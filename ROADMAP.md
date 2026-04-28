@@ -111,6 +111,87 @@ spec'ing.
   branch?
 - Conflict resolution when Overleaf and local both edit?
 
+### Audit trail — unified change/decision/version tracking
+
+**Why**: Currently audit-trail-like things are scattered across the
+system without a coherent design:
+- per-project `decisions.md` captures user-facing decisions
+- per-project `snapshots/` captures frozen artifact versions
+- references corpus `changelog.md` captures reference fetches
+- git history captures code/skill changes
+- references-manifest entries carry `last_fetched`, archived versions
+
+There's no unified picture of "what happened to this piece, when,
+why, by whom" across all the moving parts (project artifacts,
+references, manifests, configs, integrations, bausteine, plans,
+correspondence). When a UNB later asks "show me what changed
+between Vorentwurf and Entwurf for §X", we should be able to
+answer cleanly. When citation drift breaks a baustein months later,
+we should be able to trace the chain.
+
+**Sketch (topic-level only — design TBD)**:
+- A unified event log with stable schema (timestamp, actor, kind,
+  scope, target, before/after pointers, rationale).
+- Per-domain handlers (project artifacts → snapshot manifest;
+  references → changelog; bausteine → status flips; configs →
+  schema migrations; etc.) emit into the same log.
+- Query path: "what changed in scope X between dates A and B" or
+  "what was the state of artifact Y at date Z".
+- Privacy / retention boundaries: per-project audit lives with the
+  project; cross-cutting (references, configs) at office level.
+
+**Open questions** (deliberately unresolved):
+- Single append-only event log file vs distributed per-domain logs
+  with a query layer over them?
+- Schema across domains: how rigid? per-kind subschemas?
+- How does this interact with snapshots/, decisions.md, changelog.md
+  — do those become projections of the unified log, or stay
+  authoritative with the log as a thin index?
+- External-actor attribution (UNB sends a Stellungnahme — that's
+  also an event, but the actor is outside the system).
+
+### Human-readable artifact generation at checkpoints
+
+**Why**: Many workflow pieces are machine-readable (LaTeX source,
+billing.md ledger, Stellungnahme YAML, baustein markdown) — but
+humans review and discuss in their natural form (PDF, formatted
+preview). Today only LaTeX has clean human-output via `compile_latex`.
+Other kinds either have no checkpoint render or rely on ad-hoc
+generation. We need a principle: at every meaningful checkpoint
+(send-gate, phase transition, draft-invoice, baustein-promotion,
+config-change), produce the human-readable artifact alongside the
+machine state, so the human review step has something to look at.
+
+**Examples**:
+- LaTeX docs: PDF on every snapshot (already done)
+- Invoices: PDF draft when `draft-invoice` runs (planned with PM item above)
+- Stellungnahmen drafts: PDF for review before send-gate
+- Cover mails: PDF/RTF for review before send
+- Bausteine: when promoted to skill, show diff PDF or formatted view
+- Config changes: human-readable summary of what changed (not raw YAML diff)
+- Audit trail queries: rendered timeline view, not raw log
+- Baustein freshness sweep: human-readable report PDF
+
+**Sketch (topic-level)**:
+- Convention: every checkpoint event has an associated render that
+  produces a PDF (or HTML for interactive) at a predictable path.
+- Backend tool family for renders (compile_latex already exists;
+  add `render_invoice`, `render_stellungnahme`, `render_audit_timeline`,
+  etc. as needed).
+- Skills register their checkpoints + the render they produce.
+- Renders are themselves versioned through the audit trail above —
+  so we can show the user what the rendered checkpoint looked like
+  at the time, not as it would render today.
+
+**Open questions**:
+- Render templates: per-office or universal? (Likely follows same
+  3-layer LaTeX stack pattern: app shipping universal templates,
+  office overlays for branding.)
+- HTML vs PDF: when does interactive review (HTML) beat archival
+  (PDF)? Probably both, with PDF as the canonical archival form.
+- Storage: renders alongside source in snapshots/, or a separate
+  renders/ tree?
+
 ### Project management + invoicing
 
 **Why**: Project work today has no time/billable tracking, no
