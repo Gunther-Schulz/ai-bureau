@@ -55,8 +55,11 @@ class Partner(BaseModel):
     id: str = Field(..., min_length=1)
     label: str = Field(..., min_length=1)
     signer: str | None = None
+    specialization: str | None = None     # e.g. "Landschaftsökologie"
     email: str | None = None
     email_match_patterns: list[str] = Field(default_factory=list)
+    phone: str | None = None
+    web: str | None = None
 
 
 class Identity(BaseModel):

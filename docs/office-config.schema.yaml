@@ -89,9 +89,12 @@ partners:                          # optional list (default: [])
   - id: <short-id>                 # short id used in state.md.partners
     label: "<Display Name>"
     signer: "<Full Name>"          # used when partner signs Gutachten
+    specialization: "<Discipline>" # optional, e.g. "Landschaftsökologie"
     email: "<contact@partner-domain>"
     email_match_patterns:          # fnmatch wildcards
       - "*@partner-domain"
+    phone: "<phone>"               # optional
+    web: "<partner-website>"       # optional
 
 # --- Filesystem paths ---------------------------------------------------
 #

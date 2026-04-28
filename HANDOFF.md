@@ -1,198 +1,178 @@
 # Session handoff — pbs-bureau
 
-This document captures the state of pbs-bureau at end of session
-2026-04-28 so the next Claude Code session can pick up cleanly with
-fresh context.
+End of session 2026-04-28 (second major session). The previous
+HANDOFF described "backend smoke test green; CUDA confirmed"; this
+session pivoted to a deep architectural cleanup: app vs office-config
+split, memory↔RAG rule, per-project state, layered LaTeX template
+stack, modular integrations. The repo is now a deployable generic
+German-planning-bureau workflow app, with PBS as the reference
+deployment.
 
 **Read order for next session**:
 1. This file (HANDOFF.md)
-2. `ARCHITECTURE.md` — taxonomy + decision rules
-3. `plugin/skills/orchestrator/SKILL.md` + `PROCEDURE.md` — framework
-4. Whichever skill is next on the build list
+2. `ARCHITECTURE.md` — meta-rules + 7 entity types + decision rules
+3. `docs/office-config.schema.yaml` — the deployment-config schema
+4. `plugin/skills/orchestrator/SKILL.md` + `PROCEDURE.md`
+5. Whichever skill the user invokes
 
 ---
 
-## What pbs-bureau is
+## Status snapshot
 
-A Claude Code plugin + local Python MCP backend for drafting,
-reviewing, and finalizing planning documents for Planungsbüro Schulz
-(PBS). Doctypes: B-Plan Begründung, B-Plan Textliche Festsetzungen,
-Umweltbericht, Artenschutzbewertung, Gutachten variants. Uses local
-RAG (LanceDB + sentence-transformers + bge-m3 + bge-reranker-v2-m3),
-no Docker, no external API.
+### ✅ Architecture transformation (this session)
 
-Project root: `/home/g/dev/Gunther-Schulz/pbs-bureau/`
-GitHub: <https://github.com/Gunther-Schulz/pbs-bureau> (private)
+- **App vs office split** (ARCHITECTURE.md meta-rule + skill-author
+  checklist): no PBS-specific values in repo content. All paths,
+  identity, practices, state-extensions, LaTeX styling come from
+  `office-config.yaml` resolved via env-var-then-XDG.
+- **Memory ↔ RAG rule** (ARCHITECTURE.md): cross-cutting memory
+  uses §-references as labels only; verbatim legal text lives in
+  RAG. Memory docs declare `references_used[]` in frontmatter;
+  `research-references` flags both bausteine and memory docs on
+  law change.
+- **State per-project** (`state.md.bundesland`), never office-level.
+  `office.state` removed. `extensions.references_manifests` is a
+  `dict[StateCode, Path]` keyed by Bundesland.
+- **3-layer LaTeX stack**: app `.cls` + skeletons (Layer 1) +
+  office `office-style.sty` + auto-generated `office-identity.tex`
+  (Layer 2) + per-project `Projektdaten.tex` (Layer 3). Compile
+  composes TEXINPUTS across layers.
+- **practices vs partners**: practices = internal sub-units of
+  this office. partners = external collaborators (other offices)
+  with own email/identity/match-patterns. Both can carry signer +
+  email_match_patterns (fnmatch-style).
+- **Manifest split**: federal-core in repo
+  (`references-manifest.yaml`), state extensions per Bundesland in
+  `<state_root>/extensions/<STATE>/`, with example template at
+  `docs/office-extensions/MV/references-manifest.example.yaml`.
+- **Modular integrations roadmap** (ROADMAP.md): email/calendar/
+  scanner/etc. as office-config-declared adapter classes — not
+  implemented, principle established.
 
----
+### ✅ Backend (commit `0fbe511`)
 
-## Status snapshot (what's done, what's not)
+- New `office_config.py` — pydantic schema + loader
+  (env-var-then-XDG resolution, validation, identity-macro
+  generator helpers).
+- `config.py` — delegates path resolution to office_config.
+- `tools/projects.py` — practices, folder-layout, project-name
+  generation, project-number auto-increment all from config.
+- `tools/build.py` — TEXINPUTS-aware compile, auto-regenerates
+  `office-identity.tex` from `identity:` section before each
+  build.
+- `tools/ingest.py` — path classification by config-derived roots.
+- `schemas.py` — SourceSubtype renamed (`hidrive-project` →
+  `project-folder`, `gesetz-mv` → `gesetz-state`).
 
-### ✅ Completed in this session
+### ✅ New surface (commit `ee31899`)
 
-- **Repo + GitHub remote** with marketplace + plugin manifest layout
-  matching the user's other plugins (bildhauer, clippy, skill-craft).
-- **Plugin scaffolding** — `plugin/.claude-plugin/plugin.json`,
-  `plugin/CLAUDE.md`, `.claude-plugin/marketplace.json`.
-- **Symlink-based dev install** — `dev-link.sh` symlinks
-  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` to repo's `plugin/`.
-  Settings in `dotfiles/claude/settings.json` register marketplace +
-  enable plugin. Updates to plugin files are picked up by
-  `/reload-plugins` without reinstall.
-- **Hooks updated** — `restrict-bash-paths.py` (rewrote in Python
-  with `shlex` for quoting + Unicode handling), added
-  `restrict-file-paths.py` for Read/Edit/Write/Glob/Grep/NotebookEdit
-  with same allowlist. Hidrive path
-  `/mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/...`
-  whitelisted.
-- **Backend Python project scaffolded** at `backend/mcp-server/` —
-  `pyproject.toml`, `uv.lock`, `.python-version` (3.13),
-  `src/pbs_mcp/__init__.py`, `server.py` (stdio MCP entry),
-  `config.py` (path resolution). Deps installed via `uv sync`. Server
-  imports cleanly; `list_tools` returns `[]` (no tools wired yet).
-- **ARCHITECTURE.md** at repo root — 6 entity types + 5 decision
-  rules for placement.
-- **Memory reference content** in `memory/domain/`:
-  - `style/style-spec.md` — both LaTeX doctypes (Begründung scrreprt,
-    Festsetzungen article) with exact preamble specs, drawn from
-    canonical local repos (`~/dev/Planungsbüro-Schulz/22-16-Maxsolar-
-    --Friedrichshof---*`).
-  - `conventions/korrektur-rules.md` — distilled from legacy
-    korrektur-prompt.txt (German quotes, non-breaking spaces, German
-    number format, hyphenation, source line wrap, lists).
-  - `project-structure.md` — clean AI-native folder layout for new
-    projects (`.ai/` hidden, `inputs/` subdivided by source, doctype
-    subfolders, `Schriftverkehr/`, `TöB/`, `Auslieferung/`).
-  - `doctypes.yaml` — registry of doctypes with status (active,
-    deferred), template paths, master file conventions.
-  - `verfahren/bauleitplanung-phasen.md` — 13-phase Regelverfahren +
-    §13/§13a/§13b variants + §12 vorhabensbezogen, drawn from local
-    BauGB.txt + Friedrichshof Festsetzungen Verfahrensvermerke.
-- **Skill references** in `plugin/skills/<skill>/references/`:
-  - `save-baustein/references/format.md` — baustein file format spec
-  - `record-feedback/references/format.md` — feedback entry format
-  - `research-references/references/manifest-schema.md` — manifest
-    schema
-  - `validate-checklist/references/checklists/{4 files}` — per-doctype
-    structural checklists (b-plan-begruendung, b-plan-festsetzungen,
-    umweltbericht, gutachten-generic)
-  - `orchestrator/references/state-format.md` — `_ai/state.md`
-    format including `doctype_status` field for per-project scope
-- **Backend docs** in `backend/mcp-server/docs/`:
-  - `vector-metadata-schema.md` — LanceDB columns + filter patterns
-  - `chunking-strategy.md` — per-source-type chunker registry
-- **All 14 specialist skill specs**:
-  1. **orchestrator** (master, SKILL.md + PROCEDURE.md, references/
-     state-format.md) — three-scope framework, watch list, four-way
-     menu, hard gates, hard guards, validation, specialist routing
-  2. **draft-textteil-b** (heavy, SKILL.md + PROCEDURE.md) — Phase A
-     entry for Begründung
-  3. **draft-textteil-c** (heavy, SKILL.md + PROCEDURE.md) — Phase A
-     entry for Festsetzungen
-  4. **review-draft** (heavy, SKILL.md + PROCEDURE.md) — Phase B
-     layered review
-  5. **save-baustein** (light, references/format.md) — capture
-  6. **record-feedback** (light, references/format.md) — feedback
-  7. **research-references** (light, references/manifest-schema.md) —
-     legal corpus maintenance
-  8. **validate-checklist** (light, references/checklists/) —
-     Layer 1 structural
-  9. **validate-latex-style** (light) — Layer 3 formal style
-  10. **verify-citations** (light) — citation freshness
-  11. **draft-cover-mail** (light) — transmittal mails
-  12. **survey-project** (light) — first-bind clustering
-  13. **promote-to-skill** (light) — memory→skill graduation
-  14. **validate-bausteine** (light) — freshness sweep
+- **`setup-office` skill** — first-time deployment wizard with
+  conversational prompt-by-prompt flow (`references/wizard-flow.md`).
+  Creates office-config, bootstraps state directory tree, copies
+  default office-style + state-extension templates.
+- **`setup_project` MCP tool** — single entry point for project
+  work. Mode auto-detected from target_root state: absent →
+  create+scaffold; empty → scaffold inside; populated → fall back
+  to bind. Generates folder name from naming template, scaffolds
+  layout per `conventions.project_folder_layout`, copies skeleton
+  per doctype, patches Projektdaten.tex placeholders, seeds
+  `.ai/state.md`, appends to projects-index.
 
-### ✅ Designed + built + smoke-tested
+  Backend now exposes 18 tools (was 17).
 
-- **Backend implementation** — committed (commit 27ca270).
-  3129 lines across 21 files: embedder.py, db.py, schemas.py,
-  chunkers/* (10 chunker types), tools/* (corpus, ingest, memory,
-  projects, build), server.py wiring all tools.
-  - **Smoke test PASSED** at end of session.
-    - `uv sync` completed clean (torch 2.11.0, sentence_transformers
-      5.4.1, lancedb, mcp, pydantic all resolved).
-    - All 17 tools register via `from pbs_mcp.server import
-      TOOL_HANDLERS`: search_corpus, read_corpus_file, ingest_paths,
-      ingest_project_inputs, search_inputs, list_bausteine,
-      get_baustein, save_baustein, flag_baustein, archive_baustein,
-      find_bausteine_by_reference, list_projects, bind_project,
-      unbind_project, survey_project, compile_latex, scaffold_project.
-    - `device_info()` confirms CUDA on RTX 5090 — embedder will
-      auto-use GPU.
-  - Note: db.py uses LanceDB native hybrid search (vector + Tantivy
-    BM25 via FTS) + reranker. FTS index auto-created on table
-    creation; refreshed after bulk ingest.
-  - First call to embedder downloads bge-m3 (~2.3GB) and reranker
-    (~568MB) from HuggingFace; happens lazily on first `encode_one`
-    or `score` call.
+### ✅ Identity model extended (commit `9dbe067`)
 
-- **`references-manifest.yaml`** — committed (commit 6d83765).
-  30 entries total (28 ingestable + 2 cite-only):
-  - 8 federal laws (BauGB, BauNVO, BNatSchG, EEG, BImSchG, UVPG,
-    PlanZV, ROG)
-  - 2 EU directives (FFH-RL, Vogelschutz-RL)
-  - 4 M-V laws (LPlG-MV, LBauO-MV, NatSchAG-MV, KV-MV)
-  - 8 leitfäden (5 KNE locally available; LUNG-MV-Artenschutz,
-    Verfahrenserlass-Bauleitplanung-MV, Brandschutzkonzept-PV-MV
-    flagged NEEDS FETCH)
-  - 6 urteile (BVerwG 9 A series + 2 EuGH)
-  - 2 methodik cite-only (Südbeck, Dietz/Kiefer)
-  - last_fetched / checksum / current_amendment_form fields are
-    null; populated by research-references on first run.
+- Identity gained: `title`, `mobile`, `fax`, `specializations[]`,
+  `logo_path`, `signature_image_path`.
+- `office-identity.tex` generator emits `\OfficeTitle`,
+  `\OfficeMobile`, `\OfficeFax`, `\OfficeSpecializations`,
+  `\OfficeLogoPath`, `\OfficeSignaturePath` for office-style.sty
+  to consume.
+- Bugfix: `\OfficeSignatureBlock` was double-escaping LaTeX line
+  breaks; now escapes per-line then joins.
 
-### ⏳ Designed, NOT yet built
+### ✅ PBS deployment configured
 
-- **`.mcp.json` registration** in `plugin/` — to make the backend
-  available as MCP tools to Claude Code. One-line registration:
-  `{"mcpServers": {"pbs-mcp": {"command": "uv", "args": ["run",
-  "--directory", "<repo>/backend/mcp-server", "pbs-mcp"]}}}`.
+`~/.config/pbs-bureau/office.yaml` (NOT in repo):
 
-- **Reference fetch + initial ingest** — once backend smoke-tests
-  green and `.mcp.json` is registered:
-  1. Run `research-references` skill (now backed by real tools) to
-     fetch the 30 manifest entries into
-     `<hidrive>/_ai-references/`. The 5 KNE entries already exist
-     in `Literatur/` and just need copying.
-  2. Run `ingest_paths` to embed references + the 4 local
-     Planungsbüro-Schulz repos + the 16 hidrive project folders into
-     LanceDB. Initial ingest will be slow (~30-60min for ~22 docs +
-     existing corpus) due to model load + embedding.
+- Office: **Planungsbüro G. Schulz** (note: with G.); short PBS;
+  language de_DE
+- Identity: Dipl.-Ing. Gunther Schulz, An der Pferdekoppel 3,
+  23972 Dorf Mecklenburg, Tel/Fax 03841/62 0 66 11, Funk
+  0178 3268495, mail@planungsbuero-schulz.de,
+  www.planungsbuero-schulz.de
+- Specializations: Garten-/Landschaftsarchitektur, Solar-/Wind-
+  energieplanung, Landschaftsplanung, Stadtplanung
+- Practice (internal): `main` — Dipl.-Ing. Gunther Schulz
+- Partner: `hendrik` — Hendrik Sönnichsen
+  (`hs@deroekologe.de`, `*@deroekologe.de`)
+- Paths: hidrive-rooted (state_root, references_root,
+  projects_root) + local_repos_root at
+  `~/dev/Planungsbüro-Schulz`
+- MV state-extension registered at
+  `<state_root>/extensions/MV/references-manifest.yaml`
 
-- **Office state seeding** — `<hidrive>/_ai-office-state/`:
-  - `projects-index.md` — registry of 16 hidrive projects (name,
-    path, last-modified, lifecycle=unknown for now). The
-    `bind_project` tool creates entries on first bind; bulk
-    seeding script optional.
-  - `pending-actions.md` — empty template
-  - `recent-correspondence.md` — empty template
+State directory bootstrapped at hidrive:
+- `<state_root>/projects-index.md`, `pending-actions.md`,
+  `recent-correspondence.md` (empty seeds)
+- `<state_root>/templates/office-style.sty` (copy of
+  `office-style.default.sty`)
+- `<state_root>/templates/office-logo.png`,
+  `office-signature.png` (provided + copied)
+- `<state_root>/extensions/MV/references-manifest.yaml` (copy of
+  example)
+- `<references_root>/` with empty subdirs: `gesetze/{bund,eu,MV}`,
+  `leitfaeden/`, `urteile/`, `beispiele/`, `changelog.md`
 
-- **Office identity config** — `memory/global/identity.md` (or
-  `memory/office/identity.md` per future refactor) — PBS-specific:
-  Schwerin office address, signature, contact, language convention.
+End-to-end smoke test green: office_config loads, all paths
+resolve, MV extension reaches manifest, federal-core manifest
+reachable, identity macros generate cleanly, practice/partner
+email routing works (case-insensitive wildcards), `list_projects`
+returns empty (clean state).
 
-### ❌ NOT designed yet (deferred backlog)
+### ⏳ Pending — first thing for next session
 
-Full deferred-feature roadmap is in `ROADMAP.md` at repo root.
-Includes:
+**Run `research-references` first-time fetch**. Now feasible —
+office config + state-extension manifest are in place. Steps:
 
-- Email integration (Thunderbird mbox reader)
-- Phone call note format
-- Office identity config
-- Maps/GIS integration (gis-utils MCP coexistence)
-- Python-ACAD-Tools integration (sibling tool at
-  `~/dev/Gunther-Schulz/Python-ACAD-Tools/`)
-- Overleaf sync workflow detail
-- Reference versioning + cross-refs handling
-- Subagents (legal-reviewer, style-auditor)
-- Hooks / event triggers
-- Additional verfahren references (Umweltprüfung,
-  FFH-Vorprüfung, Artenschutz/SPA)
-- Abwägung mechanism + doctype
+1. **Reload plugin** (`/reload-plugins`) so the session sees the
+   new `setup_project` tool + the office-config-aware backend.
+2. **Run research-references**: traverses both
+   `<repo>/references-manifest.yaml` (federal core) and
+   `<state_root>/extensions/MV/references-manifest.yaml` (state
+   extension). For each entry:
+   - `web-text` / `web-html` / `web-pdf` entries: WebFetch + write
+     to `<references_root>/<canonical_path>`.
+   - `manual` entries (KNE leitfäden, LUNG-MV, Verfahrenserlass-MV,
+     Brandschutzkonzept-MV): per the new policy, Claude browses
+     the publisher site to discover the canonical PDF URL, then
+     downloads. **No reading from legacy `Literatur/` folder.**
+3. **Ingest references** via `ingest_paths` into LanceDB. First
+   call downloads bge-m3 + reranker (~3GB). RTX 5090 picks up
+   CUDA automatically.
+4. **Sample search**: verify hybrid + reranker pipeline returns
+   sensible hits.
 
-Each item in `ROADMAP.md` has Why + Sketch + Open questions. Pick
-items off the list as projects raise them.
+After that:
+5. Bind first project (any existing hidrive project — orchestrator
+   routes through survey-project → bind_project, no schema
+   migration needed).
+6. Optional: wire `\OfficeLogoPath`, `\OfficeSpecializations` into
+   the default `office-style.sty` letterhead layout if you want
+   richer compile output.
+
+### ❌ Deferred (not blocking)
+
+- **PBS project migration to colocated layout** — explicitly
+  dropped this session. PBS keeps its current per-doctype-LaTeX-repo
+  layout under `~/dev/Planungsbüro-Schulz/`. The orchestrator's
+  binding flow uses survey-project for adoption.
+- **Email integration** — see ROADMAP.md "Modular integrations
+  declared at office setup". Adapter pattern locked in;
+  Thunderbird-maildir adapter is first implementation when needed.
+- **Office-style.sty letterhead** — default version doesn't yet
+  use the new `\OfficeLogoPath` / `\OfficeSpecializations`
+  macros. Cosmetic; structural compile works without.
 
 ---
 
@@ -200,18 +180,16 @@ items off the list as projects raise them.
 
 | Decision | Reasoning |
 |---|---|
-| **Python backend, no Docker** | One Python process holds LanceDB + embedder + LaTeX wrapper. Fewer moving parts. fastembed considered but switched to sentence-transformers for GPU + reranker support. |
-| **bge-m3 + bge-reranker-v2-m3** | Best open multilingual quality for German legal text. User has 5090, GPU acceleration trivial. Reranker promoted from v0.2 to v1 because cost is near-zero on 5090. |
-| **LanceDB (single table)** | Embedded, hybrid search native, namespace by metadata not separate tables. Simpler than Qdrant or Chroma for solo use. |
-| **No /commands** | Conversational interface only. User explicitly rejected commands as too rigid. |
-| **No modes / mode-switching** | Three scopes (office, project, product) operate contextually based on conversation, not toggled. |
-| **Four-way decision menu** | capture-now / handle-now / backlog / drop. Central conversational pattern when orchestrator surfaces something. |
-| **Symlink dev install** | Eliminates reinstall friction during heavy iteration. `dev-link.sh` does it. |
-| **Memory taxonomy locked** | 6 entity types, 5 decision rules. See `ARCHITECTURE.md`. Format specs went to skill references; cross-cutting reference content stays in memory/domain. |
-| **AI-owned new projects** | Full project-folder ownership; `.ai/` hidden meta-state. Existing projects use `_ai/` (visible) with `ownership_mode: migrate | new-work-only | quarantine`. |
-| **Per-project LaTeX folders are separate git repos** | For Overleaf sync. The wider project root is hidrive-synced, not git-tracked. |
-| **AI-owned references separate from human Literatur/** | `<hidrive>/_ai-references/` for fetched legal corpus; `<hidrive>/Projekte/Literatur/` stays as human-curated. |
-| **Office state on hidrive, not in repo** | `<hidrive>/_ai-office-state/` for projects-index, pending-actions, recent-correspondence. Repo holds the assistant; hidrive holds the office's data. |
+| **App vs office-config split** | Repo must be deployable to other German planning bureaus. PBS-specific values live in `office-config.yaml` outside repo, resolved via env-var-then-XDG. ARCHITECTURE.md meta-rule + skill-author checklist enforce. |
+| **Memory ↔ RAG split** | Memory shadows RAG → drift. Strict rule: §-refs as labels OK; verbatim legal/Verfahrensvermerk text in RAG only; cross-cutting memory declares `references_used[]`; `research-references` flags affected docs on law change. |
+| **State per-project** | Offices work cross-state. `office.state` (singular or plural) was wrong. `state.md.bundesland` selects which state-extension manifest applies; office holds a `dict[StateCode, Path]` of registered extensions. |
+| **practices vs partners** | Internal sub-practices ≠ external collaborators. PBS itself is one practice (`main`); Hendrik (deroekologe.de) is a partner. Same partner can be co-producer (`state.md.partners[]`) or client (`state.md.client`) on different projects — email match patterns work either way. |
+| **3-layer LaTeX stack** | App ships universal cls + skeletons (Layer 1). Office authors `office-style.sty` once for aesthetic (Layer 2). Project provides `Projektdaten.tex` (Layer 3). Identity macros auto-generated from office-config into `office-identity.tex`. TEXINPUTS composes the layers. PBS migration of existing inline-styled masters is a clean rewrite per layer (no backwards-compat). |
+| **Federal-core manifest in repo, state extensions out** | Federal laws + KNE leitfäden + BVerwG/EuGH apply to every German bureau (in repo). State laws + state Verfahrenserlasse vary by Bundesland (in office state extensions). Example template at `docs/office-extensions/MV/`. |
+| **Auto-incrementing project numbers** | Default per `conventions.project_numbering.{pattern, auto_increment}`. Scans both projects-index AND projects_root for the highest-numbered folder. User can always override. |
+| **No project migration this session** | PBS has 16+ existing projects across hidrive + dev tree. One-time conversational migration (not a skill) — deferred until user wants it. |
+| **Modular integrations** | email/calendar/scanner/etc. as adapter classes declared in `office-config.integrations:`. Same architectural lesson as paths: no hardcoded mechanism. Roadmap-only for now. |
+| **Symlink dev install** | Unchanged from prior session. `dev-link.sh` keeps `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` → `<repo>/plugin/`. Re-run if Claude Code replaces with copy. |
 
 ---
 
@@ -221,115 +199,66 @@ items off the list as projects raise them.
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/` | Claude Code plugin |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/` | Cross-cutting memory (reference content) |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/backend/mcp-server/` | Python MCP backend |
-| `/home/g/dev/Gunther-Schulz/Planungsbüro-Schulz/` | Local per-doctype git working copies (canonical LaTeX templates) |
-| `/mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/Projekte/` | All client projects (16+) |
-| `/mnt/data2t/hidrive/.../Projekte/_ai-references/` | AI-owned legal references (to be created) |
-| `/mnt/data2t/hidrive/.../Projekte/_ai-office-state/` | Office runtime state (to be created) |
-| `/mnt/data2t/hidrive/.../Projekte/Literatur/` | Human-curated reference docs (existing) |
-| `/mnt/data2t/hidrive/.../Projekte/<YY-NN ...>/_ai/` | Per-project state (created on first bind) |
-
----
-
-## What the next session should do FIRST
-
-**Pick up at .mcp.json registration.** Backend is smoke-tested
-green; CUDA confirmed on RTX 5090.
-
-1. Read this file (HANDOFF.md), `ARCHITECTURE.md`, and
-   `plugin/skills/orchestrator/SKILL.md` for context.
-2. **Register the MCP server** by creating `plugin/.mcp.json`:
-   ```json
-   {
-     "mcpServers": {
-       "pbs-mcp": {
-         "command": "uv",
-         "args": ["run", "--directory",
-                  "${CLAUDE_PLUGIN_ROOT}/../backend/mcp-server",
-                  "pbs-mcp"]
-       }
-     }
-   }
-   ```
-   `${CLAUDE_PLUGIN_ROOT}` resolves to `<repo>/plugin/` so `..`
-   reaches the repo root. Verify path resolution works.
-3. **Reload plugins** in Claude Code (`/reload-plugins`); verify
-   tools appear via the orchestrator's tool listing.
-4. **Run research-references** to fetch Tier 1 entries into
-   `<hidrive>/_ai-references/`. The 5 KNE entries are already in
-   `Literatur/` — copy rather than re-fetch.
-5. **Ingest references** into LanceDB:
-   ```python
-   ingest_paths(
-       paths=[<list of fetched files>],
-       source_type="reference",
-       extra_metadata={"reference_id": <id>, "reference_category": <cat>},
-   )
-   ```
-   First call downloads bge-m3 + reranker (~3GB total). Subsequent
-   calls reuse the loaded model.
-6. **Ingest corpus**:
-   - 4 local repos in `~/dev/Planungsbüro-Schulz/`
-   - 16 hidrive projects in `<hidrive>/Projekte/<YY-NN ...>/`
-7. **Test end-to-end**: bind 23-12 Vorbeck or similar; run a sample
-   `search_corpus` query; verify hybrid + reranker pipeline returns
-   sensible hits.
-8. After backend live, tackle:
-   - Office state seeding (`<hidrive>/_ai-office-state/`)
-   - Office identity config (`memory/global/identity.md`)
-
-After that, "Not designed yet" backlog items in `ROADMAP.md` as they
-become needed.
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/templates/` | App-shipped LaTeX classes + skeletons + default office-style |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/` | Cross-cutting domain memory (universal German planning) |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/backend/mcp-server/` | Python MCP backend (18 tools) |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/docs/office-config.schema.yaml` | Office-config schema |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/docs/office-extensions/MV/` | M-V state-extension example |
+| `~/.config/pbs-bureau/office.yaml` | **PBS office config (NOT in repo)** |
+| `/mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/Projekte/_ai-office-state/` | PBS office state (templates/, extensions/MV/, projects-index, etc.) |
+| `/mnt/data2t/hidrive/.../_ai-references/` | PBS AI-owned legal references corpus (subdirs ready, content not yet fetched) |
+| `/mnt/data2t/hidrive/.../Projekte/` | All client projects (16+) |
+| `~/dev/Planungsbüro-Schulz/` | PBS local per-doctype LaTeX working copies |
 
 ---
 
 ## Working-style notes (lessons from this session)
 
-For the next session to avoid the failure modes I hit:
-
-1. **Apply `ARCHITECTURE.md` rules rigorously**. When placing new
-   content, walk Rules 1-5 in order. Don't generalize patterns from
-   skill-craft to memory or vice versa.
-2. **Memory file format**: pure markdown, no frontmatter unless it's
-   a data record (D type). Skills always have frontmatter
-   (Claude Code requires it). Skill references — frontmatter only if
-   it serves a queryable purpose.
-3. **No "consumed by skill X" cross-refs in content**. They don't
-   change AI behavior. Documentation of inter-module references
-   belongs in code comments or commit messages.
-4. **Skill triggers**: detailed, specific German + English phrases.
-   Not abstract.
-5. **For Begründung/Festsetzungen drafting**: the canonical templates
-   are at `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---*`,
-   NOT at hidrive `Vorlagen/Latex/` (that was old/abandoned).
-6. **Source-grounding guard**: any legal citation must be backed by
-   a tool result (search_corpus or read_corpus_file). Never invent
-   citations from training memory. (BNatSchG amendment date in
-   training memory was wrong; current is Art. 48 vom 23.10.2024.)
-7. **PBS uses pdflatex everywhere**. Never xelatex.
-8. **Project labels**: PBS uses "Textteil B" / "Textteil C" folder
-   names but the file names confuse: `Textteil-B-B-Plan.tex` is in
-   the Festsetzungen folder. Begründung is multi-page narrative;
-   Festsetzungen is the single-page article-class doc that goes
-   into the Satzung as Teil B Text. Don't get confused.
+1. **Apply ARCHITECTURE.md rules rigorously**. The meta-rules
+   (app/office, memory/RAG) catch leakage that's easy to miss in
+   isolation. When placing or generating new content, walk the
+   meta-rules first.
+2. **Memory must NOT contain verbatim legal text**. §-refs as
+   labels only. Verbatim wording lives in RAG, retrieved per
+   project bundesland. Adding `references_used[]` lets
+   `research-references` track dependents.
+3. **No "legacy" mentions in skills or app code**. The app
+   assumes AI-owned worldview throughout. Bridge to legacy only
+   via `survey-project` when binding existing project folders.
+4. **State is per-project** (`state.md.bundesland`). Skills resolve
+   state-specific references through the project's bundesland,
+   never through office-level config.
+5. **practices ≠ partners**. Same person/entity (e.g. Hendrik)
+   can be partner on one project and client on another. Email
+   patterns route correctly either way.
+6. **Don't double-escape in LaTeX generators**. Escape per-line
+   user content first, THEN add structural LaTeX (line breaks,
+   wrappers). Earlier `_generate_identity_macros` had this bug
+   in the signature_block; fixed in `9dbe067`.
+7. **Source-grounding guard unchanged**. Any legal citation in
+   produced output must be backed by a tool result. §-numbers
+   appearing in memory don't satisfy the citation-evidence
+   requirement.
+8. **Commit at coherent checkpoints**. This session: 4 commits
+   pushed (`0fbe511`, `ee31899`, `0e4aea7`, `9dbe067`) — each is
+   a stable, testable milestone.
 
 ---
 
 ## Misc context for next session
 
-- **User's machine**: Linux, RTX 5090 (32GB VRAM available for GPU
-  models). Python 3.13 will be auto-installed by uv if missing.
+- **User's machine**: Linux, RTX 5090 (32GB VRAM). Python 3.13.
 - **User's plugins active**: bildhauer, clippy, skill-craft,
   experiment-lab, gis-utils, plugin-dev, pbs (this one).
-- **Skill-craft**: invoke when authoring/improving skills. We did
-  for the orchestrator. For new skills in next session, may want to
-  use it again — depends on complexity.
-- **Hidrive auth**: hidrive paths are accessible because hooks were
-  updated this session. Verify symlink at
-  `/home/g/.claude/settings.json -> dotfiles/claude/settings.json`
-  is intact. If broken, restore per
-  `/home/g/.claude/CLAUDE.md` instructions.
-- **Plugin reload**: after this session ends, the next session will
-  pick up the latest skills automatically (they're symlinked into
-  cache). User can run `/reload-plugins` if any are stale.
+- **Plugin cache symlink**: was getting overwritten by
+  Claude Code earlier; re-run `bash dev-link.sh` if
+  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` is a regular
+  directory rather than a symlink.
+- **Hooks active**: `restrict-bash-paths.py`,
+  `restrict-file-paths.py` in dotfiles. Hidrive path whitelisted.
+- **Settings symlink**: verify
+  `~/.claude/settings.json -> dotfiles/claude/settings.json`
+  before any operation that might write settings.
+- **Dotfiles**: global CLAUDE.md and settings.json tracked in
+  `~/dev/Gunther-Schulz/dotfiles/claude/`. After editing either,
+  commit + push the dotfiles repo.
