@@ -51,6 +51,65 @@ takes on an Innenentwicklung-only project.
 BVerwG-Rechtsprechung zu §13a/§13b BauGB. Use `author-manifest`
 already-existing skill to seed; `research-references` populates.
 
+### Agentic retrieval — iterate searches per claim, not per section
+
+**Why**: Current RAG pattern (planned for first-run) is bulk: skill
+issues one or a few `search_corpus` calls per drafting section,
+stuffs results into prompt, drafts. State-of-the-art is *agentic*:
+the orchestrator iterates one search per claim during drafting —
+fetches §44 BNatSchG when about to write the §44 sentence, fetches
+the BVerwG-Freiberg ruling when about to cite CEF-Wirksamkeit.
+Better citation grounding (each claim has its own retrieval), less
+context bloat (no over-fetching upfront), more natural for Claude.
+
+**Sketch (post-first-run)**:
+- Mostly a skill-protocol question, not infrastructure. Update
+  `draft-textteil-b` / `draft-textteil-c` / `draft-cover-mail`
+  protocols: instead of "fetch all sources at start", say "before
+  each citation-bearing claim, search for the supporting reference,
+  cite from the result."
+- The MCP backend (`search_corpus`, `read_corpus_file`) already
+  supports per-call retrieval — no backend change needed.
+- Source-grounding rule strengthens naturally: every cited §-ref
+  is backed by a tool call in the same drafting turn.
+
+**Open questions**:
+- Latency: many small searches per draft vs few large ones. With
+  bge-m3 + CUDA the per-search cost is low; the question is total
+  drafting wall time.
+- Hybrid: bulk-fetch the obvious universal references (BauGB-
+  framework) once at start, agentic-fetch the specific cites?
+- When to evaluate: after first-run sample-searches show whether
+  the bulk pattern produces grounded enough citations.
+
+### Late-interaction retrieval (ColBERT / ColPali)
+
+**Why**: Current stack uses bge-m3 (single-vector dense embedding)
++ a cross-encoder reranker. State-of-the-art for long technical /
+legal text is often *late-interaction* models like ColBERT-v2 or
+ColPali — token-level retrieval that scores fine-grained matches
+without the bottleneck of compressing the whole document into one
+vector. Particularly strong on German legal text and mixed PDF
+leitfäden where exact-phrase matching matters.
+
+**Sketch (conditional)**:
+- **Trigger**: only if first-run sample-searches show quality
+  issues — bge-m3 + reranker is the right baseline; don't preempt.
+- **Drop-in**: ColBERT-v2 has Python implementations (PLAID,
+  RAGatouille) that slot under the same `search_corpus` interface.
+  ColPali is image-based (good for scanned PDF leitfäden).
+- **Trade-off**: late-interaction stores more per chunk (token-
+  level vectors), so disk/memory footprint grows. RTX 5090 + 32GB
+  VRAM handles it but the LanceDB schema needs adjusting.
+
+**Open questions**:
+- ColBERT vs ColPali: text vs page-image retrieval — KNE/LUNG PDFs
+  are mostly text-extractable; PDF page imaging may help only if
+  pdf-extraction quality turns out poor.
+- Evaluation set: need a small benchmark of "for query X, the right
+  reference is Y" pairs to objectively compare bge-m3 vs ColBERT
+  on PBS's actual corpus.
+
 ---
 
 ## v1.x-v2 — when first project needs it
