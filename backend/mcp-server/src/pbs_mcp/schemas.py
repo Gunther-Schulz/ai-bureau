@@ -301,3 +301,40 @@ class ScaffoldProjectOutput(BaseModel):
     project_root: str
     created_paths: list[str]
     git_repos_initialized: list[str]
+
+
+class SetupProjectInput(BaseModel):
+    """Input for the setup_project tool — single entry point for new
+    project work.
+
+    Mode is auto-detected from `target_root` (when set) or generated
+    via `office_config.conventions.project_naming` from the metadata
+    fields. Three modes:
+
+      - absent      → folder doesn't exist → create + scaffold
+      - empty       → folder exists, near-empty → scaffold inside
+      - populated   → folder has content → fall back to survey + bind
+
+    Required for create/initialize: client, location, doctypes,
+    practice. Required for bind-fallback: target_root with project name.
+    """
+    name: str | None = None       # explicit project name; else generated
+    client: str | None = None
+    location: str | None = None
+    project_number: str | None = None  # explicit; else auto-incremented
+    doctypes: list[str] = Field(default_factory=list)
+    practice: str | None = None   # practice id; else first from office config
+    target_root: str | None = None  # explicit path; else under projects_root
+    project_data: dict[str, Any] = Field(default_factory=dict)
+    git_init_latex: bool = False  # initialize git repo per doctype subfolder
+
+
+class SetupProjectOutput(BaseModel):
+    name: str
+    project_root: str
+    mode: Literal["created", "initialized", "bound"]
+    created_paths: list[str]
+    doctypes_scaffolded: list[str]
+    state_path: str
+    index_entry_added: bool
+    next_steps: list[str]

@@ -32,6 +32,7 @@ from pbs_mcp.schemas import (
     ScaffoldProjectInput,
     SearchCorpusInput,
     SearchInputsInput,
+    SetupProjectInput,
     SurveyProjectInput,
     UnbindProjectInput,
 )
@@ -64,6 +65,7 @@ TOOL_HANDLERS: dict[str, tuple[type, Any]] = {
     "bind_project": (BindProjectInput, projects.bind_project),
     "unbind_project": (UnbindProjectInput, projects.unbind_project),
     "survey_project": (SurveyProjectInput, projects.survey_project),
+    "setup_project": (SetupProjectInput, projects.setup_project),
     # Build
     "compile_latex": (CompileLatexInput, build.compile_latex),
     "scaffold_project": (ScaffoldProjectInput, build.scaffold_project),
@@ -88,6 +90,7 @@ TOOL_DESCRIPTIONS: dict[str, str] = {
     "bind_project": "Register a project; creates _ai/state.md if absent. Adds to projects-index.",
     "unbind_project": "Delete a project's namespaced chunks; optionally remove from index.",
     "survey_project": "Lightweight clustering of files in a project root by likely role.",
+    "setup_project": "Create / initialize / bind a project — single entry point for new project work. Mode auto-detected from target_root state. Generates folder name from conventions.project_naming, scaffolds layout per conventions.project_folder_layout, copies skeletons for chosen doctypes, seeds .ai/state.md, adds to projects-index.",
     "compile_latex": "Run latexmk (or pdflatex) on a LaTeX project. Returns PDF path, log excerpt, warnings, errors, page count.",
     "scaffold_project": "Copy a template tree to a new project root. Patches Projektdaten.tex with provided values. git inits for Overleaf.",
 }
