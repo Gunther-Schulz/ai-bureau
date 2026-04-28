@@ -1,12 +1,3 @@
----
-name: style-spec
-description: Canonical LaTeX style specification for Planungsbüro Schulz
-  documents. Two distinct doctype templates (Begründung and Textliche
-  Festsetzungen), both pdflatex. Drafted from the active local templates
-  in ~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---*.
-type: domain
----
-
 # LaTeX style specification
 
 PBS produces B-Plan documents as **two separate LaTeX projects per

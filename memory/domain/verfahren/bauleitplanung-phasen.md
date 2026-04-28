@@ -1,13 +1,3 @@
----
-name: bauleitplanung-phasen
-description: Phases of the Bauleitplanverfahren in PBS's M-V practice —
-  how Vorentwurf, Entwurf, public participation rounds, TöB rounds,
-  and Satzung interact. Sources are §§ 1-13a BauGB (federal), §17 LPlG
-  M-V (state-specific), and PBS's own Verfahrensvermerke as seen in
-  the Friedrichshof Festsetzungen template.
-type: domain
----
-
 # Bauleitplanung-Phasen (Bebauungsplan, M-V practice)
 
 The Bebauungsplan-Verfahren is structurally federal (BauGB) but has

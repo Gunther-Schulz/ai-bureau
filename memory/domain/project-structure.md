@@ -1,13 +1,3 @@
----
-name: project-structure
-description: Canonical folder layout for new (AI-owned) projects. Used
-  by the orchestrator when scaffolding via Checkpoint 12 of PROCEDURE.md
-  and by the future scaffold_project MCP tool. For existing projects,
-  the binding flow (Checkpoint 11) records actual layout in file-map.md
-  rather than enforcing this structure.
-type: domain
----
-
 # New-project folder structure
 
 Every new project is created with this layout at

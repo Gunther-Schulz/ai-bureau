@@ -1,12 +1,3 @@
----
-name: korrektur-rules
-description: Office writing conventions for LaTeX source — distilled from
-  the legacy korrektur-prompt.txt files in existing project repos.
-  Covers only the office-specific rules; modern LLMs handle generic
-  spelling/grammar/UTF-8 reflexively, so those reminders are dropped.
-type: domain
----
-
 # Korrektur rules — PBS LaTeX writing conventions
 
 The legacy `korrektur-prompt.txt` in existing project repos lists 13+
