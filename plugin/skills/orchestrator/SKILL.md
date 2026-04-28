@@ -39,7 +39,7 @@ The skill coordinates four layers:
 | Layer | Where | Purpose |
 |---|---|---|
 | Plugin | `<repo>/plugin/` | Skills (this one + specialists), agents, hooks |
-| Backend | `<repo>/backend/` | MCP server, Docker stack (LanceDB + Ollama) — not yet built |
+| Backend | `<repo>/backend/` | MCP server (Python, stdio) — embedded LanceDB + in-process embedder. Not yet built. |
 | Cross-cutting memory | `<repo>/memory/` | global / domain / office bausteine, specs, registry |
 | Per-project memory | `<project-root>/_ai/` or `.ai/` | state, file-map, decisions, snapshots |
 

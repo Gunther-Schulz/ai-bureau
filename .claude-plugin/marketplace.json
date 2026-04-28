@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "pbs",
-      "description": "Master orchestrator + specialist skills for PBS document work. Wraps a local MCP backend (LanceDB + Ollama) for corpus search and per-project memory.",
+      "description": "Master orchestrator + specialist skills for PBS document work. Wraps a local in-process MCP backend (LanceDB + fastembed) for corpus search and per-project memory.",
       "source": "./plugin"
     }
   ]

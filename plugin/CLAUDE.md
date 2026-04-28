@@ -12,10 +12,10 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
 ## System map
 
 - **Plugin** (this directory) — skills + agents + hooks
-- **Backend** (`<repo>/backend/`) — local Docker services and MCP
-  server. Provides corpus search (LanceDB), embeddings (Ollama), LaTeX
-  compile, project ingestion. Started independently via
-  `docker compose up -d` in `<repo>/backend/`.
+- **Backend** (`<repo>/backend/`) — single Python MCP server holding
+  LanceDB (vector store), an in-process embedder (fastembed +
+  `BAAI/bge-m3`), and a LaTeX compile wrapper. No Docker, no separate
+  services. Spawned by Claude Code per session via stdio MCP.
 - **Cross-cutting memory** (`<repo>/memory/`) — global, domain, and
   office-level memory shared across all projects. NOT part of the plugin
   distribution; lives in the user's checkout of the repo.

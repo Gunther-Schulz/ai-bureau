@@ -5,9 +5,9 @@ of Claude Code; the plugin connects via stdio MCP.
 
 ## Components (planned)
 
-- **Ollama** (Docker) — embedding model `nomic-embed-text-v1.5` for
-  corpus indexing.
-- **MCP server** (Python, stdio) — tool surface exposed to Claude Code:
+- **MCP server** (Python, stdio) — single in-process backend. Holds
+  the LanceDB connection, the embedder, and the LaTeX compile wrapper.
+  No separate services. Tool surface exposed to Claude Code:
   - `search_corpus(query, k, filter)` — vector search over corpus +
     references
   - `read_corpus_file(path)` — direct file read
@@ -20,7 +20,23 @@ of Claude Code; the plugin connects via stdio MCP.
     + log
   - `survey_project(root_path)` — first-bind clustering of files for
     `_ai/file-map.md`
-- **LanceDB** — embedded; lives in `data/lancedb/` (gitignored).
+- **LanceDB** — embedded vector store; lives in `data/lancedb/`
+  (gitignored).
+- **Embedder** — `fastembed` running in-process inside the MCP server
+  with `BAAI/bge-m3` (568M params, 8k context, strong multilingual
+  recall — important for German legal/planning text). Same model files
+  Ollama would serve, but loaded directly via ONNX runtime, no
+  separate service. Models cached in `~/.cache/fastembed/`.
+
+## Why no Ollama / no Docker
+
+Earlier drafts targeted Ollama+nomic-embed in Docker. Reconsidered:
+quality comes from the model choice (bge-m3 vs nomic-embed-v1.5),
+not from the runtime. fastembed runs the same models in-process with
+near-zero latency, no Docker dependency, and no separate service to
+manage. Ollama remains a viable swap if a future need arises (e.g.
+GPU acceleration, runtime model swapping, or running a local LLM in
+the same stack — none of which apply now).
 
 ## Status
 

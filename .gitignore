@@ -6,9 +6,8 @@ __pycache__/
 .venv/
 venv/
 
-# Backend state — vector DB, embeddings, Ollama models
+# Backend state — vector DB, embedding model cache
 backend/data/
-backend/.ollama/
 
 # Editor / OS
 .DS_Store
