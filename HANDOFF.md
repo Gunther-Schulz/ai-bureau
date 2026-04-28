@@ -104,20 +104,29 @@ GitHub: <https://github.com/Gunther-Schulz/pbs-bureau> (private)
   13. **promote-to-skill** (light) — memory→skill graduation
   14. **validate-bausteine** (light) — freshness sweep
 
-### ⏳ Designed + built, NOT yet runtime-verified
+### ✅ Designed + built + smoke-tested
 
 - **Backend implementation** — committed (commit 27ca270).
   3129 lines across 21 files: embedder.py, db.py, schemas.py,
   chunkers/* (10 chunker types), tools/* (corpus, ingest, memory,
   projects, build), server.py wiring all tools.
-  - **Smoke test pending** — uv sync was still downloading torch +
-    CUDA wheels at session end. Run
-    `cd backend/mcp-server && uv sync && uv run python -c "from
-    pbs_mcp.server import TOOL_HANDLERS; print(list(TOOL_HANDLERS))"`
-    to verify imports.
+  - **Smoke test PASSED** at end of session.
+    - `uv sync` completed clean (torch 2.11.0, sentence_transformers
+      5.4.1, lancedb, mcp, pydantic all resolved).
+    - All 17 tools register via `from pbs_mcp.server import
+      TOOL_HANDLERS`: search_corpus, read_corpus_file, ingest_paths,
+      ingest_project_inputs, search_inputs, list_bausteine,
+      get_baustein, save_baustein, flag_baustein, archive_baustein,
+      find_bausteine_by_reference, list_projects, bind_project,
+      unbind_project, survey_project, compile_latex, scaffold_project.
+    - `device_info()` confirms CUDA on RTX 5090 — embedder will
+      auto-use GPU.
   - Note: db.py uses LanceDB native hybrid search (vector + Tantivy
     BM25 via FTS) + reranker. FTS index auto-created on table
     creation; refreshed after bulk ingest.
+  - First call to embedder downloads bge-m3 (~2.3GB) and reranker
+    (~568MB) from HuggingFace; happens lazily on first `encode_one`
+    or `score` call.
 
 - **`references-manifest.yaml`** — committed (commit 6d83765).
   30 entries total (28 ingestable + 2 cite-only):
@@ -134,9 +143,6 @@ GitHub: <https://github.com/Gunther-Schulz/pbs-bureau> (private)
     null; populated by research-references on first run.
 
 ### ⏳ Designed, NOT yet built
-
-- **Backend smoke test + first imports** — see above; uv sync needs to
-  complete first. Estimated 5-10 minutes once sync finishes.
 
 - **`.mcp.json` registration** in `plugin/` — to make the backend
   available as MCP tools to Claude Code. One-line registration:
@@ -228,25 +234,12 @@ items off the list as projects raise them.
 
 ## What the next session should do FIRST
 
-**Pick up at backend smoke test + .mcp.json registration.**
+**Pick up at .mcp.json registration.** Backend is smoke-tested
+green; CUDA confirmed on RTX 5090.
 
 1. Read this file (HANDOFF.md), `ARCHITECTURE.md`, and
    `plugin/skills/orchestrator/SKILL.md` for context.
-2. **Verify uv sync completed**:
-   ```bash
-   cd backend/mcp-server
-   ls .venv/lib/python3.13/site-packages/ | grep -E "^(torch|sentence_transformers)$"
-   ```
-   If empty, run `uv sync` again (5-10min for torch + CUDA wheels).
-3. **Smoke test imports**:
-   ```bash
-   uv run python -c "from pbs_mcp.server import TOOL_HANDLERS; print(list(TOOL_HANDLERS))"
-   uv run python -c "from pbs_mcp.embedder import device_info; print(device_info())"
-   ```
-   Should print 17 tool names + device info (cuda or cpu). First
-   embedder load downloads bge-m3 (~2.3GB) — happens lazily on first
-   use, not at import.
-4. **Register the MCP server** by creating `plugin/.mcp.json`:
+2. **Register the MCP server** by creating `plugin/.mcp.json`:
    ```json
    {
      "mcpServers": {
@@ -261,12 +254,12 @@ items off the list as projects raise them.
    ```
    `${CLAUDE_PLUGIN_ROOT}` resolves to `<repo>/plugin/` so `..`
    reaches the repo root. Verify path resolution works.
-5. **Reload plugins** in Claude Code (`/reload-plugins`); verify
+3. **Reload plugins** in Claude Code (`/reload-plugins`); verify
    tools appear via the orchestrator's tool listing.
-6. **Run research-references** to fetch Tier 1 entries into
+4. **Run research-references** to fetch Tier 1 entries into
    `<hidrive>/_ai-references/`. The 5 KNE entries are already in
    `Literatur/` — copy rather than re-fetch.
-7. **Ingest references** into LanceDB:
+5. **Ingest references** into LanceDB:
    ```python
    ingest_paths(
        paths=[<list of fetched files>],
@@ -274,17 +267,17 @@ items off the list as projects raise them.
        extra_metadata={"reference_id": <id>, "reference_category": <cat>},
    )
    ```
-   First-time embed is slow (model load); subsequent calls reuse
-   the loaded model.
-8. **Ingest corpus**:
+   First call downloads bge-m3 + reranker (~3GB total). Subsequent
+   calls reuse the loaded model.
+6. **Ingest corpus**:
    - 4 local repos in `~/dev/Planungsbüro-Schulz/`
    - 16 hidrive projects in `<hidrive>/Projekte/<YY-NN ...>/`
-9. **Test end-to-end**: bind 23-12 Vorbeck or similar; run a sample
+7. **Test end-to-end**: bind 23-12 Vorbeck or similar; run a sample
    `search_corpus` query; verify hybrid + reranker pipeline returns
    sensible hits.
-10. After backend live, tackle:
-    - Office state seeding (`<hidrive>/_ai-office-state/`)
-    - Office identity config (`memory/global/identity.md`)
+8. After backend live, tackle:
+   - Office state seeding (`<hidrive>/_ai-office-state/`)
+   - Office identity config (`memory/global/identity.md`)
 
 After that, "Not designed yet" backlog items in `ROADMAP.md` as they
 become needed.
