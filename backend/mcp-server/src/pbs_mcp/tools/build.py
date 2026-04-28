@@ -59,14 +59,33 @@ def _generate_identity_macros(cfg) -> str:
         addr_lines.rstrip(),
         "}",
     ]
+    if ident.title:
+        lines.append(f"\\providecommand{{\\OfficeTitle}}{{{_escape_tex(ident.title)}}}")
     if ident.phone:
         lines.append(f"\\providecommand{{\\OfficePhone}}{{{_escape_tex(ident.phone)}}}")
+    if ident.mobile:
+        lines.append(f"\\providecommand{{\\OfficeMobile}}{{{_escape_tex(ident.mobile)}}}")
+    if ident.fax:
+        lines.append(f"\\providecommand{{\\OfficeFax}}{{{_escape_tex(ident.fax)}}}")
     if ident.email:
         lines.append(f"\\providecommand{{\\OfficeEmail}}{{{_escape_tex(ident.email)}}}")
     if ident.web:
         lines.append(f"\\providecommand{{\\OfficeWeb}}{{{_escape_tex(ident.web)}}}")
-    sig = ident.signature_block.replace("\n", "\\\\\n")
-    lines.append(f"\\providecommand{{\\OfficeSignatureBlock}}{{%\n{_escape_tex(sig)}}}")
+    if ident.specializations:
+        spec_lines = "".join(f"  {_escape_tex(s)}\\\\\n" for s in ident.specializations)
+        lines.append("\\providecommand{\\OfficeSpecializations}{%")
+        lines.append(spec_lines.rstrip())
+        lines.append("}")
+    if ident.logo_path:
+        # LaTeX needs forward slashes; \graphicspath uses braces around dirs
+        lines.append(f"\\providecommand{{\\OfficeLogoPath}}{{{str(ident.logo_path).replace(chr(92), '/')}}}")
+    if ident.signature_image_path:
+        lines.append(f"\\providecommand{{\\OfficeSignaturePath}}{{{str(ident.signature_image_path).replace(chr(92), '/')}}}")
+    # Escape per-line first, THEN join with LaTeX line breaks, so the
+    # LaTeX line-break syntax doesn't get double-escaped.
+    escaped_sig_lines = [_escape_tex(line) for line in ident.signature_block.splitlines() if line.strip()]
+    sig = "\\\\\n".join(escaped_sig_lines)
+    lines.append(f"\\providecommand{{\\OfficeSignatureBlock}}{{%\n{sig}}}")
     default = cfg.default_practice()
     signer = default.signer or ""
     if signer:

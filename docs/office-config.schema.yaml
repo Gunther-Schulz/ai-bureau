@@ -31,17 +31,29 @@ office:
 # below.
 
 identity:                          # required block.
+  title: "<Akademischer Titel>"    # optional, e.g. "Dipl.-Ing." — used in
+                                   # signer macros and letterhead
   address_lines:                   # required, ≥1 lines. Used in cover mails.
-    - "Planungsbüro Schulz"
-    - "Musterstraße 1"
-    - "19053 Schwerin"
-  phone: "+49 ..."                 # optional
-  email: "kontakt@example.de"      # optional
-  web: "https://example.de"        # optional
+    - "<Office Name>"
+    - "<Street + Number>"
+    - "<PLZ City>"
+  phone: "<phone>"                 # optional
+  mobile: "<mobile>"               # optional, separate Funk/cell field
+  fax: "<fax>"                     # optional
+  email: "<office-email>"          # optional
+  web: "<office-website>"          # optional
+  specializations:                 # optional list of disciplines printed
+    - "<Discipline 1>"             # on the office letterhead (e.g.
+    - "<Discipline 2>"             # "Garten- und Landschaftsarchitektur",
+                                   # "Stadtplanung", etc.)
+  logo_path: "<absolute-path>"     # optional, image referenced by
+                                   # office-style.sty as \OfficeLogoPath
+  signature_image_path: "<path>"   # optional, scanned signature for
+                                   # signed PDFs as \OfficeSignaturePath
   signature_block: |               # required. Inserted verbatim into cover
     Mit freundlichen Grüßen        # mails / Anschreiben.
-    Gunther Schulz
-    Planungsbüro Schulz
+    <Title> <Full Name>
+    <Office Name>
 
 # --- Practices (internal sub-units of THIS office) ----------------------
 #

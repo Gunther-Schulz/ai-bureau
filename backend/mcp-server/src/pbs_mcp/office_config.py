@@ -62,9 +62,24 @@ class Partner(BaseModel):
 class Identity(BaseModel):
     address_lines: list[str] = Field(..., min_length=1)
     signature_block: str = Field(..., min_length=1)
+    title: str | None = None              # e.g. "Dipl.-Ing."
     phone: str | None = None
+    mobile: str | None = None             # separate Funk/Mobile field
+    fax: str | None = None
     email: str | None = None
     web: str | None = None
+    specializations: list[str] = Field(default_factory=list)
+                                          # disciplines listed on letterhead
+    logo_path: Path | None = None         # path to office logo image
+    signature_image_path: Path | None = None
+                                          # scanned signature for signed PDFs
+
+    @field_validator("logo_path", "signature_image_path", mode="before")
+    @classmethod
+    def _expand(cls, v):
+        if v is None:
+            return v
+        return Path(os.path.expandvars(str(v))).expanduser()
 
 
 StateCode = Literal[
