@@ -240,8 +240,32 @@ pass):
 
 **Output of assessment**: a brief decision document (could be
 `docs/rag-pipeline-decisions.md` — ~1 page) capturing what gets
-wired in for first ingest and what's deferred. Then proceed to
-RAG kickoff.
+wired in for first ingest and what's deferred.
+
+**"RAG" here = the whole retrieval/lookup subsystem**, not just
+text-vector retrieval. Four mechanisms in scope:
+- Unstructured text RAG (verbatim cites, prose)
+- Structured tool calls (graph traversal, registry queries — the
+  ROADMAP "structural retrieval" item: legal §-graph, project-
+  cross-project, verfahren state-machine become typed MCP tools
+  rather than text-search guesses)
+- Multimodal RAG (page-image, table extraction, OCR, DRM removal)
+- Hybrid (text + structured + multimodal candidates merged,
+  reranker chooses)
+
+If assessment decides to wire any non-trivial change in (e.g. add
+HyDE, swap to ColBERT-v2, build the legal §-graph as a typed tool,
+add ColPali for page images), **implement that change BEFORE first
+ingest**. Re-ingesting 57 entries through a wrong pipeline is the
+cost we're avoiding; same logic for re-emitting bausteine if the
+retrieval API changed shape after they were saved.
+
+Implementation order within this phase:
+1. Assessment — produce decisions doc
+2. Backend changes (chunking, new tools for structured retrieval,
+   new pipeline stages for multimodal)
+3. Skill changes that assume the new mechanisms
+4. THEN proceed to RAG kickoff below
 
 Then RAG kickoff:
 
