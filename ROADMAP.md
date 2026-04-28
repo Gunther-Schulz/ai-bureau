@@ -11,58 +11,22 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ## v1.x — likely soon
 
-### Modular integrations declared at office setup
+### Email adapter implementations
 
-**Why**: external systems (mail, calendar, scanner OCR, phone-system
-call logs, accounting, GIS data feeds) vary per deployment. Some
-offices use Thunderbird, others Outlook or web-IMAP-only; some
-self-host email, some use Microsoft 365. Hard-coding any one
-mechanism would break portability — the same architectural lesson
-as paths/identity/practices.
+**Why**: integration adapter scaffolding is in place
+(`backend/.../integrations/email/{protocol,none}.py`) — but no real
+adapter yet. v1 has manual `.eml` drop into
+`<project>/Schriftverkehr/eml/`. For complete project context the
+assistant needs full inbox access; manually-saved `.eml` files are a
+curated subset.
 
-**Sketch**: each integration class becomes a pluggable adapter:
-
-```yaml
-# in office-config.yaml
-integrations:
-  email:
-    adapter: thunderbird-maildir       # | imap | outlook-pst | mbox-file | none
-    config: { profile_path: ~/.thunderbird/<p>/Mail/ }
-  calendar:
-    adapter: caldav                     # | exchange-ews | ical-file | none
-    config: { url: ..., credentials_ref: ... }
-  scanner:
-    adapter: hot-folder                 # | escli | tesseract | none
-    config: { hot_folder: ~/Documents/Scans/ }
-```
-
-`setup-office` skill: at first-bootstrap, walks the user through
-which integrations they want enabled and which adapter to pick per
-class, writes config, validates each adapter loads. Adapters
-themselves live as Python modules under
-`backend/mcp-server/src/pbs_mcp/integrations/<class>/<adapter>.py`
-implementing a small protocol (probe/list/fetch/normalize). MCP tools
-expose the unified interface (`fetch_emails(project, since=...)`)
-regardless of adapter.
-
-**Note**: not implementing in v1. The architectural rule is clear —
-no hardcoded mechanism. Initial v1 implementations may inline a
-single adapter (e.g. Thunderbird maildir for email) but the adapter
-boundary is in place from day one.
-
-### Email integration (Thunderbird mbox reader)
-
-**Why**: v1 has manual `.eml` drop into `<project>/Schriftverkehr/eml/`.
-For complete project context, the assistant needs full inbox access
-because the manually-saved `.eml` files are a curated subset.
-
-**Sketch**: First adapter for the email-integration class above.
-Small Python service that polls Thunderbird's local maildir/mbox at
+**Sketch**: first concrete adapter is `thunderbird-maildir.py` —
+polls Thunderbird's local maildir/mbox at
 `~/.thunderbird/<profile>/Mail/`, filters by domain whitelist +
 project-keyword matching, drops matched messages into the right
-project's `correspondence/eml/`. Could be an MCP tool or a
-standalone daemon. Behind the integration adapter interface so an
-office on IMAP can swap implementations without touching skills.
+project's `Schriftverkehr/eml/`. Implements
+`pbs_mcp.integrations.email.protocol.EmailAdapter`. After that:
+`imap.py` for self-hosted offices.
 
 ### Phone call note format
 
@@ -72,17 +36,20 @@ spec exists for what a call note file should contain.
 **Sketch**: small markdown spec — frontmatter (date, party,
 contact, project, type=call, duration), body sections (Kontext,
 Zusammenfassung, Entscheidungen, Folgeaktionen). Could be authored
-into `<repo>/memory/universal/` as a reference content file.
+into `<repo>/memory/universal/` as a reference content file. Future
+integration: `phone.adapter: call-log-csv` reads a phone-system CSV
+export and proposes call-note creations.
 
-### Office identity config
+### Domain manifest population — Innenentwicklung
 
-**Why**: `memory/global/identity.md` referenced by draft-cover-mail
-and other skills. Holds PBS-specific signature, address, language
-convention, default Quellen.
+**Why**: `extensions/domain/Innenentwicklung/references-manifest.yaml`
+is currently a skeleton. Will need population when first office with
+this domain (urban planning, no renewables) deploys, OR when PBS
+takes on an Innenentwicklung-only project.
 
-**Sketch**: single file with PBS-specific data. Format is reference
-content (no frontmatter, just markdown). Drafted from existing PBS
-templates.
+**Sketch**: candidates — Difu-Leitfäden, BBSR-Veröffentlichungen,
+BVerwG-Rechtsprechung zu §13a/§13b BauGB. Use `author-manifest`
+already-existing skill to seed; `research-references` populates.
 
 ---
 
@@ -237,7 +204,12 @@ projects need it.
 
 **Spec**: `memory/universal/verfahren/artenschutz.md`. Covers
 Bestandsaufnahme-Standards (Südbeck, Dietz/Kiefer), Signifikanz-
-prüfung, CEF-Wirksamkeit-Nachweis, FCS-Auslegung.
+prüfung, CEF-Wirksamkeit-Nachweis, FCS-Auslegung. Note: with the
+domain split, this content is Naturschutz-domain-scoped — should
+land at `memory/domain/Naturschutz/verfahren/artenschutz.md` once
+domain-scoped memory directories exist (currently universal-only).
+The decision to introduce per-domain memory directories awaits the
+first domain-specific reference content (this would be the trigger).
 
 ### Other verfahren / doctypes as projects raise them
 
@@ -254,8 +226,10 @@ v1 design. Apply by next session and onward.
 
 ### ARCHITECTURE.md as first reference
 
-When in doubt about where new content belongs, walk Rules 1-5 in
-`ARCHITECTURE.md`. Don't guess; classify deliberately.
+When in doubt about where new content belongs, walk Rules 1-6 in
+`ARCHITECTURE.md` (after the v0.2 nine-entity-types refactor). Don't
+guess; classify deliberately. For layered manifest entries pick the
+scope (universal/domain/state) BEFORE the path.
 
 ### Source-grounding for legal claims
 

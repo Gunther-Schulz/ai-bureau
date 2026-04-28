@@ -1,247 +1,238 @@
 # Session handoff — pbs-bureau
 
-End of session 2026-04-28 (second major session). The previous
-HANDOFF described "backend smoke test green; CUDA confirmed"; this
-session pivoted to a deep architectural cleanup: app vs office-config
-split, memory↔RAG rule, per-project state, layered LaTeX template
-stack, modular integrations. The repo is now a deployable generic
-German-planning-bureau workflow app, with PBS as the reference
-deployment.
+End of session 2026-04-28 (third major session). Previous session
+landed the architectural foundation (app/office split, memory↔RAG,
+practices/partners, 3-layer LaTeX). This session executed the
+**`(universal × domain × state)` orthogonality refactor** — the
+third meta-rule. Now: every reference / doctype / skeleton / baustein
+lives in one of three layered scopes, loaders walk the union per
+office's selected `scope`. PBS picks `{PV-FFA, Wind, Naturschutz} ×
+{MV}`; future deployments pick their own.
 
 **Read order for next session**:
 1. This file (HANDOFF.md)
-2. `ARCHITECTURE.md` — meta-rules + 7 entity types + decision rules
-3. `docs/office-config.schema.yaml` — the deployment-config schema
-4. `plugin/skills/orchestrator/SKILL.md` + `PROCEDURE.md`
-5. Whichever skill the user invokes
+2. `ARCHITECTURE.md` — meta-rules (3 now) + 9 entity types + 6 decision rules
+3. `docs/office-config.schema.yaml` — schema v2 with scope + integrations
+4. `extensions/README.md` — layered manifest layout
+5. `plugin/skills/orchestrator/SKILL.md` + `PROCEDURE.md`
+6. Whichever skill the user invokes
 
 ---
 
 ## Status snapshot
 
-### ✅ Architecture transformation (this session)
+### ✅ Refactor — 7 phases, 7 commits
 
-- **App vs office split** (ARCHITECTURE.md meta-rule + skill-author
-  checklist): no PBS-specific values in repo content. All paths,
-  identity, practices, state-extensions, LaTeX styling come from
-  `office-config.yaml` resolved via env-var-then-XDG.
-- **Memory ↔ RAG rule** (ARCHITECTURE.md): cross-cutting memory
-  uses §-references as labels only; verbatim legal text lives in
-  RAG. Memory docs declare `references_used[]` in frontmatter;
-  `research-references` flags both bausteine and memory docs on
-  law change.
-- **State per-project** (`state.md.bundesland`), never office-level.
-  `office.state` removed. `extensions.references_manifests` is a
-  `dict[StateCode, Path]` keyed by Bundesland.
-- **3-layer LaTeX stack**: app `.cls` + skeletons (Layer 1) +
-  office `office-style.sty` + auto-generated `office-identity.tex`
-  (Layer 2) + per-project `Projektdaten.tex` (Layer 3). Compile
-  composes TEXINPUTS across layers.
-- **practices vs partners**: practices = internal sub-units of
-  this office. partners = external collaborators (other offices)
-  with own email/identity/match-patterns. Both can carry signer +
-  email_match_patterns (fnmatch-style).
-- **Manifest split**: federal-core in repo
-  (`references-manifest.yaml`), state extensions per Bundesland in
-  `<state_root>/extensions/<STATE>/`, with example template at
-  `docs/office-extensions/MV/references-manifest.example.yaml`.
-- **Modular integrations roadmap** (ROADMAP.md): email/calendar/
-  scanner/etc. as office-config-declared adapter classes — not
-  implemented, principle established.
+This entire session was one coherent refactor. Each phase committed
+separately for review-ability:
 
-### ✅ Backend (commit `0fbe511`)
+| Phase | Commit | What |
+|---|---|---|
+| 1 | `9571692` | Filesystem reshape — `(universal × domain × state)` directory layering, all renames clean. memory/domain → memory/universal; references-manifest.yaml → extensions/universal/; skeletons → universal/<doctype>/; new extensions/{domain,state} tree; memory/bausteine/ + per-project-memory/; office-style.{PV-FFA,Wind}.sty |
+| 2 | `694e7a6` | Schema v2 — `scope.{domains,states}`, layered `ManifestMap`, integrations block, migration framework (`office_config_migrations/`). Backend rewiring: new `all_references_manifests()` / `all_doctypes_manifests()` / skeleton-overlay composition. |
+| 3 | `75657e5` | Skills — setup-office wizard extended for scope multi-select + integrations + per-domain office-style overlays; research-references walks union of selected manifests; NEW `author-manifest` skill. |
+| 4 | `16133c2` | Manifest content moved + gap-filled. Universal-core sliced down to truly-universal frameworks; PV-FFA / Wind / Naturschutz domain manifests populated; MV state manifest extended. ~50 entries across 6 manifests (was 24 in flat federal-core). |
+| 5 | `a27378a` | Integration adapter scaffolding — protocol + none-adapter for email, calendar, scanner, phone, accounting. `load_adapter("email")` works; real adapters slot into protocols later. |
+| 6 | `35e90fb` (next commit) | Docs sync — ARCHITECTURE.md (orthogonality meta-rule + 9 entity types + 6 rules), ROADMAP.md (modular-integrations item resolved into Phase 5; deferred-domain-population added), README.md (architectural meta-rules + new layout), HANDOFF.md (this file). |
+| 7 | `<next>` | PBS deployment update + smoke test (this is what's pending below). |
 
-- New `office_config.py` — pydantic schema + loader
-  (env-var-then-XDG resolution, validation, identity-macro
-  generator helpers).
-- `config.py` — delegates path resolution to office_config.
-- `tools/projects.py` — practices, folder-layout, project-name
-  generation, project-number auto-increment all from config.
-- `tools/build.py` — TEXINPUTS-aware compile, auto-regenerates
-  `office-identity.tex` from `identity:` section before each
-  build.
-- `tools/ingest.py` — path classification by config-derived roots.
-- `schemas.py` — SourceSubtype renamed (`hidrive-project` →
-  `project-folder`, `gesetz-mv` → `gesetz-state`).
+### ✅ The orthogonality (now hardcoded into the architecture)
 
-### ✅ New surface (commit `ee31899`)
+Three meta-rules in ARCHITECTURE.md, all enforced:
 
-- **`setup-office` skill** — first-time deployment wizard with
-  conversational prompt-by-prompt flow (`references/wizard-flow.md`).
-  Creates office-config, bootstraps state directory tree, copies
-  default office-style + state-extension templates.
-- **`setup_project` MCP tool** — single entry point for project
-  work. Mode auto-detected from target_root state: absent →
-  create+scaffold; empty → scaffold inside; populated → fall back
-  to bind. Generates folder name from naming template, scaffolds
-  layout per `conventions.project_folder_layout`, copies skeleton
-  per doctype, patches Projektdaten.tex placeholders, seeds
-  `.ai/state.md`, appends to projects-index.
+1. **App vs office** — no PBS-specific values in repo (identity, paths,
+   practices, styling come from `office-config.yaml`).
+2. **Memory vs RAG** — verbatim legal text in RAG only; memory holds
+   workflow logic + §-labels with `references_used[]` frontmatter.
+3. **Scope orthogonality** — references / doctypes / skeletons /
+   bausteine layered along `(universal × domain × state)`. Office
+   declares `scope.domains[]` + `scope.states[]`; loaders walk the
+   union.
 
-  Backend now exposes 18 tools (was 17).
+### ✅ Backend (commits `694e7a6`, `a27378a`)
 
-### ✅ Identity model extended (commit `9dbe067`)
+- `office_config.py` v2: scope, layered ManifestMap, integrations
+  block, schema-version dispatcher with migration framework
+  (`office_config_migrations/v1_to_v2.py`).
+- `config.py`: new layered API — `all_references_manifests()`,
+  `all_doctypes_manifests()`, `app_universal_skeleton_for(doctype)`,
+  `app_domain_skeleton_for(domain, doctype)`.
+- `tools/projects.py`: `setup_project` composes universal skeleton +
+  domain overlays.
+- `tools/build.py`: TEXINPUTS uses recursive `//` for layered
+  skeletons subtree.
+- `integrations/{email,calendar,scanner,phone,accounting}/`: each
+  has `protocol.py` + `none.py`. `load_adapter(class_name)` resolves
+  via office_config; smoke test green for all 5.
 
-- Identity gained: `title`, `mobile`, `fax`, `specializations[]`,
-  `logo_path`, `signature_image_path`.
-- `office-identity.tex` generator emits `\OfficeTitle`,
-  `\OfficeMobile`, `\OfficeFax`, `\OfficeSpecializations`,
-  `\OfficeLogoPath`, `\OfficeSignaturePath` for office-style.sty
-  to consume.
-- Bugfix: `\OfficeSignatureBlock` was double-escaping LaTeX line
-  breaks; now escapes per-line then joins.
+### ✅ Skills (commit `75657e5`)
 
-### ✅ PBS deployment configured
+- `setup-office` v0.2: discovers available domains+states by
+  listing `extensions/{domain,state}/*` (skipping placeholder dirs);
+  multi-select wizard; auto-derives `extensions.{references,
+  doctypes}_manifests` map from scope; per-domain office-style
+  overlay offer; integration adapter selection per class.
+- `research-references` v0.2: scope-aware — walks
+  `office_config.all_references_manifests()`, hands off to
+  `author-manifest` for new-target-manifest registration; per-manifest
+  + union counts in output.
+- **NEW `author-manifest`**: parameterized scaffold for new
+  domain/state manifests. Used when a scope key doesn't yet have
+  content (e.g. first office with Hochwasserschutz domain → scaffold
+  `extensions/domain/Hochwasserschutz/...`).
 
-`~/.config/pbs-bureau/office.yaml` (NOT in repo):
+### ✅ Manifests populated (commit `16133c2`)
 
-- Office: **Planungsbüro G. Schulz** (note: with G.); short PBS;
-  language de_DE
-- Identity: Dipl.-Ing. Gunther Schulz, An der Pferdekoppel 3,
-  23972 Dorf Mecklenburg, Tel/Fax 03841/62 0 66 11, Funk
-  0178 3268495, mail@planungsbuero-schulz.de,
-  www.planungsbuero-schulz.de
-- Specializations: Garten-/Landschaftsarchitektur, Solar-/Wind-
-  energieplanung, Landschaftsplanung, Stadtplanung
-- Practice (internal): `main` — Dipl.-Ing. Gunther Schulz
-- Partner: `hendrik` — Hendrik Sönnichsen
-  (`hs@deroekologe.de`, `*@deroekologe.de`)
-- Paths: hidrive-rooted (state_root, references_root,
-  projects_root) + local_repos_root at
-  `~/dev/Planungsbüro-Schulz`
-- MV state-extension registered at
-  `<state_root>/extensions/MV/references-manifest.yaml`
+`extensions/` tree now contains:
 
-State directory bootstrapped at hidrive:
-- `<state_root>/projects-index.md`, `pending-actions.md`,
-  `recent-correspondence.md` (empty seeds)
-- `<state_root>/templates/office-style.sty` (copy of
-  `office-style.default.sty`)
-- `<state_root>/templates/office-logo.png`,
-  `office-signature.png` (provided + copied)
-- `<state_root>/extensions/MV/references-manifest.yaml` (copy of
-  example)
-- `<references_root>/` with empty subdirs: `gesetze/{bund,eu,MV}`,
-  `leitfaeden/`, `urteile/`, `beispiele/`, `changelog.md`
+- `universal/`: 10 federal frameworks (BauGB, BauNVO, BImSchG,
+  UVPG, PlanZV, ROG, EEG, WHG, BBodSchG, BWaldG) + universal
+  doctypes (Begründung, Festsetzungen, Umweltbericht, Abwägung).
+- `domain/Naturschutz/`: 2 federal Naturschutz-Gesetze (BNatSchG,
+  BArtSchV), 2 EU directives (FFH-RL, VRL), 2 BfN-Schriften, 10
+  Urteile (BVerwG x6 incl. Marburg + Westumfahrung Halle, EuGH x4
+  incl. Białowieża + Holohan), 3 Methodik (Südbeck, Dietz/Kiefer,
+  Garniel/Mierwald) + 8 Naturschutz doctypes (Artenschutzgutachten,
+  saP-VP/HP, FFH-VP/-VP, LBP, AFB, Kartierbericht).
+- `domain/PV-FFA/`: 6 KNE leitfäden + BfN-Schriften 705 (Agri-PV).
+- `domain/Wind/`: WindBG + 4 KNE-Wind/Helgoländer leitfäden +
+  Albrecht 2014 Fledermaus methodik.
+- `domain/Innenentwicklung/`: skeleton-only (populates when a
+  bureau with this domain deploys).
+- `state/MV/`: 5 Landesgesetze + 5 LUNG/StALU leitfäden + 5
+  OVG-MV urteile (3 M 63/06, Körkwitz, Wind vs Denkmalschutz,
+  Untätigkeit, Seeadler 2024-06).
 
-End-to-end smoke test green: office_config loads, all paths
-resolve, MV extension reaches manifest, federal-core manifest
-reachable, identity macros generate cleanly, practice/partner
-email routing works (case-insensitive wildcards), `list_projects`
-returns empty (clean state).
+### ⏳ Pending — Phase 7 (PBS deployment + smoke test)
 
-### ⏳ Pending — first thing for next session
+Phase 7 is the only thing not done in this session. Steps:
 
-**Run `research-references` first-time fetch**. Now feasible —
-office config + state-extension manifest are in place. Steps:
+1. **Update PBS office-config** at `~/.config/pbs-bureau/office.yaml`
+   to schema v2:
+   - Add `scope: {domains: [PV-FFA, Wind, Naturschutz], states: [MV]}`
+   - Replace `extensions.references_manifests: {MV: ...}` with the
+     full layered map pointing at `<repo>/extensions/`
+   - Add `extensions.doctypes_manifests` parallel structure
+   - Add `integrations: {email: {adapter: none, ...}, ...}`
+   - Bump `schema_version: 1` → `2`
+   The migration runs on load, but writing it back to disk
+   formalizes the new shape.
 
-1. **Reload plugin** (`/reload-plugins`) so the session sees the
-   new `setup_project` tool + the office-config-aware backend.
-2. **Run research-references**: traverses both
-   `<repo>/references-manifest.yaml` (federal core) and
-   `<state_root>/extensions/MV/references-manifest.yaml` (state
-   extension). For each entry:
-   - `web-text` / `web-html` / `web-pdf` entries: WebFetch + write
-     to `<references_root>/<canonical_path>`.
-   - `manual` entries (KNE leitfäden, LUNG-MV, Verfahrenserlass-MV,
-     Brandschutzkonzept-MV): per the new policy, Claude browses
-     the publisher site to discover the canonical PDF URL, then
-     downloads. **No reading from legacy `Literatur/` folder.**
-3. **Ingest references** via `ingest_paths` into LanceDB. First
-   call downloads bge-m3 + reranker (~3GB). RTX 5090 picks up
-   CUDA automatically.
-4. **Sample search**: verify hybrid + reranker pipeline returns
-   sensible hits.
+2. **Smoke test the full chain**:
+   ```python
+   cfg = office_config.load()
+   assert cfg.schema_version == 2
+   assert cfg.scope.domains == ["PV-FFA", "Wind", "Naturschutz"]
+   assert cfg.scope.states == ["MV"]
+   assert len(cfg.all_references_manifests()) == 5  # universal + 3 domain + 1 state
+   assert len(cfg.all_doctypes_manifests()) >= 2    # universal + Naturschutz
+   for cls in ("email", "calendar", "scanner", "phone", "accounting"):
+       a = integrations.load_adapter(cls)
+       assert a.probe()["ok"]
+   ```
+
+3. **`/reload-plugins`** so Claude Code picks up updated SKILL.md files
+   and the new `author-manifest` skill.
+
+4. **Run `research-references` first-time fetch** — now feasible
+   with all manifests in place. ~50 entries across federal + 3
+   domains + MV. RTX 5090 picks up CUDA automatically; bge-m3 +
+   reranker download (~3GB) on first ingest call.
+
+5. **Sample search** to verify hybrid + reranker pipeline.
 
 After that:
-5. Bind first project (any existing hidrive project — orchestrator
-   routes through survey-project → bind_project, no schema
-   migration needed).
-6. Optional: wire `\OfficeLogoPath`, `\OfficeSpecializations` into
-   the default `office-style.sty` letterhead layout if you want
-   richer compile output.
+- Bind first project (any existing hidrive project — orchestrator
+  routes through survey-project → bind_project, no schema migration
+  needed).
+- Optional: wire `\OfficeLogoPath`, `\OfficeSpecializations` into
+  `office-style.sty` letterhead.
 
 ### ❌ Deferred (not blocking)
 
-- **PBS project migration to colocated layout** — explicitly
-  dropped this session. PBS keeps its current per-doctype-LaTeX-repo
-  layout under `~/dev/Planungsbüro-Schulz/`. The orchestrator's
-  binding flow uses survey-project for adoption.
-- **Email integration** — see ROADMAP.md "Modular integrations
-  declared at office setup". Adapter pattern locked in;
-  Thunderbird-maildir adapter is first implementation when needed.
-- **Office-style.sty letterhead** — default version doesn't yet
-  use the new `\OfficeLogoPath` / `\OfficeSpecializations`
-  macros. Cosmetic; structural compile works without.
+See ROADMAP.md for the updated list. Highlights:
+- Real email/calendar/scanner/phone/accounting adapters
+  (`thunderbird-maildir.py` etc.) — protocols + none-adapters in
+  place; concrete adapters land per demand.
+- Innenentwicklung domain population — when a bureau needs it.
+- Per-domain memory directories (`memory/domain/<X>/`) —
+  introduce when first domain-scoped reference content lands
+  (Artenschutz verfahren reference is the natural trigger).
+- Reference versioning, internal cross-refs, subagents, hooks —
+  v2 work.
 
 ---
 
 ## Key architectural decisions made (with reasoning)
 
+### From this session
+
 | Decision | Reasoning |
 |---|---|
-| **App vs office-config split** | Repo must be deployable to other German planning bureaus. PBS-specific values live in `office-config.yaml` outside repo, resolved via env-var-then-XDG. ARCHITECTURE.md meta-rule + skill-author checklist enforce. |
-| **Memory ↔ RAG split** | Memory shadows RAG → drift. Strict rule: §-refs as labels OK; verbatim legal/Verfahrensvermerk text in RAG only; cross-cutting memory declares `references_used[]`; `research-references` flags affected docs on law change. |
-| **State per-project** | Offices work cross-state. `office.state` (singular or plural) was wrong. `state.md.bundesland` selects which state-extension manifest applies; office holds a `dict[StateCode, Path]` of registered extensions. |
-| **practices vs partners** | Internal sub-practices ≠ external collaborators. PBS itself is one practice (`main`); Hendrik (deroekologe.de) is a partner. Same partner can be co-producer (`state.md.partners[]`) or client (`state.md.client`) on different projects — email match patterns work either way. |
-| **3-layer LaTeX stack** | App ships universal cls + skeletons (Layer 1). Office authors `office-style.sty` once for aesthetic (Layer 2). Project provides `Projektdaten.tex` (Layer 3). Identity macros auto-generated from office-config into `office-identity.tex`. TEXINPUTS composes the layers. PBS migration of existing inline-styled masters is a clean rewrite per layer (no backwards-compat). |
-| **Federal-core manifest in repo, state extensions out** | Federal laws + KNE leitfäden + BVerwG/EuGH apply to every German bureau (in repo). State laws + state Verfahrenserlasse vary by Bundesland (in office state extensions). Example template at `docs/office-extensions/MV/`. |
-| **Auto-incrementing project numbers** | Default per `conventions.project_numbering.{pattern, auto_increment}`. Scans both projects-index AND projects_root for the highest-numbered folder. User can always override. |
-| **No project migration this session** | PBS has 16+ existing projects across hidrive + dev tree. One-time conversational migration (not a skill) — deferred until user wants it. |
-| **Modular integrations** | email/calendar/scanner/etc. as adapter classes declared in `office-config.integrations:`. Same architectural lesson as paths: no hardcoded mechanism. Roadmap-only for now. |
-| **Symlink dev install** | Unchanged from prior session. `dev-link.sh` keeps `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` → `<repo>/plugin/`. Re-run if Claude Code replaces with copy. |
+| **`(universal × domain × state)` orthogonality** | Real planning bureaus decompose work along these axes. Forcing a single flat federal-core mixes "universal-to-every-bureau" with "domain-of-PBS-interest" content; future deployments would need to fork the manifest. Layered loaders + scope selection give clean composition. |
+| **Domain manifests live in repo, not per office** | Domain content (KNE-PV leitfäden, Helgoländer Papier) is the same for every bureau working in that domain. Shipping in repo + offices selecting via scope avoids drift across deployments. |
+| **State manifests live in repo too**, with per-office overlay path | State laws are uniform across MV; ship canonical content in repo. Office-local additions (regional Leitfäden specific to NW-MV) are an optional overlay, not the default. |
+| **Bauchstein scope is single-valued** | A baustein with multi-scope candidates is a signal that the content isn't really one reusable unit — promote to universal or split. |
+| **`memory/domain/` renamed → `memory/universal/`** | Old name was misleading: the content was universal (every German bureau), not domain-scoped. Layered manifests took over the domain word. |
+| **NEW `author-manifest` skill** (single, parameterized) | Same wizard logic for domain vs state vs references-vs-doctypes; three skills would duplicate. |
+| **Schema migration framework from day one** | No second deployment yet, but pattern in place avoids retrofit pain. v1_to_v2 migration is real and tested. |
+| **Integration adapter scaffolding now** | ROADMAP said "adapter boundary in place from day one". Wire-thin protocol + none-adapter cost ~5 min per class; sets discipline. |
+| **doctypes split universal vs Naturschutz domain** | Begründung/Festsetzungen are universal; Artenschutzgutachten/LBP/saP are Naturschutz-domain. The domain split surfaced this; existing doctypes registry was conflating layers. |
+| **TEXINPUTS gets `//` for skeletons** | Layered tree (universal/<doctype>/Textbausteine + domain/<X>/<doctype>/Textbausteine) needs recursive kpathsea search. |
+
+### Carrying forward (from previous sessions)
+
+| Decision | Reasoning |
+|---|---|
+| **App vs office-config split** | Repo deployable to other German planning bureaus; PBS-specific values in `office-config.yaml` outside repo. ARCHITECTURE.md meta-rule + skill-author checklist enforce. |
+| **Memory ↔ RAG split** | §-refs as labels OK; verbatim text only in RAG; cross-cutting docs declare `references_used[]`. |
+| **practices vs partners** | Internal sub-practices ≠ external collaborators. Email match patterns route either way. |
+| **3-layer LaTeX stack** | App `.cls` + `office-style.sty` + project `Projektdaten.tex`. Identity macros auto-generated. Now layered for skeletons too: universal + domain overlays. |
+| **No PBS project migration this session** | PBS keeps current per-doctype-LaTeX-repo layout. Orchestrator binding flow uses survey-project for adoption. |
 
 ---
 
-## Key paths reference
+## Key paths reference (post-refactor)
 
 | Path | Purpose |
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/` | Claude Code plugin |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/templates/` | App-shipped LaTeX classes + skeletons + default office-style |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/` | Cross-cutting domain memory (universal German planning) |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/backend/mcp-server/` | Python MCP backend (18 tools) |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/docs/office-config.schema.yaml` | Office-config schema |
-| `/home/g/dev/Gunther-Schulz/pbs-bureau/docs/office-extensions/MV/` | M-V state-extension example |
-| `~/.config/pbs-bureau/office.yaml` | **PBS office config (NOT in repo)** |
-| `/mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/Projekte/_ai-office-state/` | PBS office state (templates/, extensions/MV/, projects-index, etc.) |
-| `/mnt/data2t/hidrive/.../_ai-references/` | PBS AI-owned legal references corpus (subdirs ready, content not yet fetched) |
-| `/mnt/data2t/hidrive/.../Projekte/` | All client projects (16+) |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/` | Claude Code plugin (16 skills now incl. author-manifest) |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/` | Layered skeletons composed at scaffold |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/plugin/templates/office-style/office-style.{default,PV-FFA,Wind}.sty` | Office-style + per-domain overlays |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/extensions/{universal,domain/<X>,state/<X>}/` | Layered references + doctypes manifests |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/universal/` | Universal domain knowledge (formerly memory/domain/) |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/bausteine/{universal,domain/<X>,state/<X>}/` | Saved baustein landing site |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/memory/universal/per-project-memory/` | Schema docs for per-project `_ai/` |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/backend/mcp-server/src/pbs_mcp/integrations/<class>/{protocol,<adapter>}.py` | Pluggable integration adapters |
+| `/home/g/dev/Gunther-Schulz/pbs-bureau/backend/mcp-server/src/pbs_mcp/office_config_migrations/` | Schema migration framework |
+| `~/.config/pbs-bureau/office.yaml` | **PBS office config — needs Phase 7 update to v2 schema** |
+| `/mnt/data2t/hidrive/.../_ai-office-state/` | PBS office state |
+| `/mnt/data2t/hidrive/.../_ai-references/` | PBS legal references RAG corpus (still empty — Phase 7 fetch fills it) |
+| `/mnt/data2t/hidrive/.../Projekte/` | All client projects |
 | `~/dev/Planungsbüro-Schulz/` | PBS local per-doctype LaTeX working copies |
 
 ---
 
-## Working-style notes (lessons from this session)
+## Working-style notes
 
-1. **Apply ARCHITECTURE.md rules rigorously**. The meta-rules
-   (app/office, memory/RAG) catch leakage that's easy to miss in
-   isolation. When placing or generating new content, walk the
-   meta-rules first.
-2. **Memory must NOT contain verbatim legal text**. §-refs as
-   labels only. Verbatim wording lives in RAG, retrieved per
-   project bundesland. Adding `references_used[]` lets
-   `research-references` track dependents.
-3. **No "legacy" mentions in skills or app code**. The app
-   assumes AI-owned worldview throughout. Bridge to legacy only
-   via `survey-project` when binding existing project folders.
-4. **State is per-project** (`state.md.bundesland`). Skills resolve
-   state-specific references through the project's bundesland,
-   never through office-level config.
-5. **practices ≠ partners**. Same person/entity (e.g. Hendrik)
-   can be partner on one project and client on another. Email
-   patterns route correctly either way.
-6. **Don't double-escape in LaTeX generators**. Escape per-line
-   user content first, THEN add structural LaTeX (line breaks,
-   wrappers). Earlier `_generate_identity_macros` had this bug
-   in the signature_block; fixed in `9dbe067`.
-7. **Source-grounding guard unchanged**. Any legal citation in
-   produced output must be backed by a tool result. §-numbers
-   appearing in memory don't satisfy the citation-evidence
-   requirement.
-8. **Commit at coherent checkpoints**. This session: 4 commits
-   pushed (`0fbe511`, `ee31899`, `0e4aea7`, `9dbe067`) — each is
-   a stable, testable milestone.
+1. **Commit between phases** — 7 commits in this session, one per
+   refactor phase, each a stable testable milestone. Lets
+   sanity-check progressively and rollback selectively.
+2. **Backend smoke-test after every backend change**, even one-liner —
+   `python -c "from pbs_mcp import office_config; cfg = office_config.load(); print(cfg.scope)"` caught a migration bug in Phase 2 quickly.
+3. **Prefer git mv** for file moves so rename detection preserves
+   history. The `extensions/universal/references-manifest.yaml`
+   shows up in git log with full history of the old
+   `references-manifest.yaml`.
+4. **Apply ARCHITECTURE.md rules rigorously** — when Phase 4 split
+   the doctypes into universal vs Naturschutz, the orthogonality
+   meta-rule made the split obvious; without it I'd have hand-waved
+   Naturschutz-only types into the universal registry.
+5. **Cite-only entries are bibliographic-only** — they validate
+   citation form, not claim accuracy. The user surfaced this clearly
+   during the gap-fill discussion; documented in
+   `manifest-schema.md`.
 
 ---
 
@@ -250,10 +241,11 @@ After that:
 - **User's machine**: Linux, RTX 5090 (32GB VRAM). Python 3.13.
 - **User's plugins active**: bildhauer, clippy, skill-craft,
   experiment-lab, gis-utils, plugin-dev, pbs (this one).
-- **Plugin cache symlink**: was getting overwritten by
-  Claude Code earlier; re-run `bash dev-link.sh` if
-  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` is a regular
-  directory rather than a symlink.
+- **Plugin cache symlink**: re-run `bash dev-link.sh` if
+  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` is a regular dir.
+  Note: setup-office and research-references skill versions bumped
+  to 0.2.0; new author-manifest at 0.1.0. Plugin version itself
+  unchanged.
 - **Hooks active**: `restrict-bash-paths.py`,
   `restrict-file-paths.py` in dotfiles. Hidrive path whitelisted.
 - **Settings symlink**: verify

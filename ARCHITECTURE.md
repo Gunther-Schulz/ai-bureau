@@ -65,6 +65,52 @@ app — its config is *outside the repo*, at the env-var or XDG
 location, never committed. Adding fields to the schema requires
 bumping `schema_version` and updating `setup-office` migration.
 
+## Meta-rule: scope orthogonality (universal × domain × state)
+
+The third meta-rule. Reference content, doctype registries, skeletons,
+and bausteine all decompose along the same three orthogonal axes:
+
+- **universal** — applies to every German Planungsbüro deploying this
+  app, regardless of planning domain or Bundesland.
+- **domain** — applies to bureaus working in a specific planning
+  domain (e.g. PV-FFA, Wind, Naturschutz, Innenentwicklung).
+  Multiple domains can be active simultaneously.
+- **state** — applies to bureaus working in a specific Bundesland
+  (BB, BW, BY, ..., TH). Multiple states can be active simultaneously.
+
+A bureau's effective configuration is its `(domains × states)`
+selection (set in `office-config.yaml > scope.{domains,states}`).
+Layered loaders merge the universal layer with each selected domain
+and state layer at runtime.
+
+**Where this lives:**
+
+- **References manifests**: `extensions/{universal,domain/<X>,state/<X>}/references-manifest.yaml`
+- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>}/doctypes.yaml`
+- **Skeletons**: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
+- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`
+- **Office-style overlays**: `plugin/templates/office-style/office-style.{default,<DOMAIN>}.sty`
+
+**Hard rules for placing new content:**
+
+- Decide the scope BEFORE the path. Ask: does this apply to every
+  German bureau (universal), every bureau in this domain (domain),
+  every bureau in this state (state)?
+- A baustein has exactly one scope. If a candidate baustein applies
+  to multiple, either promote it up the layer (`universal` if truly
+  cross-domain) or split it.
+- An entry's home is independent of who created it. PBS adding a
+  Naturschutz entry today doesn't make that entry PBS-specific —
+  it lives in the universal Naturschutz domain and applies to any
+  future bureau that selects Naturschutz.
+
+**The `author-manifest` skill** scaffolds new domain or state manifests
+for scopes that don't yet have content. New domains added this way
+become available to every future deployment.
+
+**The scope is part of the public API.** Adding a new domain or state
+is a deliberate architectural extension, not a one-off addition.
+
 ## Meta-rule: memory vs RAG (citation freshness)
 
 A second hard line: **what lives in memory** vs **what lives in the
@@ -122,37 +168,51 @@ and navigation, never authoring. The §-label "§3 Abs.2 BauGB"
 appearing in memory does NOT satisfy the citation-evidence
 requirement when drafting.
 
-## The six entity types
+## The nine entity types
 
 | # | Type | Where | Frontmatter | What it does |
 |---|---|---|---|---|
 | **A** | **Skill** | `plugin/skills/<name>/SKILL.md` | Required (Claude Code uses for trigger detection) | Behavioral protocol. Auto-loaded on trigger match. Tells AI HOW to act. |
 | **B** | **Skill reference** | `plugin/skills/<name>/references/<file>.md` | Not required | Detailed protocol or specs the parent skill loads on demand. Format specs, checklists, procedures. |
-| **C** | **Memory reference content** | `memory/universal/...`, `memory/global/...`, `memory/office/...` | Not required (just `# H1` + body) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
-| **D** | **Memory data record** | `memory/<scope>/<domain>/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
+| **C** | **Memory reference content** | `memory/universal/...` | Optional (`references_used: []` for cross-cutting docs) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
+| **D** | **Memory data record** | `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query — including `scope` for bausteine) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
 | **E** | **Backend code & docs** | `backend/mcp-server/...` | Code: none. Docs: markdown without frontmatter. | Python implementation + technical schema docs. |
 | **F** | **External data** | Resolved via office-config: `paths.projects_root/...`, `paths.references_root/...`, `paths.state_root/...`, per-project `<project>/_ai/...` | Varies | Real user data: legal texts, project artifacts, runtime state, correspondence. |
-| **G** | **Office config (per-deployment)** | Outside the repo: `$PBS_OFFICE_CONFIG` or `~/.config/pbs-bureau/office.yaml`. Office-style.sty + extensions live under `paths.state_root`. | YAML schema (see `docs/office-config.schema.yaml`) | Per-deployment values: identity, paths, practices, LaTeX styling, state-law extensions. NOT versioned with the app. |
+| **G** | **Office config (per-deployment)** | Outside the repo: `$PBS_OFFICE_CONFIG` or `~/.config/pbs-bureau/office.yaml`. Office-style.sty + state-overlay manifests live under `paths.state_root`. | YAML schema v2 (see `docs/office-config.schema.yaml`) | Per-deployment values: identity, paths, practices, scope, manifest map, integrations, LaTeX styling. NOT versioned with the app. |
+| **H** | **Layered manifests** | `extensions/{universal,domain/<X>,state/<X>}/{references-manifest,doctypes}.yaml` | YAML with `scope`/`scope_key` self-describing fields | Reference + doctype registries layered along the (universal × domain × state) axes; loader walks the union per office's scope. |
+| **I** | **Integration adapters** | `backend/mcp-server/src/pbs_mcp/integrations/<class>/{protocol,<adapter-name>}.py` | Python; `Adapter` class implements the protocol | Pluggable adapters for external systems (email, calendar, scanner, phone, accounting); selected via `office_config.integrations.<class>.adapter`. |
 
 ## The decision rules (apply IN ORDER until classified)
 
 For any new piece of content, ask in sequence:
 
 **Rule 1 — Is this Python code or backend technical schema?**
-→ `E` (`backend/...`)
+→ Then ask: **is it an integration adapter implementation?**
+- YES → `I` (`backend/.../integrations/<class>/<adapter>.py`)
+- NO → `E` (`backend/...`)
 
-**Rule 2 — Is this an instance record produced by a skill's behavior over time** (a saved baustein, a feedback entry written today, a project's `state.md`)?
-→ `D` (with frontmatter for queryable fields)
+**Rule 2 — Is this a registry of references / doctypes?**
+→ Then ask: **what scope does it apply to?** (universal, a specific
+domain, or a specific state)
+- → `H` (`extensions/<layer>/<key>/{references-manifest,doctypes}.yaml`)
+  with `scope`/`scope_key` self-describing fields. Use `author-manifest`
+  skill for scope skeletons that don't yet exist.
 
-**Rule 3 — Does this tell the AI HOW to do something** (instruction, format spec, checklist, procedure)?
+**Rule 3 — Is this an instance record produced by a skill's behavior over time** (a saved baustein, a feedback entry written today, a project's `state.md`)?
+→ `D` (with frontmatter for queryable fields). For bausteine: pick
+the scope (universal/domain/state) BEFORE the path; place at
+`memory/bausteine/<layer>/<key>/<name>.md`.
+
+**Rule 4 — Does this tell the AI HOW to do something** (instruction, format spec, checklist, procedure)?
 → Then ask: **is it consumed by ONE skill or MULTIPLE skills?**
 - ONE → `B` (skill reference, lives with the skill)
 - MULTIPLE (cross-cutting) → `C` (memory) — exception: cross-skill content shouldn't live in one skill's folder
 
-**Rule 4 — Does this describe WHAT something IS** (domain knowledge, external reality, factual reference)?
-→ `C` (memory reference content)
+**Rule 5 — Does this describe WHAT something IS** (domain knowledge, external reality, factual reference)?
+→ `C` (memory reference content). Cross-cutting docs that name laws
+declare them in `references_used[]` frontmatter.
 
-**Rule 5 — Should Claude Code auto-discover this and load it on trigger match?**
+**Rule 6 — Should Claude Code auto-discover this and load it on trigger match?**
 → `A` (skill, with frontmatter)
 
 ## Worked examples
