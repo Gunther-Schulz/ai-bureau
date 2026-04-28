@@ -52,8 +52,12 @@ Inputs:
    with caveat that consistency-check happens at end.
 
 2. **Scaffold the LaTeX project structure** if not present:
-   - Copy template from `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan-Textliche-Festsetzungen/`
-     to `<project>/B-Plan/Festsetzungen/`.
+   - Call `scaffold_project(doctype="b-plan-festsetzungen",
+     target_root=<project>/<doctype-subfolder>/)`.
+     The tool resolves the skeleton from the app's
+     `templates/skeletons/b-plan-festsetzungen/` (default) or from
+     the office's `templates.doctype_overrides[b-plan-festsetzungen]`
+     if set.
    - Instantiate `Projektdaten.tex` consistently with Begründung's
      Projektdaten.tex (same Gemeinde, BPlanName, etc. — divergence
      is a bug).

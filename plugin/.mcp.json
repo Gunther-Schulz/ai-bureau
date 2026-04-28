@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "pbs-mcp": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${CLAUDE_PLUGIN_ROOT}/../backend/mcp-server",
+        "pbs-mcp"
+      ]
+    }
+  }
+}

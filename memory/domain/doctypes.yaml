@@ -1,9 +1,15 @@
-# Doctype registry — what document types PBS produces and where their
-# canonical templates live. The orchestrator reads this to pick the
-# right style, template, and skills per doctype.
+# Doctype registry — what document types a German Planungsbüro
+# produces. Universal domain knowledge; same registry applies to every
+# deployment.
 #
-# Add a new doctype by appending an entry; survey existing project repos
-# to populate `template_path` and `section_list`.
+# Per-deployment template paths are NOT stored here — they live in
+# `office_config.templates.doctype_overrides[<doctype>]`. The app's
+# shipped skeletons under `plugin/templates/skeletons/<doctype>/` are
+# the default; offices override only if they need a custom skeleton.
+#
+# Add a new doctype by appending an entry. Each doctype has structural
+# domain rules (class, engine, paired-with relationships); office-specific
+# styling lives in the office's `office-style.sty`.
 
 version: 1
 
@@ -14,11 +20,9 @@ doctypes:
       Multi-page narrative explanatory document for a Bebauungsplan.
       Document class: scrreprt (KOMA). Engine: pdflatex.
     style_ref: memory/domain/style/style-spec.md#doctype-a-begruendung
-    template_path: ~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan---Begruendung/
-    master_file: B-Plan Begründung.tex
-    project_subfolder: B-Plan/Textteil B          # in hidrive project layout
-    sections_canonical: friedrichshof             # see style-spec; survey other projects to confirm
-    paired_with: b-plan-festsetzungen             # produced as a pair per B-Plan
+    master_file_pattern: "B-Plan Begründung.tex"
+    project_subfolder_default: B-Plan/Begründung
+    paired_with: b-plan-festsetzungen   # produced as a pair per B-Plan
 
   b-plan-festsetzungen:
     label: "Textliche Festsetzungen (Teil B Text der Satzung)"
@@ -27,50 +31,41 @@ doctypes:
       a Bebauungsplan. Embedded as Teil B Text in the Satzung document.
       Document class: article. Engine: pdflatex. Sans-serif body.
     style_ref: memory/domain/style/style-spec.md#doctype-b-festsetzungen
-    template_path: ~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan-Textliche-Festsetzungen/
-    master_file: Textteil-B-B-Plan.tex
-    project_subfolder: B-Plan/Textteil C          # PBS uses "Textteil C" folder name though file is Textteil-B
-    sections_canonical: friedrichshof
+    master_file_pattern: "Textteil-B-B-Plan.tex"
+    project_subfolder_default: B-Plan/Festsetzungen
     paired_with: b-plan-begruendung
 
   umweltbericht:
     label: "Umweltbericht"
     description: >
       Environmental report. Modular per-Schutzgut structure with paired
-      _UB / _Mas_UB files (description + Maßnahmen). Currently only
-      observed in Hendrik's templates at hidrive Vorlagen/Latex/Kapitel_UB.
-      Style and template need to be confirmed in actual Schulz project use.
-    style_ref: TBD                                 # not yet observed in local canonical repos
-    template_path: TBD
-    master_file: TBD
-    project_subfolder: Umweltbericht
-    sections_canonical: TBD
-    status: deferred                               # not yet ready for orchestrator routing
+      _UB / _Mas_UB files (description + Maßnahmen).
+    style_ref: TBD
+    master_file_pattern: TBD
+    project_subfolder_default: Umweltbericht
+    status: deferred                    # not yet ready for orchestrator routing
 
   artenschutz:
     label: "Artenschutzbewertung / SPA"
     description: >
-      Species protection assessment. Hendrik's domain. May be drafted
-      independently or as part of a B-Plan package. Style observed in
-      Hendrik's transcript (tcolorbox, scrartcl) — separate from PBS
-      canonical templates; treated as Hendrik sub-practice for now.
+      Species protection assessment. May be drafted independently or
+      as part of a B-Plan package. Often produced by a GIS/biology
+      sub-practice within the office.
     style_ref: TBD
-    template_path: TBD
-    master_file: TBD
-    project_subfolder: Externe Gutachten           # typical placement in PBS project
+    master_file_pattern: TBD
+    project_subfolder_default: Externe Gutachten
     status: deferred
 
   abwaegung:
     label: "Abwägung (Stellungnahmen)"
     description: >
       Response document pairing each Stellungnahme from public/Behörde
-      consultation with PBS's analysis and Abwägungsergebnis. Per-
-      Stellungnahme block structure. Not yet templated.
+      consultation with the office's analysis and Abwägungsergebnis.
+      Per-Stellungnahme block structure.
     status: deferred
 
-# Berichtstypen observed in hidrive Vorlagen/Latex/Bericht-PBS master
-# (most folders empty/stubs). Listed here for awareness only; activate
-# when first project requires them.
+# Other Berichtstypen common in German planning practice. Listed here
+# for awareness; activate when first project requires them.
 berichtstypen_planned:
   - kapitel: AA
     label: Ausnahmeantrag

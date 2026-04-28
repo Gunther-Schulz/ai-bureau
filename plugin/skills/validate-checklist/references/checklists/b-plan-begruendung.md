@@ -52,7 +52,7 @@ in order. Project-specific extras allowed.
 | 12 | Belange der Forst | OPTIONAL | required only if Wald tangential |
 | 13 | Denkmalschutz | OPTIONAL | required only if Denkmäler im Gebiet |
 | 14 | Kataster- und Vermessungswesen | EXPECTED | |
-| 15 | Alternativprüfung | REQUIRED | filename: `Alternativpüfung` (sic — typo in Friedrichshof template) |
+| 15 | Alternativprüfung | REQUIRED | |
 | 16 | Kosten und Finanzierung | EXPECTED | |
 | 17 | Signatur | REQUIRED | Unterschriftsblock |
 
@@ -85,7 +85,8 @@ The Begründung body, after the last `\input{Textbausteine/Signatur.tex}`,
 should not have additional `\input` lines. The Signatur baustein must
 contain:
 
-- Office identity (Planungsbüro Schulz / Schwerin)
+- Office identity macros (`\OfficeName`, `\OfficeAddressLines`,
+  populated from office-config; rendered by office-style.sty)
 - Signature line for Bearbeiter
 - Date / Ort signature block
 

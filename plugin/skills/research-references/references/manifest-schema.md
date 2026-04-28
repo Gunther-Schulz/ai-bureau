@@ -1,10 +1,18 @@
 # references-manifest.yaml schema
 
-The manifest is the single source of truth for which external
-reference documents the assistant tracks. Lives at the repo root
-(`<repo>/references-manifest.yaml`). Mirror copy at
-`<hidrive>/_ai-references/manifest.json` for offline reference
-(auto-generated from the YAML).
+Two manifest layers, both with this same schema:
+
+- **Federal core** at `<repo>/references-manifest.yaml` — universal
+  German planning law (BauGB, BNatSchG, BImSchG, federal court
+  rulings, EU directives). Ships with the app.
+- **Office extension** at the path resolved from
+  `office_config.extensions.references_manifest` (default:
+  `<state_root>/extensions/references-manifest.yaml`) — state laws,
+  topic-specific leitfäden, locally-relevant rulings. Owned per
+  deployment.
+
+A mirror copy at `<references_root>/manifest.json` aggregates both
+for offline reference (auto-generated from the YAMLs).
 
 ## Top-level structure
 
@@ -67,7 +75,7 @@ categories:
 Fields:
 - `id` — stable identifier, never changes once set. Referenced from
   bausteine, citations, validations.
-- `canonical_path` — relative to `<hidrive>/_ai-references/`.
+- `canonical_path` — relative to `<references_root>/`.
 - `fetch_method` — `web-text` (HTML scrape, plain text), `web-html`
   (preserve structure), `manual` (user uploads), `git-mirror` (clone
   from a known mirror).
@@ -130,7 +138,7 @@ Adds `publisher`, `publication_date`, `version`. Often PDFs.
 
 ```yaml
 - id: Begruendung-Bad-Suelze-2023
-  title: B-Plan Begründung Bad Sülze (Solarpark) 2023-09
+  title: B-Plan Begründung <Location> (<BPlan-Type>) YYYY-MM
   source_artifact: <project>/Externe Gutachten/Begründung_Bad-Sülze_September-2023.pdf
   source_origin: external                    # external | pbs-archive
   canonical_path: beispiele/Begruendung-Bad-Suelze-2023.pdf
@@ -231,7 +239,7 @@ research-references run
 
 ## changelog.md format
 
-Lives at `<hidrive>/_ai-references/changelog.md`.
+Lives at `<references_root>/changelog.md`.
 
 ```markdown
 # References changelog

@@ -4,7 +4,7 @@ This file is loaded into context when the `pbs-bureau` plugin is active.
 
 ## What this plugin does
 
-Coordinates document work for Planungsbüro Schulz: drafting, reviewing,
+Coordinates document work for German planning bureaus (Planungsbüros): drafting, reviewing,
 and finalizing B-Plan Begründungen, Textliche Festsetzungen,
 Umweltberichte, and various Gutachten. The actual workflow logic lives
 in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
@@ -20,17 +20,19 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
   office-level memory shared across all projects. NOT part of the plugin
   distribution; lives in the user's checkout of the repo.
 - **Per-project memory** (`<project>/_ai/` or `<project>/.ai/`) — state,
-  decisions, file-map, snapshots. Lives WITH each project at its hidrive
-  location. Created on first bind to a project.
+  decisions, file-map, snapshots. Lives WITH each project at the
+  configured `paths.projects_root` location. Created on first bind.
 
 ## When this plugin activates
 
 - Auto-load: orchestrator skill auto-activates whenever any session
-  references PBS work (project at `/mnt/data2t/hidrive/Öffentlich
-  Planungsbüro Schulz/Projekte/...`, or local
-  `~/dev/Planungsbüro-Schulz/...` repos).
+  references planning-bureau work (project under
+  `office_config.paths.projects_root` or
+  `office_config.paths.local_repos_root`, or German planning
+  terminology in user input).
 - Specialist skills (`draft-textteil-b`, `review-draft`,
   `save-baustein`, etc.) load when their context matches.
+- `setup-office` runs first if `office-config.yaml` is missing.
 
 ## What goes WHERE
 
@@ -42,7 +44,7 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
   proves necessary; currently none.
 - **Memory bausteine, style-spec, korrektur-rules** — at repo level
   under `<repo>/memory/`, NOT here.
-- **MCP server, Docker stack** — at repo level under `<repo>/backend/`,
+- **MCP server (Python, stdio)** — at repo level under `<repo>/backend/`,
   NOT here.
 
 ## Versioning

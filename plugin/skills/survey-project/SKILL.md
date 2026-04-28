@@ -25,10 +25,13 @@ heuristics.
 By orchestrator's binding flow when a referenced project has no
 `_ai/` or `.ai/` folder. Inputs:
 
-- **Project root path** — absolute path on hidrive (or local).
+- **Project root path** — absolute path under `office_config.paths.projects_root`
+  (or anywhere the user provides).
 - **Project name** — for state.md construction.
-- **Practices guess** — orchestrator's guess of `[schulz]`,
-  `[hendrik]`, or `[joint]` from path heuristic.
+- **Practices guess** — orchestrator's guess of one or more practice
+  ids from `office_config.practices`, derived from path/file heuristic
+  (presence of doctype-relevant files vs other practices' workspace
+  markers).
 
 ## Behavior
 
@@ -44,19 +47,28 @@ By orchestrator's binding flow when a referenced project has no
    each other often belong to the same work session. Group accordingly
    for context.
 
-3. **Classify each file/folder by heuristic**:
+3. **Classify each file/folder by heuristic**, using the office's
+   configured folder layout from `office_config.conventions.project_folder_layout`
+   plus the doctype registry in `memory/domain/doctypes.yaml`:
    - **Doctype-relevant artifacts**: `.tex` files, `.pdf` outputs,
-     `Textbausteine/`, `B-Plan/` substructures, `Umweltbericht/`
-     subfolders, `Externe Gutachten/` (third-party reports).
-   - **Inputs**: `Grundlagen/`, `Inputs/`, briefings, surveys,
-     drone scans, GIS data files.
-   - **Correspondence**: `Schriftverkehr/`, `*.eml`, `telefon-
-     notizen/`, `besprechungsprotokolle/`.
-   - **Resources to leave alone**: `Fotos/`, `Bilder/`, `GIS/`
-     (Hendrik), `Karten/`, `ProjektBeispiel*` (templates).
-   - **Sent / archived versions**: pattern `*_v[N].tex`, `*_final*`,
-     `*_UNB-*`, files in subfolders named `alt/`, `archive/`,
-     `sent/`.
+     `Textbausteine/`, doctype subfolders (B-Plan/, Umweltbericht/,
+     Externe Gutachten/, etc. per registry), per-doctype LaTeX
+     working files.
+   - **Inputs**: the configured `inputs/` subfolder, plus any
+     subfolder containing client-supplied raw material (briefings,
+     surveys, drone scans, GIS data files).
+   - **Correspondence**: the configured `correspondence/` subfolder,
+     `*.eml`, telefon-notizen/, besprechungsprotokolle/, plus the
+     `toeb/` subfolder.
+   - **Sent / archived versions**: the configured `sent_versions/`
+     subfolder, plus pattern `*_v[N].tex`, `*_final*`, files in
+     subfolders named `alt/`, `archive/`, `sent/`.
+   - **Other-practice workspace**: files belonging to a different
+     practice's tooling (e.g. a sibling practice's `scripts/`,
+     `workflow.yaml`, `*.qgz`, GIS exports) — read-only for this
+     skill; flag in file-map for awareness.
+   - **Resources to leave alone**: `Fotos/`, `Bilder/`, `Karten/`,
+     `ProjektBeispiel*` (templates).
    - **Cruft / unclassifiable**: surface for user to decide.
 
 4. **Detect stale inputs**: if multiple files match the same kind
@@ -99,32 +111,32 @@ By orchestrator's binding flow when a referenced project has no
    - `_ai/module-decisions.md` empty.
    - `_ai/snapshots/` empty directory.
 
-10. **Append project to** `<hidrive>/_ai-office-state/projects-
-    index.md`.
+10. **Append project to** `<state_root>/projects-index.md`
+    (`state_root` resolved via `office_config.paths.state_root`).
 
 ## Output
 
 Step-by-step interactive walk:
 
 ```
-Surveying 23-12 Maxsolar - Vorbeck (Schwaan)...
+Surveying YY-NN <Client> - <Location>...
 
 Found 142 files, 8 folders. Clustering...
 
 Cluster 1 — Doctype artifacts:
-  - B-Plan/Textteil B/B-Plan Begründung.tex (working draft, mtime 2026-04-22)
-  - B-Plan/Testteil C/Textteil-B-B-Plan.tex (working draft, mtime 2026-04-22)
+  - B-Plan/<doctype-master>.tex (working draft, mtime YYYY-MM-DD)
+  - …
   Confirm as "Current artifacts"? [y/n/modify]
 
 Cluster 2 — Sent versions:
-  - alt/Begründung_v2_UNB-2024-03.tex (sent 2024-03-15)
+  - alt/<artifact>_v2_UNB-YYYY-MM.tex (sent YYYY-MM-DD)
   Confirm as "Sent / archived versions"? [y/n/modify]
 
 ...
 
 Proposed state.md:
   lifecycle: revision-requested
-  practices: [schulz, hendrik]   (joint — found GIS/ + scripts/)
+  practices: [<id-1>, <id-2>]   (multi-practice — markers found)
   phase: 6-abwaegung
   doctype_status:
     b-plan-begruendung: active
@@ -136,12 +148,13 @@ Confirm? [y/n/modify]
 
 ## Edge cases
 
-- **Project root contains nested project** (rare; e.g. `Projekt-
-  beispiel-B-Plan/` inside another project): surface as anomaly,
-  ask user for guidance.
-- **Project has Hendrik's `CLAUDE.md` already**: GIS workflow exists.
-  Mark `practices: [joint]`. Don't write to GIS/ — that's Hendrik's
-  workspace.
+- **Project root contains nested project** (rare; e.g. an example
+  template tree inside another project): surface as anomaly, ask
+  user for guidance.
+- **Project shows another practice's workspace markers** (e.g. a
+  sibling GIS practice's `scripts/`, `workflow.yaml`, `*.qgz`):
+  add the corresponding practice id to `practices`. Don't write to
+  that practice's directories — they are read-only here.
 - **Project size huge (thousands of files)**: cap glob; surface
   warning that survey is partial; let user prioritize sub-folders.
 - **mtime cluster spans years**: project has long history; expect

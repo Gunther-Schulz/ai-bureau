@@ -12,7 +12,7 @@ from typing import Any
 
 import yaml
 
-from pbs_mcp import config
+from pbs_mcp import config, office_config
 from pbs_mcp.db import get_db
 from pbs_mcp.schemas import (
     BindProjectInput,
@@ -31,7 +31,11 @@ logger = logging.getLogger(__name__)
 
 
 def _projects_index_path() -> Path:
-    return config.hidrive_ai_office_state() / "projects-index.md"
+    return config.office_state_root() / "projects-index.md"
+
+
+def _default_practice_id() -> str:
+    return office_config.load().default_practice().id
 
 
 def _read_projects_index() -> list[dict]:
@@ -89,7 +93,7 @@ def bind_project(input: BindProjectInput) -> BindProjectOutput:
             "project_root": str(root),
             "lifecycle": "draft",
             "ownership_mode": "new-work-only",
-            "practices": ["schulz"],
+            "practices": [_default_practice_id()],
             "doctype_focus": [],
             "doctype_status": {},
             "phase": None,
@@ -109,7 +113,7 @@ def bind_project(input: BindProjectInput) -> BindProjectOutput:
             "name": input.name,
             "project_root": str(root),
             "lifecycle": "draft",
-            "practices": ["schulz"],
+            "practices": [_default_practice_id()],
             "last_session": date.today().isoformat(),
         })
         _write_projects_index(entries)
@@ -157,6 +161,11 @@ def survey_project(input: SurveyProjectInput) -> SurveyProjectOutput:
     }
 
     EXCLUDE_EXT = {".aux", ".fdb_latexmk", ".fls", ".log", ".lot", ".toc", ".synctex.gz"}
+    layout = office_config.load().conventions.project_folder_layout
+    inputs_seg = "/" + layout.inputs.strip("/").lower() + "/"
+    sent_seg = "/" + layout.sent_versions.strip("/").lower() + "/"
+    corr_seg = "/" + layout.correspondence.strip("/").lower() + "/"
+    toeb_seg = "/" + layout.toeb.strip("/").lower() + "/"
 
     for p in root.rglob("*"):
         if not p.is_file():
@@ -166,12 +175,12 @@ def survey_project(input: SurveyProjectInput) -> SurveyProjectOutput:
             clusters["cruft"].append(rel)
             continue
 
-        rel_lower = rel.lower()
+        rel_lower = "/" + rel.lower()
         if rel_lower.endswith((".tex", ".bib")) or "/textbausteine/" in rel_lower:
             clusters["doctype-artifacts"].append(rel)
-        elif "/inputs/" in rel_lower or "/grundlagen/" in rel_lower or "/erhebungen/" in rel_lower:
+        elif inputs_seg in rel_lower or sent_seg in rel_lower or toeb_seg in rel_lower:
             clusters["inputs"].append(rel)
-        elif "/schriftverkehr/" in rel_lower or rel_lower.endswith(".eml"):
+        elif corr_seg in rel_lower or rel_lower.endswith(".eml"):
             clusters["correspondence"].append(rel)
         elif "/fotos/" in rel_lower or "/bilder/" in rel_lower or "/gis/" in rel_lower or "/karten/" in rel_lower:
             clusters["resources"].append(rel)
@@ -183,7 +192,7 @@ def survey_project(input: SurveyProjectInput) -> SurveyProjectOutput:
         "project_root": str(root),
         "lifecycle": "draft",
         "ownership_mode": "new-work-only",
-        "practices": ["schulz"],
+        "practices": [_default_practice_id()],
         "doctype_status": {},
     }
 
@@ -205,23 +214,25 @@ def _resolve_root_by_name(name: str) -> Path:
     for e in entries:
         if e.get("name") == name:
             return Path(e.get("project_root", ""))
-    # Fallback: search hidrive Projekte for a folder matching the name
-    projekte = config.hidrive_projekte()
+    # Fallback: search projects_root for a folder matching the name
+    projekte = config.projects_root()
     if projekte.is_dir():
         for d in projekte.iterdir():
             if d.is_dir() and name in d.name:
                 return d
-    raise FileNotFoundError(f"project not found in index or hidrive: {name}")
+    raise FileNotFoundError(f"project not found in index or projects_root: {name}")
 
 
 def _select_ai_dir(root: Path) -> Path:
-    """Pick _ai/ for existing projects, .ai/ for fresh AI-owned ones.
+    """Pick visible _ai/ for existing projects, hidden .ai/ for AI-owned ones.
 
-    Heuristic v0.1: if any of the canonical office subfolders already
-    exist (B-Plan, F-Plan, Umweltbericht, etc.), it's an existing
-    project → use visible _ai/. Otherwise, hidden .ai/.
+    Detection: prefer whichever already exists. If neither does, fall back
+    to _ai/ because bind_project is the entry point for *adopting* an
+    existing folder; fresh AI-owned projects come in via scaffold_project
+    which creates .ai/ explicitly.
     """
-    existing_markers = ["B-Plan", "F-Plan", "Umweltbericht", "Externe Gutachten", "Schriftverkehr"]
-    if any((root / m).is_dir() for m in existing_markers):
+    if (root / ".ai").is_dir():
+        return root / ".ai"
+    if (root / "_ai").is_dir():
         return root / "_ai"
-    return root / ".ai"
+    return root / "_ai"

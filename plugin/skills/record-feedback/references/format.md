@@ -1,7 +1,7 @@
 # Feedback format
 
 Feedback entries record externally-authored reactions (rejection,
-approval, partial, suggestion) to PBS work. One entry per
+approval, partial, suggestion) to office work. One entry per
 authority + project + topic. YAML frontmatter holds machine-readable
 metadata; body holds the full text or excerpt.
 
@@ -12,8 +12,8 @@ memory/domain/<domain>/feedback/<YYYY-MM-DD>-<authority-slug>-<topic-slug>.md
 ```
 
 Examples:
-- `memory/domain/artenschutz/feedback/2026-04-28-UNB-rostock-§45-nr5.md`
-- `memory/domain/b-plan/feedback/2025-12-10-LUNG-mv-CEF-monitoring.md`
+- `memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-<landkreis>-§45-nr5.md`
+- `memory/domain/b-plan/feedback/YYYY-MM-DD-<authority-slug>-CEF-monitoring.md`
 
 Filename rules:
 - Date prefix `YYYY-MM-DD` for chronological sort.
@@ -28,11 +28,11 @@ on each feedback save.
 ```yaml
 ---
 # Identity
-date: 2026-04-28
-authority: UNB Landkreis Rostock
-authority_slug: UNB-rostock
-contact: Hr. Ratschker
-project: 23-12-Vorbeck
+date: YYYY-MM-DD
+authority: UNB Landkreis <Landkreis>
+authority_slug: UNB-<landkreis-slug>
+contact: <Sachbearbeiter>
+project: <YY-NN>-<location-slug>
 
 # Type
 type: rejection                            # rejection | approval | partial | suggestion
@@ -53,7 +53,7 @@ suggested_alternative: |
   Kombinierte Argumentation §1a Abs.2 BauGB + soziale Gründe.
 
 # Source
-source_artifact: <project>/_ai/snapshots/2026-04-15-UNB-rostock/Stellungnahme.pdf
+source_artifact: <project>/_ai/snapshots/2026-04-15-UNB-<landkreis-slug>/Stellungnahme.pdf
 source_excerpt_pages: [3, 4]
 
 # Lifecycle
@@ -109,11 +109,11 @@ type=rejection or type=partial. `Action taken` empty initially.
 
 ```markdown
 ---
-date: 2026-04-28
-authority: UNB Landkreis Rostock
-authority_slug: UNB-rostock
-contact: Hr. Ratschker
-project: 23-12-Vorbeck
+date: YYYY-MM-DD
+authority: UNB Landkreis <Landkreis>
+authority_slug: UNB-<landkreis-slug>
+contact: <Sachbearbeiter>
+project: <YY-NN>-<location-slug>
 type: rejection
 phase: 5b-foerml-toeb
 addresses_bausteine:
@@ -126,25 +126,24 @@ verdict_reasoning: |
   Innenbereichssatzung allein reicht nicht; Verweis auf BVerwG 9 A 22.11.
 suggested_alternative: |
   Kombinierte Argumentation §1a Abs.2 BauGB + soziale Gründe.
-source_artifact: <project>/_ai/snapshots/2026-04-15-UNB-rostock/Stellungnahme.pdf
+source_artifact: <project>/_ai/snapshots/2026-04-15-UNB-<landkreis-slug>/Stellungnahme.pdf
 source_excerpt_pages: [3, 4]
 status: open
 ---
 
-# 2026-04-28 — UNB Landkreis Rostock — §45 Nr.5 Innenbereich
+# YYYY-MM-DD — UNB Landkreis <Landkreis> — §45 Nr.5 Innenbereich
 
 ## Context
 
 Stellungnahme der UNB im förmlichen Verfahren §4 Abs.2 zu B-Plan
-Vorbeck. Begründung Abschnitt 5 hat reine Innenbereichssatzungs-
+\<project\>. Begründung Abschnitt 5 hat reine Innenbereichssatzungs-
 Argumentation für §45 Abs.7 Nr.5 BNatSchG vorgetragen.
 
 ## Feedback excerpt
 
-> "Die alleinige Bezugnahme auf die Innenbereichssatzung der Gemeinde
-> reicht nicht aus, um zwingende Gründe des überwiegenden
-> öffentlichen Interesses i.S.d. §45 Abs.7 Satz 1 Nr.5 BNatSchG zu
-> begründen. Vgl. BVerwG, Urteil vom 23.08.2012 — 9 A 22.11."
+> <verbatim Stellungnahme excerpt — paste from source artifact;
+> stay verbatim, do not paraphrase. Cites BVerwG ruling, §45 Abs.7
+> Satz 1 Nr.5 BNatSchG.>
 
 ## Analysis
 
@@ -164,10 +163,10 @@ für Nr.5; immer kombinieren.
 
 ```markdown
 ---
-date: 2025-09-12
-authority: UNB Landkreis Rostock
-authority_slug: UNB-rostock
-project: 22-16-Friedrichshof
+date: YYYY-MM-DD
+authority: UNB Landkreis <Landkreis>
+authority_slug: UNB-<landkreis-slug>
+project: <YY-NN>-<other-project>
 type: approval
 phase: 10-genehmigung
 addresses_bausteine:
@@ -175,7 +174,7 @@ addresses_bausteine:
 status: resolved
 ---
 
-# 2025-09-12 — UNB Rostock — §45 Nr.5 angenommen (Friedrichshof)
+# YYYY-MM-DD — UNB \<Landkreis\> — §45 Nr.5 angenommen (\<project\>)
 
 ## Context
 
@@ -183,8 +182,9 @@ Genehmigung höhere Verwaltungsbehörde nach Auflagen.
 
 ## Feedback excerpt
 
-> "Die Ausnahme nach §45 Abs.7 Satz 1 Nr.5 BNatSchG kann unter den
-> in der Begründung dargestellten Voraussetzungen erteilt werden."
+> <verbatim approval text from source artifact — confirms the
+> §45 Abs.7 Satz 1 Nr.5 BNatSchG basis as accepted under the
+> argumentation given in the Begründung.>
 
 ## Analysis
 
@@ -219,8 +219,8 @@ User authors response → mark feedback resolved:
 
 | Date | Authority | Type | Project | Topic | Status | Path |
 |---|---|---|---|---|---|---|
-| 2026-04-28 | UNB-rostock | rejection | 23-12-Vorbeck | §45-nr5-innenbereich | open | feedback/2026-04-28-UNB-rostock-§45-nr5.md |
-| 2025-09-12 | UNB-rostock | approval | 22-16-Friedrichshof | §45-nr5-innenbereich | resolved | feedback/2025-09-12-UNB-rostock-§45-nr5.md |
+| YYYY-MM-DD | UNB-<landkreis-slug> | rejection | <YY-NN>-<location-slug> | §45-nr5-innenbereich | open | feedback/YYYY-MM-DD-UNB-<landkreis-slug>-§45-nr5.md |
+| YYYY-MM-DD | UNB-<landkreis-slug> | approval | <YY-NN>-<other-project> | §45-nr5-innenbereich | resolved | feedback/YYYY-MM-DD-UNB-<landkreis-slug>-§45-nr5.md |
 ```
 
 Sorted newest-first. Auto-maintained on every feedback save.

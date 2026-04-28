@@ -1,0 +1,153 @@
+# M-V (Mecklenburg-Vorpommern) references-manifest extension — EXAMPLE
+#
+# This file is a template. To use it for an actual deployment:
+#   cp docs/office-extensions/MV/references-manifest.example.yaml \
+#      <office_state_root>/extensions/MV/references-manifest.yaml
+#
+# Then register it in office-config.yaml:
+#   extensions:
+#     references_manifests:
+#       MV: <office_state_root>/extensions/MV/references-manifest.yaml
+#
+# This extension layers on top of the federal-core manifest at
+# `<repo>/references-manifest.yaml`. Both are loaded for any project
+# whose `state.md.bundesland: MV`.
+#
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+
+version: 1
+scope: state-extension
+state: MV
+last_updated: 2026-04-28
+maintainer: <office>
+
+categories:
+  gesetze:
+    mv:
+      - id: LPlG-MV
+        title: Landesplanungsgesetz Mecklenburg-Vorpommern
+        short_title: LPlG M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-LPlGMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/LPlG-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §17 LPlG raumordnungsbehördliche Beteiligung — Verfahrens-
+          vermerk #2 in der Festsetzungs-Sequenz.
+        tags: [landesrecht, mv, raumordnung]
+
+      - id: LBauO-MV
+        title: Landesbauordnung Mecklenburg-Vorpommern
+        short_title: LBauO M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-BauOMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/LBauO-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §86 Abs.3 örtliche Bauvorschriften — basis für Festsetzungen
+          Rule 5.
+        tags: [landesrecht, mv, bauordnung]
+
+      - id: NatSchAG-MV
+        title: Naturschutzausführungsgesetz Mecklenburg-Vorpommern
+        short_title: NatSchAG M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-NatSchAGMV2010rahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/NatSchAG-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          MV-spezifische Eingriffsbilanzierung. §3 Eingriff, §6
+          Ausgleichsmaßnahmen. Standard im Quellenverzeichnis.
+        tags: [naturschutz, mv, eingriffsregelung]
+
+      - id: KV-MV
+        title: Kommunalverfassung Mecklenburg-Vorpommern
+        short_title: KV M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-KVerfMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/KV-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §5 Abs.5 Verkündung; Bekanntmachungs-Hinweise im Verfahrens-
+          vermerk #13.
+        tags: [kommunalverfassung, mv]
+
+  leitfaeden:
+    - id: LUNG-MV-Artenschutzleitfaden
+      title: LUNG-MV Fachliche Hinweise zur Erfassung und Bewertung von Arten
+      publisher: LUNG M-V — Landesamt für Umwelt, Naturschutz und Geologie
+      source_url: https://www.lung.mv-regierung.de/
+      canonical_path: leitfaeden/LUNG-MV-Artenschutzleitfaden.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Aktuelle Fassung von LUNG-Portal beziehen. Häufig in
+        Artenschutz-Gutachten zitiert; Methodik-Standards für M-V.
+      tags: [naturschutz, mv, lung, artenschutz]
+
+    - id: Verfahrenserlass-Bauleitplanung-MV
+      title: Erlass zur Bauleitplanung Mecklenburg-Vorpommern
+      publisher: Ministerium für Inneres, Bau und Digitalisierung M-V
+      source_url: https://www.regierung-mv.de/
+      canonical_path: leitfaeden/Verfahrenserlass-Bauleitplanung-MV.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        M-V-spezifische Verfahrens-Anleitung. Includes verbatim
+        Verfahrensvermerk wording für M-V Bauleitplanung.
+      tags: [bauleitplanung, mv, verfahrenserlass]
+
+    - id: Brandschutzkonzept-PV-MV
+      title: Brandschutzkonzept-Leitfaden für PV-Freiflächenanlagen Mecklenburg-Vorpommern
+      publisher: tbd
+      source_url: tbd
+      canonical_path: leitfaeden/Brandschutzkonzept-PV-MV.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Existence to be verified — research-references skill should
+        search MUGV / Innenministerium portals. If no M-V-spezifischer
+        Leitfaden exists, drop this entry and rely on bundes-weiter
+        Brandschutz-Standards (DIN VDE 0100, etc.) from federal-core.
+      tags: [brandschutz, pv-freiflache, mv]
+
+  urteile: []
+    # M-V-specific OVG rulings can be added here as needed.

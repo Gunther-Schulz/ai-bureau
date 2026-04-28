@@ -1,0 +1,56 @@
+% !TeX program = pdflatex
+% B-Plan Begründung — master file.
+% Generated from app skeleton at scaffold time. Override styling
+% via the office's office-style.sty. Override content via the
+% Textbausteine/ subfolder.
+
+\documentclass{bplan-begruendung}
+
+% Office aesthetic + identity (Layer 2 of the template stack).
+% TEXINPUTS must include the office's office_style_dir so this
+% \usepackage finds the office's office-style.sty.
+\usepackage{office-style}
+
+% Auto-generated identity macros (regenerated before each compile
+% by the backend's compile_latex helper).
+\InputIfFileExists{office-identity}{}{%
+  \typeout{office-identity not found - using class defaults}}
+
+% Per-project metadata.
+\input{Projektdaten}
+
+\begin{document}
+
+% Prelims: Title page, TOC, list of tables (Roman numbering)
+\startroman
+\pagestyle{tocstyle}
+
+\input{Textbausteine/Titelseite}
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+\listoftables
+\cleardoublepage
+
+% Main body (Arabic numbering)
+\startarabic
+\pagestyle{scrheadings}
+
+\input{Textbausteine/Aufgaben-und-Inhalte-der-Planung}
+\input{Textbausteine/Grundlagen-der-Planung-Aufstellungsverfahren}
+\input{Textbausteine/Geltungsbereich}
+\input{Textbausteine/Planinhalte-und-Festsetzungen}
+\input{Textbausteine/Ver-und-Entsorgungsanlagen}
+\input{Textbausteine/Vorbeugender-Brandschutz-Loeschwasserversorgung}
+\input{Textbausteine/Gewaesserschutz}
+\input{Textbausteine/Bodenschutz}
+\input{Textbausteine/Immissions-und-Klimaschutz-Blendwirkung}
+\input{Textbausteine/Altlasten}
+\input{Textbausteine/Belange-der-Forst}
+\input{Textbausteine/Denkmalschutz}
+\input{Textbausteine/Kataster-und-Vermessungswesen}
+\input{Textbausteine/Alternativpruefung}
+\input{Textbausteine/Kosten-und-Finanzierung}
+\input{Textbausteine/Signatur}
+
+\end{document}

@@ -9,13 +9,30 @@ license: MIT
 
 Specialist skill for maintaining the reference corpus — fetching,
 diffing, and updating legal texts and guidance documents in
-`<hidrive>/_ai-references/`.
+the office's `paths.references_root`.
 
 ## Load this now
 
 Read `references/manifest-schema.md` for the
 `references-manifest.yaml` schema, entry types, and the update
 workflow.
+
+## Source-of-truth principle
+
+The reference corpus at the office's `_ai-references/` directory is
+the **single, authoritative source of truth** for every entry in the
+manifest. One canonical file per manifest ID, written by this skill,
+fetched fresh from the publisher.
+
+Implications:
+
+- Every entry in the manifest goes through a fresh fetch on first run
+  and on every refresh — no "use existing copy if present" branch.
+- The skill does not read references from anywhere other than its own
+  output directory. If a reference is needed but the corpus doesn't
+  have it, the answer is to fetch it, never to look elsewhere.
+- All downstream consumers (`search_corpus`, `read_corpus_file`,
+  citations in drafts) resolve references through this corpus only.
 
 ## When invoked
 
@@ -65,14 +82,23 @@ Three modes:
      deletes old chunks for this path, re-chunks + re-embeds with
      fresh metadata.
 
-6. **Cross-reference dependents**: for each changed entry, find
-   bausteine whose `references[]` include matching `law` /
-   `paragraph` / `ruling` / `leitfaden`:
-   - Set `status: flagged`, `flagged_reason: "reference updated <date>"`.
-   - List flagged bausteine to user.
+6. **Cross-reference dependents** (cross-cutting concern handler):
+   for each changed entry, find both bausteine and cross-cutting
+   memory docs that depend on the reference:
+   - **Bausteine**: scan `<repo>/memory/*/<name>.md` frontmatter for
+     `references[]` matching `law` / `paragraph` / `ruling` /
+     `leitfaden`. Each match → set `status: flagged`,
+     `flagged_reason: "reference updated <date>"`.
+   - **Memory docs**: scan `<repo>/memory/**/*.md` frontmatter for
+     `references_used[]` matching the same keys. Each match → append
+     a row to `<repo>/memory/product-backlog.md` with date, affected
+     doc path, and which references changed. (Memory docs have no
+     `status` field; the orchestrator surfaces flagged docs at session
+     open.)
+   - List both flagged bausteine and flagged memory docs to user.
 
 7. **Append to changelog**: write summary entry to
-   `<hidrive>/_ai-references/changelog.md`. Include count of entries
+   `<references_root>/changelog.md`. Include count of entries
    checked, count changed, count errored.
 
 ## Behavior (targeted refresh)

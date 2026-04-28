@@ -1,23 +1,23 @@
-# PBS Orchestrator Procedure
+# Bureau orchestrator procedure
 
 Mandatory checkpoints that interrupt default behavior. Continuous
-flow throughout every PBS session. Self-imposed — the user does not
-need to invoke any of this; recognition and surfacing is the
+flow throughout every session. Self-imposed — the user does not need
+to invoke any of this; recognition and surfacing is the
 orchestrator's job.
 
 ---
 
-## 1. Session open — before responding to first PBS-context message
+## 1. Session open — before responding to first domain-context message
 
-FIRST, when any PBS-context trigger fires, identify the operating
-scope from observable signals:
+FIRST, when any planning-bureau-context trigger fires, identify the
+operating scope from observable signals:
 
 - **Office scope:** no project named, no project root path mentioned.
   Default for queries like "what's on my plate", "any UNB responses",
   "which projects are open".
-- **Project scope:** a project name, project root path, or `<YY-NN>`
-  identifier appears in the user message OR was bound in a prior turn
-  of this session.
+- **Project scope:** a project name, project root path, or
+  configured-naming-pattern identifier appears in the user message
+  OR was bound in a prior turn of this session.
 - **Product scope:** the user references the assistant itself —
   skills, MCP tools, the framework, the backlog, "fix this skill".
 
@@ -25,13 +25,13 @@ THEN load context for the detected scope:
 
 | Scope | Read at open |
 |---|---|
-| Office | `<repo>/memory/office/projects-index.md`, `<repo>/memory/office/pending-actions.md` |
+| Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (paths via `office_config.paths.state_root`) |
 | Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`, `<repo>/memory/domain/<doctype>/` |
 | Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md` if present |
 
 Load `<repo>/memory/global/` in every scope. Load `<repo>/memory/domain/style/style-spec.md` and `<repo>/memory/domain/conventions/korrektur-rules.md` whenever LaTeX work is in scope.
 
-THEN announce loaded context in one terse line: "Mode: project (Friedrichshof). Loaded: state, file-map, b-plan-begruendung domain, style-spec." or equivalent. Do not narrate at length.
+THEN announce loaded context in one terse line: "Mode: project (\<name\>). Loaded: state, file-map, \<doctype\> domain, style-spec." or equivalent. Do not narrate at length.
 
 If a referenced project has no `_ai/` or `.ai/` folder, treat the next user request as a binding event and run **Checkpoint 11 (project binding)** before proceeding.
 
@@ -261,14 +261,24 @@ Proposing the mode is part of binding — see Checkpoint 11. Default is `new-wor
 
 For new projects (Checkpoint 12), the AI owns the entire project root. No quarantine. State lives in `<project-root>/.ai/` (hidden, since the whole folder is AI-managed and meta-state should not visually clutter).
 
-### 8.4 Joint Schulz+Hendrik projects
+### 8.4 Multi-practice projects
 
-`_ai/state.md` carries `practices: [schulz | hendrik | joint]`. For `joint`:
+`_ai/state.md` carries `practices: [<id>, ...]` where the ids come
+from `office_config.practices`. When more than one practice id appears
+in the array, the project is multi-practice (e.g. text-document
+practice + GIS practice working on the same job).
 
-- Hendrik's GIS workflow is preserved as-is: `<project-root>/scripts/`, `<project-root>/workflow.yaml`, `<project-root>/Karte.qgz` and related files are read-only for the orchestrator.
-- The orchestrator's `_ai/` lives alongside Hendrik's `scripts/`. Neither touches the other.
-- When Hendrik publishes GIS outputs to `<project-root>/Ausgabe/`, those become inputs the orchestrator may read but not modify.
-- Bausteine in `memory/domain/` apply to text-document work only. Hendrik's per-project `CLAUDE.md` is not consulted here.
+- Each practice's working files are preserved as-is. The orchestrator
+  does not touch files outside its declared practice's role unless
+  the user explicitly authorizes a cross-practice edit.
+- The orchestrator's `_ai/` lives alongside the other practice's
+  workspace. Neither touches the other.
+- When another practice publishes outputs (e.g. GIS exports to
+  `<project-root>/Ausgabe/`), those become inputs the orchestrator
+  may read but not modify.
+- Bausteine in `memory/domain/` apply to the orchestrator's
+  practice's work only. Other practices may have their own per-project
+  CLAUDE.md or assistant configurations; not consulted here.
 
 ---
 
@@ -280,7 +290,7 @@ The backend (`<repo>/backend/`) is not yet built. When MCP tools are available, 
 
 | Tool | Use for | Fallback |
 |---|---|---|
-| `search_corpus(query, k, filter)` | Semantic search over corpus + references with optional `source_type=corpus|reference` filter | `Grep` over `~/dev/Planungsbüro-Schulz/` (less recall but works) |
+| `search_corpus(query, k, filter)` | Semantic search over corpus + references with optional `source_type=corpus|reference` filter | `Grep` over the office's `paths.local_repos_root` and `paths.projects_root` (less recall but works) |
 | `read_corpus_file(path)` | Direct read of a known corpus path | `Read` tool |
 
 ### 9.2 Per-project ingestion
@@ -304,7 +314,7 @@ The backend (`<repo>/backend/`) is not yet built. When MCP tools are available, 
 |---|---|---|
 | `compile_latex(project_path)` | Run latexmk, return PDF + log | `Bash` running `latexmk -pdf` in the project dir |
 | `scaffold_project(name, doctype, template)` | Create a new project from a template | `Bash` copying the canonical template tree |
-| `list_projects()` | Enumerate registered projects | `Read` `<repo>/memory/office/projects-index.md` |
+| `list_projects()` | Enumerate registered projects | `Read` `<state_root>/projects-index.md` |
 | `bind_project(name, root_path)` | Register a project + path mapping | Write the entry to `projects-index.md` directly |
 | `survey_project(root_path)` | Cluster project files, propose file-map | `Glob` recursive + `Read` README/key files; build `_ai/file-map.md` interactively |
 
@@ -361,7 +371,7 @@ When a user references a project that has no `_ai/` or `.ai/` folder, run bindin
    - `_ai/decisions.md` empty.
    - `_ai/correspondence-log.md` with one row per `.eml` found in `Schriftverkehr/`.
 
-7. Append entry to `<repo>/memory/office/projects-index.md`.
+7. Append entry to `<state_root>/projects-index.md`.
 
 Binding is a one-time per project event. Subsequent bindings load the existing artifacts and re-survey only if file-map mtimes are stale.
 
@@ -371,23 +381,26 @@ Binding is a one-time per project event. Subsequent bindings load the existing a
 
 When the user requests a new project ("neues Projekt", "new project", "scaffold ..."):
 
-1. Solicit core metadata: project number (next `YY-NN`), client, location, doctype focus. Resolve the canonical naming pattern: `<YY-NN> <Client> - <Location>`.
+1. Solicit core metadata: project number (auto-suggested from `office_config.conventions.project_numbering` if `auto_increment: true`, else asked), client, location, doctype focus, practice (defaults to first entry in `office_config.practices`). Resolve the folder name from `office_config.conventions.project_naming` template.
 
-2. Create root folder at `/mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/Projekte/<name>/` (default; ask if user wants a different location).
+2. Call the `setup_project` MCP tool with the gathered metadata. The tool resolves target path under `office_config.paths.projects_root` and handles three modes by detecting the target folder state:
+   - **absent** → creates folder + scaffolds layout
+   - **empty** → scaffolds inside the existing folder
+   - **populated** → routes to survey + bind flow (Checkpoint 11)
 
-3. Copy the canonical project template tree from `ProjektBeispiel-B-Plan/` (or appropriate template) — preserve folder structure (B-Plan/, F-Plan/, Umweltbericht/, Externe Gutachten/, Kartierung/, GIS/, Fotos/, Schriftverkehr/, TöB/, Grundlagen Behörden/, Grundlagen Auftraggeber/, Vorlagen/, Zeichnungen/).
-
-4. Scaffold `.ai/` (hidden — full AI ownership):
-   - `state.md` with `lifecycle: draft`, `practices: [schulz]` (or `[joint]` if Hendrik in scope), `ownership_mode: full`, today's date.
+3. The tool seeds `.ai/` (hidden — full AI ownership) for fresh creation, `_ai/` (visible) for adoption of an existing folder:
+   - `state.md` with `lifecycle: draft`, `practices: [<chosen-practice-id>]`, `ownership_mode: full` (new) or detected mode (existing), today's date.
    - `decisions.md` empty.
    - `module-decisions.md` empty.
-   - `file-map.md` with the just-created folder structure.
+   - `file-map.md` with the scaffolded structure.
 
-5. Scaffold the canonical LaTeX project structure for the requested doctype: copy from `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---*` template and instantiate `Projektdaten.tex` with the gathered metadata.
+4. The tool scaffolds the canonical project layout per `office_config.conventions.project_folder_layout` (inputs/, sent_versions/, correspondence/, toeb/) plus a doctype subfolder for each chosen doctype.
 
-6. Append to `<repo>/memory/office/projects-index.md`.
+5. For each chosen doctype, the tool copies the app's shipped skeleton from `<repo>/plugin/templates/skeletons/<doctype>/` (or `office_config.templates.doctype_overrides[<doctype>]` if set) into the doctype subfolder, and instantiates `Projektdaten.tex` with the gathered metadata.
 
-7. Output a one-paragraph orientation: "Projekt 26-XX angelegt. Template kopiert. Projektdaten ausgefüllt mit \<...\>. Nächster Schritt: \<...\>?"
+6. The tool appends an entry to `<state_root>/projects-index.md`.
+
+7. Output a one-paragraph orientation: "Projekt \<name\> angelegt. Layout: \<list-of-subfolders\>. Doctypes scaffolded: \<list\>. Projektdaten ausgefüllt mit \<...\>. Nächster Schritt: \<...\>?"
 
 For new projects, never propose an ownership mode — full AI ownership is the only mode.
 

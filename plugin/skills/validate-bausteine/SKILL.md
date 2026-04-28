@@ -126,5 +126,6 @@ Found 7 bausteine. 3 candidates surfaced:
   source_type=reference) — verify references[].
 - `Edit` — update baustein frontmatter on user decisions.
 
-Until backend lands: `Grep` against `<hidrive>/_ai-references/`
-for manual citation freshness check (slower but works).
+Until backend lands: `Grep` against the office's references corpus
+at `office_config.paths.references_root` for manual citation
+freshness check (slower but works).

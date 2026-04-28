@@ -1,6 +1,6 @@
 ---
 name: draft-textteil-b
-description: This skill should be used when the user asks to draft a B-Plan Begründung (Textteil B) from project source materials. Triggered by phrases like "Entwurf Begründung", "Begründung schreiben", "draft Begründung for Friedrichshof", "Textteil B aufsetzen", "neue Begründung", "Vorentwurf Begründung". Phase A entry skill — orchestrator routes here when a project requires fresh Begründung drafting.
+description: This skill should be used when the user asks to draft a B-Plan Begründung (Textteil B) from project source materials. Triggered by phrases like "Entwurf Begründung", "Begründung schreiben", "draft Begründung", "Textteil B aufsetzen", "neue Begründung", "Vorentwurf Begründung". Phase A entry skill — orchestrator routes here when a project requires fresh Begründung drafting.
 version: 0.1.0
 license: MIT
 ---
@@ -64,8 +64,12 @@ By orchestrator (Phase A entry) or direct user request. Inputs:
      §44/§45 BNatSchG come into play.
 
 5. **Scaffold the LaTeX project structure** if not present:
-   - Copy template tree from `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan---Begruendung/`
-     to `<project>/B-Plan/Begründung/`.
+   - Call `scaffold_project(doctype="b-plan-begruendung",
+     target_root=<project>/<doctype-subfolder>/)`.
+     The tool resolves the skeleton from the app's
+     `templates/skeletons/b-plan-begruendung/` (default) or from the
+     office's `templates.doctype_overrides[b-plan-begruendung]` if
+     set, and copies it into the target.
    - Instantiate `Projektdaten.tex` with project metadata from
      state.md (Gemeinde, Ortsteil, Landkreis, BPlanNr, BPlanName,
      BPlanTyp, GeltungsbereichHa, etc.).

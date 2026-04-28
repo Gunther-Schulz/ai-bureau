@@ -16,9 +16,9 @@ from pydantic import BaseModel, Field
 SourceType = Literal["corpus", "reference", "baustein"]
 SourceSubtype = Literal[
     # corpus
-    "local-repo", "hidrive-project", "snapshot", "correspondence",
+    "local-repo", "project-folder", "snapshot", "correspondence", "external",
     # reference
-    "gesetz-bund", "gesetz-eu", "gesetz-mv", "leitfaden",
+    "gesetz-bund", "gesetz-eu", "gesetz-state", "leitfaden",
     "urteil", "beispiel", "methodik",
     # baustein
     "global", "domain", "project",

@@ -28,22 +28,22 @@ Filename rules:
 name: §45-nr5-innenbereich-privat        # matches filename stem
 scope: domain                             # global | domain | project
 domain: artenschutz                       # required if scope=domain
-project: 23-12-Vorbeck                    # required if scope=project
+project: <YY-NN>-<location-slug>                    # required if scope=project
 type: argumentation                        # argumentation | technical-spec | citation | checklist | textbaustein | template
 
 title: §45 Abs.7 Nr.5 BNatSchG — Innenbereichsentwicklung als Ausnahmegrund
 language: de                               # de | en | mixed
 
 # Provenance
-source_project: 23-12-Vorbeck             # null for global bausteine
-source_date: 2026-04-22
+source_project: <YY-NN>-<location-slug>             # null for global bausteine
+source_date: YYYY-MM-DD
 captured_via: orchestrator-menu            # orchestrator-menu | manual | promote-from-skill | seed | research-references
-captured_session: 2026-04-22-vorbeck
+captured_session: YYYY-MM-DD-<project>
 
 # Lifecycle
 status: active                             # active | flagged | archived | superseded
-last_validated: 2026-04-22
-review_due: 2027-04-22                     # default +1y
+last_validated: YYYY-MM-DD
+review_due: YYYY-MM-DD                     # default +1y
 flagged_reason: null
 superseded_by: null
 
@@ -51,7 +51,7 @@ superseded_by: null
 use_count: 0
 last_used: null
 successful_uses:
-  - {project: 22-16-Friedrichshof, date: 2025-09-12, feedback_path: memory/domain/artenschutz/feedback/2025-09-12-UNB-rostock-§45-nr5.md}
+  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
 rejected_uses: []
 
 # Dependencies — surgical hook for research-references
@@ -94,8 +94,8 @@ Limitations, known weaknesses, when NOT to use, alternative approaches.
 
 Append-only narrative log. Each entry: date — event description.
 
-- 2026-04-22 — Captured from Vorbeck §45 argumentation.
-- 2026-09-12 — Reused in Friedrichshof; UNB approved.
+- YYYY-MM-DD — Captured from <project> §45 argumentation.
+- YYYY-MM-DD — Reused in <other-project>; UNB approved.
 ```
 
 `When to use` and `Content` are mandatory. `Notes` and `History` recommended.
@@ -110,16 +110,16 @@ domain: artenschutz
 type: argumentation
 title: §45 Abs.7 Nr.5 BNatSchG — Innenbereichsentwicklung als Ausnahmegrund
 language: de
-source_project: 23-12-Vorbeck
-source_date: 2026-04-22
+source_project: <YY-NN>-<location-slug>
+source_date: YYYY-MM-DD
 captured_via: orchestrator-menu
 status: active
-last_validated: 2026-04-22
-review_due: 2027-04-22
+last_validated: YYYY-MM-DD
+review_due: YYYY-MM-DD
 use_count: 1
-last_used: 2025-09-12
+last_used: YYYY-MM-DD
 successful_uses:
-  - {project: 22-16-Friedrichshof, date: 2025-09-12, feedback_path: memory/domain/artenschutz/feedback/2025-09-12-UNB-rostock-§45-nr5.md}
+  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
 rejected_uses: []
 references:
   - {law: BNatSchG, paragraph: §45 Abs.7 Nr.5}
@@ -166,9 +166,9 @@ Interesse wird hier getragen durch:
 
 ## History
 
-- 2026-04-22 — Captured from Vorbeck §45 argumentation. Approved by
-  UNB Rostock (Hr. Ratschker).
-- 2025-09-12 — Reused in Friedrichshof. UNB Rostock approved with
+- YYYY-MM-DD — Captured from <project> §45 argumentation. Approved by
+  UNB <Landkreis> (<Sachbearbeiter>).
+- YYYY-MM-DD — Reused in <other-project>. UNB <Landkreis> approved with
   minor §1a-Bezug-Anpassung.
 ```
 

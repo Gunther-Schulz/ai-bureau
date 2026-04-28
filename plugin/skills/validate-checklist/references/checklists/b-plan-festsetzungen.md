@@ -114,28 +114,39 @@ Same set as Begründung. Festsetzungen also requires:
 
 | Macro | Severity | Used in |
 |---|---|---|
-| `\BPlanName` | REQUIRED | header (`„Solarpark Friedrichshof"`) |
+| `\BPlanName` | REQUIRED | header (e.g. `„<BPlan-Name>"`) |
 | `\BPlan` | REQUIRED | Präambel and centered title-block |
 
 ## Required Hinweis content
 
-Standard Denkmalschutz boilerplate per §11 DSchG M-V. Verbatim text
-expected (allowed paraphrase up to 20%):
+Standard Denkmalschutz boilerplate per the project's state-DSchG
+(state-specific §-reference; e.g. §11 DSchG-MV in Mecklenburg-
+Vorpommern). The verbatim wording is state-specific and lives in
+the state-leitfaden corpus — retrieve via:
 
-> Wenn während der Erdarbeiten Funde oder auffällige Bodenverfärbungen
-> entdeckt werden, ist gemäß §11 DschGM-V (GVBI. M-V Nr. 1 vom
-> 14.01.98, S. 12) die untere Denkmalschutzbehörde zu benachrichtigen
-> ...
+```
+search_corpus(query="Denkmalschutz Hinweis Boilerplate Festsetzungen",
+              filter={source_subtype: leitfaden,
+                      jurisdiction: <bundesland>})
+```
+
+Validation: the document's Hinweis section must reference the
+correct state-DSchG §-number for the project's bundesland and the
+required content elements (Anzeigepflicht bei Funden,
+Benachrichtigung der unteren Denkmalschutzbehörde,
+Veränderungsverbot). Verbatim wording compared against the
+state-leitfaden retrieved above.
 
 ## Cross-checks
 
-- Every `§N Abs.M` reference in body resolves to a current law text.
+- Every `§N Abs.M` reference in body resolves to a current law text
+  (federal-core or state-extension manifest, per project bundesland).
 - `\Gemeinde`, `\BPlan`, `\BPlanName`, `\BPlanTyp` macros referenced
   in body must be defined in `Projektdaten.tex`.
 - Bürgermeister-Name in tabbing-blocks consistent across all 13
   Verfahrensvermerke (no typos / variants).
-- Bekanntmachungsblatt name (e.g. „Bützower Landkurier") consistent
-  across Verfahrensvermerke 1, 7, 13.
+- Bekanntmachungsblatt name consistent across Verfahrensvermerke 1,
+  7, 13.
 
 ## Severity rollup
 

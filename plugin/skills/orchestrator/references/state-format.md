@@ -32,23 +32,25 @@ Single source of project lifecycle truth.
 ```yaml
 ---
 # Identity
-project: 23-12-Vorbeck
-project_root: /mnt/data2t/hidrive/Öffentlich Planungsbüro Schulz/Projekte/23-12 Maxsolar - Vorbeck (Schwaan)
-client: Maxsolar
-client_contact: Gabriel Constantin <gabriel.constantin@maxsolar.de>
-location: Vorbeck (Gemeinde Schwaan)
-gemeinde: Schwaan
-landkreis: Rostock
-bundesland: Mecklenburg-Vorpommern
+project: <YY-NN>-<location-slug>
+project_root: <projects_root>/<YY-NN> <Client> - <Location>
+client: <Client>
+client_contact: <Contact-Name> <contact@example.de>
+location: <Location> (Gemeinde <Gemeinde>)
+gemeinde: <Gemeinde>
+landkreis: <Landkreis>
+bundesland: MV    # required. ISO state code: BB|BW|BY|BE|HB|HH|HE|MV|NI|NW|RP|SH|SL|SN|ST|TH
+                  # Picks which state-extension references-manifest applies
+                  # for this project (federal-core always applies).
 
 # Dates
-created: 2023-12-01
-last_session: 2026-04-22
+created: YYYY-MM-DD
+last_session: YYYY-MM-DD
 
 # Lifecycle
 lifecycle: internal-review                # draft | internal-review | sent-to-authority | awaiting-response | revision-requested | finalized | archived
 ownership_mode: new-work-only              # full | migrate | new-work-only | quarantine
-practices: [schulz, hendrik]              # schulz | hendrik | joint
+practices: [<practice-id-1>, <practice-id-2>]   # ids from office_config.practices
 verfahren_type: vorhabensbezogen           # regelverfahren | vereinfachtes (§13) | beschleunigtes (§13a) | vorhabensbezogen (§12)
 
 # Scope — which doctypes are in/out for this project
@@ -66,36 +68,36 @@ doctype_status:
 # Bauleitplanung phase tracking
 phase: 5a-foerml-oeffentlichkeit
 phase_history:
-  - {phase: 0-aufstellungsbeschluss, entered: 2023-12-01}
-  - {phase: 2a-frueh-oeffentlichkeit, entered: 2024-03-15}
-  - {phase: 5a-foerml-oeffentlichkeit, entered: 2026-04-01}
+  - {phase: 0-aufstellungsbeschluss, entered: YYYY-MM-DD}
+  - {phase: 2a-frueh-oeffentlichkeit, entered: YYYY-MM-DD}
+  - {phase: 5a-foerml-oeffentlichkeit, entered: YYYY-MM-DD}
 
 # Deadlines
 deadlines:
-  - {kind: behoerdliche-frist, date: 2026-05-15, description: "Stellungnahme-Frist UNB"}
-  - {kind: client-deadline, date: 2026-06-30, description: "Beschlussreife Maxsolar"}
+  - {kind: behoerdliche-frist, date: YYYY-MM-DD, description: "Stellungnahme-Frist UNB"}
+  - {kind: client-deadline, date: YYYY-MM-DD, description: "Beschlussreife <Client>"}
 
 linked_projects: []
 
 # Plan content
-geltungsbereich_ha: 43.57
-geltungsbereich_solar_ha: 30.37
-b_plan_nr: 3
-b_plan_name: "Solarpark Friedrichshof"
+geltungsbereich_ha: <ha>
+geltungsbereich_solar_ha: <ha>
+b_plan_nr: <N>
+b_plan_name: "<BPlan-Name>"
 
 notes: |
-  UNB Rostock historisch kooperativ. Nachbarprojekte Friedrichshof
-  und Waren-Grabowhöfe abgeschlossen — können als Referenz dienen.
+  Free-text notes on this specific project — historical context, prior
+  cooperation experience, related projects to use as reference, etc.
 ---
 
 # History
 
 Append-only record of state transitions and major events.
 
-- 2023-12-01 — Aufstellungsbeschluss durch Gemeindevertretung Schwaan.
-- 2024-03-15 — frühzeitige Beteiligung §3/§4 Abs.1 abgeschlossen.
-- 2026-04-01 — Auslegungsbeschluss; Auslegung gestartet.
-- 2026-04-22 — UNB Stellungnahme eingegangen, in Abwägung.
+- YYYY-MM-DD — Aufstellungsbeschluss durch Gemeindevertretung <Gemeinde>.
+- YYYY-MM-DD — frühzeitige Beteiligung §3/§4 Abs.1 abgeschlossen.
+- YYYY-MM-DD — Auslegungsbeschluss; Auslegung gestartet.
+- YYYY-MM-DD — UNB Stellungnahme eingegangen, in Abwägung.
 ```
 
 ### `doctype_status` values
@@ -137,38 +139,38 @@ doesn't strictly parse.
 
 ```yaml
 ---
-project: 23-12-Vorbeck
-last_survey: 2026-04-28
-last_modified_at_survey: 2026-04-22
+project: <YY-NN>-<location-slug>
+last_survey: YYYY-MM-DD
+last_modified_at_survey: YYYY-MM-DD
 survey_method: orchestrator-binding        # binding-flow | manual-edit | research-references-update
 ---
 
 # Current artifacts
 
-- B-Plan/Textteil B/B-Plan Begründung.tex      [working draft]
-- B-Plan/Testteil C/Textteil-B-B-Plan.tex      [working draft — note typo "Testteil C" in folder name]
+- B-Plan/Begründung/<doctype-master>.tex     [working draft]
+- B-Plan/Festsetzungen/<doctype-master>.tex  [working draft]
 
 # Sent / archived versions
 
-- alt/Begründung_v2_UNB-2024-03.tex            [sent to UNB 2024-03-15]
+- alt/Begründung_v2_UNB-YYYY-MM.tex          [sent to UNB YYYY-MM-DD]
 
 # Inputs (active)
 
-- inputs/auftraggeber/briefing-2024-02.pdf
-- inputs/erhebungen/vermessung-2024-03.pdf
+- inputs/auftraggeber/briefing-YYYY-MM.pdf
+- inputs/erhebungen/vermessung-YYYY-MM.pdf
 
 # Inputs (superseded)
 
-- inputs/auftraggeber/briefing-2024-01.pdf
+- inputs/auftraggeber/briefing-YYYY-MM.pdf
 
 # Stellungnahmen (awaiting Abwägung)
 
-- inputs/stellungnahmen/2026-04/UNB-rostock.pdf
+- inputs/stellungnahmen/YYYY-MM/UNB-<authority-slug>.pdf
 
 # Resources (read-only)
 
-- /Bilder — site photos from Begehung 2024-02-15
-- /GIS — Hendrik's QGIS workspace
+- /Bilder — site photos from Begehung YYYY-MM-DD
+- /<other-practice-workspace> — sibling practice's working area
 - /Externe Gutachten — third-party reports
 
 # Cruft to ignore
@@ -179,8 +181,9 @@ survey_method: orchestrator-binding        # binding-flow | manual-edit | resear
 
 # Notes
 
-- Folder name typo: "Testteil C" should be "Textteil C". Not fixed
-  to avoid breaking existing references.
+- Free-text notes on file-map quirks (folder-name typos, layout
+  divergences from canonical, etc.) — this is the right place to
+  document such things rather than silently fixing them.
 ```
 
 ---
@@ -191,13 +194,13 @@ Append-only log. Decisions never edited in place — if reversed, a new
 entry supersedes.
 
 ```markdown
-# Decisions log — 23-12-Vorbeck
+# Decisions log — <YY-NN>-<location-slug>
 
 ---
 
-## 2026-04-22 — Apply combined §45-Nr.5 + §1a Abs.2 argumentation
+## YYYY-MM-DD — Apply combined §45-Nr.5 + §1a Abs.2 argumentation
 
-**Reasoning:** UNB Rostock previously rejected reine Innenbereichs-
+**Reasoning:** Authority previously rejected straight Innenbereichs-
 satzungs-Argumentation. Pattern from baustein/§45-nr5-innenbereich-
 privat with §1a-Erweiterung.
 **Source:** orchestrator suggestion based on rejection feedback;
@@ -205,21 +208,20 @@ user approved.
 
 ---
 
-## 2024-04-01 — Vorhabensbezogenen B-Plan with V&E-Plan
+## YYYY-MM-DD — Vorhabensbezogenen B-Plan with V&E-Plan
 
-**Reasoning:** Maxsolar verlangt klare Bindung an konkretes Vorhaben.
-§12 BauGB ermöglicht Durchführungsvertrag mit Frist 30 Jahre für die
+**Reasoning:** Client requires klare Bindung an konkretes Vorhaben.
+§12 BauGB ermöglicht Durchführungsvertrag mit Frist X Jahre für die
 Zwischennutzung.
-**Source:** Abstimmung Maxsolar-Konstantin + Bürgermeister Schwaan
-2024-03-22.
+**Source:** Abstimmung Client + Bürgermeister YYYY-MM-DD.
 
 ---
 
-## 2024-03-15 — Geltungsbereich auf 43,57 ha festgelegt (30,37 ha SO EBS)
+## YYYY-MM-DD — Geltungsbereich auf X,XX ha festgelegt
 
-**Reasoning:** Erweiterung des ursprünglichen 30 ha auf 43,57 ha zur
+**Reasoning:** Erweiterung des ursprünglichen X ha auf X,XX ha zur
 Aufnahme der Folgenutzungs-Grünlandflächen.
-**Source:** Vermessung 2024-03; Bürgermeister-Zustimmung; vor
+**Source:** Vermessung YYYY-MM; Bürgermeister-Zustimmung; vor
 Auslegungsbeschluss.
 ```
 
@@ -246,15 +248,15 @@ Append-only chronological table. Auto-maintained when new
 correspondence arrives.
 
 ```markdown
-# Correspondence log — 23-12-Vorbeck
+# Correspondence log — <YY-NN>-<location-slug>
 
 | Date | Type | Party | Subject | Artifact path |
 |---|---|---|---|---|
-| 2024-03-15 | mail-out | UNB Rostock (Ratschker) | Anschreiben §4 Abs.1 | Schriftverkehr/eml/2024-03-15-UNB-out.eml |
-| 2024-04-12 | mail-in | UNB Rostock (Ratschker) | Stellungnahme §4 Abs.1 | Schriftverkehr/eml/2024-04-12-UNB-in.eml |
-| 2024-03-22 | meeting | Maxsolar + Bürgermeister Schwaan | Abstimmung Verfahrenstyp | Schriftverkehr/besprechungsprotokolle/2024-03-22-maxsolar-buergermeister.md |
-| 2026-04-22 | mail-in | UNB Rostock | Stellungnahme zur Auslegung | inputs/stellungnahmen/2026-04/UNB-rostock.pdf |
-| 2026-04-25 | call | UNB Rostock (Ratschker) | Klärung §45-Bedenken | Schriftverkehr/telefonnotizen/2026-04-25-UNB-ratschker.md |
+| YYYY-MM-DD | mail-out | UNB <Landkreis> (<Sachbearbeiter>) | Anschreiben §4 Abs.1 | Schriftverkehr/eml/YYYY-MM-DD-UNB-out.eml |
+| YYYY-MM-DD | mail-in | UNB <Landkreis> (<Sachbearbeiter>) | Stellungnahme §4 Abs.1 | Schriftverkehr/eml/YYYY-MM-DD-UNB-in.eml |
+| YYYY-MM-DD | meeting | <Client> + Bürgermeister <Gemeinde> | Abstimmung Verfahrenstyp | Schriftverkehr/besprechungsprotokolle/YYYY-MM-DD-client-buergermeister.md |
+| YYYY-MM-DD | mail-in | UNB <Landkreis> | Stellungnahme zur Auslegung | inputs/stellungnahmen/YYYY-MM/UNB-<authority-slug>.pdf |
+| YYYY-MM-DD | call | UNB <Landkreis> (<Sachbearbeiter>) | Klärung §45-Bedenken | Schriftverkehr/telefonnotizen/YYYY-MM-DD-UNB-<authority-slug>.md |
 ```
 
 Type values: `mail-in`, `mail-out`, `call`, `meeting`,
@@ -270,7 +272,7 @@ Append-only; no entries removed.
 Per-doctype tables. Append-only.
 
 ```markdown
-# Module assembly decisions — 23-12-Vorbeck
+# Module assembly decisions — <YY-NN>-<location-slug>
 
 ## B-Plan/Begründung
 
@@ -320,11 +322,11 @@ snapshots/<YYYY-MM-DD>-<recipient-slug>/
 
 ```yaml
 ---
-date: 2026-04-28
-recipient: UNB Landkreis Rostock
-recipient_contact: Hr. Ratschker
-recipient_address: rostock@...
-project: 23-12-Vorbeck
+date: YYYY-MM-DD
+recipient: UNB Landkreis <Landkreis>
+recipient_contact: <Sachbearbeiter>
+recipient_address: <authority>@...
+project: <YY-NN>-<location-slug>
 phase: 5a-foerml-oeffentlichkeit
 artifacts:
   - final.pdf

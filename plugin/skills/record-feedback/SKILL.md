@@ -1,6 +1,6 @@
 ---
 name: record-feedback
-description: This skill should be used when external feedback (rejection, approval, partial, suggestion) on PBS work needs to be captured. Triggered by user pasting a UNB Stellungnahme, mentioning a Behörden-Reaktion, "UNB hat abgelehnt", "approval kam von Ratschker", "Stellungnahme festhalten", "feedback log", "record this rejection", or similar.
+description: This skill should be used when external feedback (rejection, approval, partial, suggestion) on planning-bureau work needs to be captured. Triggered by user pasting a UNB Stellungnahme, mentioning a Behörden-Reaktion, "UNB hat abgelehnt", "approval kam von <Person>", "Stellungnahme festhalten", "feedback log", "record this rejection", or similar.
 version: 0.1.0
 license: MIT
 ---
@@ -76,8 +76,8 @@ Confirmation including:
 - Path of the saved feedback entry.
 - Names of bausteine flagged (for rejections) or marked successful
   (for approvals).
-- Suggested next action if applicable (e.g. "Vorbeck has rejection
-  feedback open — author successor argumentation?").
+- Suggested next action if applicable (e.g. "Project <name> has a
+  rejection feedback open — author successor argumentation?").
 
 ## Edge cases
 
@@ -90,10 +90,10 @@ Confirmation including:
 - **Multiple authorities cite the same Stellungnahme** (rare, e.g.
   joint Stellungnahme): record one entry with `authority` set to the
   primary, mention secondaries in body.
-- **Feedback contradicts an existing approval** (e.g. UNB approves
-  in Friedrichshof but later rejects in Vorbeck for same argument):
-  surface as a calibration issue. Don't try to reconcile
-  automatically.
+- **Feedback contradicts an existing approval** (e.g. an authority
+  approves an argument in one project but later rejects the same
+  argument in another): surface as a calibration issue. Don't try to
+  reconcile automatically.
 
 ## Tools used (when MCP backend lands)
 

@@ -11,17 +11,58 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ## v1.x — likely soon
 
+### Modular integrations declared at office setup
+
+**Why**: external systems (mail, calendar, scanner OCR, phone-system
+call logs, accounting, GIS data feeds) vary per deployment. Some
+offices use Thunderbird, others Outlook or web-IMAP-only; some
+self-host email, some use Microsoft 365. Hard-coding any one
+mechanism would break portability — the same architectural lesson
+as paths/identity/practices.
+
+**Sketch**: each integration class becomes a pluggable adapter:
+
+```yaml
+# in office-config.yaml
+integrations:
+  email:
+    adapter: thunderbird-maildir       # | imap | outlook-pst | mbox-file | none
+    config: { profile_path: ~/.thunderbird/<p>/Mail/ }
+  calendar:
+    adapter: caldav                     # | exchange-ews | ical-file | none
+    config: { url: ..., credentials_ref: ... }
+  scanner:
+    adapter: hot-folder                 # | escli | tesseract | none
+    config: { hot_folder: ~/Documents/Scans/ }
+```
+
+`setup-office` skill: at first-bootstrap, walks the user through
+which integrations they want enabled and which adapter to pick per
+class, writes config, validates each adapter loads. Adapters
+themselves live as Python modules under
+`backend/mcp-server/src/pbs_mcp/integrations/<class>/<adapter>.py`
+implementing a small protocol (probe/list/fetch/normalize). MCP tools
+expose the unified interface (`fetch_emails(project, since=...)`)
+regardless of adapter.
+
+**Note**: not implementing in v1. The architectural rule is clear —
+no hardcoded mechanism. Initial v1 implementations may inline a
+single adapter (e.g. Thunderbird maildir for email) but the adapter
+boundary is in place from day one.
+
 ### Email integration (Thunderbird mbox reader)
 
 **Why**: v1 has manual `.eml` drop into `<project>/Schriftverkehr/eml/`.
 For complete project context, the assistant needs full inbox access
 because the manually-saved `.eml` files are a curated subset.
 
-**Sketch**: small Python service that polls Thunderbird's local
-maildir/mbox at `~/.thunderbird/<profile>/Mail/`, filters by domain
-whitelist + project-keyword matching, drops matched messages into
-the right project's `correspondence/eml/`. Could be an MCP tool or a
-standalone daemon.
+**Sketch**: First adapter for the email-integration class above.
+Small Python service that polls Thunderbird's local maildir/mbox at
+`~/.thunderbird/<profile>/Mail/`, filters by domain whitelist +
+project-keyword matching, drops matched messages into the right
+project's `correspondence/eml/`. Could be an MCP tool or a
+standalone daemon. Behind the integration adapter interface so an
+office on IMAP can swap implementations without touching skills.
 
 ### Phone call note format
 

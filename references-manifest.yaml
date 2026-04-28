@@ -1,7 +1,20 @@
 version: 1
+scope: federal-core
 last_updated: 2026-04-28
 maintainer: pbs-bureau
 
+# Federal-core references manifest. Lists references universal to
+# every German Planungsbüro: federal laws, EU directives, federal
+# court rulings, federal-level leitfäden (e.g. KNE), national
+# methodology standards.
+#
+# State-specific references (LandesPlG, LBauO, NatSchAG des Landes,
+# state Verfahrenserlasse, state environmental authority leitfäden)
+# live in per-state extension manifests. See
+# `docs/office-extensions/<STATE>/references-manifest.example.yaml`
+# for the template; offices place their copy at
+# `office_config.paths.state_root/extensions/<STATE>/references-manifest.yaml`.
+#
 # Schema documented at:
 #   plugin/skills/research-references/references/manifest-schema.md
 #
@@ -210,82 +223,9 @@ categories:
           Schutzbestimmungen für Vögel; Anhang I, Schutzgebiete (SPA).
         tags: [naturschutz, eu, vogelschutz]
 
-    mv:
-      - id: LPlG-MV
-        title: Landesplanungsgesetz Mecklenburg-Vorpommern
-        short_title: LPlG M-V
-        jurisdiction: mv
-        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-LPlGMVrahmen
-        source_type: landesrecht-mv
-        canonical_path: gesetze/mv/LPlG-MV.txt
-        fetch_method: web-html
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: landesrecht-mv
-        status: active
-        notes: |
-          §17 LPlG raumordnungsbehördliche Beteiligung — Verfahrens-
-          vermerk #2 in der Festsetzungs-Sequenz.
-        tags: [landesrecht, mv, raumordnung]
-
-      - id: LBauO-MV
-        title: Landesbauordnung Mecklenburg-Vorpommern
-        short_title: LBauO M-V
-        jurisdiction: mv
-        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-BauOMVrahmen
-        source_type: landesrecht-mv
-        canonical_path: gesetze/mv/LBauO-MV.txt
-        fetch_method: web-html
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: landesrecht-mv
-        status: active
-        notes: |
-          §86 Abs.3 örtliche Bauvorschriften — basis für Festsetzungen
-          Rule 5.
-        tags: [landesrecht, mv, bauordnung]
-
-      - id: NatSchAG-MV
-        title: Naturschutzausführungsgesetz Mecklenburg-Vorpommern
-        short_title: NatSchAG M-V
-        jurisdiction: mv
-        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-NatSchAGMV2010rahmen
-        source_type: landesrecht-mv
-        canonical_path: gesetze/mv/NatSchAG-MV.txt
-        fetch_method: web-html
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: landesrecht-mv
-        status: active
-        notes: |
-          MV-spezifische Eingriffsbilanzierung. §3 Eingriff, §6
-          Ausgleichsmaßnahmen. Standard im Quellenverzeichnis.
-        tags: [naturschutz, mv, eingriffsregelung]
-
-      - id: KV-MV
-        title: Kommunalverfassung Mecklenburg-Vorpommern
-        short_title: KV M-V
-        jurisdiction: mv
-        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-KVerfMVrahmen
-        source_type: landesrecht-mv
-        canonical_path: gesetze/mv/KV-MV.txt
-        fetch_method: web-html
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: landesrecht-mv
-        status: active
-        notes: |
-          §5 Abs.5 Verkündung; Bekanntmachungs-Hinweise im Verfahrens-
-          vermerk #13.
-        tags: [kommunalverfassung, mv]
+    # State laws (gesetze.<state-code>) live in per-state extension
+    # manifests, NOT in the federal core. See
+    # `docs/office-extensions/<STATE>/references-manifest.example.yaml`.
 
   leitfaeden:
     - id: KNE-PV-Naturschutz
@@ -301,8 +241,9 @@ categories:
       chunk_metadata_extractor: pdf-headings
       status: active
       notes: |
-        Vorhanden in <hidrive>/Projekte/Literatur/. Für ersten Lauf
-        manuell nach _ai-references/leitfaeden/ kopieren.
+        Federal-level Leitfaden by KNE (federal competence center).
+        Manual fetch: Claude discovers canonical PDF URL on the
+        publisher site, then downloads.
       tags: [pv-freiflache, naturschutz, kne]
 
     - id: KNE-Anlagengestaltung
@@ -315,7 +256,7 @@ categories:
       chunking_strategy: per-section
       chunk_metadata_extractor: pdf-headings
       status: active
-      notes: Vorhanden in Literatur/. Manuell kopieren.
+      notes: Federal-level KNE Leitfaden.
       tags: [pv-freiflache, naturschutz, kne]
 
     - id: KNE-Standortsteuerung
@@ -328,7 +269,7 @@ categories:
       chunking_strategy: per-section
       chunk_metadata_extractor: pdf-headings
       status: active
-      notes: Vorhanden in Literatur/. Manuell kopieren.
+      notes: Federal-level KNE Leitfaden.
       tags: [pv-freiflache, standort, kne]
 
     - id: KNE-Landschaftsbild
@@ -342,70 +283,34 @@ categories:
       chunking_strategy: per-section
       chunk_metadata_extractor: pdf-headings
       status: active
-      notes: Vorhanden in Literatur/. Manuell kopieren.
+      notes: Federal-level KNE Leitfaden.
       tags: [pv-freiflache, landschaftsbild, kne]
 
-    - id: KNE-Folgenutzung-Acker-Gruenland
-      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland
+    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-1
+      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 1)
       publisher: KNE
       source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland.pdf
+      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-1.pdf
       fetch_method: manual
       ingest: true
       chunking_strategy: per-section
       chunk_metadata_extractor: pdf-headings
       status: active
-      notes: |
-        Vorhanden in Literatur/ (Teil 1 + Teil 2). Manuell kopieren.
+      notes: Federal-level KNE Leitfaden — first part of two.
       tags: [pv-freiflache, folgenutzung, kne]
 
-    - id: LUNG-MV-Artenschutzleitfaden
-      title: LUNG-MV Fachliche Hinweise zur Erfassung und Bewertung von Arten
-      publisher: LUNG M-V — Landesamt für Umwelt, Naturschutz und Geologie
-      source_url: https://www.lung.mv-regierung.de/
-      canonical_path: leitfaeden/LUNG-MV-Artenschutzleitfaden.pdf
+    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-2
+      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 2)
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-2.pdf
       fetch_method: manual
       ingest: true
       chunking_strategy: per-section
       chunk_metadata_extractor: pdf-headings
       status: active
-      notes: |
-        NEEDS FETCH. Aktuelle Fassung von LUNG-Portal beziehen. Häufig
-        in Artenschutz-Gutachten zitiert; Methodik-Standards für M-V.
-      tags: [naturschutz, mv, lung, artenschutz]
-
-    - id: Verfahrenserlass-Bauleitplanung-MV
-      title: Erlass zur Bauleitplanung Mecklenburg-Vorpommern
-      publisher: Ministerium für Inneres, Bau und Digitalisierung M-V
-      source_url: https://www.regierung-mv.de/
-      canonical_path: leitfaeden/Verfahrenserlass-Bauleitplanung-MV.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: |
-        NEEDS FETCH. M-V-spezifische Verfahrens-Anleitung. SH-Variante
-        existiert in Literatur/ als Vergleichsreferenz; M-V braucht
-        eigene aktuelle Fassung.
-      tags: [bauleitplanung, mv, verfahrenserlass]
-
-    - id: Brandschutzkonzept-PV-MV
-      title: Brandschutzkonzept-Leitfaden für PV-Freiflächenanlagen Mecklenburg-Vorpommern
-      publisher: tbd
-      source_url: tbd
-      canonical_path: leitfaeden/Brandschutzkonzept-PV-MV.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: |
-        NEEDS RESEARCH + FETCH. Existence to be verified — research-
-        references skill should search MUGV/Innenministerium portals.
-        If no M-V-spezifischer Leitfaden, fall back to bundes-weiter
-        Brandschutz-Standards (DIN VDE 0100, etc.).
-      tags: [brandschutz, pv-freiflache, mv]
+      notes: Federal-level KNE Leitfaden — second part of two.
+      tags: [pv-freiflache, folgenutzung, kne]
 
   urteile:
     - id: BVerwG-9-A-3-06

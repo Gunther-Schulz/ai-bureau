@@ -118,33 +118,49 @@ Per `bauleitplanung-phasen.md` Section 9. Each entry follows pattern:
 Placeholder Daten `................` für unausgefüllte Termine
 (typisch beim Vorentwurf).
 
-## Hinweis (Denkmalschutz §11 DSchG M-V)
+## Hinweis (Denkmalschutz, state-specific)
 
-Standard verbatim text per `b-plan-festsetzungen.md` checklist.
-Wörtlich übernehmen oder bis zu 20% paraphrasieren — wenn
-paraphrasiert, sicherstellen dass §11-Wortlaut-Inhalt erhalten ist.
+Standard Denkmalschutz-Hinweis per the project's bundesland (e.g.
+§11 DSchG-MV in Mecklenburg-Vorpommern). Verbatim wording lives in
+the state-leitfaden corpus — retrieve via `search_corpus(filter=
+{source_subtype: leitfaden, jurisdiction: <bundesland>})` keyed on
+"Denkmalschutz Hinweis" and use the result verbatim in the
+Festsetzungen.
 
 ## Rechtsgrundlagen — Bullet List
 
-Minimum required entries with current amendment dates:
+Minimum required entries (each citation must include current
+amendment form, fetched from references corpus — never written
+from training memory):
 
+Federal (always required):
+- BauGB
+- BauNVO
+- PlanZV
+- BNatSchG
+
+State (required, per project bundesland — resolved from state-
+extension manifest):
+- Kommunalverfassung des Landes (e.g. KV-MV)
+- Naturschutzausführungsgesetz des Landes (e.g. NatSchAG-MV)
+- Landesbauordnung (e.g. LBauO-MV)
+
+Optional federal (include if cited in body): BImSchG, WHG, BBodSchG,
+BWaldG.
+
+Optional state (include if cited in body, per state extension):
+state-Wassergesetz, state-Denkmalschutzgesetz, etc.
+
+For each citation, fetch current amendment form via:
 ```
-- BauGB i.d.F. der Bekanntmachung vom <date>, zuletzt geändert durch
-  <art> des Gesetzes vom <date> (<BGBl-Bezug>)
-- BauNVO i.d.F. der Bekanntmachung vom <date>, ...
-- PlanZV i.d.F. der Bekanntmachung vom <date>, ...
-- KV M-V i.d.F. der Bekanntmachung vom <date>, ...
-- BNatSchG i.d.F. der Bekanntmachung vom <date>, zuletzt geändert
-  durch <art> des Gesetzes vom <date>
-- NatSchAG M-V i.d.F. der Bekanntmachung vom <date>, ...
-- LBauO M-V i.d.F. der Bekanntmachung vom <date>, ...
+read_corpus_file(<references_root>/gesetze/{bund|<state>}/<id>.md)
 ```
+The cited form is `<id> i.d.F. der Bekanntmachung vom <date>,
+zuletzt geändert durch <art> des Gesetzes vom <date>` — exact text
+from the reference corpus, never reconstructed.
 
-verify-citations skill checks each amendment date against
-references-manifest. Drift → flag.
-
-Optional entries (include if cited in body): BImSchG, WHG, LWaG M-V,
-BBodSchG, BWaldG, DSchG M-V.
+verify-citations skill checks each amendment date against the
+references-manifest (federal-core + state-extension). Drift → flag.
 
 ## Compile + verify
 

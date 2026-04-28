@@ -14,12 +14,15 @@ text. Source-grounding guard against citation rot.
 ## Load this now
 
 Resolve the references in scope:
-- `<repo>/references-manifest.yaml` — for IDs and current amendment
-  forms.
-- `<hidrive>/_ai-references/` — for actual reference text (loaded
-  on-demand via search_corpus).
+- `<repo>/references-manifest.yaml` — federal-core manifest IDs and
+  current amendment forms.
+- `office_config.extensions.references_manifest` — the office's
+  state/topic extension manifest, if any.
+- The office's references corpus at
+  `office_config.paths.references_root` — for actual reference text
+  (loaded on-demand via search_corpus).
 
-If the manifest or `_ai-references/` is missing, the skill cannot
+If the manifests or references corpus is missing, the skill cannot
 validate against authoritative sources — fall back to "no current
 reference index; cannot verify; recommend running research-references
 first." Don't fabricate verdicts.
@@ -112,5 +115,6 @@ Citations in B-Plan Begründung.tex:
 - `read_corpus_file(path)` — read full reference text for verbatim
   comparison.
 
-Until backend lands: fallback uses `Grep` over `<hidrive>/
-_ai-references/` and `Read` of manifest.yaml.
+Until backend lands: fallback uses `Grep` over the office's
+references corpus at `office_config.paths.references_root` and
+`Read` of the manifest files.

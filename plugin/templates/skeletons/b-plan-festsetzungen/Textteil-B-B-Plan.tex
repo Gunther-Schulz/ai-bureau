@@ -1,0 +1,112 @@
+% !TeX program = pdflatex
+% B-Plan Textliche Festsetzungen — master file.
+% Generated from app skeleton at scaffold time. The single-page
+% infinite-page output is designed to be embedded as Teil B Text
+% of the B-Plan Satzung document.
+
+\documentclass{bplan-festsetzungen}
+
+\usepackage{office-style}
+
+\InputIfFileExists{office-identity}{}{%
+  \typeout{office-identity not found - using class defaults}}
+
+\input{Projektdaten}
+
+\begin{document}
+
+\textbf{Satzung der Gemeinde \Gemeinde{} über den \BPlan{}}
+\bigskip
+
+\subsection*{Präambel}
+
+% Required content: Aufgrund der §§ ... BauGB sowie der ... LBauO des
+% Bundeslandes hat die Gemeindevertretung der Gemeinde \Gemeinde{}
+% am DD.MM.YYYY den \BPlanTyp{} \BPlanName{} als Satzung beschlossen.
+% Verbatim Wortlaut state-spezifisch — aus state-leitfaden corpus
+% retrieven via search_corpus(filter={source_subtype: leitfaden,
+% jurisdiction: <bundesland>}).
+
+\bigskip
+
+\subsection*{Teil A: Planzeichnung i.\,M.~1 : 2.000}
+
+% Heading placeholder — the actual Planzeichnung is a separate
+% document referenced in the Satzung.
+
+\bigskip
+
+\section*{Teil B Text}
+
+\section*{I.\hspace{17pt}Planungsrechtliche Festsetzungen gemäß §\,9 BauGB}
+
+\begin{enumerate}[label=\arabic*., leftmargin=*, labelsep=20pt, font=\bfseries]
+  \item \textbf{Art der baulichen Nutzung}
+    \begin{enumerate}[label=\arabic{enumi}.\arabic*., leftmargin=0pt, labelsep=10pt]
+      \item % nested rule content
+    \end{enumerate}
+  \item \textbf{Maß der baulichen Nutzung}
+    \begin{enumerate}[label=\arabic{enumi}.\arabic*., leftmargin=0pt, labelsep=10pt]
+      \item % nested rule content
+    \end{enumerate}
+  \item \textbf{Schutzmaßnahmen}
+    \begin{enumerate}[label=\arabic{enumi}.\arabic*., leftmargin=0pt, labelsep=10pt]
+      \item % nested rule content
+    \end{enumerate}
+  \item \textbf{Artenschutzrechtliche Festsetzungen}
+    % Include only if §44 BNatSchG triggered — log decision in
+    % _ai/module-decisions.md.
+    \begin{enumerate}[label=\arabic{enumi}.\arabic*., leftmargin=0pt, labelsep=10pt]
+      \item % nested rule content
+    \end{enumerate}
+  \item \textbf{Örtliche Bauvorschriften}
+    % Per state LBauO §-reference (resolve from state-leitfaden).
+    \begin{enumerate}[label=\arabic{enumi}.\arabic*., leftmargin=0pt, labelsep=10pt]
+      \item % nested rule content
+    \end{enumerate}
+\end{enumerate}
+
+\bigskip
+
+\section*{Verfahrensvermerke}
+
+% State-specific Verfahrensvermerk reihenfolge. Resolve verbatim
+% wording per project bundesland from state-leitfaden corpus.
+% Each Vermerk uses the helper:
+%   \VerfahrensvermerkSignatur{Ort, Datum}{Bürgermeister-Name}{Bürgermeister}
+%
+% Standard 13-Vermerk sequence is documented in
+% memory/domain/verfahren/bauleitplanung-phasen.md §9.
+
+\bigskip
+
+\section*{Hinweis}
+
+% Standard Denkmalschutz-Hinweis per project bundesland's DSchG.
+% Verbatim wording from state-leitfaden corpus.
+
+\bigskip
+
+\begin{center}
+  \textbf{SATZUNG DER GEMEINDE}\\
+  \Gemeinde\\
+  ÜBER DEN\\
+  \BPlanTyp
+\end{center}
+
+\bigskip
+
+\section*{Rechtsgrundlagen}
+
+\begin{itemize}
+  \item BauGB i.d.F. <fetched from references corpus>
+  \item BauNVO i.d.F. <fetched from references corpus>
+  \item PlanZV i.d.F. <fetched from references corpus>
+  \item BNatSchG i.d.F. <fetched from references corpus>
+  % State-specific (per project bundesland, fetched from state-extension):
+  \item Kommunalverfassung des Landes
+  \item Naturschutzausführungsgesetz des Landes
+  \item Landesbauordnung
+\end{itemize}
+
+\end{document}

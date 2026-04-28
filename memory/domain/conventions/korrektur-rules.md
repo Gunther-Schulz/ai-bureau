@@ -1,13 +1,12 @@
-# Korrektur rules — PBS LaTeX writing conventions
+# Korrektur rules — German planning-bureau LaTeX writing conventions
 
-The legacy `korrektur-prompt.txt` in existing project repos lists 13+
-rules that were prompt-engineered for older LLMs needing step-by-step
-guidance. Most of those (basic spelling, grammar, UTF-8 verification,
-math forms, citation/figure label correctness) are reflexive for current
-models and don't need to be stated.
-
-What follows is the **office-specific** subset that captures actual
-PBS conventions a model would otherwise miss or get wrong.
+Universal German typographic + writing conventions that apply to all
+planning-bureau document output (Begründung, Festsetzungen,
+Umweltbericht, Gutachten, cover mails). What follows is the subset
+that a current model would otherwise miss or get wrong if not
+explicitly told — basic spelling, grammar, UTF-8 verification, math
+forms, citation/figure label correctness are reflexive and not
+restated here.
 
 ## 1. German quotation marks
 
@@ -91,7 +90,7 @@ Do not touch:
 - Legal citations (BauGB, BNatSchG paragraphs as written, even if
   formatting looks off — they may be officially correct)
 - Quoted text from external sources (even if quoting style differs from
-  PBS conventions)
+  these conventions)
 - LaTeX commands and their arguments
 - Specialized technical terms (Hochspannungsfreileitung, Solartracker,
   Wechselrichterstation — leave intact even if hyphenation feels weird)

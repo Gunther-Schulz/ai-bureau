@@ -1,63 +1,71 @@
-# LaTeX style specification
+# LaTeX style specification — universal B-Plan domain
 
-PBS produces B-Plan documents as **two separate LaTeX projects per
-B-Plan**. They have different structures, different document classes,
-and different output shapes. Both compile with **pdflatex** (not
-xelatex). Engine choice is uniform.
+This document captures the **structural domain** of B-Plan LaTeX
+production: which document classes to use, which conventions are
+universal across German Planungsbüros, and which macros and patterns
+the app's skeletons assume.
 
-| Doctype | Class | Output shape | Master file naming |
+**Office-specific choices** (geometry, fonts, header layouts,
+TOC styling, color schemes, identity macros) are NOT here. They live
+in each office's `office-style.sty` under
+`office_config.templates.office_style_dir`. That `.sty` is loaded by
+the app's skeletons via `\usepackage{office-style}` and supplies the
+office's aesthetic on top of the structural skeleton.
+
+A B-Plan project produces **two LaTeX documents** that share metadata
+but have different shapes. Both compile with **pdflatex**:
+
+| Doctype | Class | Output shape | Master file |
 |---|---|---|---|
 | **Begründung** | `scrreprt` | Multi-page narrative report | `B-Plan Begründung.tex` |
 | **Textliche Festsetzungen** | `article` | Single long page (Satzung Teil B Text) | `Textteil-B-B-Plan.tex` |
 
-Naming clarification: the file `Textteil-B-B-Plan.tex` refers to
-"Teil B Text" of the B-Plan Satzung (Teil A = Planzeichnung,
-Teil B = Text). It is **not** Textteil B in the standard
-Bundesländer-convention sense. The Begründung is a separate
-explanatory document outside the Satzung.
+Naming clarification: `Textteil-B-B-Plan.tex` refers to "Teil B Text"
+of the B-Plan Satzung (Teil A = Planzeichnung, Teil B = Text). It is
+**not** "Textteil B" in the older Bundesländer-convention sense. The
+Begründung is a separate explanatory document outside the Satzung.
 
 ---
 
 ## Doctype A — Begründung (scrreprt)
 
-Source of truth: `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan---Begruendung/`
-
 ### Document class
+
 ```latex
-\documentclass[12pt, a4paper, times, numbered, print, index, parskip=half,
-  BCOR=5mm, headings=normal, toc=listof, bibliography=totoc,
-  captions=tableheading]{scrreprt}
+\documentclass[12pt, a4paper, parskip=half,
+  bibliography=totoc, captions=tableheading,
+  toc=listof]{scrreprt}
 ```
-- KOMA-Script `scrreprt` (chapter-based)
-- 12pt, A4, Times font (built-in via `times` option)
-- `parskip=half` — half-line space between paragraphs
-- `BCOR=5mm` — binding correction
-- `bibliography=totoc` — bibliography appears in TOC
-- `captions=tableheading` — table captions above tables
+
+- KOMA-Script `scrreprt` (chapter-based, but chapters typically
+  not used — sections are top-level).
+- `parskip=half` — half-line space between paragraphs.
+- `bibliography=totoc` — bibliography appears in TOC.
+- `captions=tableheading` — table captions above tables.
+- Office-specific: `BCOR`, `headings`, font option (`times`,
+  `palatino`, etc.), `numbered`/`print`/`index` flags. Set in
+  the office's `office-style.sty` or in office-overlay class options.
 
 ### Engine
+
 ```
 % !TeX program = pdflatex
 ```
 
-**Heads-up:** the Friedrichshof master file has a stale magic comment
-`% !TeX root = Textteil-C.tex` at the top — leftover from a copy. The
-actual root is `B-Plan Begründung.tex`. Should be cleaned up.
-
-### Geometry
-```latex
-\usepackage[a4paper, left=25mm, right=25mm, top=30mm, bottom=25mm,
-  headheight=30pt, marginparwidth=0pt]{geometry}
-```
-
 ### Encoding & language
+
 ```latex
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}    % new German orthography
 ```
 
+Universal across German planning practice. `ngerman` enables German
+hyphenation patterns; combined with `pdflatex` + `utf8 inputenc` it
+handles UTF-8 source (umlauts, ß, German quotation marks).
+
 ### Hyphenation tuning
+
 ```latex
 \usepackage{hyphenat}
 \tolerance=1500
@@ -66,31 +74,28 @@ actual root is `B-Plan Begründung.tex`. Should be cleaned up.
 \exhyphenpenalty=50
 \hbadness=10000
 ```
-Notably **softer** than the older office templates (which used 10000 for
-every penalty). This pdflatex setup permits some hyphenation rather than
-fighting all breaks, while suppressing badness warnings.
 
-### Headers (scrlayer-scrpage, NOT fancyhdr)
+Permits some hyphenation rather than fighting all breaks, while
+suppressing badness warnings. Office may add specific hyphenation
+hints (`\hyphenation{Bun-des-na-tur-schutz-ge-setz}`) for
+frequently-bad-breaking compounds in office-style.sty.
+
+### Headers
+
+The Begründung uses `scrlayer-scrpage` (NOT `fancyhdr`):
+
 ```latex
 \usepackage[automark]{scrlayer-scrpage}
 \clearpairofpagestyles
-
-\ihead{\small\parbox[t]{0.45\textwidth}{Gemeinde \Gemeinde{} \\
-       \BPlanTyp{} \BPlan{}}}
-\ohead{\small Begründung \\ \small Seite \thepage}
-
-\newpairofpagestyles[scrheadings]{tocstyle}{
-  \ihead{...same as main...}
-  \ohead{\small Begründung \\ \small Seite \thepage}
-}
-\renewcommand*{\chapterpagestyle}{tocstyle}
 ```
-- Inner head: `Gemeinde X / BPlanTyp BPlan`
-- Outer head: `Begründung / Seite N`
-- Custom `tocstyle` so prelim pages keep the same header
-- `\automark` to drive content from chapter/section names
+
+Header content (`\ihead`, `\ohead`) and TOC pagestyle definitions
+are **office choice** — set in `office-style.sty`. Conventional
+content: inner head shows `Gemeinde \Gemeinde / \BPlanTyp`, outer
+head shows `Begründung / Seite \thepage`.
 
 ### Page numbering: Roman → Arabic flip
+
 ```latex
 \newcommand{\startroman}{%
   \cleardoublepage
@@ -103,53 +108,25 @@ fighting all breaks, while suppressing badness warnings.
   \setcounter{page}{1}
 }
 ```
-Used in the master to switch numbering between prelims (Title, TOC, LOT)
-and main body. **Capital Roman** (`I, II, III`), not lowercase.
 
-### Heading fonts
-```latex
-\addtokomafont{section}{\normalfont\Large\bfseries}
-\addtokomafont{subsection}{\normalfont\large\bfseries}
-\addtokomafont{subsubsection}{\normalfont\normalsize\bfseries}
-```
+Used to switch numbering between prelims (Title, TOC, List of Tables)
+and main body. **Capital Roman** (`I, II, III`), not lowercase.
+Universal in German planning practice for legal-document layout.
 
 ### Section numbering (re-declared)
+
 ```latex
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 ```
-Forces flat arabic numbering even though the doc is `scrreprt`
-(otherwise sections would be `1.1` under chapters; here chapters aren't
-used and sections are top-level numbered as `1`, `2`, `3`).
 
-### TOC styling (tocbasic, NOT tocloft)
-```latex
-\usepackage{tocbasic}
-\setcounter{tocdepth}{3}
-
-\RedeclareSectionCommands[
-  tocdynnumwidth,
-  toclinefill=\TOCLineLeaderFill,
-  tocraggedpagenumber=true
-]{section,subsection,subsubsection}
-
-\DeclareTOCStyleEntry[indent=0pt, numwidth=2em, level=1,
-                     entryformat=\normalfont]{tocline}{section}
-\DeclareTOCStyleEntry[indent=2em, numwidth=3em, level=2,
-                     entryformat=\normalfont]{tocline}{subsection}
-\DeclareTOCStyleEntry[indent=5em, numwidth=4em, level=3,
-                     entrynumberformat=\itshape,
-                     entryformat=\normalfont\itshape]{tocline}{subsubsection}
-\DeclareTOCStyleEntry[beforeskip=1.0em plus 1pt]{tocline}{section}
-
-\renewcaptionname{ngerman}{\contentsname}{\MakeUppercase{Inhaltsverzeichnis}}
-```
-- Subsubsections italicized in TOC
-- "Inhaltsverzeichnis" forced UPPERCASE
-- Page numbers right-ragged (no leader-dot fill)
+Forces flat arabic numbering even though the doc is `scrreprt` (where
+chapters would otherwise prefix all numbering). Sections at top level
+are numbered `1`, `2`, `3` — chapters not used.
 
 ### Number formatting (siunitx, German conventions)
+
 ```latex
 \usepackage{siunitx}
 \sisetup{
@@ -159,52 +136,45 @@ used and sections are top-level numbered as `1`, `2`, `3`).
 }
 \newcommand{\formatnumber}[1]{\num[round-mode=places,round-precision=0]{#1}}
 ```
-- Decimal: comma (German style)
-- Thousands separator: dot, applied to numbers ≥ 4 digits
+
+- Decimal: comma (German style).
+- Thousands separator: dot, applied to numbers ≥ 4 digits.
+
+Universal in German legal/planning documents.
 
 ### Master document assembly
+
 ```latex
 \documentclass[...]{scrreprt}
-\input{preamble.tex}
-\input{Projektdaten.tex}
+\usepackage{office-style}      % office's styling overlay
+\input{office-identity}        % office identity macros (auto-generated)
+\input{Projektdaten.tex}       % per-project metadata
 
 \begin{document}
 \startroman
-\pagestyle{tocstyle}
+\pagestyle{tocstyle}           % style defined in office-style.sty
 
 \input{Textbausteine/Titelseite.tex}
 \cleardoublepage
 \tableofcontents
 \cleardoublepage
-% \listoffigures
-% \cleardoublepage
 \listoftables
 \cleardoublepage
 
 \startarabic
 \pagestyle{scrheadings}
 
-\input{Textbausteine/Aufgaben und Inhalte der Planung.tex}
-\input{Textbausteine/Grundlagen der Planung - Aufstellungsverfahren.tex}
-\input{Textbausteine/Geltungsbereich.tex}
-\input{Textbausteine/Planinhalte und Festsetzungen.tex}
-\input{Textbausteine/Ver- und Entsorgungsanlagen.tex}
-\cleardoublepage
-\input{Textbausteine/Vorbeugender Brandschutz - Löschwasserversorgung.tex}
-\input{Textbausteine/Gewässerschutz.tex}
-\input{Textbausteine/Bodenschutz.tex}
-\input{Textbausteine/Immissions- und Klimaschutz - Blendwirkung.tex}
-\input{Textbausteine/Altlasten und Altlastverdachtsflächen.tex}
-\input{Textbausteine/Belange der Forst.tex}
-\input{Textbausteine/Denkmalschutz.tex}
-\input{Textbausteine/Kataster- und Vermessungswesen.tex}
-\input{Textbausteine/Alternativpüfung}            % typo: Alternativprüfung
-\input{Textbausteine/Kosten und Finanzierung.tex}
-\input{Textbausteine/Signatur.tex}
+\input{Textbausteine/<section-1>.tex}
+\input{Textbausteine/<section-2>.tex}
+% ... per the section list below
 \end{document}
 ```
 
-### Begründung canonical section order (Friedrichshof)
+### Begründung canonical section order
+
+The standard B-Plan Begründung section list, observed across German
+planning bureau practice:
+
 1. Titelseite
 2. Aufgaben und Inhalte der Planung
 3. Grundlagen der Planung — Aufstellungsverfahren
@@ -223,37 +193,40 @@ used and sections are top-level numbered as `1`, `2`, `3`).
 16. Kosten und Finanzierung
 17. Signatur
 
-This is one project's order; section list may vary slightly per
-project. Survey other projects to confirm the canonical superset.
-The "Alternativpüfung" filename has a typo (missing 'r' before 'p')
-that's been carried in the master `\input{}`.
+Project-specific deviations from this list are normal — sections may
+be omitted (when not applicable) or extended (project-specific topics).
+The `validate-checklist` skill marks each section as REQUIRED /
+EXPECTED / OPTIONAL per the doctype checklist.
 
 ### Textbausteine subfolder
-- `Textbausteine/` next to master
-- Filenames in mixed-case German with spaces and umlauts
-- pdflatex handles UTF-8 filenames since the doc is `inputenc utf8`
+
+- `Textbausteine/` next to master.
+- Filenames in mixed-case German with spaces and umlauts.
+- pdflatex handles UTF-8 filenames since the doc uses `inputenc utf8`.
 
 ---
 
 ## Doctype B — Textliche Festsetzungen (article, infinite page)
 
-Source of truth: `~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan-Textliche-Festsetzungen/Textteil-B-B-Plan.tex`
-
 ### Document class & engine
+
 ```latex
 \documentclass[12pt]{article}
 % pdflatex
 ```
-Plain `article`. No KOMA, no chapters.
+
+Plain `article`. No KOMA, no chapters. Single document.
 
 ### Encoding
+
 ```latex
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 ```
 
-### Other packages
+### Other packages (typical)
+
 ```latex
 \usepackage[final]{microtype}
 \usepackage{enumitem}
@@ -262,23 +235,19 @@ Plain `article`. No KOMA, no chapters.
 \usepackage{url}
 ```
 
-### Sans-serif font (override default)
-```latex
-\renewcommand{\familydefault}{\sfdefault}
-```
-Different from Begründung — Festsetzungen body is **sans-serif**, while
-Begründung uses Times serif. Visual marker that Festsetzungen are the
-"binding rules" portion vs the narrative explanation.
+### Body font
 
-### Hyphenation
-```latex
-\setlength{\emergencystretch}{3em}
-\hyphenation{Na-tur-schutz-aus-füh-rungs-ge-setz Bun-des-na-tur-schutz-ge-setz}
-```
-Pre-declared hyphenation hints for long compound words that LaTeX
-otherwise breaks badly.
+Festsetzungen body is conventionally rendered **sans-serif** (visual
+distinction from the serif-typeset Begründung — sans-serif signals
+the "binding rules" portion vs the narrative explanation). Specific
+font choice is office aesthetic.
 
 ### Geometry — single infinite page
+
+The Festsetzungen output is **one PDF page** containing the full
+text, designed to be embedded as Teil B of the B-Plan Satzung
+document. Implementation:
+
 ```latex
 \geometry{
   paperwidth=210mm,            % A4 width
@@ -287,43 +256,38 @@ otherwise breaks badly.
   top=0in, bottom=0in
 }
 ```
-- A4 width but paperheight maxed (~141 cm; TeX limit ~575cm)
-- No margins inside the geometry — content controls its own indentation
-- Output is **one PDF page** containing the full text, designed to be
-  embedded as Teil B of the B-Plan Satzung document
-- Will not paginate; very long Festsetzungen could overflow `4000pt`,
-  but in practice fits
 
-### Section title formatting
-```latex
-\titleformat{\section}
-  {\normalfont\normalsize\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}
-  {\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}
-  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
-```
-All heading levels render at **normalsize bold**. No size escalation.
-Compact, list-like presentation — fitting for a Satzung.
+A4 width but paperheight maxed (≈141 cm; TeX limit ≈575 cm). No
+margins inside the geometry — content controls its own indentation.
+Will not paginate; very long Festsetzungen could overflow `4000pt` —
+in practice rare.
 
 ### Document body structure
+
 1. Header: `\textbf{Satzung der Gemeinde \Gemeinde{} über den \BPlan{}}`
-2. `\subsection*{Präambel}` — long sentence reciting BauGB §10 + LBauO M-V references and the Beschlussfassung clause
-3. `\subsection*{Teil A: Planzeichnung i. M. 1 : 2.000}` (just a heading)
+2. `\subsection*{Präambel}` — long sentence reciting BauGB §10 plus
+   state-LBauO references and Beschlussfassung clause.
+3. `\subsection*{Teil A: Planzeichnung i. M. 1 : 2.000}` (heading
+   placeholder; the actual Planzeichnung is separate).
 4. `\section*{Teil B Text}`
-5. `\section*{I.\hspace{17pt} Planungsrechtliche Festsetzungen gemäß §~9 BauGB}`
-   - Numbered enumerate: Art der baulichen Nutzung, Maß der baulichen
-     Nutzung, Schutzmaßnahmen, Artenschutzrechtliche Festsetzungen,
-     Örtliche Bauvorschriften
-   - Each with nested subitems
-6. `\section*{Verfahrensvermerke}` — placeholder dates and signature blocks
-7. `\section*{Hinweis}` — Denkmalschutz boilerplate
-8. Title-block of cente blocks: `SATZUNG DER GEMEINDE / Klein Belitz /
-   ÜBER DEN / Vorhabensbezogener Bebauungsplan ... `
-9. `\section*{Rechtsgrundlagen}` — bullet list of BauGB, BauNVO, PlanZV,
-   KV M-V, BNatSchG, NatSchAG M-V, LBauO M-V with full citations
+5. Numbered Planungsrechtliche Festsetzungen gemäß §9 BauGB:
+   - Art der baulichen Nutzung
+   - Maß der baulichen Nutzung
+   - Schutzmaßnahmen
+   - Artenschutzrechtliche Festsetzungen (when §44 BNatSchG triggered)
+   - Örtliche Bauvorschriften (per state LBauO)
+6. `\section*{Verfahrensvermerke}` — placeholder dates and signature
+   blocks. The exact reihenfolge is state-specific and per Verfahrenstyp
+   — see `bauleitplanung-phasen.md` and the state-leitfaden corpus.
+7. `\section*{Hinweis}` — Denkmalschutz boilerplate (per state DSchG).
+8. Centered title-block: `SATZUNG DER GEMEINDE / \Gemeinde / ÜBER DEN /
+   \BPlanTyp`.
+9. `\section*{Rechtsgrundlagen}` — bullet list of cited laws with full
+   citations: BauGB, BauNVO, PlanZV, BNatSchG (federal); state LBauO,
+   NatSchAG, KV (state).
 
 ### enumerate styling pattern
+
 ```latex
 \begin{enumerate}[label=\arabic*., leftmargin=*, labelsep=20pt, font=\bfseries]
   \item \textbf{...}
@@ -332,12 +296,14 @@ Compact, list-like presentation — fitting for a Satzung.
         \end{enumerate}
 \end{enumerate}
 ```
-- Top-level: `1.`, `2.`, `3.` in bold
-- Nested: `1.1.`, `1.2.` flat-aligned to `0pt` margin
-- `labelsep` controls space between label and content
+
+- Top-level: `1.`, `2.`, `3.` in bold.
+- Nested: `1.1.`, `1.2.` flat-aligned to `0pt` margin.
 
 ### Verfahrensvermerke pattern
+
 Repetitive block per Verfahrensschritt:
+
 ```latex
 \item Aufgestellt aufgrund des Aufstellungsbeschlusses der Gemeindevertretung vom ...........
       Der Aufstellungsbeschluss ist am ........... durch Abdruck ...
@@ -348,9 +314,10 @@ Repetitive block per Verfahrensschritt:
         \> \> — Bürgermeister —
       \end{tabbing}
 ```
-- Placeholder dates rendered as `................`
+
+- Placeholder dates rendered as `................`.
 - Signature block uses tabbing (not tabular) for left-aligned location,
-  middle-aligned `Siegel`, right-aligned name + title
+  middle-aligned `Siegel`, right-aligned name + title.
 
 ---
 
@@ -359,77 +326,41 @@ Repetitive block per Verfahrensschritt:
 Both doctypes read a `Projektdaten.tex` of identical structure:
 
 ```latex
-\newcommand{\Gemeinde}{Klein Belitz}
-\newcommand{\Stadt}{---STADT---}
-\newcommand{\Gemarkung}{Friedrichshof}
-\newcommand{\Ortsteil}{Friedrichshof}
-\newcommand{\Landkreis}{Rostock}
+\newcommand{\Gemeinde}{<Gemeinde>}
+\newcommand{\Stadt}{---STADT---}              % set or leave placeholder
+\newcommand{\Gemarkung}{<Gemarkung>}
+\newcommand{\Ortsteil}{<Ortsteil>}
+\newcommand{\Landkreis}{<Landkreis>}
 \newcommand{\BPlanAbrv}{B-Plan}
-\newcommand{\BPlanNr}{3}
-\newcommand{\BPlanName}{„Solarpark Friedrichshof"}
-\newcommand{\BPlan}{vorhabensbezogenen Bebauungsplan Nr. 3 mit integriertem Vorhaben- und Erschließungsplan}
-\newcommand{\BPlanTyp}{Vorhabensbezogener Bebauungsplan Nr. 3 mit integriertem Vorhaben- und Erschließungsplan}
-\newcommand{\GeltungsbereichHa}{43,57}
-\newcommand{\GeltungsbereichHaSolar}{30,37}
-\newcommand{\Planungsregion}{Rostock}
+\newcommand{\BPlanNr}{<N>}
+\newcommand{\BPlanName}{„<BPlan-Name>"}
+\newcommand{\BPlan}{vorhabensbezogenen Bebauungsplan Nr. <N> mit integriertem Vorhaben- und Erschließungsplan}
+\newcommand{\BPlanTyp}{Vorhabensbezogener Bebauungsplan Nr. <N> mit integriertem Vorhaben- und Erschließungsplan}
+\newcommand{\GeltungsbereichHa}{<X,XX>}
+\newcommand{\GeltungsbereichHaSolar}{<X,XX>}
+\newcommand{\Planungsregion}{<Region>}
 % \newcommand{\Landesverordnung}{...}
 ```
 
-**Key convention:** `\BPlan` is **lowercase-leading** (used inside running prose, e.g. "...des vorhabensbezogenen Bebauungsplans..."), while `\BPlanTyp` is **capitalized-leading** (used at sentence start or in headings). Different macros for different grammatical positions.
+**Key convention:** `\BPlan` is **lowercase-leading** (used inside
+running prose, e.g. "...des vorhabensbezogenen Bebauungsplans..."),
+while `\BPlanTyp` is **capitalized-leading** (used at sentence start
+or in headings). Different macros for different grammatical positions.
 
 Placeholder values use `---FIELDNAME---` shouted-uppercase to make
 unfilled fields glaringly visible. Each new project should fill all
 slots before compile.
 
----
-
-## Per-project file layout
-
-Each project folder is its **own git repo** at
-`~/dev/Planungsbüro-Schulz/<long-name>/`, containing:
-
-```
-<project-repo>/
-├── B-Plan Begründung.tex          # Begründung master (or)
-├── Textteil-B-B-Plan.tex          # Festsetzungen master
-├── preamble.tex                   # doctype-specific preamble
-├── Projektdaten.tex               # macros for this project
-├── Textbausteine/                 # per-section .tex files (Begründung)
-├── Bilder/                        # images (Begründung)
-├── Vorlage/                       # local template variants (some projects)
-├── BauGB.txt                      # reference text colocated with project
-├── EEG 2023 - Gesetz für den Ausbau...txt   # ditto
-├── README.md                      # project notes (sparse)
-├── korrektur-prompt.txt           # the legacy AI proofing prompt
-├── korrektur-prompt-old.txt       # earlier version
-├── clean_latex_aux.sh             # cleanup auxiliary files
-├── fix_quotes.py                  # German-quote fixup helper
-├── pdf_to_image.sh                # PDF→PNG (for OCR or thumbnails)
-└── B-Plan Begründung.{aux,fdb_latexmk,fls,log,lot,pdf,synctex.gz,toc,tex}
-                                   # build artifacts (should be gitignored)
-```
-
-Notes:
-- Reference text files (BauGB.txt, EEG.txt, etc.) are colocated **per
-  project** rather than centralized. Duplicate content across projects.
-  When a law changes, every project's copy goes stale unless updated
-  individually. (Roadmap: centralize references via the RAG.)
-- LaTeX build artifacts are committed to git in some repos. These
-  should be in `.gitignore` (will need cleanup migration when projects
-  adopt our system).
-- `clean_latex_aux.sh` removes the artifacts manually; `fix_quotes.py`
-  applies regex-based German-quote conversion; `pdf_to_image.sh`
-  rasterizes for OCR pre-processing. All three are migration material —
-  their function should fold into our MCP server's `compile_latex`,
-  validation hooks, and an OCR helper.
+These macros are universal — every German B-Plan project needs them.
+The app's skeleton ships a Projektdaten.tex template with these
+fields as placeholders; setup_project / scaffold_project instantiates
+the values from project metadata.
 
 ---
 
 ## Cross-doctype conventions
 
-- **Engine:** pdflatex everywhere. Never xelatex (that was a wrong
-  reading of an old hidrive Vorlagen folder; the local templates are
-  authoritative).
+- **Engine:** pdflatex everywhere. Never xelatex.
 - **Encoding:** utf8 inputenc + T1 fontenc + ngerman babel.
 - **Compile chain:** `latexmk -pdf` (pulls in pdflatex iterations as
   needed). Multiple passes required for stable TOC / refs.
@@ -441,36 +372,45 @@ Notes:
 - **Legal references:** `§~9 BauGB`, `§~44 BNatSchG` — non-breaking
   space between `§` and number.
 - **Compound word hyphenation:** when LaTeX breaks German compounds
-  badly, add to `\hyphenation{...}` in preamble OR insert `\-` in
-  source.
+  badly, add to `\hyphenation{...}` in office-style.sty OR insert
+  `\-` in source.
 
 ---
 
-## Cleanup items (already noted; backlog candidates)
+## Office-specific layer (office-style.sty)
 
-1. **Stale magic comment** in Friedrichshof Begründung master:
-   `% !TeX root = Textteil-C.tex` should be removed.
-2. **Filename typo** in Textbausteine: `Alternativpüfung` (missing 'r').
-   Fix the file and the `\input{...}` reference.
-3. **Build artifacts in git** in some project repos. `.gitignore` for
-   `*.aux *.fdb_latexmk *.fls *.log *.lot *.toc *.synctex.gz` etc.
-4. **Reference texts duplicated across projects** (BauGB.txt, EEG.txt
-   per project). Centralize in the RAG once references are ingested.
-5. **Helper scripts** (`clean_latex_aux.sh`, `fix_quotes.py`,
-   `pdf_to_image.sh`) duplicated across projects. Fold into MCP server.
+Per `office_config.templates.office_style_dir`. Authored once per
+office. Provides:
+
+- Geometry (margins, BCOR, headheight, marginparwidth).
+- Header layout: content of `\ihead`, `\ohead` per page style.
+- Heading fonts (sizes via `\addtokomafont`).
+- TOC styling (indent values, leader-fill, page-number alignment,
+  Inhaltsverzeichnis case).
+- Color theme (if any).
+- Office logo / Briefkopf.
+- Office-specific `\hyphenation{...}` hints.
+- Festsetzungen-specific `\titleformat{\section}{...}` choices.
+
+The app's skeleton is loadable WITHOUT office-style.sty (a default
+minimal one is shipped) — the office layer customizes appearance
+without affecting structural correctness.
 
 ---
 
-## Open questions for confirmation
+## Office-identity layer (office-identity.tex)
 
-- Q1: Is the section list in Friedrichshof Begründung the canonical set,
-  or do other projects (e.g. Waren-Grabowhöfe) have additional / different
-  sections? Should be answered by surveying other Begründung repos.
-- Q2: For Festsetzungen, the layout uses `paperheight=4000pt`. Any
-  Festsetzungen ever overflowed this? Workaround if so?
-- Q3: Are Begründung and Festsetzungen always paired 1:1 per B-Plan, or
-  do some B-Plans have only one? (The two existing 22-20 repos suggest
-  pairing is normal.)
-- Q4: F-Plan Begründung — same template as B-Plan Begründung, or its own
-  variant? (The existing local repos cover only B-Plan; F-Plan exists in
-  hidrive project folders but no LaTeX repo here yet.)
+Auto-generated by the backend before each compile from
+`office_config.identity.*`. Provides:
+
+- `\OfficeName` — full office name.
+- `\OfficeShort` — abbreviation.
+- `\OfficeAddressLines` — multi-line address block.
+- `\OfficePhone`, `\OfficeEmail`, `\OfficeWeb` — contact data
+  (when set in identity).
+- `\OfficeSignatureBlock` — signature paragraph.
+- `\OfficeSigner` — signer name from active practice.
+
+These macros are consumed by `office-style.sty` (e.g. in headers,
+title pages, signatures). Single source of truth: the office-config
+`identity:` section.

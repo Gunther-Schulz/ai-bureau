@@ -8,21 +8,23 @@ license: MIT
 # draft-cover-mail
 
 Specialist skill for drafting transmittal cover mails when artifacts
-go out to authorities or clients. Phase-aware; matches PBS office
-style (collegiate when contact is established, formal otherwise).
+go out to authorities or clients. Phase-aware; tone calibrated by
+prior correspondence.
 
 ## Load this now
 
 Read `<repo>/memory/domain/verfahren/bauleitplanung-phasen.md` for
 phase-appropriate language and the Verfahrensvermerke context.
 
-Read `<repo>/memory/global/identity.md` (when authored) for office
-identity, default Quellen, and signature conventions.
+Load `office_config` for office identity and signature: `office.name`,
+`identity.address_lines`, `identity.signature_block`,
+`identity.phone`, `identity.email`. The signature block is inserted
+verbatim at the end of the mail; identity fields populate header
+metadata if needed.
 
 If the project has prior correspondence with the recipient, scan
 `<project>/_ai/correspondence-log.md` for tone calibration —
-established contacts use collegiate style ("Moin Herr Ratschker,"),
-new contacts use formal ("Sehr geehrte Damen und Herren,").
+established contacts use collegiate style, new contacts use formal.
 
 ## When invoked
 
@@ -47,7 +49,8 @@ By orchestrator's send gate, or by direct user request. Inputs:
    - Override per user request.
 
 2. **Detect language**:
-   - German default for all PBS correspondence per office convention.
+   - Default from `office_config.office.language` (currently always
+     `de_DE`). All German-deployment correspondence is in German.
    - English only on explicit user override (rare; only for non-
      German-speaking authorities).
 
@@ -74,14 +77,17 @@ By orchestrator's send gate, or by direct user request. Inputs:
 
 4. **Structure**:
    - Subject line: `<Projekt-Kurzform> — <Phase-Anlass>`
-     Example: "Solarpark Friedrichshof — Stellungnahme §4 Abs.2 BauGB"
+     Example: "<BPlan-Name> — Stellungnahme §4 Abs.2 BauGB"
    - Salutation matched to tone.
    - Opening paragraph: project context (one sentence).
    - Body: what's being sent + why + key points + Frist (if applicable).
    - Specific items the recipient should pay attention to (from input).
    - Closing: anbieten Rückfragen / Telefonklärung / weiterer
      Austausch.
-   - Signature block per `memory/global/identity.md`.
+   - Signature: insert `office_config.identity.signature_block`
+     verbatim. If the active practice has its own
+     `practices[].signer` set, prepend the signer's name above the
+     signature block.
 
 5. **Reference attachments** in body and list at end.
 
@@ -91,9 +97,9 @@ By orchestrator's send gate, or by direct user request. Inputs:
 
 ## Output
 
-Plain text draft (mail format), ready to copy-paste into Thunderbird
-or whatever mail client. Headers as the start of the draft, body
-follows, signature at end. No markdown formatting in the mail itself
+Plain text draft (mail format), ready to copy-paste into the office's
+mail client. Headers as the start of the draft, body follows,
+signature at end. No markdown formatting in the mail itself
 (LaTeX-style markup not needed for mail).
 
 ## Edge cases
@@ -101,8 +107,9 @@ follows, signature at end. No markdown formatting in the mail itself
 - **No prior correspondence with recipient AND no formal context**:
   default formal salutation. Note in output that tone may be
   adjustable.
-- **Joint Schulz+Hendrik project**: signature includes both offices
-  if appropriate (specifically for Gutachten signed by Hendrik).
+- **Multi-practice project**: signature includes both practices' signers
+  if appropriate (e.g. for joint Gutachten signed by multiple practices).
+  Pull each signer from the relevant entry in `office_config.practices`.
 - **Late response to received Stellungnahme**: tone needs explicit
   acknowledgment of late response; suggest user verify Frist
   passed before sending.
@@ -112,7 +119,9 @@ follows, signature at end. No markdown formatting in the mail itself
 
 ## Tools used
 
-- `Read` — project state, correspondence log, identity.md.
+- `Read` — project state, correspondence log.
+- Office identity values come from `office_config` (in-memory),
+  not from any markdown file.
 - `Grep` — search prior mail for tone calibration.
 - No MCP backend dependency for drafting (the send action itself is
   separate).

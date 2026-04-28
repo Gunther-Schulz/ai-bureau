@@ -10,6 +10,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from pbs_mcp import config
 from pbs_mcp.chunkers import select_chunker
 from pbs_mcp.db import get_db
 from pbs_mcp.embedder import get_embedder
@@ -179,33 +180,51 @@ def _read_file(p: Path) -> str:
 
 
 def _infer_source_subtype(path: str, source_type: str) -> str:
-    p = path.lower()
+    """Classify a source path by which root + sub-area it falls under.
+
+    Roots come from office-config; classification is by path containment
+    rather than substring matching, so it works on any office layout.
+    """
+    p_resolved = Path(path).resolve()
+    p_lower = path.lower()
     if source_type == "corpus":
-        if "/dev/planungsbüro-schulz/" in p:
+        local_repos = config.local_repos_root()
+        projects = config.projects_root()
+        if local_repos and _is_relative_to(p_resolved, local_repos.resolve()):
             return "local-repo"
-        if "/projekte/" in p and "/_ai/snapshots/" in p:
-            return "snapshot"
-        if "/schriftverkehr/" in p or "/correspondence/" in p:
-            return "correspondence"
-        return "hidrive-project"
+        if projects and _is_relative_to(p_resolved, projects.resolve()):
+            if "/_ai/snapshots/" in p_lower:
+                return "snapshot"
+            if "/correspondence/" in p_lower or "schriftverkehr" in p_lower:
+                return "correspondence"
+            return "project-folder"
+        return "external"
     if source_type == "reference":
-        if "/gesetze/bund/" in p:
+        if "/gesetze/bund/" in p_lower:
             return "gesetz-bund"
-        if "/gesetze/eu/" in p:
+        if "/gesetze/eu/" in p_lower:
             return "gesetz-eu"
-        if "/gesetze/mv/" in p:
-            return "gesetz-mv"
-        if "/leitfaeden/" in p:
+        if "/gesetze/" in p_lower:
+            return "gesetz-state"
+        if "/leitfaeden/" in p_lower:
             return "leitfaden"
-        if "/urteile/" in p:
+        if "/urteile/" in p_lower:
             return "urteil"
-        if "/beispiele/" in p:
+        if "/beispiele/" in p_lower:
             return "beispiel"
         return "reference"
     if source_type == "baustein":
-        if "/global/" in p:
+        if "/global/" in p_lower:
             return "global"
-        if "/projects/" in p:
+        if "/projects/" in p_lower:
             return "project"
         return "domain"
     return source_type
+
+
+def _is_relative_to(child: Path, parent: Path) -> bool:
+    try:
+        child.relative_to(parent)
+        return True
+    except ValueError:
+        return False
