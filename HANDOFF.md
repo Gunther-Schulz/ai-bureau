@@ -162,40 +162,25 @@ GitHub: <https://github.com/Gunther-Schulz/pbs-bureau> (private)
 
 ### ❌ NOT designed yet (deferred backlog)
 
-These are explicitly deferred. Not blocking; pick up later when need
-arises.
+Full deferred-feature roadmap is in `ROADMAP.md` at repo root.
+Includes:
 
-- **Email integration** — Thunderbird mbox reader to populate
-  `Schriftverkehr/eml/` automatically. v1 has manual `.eml` drop.
-  Roadmap: parse local maildir, filter by domain whitelist, route
-  to project correspondence/.
-- **Phone call note format** — small markdown spec for
-  `Schriftverkehr/telefonnotizen/<date>-<party>.md`.
-- **Maps/GIS integration** — gis-utils MCP coexistence with
-  pbs-bureau MCP for joint Schulz+Hendrik projects.
-- **Overleaf sync workflow detail** — git init per LaTeX subfolder
-  is decided; the actual GitHub-remote-creation + branch protection
-  + push-on-save details are TBD.
-- **Reference versioning** — keep history vs overwrite when laws
-  amend. Initial decision: archive old per `archive_versions: true`,
-  keep N=5. Refine with use.
-- **Reference internal cross-refs** — §44 BNatSchG mentions §1; how
-  do we resolve that during retrieval? Probably handled by reranker;
-  test with real queries first.
-- **Subagents** — legal-reviewer, style-auditor agents (separate
-  Claude instances spawned for deep passes). v1+, when context
-  pressure justifies.
-- **Umweltprüfung verfahren reference** — separate
-  `memory/domain/verfahren/umweltpruefung.md` with §2 Abs.4 BauGB
-  + Anlage 1 detail.
-- **FFH-Vorprüfung verfahren reference** — `ffh-vorpruefung.md`,
-  §34 BNatSchG + Erheblichkeitsabschätzung detail.
-- **Abwägung mechanism + doctype** — per-Stellungnahme structure:
-  quote → analyze → Abwägungsergebnis. Add to doctypes.yaml.
-- **Artenschutz / SPA verfahren reference** — Hendrik's domain;
-  joint projects need it.
-- **Hooks / event triggers** — currently none in v1. Possibly add
-  state-transition hooks, snapshot-on-send hooks later.
+- Email integration (Thunderbird mbox reader)
+- Phone call note format
+- Office identity config
+- Maps/GIS integration (gis-utils MCP coexistence)
+- Python-ACAD-Tools integration (sibling tool at
+  `~/dev/Gunther-Schulz/Python-ACAD-Tools/`)
+- Overleaf sync workflow detail
+- Reference versioning + cross-refs handling
+- Subagents (legal-reviewer, style-auditor)
+- Hooks / event triggers
+- Additional verfahren references (Umweltprüfung,
+  FFH-Vorprüfung, Artenschutz/SPA)
+- Abwägung mechanism + doctype
+
+Each item in `ROADMAP.md` has Why + Sketch + Open questions. Pick
+items off the list as projects raise them.
 
 ---
 
