@@ -190,6 +190,28 @@ art rewrites the query before retrieval to bridge vocabulary gaps:
      covers internal-use ingest of legitimately-acquired material;
      redistribution is separate. Document the policy.
 
+**Recommended architecture** (decided):
+
+| Step | Who | Why |
+|---|---|---|
+| Pre-process PDFs at ingest (page render, OCR, table extract, DRM removal) | Local Python tools | Deterministic, one-shot |
+| Embed page images for retrieval | Local ColPali on RTX 5090 | Bounded corpus, consistency with bge-m3 text-RAG |
+| Match query → page images | Local LanceDB | Same store as text-RAG |
+| **Read and reason about returned images** | **The Claude session itself** | Already in the loop, vision-capable, has project context |
+
+The orchestrator runs IN a Claude session — Claude is already
+vision-capable. MCP backend returns image bytes (new tool
+`read_corpus_page_image` or extension to `read_corpus_file`); the
+session passes them as image content blocks; Claude reads + reasons
+directly. No separate vision-LLM deployment needed for interactive
+work.
+
+A separate local vision model (Llama 3.2 Vision, Qwen2-VL, Pixtral)
+or API vision call is only needed for **batch/headless** processing
+that runs outside a live Claude session — e.g. a future
+"weekly auto-scan new Stellungnahmen for action items" cron. Defer
+that until such a use case lands.
+
 **Open questions**:
 - Coexistence: page-image retrieval + text-RAG returning different
   hit kinds — how does the orchestrator decide which to send to the
@@ -197,8 +219,8 @@ art rewrites the query before retrieval to bridge vocabulary gaps:
   candidate pool, reranker decides.
 - Storage cost: page images are large; LanceDB blob storage or
   filesystem references?
-- Vision-model cost: every multimodal hit means image bytes in the
-  context; budget control matters.
+- Token-budget control: every multimodal hit means image bytes in
+  the context. Cap on images-per-turn?
 - Table extraction precision: structured tables are queryable but
   the extractor mis-identifies blocks. Need fallback to text+image.
 
@@ -248,27 +270,11 @@ capability / relationship, design it as data, not prose.
   event is naturally a graph-edge ("decision X was logged in
   project Y by partner Z at time T").
 
-### Existing skill protocols — revisit for iterate/rewrite patterns
-
-When next touching these skills, evaluate against the iterate /
-rewrite / rerank lens above. Currently designed bulk-style; per-
-claim or per-attribute iteration would improve grounding:
-
-- **`verify-citations`** — currently flat per-cite lookup. Should
-  iterate: ambiguous cite → fetch chapter → narrow → possibly fetch
-  interpreting ruling → decide.
-- **`validate-checklist`** — checklist hits should be able to fetch
-  the actual reference defining what's required, not just match
-  section names.
-- **`survey-project`** — for each ambiguous file, iterate (filename
-  → content sniff → last-modified → related files).
-- **Stellungnahmen-/Abwägung-Bearbeitung** — per-concern iteration:
-  fetch related baseline + relevant ruling + similar past Abwägung.
-- **`save-baustein`** — needs dedupe guard with HyDE-style
-  paraphrase-search (currently no dedupe at all).
-
-These are protocol changes, not infrastructure — flag for the next
-review of each skill.
+_(Skill-protocol refactor for iterate/rewrite patterns —
+verify-citations, validate-checklist, survey-project,
+Stellungnahme/Abwägung handling, save-baustein dedupe — promoted
+out of ROADMAP into immediate next-session work. See HANDOFF.md
+"Pending — first task next session.")_
 
 ---
 

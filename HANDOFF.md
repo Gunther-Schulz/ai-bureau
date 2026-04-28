@@ -122,16 +122,94 @@ Smoke test results (all green):
   unrelated addresses return None ✓
 - All 5 integration adapters loadable; `probe()` returns ok ✓
 
-### ⏳ Pending — first-run actions for next session
+### ⏳ Pending — first task next session
+
+**Full skill-alignment sweep** — all 16 PBS skills reviewed for
+consistency with this session's architectural realizations, BEFORE
+first-run RAG ingestion. Reasoning: this session changed a lot
+(scope orthogonality, layered manifests, new skills, iterate/rewrite
+patterns, baustein landing layout, references_used[] frontmatter).
+Existing skills were largely written before these emerged — they
+likely don't yet leverage or respect them. Aligning them BEFORE
+first user-visible sessions means the new architecture actually
+flows through to user-facing behavior from day one. Touching skills
+is reversible; discovering misalignment post-ingest with bausteine
+already saved at wrong paths isn't.
+
+**Alignment checklist per skill** (apply to every SKILL.md +
+references/):
+
+- **Scope orthogonality**: does it use
+  `office_config.scope.{domains,states}` to filter bausteine /
+  references / doctypes? Does it walk `all_references_manifests()`
+  or assume the old flat federal-core?
+- **Baustein landing site**: when it writes a baustein (save-
+  baustein) or queries them, does it respect
+  `memory/bausteine/{universal,domain/<X>,state/<X>}/` layout
+  with `scope` frontmatter? (Old layout was implicit / flat.)
+- **Iterate / rewrite / rerank lens**: where the skill currently
+  does bulk retrieval, evaluate per-claim iteration. HyDE-style
+  query rewriting where applicable (esp. baustein dedupe).
+- **Decision rules + entity types** (ARCHITECTURE.md): are
+  generated artifacts placed per Rules 1–6 with the right entity
+  type (incl. new H = layered manifests, I = integration adapters)?
+- **`references_used[]` frontmatter**: does the skill emit /
+  maintain it on memory docs that name laws? Does it read it for
+  staleness checks?
+- **Layered loaders**: does it call `cfg.all_references_manifests()`,
+  `cfg.all_doctypes_manifests()`, `app_universal_skeleton_for(...)`
+  + `app_domain_skeleton_for(...)` instead of hardcoded paths?
+- **Trigger description accuracy**: still matches what the skill
+  actually does after this session's changes?
+
+**Five concrete refactor touchpoints already identified** (most
+urgent within the alignment sweep):
+
+- **`verify-citations`** — flat per-cite lookup → iterative:
+  ambiguous cite → fetch chapter → narrow → fetch interpreting
+  ruling → decide. Strengthens source-grounding naturally.
+- **`validate-checklist`** — checklist hits fetch the actual
+  reference defining the requirement, not just match section names.
+- **`survey-project`** — per-ambiguous-file iteration (filename →
+  content sniff → last-modified → related files) instead of
+  one-shot classification.
+- **Stellungnahmen-/Abwägung handling** (record-feedback +
+  future draft-abwaegung) — per-concern iteration: fetch baseline
+  + relevant ruling + similar past Abwägung per concern.
+- **`save-baustein`** — add dedupe guard with HyDE-style
+  paraphrase-search; ensure scope frontmatter + correct
+  `memory/bausteine/<layer>/<key>/` landing path.
+
+**Skills also touched this session that need follow-up review**:
+- `orchestrator` — does its decision-tree know about scope, the new
+  setup-office wizard expansion, author-manifest hand-off?
+- `validate-bausteine` — sweeps `memory/bausteine/` — must walk the
+  new layered tree, not assume flat.
+- `record-feedback`, `promote-to-skill` — likely need scope-frontmatter
+  awareness for emitted records.
+- `draft-textteil-b`, `draft-textteil-c`, `draft-cover-mail`,
+  `review-draft`, `validate-latex-style` — review for layered-
+  manifest + scope-aware retrieval.
+
+Already aligned (don't re-touch unless something changes):
+`setup-office` v0.2, `research-references` v0.2, `author-manifest`
+v0.1.0 — all written/updated in Phase 3 of this session.
+
+These are skill-protocol changes (markdown SKILL.md +
+`references/<file>.md`), not backend changes. The MCP tools
+(`search_corpus`, `read_corpus_file`, manifest accessors) already
+support what the protocols need.
+
+Then RAG kickoff:
 
 1. **`/reload-plugins`** so Claude Code picks up the updated SKILL.md
-   files (setup-office v0.2, research-references v0.2) and the new
-   `author-manifest` skill.
+   files (incl. the protocol refactors above + setup-office v0.2,
+   research-references v0.2, new `author-manifest`).
 
-2. **Run `research-references` first-time fetch** — now feasible
-   with all manifests in place. ~57 entries across universal + 3
-   domains + MV. RTX 5090 picks up CUDA automatically; bge-m3 +
-   reranker download (~3GB) on first ingest call.
+2. **Run `research-references` first-time fetch** — ~57 entries
+   across universal + 3 domains + MV. RTX 5090 picks up CUDA
+   automatically; bge-m3 + reranker download (~3GB) on first
+   ingest call.
 
 3. **Sample search** to verify hybrid + reranker pipeline returns
    sensible hits.
