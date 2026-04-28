@@ -26,9 +26,37 @@ CURRENT_SCHEMA_VERSION = 1
 
 
 class Practice(BaseModel):
+    """An internal sub-practice of THIS office.
+
+    Most offices have a single practice (themselves). Multi-practice
+    setups exist for offices internally divided into specialized
+    sub-units (e.g. text/planning + GIS as separate departments
+    within the same legal entity).
+    """
     id: str = Field(..., min_length=1)
     label: str = Field(..., min_length=1)
     signer: str | None = None
+    email: str | None = None
+    email_match_patterns: list[str] = Field(default_factory=list)
+
+
+class Partner(BaseModel):
+    """An external collaborator the office regularly works with.
+
+    Different from Practice: a partner is its own legal entity with
+    its own email/identity. May appear on projects either as a
+    co-producer (`state.md.partners: [hendrik]`) or as the client
+    (`state.md.client: Hendrik`).
+
+    `email_match_patterns` accept fnmatch-style wildcards (`*@domain`)
+    used by the email integration to associate incoming messages
+    with this partner.
+    """
+    id: str = Field(..., min_length=1)
+    label: str = Field(..., min_length=1)
+    signer: str | None = None
+    email: str | None = None
+    email_match_patterns: list[str] = Field(default_factory=list)
 
 
 class Identity(BaseModel):
@@ -124,10 +152,26 @@ class OfficeConfig(BaseModel):
     office: Office
     identity: Identity
     practices: list[Practice] = Field(..., min_length=1)
+    partners: list[Partner] = Field(default_factory=list)
     paths: Paths
     extensions: Extensions = Field(default_factory=Extensions)
     templates: Templates = Field(default_factory=Templates)
     conventions: Conventions = Field(default_factory=Conventions)
+
+    def find_partner_by_email(self, email: str) -> Partner | None:
+        """Match an incoming email address against partner patterns.
+
+        Uses fnmatch-style wildcards. Returns the first matching
+        partner; partners are scanned in declaration order.
+        """
+        import fnmatch
+        for p in self.partners:
+            if p.email and p.email.lower() == email.lower():
+                return p
+            for pattern in p.email_match_patterns:
+                if fnmatch.fnmatch(email.lower(), pattern.lower()):
+                    return p
+        return None
 
     @model_validator(mode="after")
     def _resolve_template_defaults(self) -> "OfficeConfig":

@@ -43,24 +43,43 @@ identity:                          # required block.
     Gunther Schulz
     Planungsbüro Schulz
 
-# --- Practices (sub-units of the office) --------------------------------
+# --- Practices (internal sub-units of THIS office) ----------------------
 #
-# A "practice" is a sub-discipline within the office. PBS has two:
-#   - schulz: text/planning practice (Begründung, Festsetzungen)
-#   - hendrik: GIS practice (QGIS workflows, maps)
+# A practice is an internal sub-division of the office. Most offices have
+# exactly one practice (themselves). Multi-practice setups model offices
+# that internally split text-document work from GIS work, etc., as
+# separate departments — but still ONE legal entity.
 #
-# Single-practice offices set this to one entry (e.g. id: main).
-# Every project state and file-map entry carries a `practice:` field so
-# the data model is uniform regardless of office shape.
+# For external collaborators (separate offices that co-produce on some
+# projects), use `partners` below. Practice ≠ partner.
+#
+# Every project's `state.md.practices: [<id>, ...]` lists which internal
+# practices are involved. First entry in this config is the default.
 
-practices:                         # required, ≥1 entry. First is default.
-  - id: schulz                     # short id used in state.md, file-map.md
-    label: "Text & Planung"        # display label
-    signer: "Gunther Schulz"       # optional per-practice signer override
-                                   # (defaults to identity.signature_block)
-  - id: hendrik
-    label: "GIS & QGIS"
-    signer: "..."
+practices:                         # required, ≥1 entry.
+  - id: main                       # short id used in state.md, file-map.md
+    label: "Planungsbüro Schulz"   # display label
+    signer: "Gunther Schulz"       # signer name (used in cover-mail signoffs
+                                   # and Festsetzungen Verfahrensvermerke)
+    email: "FILL_IN_PBS_EMAIL"     # used in office-identity macros
+    email_match_patterns:          # fnmatch wildcards; incoming mail
+      - "*@FILL_IN_PBS_DOMAIN"     # matched against these for routing
+
+# --- Partners (external collaborators) ---------------------------------
+#
+# External offices the office regularly works with. May appear on
+# projects either as a co-producer (state.md.partners: [<id>]) or as
+# the client (state.md.client: "<Label>"). Same partner can play
+# either role on different projects — the email_match_patterns work
+# regardless.
+
+partners:                          # optional list (default: [])
+  - id: <short-id>                 # short id used in state.md.partners
+    label: "<Display Name>"
+    signer: "<Full Name>"          # used when partner signs Gutachten
+    email: "<contact@partner-domain>"
+    email_match_patterns:          # fnmatch wildcards
+      - "*@partner-domain"
 
 # --- Filesystem paths ---------------------------------------------------
 #
