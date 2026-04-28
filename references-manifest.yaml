@@ -1,0 +1,554 @@
+version: 1
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+#
+# Empty `last_fetched`, `checksum_sha256`, `current_amendment_form`
+# fields are populated by the research-references skill on first run.
+
+categories:
+  gesetze:
+    bund:
+      - id: BauGB
+        title: Baugesetzbuch
+        short_title: BauGB
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/baugb/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BauGB.txt
+        fetch_method: web-text
+        last_fetched: null
+        last_modified_at_source: null
+        current_amendment_form: null
+        checksum_sha256: null
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Bauleitplanung-Hauptgesetz. §3, §4 Beteiligungen, §10 Beschluss,
+          §13 vereinfachtes Verfahren, §13a Innenentwicklung, §13b
+          (Wohnnutzung), §214/215 Heilung. Verify §13b is included in
+          fetched text — early-2024 reintroduction may be missing in
+          older snapshots.
+        tags: [bauleitplanung, federal-baugb, kernel]
+
+      - id: BauNVO
+        title: Baunutzungsverordnung
+        short_title: BauNVO
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/baunvo/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BauNVO.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          §11 Sondergebiete (SO EBS für Solar-PV). §19 Grundfläche
+          (Schwellenwerte für §13a-Verfahren).
+        tags: [bauleitplanung, federal, sondergebiete]
+
+      - id: BNatSchG
+        title: Bundesnaturschutzgesetz
+        short_title: BNatSchG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bnatschg_2009/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BNatSchG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          §44 Tatbestände, §45 Ausnahmen, §15 Eingriffsregelung, §34
+          FFH-Verträglichkeitsprüfung. Häufig zitiert; viele Bausteine
+          referenzieren §45 Abs.7. Letzte bekannte Änderung Art. 48
+          vom 23.10.2024.
+        tags: [naturschutz, federal, kernel]
+
+      - id: EEG
+        title: Erneuerbare-Energien-Gesetz
+        short_title: EEG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/eeg_2023/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/EEG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Solar-PV-Förderrahmen, Ausschreibungssegmente, Privilegierungen.
+          Für Begründung-Argumentation Solar-Vorhaben relevant.
+        tags: [erneuerbare-energien, solar-pv, federal]
+
+      - id: BImSchG
+        title: Bundes-Immissionsschutzgesetz
+        short_title: BImSchG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bimschg/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BImSchG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          §50 schwere-Unfälle-Pflichten relevant für §13a-Ausschluss.
+          Generell für Immissions-Argumentation in Begründung.
+        tags: [immissionsschutz, federal]
+
+      - id: UVPG
+        title: Gesetz über die Umweltverträglichkeitsprüfung
+        short_title: UVPG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/uvpg/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/UVPG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          UVP-Pflicht für Vorhaben — relevant für §13/§13a-Ausschluss
+          und Umweltbericht-Scoping.
+        tags: [umweltpruefung, federal]
+
+      - id: PlanZV
+        title: Planzeichenverordnung
+        short_title: PlanZV
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/planzv/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/PlanZV.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Planzeichen für die Planzeichnung. Standard-Quellenverzeichnis-
+          Eintrag.
+        tags: [planzeichen, federal]
+
+      - id: ROG
+        title: Raumordnungsgesetz
+        short_title: ROG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/rog_2008/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/ROG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Übergeordnete Raumordnung; §1a Abs.2 BauGB-Ergänzung im
+          Bundes-Land-Verhältnis.
+        tags: [raumordnung, federal]
+
+    eu:
+      - id: FFH-RL
+        title: Richtlinie 92/43/EWG (Fauna-Flora-Habitat-Richtlinie)
+        short_title: FFH-RL
+        jurisdiction: eu
+        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:01992L0043
+        source_type: eur-lex
+        canonical_path: gesetze/eu/FFH-RL.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 3
+        ingest: true
+        chunking_strategy: per-article
+        chunk_metadata_extractor: eur-lex
+        status: active
+        notes: |
+          Anhang II + IV Arten-Schutz. Art. 6 Verträglichkeit, Art. 16
+          Ausnahme. Häufig in Begründung + Artenschutzgutachten zitiert.
+        tags: [naturschutz, eu, ffh]
+
+      - id: Vogelschutz-RL
+        title: Richtlinie 2009/147/EG (Vogelschutz-Richtlinie)
+        short_title: VRL
+        jurisdiction: eu
+        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32009L0147
+        source_type: eur-lex
+        canonical_path: gesetze/eu/Vogelschutz-RL.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 3
+        ingest: true
+        chunking_strategy: per-article
+        chunk_metadata_extractor: eur-lex
+        status: active
+        notes: |
+          Schutzbestimmungen für Vögel; Anhang I, Schutzgebiete (SPA).
+        tags: [naturschutz, eu, vogelschutz]
+
+    mv:
+      - id: LPlG-MV
+        title: Landesplanungsgesetz Mecklenburg-Vorpommern
+        short_title: LPlG M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-LPlGMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/LPlG-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §17 LPlG raumordnungsbehördliche Beteiligung — Verfahrens-
+          vermerk #2 in der Festsetzungs-Sequenz.
+        tags: [landesrecht, mv, raumordnung]
+
+      - id: LBauO-MV
+        title: Landesbauordnung Mecklenburg-Vorpommern
+        short_title: LBauO M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-BauOMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/LBauO-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §86 Abs.3 örtliche Bauvorschriften — basis für Festsetzungen
+          Rule 5.
+        tags: [landesrecht, mv, bauordnung]
+
+      - id: NatSchAG-MV
+        title: Naturschutzausführungsgesetz Mecklenburg-Vorpommern
+        short_title: NatSchAG M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-NatSchAGMV2010rahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/NatSchAG-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          MV-spezifische Eingriffsbilanzierung. §3 Eingriff, §6
+          Ausgleichsmaßnahmen. Standard im Quellenverzeichnis.
+        tags: [naturschutz, mv, eingriffsregelung]
+
+      - id: KV-MV
+        title: Kommunalverfassung Mecklenburg-Vorpommern
+        short_title: KV M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-KVerfMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/KV-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          §5 Abs.5 Verkündung; Bekanntmachungs-Hinweise im Verfahrens-
+          vermerk #13.
+        tags: [kommunalverfassung, mv]
+
+  leitfaeden:
+    - id: KNE-PV-Naturschutz
+      title: KNE — Auswahlbibliografie PV-FFA Naturschutz
+      publisher: KNE — Kompetenzzentrum Naturschutz und Energiewende
+      publication_date: null
+      version: null
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-PV-Naturschutz.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Vorhanden in <hidrive>/Projekte/Literatur/. Für ersten Lauf
+        manuell nach _ai-references/leitfaeden/ kopieren.
+      tags: [pv-freiflache, naturschutz, kne]
+
+    - id: KNE-Anlagengestaltung
+      title: KNE — Kriterienkatalog zur naturverträglichen Anlagengestaltung PV-Freiflächenanlagen
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Anlagengestaltung.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Vorhanden in Literatur/. Manuell kopieren.
+      tags: [pv-freiflache, naturschutz, kne]
+
+    - id: KNE-Standortsteuerung
+      title: KNE — Kriterienkatalog zur naturverträglichen Standortsteuerung PV-Freiflächenanlagen
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Standortsteuerung.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Vorhanden in Literatur/. Manuell kopieren.
+      tags: [pv-freiflache, standort, kne]
+
+    - id: KNE-Landschaftsbild
+      title: KNE — Auswirkungen von Solarparks auf das Landschaftsbild
+      publisher: KNE
+      publication_date: 2020-11
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Landschaftsbild.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Vorhanden in Literatur/. Manuell kopieren.
+      tags: [pv-freiflache, landschaftsbild, kne]
+
+    - id: KNE-Folgenutzung-Acker-Gruenland
+      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Vorhanden in Literatur/ (Teil 1 + Teil 2). Manuell kopieren.
+      tags: [pv-freiflache, folgenutzung, kne]
+
+    - id: LUNG-MV-Artenschutzleitfaden
+      title: LUNG-MV Fachliche Hinweise zur Erfassung und Bewertung von Arten
+      publisher: LUNG M-V — Landesamt für Umwelt, Naturschutz und Geologie
+      source_url: https://www.lung.mv-regierung.de/
+      canonical_path: leitfaeden/LUNG-MV-Artenschutzleitfaden.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        NEEDS FETCH. Aktuelle Fassung von LUNG-Portal beziehen. Häufig
+        in Artenschutz-Gutachten zitiert; Methodik-Standards für M-V.
+      tags: [naturschutz, mv, lung, artenschutz]
+
+    - id: Verfahrenserlass-Bauleitplanung-MV
+      title: Erlass zur Bauleitplanung Mecklenburg-Vorpommern
+      publisher: Ministerium für Inneres, Bau und Digitalisierung M-V
+      source_url: https://www.regierung-mv.de/
+      canonical_path: leitfaeden/Verfahrenserlass-Bauleitplanung-MV.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        NEEDS FETCH. M-V-spezifische Verfahrens-Anleitung. SH-Variante
+        existiert in Literatur/ als Vergleichsreferenz; M-V braucht
+        eigene aktuelle Fassung.
+      tags: [bauleitplanung, mv, verfahrenserlass]
+
+    - id: Brandschutzkonzept-PV-MV
+      title: Brandschutzkonzept-Leitfaden für PV-Freiflächenanlagen Mecklenburg-Vorpommern
+      publisher: tbd
+      source_url: tbd
+      canonical_path: leitfaeden/Brandschutzkonzept-PV-MV.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        NEEDS RESEARCH + FETCH. Existence to be verified — research-
+        references skill should search MUGV/Innenministerium portals.
+        If no M-V-spezifischer Leitfaden, fall back to bundes-weiter
+        Brandschutz-Standards (DIN VDE 0100, etc.).
+      tags: [brandschutz, pv-freiflache, mv]
+
+  urteile:
+    - id: BVerwG-9-A-3-06
+      title: "BVerwG, Urteil vom 17.01.2007 — 9 A 3.06 (Bestandsaufnahme nach bestem wissenschaftlichen Erkenntnisstand)"
+      short_title: 9 A 3.06
+      court: BVerwG
+      docket: 9 A 3.06
+      decision_date: 2007-01-17
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/170107U9A3.06.0
+      canonical_path: urteile/BVerwG-9-A-3-06.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: Methodik-Standards Bestandsaufnahme; bei Prognoseunsicherheiten "bester Erkenntnisstand".
+      tags: [methodik, naturschutz, bverwg]
+
+    - id: BVerwG-9-A-14-07
+      title: "BVerwG, Urteil vom 12.03.2008 — 9 A 14.07 (FFH-Habitate, Eingriffsfolgen)"
+      short_title: 9 A 14.07
+      court: BVerwG
+      docket: 9 A 14.07
+      decision_date: 2008-03-12
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/120308U9A14.07.0
+      canonical_path: urteile/BVerwG-9-A-14-07.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: Signifikanzkriterium Tötungsverbot; Risikomanagement bei CEF-Maßnahmen.
+      tags: [naturschutz, ffh, signifikanz, bverwg]
+
+    - id: BVerwG-9-A-39-07
+      title: "BVerwG, Urteil vom 14.07.2011 — 9 A 12.10 (Freiberg, CEF-Wirksamkeit)"
+      short_title: Freiberg
+      court: BVerwG
+      docket: 9 A 12.10
+      decision_date: 2011-07-14
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/140711U9A12.10.0
+      canonical_path: urteile/BVerwG-9-A-12-10-Freiberg.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        CEF-Maßnahmen-Wirksamkeit vor Eingriff; ökologische
+        Funktionalität. Häufig zitiert (transcript ID 9 A 39.07 ist
+        ein Verwechsler — actual docket is 9 A 12.10 mit Sache
+        Freiberg).
+      tags: [cef, naturschutz, bverwg, freiberg]
+
+    - id: BVerwG-9-A-22-11
+      title: "BVerwG, Urteil vom 23.04.2014 — 9 A 22.13 (§45 Nr.5 Begründungstiefe — alt: 9 A 22.11)"
+      short_title: 9 A 22.13
+      court: BVerwG
+      docket: 9 A 22.13
+      decision_date: 2014-04-23
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/230414U9A22.13.0
+      canonical_path: urteile/BVerwG-9-A-22-13.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        Wichtigste Entscheidung zur Begründungstiefe für §45 Abs.7 Nr.5
+        bei privaten Vorhaben. Häufig in UNB-Stellungnahmen zitiert.
+        Note: original transcript referenced "9 A 22.11" — verify exact
+        docket on first fetch (may be different decision).
+      tags: [§45-bnatschg, ausnahmegrund, bverwg]
+
+    - id: EuGH-C-127-02-Waddenzee
+      title: "EuGH, Urteil vom 07.09.2004 — C-127/02 (Waddenzee — Erheblichkeitsbewertung)"
+      short_title: Waddenzee
+      court: EuGH
+      docket: C-127/02
+      decision_date: 2004-09-07
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62002CJ0127
+      canonical_path: urteile/EuGH-C-127-02-Waddenzee.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: FFH-Erheblichkeitsabschätzung; "vernünftige wissenschaftliche Zweifel".
+      tags: [ffh, eugh, erheblichkeit]
+
+    - id: EuGH-C-258-11-Sweetman
+      title: "EuGH, Urteil vom 11.04.2013 — C-258/11 (Sweetman — Verschlechterungsverbot)"
+      short_title: Sweetman
+      court: EuGH
+      docket: C-258/11
+      decision_date: 2013-04-11
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62011CJ0258
+      canonical_path: urteile/EuGH-C-258-11-Sweetman.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: FFH-Verschlechterungsverbot; Erhaltungsziele verbindlich.
+      tags: [ffh, eugh, verschlechterungsverbot]
+
+  beispiele: []
+    # Populated as exemplary documents from PBS archive or external sources
+    # are identified. See ROADMAP.md for context.
+
+  methodik:
+    - id: Suedbeck-2005-Brutvoegel
+      title: Methodenstandards zur Erfassung der Brutvögel Deutschlands
+      authors: ["Südbeck", "Andretzke", "Fischer", "Gedeon", "Schikore", "Schröder", "Sudfeldt"]
+      publication_year: 2005
+      publisher: Radolfzell
+      citation: |
+        Südbeck, P. et al. (2005): Methodenstandards zur Erfassung der
+        Brutvögel Deutschlands. Radolfzell.
+      available: false
+      canonical_path: null
+      ingest: false
+      notes: |
+        Buch; nicht frei verfügbar. Wird zitiert, nicht ingestiert. Der
+        Eintrag dient verify-citations als Referenzform.
+      tags: [methodik, avifauna]
+
+    - id: Dietz-Kiefer-2014-Fledermaeuse
+      title: Die Fledermäuse Europas — Kennen, bestimmen, schützen
+      authors: ["Dietz", "Kiefer"]
+      publication_year: 2014
+      publisher: Quelle & Meyer Verlag
+      citation: |
+        Dietz, C. & Kiefer, A. (2014): Die Fledermäuse Europas. Quelle
+        & Meyer Verlag, Wiebelsheim.
+      available: false
+      canonical_path: null
+      ingest: false
+      notes: Buch; nicht frei verfügbar. Cite-only Eintrag.
+      tags: [methodik, chiroptera]
