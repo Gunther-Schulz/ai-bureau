@@ -44,7 +44,7 @@ content where possible and ask for missing ones.
    - Extract suggested alternatives if mentioned.
 
 2. **Identify addressed bausteine**:
-   - Search `memory/domain/<domain>/` for bausteine whose Content
+   - Search `memory/universal/<domain>/` for bausteine whose Content
      section matches the addressed arguments.
    - For ambiguous matches, propose candidates to user.
    - Allow explicit user designation if no auto-match.
@@ -56,7 +56,7 @@ content where possible and ask for missing ones.
    - `source_artifact` validated as immutable.
 
 4. **Write to disk** at
-   `memory/domain/<domain>/feedback/<YYYY-MM-DD>-<authority-slug>-<topic-slug>.md`.
+   `memory/universal/<domain>/feedback/<YYYY-MM-DD>-<authority-slug>-<topic-slug>.md`.
 
 5. **Apply lifecycle effects** to addressed bausteine:
    - **Rejection / partial**: set `status: flagged`, `flagged_reason: "see <feedback path>"`. Append `{project, date, feedback_path}` to `rejected_uses[]`.

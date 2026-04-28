@@ -19,12 +19,12 @@ section-by-section workflow.
 
 While operating, hold these references loaded:
 
-- `<repo>/memory/domain/style/style-spec.md` — Doctype A spec
+- `<repo>/memory/universal/style/style-spec.md` — Doctype A spec
   (scrreprt + pdflatex, German conventions).
-- `<repo>/memory/domain/conventions/korrektur-rules.md` — office
+- `<repo>/memory/universal/conventions/korrektur-rules.md` — office
   writing conventions (German quotes, non-breaking spaces, number
   formatting).
-- `<repo>/memory/domain/verfahren/bauleitplanung-phasen.md` — phase
+- `<repo>/memory/universal/verfahren/bauleitplanung-phasen.md` — phase
   context for Stand-des-Aufstellungsverfahrens-section.
 - `<repo>/plugin/skills/validate-checklist/references/checklists/
   b-plan-begruendung.md` — required-sections list.

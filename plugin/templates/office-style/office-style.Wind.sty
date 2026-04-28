@@ -1,0 +1,45 @@
+% office-style.Wind.sty
+% Domain-specific office-style overlay for offices working primarily on
+% Windenergie-an-Land projects (B-Plan + Genehmigungs-Begleitung).
+%
+% Layered after office-style.default.sty when the office's
+% scope.domains[] includes Wind. Adds Wind-conventional macros
+% and figure conventions on top of the base aesthetic.
+%
+% setup-office offers this as a starter overlay. Offices customize
+% their own copy at <office_state_root>/templates/office-style.sty
+% (or as a separate office-style-Wind.sty addon, if they want both
+% domains active with separate aesthetics).
+%
+% Layer 2 (domain overlay) of the 3-layer template stack.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{office-style-Wind}[2026/04/28 v0.1 Wind domain overlay]
+
+% ---- Wind domain conventions ----------------------------------------
+% WEA notation: Hersteller / Typ / Nennleistung / Nabenhöhe /
+% Rotordurchmesser. Helgoländer-Abstandsempfehlungen formatting.
+
+\providecommand{\WEA}{Windenergieanlage(n)}
+\providecommand{\WEATyp}[1]{WEA-Typ: #1}
+\providecommand{\Nabenhoehe}[1]{Nabenhöhe: #1\,m}
+\providecommand{\Rotordurchmesser}[1]{Rotordurchmesser: #1\,m}
+\providecommand{\Nennleistung}[1]{Nennleistung: #1\,MW}
+
+% Helgoländer-Papier abstand notation
+\providecommand{\AbstandHelgolaender}[2]{%
+  Abstand zu #1: #2\,m (Helgoländer Papier 2015)%
+}
+
+% ---- Hyphenation hints (Wind-specific compounds) --------------------
+\hyphenation{%
+  Wind-en-er-gie-an-la-ge%
+  Wind-en-er-gie-flae-chen-be-darfs-ge-setz%
+  Wind-park%
+  Naben-hoe-he%
+  Ro-tor-durch-mes-ser%
+  Anti-Kol-li-si-ons-sys-tem%
+  Re-pow-er-ing%
+}
+
+\endinput

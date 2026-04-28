@@ -6,7 +6,7 @@ from source materials. Loaded by SKILL.md when this skill is active.
 ## Section drafting order
 
 Match the canonical B-Plan Begründung section order documented in
-`memory/domain/style/style-spec.md`. Each section is drafted to a
+`memory/universal/style/style-spec.md`. Each section is drafted to a
 checkpoint then user reviews before next section starts.
 
 ```

@@ -21,7 +21,7 @@ from `references/checklists/`:
 - `references/checklists/gutachten-generic.md` (fallback for any
   Gutachten doctype without its own checklist)
 
-Also load `<repo>/memory/domain/style/style-spec.md` to validate
+Also load `<repo>/memory/universal/style/style-spec.md` to validate
 document class + engine + packages against the canonical style.
 
 ## Doctype identification

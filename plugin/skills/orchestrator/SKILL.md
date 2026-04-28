@@ -19,17 +19,17 @@ Read `PROCEDURE.md` from this skill's directory. Follow it.
 While operating, hold these references loaded as authoritative ground
 truth:
 
-- `<repo>/memory/domain/style/style-spec.md` — universal structural
+- `<repo>/memory/universal/style/style-spec.md` — universal structural
   domain for B-Plan LaTeX (KOMA scrreprt, ngerman babel, German
   number conventions, Roman/Arabic numbering, Projektdaten macro
   framework). Office-specific styling lives in the office's
   `office-style.sty` (loaded by the compile pipeline, not by this
   skill).
-- `<repo>/memory/domain/conventions/korrektur-rules.md` — German
+- `<repo>/memory/universal/conventions/korrektur-rules.md` — German
   writing conventions (German quotes `\glqq…\grqq{}`, non-breaking
   spaces before §/units/dates, German number formatting, hyphenation
   hints, source line wrap).
-- `<repo>/memory/domain/doctypes.yaml` — registry of supported
+- `<repo>/memory/universal/doctypes.yaml` — registry of supported
   doctypes, master file conventions, ownership rules.
 
 Resolve `<repo>` to the plugin's repo root. From inside the plugin,

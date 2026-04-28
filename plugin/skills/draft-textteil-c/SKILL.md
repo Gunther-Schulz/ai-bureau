@@ -20,11 +20,11 @@ workflow.
 
 While operating, hold these references loaded:
 
-- `<repo>/memory/domain/style/style-spec.md` — Doctype B spec
+- `<repo>/memory/universal/style/style-spec.md` — Doctype B spec
   (article + pdflatex + sans-serif + infinite-page).
-- `<repo>/memory/domain/conventions/korrektur-rules.md` — writing
+- `<repo>/memory/universal/conventions/korrektur-rules.md` — writing
   conventions.
-- `<repo>/memory/domain/verfahren/bauleitplanung-phasen.md` —
+- `<repo>/memory/universal/verfahren/bauleitplanung-phasen.md` —
   Verfahrensvermerke sequence + phase context.
 - `<repo>/plugin/skills/validate-checklist/references/checklists/
   b-plan-festsetzungen.md` — required structure.

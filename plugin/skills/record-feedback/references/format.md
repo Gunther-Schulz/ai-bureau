@@ -8,12 +8,12 @@ metadata; body holds the full text or excerpt.
 ## File location
 
 ```
-memory/domain/<domain>/feedback/<YYYY-MM-DD>-<authority-slug>-<topic-slug>.md
+memory/universal/<domain>/feedback/<YYYY-MM-DD>-<authority-slug>-<topic-slug>.md
 ```
 
 Examples:
-- `memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-<landkreis>-§45-nr5.md`
-- `memory/domain/b-plan/feedback/YYYY-MM-DD-<authority-slug>-CEF-monitoring.md`
+- `memory/universal/artenschutz/feedback/YYYY-MM-DD-UNB-<landkreis>-§45-nr5.md`
+- `memory/universal/b-plan/feedback/YYYY-MM-DD-<authority-slug>-CEF-monitoring.md`
 
 Filename rules:
 - Date prefix `YYYY-MM-DD` for chronological sort.

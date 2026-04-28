@@ -112,7 +112,7 @@ Substantive content correctness. Per-section walk:
 ```
 [A2] L168: §45 Abs.7 Nr.5 argumentation uses Innenbereichssatzung
      alone. UNB Rostock previously rejected this pattern (see
-     memory/domain/artenschutz/feedback/2026-04-28-...).
+     memory/universal/artenschutz/feedback/2026-04-28-...).
      Suggested fix: combine with §1a Abs.2 BauGB-Bezug.
      Implications: Festsetzungen rule on Folgenutzung may need
      §1a-reference too.

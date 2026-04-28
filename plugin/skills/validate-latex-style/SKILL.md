@@ -8,16 +8,16 @@ license: MIT
 # validate-latex-style
 
 Specialist skill for formal LaTeX style validation. Compares document
-preamble + structural choices against `<repo>/memory/domain/style/
+preamble + structural choices against `<repo>/memory/universal/style/
 style-spec.md` and surfaces deviations.
 
 ## Load this now
 
-Read `<repo>/memory/domain/style/style-spec.md` to know the canonical
+Read `<repo>/memory/universal/style/style-spec.md` to know the canonical
 office style for both doctypes (Begründung scrreprt + Festsetzungen
 article).
 
-Also read `<repo>/memory/domain/conventions/korrektur-rules.md` for
+Also read `<repo>/memory/universal/conventions/korrektur-rules.md` for
 the writing conventions (German quotes, non-breaking spaces, German
 number formatting, hyphenation hints, source line wrap).
 

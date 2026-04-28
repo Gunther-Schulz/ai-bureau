@@ -13,7 +13,7 @@ new skill that codifies the pattern as procedural behavior.
 
 ## Load this now
 
-Read `<repo>/memory/domain/baustein-format.md` (already in skill
+Read `<repo>/memory/universal/baustein-format.md` (already in skill
 references via save-baustein, but reference its location).
 
 Read the source baustein the user wants to promote — full content,
@@ -44,7 +44,7 @@ Inputs:
    - **Frontmatter** with description derived from baustein's
      "When to use" + concrete trigger phrases extracted from
      successful_uses contexts.
-   - **Body** with: Load this now (point at memory/domain/<domain>/
+   - **Body** with: Load this now (point at memory/universal/<domain>/
      <baustein>.md as the canonical content), When invoked
      (extracted from When-to-use), Behavior (procedural steps for
      applying the pattern), Output, Edge cases, Tools used.

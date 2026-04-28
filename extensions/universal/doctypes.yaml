@@ -19,7 +19,7 @@ doctypes:
     description: >
       Multi-page narrative explanatory document for a Bebauungsplan.
       Document class: scrreprt (KOMA). Engine: pdflatex.
-    style_ref: memory/domain/style/style-spec.md#doctype-a-begruendung
+    style_ref: memory/universal/style/style-spec.md#doctype-a-begruendung
     master_file_pattern: "B-Plan Begründung.tex"
     project_subfolder_default: B-Plan/Begründung
     paired_with: b-plan-festsetzungen   # produced as a pair per B-Plan
@@ -30,7 +30,7 @@ doctypes:
       Single long page Satzung containing the binding textual rules of
       a Bebauungsplan. Embedded as Teil B Text in the Satzung document.
       Document class: article. Engine: pdflatex. Sans-serif body.
-    style_ref: memory/domain/style/style-spec.md#doctype-b-festsetzungen
+    style_ref: memory/universal/style/style-spec.md#doctype-b-festsetzungen
     master_file_pattern: "Textteil-B-B-Plan.tex"
     project_subfolder_default: B-Plan/Festsetzungen
     paired_with: b-plan-begruendung

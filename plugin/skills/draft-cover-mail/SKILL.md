@@ -13,7 +13,7 @@ prior correspondence.
 
 ## Load this now
 
-Read `<repo>/memory/domain/verfahren/bauleitplanung-phasen.md` for
+Read `<repo>/memory/universal/verfahren/bauleitplanung-phasen.md` for
 phase-appropriate language and the Verfahrensvermerke context.
 
 Load `office_config` for office identity and signature: `office.name`,

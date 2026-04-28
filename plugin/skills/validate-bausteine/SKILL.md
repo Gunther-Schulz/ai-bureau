@@ -17,7 +17,7 @@ Read `<repo>/plugin/skills/save-baustein/references/format.md` for
 baustein frontmatter schema (especially `status`, `last_validated`,
 `review_due`, `references[]`, `flagged_reason`).
 
-Read `<repo>/memory/domain/conventions/korrektur-rules.md` for
+Read `<repo>/memory/universal/conventions/korrektur-rules.md` for
 content-style conventions used in baustein bodies.
 
 ## When invoked

@@ -11,7 +11,7 @@ Path determined by scope:
 | Scope | Location |
 |---|---|
 | `global` | `<repo>/memory/global/<name>.md` |
-| `domain` | `<repo>/memory/<domain>/<name>.md` (e.g. `memory/domain/artenschutz/§45-nr5-innenbereich-privat.md`) |
+| `domain` | `<repo>/memory/<domain>/<name>.md` (e.g. `memory/universal/artenschutz/§45-nr5-innenbereich-privat.md`) |
 | `project` | `<project-root>/_ai/bausteine/<name>.md` |
 
 Filename rules:
@@ -51,7 +51,7 @@ superseded_by: null
 use_count: 0
 last_used: null
 successful_uses:
-  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
+  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/universal/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
 rejected_uses: []
 
 # Dependencies — surgical hook for research-references
@@ -119,7 +119,7 @@ review_due: YYYY-MM-DD
 use_count: 1
 last_used: YYYY-MM-DD
 successful_uses:
-  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/domain/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
+  - {project: <YY-NN>-<other-project>, date: YYYY-MM-DD, feedback_path: memory/universal/artenschutz/feedback/YYYY-MM-DD-UNB-rostock-§45-nr5.md}
 rejected_uses: []
 references:
   - {law: BNatSchG, paragraph: §45 Abs.7 Nr.5}

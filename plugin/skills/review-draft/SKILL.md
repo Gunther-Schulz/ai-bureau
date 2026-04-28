@@ -19,7 +19,7 @@ review workflow with per-layer detail.
 
 While operating, hold these references loaded:
 
-- `<repo>/memory/domain/conventions/korrektur-rules.md` — formal-layer
+- `<repo>/memory/universal/conventions/korrektur-rules.md` — formal-layer
   writing conventions.
 - `<repo>/plugin/skills/validate-checklist/SKILL.md` — layer 1
   delegation target.

@@ -128,7 +128,7 @@ requirement when drafting.
 |---|---|---|---|---|
 | **A** | **Skill** | `plugin/skills/<name>/SKILL.md` | Required (Claude Code uses for trigger detection) | Behavioral protocol. Auto-loaded on trigger match. Tells AI HOW to act. |
 | **B** | **Skill reference** | `plugin/skills/<name>/references/<file>.md` | Not required | Detailed protocol or specs the parent skill loads on demand. Format specs, checklists, procedures. |
-| **C** | **Memory reference content** | `memory/domain/...`, `memory/global/...`, `memory/office/...` | Not required (just `# H1` + body) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
+| **C** | **Memory reference content** | `memory/universal/...`, `memory/global/...`, `memory/office/...` | Not required (just `# H1` + body) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
 | **D** | **Memory data record** | `memory/<scope>/<domain>/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
 | **E** | **Backend code & docs** | `backend/mcp-server/...` | Code: none. Docs: markdown without frontmatter. | Python implementation + technical schema docs. |
 | **F** | **External data** | Resolved via office-config: `paths.projects_root/...`, `paths.references_root/...`, `paths.state_root/...`, per-project `<project>/_ai/...` | Varies | Real user data: legal texts, project artifacts, runtime state, correspondence. |
@@ -206,7 +206,7 @@ For now: single-skill, lives at
 
 ### Office-specific vs domain-generic in `memory/`
 
-Resolved by the meta-rule. `memory/domain/` contains only universal
+Resolved by the meta-rule. `memory/universal/` contains only universal
 German planning-bureau domain knowledge — content that applies to
 every Planungsbüro regardless of state, client mix, or styling
 choices.

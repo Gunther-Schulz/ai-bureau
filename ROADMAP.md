@@ -72,7 +72,7 @@ spec exists for what a call note file should contain.
 **Sketch**: small markdown spec — frontmatter (date, party,
 contact, project, type=call, duration), body sections (Kontext,
 Zusammenfassung, Entscheidungen, Folgeaktionen). Could be authored
-into `<repo>/memory/domain/` as a reference content file.
+into `<repo>/memory/universal/` as a reference content file.
 
 ### Office identity config
 
@@ -197,10 +197,10 @@ raises them.
 
 **Why**: §2 Abs.4 BauGB + Anlage 1 environmental assessment
 integration with the 13-phase Bauleitplanung. Currently mentioned
-but not detailed in `memory/domain/verfahren/bauleitplanung-phasen.md`.
+but not detailed in `memory/universal/verfahren/bauleitplanung-phasen.md`.
 
 **Spec**: full reference doc at
-`memory/domain/verfahren/umweltpruefung.md`. Covers Scoping (§4
+`memory/universal/verfahren/umweltpruefung.md`. Covers Scoping (§4
 Abs.1), Umweltbericht structure cross-ref to umweltbericht checklist,
 Wechselwirkungen, Monitoring (§4c) integration.
 
@@ -212,7 +212,7 @@ transcript; deserves its own reference doc for projects where
 formal Vorprüfung is required.
 
 **Spec**: full reference doc at
-`memory/domain/verfahren/ffh-vorpruefung.md`. Covers
+`memory/universal/verfahren/ffh-vorpruefung.md`. Covers
 Erheblichkeitsabschätzung, Kumulative Betrachtung,
 Verschlechterungsverbot, Ausnahme nach §34 Abs.3-5.
 
@@ -235,7 +235,7 @@ active.
 + SPA-Hauptprüfung structure. Hendrik's domain primarily but joint
 projects need it.
 
-**Spec**: `memory/domain/verfahren/artenschutz.md`. Covers
+**Spec**: `memory/universal/verfahren/artenschutz.md`. Covers
 Bestandsaufnahme-Standards (Südbeck, Dietz/Kiefer), Signifikanz-
 prüfung, CEF-Wirksamkeit-Nachweis, FCS-Auslegung.
 

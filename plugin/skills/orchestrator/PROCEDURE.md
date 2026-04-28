@@ -26,10 +26,10 @@ THEN load context for the detected scope:
 | Scope | Read at open |
 |---|---|
 | Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (paths via `office_config.paths.state_root`) |
-| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`, `<repo>/memory/domain/<doctype>/` |
+| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`, `<repo>/memory/universal/<doctype>/` |
 | Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md` if present |
 
-Load `<repo>/memory/global/` in every scope. Load `<repo>/memory/domain/style/style-spec.md` and `<repo>/memory/domain/conventions/korrektur-rules.md` whenever LaTeX work is in scope.
+Load `<repo>/memory/global/` in every scope. Load `<repo>/memory/universal/style/style-spec.md` and `<repo>/memory/universal/conventions/korrektur-rules.md` whenever LaTeX work is in scope.
 
 THEN announce loaded context in one terse line: "Mode: project (\<name\>). Loaded: state, file-map, \<doctype\> domain, style-spec." or equivalent. Do not narrate at length.
 
@@ -199,7 +199,7 @@ Module decisions made conversationally without logging are a protocol violation 
 
 ### 6.4 Baustein promotion guard
 
-A baustein in `memory/projects/<project>/...` may only be promoted to `memory/domain/...` after the source project's `_ai/state.md` lifecycle is `finalized`. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the practice is wrong.
+A baustein in `memory/projects/<project>/...` may only be promoted to `memory/universal/...` after the source project's `_ai/state.md` lifecycle is `finalized`. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the practice is wrong.
 
 Promotion before finalization → BLOCK. Output: "Quellprojekt ist noch \<state\>. Promotion erst nach finalized erlaubt." If the user insists, require an explicit "ich autorisiere die frühe Promotion" — log the override in `<repo>/memory/product-backlog.md` for later audit.
 
@@ -276,7 +276,7 @@ practice + GIS practice working on the same job).
 - When another practice publishes outputs (e.g. GIS exports to
   `<project-root>/Ausgabe/`), those become inputs the orchestrator
   may read but not modify.
-- Bausteine in `memory/domain/` apply to the orchestrator's
+- Bausteine in `memory/universal/` apply to the orchestrator's
   practice's work only. Other practices may have their own per-project
   CLAUDE.md or assistant configurations; not consulted here.
 

@@ -106,9 +106,9 @@ def _enumerate_paths(scope: str | None, domain: str | None,
             for d in base.iterdir():
                 if d.is_dir() and d.name not in ("global", "office", "projects"):
                     # NOTE: domain folder is e.g. memory/artenschutz/, but
-                    # currently memory/domain/ wraps domains. Adjust:
+                    # currently memory/universal/ wraps domains. Adjust:
                     pass
-            # Currently structure: memory/domain/<domain>/. Iterate.
+            # Currently structure: memory/universal/<domain>/. Iterate.
             domain_root = base / "domain"
             if domain_root.is_dir():
                 for d in domain_root.iterdir():

@@ -422,7 +422,7 @@ not as a state transition.
 
 ## 8. Mapping: Phase → folder structure
 
-The new-project folder structure (`memory/domain/project-structure.md`)
+The new-project folder structure (`memory/universal/project-structure.md`)
 provides `B-Plan/Aufstellungsverfahren/` and `TöB/` as the per-phase
 holding spots. Recommended subfolder naming:
 
@@ -509,7 +509,7 @@ state-leitfaden).
 - **Q4:** Wie integriert sich die Umweltprüfung (§2 Abs.4 BauGB)
   zeitlich in die Phasen? Muss vor Auslegung abgeschlossen sein;
   Umfang im Rahmen §4 Abs.1 von TöB festgelegt (Scoping). Detail-
-  Doc als separates `memory/domain/verfahren/umweltpruefung.md`
+  Doc als separates `memory/universal/verfahren/umweltpruefung.md`
   lohnt, wenn Projekt das erstmals ausführlich behandelt.
 
 These belong on the product backlog. As specific projects raise them,

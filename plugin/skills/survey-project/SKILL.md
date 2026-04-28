@@ -13,11 +13,11 @@ proposes a `_ai/file-map.md` for user confirmation.
 
 ## Load this now
 
-Read `<repo>/memory/domain/project-structure.md` for the canonical
+Read `<repo>/memory/universal/project-structure.md` for the canonical
 new-project folder structure. Existing projects often diverge from
 it; the divergence is exactly what file-map.md captures.
 
-Read `<repo>/memory/domain/doctypes.yaml` for doctype identification
+Read `<repo>/memory/universal/doctypes.yaml` for doctype identification
 heuristics.
 
 ## When invoked
@@ -49,7 +49,7 @@ By orchestrator's binding flow when a referenced project has no
 
 3. **Classify each file/folder by heuristic**, using the office's
    configured folder layout from `office_config.conventions.project_folder_layout`
-   plus the doctype registry in `memory/domain/doctypes.yaml`:
+   plus the doctype registry in `memory/universal/doctypes.yaml`:
    - **Doctype-relevant artifacts**: `.tex` files, `.pdf` outputs,
      `Textbausteine/`, doctype subfolders (B-Plan/, Umweltbericht/,
      Externe Gutachten/, etc. per registry), per-doctype LaTeX
