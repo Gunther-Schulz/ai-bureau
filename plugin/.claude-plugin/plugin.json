@@ -1,0 +1,20 @@
+{
+  "name": "pbs",
+  "version": "0.1.0",
+  "description": "Planungsbüro Schulz document workflow assistant. Master orchestrator coordinates drafting, review, and finalization of B-Plan, Festsetzungen, Umweltberichte, and Gutachten using a local LanceDB+Ollama RAG backend and per-project memory in _ai/.",
+  "author": {
+    "name": "Gunther Schulz"
+  },
+  "repository": "https://github.com/Gunther-Schulz/pbs-bureau",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "latex",
+    "german",
+    "rag",
+    "documents",
+    "b-plan",
+    "umweltbericht",
+    "gutachten"
+  ]
+}

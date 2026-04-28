@@ -1,0 +1,98 @@
+# Doctype registry — what document types PBS produces and where their
+# canonical templates live. The orchestrator reads this to pick the
+# right style, template, and skills per doctype.
+#
+# Add a new doctype by appending an entry; survey existing project repos
+# to populate `template_path` and `section_list`.
+
+version: 1
+
+doctypes:
+  b-plan-begruendung:
+    label: "B-Plan Begründung"
+    description: >
+      Multi-page narrative explanatory document for a Bebauungsplan.
+      Document class: scrreprt (KOMA). Engine: pdflatex.
+    style_ref: memory/domain/style/style-spec.md#doctype-a-begruendung
+    template_path: ~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan---Begruendung/
+    master_file: B-Plan Begründung.tex
+    project_subfolder: B-Plan/Textteil B          # in hidrive project layout
+    sections_canonical: friedrichshof             # see style-spec; survey other projects to confirm
+    paired_with: b-plan-festsetzungen             # produced as a pair per B-Plan
+
+  b-plan-festsetzungen:
+    label: "Textliche Festsetzungen (Teil B Text der Satzung)"
+    description: >
+      Single long page Satzung containing the binding textual rules of
+      a Bebauungsplan. Embedded as Teil B Text in the Satzung document.
+      Document class: article. Engine: pdflatex. Sans-serif body.
+    style_ref: memory/domain/style/style-spec.md#doctype-b-festsetzungen
+    template_path: ~/dev/Planungsbüro-Schulz/22-16-Maxsolar---Friedrichshof---B-Plan-Textliche-Festsetzungen/
+    master_file: Textteil-B-B-Plan.tex
+    project_subfolder: B-Plan/Textteil C          # PBS uses "Textteil C" folder name though file is Textteil-B
+    sections_canonical: friedrichshof
+    paired_with: b-plan-begruendung
+
+  umweltbericht:
+    label: "Umweltbericht"
+    description: >
+      Environmental report. Modular per-Schutzgut structure with paired
+      _UB / _Mas_UB files (description + Maßnahmen). Currently only
+      observed in Hendrik's templates at hidrive Vorlagen/Latex/Kapitel_UB.
+      Style and template need to be confirmed in actual Schulz project use.
+    style_ref: TBD                                 # not yet observed in local canonical repos
+    template_path: TBD
+    master_file: TBD
+    project_subfolder: Umweltbericht
+    sections_canonical: TBD
+    status: deferred                               # not yet ready for orchestrator routing
+
+  artenschutz:
+    label: "Artenschutzbewertung / SPA"
+    description: >
+      Species protection assessment. Hendrik's domain. May be drafted
+      independently or as part of a B-Plan package. Style observed in
+      Hendrik's transcript (tcolorbox, scrartcl) — separate from PBS
+      canonical templates; treated as Hendrik sub-practice for now.
+    style_ref: TBD
+    template_path: TBD
+    master_file: TBD
+    project_subfolder: Externe Gutachten           # typical placement in PBS project
+    status: deferred
+
+  abwaegung:
+    label: "Abwägung (Stellungnahmen)"
+    description: >
+      Response document pairing each Stellungnahme from public/Behörde
+      consultation with PBS's analysis and Abwägungsergebnis. Per-
+      Stellungnahme block structure. Not yet templated.
+    status: deferred
+
+# Berichtstypen observed in hidrive Vorlagen/Latex/Bericht-PBS master
+# (most folders empty/stubs). Listed here for awareness only; activate
+# when first project requires them.
+berichtstypen_planned:
+  - kapitel: AA
+    label: Ausnahmeantrag
+    status: stub
+  - kapitel: AFB
+    label: Artenschutzfachbeitrag
+    status: stub
+  - kapitel: GK
+    label: Gebäudekontrolle
+    status: stub
+  - kapitel: KB
+    label: Kartierbericht
+    status: stub
+  - kapitel: LBP
+    label: Landschaftspflegerischer Begleitplan
+    status: stub
+  - kapitel: SPA_HP
+    label: Speziell artenschutzrechtliche Prüfung — Hauptprüfung
+    status: stub
+  - kapitel: SPA_VP
+    label: Speziell artenschutzrechtliche Prüfung — Vorprüfung
+    status: stub
+  - kapitel: ZAV
+    label: Zielabweichungsverfahren
+    status: stub

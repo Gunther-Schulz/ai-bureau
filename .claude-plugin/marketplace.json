@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "pbs-bureau",
+  "description": "Planungsbüro Schulz document workflow — drafting, review, and finalization for B-Plan, Festsetzungen, Umweltberichte, and Gutachten",
+  "owner": {
+    "name": "Gunther Schulz"
+  },
+  "plugins": [
+    {
+      "name": "pbs",
+      "description": "Master orchestrator + specialist skills for PBS document work. Wraps a local MCP backend (LanceDB + Ollama) for corpus search and per-project memory.",
+      "source": "./plugin"
+    }
+  ]
+}
