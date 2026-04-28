@@ -192,6 +192,81 @@ machine state, so the human review step has something to look at.
 - Storage: renders alongside source in snapshots/, or a separate
   renders/ tree?
 
+### Integration registry — unified discovery of MCPs + adapters + skills
+
+**Why**: PBS will accumulate many "things the orchestrator can call":
+- Internal adapters (email, calendar, scanner, phone, accounting —
+  Phase 5 scaffolded)
+- External MCP servers (gis-utils, Python-ACAD-Tools, future
+  review-platform MCP, future legal-search MCP, etc.)
+- PBS-owned skills (16 currently — auto-discovered from
+  plugin/skills/ but their utility/scope isn't queryable as data)
+
+The orchestrator currently knows about these through tribal
+knowledge (it knows `gis-utils` exists because the user has it
+installed; it knows about `survey-project` because the SKILL.md
+trigger fires). There's no unified registry where the orchestrator
+can ask "what tools do I have for working with GIS data?" or "what's
+available in the Wind domain that I could leverage?"
+
+When a new MCP becomes useful (or new internal adapter, or new skill),
+making it *known* to the orchestrator + queryable by capability is
+itself a gap.
+
+**Sketch (topic-level)**:
+- A 4th layered manifest type alongside references + doctypes:
+  `integrations-manifest.yaml` per scope (universal / domain / state).
+- Each entry catalogs ONE callable thing (MCP, internal adapter, or
+  skill) with metadata:
+  ```yaml
+  - id: gis-utils
+    kind: mcp                       # mcp | adapter | skill
+    name: gis-utils
+    description: GIS/CAD utility library — geometry conversion, recipes, templates
+    scope_relevance: [PV-FFA, Wind, Naturschutz]   # which domains benefit
+    state_relevance: []                              # any
+    when_to_use: |
+      Geometry conversion, lines→polygon, buffer/dissolve operations,
+      checking recipe-layer compatibility, GIS-workflow authoring.
+    capabilities: [geometry-conversion, workflow-authoring, recipe-discovery]
+    docs_url: <plugin-docs>
+    config_path: ~/.config/claude/mcp.json#gis-utils
+    activation: explicit-skill-tool   # how the orchestrator invokes it
+  ```
+- Layered loader walks the union per office's scope (same pattern as
+  references / doctypes). PBS sees universal + domain manifests for
+  PV-FFA / Wind / Naturschutz + state for MV.
+- A new PBS skill `register-integration` (or
+  `integrate-tool`) walks the user through adding a new MCP /
+  adapter / skill to the relevant scope manifest. Hands off to
+  `author-manifest` if the target manifest doesn't exist yet.
+- Orchestrator queries via new MCP backend tool
+  `find_integrations(capability=?, scope=?)` — returns relevant
+  entries, lets the AI surface "for this task, you have these
+  options" to the user.
+
+**Why a registry vs just letting the orchestrator discover by trial**:
+- Discoverability: the AI knows what's available without trying
+  random tool names.
+- Cross-office reusability: once "review-platform / Hypothesis is a
+  good fit for collaborative review" is captured, every office that
+  selects that scope inherits the knowledge.
+- Onboarding: a new deployment knows what's plug-and-play vs what
+  needs configuration.
+
+**Open questions**:
+- Do MCP entries carry their own MCP server config (host, port,
+  command), or just point at where it's configured externally
+  (~/.claude/.mcp.json)?
+- Skill entries — are they redundant with auto-discovery via
+  SKILL.md frontmatter? Maybe yes for skills, registry is mostly
+  for MCPs + adapters; skills get auto-registered.
+- Capability vocabulary: free-text or controlled list? Free-text
+  starts faster, controlled list helps queries.
+- Integration with the "review-platform integration adapter class"
+  proposed in the Web-UI item: that's a specific case of this more
+  general pattern.
+
 ### Web UI for collaborative review (annotations + comments)
 
 **Why**: Renders from the previous item produce review-ready PDFs,
