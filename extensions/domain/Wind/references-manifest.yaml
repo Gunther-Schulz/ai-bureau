@@ -1,0 +1,146 @@
+version: 1
+scope: domain
+scope_key: Wind
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# Wind (Windenergie an Land) domain references manifest. Loaded when
+# an office's scope.domains contains "Wind". Holds Wind-specific
+# federal Gesetze (WindBG), KNE-Wind Leitfäden, Helgoländer Papier,
+# and Wind-specific methodology (Albrecht 2014 Fledermaus-Wind).
+#
+# Universal frameworks (BauGB, EEG, BImSchG, BNatSchG §45b) live in
+# extensions/universal/ and extensions/domain/Naturschutz/. State-
+# specific Wind references (e.g. OVG-MV Wind-Urteile) live in the
+# matching state manifest.
+#
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+
+categories:
+  gesetze:
+    bund:
+      - id: WindBG
+        title: Windenergieflächenbedarfsgesetz
+        short_title: WindBG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/windbg/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/WindBG.txt
+        fetch_method: web-text
+        last_fetched: null
+        last_modified_at_source: null
+        current_amendment_form: null
+        checksum_sha256: null
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Flächenziel-Gesetz: 2.2% bis Ende 2026, 4.4% bis Ende 2030.
+          §6 modifiziert Artenschutzprüfung in ausgewiesenen
+          Windgebieten — relevant für jede Wind-Begründung im
+          Geltungsbereich eines Windgebiets nach LROP/RROP. Letzte
+          Änderung Art. 4 Gesetz v. 12.08.2025.
+        tags: [wind, federal, flaechenziel, paragraph-6]
+
+  leitfaeden:
+    - id: KNE-Vorschriften-Wind-an-Land-2022
+      title: KNE — Die Vorschriften zur Windenergie an Land 2022 (BNatSchG §45b + WindBG Synopse)
+      publisher: KNE — Kompetenzzentrum Naturschutz und Energiewende
+      publication_date: 2022
+      source_url: https://www.naturschutz-energiewende.de/wp-content/uploads/KNE-Die-Vorschriften-zur-Windenergie-an-Land-2022.pdf
+      canonical_path: leitfaeden/KNE-Vorschriften-Wind-an-Land-2022.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Synopse der 2022er Wind-an-Land-Reform: §45b BNatSchG +
+        WindBG zusammenhängend erläutert. Zentrale Quelle für
+        Anti-Kollisions-System-Argumentation und Yield-Loss-Schwellen.
+      tags: [wind, naturschutz, paragraph-45b, kne, synopse]
+
+    - id: KNE-Anwendung-Paragraph-45b-Bestand
+      title: KNE — Zur Anwendbarkeit des Prüfungsmaßstabs aus § 45b BNatSchG auf bereits bestandskräftig zugelassene Windenergieanlagen
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/publikationen/zur-anwendbarkeit-des-pruefungsmassstabs-aus-%C2%A7-45b-bnatschg-auf-bereits-bestandskraeftig-zugelassene-windenergieanlagen/
+      canonical_path: leitfaeden/KNE-Anwendung-Paragraph-45b-Bestand.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        §45b-Maßstab auf Bestands-WEA — relevant für Repowering-
+        Begründung und nachträgliche Auflagen.
+      tags: [wind, paragraph-45b, repowering, kne, bestand]
+
+    - id: Helgolaender-Papier-2015
+      title: Helgoländer Papier 2015 — Abstandsempfehlungen für Windenergieanlagen zu bedeutsamen Vogellebensräumen sowie Brutplätzen ausgewählter Vogelarten
+      publisher: LAG VSW — Länderarbeitsgemeinschaft der Vogelschutzwarten
+      publication_date: 2015-05
+      source_url: http://www.vogelschutzwarten.de/downloads/lagvsw2015_abstand.pdf
+      canonical_path: leitfaeden/Helgolaender-Papier-2015.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Abstandsempfehlungen WEA zu Brutplätzen sensitiver Vogelarten
+        (Schreiadler, Rotmilan, Schwarzstorch, Seeadler, Kranich,
+        ...). Kernreferenz für Standortbewertung Wind. Rechtlich
+        nicht bindend, aber Indizwirkung in OVG-Rechtsprechung.
+      tags: [wind, vogelschutz, abstand, helgolaender, lag-vsw]
+
+    - id: FA-Wind-Synopse-Helgolaender-Papier-2017
+      title: FA Wind — Synopse Helgoländer Papier 2015 in Landesplanung und Rechtsprechung
+      publisher: Fachagentur Windenergie an Land (heute FA Wind und Solar)
+      publication_date: 2017
+      source_url: https://www.fachagentur-wind-solar.de/fileadmin/Veroeffentlichungen/Wind/Natur-_und_Artenschutz/FA_Wind_Synopse_Helgolaender_Papier_2017.pdf
+      canonical_path: leitfaeden/FA-Wind-Synopse-Helgolaender-Papier-2017.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Rechtsprechungs-Synopse zum Helgoländer Papier — wie haben
+        OVGs die Empfehlungen aufgenommen. Kernquelle für
+        rechtsdogmatische Argumentation in Begründung.
+      tags: [wind, vogelschutz, abstand, rechtsprechung, fa-wind]
+
+  urteile: []
+    # Federal Wind-specific BVerwG urteile populate as needed.
+    # State-level OVG-Wind-Urteile (Körkwitz MV, Boitzenburg BB)
+    # live in the matching state manifest, NOT here.
+
+  beispiele: []
+    # Exemplary Wind-Begründungen as PBS archive yields them.
+
+  methodik:
+    - id: Albrecht-et-al-2014-Fledermaus-Wind
+      title: Methodenstandards für Fledermaus-Untersuchungen an Windenergieanlagen
+      authors: ["Albrecht", "Hahn", "Hurst", "Korn", "Strauß"]
+      publication_year: 2014
+      publisher: Fachagentur Windenergie an Land / BfN
+      citation: |
+        Albrecht, K. et al. (2014): Methodenstandards für Fledermaus-
+        Untersuchungen an Windenergieanlagen.
+      available: true
+      source_url: https://www.fachagentur-wind-solar.de/
+      canonical_path: methodik/Albrecht-et-al-2014-Fledermaus-Wind.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Methodik-Standard für Fledermaus-Untersuchungen vor WEA-
+        Errichtung. Backbone für Fledermaus-Gutachten /
+        Schlagopfer-Risikobewertung. Frei verfügbar PDF.
+      tags: [methodik, chiroptera, wind, ingestable]

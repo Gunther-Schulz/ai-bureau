@@ -1,0 +1,34 @@
+version: 1
+scope: domain
+scope_key: Innenentwicklung
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# Innenentwicklung domain references manifest. Skeleton — populated
+# by the first office that deploys with this domain in scope. Use
+# author-manifest skill to add real entries; research-references to
+# fetch.
+#
+# Universal frameworks (BauGB §13a/§13b in particular) live in
+# extensions/universal/. State-specific Innenentwicklung-Verordnungen
+# live in the matching state manifest.
+#
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+
+categories:
+  gesetze:
+    bund: []
+      # §13a/§13b BauGB are in universal-core BauGB. No
+      # Innenentwicklung-exclusive federal laws.
+
+  leitfaeden: []
+    # Candidates: Difu-Leitfäden zur Innenentwicklung,
+    # BBSR-Veröffentlichungen.
+
+  urteile: []
+    # Candidates: BVerwG-Rechtsprechung zu §13a/§13b — populate as
+    # case law develops or first project requires.
+
+  beispiele: []
+  methodik: []

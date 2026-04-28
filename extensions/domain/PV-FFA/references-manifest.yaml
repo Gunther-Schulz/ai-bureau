@@ -1,0 +1,142 @@
+version: 1
+scope: domain
+scope_key: PV-FFA
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# PV-FFA (Photovoltaik-Freiflächenanlagen) domain references manifest.
+# Loaded when an office's scope.domains contains "PV-FFA". Holds
+# PV-specific federal Leitfäden (KNE, BfN-705 Agri-PV) and PV-related
+# rulings.
+#
+# Universal frameworks (BauGB, EEG, BImSchG, BNatSchG) live in
+# extensions/universal/ resp. extensions/domain/Naturschutz/. State-
+# specific PV references (Brandschutzkonzept-PV-MV) live in the
+# matching state manifest.
+#
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+
+categories:
+  gesetze:
+    bund: []
+      # No PV-FFA-exclusive federal laws — PV is regulated under the
+      # universal frameworks (BauGB §11 BauNVO Sondergebiete, EEG
+      # privilegierungen, BImSchG-Schwellen).
+
+  leitfaeden:
+    - id: KNE-PV-Naturschutz
+      title: KNE — Auswahlbibliografie PV-FFA Naturschutz
+      publisher: KNE — Kompetenzzentrum Naturschutz und Energiewende
+      publication_date: null
+      version: null
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-PV-Naturschutz.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Federal-level Leitfaden by KNE (federal competence center).
+        Manual fetch: Claude discovers canonical PDF URL on the
+        publisher site, then downloads.
+      tags: [pv-freiflache, naturschutz, kne]
+
+    - id: KNE-Anlagengestaltung
+      title: KNE — Kriterienkatalog zur naturverträglichen Anlagengestaltung PV-Freiflächenanlagen
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Anlagengestaltung.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Federal-level KNE Leitfaden zur PV-Anlagengestaltung.
+      tags: [pv-freiflache, naturschutz, kne, anlagengestaltung]
+
+    - id: KNE-Standortsteuerung
+      title: KNE — Kriterienkatalog zur naturverträglichen Standortsteuerung PV-Freiflächenanlagen
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Standortsteuerung.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Federal-level KNE Leitfaden zur PV-Standortsteuerung.
+      tags: [pv-freiflache, standort, kne]
+
+    - id: KNE-Landschaftsbild
+      title: KNE — Auswirkungen von Solarparks auf das Landschaftsbild
+      publisher: KNE
+      publication_date: 2020-11
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Landschaftsbild.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Landschaftsbild-Bewertung von Solarparks — relevant für
+        Begründung-Kapitel Landschaftsbild und Umweltbericht-
+        Schutzgut Landschaft.
+      tags: [pv-freiflache, landschaftsbild, kne]
+
+    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-1
+      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 1)
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-1.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Federal-level KNE Leitfaden — first part of two.
+      tags: [pv-freiflache, folgenutzung, kne]
+
+    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-2
+      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 2)
+      publisher: KNE
+      source_url: https://www.naturschutz-energiewende.de/
+      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-2.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: Federal-level KNE Leitfaden — second part of two.
+      tags: [pv-freiflache, folgenutzung, kne]
+
+    - id: BfN-Schriften-705
+      title: BfN-Schriften 705 — Photovoltaik-Freiflächenanlagen, Inanspruchnahme landwirtschaftlicher Flächen, Agri-PV und Potenziale für eine naturverträglichere Gestaltung
+      publisher: BfN — Bundesamt für Naturschutz
+      publication_date: 2024
+      source_url: https://www.bfn.de/publikationen/bfn-schriften/bfn-schriften-705-photovoltaik-freiflaechenanlagen-inanspruchnahme
+      canonical_path: leitfaeden/BfN-Schriften-705.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Aktuellste BfN-Position zur PV-FFA + Agri-PV (Stand 2024).
+        Zentrale Quelle für Naturverträglichkeit-Argumentation in
+        Begründung.
+      tags: [pv-freiflache, agri-pv, naturschutz, bfn, 2024]
+
+  urteile: []
+    # PV-specific federal urteile populate as case law develops.
+    # Boitzenburger Land Solar 128 ha (Brandenburg) — when relevant
+    # to BB office; goes in state/BB manifest, not domain.
+
+  beispiele: []
+    # Exemplary PV-FFA Begründungen / Festsetzungen as PBS archive
+    # yields them.
+
+  methodik: []
+    # PV-specific methodology populates as needed.

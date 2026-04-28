@@ -1,0 +1,381 @@
+version: 1
+scope: domain
+scope_key: Naturschutz
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# Naturschutz domain references manifest. Loaded when an office's
+# scope.domains contains "Naturschutz". Includes federal Naturschutz-
+# Gesetze, EU Naturschutz-Richtlinien, federal court rulings on
+# Naturschutz/FFH/§44 BNatSchG, federal-level naturschutz Leitfäden
+# (BfN), and methodology cite-only references (Brutvögel, Fledermäuse).
+#
+# State-specific naturschutz references (NatSchAG-X, LUNG-X, OVG-X
+# rulings) live in the matching state manifest, NOT here.
+#
+# Schema documented at:
+#   plugin/skills/research-references/references/manifest-schema.md
+
+categories:
+  gesetze:
+    bund:
+      - id: BNatSchG
+        title: Bundesnaturschutzgesetz
+        short_title: BNatSchG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bnatschg_2009/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BNatSchG.txt
+        fetch_method: web-text
+        last_fetched: null
+        last_modified_at_source: null
+        current_amendment_form: null
+        checksum_sha256: null
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          §44 Tatbestände, §45 Ausnahmen, §45b Wind-an-Land
+          (Anti-Kollisions-Systeme + Yield-Loss-Schwellen), §15
+          Eingriffsregelung, §34 FFH-Verträglichkeitsprüfung. Häufig
+          zitiert; viele Bausteine referenzieren §45 Abs.7. Letzte
+          bekannte Änderung Art. 48 vom 23.10.2024.
+        tags: [naturschutz, federal, kernel, paragraph-44, paragraph-45b]
+
+      - id: BArtSchV
+        title: Bundesartenschutzverordnung
+        short_title: BArtSchV
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bartschv_2005/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BArtSchV.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Backbone jeder Artenschutzgutachten — definiert "besonders
+          geschützte" und "streng geschützte" Arten via Anlage 1.
+          Dauerreferenz für §44 BNatSchG-Anwendung.
+        tags: [naturschutz, federal, artenschutz, anlage-1]
+
+    eu:
+      - id: FFH-RL
+        title: Richtlinie 92/43/EWG (Fauna-Flora-Habitat-Richtlinie)
+        short_title: FFH-RL
+        jurisdiction: eu
+        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:01992L0043
+        source_type: eur-lex
+        canonical_path: gesetze/eu/FFH-RL.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 3
+        ingest: true
+        chunking_strategy: per-article
+        chunk_metadata_extractor: eur-lex
+        status: active
+        notes: |
+          Anhang II + IV Arten-Schutz. Art. 6 Verträglichkeit, Art. 16
+          Ausnahme. Häufig in Begründung + Artenschutzgutachten zitiert.
+        tags: [naturschutz, eu, ffh]
+
+      - id: Vogelschutz-RL
+        title: Richtlinie 2009/147/EG (Vogelschutz-Richtlinie)
+        short_title: VRL
+        jurisdiction: eu
+        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32009L0147
+        source_type: eur-lex
+        canonical_path: gesetze/eu/Vogelschutz-RL.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 3
+        ingest: true
+        chunking_strategy: per-article
+        chunk_metadata_extractor: eur-lex
+        status: active
+        notes: |
+          Schutzbestimmungen für Vögel; Anhang I, Schutzgebiete (SPA).
+        tags: [naturschutz, eu, vogelschutz]
+
+  leitfaeden:
+    - id: BfN-Schriften-247
+      title: BfN-Schriften 247 — Naturschutzfachliche Bewertungsmethoden von Freilandphotovoltaikanlagen
+      publisher: BfN — Bundesamt für Naturschutz
+      publication_date: null
+      version: null
+      source_url: https://www.bfn.de/publikationen/bfn-schriften/bfn-schriften-247-naturschutzfachliche-bewertungsmethoden-von
+      canonical_path: leitfaeden/BfN-Schriften-247.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Methodik-Standard zur naturschutzfachlichen Bewertung — gilt
+        nicht nur PV. Backbone für Bewertungstabellen in
+        Artenschutzgutachten / Umweltberichten.
+      tags: [naturschutz, methodik, bewertung, bfn]
+
+    - id: BfN-Schriften-562
+      title: BfN-Schriften 562 — Naturschutzfachliches Monitoring des Ausbaus Erneuerbarer Energien
+      publisher: BfN
+      source_url: https://www.bfn.de/
+      canonical_path: leitfaeden/BfN-Schriften-562.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Monitoring-Standards für Erneuerbare-Anlagen — relevant
+        für Begleitmonitoring-Konzepte und CEF-Wirksamkeit-Nachweis.
+      tags: [naturschutz, monitoring, bfn]
+
+  urteile:
+    - id: BVerwG-9-A-3-06
+      title: "BVerwG, Urteil vom 17.01.2007 — 9 A 3.06 (Bestandsaufnahme nach bestem wissenschaftlichen Erkenntnisstand)"
+      short_title: 9 A 3.06
+      court: BVerwG
+      docket: 9 A 3.06
+      decision_date: 2007-01-17
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/170107U9A3.06.0
+      canonical_path: urteile/BVerwG-9-A-3-06.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: Methodik-Standards Bestandsaufnahme; bei Prognoseunsicherheiten "bester Erkenntnisstand".
+      tags: [methodik, naturschutz, bverwg]
+
+    - id: BVerwG-9-A-14-07
+      title: "BVerwG, Urteil vom 12.03.2008 — 9 A 14.07 (FFH-Habitate, Eingriffsfolgen)"
+      short_title: 9 A 14.07
+      court: BVerwG
+      docket: 9 A 14.07
+      decision_date: 2008-03-12
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/120308U9A14.07.0
+      canonical_path: urteile/BVerwG-9-A-14-07.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: Signifikanzkriterium Tötungsverbot; Risikomanagement bei CEF-Maßnahmen.
+      tags: [naturschutz, ffh, signifikanz, bverwg]
+
+    - id: BVerwG-9-A-12-10-Freiberg
+      title: "BVerwG, Urteil vom 14.07.2011 — 9 A 12.10 (Freiberg, CEF-Wirksamkeit)"
+      short_title: Freiberg
+      court: BVerwG
+      docket: 9 A 12.10
+      decision_date: 2011-07-14
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/140711U9A12.10.0
+      canonical_path: urteile/BVerwG-9-A-12-10-Freiberg.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        CEF-Maßnahmen-Wirksamkeit vor Eingriff; ökologische
+        Funktionalität.
+      tags: [cef, naturschutz, bverwg, freiberg]
+
+    - id: BVerwG-9-A-22-13
+      title: "BVerwG, Urteil vom 23.04.2014 — 9 A 22.13 (§45 Nr.5 Begründungstiefe)"
+      short_title: 9 A 22.13
+      court: BVerwG
+      docket: 9 A 22.13
+      decision_date: 2014-04-23
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/230414U9A22.13.0
+      canonical_path: urteile/BVerwG-9-A-22-13.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        Wichtigste Entscheidung zur Begründungstiefe für §45 Abs.7
+        Nr.5 bei privaten Vorhaben. Häufig in UNB-Stellungnahmen
+        zitiert.
+      tags: [§45-bnatschg, ausnahmegrund, bverwg]
+
+    - id: BVerwG-4-CN-2-07-Marburg
+      title: "BVerwG, Urteil vom 25.01.2007 — 4 CN 2.07 (Marburg, Alternativenprüfung)"
+      short_title: Marburg
+      court: BVerwG
+      docket: 4 CN 2.07
+      decision_date: 2007-01-25
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/
+      canonical_path: urteile/BVerwG-4-CN-2-07-Marburg.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        Alternativenprüfung im Bauleitplan. Maßgeblich für
+        Standortbegründung in Begründung-Kapitel
+        Alternativen­prüfung. Verify exact docket on first fetch.
+      tags: [bauleitplanung, alternativen, bverwg]
+
+    - id: BVerwG-9-A-7-13
+      title: "BVerwG, Urteil — 9 A 7.13 (Westumfahrung Halle, FFH-Methodik)"
+      short_title: Westumfahrung Halle
+      court: BVerwG
+      docket: 9 A 7.13
+      decision_date: null
+      jurisdiction: bund
+      source_url: https://www.bverwg.de/
+      canonical_path: urteile/BVerwG-9-A-7-13-Westumfahrung-Halle.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: bverwg-randnummer
+      status: active
+      notes: |
+        FFH-Verträglichkeitsprüfung-Methodik; Erheblichkeit von
+        Beeinträchtigungen. research-references resolves exact
+        docket + date on first fetch.
+      tags: [ffh, methodik, bverwg]
+
+    - id: EuGH-C-127-02-Waddenzee
+      title: "EuGH, Urteil vom 07.09.2004 — C-127/02 (Waddenzee — Erheblichkeitsbewertung)"
+      short_title: Waddenzee
+      court: EuGH
+      docket: C-127/02
+      decision_date: 2004-09-07
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62002CJ0127
+      canonical_path: urteile/EuGH-C-127-02-Waddenzee.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: FFH-Erheblichkeitsabschätzung; "vernünftige wissenschaftliche Zweifel".
+      tags: [ffh, eugh, erheblichkeit]
+
+    - id: EuGH-C-258-11-Sweetman
+      title: "EuGH, Urteil vom 11.04.2013 — C-258/11 (Sweetman — Verschlechterungsverbot)"
+      short_title: Sweetman
+      court: EuGH
+      docket: C-258/11
+      decision_date: 2013-04-11
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62011CJ0258
+      canonical_path: urteile/EuGH-C-258-11-Sweetman.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: FFH-Verschlechterungsverbot; Erhaltungsziele verbindlich.
+      tags: [ffh, eugh, verschlechterungsverbot]
+
+    - id: EuGH-C-441-17-Bialowieza
+      title: "EuGH, Urteil — C-441/17 (Białowieża — strenger FFH-Schutz)"
+      short_title: Białowieża
+      court: EuGH
+      docket: C-441/17
+      decision_date: null
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62017CJ0441
+      canonical_path: urteile/EuGH-C-441-17-Bialowieza.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: |
+        Strenger Schutz vor Eingriffen in FFH-Gebiete. Verify exact
+        decision date on first fetch.
+      tags: [ffh, eugh, strenger-schutz, bialowieza]
+
+    - id: EuGH-C-461-17-Holohan
+      title: "EuGH, Urteil — C-461/17 (Holohan — UVP/FFH-Vollständigkeit)"
+      short_title: Holohan
+      court: EuGH
+      docket: C-461/17
+      decision_date: null
+      jurisdiction: eu
+      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62017CJ0461
+      canonical_path: urteile/EuGH-C-461-17-Holohan.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: eur-lex
+      status: active
+      notes: |
+        UVP- und FFH-Vollständigkeitsprüfung. Verify exact decision
+        date on first fetch.
+      tags: [uvp, ffh, eugh, vollständigkeit]
+
+  beispiele: []
+    # Naturschutz-domain exemplary documents (e.g. exemplary
+    # Artenschutzgutachten) populate as PBS archive yields them.
+
+  methodik:
+    - id: Suedbeck-2005-Brutvoegel
+      title: Methodenstandards zur Erfassung der Brutvögel Deutschlands
+      authors: ["Südbeck", "Andretzke", "Fischer", "Gedeon", "Schikore", "Schröder", "Sudfeldt"]
+      publication_year: 2005
+      publisher: Radolfzell
+      citation: |
+        Südbeck, P. et al. (2005): Methodenstandards zur Erfassung der
+        Brutvögel Deutschlands. Radolfzell.
+      available: false
+      canonical_path: null
+      ingest: false
+      notes: |
+        Buch; nicht frei verfügbar. Cite-only Eintrag — verify-citations
+        validates citation FORM only, nicht claim accuracy.
+      tags: [methodik, avifauna, cite-only]
+
+    - id: Dietz-Kiefer-2014-Fledermaeuse
+      title: Die Fledermäuse Europas — Kennen, bestimmen, schützen
+      authors: ["Dietz", "Kiefer"]
+      publication_year: 2014
+      publisher: Quelle & Meyer Verlag
+      citation: |
+        Dietz, C. & Kiefer, A. (2014): Die Fledermäuse Europas. Quelle
+        & Meyer Verlag, Wiebelsheim.
+      available: false
+      canonical_path: null
+      ingest: false
+      notes: Buch; nicht frei verfügbar. Cite-only Eintrag.
+      tags: [methodik, chiroptera, cite-only]
+
+    - id: Garniel-Mierwald-2010-Voegel-Verkehrslaerm
+      title: Vögel und Verkehrslärm — Quantifizierung und Bewältigung entscheidungserheblicher Auswirkungen
+      authors: ["Garniel", "Mierwald"]
+      publication_year: 2010
+      publisher: Bundesministerium für Verkehr, Bau und Stadtentwicklung
+      citation: |
+        Garniel, A. & Mierwald, U. (2010): Vögel und Verkehrslärm.
+        Bundesministerium für Verkehr, Bau und Stadtentwicklung.
+      available: true
+      source_url: https://www.bmv.de/
+      canonical_path: methodik/Garniel-Mierwald-2010-Voegel-Verkehrslaerm.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        Lärmwirkungen auf Vögel — Methodik-Standard für Begründung
+        Schallausbreitung-Argumentation (PV-Wechselrichter, WEA-
+        Geräusche). Frei verfügbar als PDF beim BMV.
+      tags: [methodik, avifauna, laerm, ingestable]

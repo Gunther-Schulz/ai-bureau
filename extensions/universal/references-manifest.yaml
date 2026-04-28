@@ -1,19 +1,21 @@
 version: 1
-scope: federal-core
+scope: universal
+scope_key: null
 last_updated: 2026-04-28
 maintainer: pbs-bureau
 
-# Federal-core references manifest. Lists references universal to
-# every German Planungsbüro: federal laws, EU directives, federal
-# court rulings, federal-level leitfäden (e.g. KNE), national
-# methodology standards.
+# Universal references manifest. Federal frameworks that apply to
+# EVERY German Planungsbüro regardless of planning domain (PV-FFA,
+# Wind, Innenentwicklung, ...) or Bundesland.
 #
-# State-specific references (LandesPlG, LBauO, NatSchAG des Landes,
-# state Verfahrenserlasse, state environmental authority leitfäden)
-# live in per-state extension manifests. See
-# `docs/office-extensions/<STATE>/references-manifest.example.yaml`
-# for the template; offices place their copy at
-# `office_config.paths.state_root/extensions/<STATE>/references-manifest.yaml`.
+# Domain-specific federal references (e.g. KNE-PV-* leitfäden →
+# domain/PV-FFA, BNatSchG + FFH-RL + naturschutz urteile →
+# domain/Naturschutz, WindBG + Helgoländer-Papier → domain/Wind)
+# live in per-domain manifests under extensions/domain/<X>/.
+#
+# State references (LPlG-X, LBauO-X, NatSchAG-X, OVG-X rulings,
+# state Verfahrenserlasse, LUNG/StALU leitfäden) live in per-state
+# manifests under extensions/state/<X>/.
 #
 # Schema documented at:
 #   plugin/skills/research-references/references/manifest-schema.md
@@ -68,46 +70,6 @@ categories:
           §11 Sondergebiete (SO EBS für Solar-PV). §19 Grundfläche
           (Schwellenwerte für §13a-Verfahren).
         tags: [bauleitplanung, federal, sondergebiete]
-
-      - id: BNatSchG
-        title: Bundesnaturschutzgesetz
-        short_title: BNatSchG
-        jurisdiction: bund
-        source_url: https://www.gesetze-im-internet.de/bnatschg_2009/
-        source_type: gesetze-im-internet
-        canonical_path: gesetze/bund/BNatSchG.txt
-        fetch_method: web-text
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: gesetze-im-internet
-        status: active
-        notes: |
-          §44 Tatbestände, §45 Ausnahmen, §15 Eingriffsregelung, §34
-          FFH-Verträglichkeitsprüfung. Häufig zitiert; viele Bausteine
-          referenzieren §45 Abs.7. Letzte bekannte Änderung Art. 48
-          vom 23.10.2024.
-        tags: [naturschutz, federal, kernel]
-
-      - id: EEG
-        title: Erneuerbare-Energien-Gesetz
-        short_title: EEG
-        jurisdiction: bund
-        source_url: https://www.gesetze-im-internet.de/eeg_2023/
-        source_type: gesetze-im-internet
-        canonical_path: gesetze/bund/EEG.txt
-        fetch_method: web-text
-        archive_versions: true
-        retention_versions: 5
-        ingest: true
-        chunking_strategy: per-paragraph
-        chunk_metadata_extractor: gesetze-im-internet
-        status: active
-        notes: |
-          Solar-PV-Förderrahmen, Ausschreibungssegmente, Privilegierungen.
-          Für Begründung-Argumentation Solar-Vorhaben relevant.
-        tags: [erneuerbare-energien, solar-pv, federal]
 
       - id: BImSchG
         title: Bundes-Immissionsschutzgesetz
@@ -185,275 +147,93 @@ categories:
           Bundes-Land-Verhältnis.
         tags: [raumordnung, federal]
 
-    eu:
-      - id: FFH-RL
-        title: Richtlinie 92/43/EWG (Fauna-Flora-Habitat-Richtlinie)
-        short_title: FFH-RL
-        jurisdiction: eu
-        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:01992L0043
-        source_type: eur-lex
-        canonical_path: gesetze/eu/FFH-RL.txt
-        fetch_method: web-html
+      - id: EEG
+        title: Erneuerbare-Energien-Gesetz
+        short_title: EEG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/eeg_2023/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/EEG.txt
+        fetch_method: web-text
         archive_versions: true
-        retention_versions: 3
+        retention_versions: 5
         ingest: true
-        chunking_strategy: per-article
-        chunk_metadata_extractor: eur-lex
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
         status: active
         notes: |
-          Anhang II + IV Arten-Schutz. Art. 6 Verträglichkeit, Art. 16
-          Ausnahme. Häufig in Begründung + Artenschutzgutachten zitiert.
-        tags: [naturschutz, eu, ffh]
+          §2 EEG: überragend öffentliches Interesse Erneuerbarer —
+          häufig in Wind-/Solar-Begründung zitiert (Vorrang-Norm in
+          OVG-Rechtsprechung). Solar-PV-Förderrahmen, Ausschreibungs-
+          segmente, Privilegierungen. Universal-relevant für jedes
+          renewable-energy planungsbüro (PV + Wind).
+        tags: [erneuerbare-energien, federal, paragraf-2-vorrang]
 
-      - id: Vogelschutz-RL
-        title: Richtlinie 2009/147/EG (Vogelschutz-Richtlinie)
-        short_title: VRL
-        jurisdiction: eu
-        source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32009L0147
-        source_type: eur-lex
-        canonical_path: gesetze/eu/Vogelschutz-RL.txt
-        fetch_method: web-html
+      - id: WHG
+        title: Wasserhaushaltsgesetz
+        short_title: WHG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/whg_2009/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/WHG.txt
+        fetch_method: web-text
         archive_versions: true
-        retention_versions: 3
+        retention_versions: 5
         ingest: true
-        chunking_strategy: per-article
-        chunk_metadata_extractor: eur-lex
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
         status: active
         notes: |
-          Schutzbestimmungen für Vögel; Anhang I, Schutzgebiete (SPA).
-        tags: [naturschutz, eu, vogelschutz]
+          Eingriffsregelung Gewässer — relevant für Solar-/Wind-Eingriffe
+          und Umweltbericht-Schutzgut Wasser.
+        tags: [wasserhaushalt, federal, eingriffsregelung]
 
-    # State laws (gesetze.<state-code>) live in per-state extension
-    # manifests, NOT in the federal core. See
-    # `docs/office-extensions/<STATE>/references-manifest.example.yaml`.
+      - id: BBodSchG
+        title: Bundes-Bodenschutzgesetz
+        short_title: BBodSchG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bbodschg/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BBodSchG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Bodenversiegelung / Bodenschutz bei Solar (Aufständerungen
+          mit minimaler Versiegelung) und Wind (Fundament-Gründung).
+          Schutzgut Boden im Umweltbericht.
+        tags: [bodenschutz, federal, schutzgut-boden]
 
-  leitfaeden:
-    - id: KNE-PV-Naturschutz
-      title: KNE — Auswahlbibliografie PV-FFA Naturschutz
-      publisher: KNE — Kompetenzzentrum Naturschutz und Energiewende
-      publication_date: null
-      version: null
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-PV-Naturschutz.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: |
-        Federal-level Leitfaden by KNE (federal competence center).
-        Manual fetch: Claude discovers canonical PDF URL on the
-        publisher site, then downloads.
-      tags: [pv-freiflache, naturschutz, kne]
-
-    - id: KNE-Anlagengestaltung
-      title: KNE — Kriterienkatalog zur naturverträglichen Anlagengestaltung PV-Freiflächenanlagen
-      publisher: KNE
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Anlagengestaltung.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: Federal-level KNE Leitfaden.
-      tags: [pv-freiflache, naturschutz, kne]
-
-    - id: KNE-Standortsteuerung
-      title: KNE — Kriterienkatalog zur naturverträglichen Standortsteuerung PV-Freiflächenanlagen
-      publisher: KNE
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Standortsteuerung.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: Federal-level KNE Leitfaden.
-      tags: [pv-freiflache, standort, kne]
-
-    - id: KNE-Landschaftsbild
-      title: KNE — Auswirkungen von Solarparks auf das Landschaftsbild
-      publisher: KNE
-      publication_date: 2020-11
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Landschaftsbild.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: Federal-level KNE Leitfaden.
-      tags: [pv-freiflache, landschaftsbild, kne]
-
-    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-1
-      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 1)
-      publisher: KNE
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-1.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: Federal-level KNE Leitfaden — first part of two.
-      tags: [pv-freiflache, folgenutzung, kne]
-
-    - id: KNE-Folgenutzung-Acker-Gruenland-Teil-2
-      title: KNE — Photovoltaik und Folgenutzung auf Acker- und Grünland (Teil 2)
-      publisher: KNE
-      source_url: https://www.naturschutz-energiewende.de/
-      canonical_path: leitfaeden/KNE-Folgenutzung-Acker-Gruenland-Teil-2.pdf
-      fetch_method: manual
-      ingest: true
-      chunking_strategy: per-section
-      chunk_metadata_extractor: pdf-headings
-      status: active
-      notes: Federal-level KNE Leitfaden — second part of two.
-      tags: [pv-freiflache, folgenutzung, kne]
-
-  urteile:
-    - id: BVerwG-9-A-3-06
-      title: "BVerwG, Urteil vom 17.01.2007 — 9 A 3.06 (Bestandsaufnahme nach bestem wissenschaftlichen Erkenntnisstand)"
-      short_title: 9 A 3.06
-      court: BVerwG
-      docket: 9 A 3.06
-      decision_date: 2007-01-17
-      jurisdiction: bund
-      source_url: https://www.bverwg.de/170107U9A3.06.0
-      canonical_path: urteile/BVerwG-9-A-3-06.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: bverwg-randnummer
-      status: active
-      notes: Methodik-Standards Bestandsaufnahme; bei Prognoseunsicherheiten "bester Erkenntnisstand".
-      tags: [methodik, naturschutz, bverwg]
-
-    - id: BVerwG-9-A-14-07
-      title: "BVerwG, Urteil vom 12.03.2008 — 9 A 14.07 (FFH-Habitate, Eingriffsfolgen)"
-      short_title: 9 A 14.07
-      court: BVerwG
-      docket: 9 A 14.07
-      decision_date: 2008-03-12
-      jurisdiction: bund
-      source_url: https://www.bverwg.de/120308U9A14.07.0
-      canonical_path: urteile/BVerwG-9-A-14-07.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: bverwg-randnummer
-      status: active
-      notes: Signifikanzkriterium Tötungsverbot; Risikomanagement bei CEF-Maßnahmen.
-      tags: [naturschutz, ffh, signifikanz, bverwg]
-
-    - id: BVerwG-9-A-39-07
-      title: "BVerwG, Urteil vom 14.07.2011 — 9 A 12.10 (Freiberg, CEF-Wirksamkeit)"
-      short_title: Freiberg
-      court: BVerwG
-      docket: 9 A 12.10
-      decision_date: 2011-07-14
-      jurisdiction: bund
-      source_url: https://www.bverwg.de/140711U9A12.10.0
-      canonical_path: urteile/BVerwG-9-A-12-10-Freiberg.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: bverwg-randnummer
-      status: active
-      notes: |
-        CEF-Maßnahmen-Wirksamkeit vor Eingriff; ökologische
-        Funktionalität. Häufig zitiert (transcript ID 9 A 39.07 ist
-        ein Verwechsler — actual docket is 9 A 12.10 mit Sache
-        Freiberg).
-      tags: [cef, naturschutz, bverwg, freiberg]
-
-    - id: BVerwG-9-A-22-11
-      title: "BVerwG, Urteil vom 23.04.2014 — 9 A 22.13 (§45 Nr.5 Begründungstiefe — alt: 9 A 22.11)"
-      short_title: 9 A 22.13
-      court: BVerwG
-      docket: 9 A 22.13
-      decision_date: 2014-04-23
-      jurisdiction: bund
-      source_url: https://www.bverwg.de/230414U9A22.13.0
-      canonical_path: urteile/BVerwG-9-A-22-13.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: bverwg-randnummer
-      status: active
-      notes: |
-        Wichtigste Entscheidung zur Begründungstiefe für §45 Abs.7 Nr.5
-        bei privaten Vorhaben. Häufig in UNB-Stellungnahmen zitiert.
-        Note: original transcript referenced "9 A 22.11" — verify exact
-        docket on first fetch (may be different decision).
-      tags: [§45-bnatschg, ausnahmegrund, bverwg]
-
-    - id: EuGH-C-127-02-Waddenzee
-      title: "EuGH, Urteil vom 07.09.2004 — C-127/02 (Waddenzee — Erheblichkeitsbewertung)"
-      short_title: Waddenzee
-      court: EuGH
-      docket: C-127/02
-      decision_date: 2004-09-07
-      jurisdiction: eu
-      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62002CJ0127
-      canonical_path: urteile/EuGH-C-127-02-Waddenzee.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: eur-lex
-      status: active
-      notes: FFH-Erheblichkeitsabschätzung; "vernünftige wissenschaftliche Zweifel".
-      tags: [ffh, eugh, erheblichkeit]
-
-    - id: EuGH-C-258-11-Sweetman
-      title: "EuGH, Urteil vom 11.04.2013 — C-258/11 (Sweetman — Verschlechterungsverbot)"
-      short_title: Sweetman
-      court: EuGH
-      docket: C-258/11
-      decision_date: 2013-04-11
-      jurisdiction: eu
-      source_url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:62011CJ0258
-      canonical_path: urteile/EuGH-C-258-11-Sweetman.txt
-      fetch_method: web-html
-      ingest: true
-      chunking_strategy: per-randnummer
-      chunk_metadata_extractor: eur-lex
-      status: active
-      notes: FFH-Verschlechterungsverbot; Erhaltungsziele verbindlich.
-      tags: [ffh, eugh, verschlechterungsverbot]
+      - id: BWaldG
+        title: Bundeswaldgesetz
+        short_title: BWaldG
+        jurisdiction: bund
+        source_url: https://www.gesetze-im-internet.de/bwaldg/
+        source_type: gesetze-im-internet
+        canonical_path: gesetze/bund/BWaldG.txt
+        fetch_method: web-text
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: gesetze-im-internet
+        status: active
+        notes: |
+          Waldumwandlung bei Wind im Wald sowie Wald-Nähe-Argumentation
+          bei Solar (Landschaftsbild, Schattenwirkung,
+          Brandschutzabstand). Planung erfolgt häufig in Wald-Nähe.
+        tags: [wald, federal, waldumwandlung]
 
   beispiele: []
-    # Populated as exemplary documents from PBS archive or external sources
-    # are identified. See ROADMAP.md for context.
+    # Universal exemplary documents (rare). Per-domain exemplars live
+    # in the matching domain manifest.
 
-  methodik:
-    - id: Suedbeck-2005-Brutvoegel
-      title: Methodenstandards zur Erfassung der Brutvögel Deutschlands
-      authors: ["Südbeck", "Andretzke", "Fischer", "Gedeon", "Schikore", "Schröder", "Sudfeldt"]
-      publication_year: 2005
-      publisher: Radolfzell
-      citation: |
-        Südbeck, P. et al. (2005): Methodenstandards zur Erfassung der
-        Brutvögel Deutschlands. Radolfzell.
-      available: false
-      canonical_path: null
-      ingest: false
-      notes: |
-        Buch; nicht frei verfügbar. Wird zitiert, nicht ingestiert. Der
-        Eintrag dient verify-citations als Referenzform.
-      tags: [methodik, avifauna]
-
-    - id: Dietz-Kiefer-2014-Fledermaeuse
-      title: Die Fledermäuse Europas — Kennen, bestimmen, schützen
-      authors: ["Dietz", "Kiefer"]
-      publication_year: 2014
-      publisher: Quelle & Meyer Verlag
-      citation: |
-        Dietz, C. & Kiefer, A. (2014): Die Fledermäuse Europas. Quelle
-        & Meyer Verlag, Wiebelsheim.
-      available: false
-      canonical_path: null
-      ingest: false
-      notes: Buch; nicht frei verfügbar. Cite-only Eintrag.
-      tags: [methodik, chiroptera]
+  methodik: []
+    # Universal methodology references (e.g. national-level cite-only
+    # books that don't fit a single domain). Most methodology lives in
+    # the matching domain manifest (Südbeck/Dietz-Kiefer →
+    # Naturschutz; Albrecht → Wind).

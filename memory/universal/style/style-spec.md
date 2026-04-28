@@ -1,3 +1,10 @@
+---
+references_used:
+  - {law: BauGB, paragraph: §9}
+  - {law: BauGB, paragraph: §10}
+  - {law: BNatSchG, paragraph: §44}
+---
+
 # LaTeX style specification — universal B-Plan domain
 
 This document captures the **structural domain** of B-Plan LaTeX

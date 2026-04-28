@@ -1,17 +1,18 @@
-# Doctype registry — what document types a German Planungsbüro
-# produces. Universal domain knowledge; same registry applies to every
-# deployment.
+version: 1
+scope: universal
+scope_key: null
+last_updated: 2026-04-28
+
+# Universal doctype registry — document types every German Planungsbüro
+# may produce regardless of planning domain. Domain-specific doctypes
+# (Artenschutzgutachten, FFH-Vorprüfung, LBP, saP) live in the matching
+# domain manifest under extensions/domain/<X>/doctypes.yaml.
 #
 # Per-deployment template paths are NOT stored here — they live in
 # `office_config.templates.doctype_overrides[<doctype>]`. The app's
-# shipped skeletons under `plugin/templates/skeletons/<doctype>/` are
-# the default; offices override only if they need a custom skeleton.
-#
-# Add a new doctype by appending an entry. Each doctype has structural
-# domain rules (class, engine, paired-with relationships); office-specific
-# styling lives in the office's `office-style.sty`.
-
-version: 1
+# shipped skeletons under
+# `plugin/templates/skeletons/universal/<doctype>/` are the default
+# (with domain overlays at `skeletons/domain/<X>/<doctype>/`).
 
 doctypes:
   b-plan-begruendung:
@@ -22,7 +23,7 @@ doctypes:
     style_ref: memory/universal/style/style-spec.md#doctype-a-begruendung
     master_file_pattern: "B-Plan Begründung.tex"
     project_subfolder_default: B-Plan/Begründung
-    paired_with: b-plan-festsetzungen   # produced as a pair per B-Plan
+    paired_with: b-plan-festsetzungen
 
   b-plan-festsetzungen:
     label: "Textliche Festsetzungen (Teil B Text der Satzung)"
@@ -43,17 +44,6 @@ doctypes:
     style_ref: TBD
     master_file_pattern: TBD
     project_subfolder_default: Umweltbericht
-    status: deferred                    # not yet ready for orchestrator routing
-
-  artenschutz:
-    label: "Artenschutzbewertung / SPA"
-    description: >
-      Species protection assessment. May be drafted independently or
-      as part of a B-Plan package. Often produced by a GIS/biology
-      sub-practice within the office.
-    style_ref: TBD
-    master_file_pattern: TBD
-    project_subfolder_default: Externe Gutachten
     status: deferred
 
   abwaegung:
@@ -64,29 +54,15 @@ doctypes:
       Per-Stellungnahme block structure.
     status: deferred
 
-# Other Berichtstypen common in German planning practice. Listed here
-# for awareness; activate when first project requires them.
+# Other Berichtstypen / generic Gutachten variants common in German
+# planning practice. Activate (move out of berichtstypen_planned) when
+# first project requires one.
 berichtstypen_planned:
   - kapitel: AA
     label: Ausnahmeantrag
     status: stub
-  - kapitel: AFB
-    label: Artenschutzfachbeitrag
-    status: stub
   - kapitel: GK
     label: Gebäudekontrolle
-    status: stub
-  - kapitel: KB
-    label: Kartierbericht
-    status: stub
-  - kapitel: LBP
-    label: Landschaftspflegerischer Begleitplan
-    status: stub
-  - kapitel: SPA_HP
-    label: Speziell artenschutzrechtliche Prüfung — Hauptprüfung
-    status: stub
-  - kapitel: SPA_VP
-    label: Speziell artenschutzrechtliche Prüfung — Vorprüfung
     status: stub
   - kapitel: ZAV
     label: Zielabweichungsverfahren

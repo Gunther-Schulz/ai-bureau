@@ -1,3 +1,10 @@
+---
+references_used: []
+# Pure typographic/writing conventions; mentions "BauGB" / "BNatSchG"
+# only as examples of how to format legal-citation strings, not for
+# their content. No real reference dependencies.
+---
+
 # Korrektur rules — German planning-bureau LaTeX writing conventions
 
 Universal German typographic + writing conventions that apply to all

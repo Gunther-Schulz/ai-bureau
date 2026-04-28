@@ -1,3 +1,11 @@
+---
+references_used:
+  - {law: BauGB, paragraph: §3 Abs.1}
+  - {law: BauGB, paragraph: §3 Abs.2}
+  - {law: BauGB, paragraph: §4 Abs.1}
+  - {law: BauGB, paragraph: §4 Abs.2}
+---
+
 # New-project folder structure
 
 Every new project is created with this layout under

@@ -1,26 +1,19 @@
-# M-V (Mecklenburg-Vorpommern) references-manifest extension — EXAMPLE
+version: 1
+scope: state
+scope_key: MV
+last_updated: 2026-04-28
+maintainer: pbs-bureau
+
+# Mecklenburg-Vorpommern state references manifest. Loaded when an
+# office's scope.states contains "MV". Holds MV-Landesgesetze,
+# LUNG/StALU Leitfäden, OVG-MV Urteile, MV-Verfahrenserlasse.
 #
-# This file is a template. To use it for an actual deployment:
-#   cp docs/office-extensions/MV/references-manifest.example.yaml \
-#      <office_state_root>/extensions/MV/references-manifest.yaml
-#
-# Then register it in office-config.yaml:
-#   extensions:
-#     references_manifests:
-#       MV: <office_state_root>/extensions/MV/references-manifest.yaml
-#
-# This extension layers on top of the federal-core manifest at
-# `<repo>/references-manifest.yaml`. Both are loaded for any project
-# whose `state.md.bundesland: MV`.
+# Federal frameworks (BauGB, BNatSchG, WindBG, EU directives) live
+# in extensions/universal/ and extensions/domain/<X>/. This manifest
+# layers on top for projects with state.md.bundesland: MV.
 #
 # Schema documented at:
 #   plugin/skills/research-references/references/manifest-schema.md
-
-version: 1
-scope: state-extension
-state: MV
-last_updated: 2026-04-28
-maintainer: <office>
 
 categories:
   gesetze:
@@ -101,6 +94,26 @@ categories:
           vermerk #13.
         tags: [kommunalverfassung, mv]
 
+      - id: WaldG-MV
+        title: Landeswaldgesetz Mecklenburg-Vorpommern
+        short_title: LWaldG M-V
+        jurisdiction: mv
+        source_url: https://www.landesrecht-mv.de/bsmv/document/jlr-LWaldGMVrahmen
+        source_type: landesrecht-mv
+        canonical_path: gesetze/mv/WaldG-MV.txt
+        fetch_method: web-html
+        archive_versions: true
+        retention_versions: 5
+        ingest: true
+        chunking_strategy: per-paragraph
+        chunk_metadata_extractor: landesrecht-mv
+        status: active
+        notes: |
+          MV-Waldumwandlungsregeln (Wind im Wald) und Wald-Nähe-
+          Vorgaben (Solar mit Schutzabstand). research-references
+          verifies exact source URL on first fetch.
+        tags: [landesrecht, mv, wald, waldumwandlung]
+
   leitfaeden:
     - id: LUNG-MV-Artenschutzleitfaden
       title: LUNG-MV Fachliche Hinweise zur Erfassung und Bewertung von Arten
@@ -116,6 +129,39 @@ categories:
         Aktuelle Fassung von LUNG-Portal beziehen. Häufig in
         Artenschutz-Gutachten zitiert; Methodik-Standards für M-V.
       tags: [naturschutz, mv, lung, artenschutz]
+
+    - id: LUNG-MV-Eingriffsregelung-Hinweise
+      title: LUNG-MV Hinweise zur Eingriffsregelung in Mecklenburg-Vorpommern
+      publisher: LUNG M-V
+      source_url: https://www.lung.mv-regierung.de/
+      canonical_path: leitfaeden/LUNG-MV-Eingriffsregelung-Hinweise.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        MV-spezifische Auslegung der Eingriffsregelung. Backbone für
+        NatSchAG-MV §3+§6-Anwendung. research-references verifies
+        existence/canonical title on first fetch.
+      tags: [naturschutz, mv, lung, eingriffsregelung]
+
+    - id: LUNG-MV-Arten-besondere-Verantwortung
+      title: LUNG-MV Liste der Arten mit besonderer Verantwortung in M-V
+      publisher: LUNG M-V
+      source_url: https://www.lung.mv-regierung.de/
+      canonical_path: leitfaeden/LUNG-MV-Arten-besondere-Verantwortung.pdf
+      fetch_method: manual
+      ingest: true
+      chunking_strategy: per-section
+      chunk_metadata_extractor: pdf-headings
+      status: active
+      notes: |
+        MV-Artenliste mit besonderer Verantwortung des Landes — Zusatz
+        zu BArtSchV-Anlage 1, MV-relevante Arten. Häufig in
+        Artenschutzgutachten zitiert. research-references verifies
+        existence on first fetch.
+      tags: [naturschutz, mv, lung, arten-verantwortung]
 
     - id: Verfahrenserlass-Bauleitplanung-MV
       title: Erlass zur Bauleitplanung Mecklenburg-Vorpommern
@@ -149,5 +195,110 @@ categories:
         Brandschutz-Standards (DIN VDE 0100, etc.) from federal-core.
       tags: [brandschutz, pv-freiflache, mv]
 
-  urteile: []
-    # M-V-specific OVG rulings can be added here as needed.
+  urteile:
+    - id: OVG-MV-3-M-63-06-Wind-BPlan
+      title: "OVG Greifswald, Beschluss vom 19.10.2006 — 3 M 63/06 (Bebauungsplan Windenergie)"
+      short_title: 3 M 63/06
+      court: OVG-MV
+      docket: 3 M 63/06
+      decision_date: 2006-10-19
+      jurisdiction: mv
+      source_url: https://www.landesrecht-mv.de/
+      canonical_path: urteile/OVG-MV-3-M-63-06.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: landesrecht-mv
+      status: active
+      notes: |
+        Frühe OVG-MV-Entscheidung zu Wind-B-Plan. Häufig zitiert in
+        späterer Rechtsprechungs-Synopse. research-references resolves
+        canonical source URL on first fetch.
+      tags: [wind, bauleitplanung, ovg-mv]
+
+    - id: OVG-MV-Koerkwitz-Wind-2018
+      title: "OVG Greifswald, 2018 — Körkwitz Windkraftanlage (Betrieb rechtswidrig)"
+      short_title: Körkwitz
+      court: OVG-MV
+      docket: null
+      decision_date: null
+      jurisdiction: mv
+      source_url: https://mecklenburg-vorpommern.nabu.de/umwelt-und-ressourcen/energie/erneuerbare-energien-energiewende/windkraft-und-artenschutz/24516.html
+      canonical_path: urteile/OVG-MV-Koerkwitz-Wind-2018.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: landesrecht-mv
+      status: active
+      notes: |
+        Naturschutzfachliche Mängel führten zu Rechtswidrigkeit der
+        WEA-Genehmigung Körkwitz. research-references resolves
+        exact docket + decision date + canonical OVG source URL on
+        first fetch.
+      tags: [wind, naturschutz, ovg-mv, koerkwitz]
+
+    - id: OVG-MV-Wind-Denkmalschutz-2023
+      title: "OVG Greifswald, 2023 — Windenergie vs. Denkmalschutz (§ 2 EEG Vorrang)"
+      short_title: Wind vs Denkmalschutz
+      court: OVG-MV
+      docket: null
+      decision_date: null
+      jurisdiction: mv
+      source_url: https://www.prometheus-recht.de/ovg-greifswald-windenergie-gewinnt-gegen-denkmalschutz/
+      canonical_path: urteile/OVG-MV-Wind-Denkmalschutz-2023.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: landesrecht-mv
+      status: active
+      notes: |
+        § 2 EEG (Vorrang Erneuerbare) als Kernargument im Konflikt
+        mit Denkmalschutzbelangen. Übertragbar auf
+        Naturschutz-Konflikte. research-references resolves exact
+        docket on first fetch.
+      tags: [wind, denkmalschutz, paragraph-2-eeg, ovg-mv]
+
+    - id: OVG-MV-Wind-Untaetigkeit-2023
+      title: "OVG Greifswald, 2023 — Untätigkeitsklage Wind (StALU Westmecklenburg)"
+      short_title: Untätigkeit Wind
+      court: OVG-MV
+      docket: null
+      decision_date: null
+      jurisdiction: mv
+      source_url: https://www.wind-energie.de/presse/pressemitteilungen/detail/urteil-des-ovg-greifswald-behoerden-muessen-entscheiden-und-vorrang-der-erneuerbaren-aus-2-eeg-berue/
+      canonical_path: urteile/OVG-MV-Wind-Untaetigkeit-2023.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: landesrecht-mv
+      status: active
+      notes: |
+        StALU Westmecklenburg-Untätigkeit; Vorrang der Erneuerbaren
+        aus § 2 EEG durchzusetzen. research-references resolves
+        exact docket + date on first fetch.
+      tags: [wind, untaetigkeit, ovg-mv, paragraph-2-eeg]
+
+    - id: OVG-MV-Wind-Seeadler-2024-06
+      title: "OVG Greifswald, 06/2024 — Seeadler / § 2 EEG Artenschutz nachträgliche Anordnung"
+      short_title: Seeadler
+      court: OVG-MV
+      docket: null
+      decision_date: 2024-06-01
+      jurisdiction: mv
+      source_url: https://www.fachagentur-wind-solar.de/fileadmin/Veroeffentlichungen/Wind/Rundbrief_Recht/FA_Wind_und_Solar_Rundbrief_Windenergie_und_Recht_3.2024.pdf
+      canonical_path: urteile/OVG-MV-Wind-Seeadler-2024-06.txt
+      fetch_method: web-html
+      ingest: true
+      chunking_strategy: per-randnummer
+      chunk_metadata_extractor: landesrecht-mv
+      status: active
+      notes: |
+        2024er OVG-MV-Entscheidung — Seeadler-Schutz / § 2 EEG /
+        nachträgliche Anordnung von Artenschutzmaßnahmen. Zentral
+        für Repowering-Genehmigungen mit Seeadler-Sichtungen.
+        research-references resolves exact docket + URL on first
+        fetch via FA-Wind Rundbrief.
+      tags: [wind, naturschutz, seeadler, ovg-mv, 2024, paragraph-2-eeg]
+
+  beispiele: []
+  methodik: []

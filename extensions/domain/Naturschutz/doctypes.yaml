@@ -1,0 +1,82 @@
+version: 1
+scope: domain
+scope_key: Naturschutz
+last_updated: 2026-04-28
+
+# Naturschutz domain doctypes — Artenschutz, FFH, Eingriffsregelung
+# Gutachten-Typen. Loaded when an office's scope.domains contains
+# "Naturschutz". Many Naturschutz Gutachten are produced by an
+# external partner (Hendrik Sönnichsen / deroekologe) — but the
+# doctype registry is independent of who produces it.
+
+doctypes:
+  artenschutzgutachten:
+    label: "Artenschutzgutachten / spezielle artenschutzrechtliche Prüfung"
+    description: >
+      Species protection assessment. May be drafted independently or
+      as part of a B-Plan package. Covers Bestandsaufnahme,
+      §44 BNatSchG-Tatbestände, §45 Abs.7 Ausnahmen, CEF-Maßnahmen.
+    style_ref: TBD
+    master_file_pattern: TBD
+    project_subfolder_default: Externe Gutachten/Artenschutz
+    status: deferred
+
+  saP-vorpruefung:
+    label: "spezielle artenschutzrechtliche Prüfung — Vorprüfung"
+    description: >
+      Vorprüfung whether a vollständige saP is required. Common
+      Erstcheck before scoping a full Artenschutzgutachten.
+    project_subfolder_default: Externe Gutachten/Artenschutz/saP-VP
+    status: deferred
+
+  saP-hauptpruefung:
+    label: "spezielle artenschutzrechtliche Prüfung — Hauptprüfung"
+    description: >
+      Vollständige saP nach BNatSchG §44, Anlage 1 BArtSchV. Strikte
+      Tatbestand-für-Tatbestand-Prüfung mit Maßnahmen-Konzept (CEF,
+      Vermeidung, Schadensbegrenzung).
+    project_subfolder_default: Externe Gutachten/Artenschutz/saP-HP
+    status: deferred
+
+  ffh-vorpruefung:
+    label: "FFH-Vorprüfung (Erheblichkeitsabschätzung)"
+    description: >
+      §34 BNatSchG Erheblichkeitsabschätzung für Vorhaben in / nahe
+      FFH-Gebieten. Vorgeschaltet einer ggf. erforderlichen
+      FFH-Verträglichkeitsprüfung.
+    project_subfolder_default: Externe Gutachten/FFH-VP
+    status: deferred
+
+  ffh-vertraeglichkeitspruefung:
+    label: "FFH-Verträglichkeitsprüfung (Hauptprüfung)"
+    description: >
+      Vollständige FFH-VP wenn Vorprüfung erhebliche Beeinträchtigung
+      nicht ausschließen kann. Ausnahmeregelung nach §34 Abs.3-5.
+    project_subfolder_default: Externe Gutachten/FFH-VP
+    status: deferred
+
+  lbp:
+    label: "Landschaftspflegerischer Begleitplan"
+    description: >
+      Begleitplan zur Eingriffsregelung — Bilanzierung Eingriff vs.
+      Ausgleich/Ersatz nach §15 BNatSchG. Standard-Anlage zu
+      größeren Bauvorhaben.
+    project_subfolder_default: Externe Gutachten/LBP
+    status: deferred
+
+  artenschutzfachbeitrag:
+    label: "Artenschutzfachbeitrag (AFB)"
+    description: >
+      Schlankere Variante eines Artenschutzgutachtens — fachlicher
+      Beitrag zu einer übergeordneten Genehmigung statt
+      eigenständiges Gutachten.
+    project_subfolder_default: Externe Gutachten/Artenschutz/AFB
+    status: stub
+
+  kartierbericht:
+    label: "Kartierbericht"
+    description: >
+      Bericht über Geländekartierungen (Avifauna, Chiroptera, Flora,
+      Reptilien, etc.). Datengrundlage für nachgeordnete Gutachten.
+    project_subfolder_default: Externe Gutachten/Kartierungen
+    status: stub
