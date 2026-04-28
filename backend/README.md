@@ -40,5 +40,10 @@ the same stack — none of which apply now).
 
 ## Status
 
-Skeleton only. Implementation pending in v0.2.x. See `<repo>/ROADMAP.md`
-for sequencing.
+v0.1 scaffolding in place at `backend/mcp-server/`. Tool surface
+stubbed but not implemented. Server can start and respond to MCP
+`list_tools` (currently returns empty list).
+
+Run from `backend/mcp-server/` with `uv sync && uv run pbs-mcp`.
+
+See `backend/mcp-server/README.md` for setup and configuration.
