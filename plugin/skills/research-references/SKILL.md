@@ -1,15 +1,15 @@
 ---
 name: research-references
-description: This skill should be used to fetch, update, or check freshness of legal references (gesetze, leitfäden, urteile) tracked in references-manifest.yaml. Triggered by user phrases like "update references", "neue Fassung holen", "BauGB current?", "research new law", "are our laws current?", "refresh references", "gesetze aktualisieren", "fetch BVerwG ruling", or scheduled refresh checks.
-version: 0.1.0
+description: This skill should be used to fetch, update, or check freshness of legal references (gesetze, leitfäden, urteile) tracked across the office's layered references manifests. Triggered by user phrases like "update references", "neue Fassung holen", "BauGB current?", "research new law", "are our laws current?", "refresh references", "gesetze aktualisieren", "fetch BVerwG ruling", or scheduled refresh checks.
+version: 0.2.0
 license: MIT
 ---
 
 # research-references
 
 Specialist skill for maintaining the reference corpus — fetching,
-diffing, and updating legal texts and guidance documents in
-the office's `paths.references_root`.
+diffing, and updating legal texts and guidance documents across the
+office's layered manifests (universal + per-domain + per-state).
 
 ## Load this now
 
@@ -20,43 +20,64 @@ workflow.
 ## Source-of-truth principle
 
 The reference corpus at the office's `_ai-references/` directory is
-the **single, authoritative source of truth** for every entry in the
-manifest. One canonical file per manifest ID, written by this skill,
-fetched fresh from the publisher.
+the **single, authoritative source of truth** for every entry across
+every selected manifest layer. One canonical file per manifest ID,
+written by this skill, fetched fresh from the publisher.
 
 Implications:
 
-- Every entry in the manifest goes through a fresh fetch on first run
-  and on every refresh — no "use existing copy if present" branch.
+- Every entry goes through a fresh fetch on first run and on every
+  refresh — no "use existing copy if present" branch.
 - The skill does not read references from anywhere other than its own
   output directory. If a reference is needed but the corpus doesn't
   have it, the answer is to fetch it, never to look elsewhere.
 - All downstream consumers (`search_corpus`, `read_corpus_file`,
   citations in drafts) resolve references through this corpus only.
 
+## Manifest sources (layered)
+
+The skill walks the union of manifests selected by the office's
+`scope` configuration — programmatically obtained from
+`office_config.load().all_references_manifests()`. The list returns
+in load order:
+
+1. `extensions/universal/references-manifest.yaml` (every bureau)
+2. For each domain in `scope.domains`:
+   `extensions/domain/<X>/references-manifest.yaml`
+3. For each state in `scope.states`:
+   `extensions/state/<X>/references-manifest.yaml`
+
+Files not present on disk (placeholder dirs, unselected scope) are
+silently skipped. The skill never reaches outside this set.
+
 ## When invoked
 
 Three modes:
 
 - **Full refresh** — "update references", "refresh all": walks the
-  full manifest.
+  full union manifest set.
 - **Targeted refresh** — "is BauGB current?", "fetch the new BVerwG
-  ruling", "check LUNG leitfaden": single-entry or filtered subset.
+  ruling": single-entry or filtered subset across all manifests.
 - **New-entry registration** — "add this leitfaden", "register a new
-  ruling": user provides URL + metadata, skill appends a manifest
-  entry and fetches.
+  ruling": user provides URL + metadata + target layer
+  (universal/domain/state). Skill appends to the matching manifest
+  and fetches.
 
 ## Behavior (full refresh)
 
-1. **Read manifest** at `<repo>/references-manifest.yaml`.
+1. **Resolve manifest set** via
+   `office_config.load().all_references_manifests()`. Report which
+   manifests are in scope.
 
-2. **For each entry, fetch + diff**:
+2. **For each entry in each manifest, fetch + diff**:
    - Fetch from `source_url` via `fetch_method`:
      - `web-text` — HTML scrape, plain text via readability extraction
      - `web-html` — preserve structure (for laws with §-anchors)
      - `web-pdf` — download PDF, extract text via pymupdf4llm
      - `git-mirror` — clone/pull from a known mirror repo
-     - `manual` — skip; user uploads directly
+     - `manual` — Claude browses the publisher site to discover the
+       canonical PDF URL, then downloads (used for KNE/LUNG/etc.
+       leitfäden where direct PDF URLs aren't stable)
    - Compute SHA-256 of fetched content.
    - Compare against `checksum_sha256` in manifest.
 
@@ -69,25 +90,21 @@ Three modes:
      `<canonical_dir>/<id>/archive/<old-fetch-date>.<ext>`.
    - **Write new content** to `canonical_path`.
    - **Update manifest entry**: `last_fetched`, `checksum_sha256`,
-     `last_modified_at_source` (parsed from content),
-     `current_amendment_form` (parsed from content).
-   - **Surface diff to user**: meaningful summary (e.g.
-     "BauGB §13b: text changed; old version archived. Specific changes:
-     <bullet diff>."). Use unified diff for short changes; summary for
-     long.
+     `last_modified_at_source`, `current_amendment_form` (parsed
+     from content).
+   - **Surface diff to user**: meaningful summary.
    - **Wait for user approval** before re-ingesting.
 
 5. **On user approval, re-ingest into LanceDB**:
    - Call `ingest_paths(paths=[changed_path], force=true)` —
-     deletes old chunks for this path, re-chunks + re-embeds with
-     fresh metadata.
+     deletes old chunks for this path, re-chunks + re-embeds.
 
 6. **Cross-reference dependents** (cross-cutting concern handler):
-   for each changed entry, find both bausteine and cross-cutting
-   memory docs that depend on the reference:
-   - **Bausteine**: scan `<repo>/memory/*/<name>.md` frontmatter for
-     `references[]` matching `law` / `paragraph` / `ruling` /
-     `leitfaden`. Each match → set `status: flagged`,
+   for each changed entry, find both bausteine and memory docs
+   that depend on the reference:
+   - **Bausteine**: scan `<repo>/memory/bausteine/**/<name>.md`
+     frontmatter for `references[]` matching `law` / `paragraph` /
+     `ruling` / `leitfaden`. Each match → set `status: flagged`,
      `flagged_reason: "reference updated <date>"`.
    - **Memory docs**: scan `<repo>/memory/**/*.md` frontmatter for
      `references_used[]` matching the same keys. Each match → append
@@ -99,26 +116,35 @@ Three modes:
 
 7. **Append to changelog**: write summary entry to
    `<references_root>/changelog.md`. Include count of entries
-   checked, count changed, count errored.
+   checked per manifest, count changed, count errored.
 
 ## Behavior (targeted refresh)
 
-Same as full refresh but scoped to filtered entries (single ID, or
-matching tag, or matching category).
+Same as full refresh but scoped to filtered entries (single ID across
+manifests, matching tag, matching category, or matching layer/scope-
+key like "all entries from domain/Wind").
 
 ## Behavior (new-entry registration)
 
 1. Solicit metadata from user: ID, title, category, source_url,
    fetch_method.
-2. Determine `canonical_path` per category convention.
-3. Append entry to `references-manifest.yaml`.
-4. Run targeted refresh on the new entry to do initial fetch.
+2. Determine target manifest layer:
+   - State-specific law → `state/<X>/references-manifest.yaml`
+   - Domain-specific Leitfaden → `domain/<X>/references-manifest.yaml`
+   - Universal federal law → `universal/references-manifest.yaml`
+3. Determine `canonical_path` per category convention.
+4. Append entry to the chosen manifest. If the target manifest
+   doesn't yet exist (e.g. user wants to add the first entry to
+   `extensions/state/SH/`), hand off to `author-manifest` to scaffold
+   it first.
+5. Run targeted refresh on the new entry to do initial fetch.
 
 ## Output
 
 User sees:
 
-- Summary line: "X entries checked; Y changed; Z errored."
+- Per manifest: "X entries checked; Y changed; Z errored."
+- Across union: total counts.
 - Per change: 1-line description + path of new + path of archived old.
 - Per error: 1-line description + suggested action ("URL dead — check
   source").
@@ -137,16 +163,18 @@ User sees:
 - **Manifest entry missing required fields**: fail loud, ask user to
   fix manifest.
 - **Fetched content suspicious** (e.g. captcha page returned, login
-  form): detect via heuristics (very short content for laws,
-  presence of "captcha"/"login" tokens). Treat as fetch error.
+  form): detect via heuristics. Treat as fetch error.
+- **Same entry ID in multiple manifest layers**: not allowed.
+  Universal-core and state-extension should never have the same ID.
+  Surface as a config error.
 
-## Tools used (when MCP backend lands)
+## Tools used
 
 - `WebFetch` (built-in) for source URLs.
-- `ingest_paths(paths, force?)` — re-ingestion.
+- `office_config.load().all_references_manifests()` to enumerate.
+- `ingest_paths(paths, force?)` (MCP tool) — re-ingestion.
 - `find_bausteine_by_reference(law, paragraph)` — cross-reference
   dependents.
-
-Until backend lands: filesystem `Write` for canonical_path updates +
-`WebFetch` + `Edit` on manifest. Re-ingestion deferred (graceful fail
-with note "skipped re-ingest; backend not online").
+- Filesystem `Read` / `Edit` on each manifest YAML.
+- Hands off to `author-manifest` if an entry needs to be added to a
+  manifest that doesn't yet exist.
