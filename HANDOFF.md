@@ -104,55 +104,61 @@ GitHub: <https://github.com/Gunther-Schulz/pbs-bureau> (private)
   13. **promote-to-skill** (light) — memory→skill graduation
   14. **validate-bausteine** (light) — freshness sweep
 
-### ⏳ Designed, decided, NOT yet built
+### ⏳ Designed + built, NOT yet runtime-verified
 
-- **Backend implementation** — Python source for the MCP tools. The
-  scaffold exists (server runs, list_tools returns empty); each tool
-  needs implementation:
-  - Embedder wrapper (`embedder.py`) — sentence-transformers + bge-m3
-    + bge-reranker-v2-m3, GPU when 5090 available
-  - LanceDB wrapper (`db.py`) — table schema per
-    `vector-metadata-schema.md`, hybrid search + reranker pipeline
-  - Tools (`tools/`):
-    - `corpus.py` — search_corpus, read_corpus_file
-    - `ingest.py` — ingest_paths, ingest_project_inputs, search_inputs
-    - `memory.py` — list_bausteine, get_baustein, save_baustein,
-      flag_baustein, archive_baustein, find_bausteine_by_reference
-    - `projects.py` — list_projects, bind_project, unbind_project,
-      survey_project (lightweight; full survey is in skill)
-    - `build.py` — compile_latex (latexmk wrapper),
-      scaffold_project (template tree copy + git init for Overleaf)
-  - Per-source chunkers per `chunking-strategy.md`
-  - Schema register for tool I/O Pydantic models
-  - Update `server.py` to import tools and wire them into
-    `list_tools()` + per-tool handlers
+- **Backend implementation** — committed (commit 27ca270).
+  3129 lines across 21 files: embedder.py, db.py, schemas.py,
+  chunkers/* (10 chunker types), tools/* (corpus, ingest, memory,
+  projects, build), server.py wiring all tools.
+  - **Smoke test pending** — uv sync was still downloading torch +
+    CUDA wheels at session end. Run
+    `cd backend/mcp-server && uv sync && uv run python -c "from
+    pbs_mcp.server import TOOL_HANDLERS; print(list(TOOL_HANDLERS))"`
+    to verify imports.
+  - Note: db.py uses LanceDB native hybrid search (vector + Tantivy
+    BM25 via FTS) + reranker. FTS index auto-created on table
+    creation; refreshed after bulk ingest.
 
-- **`references-manifest.yaml`** at repo root — populate Tier 1
-  entries (~22 docs):
-  - **Federal**: BauGB, BauNVO, BNatSchG, EEG, BImSchG, UVPG, PlanZV, ROG
-  - **EU**: FFH-RL (92/43/EWG), Vogelschutz-RL (2009/147/EG)
-  - **M-V**: LPlG-MV, LBauO-MV, NatSchAG-MV, KV-MV
-  - **Leitfäden**: KNE-PV-Naturschutz (have), KNE-Anlagengestaltung
-    (have), KNE-Standortsteuerung (have), KNE-Landschaftsbild (have),
-    KNE-Folgenutzung-Acker-Gruenland (have), LUNG-MV-
-    Artenschutzleitfaden (need), Verfahrenserlass-Bauleitplanung-MV
-    (need), Brandschutzkonzept-Leitfaden-PV-MV (need; verify exists)
-  - **Urteile**: BVerwG-9-A-3-06, BVerwG-9-A-14-07, BVerwG-9-A-39-07
-    (Freiberg), BVerwG-9-A-22-11 (§45 Nr.5), EuGH-C-127-02
-    (Waddenzee), EuGH-C-258-11 (Sweetman)
-  - **Methodik (cite-only)**: Suedbeck-2005-Brutvoegel,
-    Dietz-Kiefer-2014-Fledermaeuse
+- **`references-manifest.yaml`** — committed (commit 6d83765).
+  30 entries total (28 ingestable + 2 cite-only):
+  - 8 federal laws (BauGB, BauNVO, BNatSchG, EEG, BImSchG, UVPG,
+    PlanZV, ROG)
+  - 2 EU directives (FFH-RL, Vogelschutz-RL)
+  - 4 M-V laws (LPlG-MV, LBauO-MV, NatSchAG-MV, KV-MV)
+  - 8 leitfäden (5 KNE locally available; LUNG-MV-Artenschutz,
+    Verfahrenserlass-Bauleitplanung-MV, Brandschutzkonzept-PV-MV
+    flagged NEEDS FETCH)
+  - 6 urteile (BVerwG 9 A series + 2 EuGH)
+  - 2 methodik cite-only (Südbeck, Dietz/Kiefer)
+  - last_fetched / checksum / current_amendment_form fields are
+    null; populated by research-references on first run.
 
-- **Reference fetch + initial ingest** — once backend tools online:
-  1. Run `research-references` skill to fetch all manifest entries
-     into `<hidrive>/_ai-references/`.
+### ⏳ Designed, NOT yet built
+
+- **Backend smoke test + first imports** — see above; uv sync needs to
+  complete first. Estimated 5-10 minutes once sync finishes.
+
+- **`.mcp.json` registration** in `plugin/` — to make the backend
+  available as MCP tools to Claude Code. One-line registration:
+  `{"mcpServers": {"pbs-mcp": {"command": "uv", "args": ["run",
+  "--directory", "<repo>/backend/mcp-server", "pbs-mcp"]}}}`.
+
+- **Reference fetch + initial ingest** — once backend smoke-tests
+  green and `.mcp.json` is registered:
+  1. Run `research-references` skill (now backed by real tools) to
+     fetch the 30 manifest entries into
+     `<hidrive>/_ai-references/`. The 5 KNE entries already exist
+     in `Literatur/` and just need copying.
   2. Run `ingest_paths` to embed references + the 4 local
      Planungsbüro-Schulz repos + the 16 hidrive project folders into
-     LanceDB.
+     LanceDB. Initial ingest will be slow (~30-60min for ~22 docs +
+     existing corpus) due to model load + embedding.
 
 - **Office state seeding** — `<hidrive>/_ai-office-state/`:
   - `projects-index.md` — registry of 16 hidrive projects (name,
-    path, last-modified, lifecycle=unknown for now)
+    path, last-modified, lifecycle=unknown for now). The
+    `bind_project` tool creates entries on first bind; bulk
+    seeding script optional.
   - `pending-actions.md` — empty template
   - `recent-correspondence.md` — empty template
 
@@ -222,49 +228,66 @@ items off the list as projects raise them.
 
 ## What the next session should do FIRST
 
-**Pick up at backend implementation.**
+**Pick up at backend smoke test + .mcp.json registration.**
 
 1. Read this file (HANDOFF.md), `ARCHITECTURE.md`, and
    `plugin/skills/orchestrator/SKILL.md` for context.
-2. `cd backend/mcp-server` and verify the scaffold:
-   - `uv sync` (re-resolve deps if needed)
-   - `uv run python -c "from pbs_mcp.server import server; print('ok')"`
-3. **Implement embedder + db**:
-   - `src/pbs_mcp/embedder.py` — sentence-transformers wrapper
-     (model: BAAI/bge-m3, with GPU detection); reranker (model:
-     BAAI/bge-reranker-v2-m3).
-   - `src/pbs_mcp/db.py` — LanceDB connection at
-     `config.lancedb_path()`, schema per
-     `backend/mcp-server/docs/vector-metadata-schema.md`. Hybrid
-     search + reranker pipeline per the same doc's flow section.
-4. **Implement tools** in `src/pbs_mcp/tools/`:
-   - Per the surface declared in
-     `plugin/skills/orchestrator/SKILL.md` "MCP tool surface" and
-     individual skill SKILL.md files.
-   - Pydantic schemas for tool I/O in `src/pbs_mcp/schemas.py`.
-5. **Wire tools into server**: update
-   `src/pbs_mcp/server.py` to register tools (decorate with
-   `@server.call_tool`) and return them from `list_tools()`.
-6. **Per-source chunkers**: implement `src/pbs_mcp/chunkers/` per
-   `backend/mcp-server/docs/chunking-strategy.md`.
-7. Run smoke test: server starts; `list_tools()` returns full
-   surface; manual MCP request via stdio test gets a real response.
-8. **Commit + push**.
-9. **Update `.mcp.json`** in `plugin/` to register the local
-   server. Test via `/reload-plugins` in Claude Code.
+2. **Verify uv sync completed**:
+   ```bash
+   cd backend/mcp-server
+   ls .venv/lib/python3.13/site-packages/ | grep -E "^(torch|sentence_transformers)$"
+   ```
+   If empty, run `uv sync` again (5-10min for torch + CUDA wheels).
+3. **Smoke test imports**:
+   ```bash
+   uv run python -c "from pbs_mcp.server import TOOL_HANDLERS; print(list(TOOL_HANDLERS))"
+   uv run python -c "from pbs_mcp.embedder import device_info; print(device_info())"
+   ```
+   Should print 17 tool names + device info (cuda or cpu). First
+   embedder load downloads bge-m3 (~2.3GB) — happens lazily on first
+   use, not at import.
+4. **Register the MCP server** by creating `plugin/.mcp.json`:
+   ```json
+   {
+     "mcpServers": {
+       "pbs-mcp": {
+         "command": "uv",
+         "args": ["run", "--directory",
+                  "${CLAUDE_PLUGIN_ROOT}/../backend/mcp-server",
+                  "pbs-mcp"]
+       }
+     }
+   }
+   ```
+   `${CLAUDE_PLUGIN_ROOT}` resolves to `<repo>/plugin/` so `..`
+   reaches the repo root. Verify path resolution works.
+5. **Reload plugins** in Claude Code (`/reload-plugins`); verify
+   tools appear via the orchestrator's tool listing.
+6. **Run research-references** to fetch Tier 1 entries into
+   `<hidrive>/_ai-references/`. The 5 KNE entries are already in
+   `Literatur/` — copy rather than re-fetch.
+7. **Ingest references** into LanceDB:
+   ```python
+   ingest_paths(
+       paths=[<list of fetched files>],
+       source_type="reference",
+       extra_metadata={"reference_id": <id>, "reference_category": <cat>},
+   )
+   ```
+   First-time embed is slow (model load); subsequent calls reuse
+   the loaded model.
+8. **Ingest corpus**:
+   - 4 local repos in `~/dev/Planungsbüro-Schulz/`
+   - 16 hidrive projects in `<hidrive>/Projekte/<YY-NN ...>/`
+9. **Test end-to-end**: bind 23-12 Vorbeck or similar; run a sample
+   `search_corpus` query; verify hybrid + reranker pipeline returns
+   sensible hits.
+10. After backend live, tackle:
+    - Office state seeding (`<hidrive>/_ai-office-state/`)
+    - Office identity config (`memory/global/identity.md`)
 
-After backend is working, then:
-
-- `references-manifest.yaml` population
-- `research-references` actually fetches Tier 1 docs
-- Ingest references + corpus + bausteine into LanceDB
-- Office state seeding (`_ai-office-state/`)
-- Office identity config (`memory/global/identity.md`)
-
-THEN the system can be tested end-to-end on a real project (e.g.
-binding the 23-12 Vorbeck project, doing a phase A/B/C cycle).
-
-After that, "Not designed yet" backlog items as they're needed.
+After that, "Not designed yet" backlog items in `ROADMAP.md` as they
+become needed.
 
 ---
 
