@@ -192,6 +192,66 @@ machine state, so the human review step has something to look at.
 - Storage: renders alongside source in snapshots/, or a separate
   renders/ tree?
 
+### Web UI for collaborative review (annotations + comments)
+
+**Why**: Renders from the previous item produce review-ready PDFs,
+but distribution + collaborative review still happens out-of-band
+(email attachments, file shares). For colleagues, partners (Hendrik),
+and clients to comment / annotate / discuss in-place — and for those
+annotations to come back into the workflow — we need a web UI.
+Self-hosted in Coolify (PBS's existing PaaS).
+
+**Sketch (topic-level)**:
+- Web app receives uploads from the backend (PDFs + metadata
+  context: project, doctype, version, what we want feedback on).
+- Recipients get a share link (auth via password / signed link /
+  account, TBD).
+- Reviewers annotate (highlight, draw, comment per page/region),
+  thread comments, mark sections as approved/rejected.
+- Annotations + comments are queryable back via MCP (new tool
+  `fetch_review_feedback(project, doctype, version)`) so they feed
+  the orchestrator's record-feedback / Abwägung-drafting flows.
+- Probably a "review-platform" integration adapter class (parallel
+  to email/calendar/scanner/etc.) so the platform itself can be
+  swapped per office preference.
+
+**Research candidates** (open-source to evaluate before building):
+- **Hypothesis** (web annotation, open source, well-established) —
+  paragraph + range annotations on web pages / PDFs; has API for
+  read-back. Mostly aimed at academic web annotation.
+- **Cryptpad** (encrypted collaboration suite, French gov-funded) —
+  has document review capabilities; self-hostable.
+- **Nextcloud + Collabora Online** — generic collaborative office
+  suite; Collabora supports PDF review; widely deployed.
+- **Stirling-PDF** — open-source PDF tools; has annotation support;
+  self-hostable.
+- **HedgeDoc / Outline** — collaborative markdown; not PDF-focused
+  but useful if review shifts upstream from PDF.
+- **PDF.js + custom annotation backend** — Mozilla's PDF.js with
+  annotation layer + a small server (FastAPI?) storing annotations.
+  Custom-built; most flexible but most work.
+- **Onlyoffice Document Server** — full collaborative office suite;
+  PDF review; Coolify-friendly Docker deployment.
+- **PaperHive / Annotator.js** — older annotation-focused projects;
+  check current state.
+
+Goal: prefer a deployable existing tool with a usable API over
+custom build. Custom annotation server is last resort.
+
+**Open questions**:
+- Auth model for external reviewers (UNB officials, client
+  contacts): passwords, signed links, federation?
+- Annotation portability: if we leave the chosen tool later, can
+  annotations export to a standard format (W3C Web Annotations)?
+- Privacy: annotations on Begründung drafts contain pre-decisional
+  content; storage location + retention need legal-review.
+- Notification flow: how do reviewers learn there's something to
+  review? Email integration (already on roadmap) is the natural
+  hook — invite mail with review link.
+- Round-trip: when reviewers comment, does the orchestrator surface
+  it on next session-open, or wait for explicit `fetch-review-
+  feedback` call?
+
 ### Project management + invoicing
 
 **Why**: Project work today has no time/billable tracking, no
