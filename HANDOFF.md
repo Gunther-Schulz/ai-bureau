@@ -103,43 +103,38 @@ Three meta-rules in ARCHITECTURE.md, all enforced:
   OVG-MV urteile (3 M 63/06, Körkwitz, Wind vs Denkmalschutz,
   Untätigkeit, Seeadler 2024-06).
 
-### ⏳ Pending — Phase 7 (PBS deployment + smoke test)
+### ✅ Phase 7 — PBS deployment + smoke test
 
-Phase 7 is the only thing not done in this session. Steps:
+`~/.config/pbs-bureau/office.yaml` rewritten to schema v2:
+- `scope.domains: [PV-FFA, Wind, Naturschutz]`, `scope.states: [MV]`
+- `extensions.references_manifests` — full layered map pointing
+  at in-repo manifests (universal + 3 domains + MV state)
+- `extensions.doctypes_manifests` — universal + Naturschutz
+- `integrations.{email,calendar,scanner,phone,accounting}.adapter: none`
+- `schema_version: 2`
 
-1. **Update PBS office-config** at `~/.config/pbs-bureau/office.yaml`
-   to schema v2:
-   - Add `scope: {domains: [PV-FFA, Wind, Naturschutz], states: [MV]}`
-   - Replace `extensions.references_manifests: {MV: ...}` with the
-     full layered map pointing at `<repo>/extensions/`
-   - Add `extensions.doctypes_manifests` parallel structure
-   - Add `integrations: {email: {adapter: none, ...}, ...}`
-   - Bump `schema_version: 1` → `2`
-   The migration runs on load, but writing it back to disk
-   formalizes the new shape.
+Smoke test results (all green):
+- Schema v2 loads cleanly
+- 5 reference manifests in scope, 2 doctype manifests in scope
+- Reference entry total: **57 entries** discoverable via
+  `cfg.all_references_manifests()`
+- Email routing: `hs@deroekologe.de` → `hendrik` partner ✓;
+  unrelated addresses return None ✓
+- All 5 integration adapters loadable; `probe()` returns ok ✓
 
-2. **Smoke test the full chain**:
-   ```python
-   cfg = office_config.load()
-   assert cfg.schema_version == 2
-   assert cfg.scope.domains == ["PV-FFA", "Wind", "Naturschutz"]
-   assert cfg.scope.states == ["MV"]
-   assert len(cfg.all_references_manifests()) == 5  # universal + 3 domain + 1 state
-   assert len(cfg.all_doctypes_manifests()) >= 2    # universal + Naturschutz
-   for cls in ("email", "calendar", "scanner", "phone", "accounting"):
-       a = integrations.load_adapter(cls)
-       assert a.probe()["ok"]
-   ```
+### ⏳ Pending — first-run actions for next session
 
-3. **`/reload-plugins`** so Claude Code picks up updated SKILL.md files
-   and the new `author-manifest` skill.
+1. **`/reload-plugins`** so Claude Code picks up the updated SKILL.md
+   files (setup-office v0.2, research-references v0.2) and the new
+   `author-manifest` skill.
 
-4. **Run `research-references` first-time fetch** — now feasible
-   with all manifests in place. ~50 entries across federal + 3
+2. **Run `research-references` first-time fetch** — now feasible
+   with all manifests in place. ~57 entries across universal + 3
    domains + MV. RTX 5090 picks up CUDA automatically; bge-m3 +
    reranker download (~3GB) on first ingest call.
 
-5. **Sample search** to verify hybrid + reranker pipeline.
+3. **Sample search** to verify hybrid + reranker pipeline returns
+   sensible hits.
 
 After that:
 - Bind first project (any existing hidrive project — orchestrator
@@ -150,7 +145,10 @@ After that:
 
 ### ❌ Deferred (not blocking)
 
-See ROADMAP.md for the updated list. Highlights:
+See ROADMAP.md for the full list. Highlights, including 5 new
+v1.x-v2 design items added late in the session:
+
+**Carried from before:**
 - Real email/calendar/scanner/phone/accounting adapters
   (`thunderbird-maildir.py` etc.) — protocols + none-adapters in
   place; concrete adapters land per demand.
@@ -160,6 +158,36 @@ See ROADMAP.md for the updated list. Highlights:
   (Artenschutz verfahren reference is the natural trigger).
 - Reference versioning, internal cross-refs, subagents, hooks —
   v2 work.
+
+**New design items added this session** (topic-only, design TBD):
+- **Audit trail** — unified change/decision/version tracking across
+  artifacts, references, manifests, configs, integrations, bausteine,
+  plans, correspondence. Currently scattered (decisions.md,
+  snapshots/, changelog.md, git history) without coherent design.
+- **Human-readable artifact generation at checkpoints** — every
+  meaningful checkpoint (send-gate, phase transition, draft-invoice,
+  baustein-promotion, config-change) produces a PDF/HTML alongside
+  machine state for human review. Today only LaTeX has clean output
+  via compile_latex.
+- **Web UI for collaborative review** (Coolify-hosted) — share
+  PDFs with colleagues / partners / clients, annotate + comment,
+  read annotations back via MCP. Research candidates: Hypothesis,
+  Cryptpad, Nextcloud+Collabora, Stirling-PDF, HedgeDoc, PDF.js+
+  custom, Onlyoffice, PaperHive. Prefer existing OSS over custom.
+- **PM + invoicing** — per-project billing.md ledger, log-time +
+  draft-invoice skills, accounting-adapter implementations. Tied
+  to send-gate (Vorentwurf snapshot = billable milestone).
+- **Integration registry** — 4th layered manifest type
+  (integrations-manifest.yaml per scope) cataloging all callables
+  (MCPs + internal adapters + skills) with metadata for capability-
+  based queries. NEW skill `register-integration` to add entries;
+  NEW backend tool `find_integrations(capability=, scope=)`.
+
+These five items inter-connect: the integration registry is the
+discovery layer; audit trail records what happens; checkpoint
+renders produce the human-readable artifacts; the web UI distributes
+them; PM+invoicing is one specific consumer of all the above.
+Worth designing them as a coherent subsystem rather than piecemeal.
 
 ---
 
