@@ -1,11 +1,30 @@
 # pbs-bureau architecture — what goes where
 
 This document is the canonical placement reference. When in doubt
-about where new content belongs, walk the meta-rule first, then the
+about where new content belongs, walk the meta-rules first, then the
 decision rules below.
 
-Status: v0.1 — confirmed working classification. May refine as edge
-cases emerge.
+Status: **v0.3 (post-orthogonality)**.
+- v0.1 → v0.2: nine entity types + 6 decision rules.
+- v0.2 → v0.3: scope-orthogonality meta-rule live, layered
+  manifests in repo, integration adapter scaffolding deployed,
+  schema migration framework in place.
+
+## Maintenance discipline
+
+**Keep this document up to date.** Every meta-rule change, new
+entity type, schema bump, integration class, or significant
+architectural refactor lands here in the same commit that
+introduces the change. If you change how content is placed, the
+change has not been made until ARCHITECTURE.md reflects it.
+
+ROADMAP-tracked extensions get a one-line pointer under "Designed
+extensions, not yet implemented" (below) so future sessions know
+they're coming and don't re-discover them.
+
+Periodically (definitely after any meta-rule addition or refactor),
+sweep all skills against the current meta-rules to catch drift.
+That sweep is currently the next-session priority — see HANDOFF.md.
 
 ## Meta-rule: app vs office (deployment portability)
 
@@ -34,11 +53,13 @@ the `setup-office` skill on first run.
   Vorbeck). Use neutral examples in docs (`YY-NN <Client> -
   <Location>`); refer to live projects only via paths the user
   provides at runtime.
-- State-specific references live in `extensions.references_manifests`
-  keyed by Bundesland code. Bundesland is a per-PROJECT property
+- State-specific and domain-specific references live in
+  `extensions.{references,doctypes}_manifests` as a layered map
+  (`{universal, domain: {<X>: path}, state: {<X>: path}}`).
+  Loader walks the union per the office's `scope.{domains,states}`
+  selection. Bundesland is a per-PROJECT property
   (`state.md.bundesland`), not an office property — offices freely
-  take projects in any state and register the corresponding
-  reference-manifest extension as needed.
+  take projects in any state in their scope.
 - LaTeX styling (geometry, header layout, fonts, colors) lives in the
   office's `office-style.sty`, NOT in app skeletons or classes.
 - Office identity macros (`\OfficeName`, `\OfficeAddressLines`,
@@ -62,8 +83,22 @@ the `setup-office` skill on first run.
 
 **The reference deployment.** PBS is the reference deployment of this
 app — its config is *outside the repo*, at the env-var or XDG
-location, never committed. Adding fields to the schema requires
-bumping `schema_version` and updating `setup-office` migration.
+location, never committed.
+
+**Schema versioning + migrations.** Adding fields to office-config
+schema requires bumping `CURRENT_SCHEMA_VERSION` in
+`backend/.../office_config.py` and adding a migration at
+`backend/.../office_config_migrations/v<N>_to_v<N+1>.py` exporting
+`migrate(data: dict) -> dict`. The dispatcher applies migrations
+sequentially in-memory on every load; existing PBS configs forward-
+migrate transparently. The `setup-office` skill reconcile mode
+prompts the user for any newly-required field and writes the
+migrated form back to disk.
+
+**Skill versioning.** Every SKILL.md carries `version:` (semver) in
+frontmatter. Bump on behavioral change (minor for new behavior,
+patch for fixes). Reload via `/reload-plugins` after edits;
+`dev-link.sh` keeps the cache symlinked.
 
 ## Meta-rule: scope orthogonality (universal × domain × state)
 
@@ -111,6 +146,28 @@ become available to every future deployment.
 **The scope is part of the public API.** Adding a new domain or state
 is a deliberate architectural extension, not a one-off addition.
 
+## Meta-rule: integration adapter pattern (capability swappability)
+
+Where the app interfaces with external systems whose mechanism varies
+per deployment (email service, calendar, scanner, phone system,
+accounting), the implementation lives behind a small **protocol +
+adapter pattern**: a Python `Protocol` defines the contract; each
+adapter (`thunderbird-maildir`, `imap`, `caldav`, etc.) implements
+it; office-config selects which adapter is active per class.
+
+Same architectural lesson as paths/identity/practices/scope: no
+hardcoded mechanism. The adapter boundary is in place from day one
+(currently all default to `none`); concrete adapters land per
+demand.
+
+Adapters live at
+`backend/mcp-server/src/pbs_mcp/integrations/<class>/<adapter>.py`,
+each exporting an `Adapter(config: dict)` class implementing the
+protocol at `<class>/protocol.py`. `load_adapter(class_name)`
+resolves via `office_config.integrations.<class>.adapter`.
+
+This pattern is entity type **I**.
+
 ## Meta-rule: memory vs RAG (citation freshness)
 
 A second hard line: **what lives in memory** vs **what lives in the
@@ -121,8 +178,15 @@ RAG corpus**. The split protects against legal-citation rot.
   mapping, doctype structure, two-axis Beteiligungs-Logik.
 - Conventions — German number formatting, quotation conventions,
   hyphenation rules, korrektur-rules.
-- Domain registries — doctypes.yaml, project-structure.md.
+- Reference content (project-structure.md, per-project-memory
+  format docs).
+- Saved bausteine (Type D records under
+  `memory/bausteine/{universal,domain/<X>,state/<X>}/`).
 - Universal reasoning patterns that don't depend on current law text.
+
+(Note: doctype + reference registries are NOT memory — they're
+layered manifests in `extensions/`, type H. Memory holds the
+prose conventions and saved instance records.)
 
 **RAG** (`<references_root>/`, retrieved on demand via
 `search_corpus` / `read_corpus_file`) holds:
@@ -222,7 +286,8 @@ declare them in `references_used[]` frontmatter.
 | `style-spec.md` (universal B-Plan LaTeX domain) | Rule 4: describes WHAT the structural domain IS. Cross-cutting (review-draft, draft-*, validate-*). Office-specific styling lives in office-config Layer 2. | `C` |
 | `korrektur-rules.md` (German writing conventions) | Rule 3: HOW to write — but cross-cutting (multiple skills). Per Rule 3 exception → `C` | `C` |
 | `bauleitplanung-phasen.md` (BauGB process) | Rule 4: describes WHAT the process IS. Cross-cutting. | `C` |
-| `doctypes.yaml` (registry) | Rule 4: knowledge of what doctypes exist. Cross-cutting. | `C` |
+| `extensions/universal/doctypes.yaml` (registry) | Rule 2: registry of doctypes, scope=universal. | `H` |
+| `extensions/domain/Naturschutz/doctypes.yaml` | Rule 2: registry, scope=domain/Naturschutz. | `H` |
 | `baustein-format.md` (how to write a baustein) | Rule 3: instruction. Single-skill (save-baustein). | `B` |
 | `feedback-format.md` | Same as above. | `B` |
 | `state-format.md` | Rule 3: HOW to write state.md. Currently single-skill (orchestrator does the writes). | `B` |
@@ -237,12 +302,29 @@ declare them in `references_used[]` frontmatter.
 
 ## What changes invalidate what
 
-- **Update to a Skill (A)** → AI's behavior changes. Re-link cache via `dev-link.sh` if not symlinked; otherwise reinstall.
-- **Update to a Skill reference (B)** → parent skill behavior precision changes on next session.
-- **Update to Memory reference content (C)** → AI's domain knowledge changes; downstream skills may produce different output.
-- **Update to Memory data record (D)** → that record's instance state changes; tools see new field values.
-- **Update to Backend (E)** → backend behavior changes; restart MCP server.
-- **Update to External data (F)** → runtime state changes; if ingested into RAG, re-ingest the changed paths.
+- **Update to a Skill (A)** → AI's behavior changes. Bump
+  `version:` in frontmatter; `/reload-plugins` to pick up.
+- **Update to a Skill reference (B)** → parent skill behavior
+  precision changes on next session.
+- **Update to Memory reference content (C)** → AI's domain
+  knowledge changes; downstream skills may produce different output.
+- **Update to Memory data record (D)** → that record's instance
+  state changes; tools see new field values.
+- **Update to Backend (E)** → backend behavior changes; restart
+  MCP server.
+- **Update to External data (F)** → runtime state changes; if
+  ingested into RAG, re-ingest the changed paths.
+- **Update to Office config (G)** → bump `schema_version` if
+  shape changes; add migration at
+  `office_config_migrations/v<N>_to_v<N+1>.py`. Existing PBS
+  config forward-migrates on next load.
+- **Update to Layered manifests (H)** → loader picks up on next
+  start; entries flagged for ingest re-fetch by `research-references`;
+  affected bausteine + memory docs flagged via `references_used[]`
+  cross-reference.
+- **Update to Integration adapter (I)** → restart MCP server; the
+  `adapter` field in `office_config.integrations.<class>` may need
+  updating to point at the new adapter name.
 
 ## Borderline cases (resolved here for now)
 
@@ -292,7 +374,7 @@ in PBS's `office-config.yaml` outside the repo.
 
 When adding new content:
 
-1. Walk Rules 1-5 above. Pick the first one that classifies.
+1. Walk Rules 1-6 above. Pick the first one that classifies.
 2. Place the content in the matching path.
 3. If classification is unclear, surface the case to the user with
    reasoning before placing.
@@ -301,9 +383,55 @@ When adding new content:
 
 When reviewing existing content during refactors:
 
-1. For each file, check: does its current location match Rules 1-5?
+1. For each file, check: does its current location match Rules 1-6?
 2. If not, propose move with reasoning.
 3. Don't move silently.
 
 This document evolves with the system. Refinements expected as
 real-use surfaces edge cases.
+
+## Designed extensions, not yet implemented
+
+These ROADMAP items will extend or modify the architecture when
+implemented. Recorded here so future sessions don't re-discover
+them. Full design lives in `ROADMAP.md`.
+
+- **Audit trail** — unified change/decision/version log across
+  artifacts, references, manifests, configs, integrations,
+  bausteine, plans, correspondence. Today scattered (`decisions.md`,
+  `snapshots/`, `changelog.md`, manifest archives, git). Will likely
+  add a new entity type or formalize as a layered manifest.
+- **Human-readable artifact generation at checkpoints** — every
+  meaningful checkpoint (send-gate, phase transition, draft-invoice,
+  baustein-promotion, config-change) produces a PDF/HTML alongside
+  machine state. Today only LaTeX renders cleanly.
+- **Integration registry** — 4th layered manifest type
+  (`integrations-manifest.yaml` per scope) cataloging callables
+  (MCPs + internal adapters + skills) with capability metadata.
+  Will extend type H to a third manifest kind alongside
+  references-manifest + doctypes.
+- **Web UI for collaborative review** — Coolify-hosted; review-
+  platform integration adapter class (specific case of meta-rule
+  III). Annotations + comments queryable back via MCP.
+- **PM + invoicing** — per-project `_ai/billing.md` ledger;
+  `log-time` + `draft-invoice` skills; uses accounting integration
+  adapter.
+- **Multimodal RAG ingest pipeline** — page-image retrieval
+  (ColPali), table extraction, OCR for scanned PDFs, DRM removal.
+  Architecture decided: local pre-processing + embedding +
+  matching; reading + reasoning happens via the in-loop Claude
+  session (vision-capable). No separate vision-LLM in stack for
+  interactive use.
+- **Structural retrieval** — legal §-graph + project-cross-
+  project graph + verfahren state-machine. Likely separate store
+  (SQLite or graph DB) alongside LanceDB.
+- **Query rewriting** (HyDE + decomposition + expansion) +
+  **agentic retrieval** (per-claim search during drafting) +
+  **late-interaction text retrieval** (ColBERT-v2, conditional)
+  — all retrieval-pattern improvements, mostly skill-protocol
+  changes; covered in HANDOFF Phase-8 alignment sweep + RAG-
+  options assessment.
+- **Per-domain memory directories** (`memory/domain/<X>/`) —
+  introduce when first domain-scoped reference content lands
+  (Artenschutz verfahren reference is the natural trigger).
+  Mirror of references / doctypes layering.

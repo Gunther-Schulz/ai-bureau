@@ -200,6 +200,49 @@ These are skill-protocol changes (markdown SKILL.md +
 (`search_corpus`, `read_corpus_file`, manifest accessors) already
 support what the protocols need.
 
+Then RAG-options assessment (BEFORE first ingest — re-ingesting 57
+entries through OCR + DRM-removal + multimodal pipelines is
+expensive, so decide pipeline shape first):
+
+**Pre-ingest decisions to make** (ROADMAP items already drafted —
+this is the "which to wire in for first ingest, which to defer"
+pass):
+
+1. **Text-retrieval baseline**: stick with bge-m3 + cross-encoder
+   reranker, or swap straight to ColBERT-v2 (RAGatouille/PLAID)?
+   Default: keep bge-m3 baseline; ColBERT only if benchmarks for
+   German legal text show meaningful gain. Research: recent
+   benchmarks on German legal corpora; ColBERT-v2 vs bge-m3 on
+   long technical documents.
+2. **Multimodal scope for first ingest**: which subset of the
+   four multimodal sub-pieces (page-image retrieval, table
+   extraction, OCR for scanned PDFs, DRM removal) ship in first
+   pipeline vs follow-up?
+   - **OCR**: likely yes — many older Verfahrenserlasse / archived
+     Stellungnahmen are scanned. Block on testing the corpus mix.
+   - **DRM removal** (qpdf/pikepdf): yes if any KNE/BfN PDF has DRM;
+     test on actual fetches. Cheap to add, no-op if no DRM.
+   - **Page-image retrieval (ColPali)**: optional first-cut. Decide
+     based on diagram-heavy vs text-heavy content mix.
+   - **Table extraction (Camelot/Tabula)**: optional. Helgoländer-
+     species×distance is highest-value table; isolated work.
+3. **Query rewriting placement**: backend preprocessor (transparent
+   to skills, deterministic variants like synonym expansion) vs
+   skill-level (HyDE — needs model in the loop)? Decide before
+   ingest only because it might affect chunking strategy.
+4. **Chunking strategy review**: each manifest entry specifies
+   `chunking_strategy` (per-paragraph, per-randnummer, per-section,
+   per-article). Worth a sanity-check against the layered
+   architecture before they get baked into LanceDB.
+5. **Reranker model choice**: confirm reranker (bge-reranker-v2-m3
+   default? Or jina-reranker-multilingual?) — German support
+   matters.
+
+**Output of assessment**: a brief decision document (could be
+`docs/rag-pipeline-decisions.md` — ~1 page) capturing what gets
+wired in for first ingest and what's deferred. Then proceed to
+RAG kickoff.
+
 Then RAG kickoff:
 
 1. **`/reload-plugins`** so Claude Code picks up the updated SKILL.md
@@ -209,10 +252,11 @@ Then RAG kickoff:
 2. **Run `research-references` first-time fetch** — ~57 entries
    across universal + 3 domains + MV. RTX 5090 picks up CUDA
    automatically; bge-m3 + reranker download (~3GB) on first
-   ingest call.
+   ingest call (or whatever the assessment decided).
 
-3. **Sample search** to verify hybrid + reranker pipeline returns
-   sensible hits.
+3. **Sample search** to verify the chosen retrieval pipeline
+   returns sensible hits. If quality is poor → revisit assessment
+   choices (e.g. swap to ColBERT-v2, add HyDE).
 
 After that:
 - Bind first project (any existing hidrive project — orchestrator

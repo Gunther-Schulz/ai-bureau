@@ -701,12 +701,21 @@ first domain-specific reference content (this would be the trigger).
 These aren't features but discipline improvements observed during
 v1 design. Apply by next session and onward.
 
-### ARCHITECTURE.md as first reference
+### ARCHITECTURE.md as first reference, kept fresh
 
 When in doubt about where new content belongs, walk Rules 1-6 in
-`ARCHITECTURE.md` (after the v0.2 nine-entity-types refactor). Don't
-guess; classify deliberately. For layered manifest entries pick the
-scope (universal/domain/state) BEFORE the path.
+`ARCHITECTURE.md`. Don't guess; classify deliberately. For layered
+manifest entries pick the scope (universal/domain/state) BEFORE the
+path.
+
+**Keep ARCHITECTURE.md current with every architectural change.**
+Meta-rule changes, new entity types, schema bumps, integration
+classes — all land in ARCHITECTURE.md *in the same commit* that
+introduces them. ROADMAP-tracked items get a one-line pointer in
+the "Designed extensions" section so future sessions don't
+re-discover them. After any meta-rule addition or significant
+refactor, sweep all skills against current meta-rules to catch
+drift.
 
 ### Source-grounding for legal claims
 
