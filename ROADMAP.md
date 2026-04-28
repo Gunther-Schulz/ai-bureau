@@ -111,6 +111,42 @@ spec'ing.
   branch?
 - Conflict resolution when Overleaf and local both edit?
 
+### Project management + invoicing
+
+**Why**: Project work today has no time/billable tracking, no
+milestone-to-invoice mapping, no status reporting to client. The
+orchestrator knows phase transitions and decision logs but doesn't
+connect them to billing. Adding PM concerns covers: time tracking
+per project / per practice / per partner, milestone definitions
+that trigger invoicing, status reports auto-generated from state.md
++ decisions.md, draft invoices from accumulated time.
+
+**Sketch**:
+- Per-project `_ai/billing.md` — ledger of billable units (hours,
+  fixed-price milestones, expenses) with state-transition tagging.
+- New PBS skill `log-time` — capture time entries from session
+  context (e.g. "I worked 2h on Maxsolar Begründung Section 4
+  today"), append to billing.md.
+- New skill `draft-invoice` — composes invoice from a project's
+  billing ledger, applies office-config invoice template, hands off
+  to the accounting integration adapter for actual delivery.
+- Accounting adapter implementations (DATEV-export, lexoffice,
+  sevDesk) — protocol stub already in place from Phase 5
+  (`backend/.../integrations/accounting/`).
+- Integration with Begründung-deliverable-snapshot pairs: a
+  send-gate firing on a Vorentwurf is also a billable milestone.
+
+**Open questions**:
+- Time entries: structured (hours / category / billable yes-no) or
+  free-text with extraction?
+- Multi-practice billing: when Hendrik (partner) co-produces, does
+  PBS bill the client and split, or does each party bill independently?
+- Privacy: billing data is sensitive. Per-project storage in
+  `<project>/_ai/billing.md` keeps it co-located with project
+  context but means it ships wherever the project ships. Office-
+  state-only ledger (`<state_root>/billing/<project>.md`) is more
+  isolated.
+
 ---
 
 ## v2 — extensions
