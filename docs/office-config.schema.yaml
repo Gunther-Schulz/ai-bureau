@@ -10,11 +10,11 @@
 # migrates the schema_version when fields are added in future versions.
 #
 # Every field is shown here with type + purpose + required/optional status.
-# Values shown are illustrative (PBS as the reference instance).
+# Values shown are illustrative.
 
 # --- Schema versioning ---------------------------------------------------
 
-schema_version: 1   # required. setup-office migrates older configs forward.
+schema_version: 2   # required. setup-office migrates older configs forward.
 
 # --- Office identity -----------------------------------------------------
 
@@ -24,11 +24,10 @@ office:
   language: de_DE                  # required. Output language of drafts.
                                    # Currently only de_DE is supported.
 
-# NOTE: Bundesland is a per-PROJECT property, not an office property.
-# Each project's `_ai/state.md` carries `bundesland: <STATE>`. The office
-# itself has no state. Skills resolve state law per project, looking up
-# the matching extension manifest via `extensions.references_manifests`
-# below.
+# NOTE: Bundesland is per-PROJECT (in `_ai/state.md.bundesland`), not an
+# office property. The office's `scope.states` lists which Bundesländer it
+# operates in (drives state-extension manifest selection); each project
+# picks one from that list at bind/setup time.
 
 identity:                          # required block.
   title: "<Akademischer Titel>"    # optional, e.g. "Dipl.-Ing." — used in
@@ -43,9 +42,8 @@ identity:                          # required block.
   email: "<office-email>"          # optional
   web: "<office-website>"          # optional
   specializations:                 # optional list of disciplines printed
-    - "<Discipline 1>"             # on the office letterhead (e.g.
-    - "<Discipline 2>"             # "Garten- und Landschaftsarchitektur",
-                                   # "Stadtplanung", etc.)
+    - "<Discipline 1>"             # on the office letterhead
+    - "<Discipline 2>"
   logo_path: "<absolute-path>"     # optional, image referenced by
                                    # office-style.sty as \OfficeLogoPath
   signature_image_path: "<path>"   # optional, scanned signature for
@@ -56,51 +54,29 @@ identity:                          # required block.
     <Office Name>
 
 # --- Practices (internal sub-units of THIS office) ----------------------
-#
-# A practice is an internal sub-division of the office. Most offices have
-# exactly one practice (themselves). Multi-practice setups model offices
-# that internally split text-document work from GIS work, etc., as
-# separate departments — but still ONE legal entity.
-#
-# For external collaborators (separate offices that co-produce on some
-# projects), use `partners` below. Practice ≠ partner.
-#
-# Every project's `state.md.practices: [<id>, ...]` lists which internal
-# practices are involved. First entry in this config is the default.
 
 practices:                         # required, ≥1 entry.
-  - id: main                       # short id used in state.md, file-map.md
-    label: "Planungsbüro Schulz"   # display label
-    signer: "Gunther Schulz"       # signer name (used in cover-mail signoffs
-                                   # and Festsetzungen Verfahrensvermerke)
-    email: "FILL_IN_PBS_EMAIL"     # used in office-identity macros
-    email_match_patterns:          # fnmatch wildcards; incoming mail
-      - "*@FILL_IN_PBS_DOMAIN"     # matched against these for routing
+  - id: main
+    label: "Planungsbüro Schulz"
+    signer: "Gunther Schulz"
+    email: "FILL_IN_PBS_EMAIL"
+    email_match_patterns:
+      - "*@FILL_IN_PBS_DOMAIN"
 
 # --- Partners (external collaborators) ---------------------------------
-#
-# External offices the office regularly works with. May appear on
-# projects either as a co-producer (state.md.partners: [<id>]) or as
-# the client (state.md.client: "<Label>"). Same partner can play
-# either role on different projects — the email_match_patterns work
-# regardless.
 
 partners:                          # optional list (default: [])
-  - id: <short-id>                 # short id used in state.md.partners
+  - id: <short-id>
     label: "<Display Name>"
-    signer: "<Full Name>"          # used when partner signs Gutachten
-    specialization: "<Discipline>" # optional, e.g. "Landschaftsökologie"
+    signer: "<Full Name>"
+    specialization: "<Discipline>"
     email: "<contact@partner-domain>"
-    email_match_patterns:          # fnmatch wildcards
+    email_match_patterns:
       - "*@partner-domain"
-    phone: "<phone>"               # optional
-    web: "<partner-website>"       # optional
+    phone: "<phone>"
+    web: "<partner-website>"
 
 # --- Filesystem paths ---------------------------------------------------
-#
-# Every path is absolute. The loader expands ~ and resolves env vars.
-# `state_root` is the canonical "office state" location: extensions,
-# templates, and AI office-state subdirectories live under it by default.
 
 paths:
   state_root: "/mnt/data2t/.../_ai-office-state"      # required
@@ -108,98 +84,120 @@ paths:
   projects_root: "/mnt/data2t/.../Projekte"           # required
   local_repos_root: "~/dev/Planungsbüro-Schulz"       # optional. Set if the
                                                       # office uses per-doctype
-                                                      # LaTeX repos in a dev
-                                                      # tree. Omit otherwise.
+                                                      # LaTeX repos in a dev tree.
 
-# --- Reference extensions -----------------------------------------------
+# --- Scope --------------------------------------------------------------
 #
-# The app ships a federal-core references manifest covering BauGB,
-# BNatSchG, federal court rulings, EU directives — references universal
-# to every German Planungsbüro. State-specific laws (LPlG-X, LBauO-X,
-# NatSchAG-X, etc.) and state-flavored Verfahrensvermerk patterns live
-# in per-state extension manifests, registered here keyed by Bundesland
-# code.
+# Which planning domains and Bundesländer this office operates in. Drives
+# the layered manifest loader (universal + per-domain + per-state). Set
+# during setup-office multi-select; edit by hand or re-run setup-office
+# to change later.
 #
-# An office working only in M-V registers one entry; an office with
-# projects across M-V, BB, and SH registers three. Each entry points
-# at a YAML file with the same schema as the federal core manifest.
+# Domains correspond to subdirs under <repo>/extensions/domain/ (e.g.
+# PV-FFA, Wind, Naturschutz, Innenentwicklung). New domains added via
+# the `author-manifest` skill.
 #
-# Resolution per project: a project's `state.md.bundesland` selects
-# which extension applies. Lookup falls back to the conventional default
-# path `<state_root>/extensions/<bundesland>/references-manifest.yaml`
-# if no explicit entry is registered.
+# States are 2-letter Bundesland codes (BB, BW, BY, BE, HB, HH, HE, MV,
+# NI, NW, RP, SH, SL, SN, ST, TH).
+
+scope:
+  domains: [PV-FFA, Wind, Naturschutz]   # subset of available domain
+                                         # manifests this office activates
+  states: [MV]                           # Bundesländer the office operates in
+
+# --- Reference + doctype extensions (layered manifests) -----------------
+#
+# Layered along scope:
+#   - universal: applies to every deployment (ships in repo)
+#   - domain[<X>]: applies when scope.domains contains X (ships in repo)
+#   - state[<X>]: applies when scope.states contains X (ships in repo,
+#                 may be overridden per-office for state-local additions)
+#
+# The loader walks the union of selected manifests at startup and
+# whenever a tool needs to enumerate references/doctypes. Order:
+# universal → each domain in scope.domains order → each state in
+# scope.states order.
 
 extensions:
   references_manifests:
-    MV: "<state_root>/extensions/MV/references-manifest.yaml"
-    # BB: "<state_root>/extensions/BB/references-manifest.yaml"
-    # SH: "<state_root>/extensions/SH/references-manifest.yaml"
-                                   # Add an entry per Bundesland the
-                                   # office has provisioned references
-                                   # for. Empty map (no entries) is
-                                   # legal — only federal-core applies.
+    universal: "<repo>/extensions/universal/references-manifest.yaml"
+    domain:
+      PV-FFA: "<repo>/extensions/domain/PV-FFA/references-manifest.yaml"
+      Wind: "<repo>/extensions/domain/Wind/references-manifest.yaml"
+      Naturschutz: "<repo>/extensions/domain/Naturschutz/references-manifest.yaml"
+    state:
+      MV: "<repo>/extensions/state/MV/references-manifest.yaml"
+      # office-local state additions (e.g. an MV-bureau adds regional
+      # Leitfäden specific to NW-MV) go to a separate file:
+      # MV-office-additions: "<state_root>/extensions/MV/office-additions.yaml"
 
-# --- LaTeX templates (Phase 6 design) -----------------------------------
+  doctypes_manifests:
+    universal: "<repo>/extensions/universal/doctypes.yaml"
+    domain:
+      Naturschutz: "<repo>/extensions/domain/Naturschutz/doctypes.yaml"
+      # PV-FFA / Wind doctypes can be added similarly when needed
+    state:
+      # MV: "<repo>/extensions/state/MV/doctypes.yaml"   # if MV has variants
+
+# --- Integrations (pluggable adapters) ----------------------------------
 #
-# 3-layer cake:
-#   Layer 1 — App: ships document classes (.cls) + skeleton master files
-#             encoding universal German B-Plan domain.
-#   Layer 2 — Office: provides office-style.sty (geometry, header, fonts,
-#             colors) + auto-generated office-identity.tex (from `identity:`
-#             above) — both consumed by the skeleton via \usepackage and
-#             \input respectively.
-#   Layer 3 — Project: per-project Projektdaten.tex (\Gemeinde, \BPlan,
-#             \BPlanTyp, \GeltungsbereichHa, etc).
+# External systems each declared as adapter + adapter-specific config.
+# `adapter: none` is the default no-op (the integration is unused).
+# Real adapters land under backend/.../integrations/<class>/<adapter>.py
+# and are selected by name here.
+
+integrations:
+  email:
+    adapter: none                  # | thunderbird-maildir | imap | outlook-pst | mbox-file
+    config: {}                     # adapter-specific (e.g. profile_path)
+  calendar:
+    adapter: none                  # | caldav | exchange-ews | ical-file
+    config: {}
+  scanner:
+    adapter: none                  # | hot-folder | escli | tesseract
+    config: {}
+  phone:
+    adapter: none                  # | call-log-csv | (provider adapters)
+    config: {}
+  accounting:
+    adapter: none                  # | (per provider)
+    config: {}
+
+# --- LaTeX templates (3-layer cake) -------------------------------------
 #
-# Compile sets TEXINPUTS to include project dir, office_style_dir, and
-# the app's templates/classes + templates/skeletons dirs.
+# Layer 1 — App: ships document classes (.cls) + skeletons under
+#           plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/
+# Layer 2 — Office: provides office-style.sty (geometry, header, fonts,
+#           colors) + auto-generated office-identity.tex (from `identity:`
+#           above) + optional domain-specific office-style overlays
+#           (office-style.PV-FFA.sty, office-style.Wind.sty)
+# Layer 3 — Project: per-project Projektdaten.tex + master .tex
+#
+# Compile sets TEXINPUTS to recursively include project dir, office
+# style dir, app classes, and the layered skeletons tree.
 
 templates:
-  skeleton_source: app             # "app" | <override-dir>. "app" uses the
-                                   # skeletons shipped in plugin/templates/.
-                                   # Override only if office needs a custom
-                                   # master structure (rare).
+  skeleton_source: app             # "app" | <override-dir>. "app" uses
+                                   # plugin/templates/skeletons/.
   office_style_dir: "<state_root>/templates"
                                    # required. Directory containing
-                                   # office-style.sty. Authored once per
-                                   # office; setup-office offers extraction
-                                   # wizard for offices migrating from
-                                   # existing inline preambles.
-  identity_macros: auto            # "auto" — generate office-identity.tex
-                                   # from `identity:` section before each
-                                   # compile. | <path> — use hand-maintained
-                                   # file at given path.
+                                   # office-style.sty + the auto-generated
+                                   # office-identity.tex.
+  identity_macros: auto            # "auto" — regenerate office-identity.tex
+                                   # from `identity:` before each compile.
+                                   # | <path> — use hand-maintained file.
   doctype_overrides: {}            # optional. Per-doctype skeleton overrides.
-                                   # Example:
-                                   #   b-plan-begruendung: <skeleton-path>
                                    # Used as escape hatch only.
 
 # --- Conventions --------------------------------------------------------
-#
-# Project-folder shape and naming. survey-project consumes these to
-# classify files in existing project folders.
 
 conventions:
-  # Optional. Every key has a sane default shown below; offices override
-  # only what they need to differ.
   project_naming: "{year_2}-{nr} {client} - {location}"
-                                   # template used by setup_project when
-                                   # generating new folder names.
-                                   # Available placeholders:
-                                   #   {year_2}   — 2-digit year (25)
-                                   #   {year_4}   — 4-digit year (2025)
-                                   #   {nr}       — project number (1)
-                                   #   {nr_pad:N} — N-padded (e.g. {nr_pad:2}=01)
-                                   #   {client}   — client name
-                                   #   {location} — project location
   project_numbering:
-    pattern: YY-NN                 # display pattern. YY-NN | YYYY-NN | NN |
-                                   # YY/NN — informational, drives parsing.
-    auto_increment: true           # if true, setup_project suggests
-                                   # max(existing-numbers) + 1.
-  project_folder_layout:           # role-keyed folder names. Skills
-                                   # reference roles, not literal names.
-    inputs: "inputs/"              # raw client-supplied inputs
-    sent_versions: "Auslieferung/" # delivered/sent versions
+    pattern: YY-NN                 # YY-NN | YYYY-NN | NN | YY/NN
+    auto_increment: true
+  project_folder_layout:
+    inputs: "inputs/"
+    sent_versions: "Auslieferung/"
     correspondence: "Schriftverkehr/"
-    toeb: "TöB/"                   # Träger öffentlicher Belange folders
+    toeb: "TöB/"

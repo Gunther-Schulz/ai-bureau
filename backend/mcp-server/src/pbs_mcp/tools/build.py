@@ -112,13 +112,19 @@ def _refresh_identity_macros() -> Path | None:
 
 
 def _texinputs(project_dir: Path) -> str:
-    """Compose TEXINPUTS in the right order: project, office, app, system."""
+    """Compose TEXINPUTS in the right order: project, office, app, system.
+
+    The skeletons subtree is layered (universal/<doctype>/ +
+    domain/<X>/<doctype>/); a trailing `//` makes kpathsea search it
+    recursively so the right Textbaustein resolves regardless of which
+    layer it lives in.
+    """
     cfg = office_config.load()
-    parts: list[str] = [str(project_dir)]
+    parts: list[str] = [str(project_dir) + "//"]
     if cfg.templates.office_style_dir:
         parts.append(str(cfg.templates.office_style_dir))
     parts.append(str(config.app_classes_dir()))
-    parts.append(str(config.app_skeletons_dir()))
+    parts.append(str(config.app_skeletons_dir()) + "//")
     if cfg.templates.skeleton_source != "app":
         parts.append(cfg.templates.skeleton_source)
     parts.append("")  # trailing empty = include default kpathsea path
@@ -243,14 +249,16 @@ def scaffold_project(input: ScaffoldProjectInput) -> ScaffoldProjectOutput:
     elif input.doctype in cfg.templates.doctype_overrides:
         template = cfg.templates.doctype_overrides[input.doctype]
     else:
-        skeleton_dir = config.app_skeletons_dir() / input.doctype
-        if skeleton_dir.is_dir():
-            template = skeleton_dir
+        universal = config.app_universal_skeleton_for(input.doctype)
+        if universal is not None:
+            template = universal
         else:
             raise FileNotFoundError(
                 f"no skeleton shipped for doctype '{input.doctype}'. "
                 f"Set templates.doctype_overrides.{input.doctype} in "
-                f"office-config or pass template_repo explicitly."
+                f"office-config, add a universal skeleton at "
+                f"plugin/templates/skeletons/universal/{input.doctype}/, "
+                f"or pass template_repo explicitly."
             )
 
     if not template.is_dir():

@@ -1,9 +1,9 @@
 """Office configuration loader.
 
 Resolves and validates the per-deployment `office-config.yaml`. Every
-office-specific value (paths, identity, practices, LaTeX styling,
-state-law extensions) is read through this module — never hardcoded
-elsewhere.
+office-specific value (paths, identity, practices, scope, LaTeX styling,
+manifest extensions, integrations) is read through this module — never
+hardcoded elsewhere.
 
 Resolution order:
 1. $PBS_OFFICE_CONFIG (explicit path)
@@ -16,23 +16,17 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
-CURRENT_SCHEMA_VERSION = 1
+CURRENT_SCHEMA_VERSION = 2
 
 
 class Practice(BaseModel):
-    """An internal sub-practice of THIS office.
-
-    Most offices have a single practice (themselves). Multi-practice
-    setups exist for offices internally divided into specialized
-    sub-units (e.g. text/planning + GIS as separate departments
-    within the same legal entity).
-    """
+    """An internal sub-practice of THIS office."""
     id: str = Field(..., min_length=1)
     label: str = Field(..., min_length=1)
     signer: str | None = None
@@ -41,21 +35,11 @@ class Practice(BaseModel):
 
 
 class Partner(BaseModel):
-    """An external collaborator the office regularly works with.
-
-    Different from Practice: a partner is its own legal entity with
-    its own email/identity. May appear on projects either as a
-    co-producer (`state.md.partners: [hendrik]`) or as the client
-    (`state.md.client: Hendrik`).
-
-    `email_match_patterns` accept fnmatch-style wildcards (`*@domain`)
-    used by the email integration to associate incoming messages
-    with this partner.
-    """
+    """An external collaborator the office regularly works with."""
     id: str = Field(..., min_length=1)
     label: str = Field(..., min_length=1)
     signer: str | None = None
-    specialization: str | None = None     # e.g. "Landschaftsökologie"
+    specialization: str | None = None
     email: str | None = None
     email_match_patterns: list[str] = Field(default_factory=list)
     phone: str | None = None
@@ -65,17 +49,15 @@ class Partner(BaseModel):
 class Identity(BaseModel):
     address_lines: list[str] = Field(..., min_length=1)
     signature_block: str = Field(..., min_length=1)
-    title: str | None = None              # e.g. "Dipl.-Ing."
+    title: str | None = None
     phone: str | None = None
-    mobile: str | None = None             # separate Funk/Mobile field
+    mobile: str | None = None
     fax: str | None = None
     email: str | None = None
     web: str | None = None
     specializations: list[str] = Field(default_factory=list)
-                                          # disciplines listed on letterhead
-    logo_path: Path | None = None         # path to office logo image
+    logo_path: Path | None = None
     signature_image_path: Path | None = None
-                                          # scanned signature for signed PDFs
 
     @field_validator("logo_path", "signature_image_path", mode="before")
     @classmethod
@@ -111,26 +93,93 @@ class Paths(BaseModel):
         return Path(os.path.expandvars(str(v))).expanduser()
 
 
-class Extensions(BaseModel):
-    """Reference-manifest extensions, keyed by Bundesland code.
+class Scope(BaseModel):
+    """Which planning domains and Bundesländer this office operates in.
 
-    State is purely per-project (in `state.md.bundesland`); the office
-    has no state of its own. The map registers which state extensions
-    have been provisioned in this deployment. When a project's
-    bundesland is set, skills look up the matching key here. Missing
-    keys → research-references is suggested.
+    Drives layered manifest resolution: the loader walks the universal
+    manifest plus the domain[X] manifest for each X in scope.domains plus
+    the state[X] manifest for each X in scope.states.
+
+    Empty domains/states is legal — an office may run on universal-only
+    content (rare, used during initial setup).
     """
-    references_manifests: dict[StateCode, Path] = Field(default_factory=dict)
+    domains: list[str] = Field(default_factory=list)
+    states: list[StateCode] = Field(default_factory=list)
 
-    @field_validator("references_manifests", mode="before")
+
+def _expand_path_dict(v: Any) -> dict:
+    if not isinstance(v, dict):
+        return v
+    return {
+        k: Path(os.path.expandvars(str(p))).expanduser() if p is not None else None
+        for k, p in v.items()
+    }
+
+
+class ManifestMap(BaseModel):
+    """A layered manifest map: universal + domain[X] + state[X].
+
+    Used for both references-manifest and doctypes-manifest. Domain and
+    state keys are expected to match the office's scope.{domains,states}
+    selection but extras don't error (they just won't be loaded).
+    """
+    universal: Path | None = None
+    domain: dict[str, Path] = Field(default_factory=dict)
+    state: dict[str, Path] = Field(default_factory=dict)
+
+    @field_validator("universal", mode="before")
+    @classmethod
+    def _expand_universal(cls, v):
+        if v is None:
+            return v
+        return Path(os.path.expandvars(str(v))).expanduser()
+
+    @field_validator("domain", "state", mode="before")
     @classmethod
     def _expand_paths(cls, v):
-        if not isinstance(v, dict):
-            return v
-        return {
-            k: Path(os.path.expandvars(str(p))).expanduser()
-            for k, p in v.items()
-        }
+        return _expand_path_dict(v)
+
+
+class Extensions(BaseModel):
+    """Layered manifest extensions: references + doctypes per scope axis.
+
+    The universal layer ships with the app and applies to every deployment.
+    Domain layers ship with the app under extensions/domain/<X>/ and are
+    selected via scope.domains. State layers ship with the app under
+    extensions/state/<X>/ for canonical state-law content; offices may
+    register additional state overrides under their own state_root.
+    """
+    references_manifests: ManifestMap = Field(default_factory=ManifestMap)
+    doctypes_manifests: ManifestMap = Field(default_factory=ManifestMap)
+
+
+class IntegrationConfig(BaseModel):
+    """A single integration adapter declaration.
+
+    `adapter` selects which Python module under
+    backend/.../integrations/<class>/<adapter>.py implements this
+    integration class. `none` is the default no-op adapter.
+    """
+    adapter: str = "none"
+    config: dict[str, Any] = Field(default_factory=dict)
+
+
+class Integrations(BaseModel):
+    """Pluggable integration adapters declared at office setup.
+
+    Each integration class is independently swappable: an office on
+    Thunderbird picks `email.adapter: thunderbird-maildir`; an office on
+    IMAP picks `email.adapter: imap`. Adapters live as Python modules
+    under backend/.../integrations/<class>/<adapter>.py implementing a
+    small protocol.
+
+    All defaults to `none` (no-op). Real adapters land in v1.x+.
+    """
+    email: IntegrationConfig = Field(default_factory=IntegrationConfig)
+    calendar: IntegrationConfig = Field(default_factory=IntegrationConfig)
+    scanner: IntegrationConfig = Field(default_factory=IntegrationConfig)
+    phone: IntegrationConfig = Field(default_factory=IntegrationConfig)
+    accounting: IntegrationConfig = Field(default_factory=IntegrationConfig)
 
 
 class Templates(BaseModel):
@@ -172,16 +221,14 @@ class OfficeConfig(BaseModel):
     practices: list[Practice] = Field(..., min_length=1)
     partners: list[Partner] = Field(default_factory=list)
     paths: Paths
+    scope: Scope = Field(default_factory=Scope)
     extensions: Extensions = Field(default_factory=Extensions)
+    integrations: Integrations = Field(default_factory=Integrations)
     templates: Templates = Field(default_factory=Templates)
     conventions: Conventions = Field(default_factory=Conventions)
 
     def find_partner_by_email(self, email: str) -> Partner | None:
-        """Match an incoming email address against partner patterns.
-
-        Uses fnmatch-style wildcards. Returns the first matching
-        partner; partners are scanned in declaration order.
-        """
+        """Match an incoming email address against partner patterns."""
         import fnmatch
         for p in self.partners:
             if p.email and p.email.lower() == email.lower():
@@ -197,21 +244,32 @@ class OfficeConfig(BaseModel):
             self.templates.office_style_dir = self.paths.state_root / "templates"
         return self
 
-    def references_manifest_for_state(self, bundesland: StateCode) -> Path | None:
-        """Resolve the extension manifest for a project's Bundesland.
+    def all_references_manifests(self) -> list[Path]:
+        """All reference manifests this office has selected, in load order.
 
-        Falls back to the conventional default location
-        `<state_root>/extensions/<state>/references-manifest.yaml` if
-        no explicit override is registered.
+        Universal first, then per-domain (in scope.domains order), then
+        per-state (in scope.states order). Files that don't exist are
+        silently skipped — the loader logs which were found.
         """
-        explicit = self.extensions.references_manifests.get(bundesland)
-        if explicit is not None:
-            return explicit if explicit.is_file() else None
-        default = (
-            self.paths.state_root / "extensions" / bundesland
-            / "references-manifest.yaml"
-        )
-        return default if default.is_file() else None
+        return self._collect_manifests(self.extensions.references_manifests)
+
+    def all_doctypes_manifests(self) -> list[Path]:
+        """All doctype manifests this office has selected, in load order."""
+        return self._collect_manifests(self.extensions.doctypes_manifests)
+
+    def _collect_manifests(self, mmap: ManifestMap) -> list[Path]:
+        out: list[Path] = []
+        if mmap.universal is not None and mmap.universal.is_file():
+            out.append(mmap.universal)
+        for domain_key in self.scope.domains:
+            p = mmap.domain.get(domain_key)
+            if p is not None and p.is_file():
+                out.append(p)
+        for state_key in self.scope.states:
+            p = mmap.state.get(state_key)
+            if p is not None and p.is_file():
+                out.append(p)
+        return out
 
     @model_validator(mode="after")
     def _check_schema_version(self) -> "OfficeConfig":
@@ -252,7 +310,14 @@ def discover_path() -> Path | None:
 
 @lru_cache(maxsize=1)
 def load() -> OfficeConfig:
-    """Load + validate the office config. Cached for the process lifetime."""
+    """Load + validate the office config. Cached for the process lifetime.
+
+    Applies any pending schema migrations (in-memory only) before validation.
+    The on-disk file is migrated by the `setup-office` skill, not silently
+    here — the loader rejects on-disk versions newer than CURRENT but does
+    forward-migrate older versions in memory so the tools keep working
+    until the user re-runs setup-office.
+    """
     path = discover_path()
     if path is None:
         searched = "\n  ".join(str(p) for p in _candidate_paths())
@@ -264,7 +329,14 @@ def load() -> OfficeConfig:
     with path.open("r", encoding="utf-8") as fh:
         data = yaml.safe_load(fh)
 
+    data = _migrate(data)
     return OfficeConfig.model_validate(data)
+
+
+def _migrate(data: dict) -> dict:
+    """Apply schema migrations sequentially up to CURRENT_SCHEMA_VERSION."""
+    from pbs_mcp.office_config_migrations import apply_migrations
+    return apply_migrations(data, target=CURRENT_SCHEMA_VERSION)
 
 
 def reset_cache() -> None:

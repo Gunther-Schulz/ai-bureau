@@ -304,7 +304,8 @@ def setup_project(input: SetupProjectInput) -> SetupProjectOutput:
             created.append(str(doctype_dir))
             doctypes_scaffolded.append(doctype)
             continue
-        _copy_skeleton(skeleton, doctype_dir, input.project_data)
+        overlays = _resolve_domain_overlays(cfg, doctype)
+        _copy_skeleton(skeleton, doctype_dir, input.project_data, overlays=overlays)
         if input.git_init_latex:
             _git_init(doctype_dir)
         created.append(str(doctype_dir))
@@ -483,27 +484,49 @@ def _doctype_subfolder(doctype: str) -> str:
 
 
 def _resolve_skeleton(cfg, doctype: str) -> Path | None:
-    """Resolve the skeleton path for a doctype.
+    """Resolve the *base* skeleton path for a doctype (universal layer).
 
-    Order: office override → app-shipped skeleton → None.
+    Order: office override → universal app-shipped skeleton → None.
+    Domain overlays are applied separately via `_resolve_domain_overlays`.
     """
     override = cfg.templates.doctype_overrides.get(doctype)
     if override:
         return override
-    app_skeleton = config.app_skeletons_dir() / doctype
-    if app_skeleton.is_dir():
-        return app_skeleton
-    return None
+    return config.app_universal_skeleton_for(doctype)
 
 
-def _copy_skeleton(skeleton: Path, target: Path, project_data: dict[str, Any]) -> None:
-    """Copy skeleton tree into target, then patch Projektdaten with values."""
+def _resolve_domain_overlays(cfg, doctype: str) -> list[Path]:
+    """Domain overlay skeleton paths for the office's active scope.
+
+    Walks `cfg.scope.domains` in declaration order; returns each domain's
+    skeleton dir for this doctype if one exists. Empty list if no domain
+    has a skeleton overlay for this doctype (the common case today).
+    """
+    overlays: list[Path] = []
+    for domain in cfg.scope.domains:
+        p = config.app_domain_skeleton_for(domain, doctype)
+        if p is not None:
+            overlays.append(p)
+    return overlays
+
+
+def _copy_skeleton(skeleton: Path, target: Path, project_data: dict[str, Any],
+                    overlays: list[Path] | None = None) -> None:
+    """Copy skeleton tree into target with optional domain overlays.
+
+    Universal skeleton copied first; each overlay then layered on top
+    (later-wins for files that exist in multiple layers). After all copies,
+    Projektdaten.tex placeholders are patched with project_data values.
+    """
     EXCLUDE_NAMES = {".git", ".gitignore"}
 
     def _ignore(d, names):
         return [n for n in names if n in EXCLUDE_NAMES]
 
     shutil.copytree(skeleton, target, ignore=_ignore, dirs_exist_ok=True)
+    for overlay in overlays or []:
+        shutil.copytree(overlay, target, ignore=_ignore, dirs_exist_ok=True)
+
     projektdaten = target / "Projektdaten.tex"
     if projektdaten.is_file() and project_data:
         text = projektdaten.read_text(encoding="utf-8")
