@@ -6,13 +6,16 @@ requires-python = ">=3.13"
 authors = [{ name = "Gunther Schulz" }]
 license = { text = "MIT" }
 dependencies = [
-    "mcp>=1.2.0",            # Model Context Protocol SDK (stdio server)
-    "lancedb>=0.16.0",        # embedded vector store
-    "fastembed>=0.5.0",       # in-process embedder (ONNX runtime)
-    "pyarrow>=18.0.0",        # required by lancedb
-    "pydantic>=2.10.0",       # tool input/output schemas
-    "pyyaml>=6.0.2",          # reading manifests, configs
-    "httpx>=0.28.0",          # for the research-references skill's fetches
+    "mcp>=1.2.0",                  # Model Context Protocol SDK (stdio server)
+    "lancedb>=0.16.0",              # embedded vector store
+    "sentence-transformers>=3.3.0", # embedder + reranker (bge-m3, bge-reranker-v2-m3)
+    "torch>=2.5.0",                 # CUDA backend (auto-falls-back to CPU)
+    "pyarrow>=18.0.0",              # required by lancedb
+    "pydantic>=2.10.0",             # tool input/output schemas
+    "pyyaml>=6.0.2",                # reading manifests, configs
+    "httpx>=0.28.0",                # for research-references fetches
+    "pymupdf4llm>=0.0.17",          # PDF→markdown for leitfäden chunker
+    "mail-parser>=4.1.0",           # .eml parsing for correspondence chunker
 ]
 
 [project.scripts]
