@@ -82,33 +82,193 @@ context bloat (no over-fetching upfront), more natural for Claude.
 - When to evaluate: after first-run sample-searches show whether
   the bulk pattern produces grounded enough citations.
 
-### Late-interaction retrieval (ColBERT / ColPali)
+### Late-interaction retrieval (ColBERT-v2)
 
 **Why**: Current stack uses bge-m3 (single-vector dense embedding)
 + a cross-encoder reranker. State-of-the-art for long technical /
-legal text is often *late-interaction* models like ColBERT-v2 or
-ColPali — token-level retrieval that scores fine-grained matches
-without the bottleneck of compressing the whole document into one
-vector. Particularly strong on German legal text and mixed PDF
-leitfäden where exact-phrase matching matters.
+legal text is often *late-interaction* models like ColBERT-v2 —
+token-level retrieval that scores fine-grained matches without the
+bottleneck of compressing the whole document into one vector.
+Particularly strong on German legal text where exact-phrase
+matching matters.
 
 **Sketch (conditional)**:
 - **Trigger**: only if first-run sample-searches show quality
   issues — bge-m3 + reranker is the right baseline; don't preempt.
 - **Drop-in**: ColBERT-v2 has Python implementations (PLAID,
   RAGatouille) that slot under the same `search_corpus` interface.
-  ColPali is image-based (good for scanned PDF leitfäden).
 - **Trade-off**: late-interaction stores more per chunk (token-
   level vectors), so disk/memory footprint grows. RTX 5090 + 32GB
   VRAM handles it but the LanceDB schema needs adjusting.
 
 **Open questions**:
-- ColBERT vs ColPali: text vs page-image retrieval — KNE/LUNG PDFs
-  are mostly text-extractable; PDF page imaging may help only if
-  pdf-extraction quality turns out poor.
 - Evaluation set: need a small benchmark of "for query X, the right
   reference is Y" pairs to objectively compare bge-m3 vs ColBERT
   on PBS's actual corpus.
+- Coexistence with multimodal page-image retrieval (ColPali — see
+  next item): probably both, used for different content kinds.
+
+### Query rewriting (HyDE + decomposition + expansion)
+
+**Why**: We have ZERO query rewriting today. User/skill issues a
+literal-keyword query → gets dense-retrieval matches. State of the
+art rewrites the query before retrieval to bridge vocabulary gaps:
+- **HyDE** (Hypothetical Document Embeddings): the model first
+  drafts a hypothetical answer, embeds *that*, retrieves against
+  the corpus. Catches paraphrase mismatches.
+- **Decomposition**: split a multi-part query into sub-queries,
+  retrieve each, union.
+- **Expansion**: add synonyms / variants ("§44 BNatSchG Tötungs-
+  verbot" → also search "Tötung Verbot §44", "signifikant Tötungs-
+  risiko §44").
+
+**Sketch**:
+- HyDE for **baustein retrieval** (find similar bausteine when
+  user is about to write a similar argument): the most natural fit.
+- Decomposition for **multi-§-claim drafting**: a sentence that
+  cites BauGB §13a and BNatSchG §44 issues two retrievals.
+- Expansion for **legal lookup**: deterministic, can be a
+  preprocessor on top of search_corpus.
+- **save-baustein dedupe** — paraphrase the candidate in 3 variants,
+  search each, union, decide if duplicate. Currently no dedupe
+  guard in place at all.
+
+**Open questions**:
+- Where to apply: query-rewrite as preprocessor in the MCP backend
+  (transparent to skills), or as an explicit skill responsibility?
+  Likely backend for cheap variants (expansion), skill for HyDE
+  (needs the model in the loop).
+- Rewriting cost: HyDE adds one model call per search. Acceptable
+  for high-stakes (drafting), maybe too much for bulk operations.
+
+### Multimodal RAG (page images, tables, scanned PDFs, copy-protected PDFs)
+
+**Why**: Current ingest pipeline is text-only. We lose:
+- **Diagrams** in KNE-Anlagengestaltung (Modulreihen-schematics,
+  row-spacing), KNE-Standortsteuerung (decision flowcharts).
+- **Charts** in BfN-Schriften 705 (Agri-PV adoption, land-use).
+- **Tables** in Helgoländer Papier (species × distance recommen-
+  dations) — text-extracted tables often arrive mangled.
+- **Maps** in LUNG-MV-Artenschutzleitfaden (Bestandskarten,
+  Schutzgebiete).
+- **Future Kartierberichte** from Hendrik — fundamentally visual
+  (maps, distribution plots, habitat photos). Pure-text RAG would
+  be useless for these.
+
+**Sketch (4 sub-pieces)**:
+
+1. **Page-image retrieval (ColPali / Nomic Vision)** — embed each
+   PDF page as an image; query → page images; Claude (vision-
+   capable) reads them. Lowest pipeline complexity; decent quality.
+   Coexists with text-RAG (text for keyword-precise, images for
+   "I need to see the diagram").
+
+2. **Targeted table extraction** — Camelot / Tabula / Unstructured
+   detects tabular blocks at ingest, extracts as structured records.
+   Helgoländer-style species×distance tables become symbolic
+   queries ("min distance for Schreiadler"). High value where it
+   applies; not every PDF has tables worth this treatment.
+
+3. **Scanned PDFs (OCR)** — many older Verfahrenserlasse, archived
+   Stellungnahmen, scanned Behörden-correspondence are image-only
+   PDFs with no embedded text. Need OCR at ingest. Tools:
+   `ocrmypdf` (wraps tesseract; preserves PDF structure +
+   adds searchable text layer), `tesseract` direct + custom
+   reconstruction. German-language model essential.
+
+4. **Copy-protected PDFs** — KNE/BfN/Verlag-published leitfäden
+   sometimes ship with DRM (printing/copying disabled, sometimes
+   password-protected). For internal RAG ingest of legitimately-
+   acquired material we need a removal path:
+   - `qpdf --decrypt` for owner-password DRM (most common,
+     trivial to strip)
+   - `pikepdf` (Python; same backend) for programmatic ingest
+   - `mutool clean -d` (MuPDF) as fallback
+   - Investigation: which DRM kinds appear in PBS's actual
+     publisher mix; which tool handles each cleanly.
+   - Legal: DE Privatkopie / wissenschaftliche Eigennutzung law
+     covers internal-use ingest of legitimately-acquired material;
+     redistribution is separate. Document the policy.
+
+**Open questions**:
+- Coexistence: page-image retrieval + text-RAG returning different
+  hit kinds — how does the orchestrator decide which to send to the
+  model? Probably hybrid retrieval that includes both kinds in
+  candidate pool, reranker decides.
+- Storage cost: page images are large; LanceDB blob storage or
+  filesystem references?
+- Vision-model cost: every multimodal hit means image bytes in the
+  context; budget control matters.
+- Table extraction precision: structured tables are queryable but
+  the extractor mis-identifies blocks. Need fallback to text+image.
+
+### Structural retrieval (legal §-graph + project graph + verfahren state-machine)
+
+**Why**: PBS corpus and project state are full of latent structure
+that text-only retrieval ignores. Recurring pattern observed in
+this session: we keep designing things text-first and finding
+ourselves needing a graph or registry later (integration registry,
+audit trail are exactly this — formalizing what's currently
+implicit).
+
+**Meta-principle**: when something is queried by attribute /
+capability / relationship, design it as data, not prose.
+
+**Three concrete graphs**:
+
+1. **Legal §-graph** — §44 BNatSchG cites §15, §1; BVerwG-9-A-22-13
+   interprets §45 Abs.7 Nr.5; KNE-Anlagengestaltung references
+   §44 Abs.1; LUNG-MV-Artenschutzleitfaden tracks BNatSchG §44
+   Anwendungspraxis. Today: nothing — keyword search only. Graph
+   would let symbolic traversal: "find all rulings interpreting
+   §45 Abs.7", "what cites this baustein's underlying §s".
+   Built at ingest (extract §-references from law/ruling/leitfaden
+   text), updated by research-references on each refresh.
+
+2. **Project-cross-project graph** — projects × doctypes × phases
+   × decisions × partners × clients. Today: state.md per project,
+   no aggregation. Graph would answer "all PV-FFA projects in
+   phase 5b with Hendrik as partner", "which projects share this
+   client", "decision X across projects".
+
+3. **Verfahren state-machine** — bauleitplanung-phasen.md is *prose*
+   describing the 13 phases + transitions. Could be a state machine
+   the orchestrator queries: "given current phase X, valid next
+   transitions"; "what's required to fire transition Y". Used by
+   orchestrator for phase-transition validation, by validate-
+   checklist for "is this artifact ready for phase X" gates.
+
+**Open questions**:
+- Storage: LanceDB has no graph queries; SQLite + manual graph
+  schema, or a real graph DB (Kùzu / Neo4j)?
+- Maintenance: §-graph and project-graph need to update on every
+  research-references run / state.md write. Build derived-data
+  pipeline?
+- Integration with audit trail (separate ROADMAP item): an audit
+  event is naturally a graph-edge ("decision X was logged in
+  project Y by partner Z at time T").
+
+### Existing skill protocols — revisit for iterate/rewrite patterns
+
+When next touching these skills, evaluate against the iterate /
+rewrite / rerank lens above. Currently designed bulk-style; per-
+claim or per-attribute iteration would improve grounding:
+
+- **`verify-citations`** — currently flat per-cite lookup. Should
+  iterate: ambiguous cite → fetch chapter → narrow → possibly fetch
+  interpreting ruling → decide.
+- **`validate-checklist`** — checklist hits should be able to fetch
+  the actual reference defining what's required, not just match
+  section names.
+- **`survey-project`** — for each ambiguous file, iterate (filename
+  → content sniff → last-modified → related files).
+- **Stellungnahmen-/Abwägung-Bearbeitung** — per-concern iteration:
+  fetch related baseline + relevant ruling + similar past Abwägung.
+- **`save-baustein`** — needs dedupe guard with HyDE-style
+  paraphrase-search (currently no dedupe at all).
+
+These are protocol changes, not infrastructure — flag for the next
+review of each skill.
 
 ---
 
