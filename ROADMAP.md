@@ -11,65 +11,34 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ## v1.x — likely soon
 
-### Backend MCP discovery layer (Tier 1 — pre-RAG)
+### Tier 2 MCP cross-reference tools (during first project work) — partial
 
-**Why**: Today the layered manifest API (`cfg.all_references_manifests()`,
-`app_universal_skeleton_for(...)`, etc.) lives only as Python in
-`backend/.../config.py`. Skills can't call Python directly — they
-fall back to Glob/Read of `extensions/` which bypasses scope
-filtering and is non-deterministic. Closing this gap is the
-prerequisite for the alignment sweep + RAG kickoff: re-ingesting
-57 entries through a wrong pipeline is the cost we're avoiding,
-and the same logic applies to skill behavior — every skill
-referencing the manifest set should call a tool, not improvise.
-
-**Sketch (5 MCP tools)**:
-
-- `list_reference_manifests(scope_filter=true)` — wraps
-  `cfg.all_references_manifests()`. Returns
-  `[{path, layer, scope_key, entry_count, last_updated}, ...]`.
-  Default scope-filtered (only manifests in active
-  `scope.{domains,states}`); pass `scope_filter=false` for the
-  full union.
-- `list_doctypes_manifests(scope_filter=true)` — same shape for
-  doctype manifests; wraps `cfg.all_doctypes_manifests()`.
-- `list_skills()` — reads `plugin/skills/*/SKILL.md` frontmatter,
-  returns `[{name, version, description, trigger_phrases_excerpt,
-  mcp_tools_required, mcp_tools_optional, path}, ...]`. Replaces
-  the manually-maintained "Specialist routing" inventory in
-  orchestrator PROCEDURE.md with auto-discovery.
-- `list_skeletons(doctype)` — wraps `app_universal_skeleton_for(...)`
-  + `app_domain_skeleton_for(...)`. Returns the layered
-  universal + per-domain overlay set for a given doctype.
-- `list_bausteine(scope, scope_key=None)` — scope-aware
-  enumeration with new orthogonality semantics
-  (`universal | domain | state | project`). Replaces the stale
-  signature in skills referencing `global | domain | project`.
-
-**Order**: build these BEFORE the alignment sweep. Skills written
-in the sweep then reference the new tools by name (and declare
-them in `mcp_tools_required[]` per meta-rule 5).
-
-### Tier 2 MCP cross-reference tools (during first project work)
+**Status**: `find_bausteine_by_reference` landed in session 4 (see
+`backend/mcp-server/src/pbs_mcp/tools/memory.py`). The remaining
+two tools below are deferred until the first reference refresh
+fires and the manual fallback proves friction.
 
 **Why**: When `research-references` updates a law and needs to
-find every dependent baustein and memory doc, today there's no
-graph query. Already referenced as planned in `research-references`
-SKILL.md but not implemented.
+find every dependent baustein and memory doc, the cross-reference
+graph is partial — bausteine lookup landed but memory-docs and
+manifest-entry single-lookup are still planned.
 
-**Sketch**:
+**Sketch (remaining)**:
 
-- `find_bausteine_by_reference(law=, paragraph=, ruling=,
-  leitfaden=)` — scans baustein frontmatter `references[]` for
-  matches; returns paths.
-- `find_memory_docs_by_reference(...)` — same pattern for
-  cross-cutting memory docs declaring `references_used[]`
-  frontmatter.
+- `find_memory_docs_by_reference(...)` — cross-cutting memory docs
+  declaring `references_used[]` frontmatter.
 - `find_manifest_entry(id)` — single-entry lookup across the
   union of in-scope manifests.
 
 Build when the first reference refresh fires and the manual
 fallback proves friction.
+
+> **Tier 1 MCP discovery layer** (`list_reference_manifests`,
+> `list_doctypes_manifests`, `list_skills`, `list_skeletons`,
+> `list_bausteine`) landed in session 4 — see
+> `backend/mcp-server/src/pbs_mcp/tools/discovery.py` and
+> `tools/memory.py`. Removed from this ROADMAP per "Tracking
+> conventions" rule.
 
 ### Tier 3 MCP introspection tools (deferred)
 
@@ -709,11 +678,10 @@ itself a gap.
   matching tool descriptions becomes unwieldy; routing decisions
   are repeatedly wrong because the orchestrator can't query
   callables by capability.
-- **Total callable count exceeds ~50** — current count is ~30
-  (16 skills + 5 integration adapters + ~10 planned MCP tools +
-  1 external MCP `gis-utils`). At this scale the orchestrator
-  holds the inventory in context fine; at 50+ a registry pays
-  off.
+- **Total callable count exceeds ~50** — current count is ~44
+  (16 skills + 5 integration adapters + 22 MCP tools + 1 external
+  MCP `gis-utils`). At this scale the orchestrator holds the
+  inventory in context fine; at 50+ a registry pays off.
 - **Second deployment** — PBS-only doesn't justify cross-office
   knowledge propagation; a second Planungsbüro adopting the app
   forces it (registry entries become reusable across offices).

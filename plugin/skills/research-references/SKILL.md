@@ -1,8 +1,11 @@
 ---
 name: research-references
 description: This skill should be used to fetch, update, or check freshness of legal references (gesetze, leitfäden, urteile) tracked across the office's layered references manifests. Triggered by user phrases like "update references", "neue Fassung holen", "BauGB current?", "research new law", "are our laws current?", "refresh references", "gesetze aktualisieren", "fetch BVerwG ruling", or scheduled refresh checks.
-version: 0.2.0
+version: 0.2.1
 license: MIT
+mcp_tools_required: [list_reference_manifests, ingest_paths]
+mcp_tools_optional: [find_bausteine_by_reference]
+fallback_when_mcp_absent: "without list_reference_manifests + ingest_paths the skill cannot run a refresh — fail loud and route the user to restart the backend. find_bausteine_by_reference is optional; without it, dependent-baustein cross-reference falls back to a filesystem scan of memory/bausteine/**."
 ---
 
 # research-references
@@ -37,9 +40,9 @@ Implications:
 ## Manifest sources (layered)
 
 The skill walks the union of manifests selected by the office's
-`scope` configuration — programmatically obtained from
-`office_config.load().all_references_manifests()`. The list returns
-in load order:
+`scope` configuration — obtained from
+`list_reference_manifests(scope_filter=true)` (Tier 1 MCP tool). The
+list returns in load order:
 
 1. `extensions/universal/references-manifest.yaml` (every bureau)
 2. For each domain in `scope.domains`:
@@ -66,7 +69,7 @@ Three modes:
 ## Behavior (full refresh)
 
 1. **Resolve manifest set** via
-   `office_config.load().all_references_manifests()`. Report which
+   `list_reference_manifests(scope_filter=true)`. Report which
    manifests are in scope.
 
 2. **For each entry in each manifest, fetch + diff**:
@@ -171,7 +174,7 @@ User sees:
 ## Tools used
 
 - `WebFetch` (built-in) for source URLs.
-- `office_config.load().all_references_manifests()` to enumerate.
+- `list_reference_manifests(scope_filter=true)` (MCP) to enumerate.
 - `ingest_paths(paths, force?)` (MCP tool) — re-ingestion.
 - `find_bausteine_by_reference(law, paragraph)` — cross-reference
   dependents.

@@ -4,7 +4,7 @@ description: This skill should be used when the user works on Planungsbüro (Ger
 version: 0.2.0
 license: MIT
 mcp_tools_required: [list_projects, list_skills]
-mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference]
+mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
 fallback_when_mcp_absent: "warn user and suggest backend restart. Orchestrator can still surface decisions and route to specialists from skill descriptions, but session-open project enumeration and watch-list cross-references degrade to filesystem reads."
 ---
 

@@ -354,7 +354,7 @@ layer is not designed.
 | **A** | **Skill** | `plugin/skills/<name>/SKILL.md` | Required (Claude Code uses for trigger detection) | Behavioral protocol. Auto-loaded on trigger match. Tells AI HOW to act. |
 | **B** | **Skill reference** | `plugin/skills/<name>/references/<file>.md` | Not required | Detailed protocol or specs the parent skill loads on demand. Format specs, checklists, procedures. |
 | **C** | **Memory reference content** | `memory/universal/...` | Optional (`references_used: []` for cross-cutting docs) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
-| **D** | **Memory data record** | `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query — including `scope` for bausteine) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
+| **D** | **Memory data record** | `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query — including `scope`, `verified_against_version`, `cross_project_visible` for bausteine; full schema in `plugin/skills/save-baustein/references/format.md`) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
 | **E** | **Backend code & docs** | `backend/mcp-server/...` | Code: none. Docs: markdown without frontmatter. | Python implementation + technical schema docs. |
 | **F** | **External data** | Resolved via office-config: `paths.projects_root/...`, `paths.references_root/...`, `paths.state_root/...`, per-project `<project>/_ai/...` | Varies | Real user data: legal texts, project artifacts, runtime state, correspondence. |
 | **G** | **Office config (per-deployment)** | Outside the repo: `$PBS_OFFICE_CONFIG` or `~/.config/pbs-bureau/office.yaml`. Office-style.sty + state-overlay manifests live under `paths.state_root`. | YAML schema v2 (see `docs/office-config.schema.yaml`) | Per-deployment values: identity, paths, practices, scope, manifest map, integrations, LaTeX styling. NOT versioned with the app. |
@@ -556,6 +556,14 @@ real-use surfaces edge cases.
 These ROADMAP items will extend or modify the architecture when
 implemented. Recorded here so future sessions don't re-discover
 them. Full design lives in `ROADMAP.md`.
+
+> **RAG-related items** (multimodal ingest, structural retrieval,
+> query rewriting, agentic retrieval, late-interaction text
+> retrieval) are further resolved (PROPOSED) in
+> `docs/rag-pipeline-decisions.md`; final confirmation pending the
+> pre-RAG audit (which is itself the gating activity for RAG
+> kickoff). When that doc moves from PROPOSED to ACCEPTED, the
+> bullets below will reflect ACCEPTED verdicts inline.
 
 - **Audit trail** — unified change/decision/version log across
   artifacts, references, manifests, configs, integrations,

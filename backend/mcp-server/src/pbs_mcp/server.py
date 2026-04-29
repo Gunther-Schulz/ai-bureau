@@ -89,7 +89,7 @@ TOOL_DESCRIPTIONS: dict[str, str] = {
     "ingest_paths": "Index file paths into LanceDB with embeddings. Selects chunker per source type. force=true re-indexes existing.",
     "ingest_project_inputs": "Project-namespaced ingestion of source materials. Wraps ingest_paths with project + artifact_kind=input metadata.",
     "search_inputs": "Search a single project's namespaced input documents only.",
-    "list_bausteine": "List bausteine matching scope/domain/project/status filters.",
+    "list_bausteine": "List bausteine matching scope (universal/domain/state/project) + scope_key + project_root + status filters.",
     "get_baustein": "Fetch a baustein by name. Increments use_count and updates last_used.",
     "save_baustein": "Write a new baustein with full frontmatter (defaults applied). Uses the canonical format spec.",
     "flag_baustein": "Mark a baustein as flagged with a reason (e.g. citation drift, rejection feedback).",
