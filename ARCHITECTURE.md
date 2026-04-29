@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.9 (post-session-7 + office-vs-department open question)**.
+Status: **v0.10 (post-session-8 + A2A-shape compatibility + actor_kind discrimination)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -69,6 +69,20 @@ Status: **v0.9 (post-session-7 + office-vs-department open question)**.
   natural abstractions + ad-hoc context sharing + integration/
   setup configuration. Scoped as pre-RAG commitment #12 for
   structural design discussion before Phase 1 corpus download.
+- **v0.9 → v0.10**: **A2A-shape compatibility decided per row** of
+  the v2 Gemini Enterprise comparison table. AuditEvent grows three
+  additive fields (`actor_kind` required, `actor_card` optional,
+  `origin_agent_card` optional) — distinguishes human vs skill vs
+  external-A2A-peer as event emitter. Pattern-vs-instance discipline
+  picks up an explicit archetype-portability paragraph: every
+  schema decision is checked against "would this port cleanly to a
+  multi-agent A2A archetype?" alongside the cross-domain test. HTTP
+  MCP transport, data classification, and signing fields are
+  deferred with documented paths to commitments #13 and Tier-3
+  migration. Cross-department coordination (open question per v0.9)
+  receives a load-bearing constraint: must be event-shaped, not
+  call-shaped — preserves transport-swap-to-A2A path for #12. See
+  `docs/decisions/a2a-and-gemini-pattern-emulation.md`.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -458,7 +472,7 @@ list):
 | Skill Bundle | semver `version:` field; bump on behavior change. Body changes invalidate skill behavior on `/reload-plugins`. |
 | Memory (prose) | `references_used: []` frontmatter declares dependent law refs. `research-references` flags affected docs in `memory/product-backlog.md` when a referenced law is updated. |
 | Memory (records) | `status: active|flagged|archived|superseded`, `last_validated`, `review_due`, `references[].verified_against_version`. `validate-bausteine` sweeps for stale records. |
-| Memory (audit-log) | Append-only `<project>/_ai/audit-trail.jsonl` per docs/decisions/audit-trail-v1.md. Each `AuditEvent` carries `id`, `timestamp`, `kind`, `sources[]`. Events never invalidate (immutable history); `causes[]` chain captures supersession. `query_audit_trail` MCP tool is the canonical query layer; existing prose sources (decisions.md, snapshots/, etc.) remain authoritative for human-readable context. Dual-write discipline: every event-producing skill calls `record_audit_event`. |
+| Memory (audit-log) | Append-only `<project>/_ai/audit-trail.jsonl` per docs/decisions/audit-trail-v2.md (single-write supersedes v1's dual-write). Each `AuditEvent` carries `id`, `timestamp`, `kind`, `actor`, `actor_kind` (human/skill/external_agent per a2a-and-gemini-pattern-emulation.md), `actor_card?`, `origin_agent_card?`, `sources[]`. Events never invalidate (immutable history); `causes[]` chain captures supersession. `query_audit_trail` is the canonical query layer; `render_audit_trail` produces prose views from queries. Skills call `record_audit_event` (or `record_decision` for legal-defense provenance via `decisions.md` mirror — gate-mediated). Per the strict-validation discipline, `actor_kind` is required; `external_agent` events MUST name `origin_agent_card`. |
 | Backend | Python imports + Pydantic schemas; restart MCP server after changes. No declarative invalidation hook. |
 | Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
 | External data | Per-project `_ai/state.md.lifecycle` declares phase + status; `roots.references_root` corpus carries `changelog.md`. |

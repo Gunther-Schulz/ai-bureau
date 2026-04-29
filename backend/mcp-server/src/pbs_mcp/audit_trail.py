@@ -24,7 +24,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from pbs_mcp._strict import StrictModel
 
@@ -43,6 +43,17 @@ EventKind = Literal[
     "reference_update",        # research-references applied an update
     "baustein_use",            # baustein cited (successful/rejected)
 ]
+
+
+# Per docs/decisions/a2a-and-gemini-pattern-emulation.md — distinguishes
+# the kind of agent that produced the event. "human" = a person (Gunther,
+# colleague, user under multi-user deployment). "skill" = a PBS skill or
+# plugin agent emitting an event during its execution. "external_agent" =
+# an A2A peer producing events into our trail (today: none; reserved for
+# future cross-office workflows). The discrimination is independently
+# valuable for #11 (plugin agents as skill-kind) and #12 (per-department
+# audit views via skill membership), and forward-compatible with A2A.
+ActorKind = Literal["human", "skill", "external_agent"]
 
 
 # === Source references ==================================================
@@ -76,6 +87,9 @@ class AuditEvent(StrictModel):
     kind: EventKind
     project: str = Field(..., min_length=1)          # YY-NN-slug
     actor: str = Field(..., min_length=1)            # office actor id, kind=internal
+    actor_kind: ActorKind                            # human | skill | external_agent
+    actor_card: str | None = None                    # reserved for agent-card URL (A2A)
+    origin_agent_card: str | None = None             # source A2A peer (when external_agent)
     summary: str = Field(..., min_length=1)          # one-line description
     details: dict[str, Any] = Field(default_factory=dict)
     sources: list[SourceRef] = Field(..., min_length=1)
@@ -88,6 +102,23 @@ class AuditEvent(StrictModel):
         if v.tzinfo is None:
             return v.replace(tzinfo=timezone.utc)
         return v
+
+    @model_validator(mode="after")
+    def _check_external_agent_origin(self) -> "AuditEvent":
+        """external_agent events MUST name their source peer.
+
+        Per docs/decisions/a2a-and-gemini-pattern-emulation.md row 5: the
+        actor_kind discrimination is meaningful only if external_agent
+        events can be traced back to their origin. Today no external
+        events exist; this invariant guards future A2A-peer integration
+        from emitting unattributable events into our trail.
+        """
+        if self.actor_kind == "external_agent" and not self.origin_agent_card:
+            raise ValueError(
+                f"actor_kind='external_agent' requires origin_agent_card to be set; "
+                f"event {self.id} cannot be external without naming its source peer"
+            )
+        return self
 
 
 # === Read/write helpers =================================================

@@ -442,139 +442,41 @@ today.
   #7 (bootstrap-write tools) — those can run in parallel.
 
 **10. A2A schema compatibility + Gemini Enterprise pattern
-emulation decision gate** (session 7, market context) — see
-ROADMAP v2 "AI-office builder" + "Gemini Enterprise migration
-path" entries.
+emulation decision gate** — see
+`docs/decisions/a2a-and-gemini-pattern-emulation.md`.
 
-- **Two-sided decision gate**:
-  - **(A) Defensive — A2A-shape compatibility**: are our schemas
-    A2A-friendly enough that future migration (per "Gemini
-    Enterprise migration path" in v2 section) is cheap? Cost-
-    cheap to decide pre-RAG; expensive once data accumulates.
-  - **(B) Proactive — Gemini Enterprise pattern emulation**:
-    which of Google's archetypal choices should we adopt *now*
-    (additively, within our single-big-model archetype)? The
-    Gemini Enterprise comparison table in v2 section names the
-    trade-offs row by row; this commitment decides per row what
-    to emulate proactively.
-- **Defensive (A) — concrete questions to answer**:
-  - **AuditEvent schema**: A2A's "signed agent cards" pattern
-    expects cryptographic provenance + agent identity per event.
-    Our AuditEvent has `actor` and event signatures aren't
-    designed in. Decision: add cryptographic-signature-friendly
-    shape now (e.g., reserve `signature_hint`, `agent_card_id`
-    fields) or defer?
-  - **ProjectState identity**: A2A expects agent-card identity
-    for each agent in cross-office workflows. Our
-    `ProjectState.project` is a slug; does it need a stronger
-    identity field (UUID, agent-card reference)?
-  - **MCP server endpoint**: should the PBS backend expose an
-    A2A endpoint stub now (decision: accept connections from
-    other A2A-speaking offices), or defer until concrete
-    cross-office scenario?
-  - **`record_audit_event` MCP tool**: events that originate
-    from another A2A peer should be distinguishable from local
-    events. Add `origin_agent_card?: str` field?
-- **Proactive (B) — preliminary leans** (to be confirmed at
-  session 8 when commitment runs; current best guesses based on
-  cost-cheap / load-bearing / pre-RAG-critical analysis):
-  - **Likely adopt now** (additive, cost-cheap, ties into other
-    pre-RAG commitments):
-    - A2A-shape internal skill→agent + department→department
-      messaging (same protocol shape internal + external; ties
-      to commitment #12 department modularization)
-    - Agent identity as first-class in audit trail (skill-as-
-      agent vs human-as-actor vs A2A-peer-as-agent — additive
-      Pydantic fields)
-    - Data classification annotations on contract-bearing
-      Pydantic fields (PII, business-sensitive, public — Agent
-      Gateway analogue, additive field annotations)
-    - **HTTP MCP endpoints alongside stdio** (revised session-7
-      late from "defer" to "adopt"). Cloud-deployability for
-      consulting engagements is realistic near-term — backend
-      should expose both stdio (Gunther's local use) and HTTP
-      (cloud-deployed clients accessing via Cowork's HTTP MCP
-      pattern, like Anthropic's `legal` plugin uses
-      `mcp.box.com`/etc.). Decision made here; full cloud
-      deployment architecture is commitment #13.
-  - **Likely defer** (real but not pre-RAG-critical; document
-    path for future):
-    - Session-spanning "office-memory" concept (current memory
-      taxonomy probably sufficient for solo; revisit if needed)
-    - Model Armor analogue (input validation against prompt
-      injection at MCP gate boundary)
-  - **Defer to v2** (heavy work, post-launch):
-    - Agent Simulation analogue (stress-test pattern for cross-
-      skill workflows; partial coverage via audit + design-review)
-  - **Skip** (no archetype difference):
-    - Model layer (Claude in both archetypes; no decision needed)
-
-- **Proactive (B) — per-row analysis** (per v2 comparison table):
-  - **Orchestrator (single Opus session vs N agents via A2A)**:
-    we partially adopt N-agent pattern via plugin agents
-    (commitment #11). Decision: how A2A-shaped should our
-    INTERNAL skill→agent delegation be? If we shape skill→agent
-    calls as A2A-message-shaped today, the same protocol serves
-    internal coordination AND external A2A peer requests later.
-    Cost-cheap; potentially elegant. Decide.
-  - **Backend (local stdio vs HTTP managed)**: HTTP MCP endpoints
-    for our pbs_mcp server in addition to stdio. Would let
-    non-Cowork clients (any A2A-speaking system) consume our
-    tools AND enables cloud deployment for consulting engagements
-    (clients access via Cowork's HTTP MCP pattern). **Decision:
-    adopt** (revised session-7 late — cloud-deployability for
-    consulting is realistic near-term, makes this load-bearing
-    pre-RAG). Full cloud deployment architecture handled in
-    commitment #13.
-  - **Persistent state (state.md vs Memory Bank)**: their Memory
-    Bank is session-spanning persistent context. Our state.md is
-    per-project + memory taxonomy is layered. Decision: do we
-    add a session-spanning "office memory" concept (scope wider
-    than project, narrower than universal)? Or stay with current
-    taxonomy? Likely defer — current taxonomy probably sufficient
-    for solo, but document.
-  - **Cross-department workflow (in-session orchestration vs A2A
-    message-passing)**: COULD adopt A2A-shaped INTERNAL message-
-    passing for department coordination today. Means same protocol
-    works for departments-within-office AND offices-cross-system.
-    Decision: design department-coordination as A2A-shape now?
-    Tightly coupled to commitment #12 (department modularization).
-  - **Audit trail (custom JSONL vs Agent Identity cryptographic)**:
-    add cryptographic-friendly fields to AuditEvent (already
-    captured in (A) above). PLUS: explicit "agent identity" as
-    first-class — distinguish skill-as-agent vs human-as-actor
-    vs external-A2A-peer-as-agent. Cost-cheap additive fields.
-  - **Governance (meta-rules vs Agent Gateway/Model Armor/Agent
-    Simulation)**:
-    - **Agent Gateway analogue**: data classification annotations
-      on contract-bearing fields (PII, business-sensitive, public).
-      Cost-cheap additive Pydantic field annotations. Decision:
-      adopt now? Likely yes (small, additive).
-    - **Model Armor analogue**: input validation pattern at MCP
-      gate for skill-invoked tool calls (defend against prompt
-      injection in user inputs). Defer (probably) — not pre-RAG-
-      critical for solo, but document.
-    - **Agent Simulation analogue**: stress-test pattern for
-      cross-skill workflows. We have audit + design-review (partial
-      coverage). Defer to v2 — full simulation is heavy.
-  - **Model**: identical (Claude both archetypes). Skip.
-- **Output**: decision record `docs/decisions/a2a-and-gemini-
-  pattern-emulation.md` documenting both defensive (A) and
-  proactive (B) decisions per row. Adopted patterns implemented;
-  deferred patterns documented for future revisit.
-- **Scope** (revised): 1 session (was ~half-day) — analysis +
-  schema additions per row of comparison table. Larger because
-  the proactive (B) side adds emulation decisions per element,
-  not just A2A-shape additions per element. Implementation of
-  an actual A2A endpoint or HTTP MCP endpoints (if decided)
-  remains separate follow-on.
-- **Order note**: **execute FIRST in pre-RAG queue** (session 7
-  late insight, user-directed pull-forward). Smallest commitment,
-  informs every downstream schema decision (#6 AuditEvent shape,
-  #7 bootstrap-write tool interfaces, #9 pattern-vs-instance
-  split, #12 department identity + cross-department messaging
-  shape, #11 Cowork integration agent identity). Doing it last
-  means risk of schema refactor on every prior item.
+- ✅ **Done session 8**: per-row decisions across the v2 comparison
+  table (orchestrator / backend transport / persistent state /
+  cross-department workflow / audit trail / governance / model);
+  three additive AuditEvent fields shipped (`actor_kind` required,
+  `actor_card` optional, `origin_agent_card` optional) +
+  cross-reference validator (`external_agent` requires
+  `origin_agent_card`).
+- ✅ **ARCHITECTURE.md** v0.9 → v0.10: meta-rule 3 invalidation
+  table for AuditEvent updated; archetype-portability paragraph
+  added to v0.10 changelog entry.
+- **Constraints recorded for downstream commitments**:
+  - #6 audit-trail v2 retrofit: every `record_audit_event` /
+    `record_decision` call MUST set `actor_kind` explicitly.
+    Skill retrofits pass `actor_kind="skill", actor_card=<name>`.
+    `user_confirmation` events emit as `actor_kind="human"`.
+  - #11 Cowork plugin agents: emit as
+    `actor_kind="skill", actor_card=<agent-name>`.
+  - #12 office-vs-department: cross-department coordination MUST
+    be event-shaped (typed events on audit trail or sibling
+    mechanism), not call-shaped. Preserves transport-swap-to-A2A
+    path.
+  - #13 deployment flexibility: HTTP MCP transport implementation
+    + data classification annotations + AuditEvent.user_id
+    (multi-user) land here. #10 decided HTTP MCP adoption; #13
+    builds it.
+- **Deferred items** (with documented revisit triggers in the
+  decision record):
+  - Cryptographic signing fields (Tier 3 migration when triggered)
+  - Deterministic JSON canonicalization (Tier 3 migration)
+  - Session-spanning "office-memory" concept
+  - Model Armor analogue (input validation at MCP gate)
+  - Agent Simulation analogue (v2)
 
 **11. Cowork as primary end-user runtime** (session 7, market
 context) — see ROADMAP v2 "AI-office builder" entry's "Market
