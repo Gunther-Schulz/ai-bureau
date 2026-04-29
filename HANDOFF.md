@@ -333,21 +333,33 @@ than landing the new shape first.
      implementation, possibly indefinite. Working method is
      best-effort split per single-domain-pioneer constraint.
 
-10. **A2A schema compatibility decision gate** (per ROADMAP
-    commitment #10) — **POSITION 1** (pulled forward, session 7
-    late insight):
-    - Decide whether AuditEvent / ProjectState / MCP server
-      get A2A-shape-compatibility additions now (cheap pre-RAG)
-      vs deferred (expensive once data accumulates).
-    - Output: `docs/decisions/a2a-compatibility.md` documenting
-      schema additions accepted vs deferred.
-    - Scope: ~half-day to 1 session (analysis + minor schema
-      additions).
+10. **A2A schema compatibility + Gemini Enterprise pattern
+    emulation decision gate** (per ROADMAP commitment #10) —
+    **POSITION 1** (pulled forward, session 7 late insight,
+    expanded session-7-final to include proactive emulation):
+    - Two-sided decision gate:
+      - **(A) Defensive — A2A-shape compatibility**: AuditEvent
+        / ProjectState / MCP server get A2A-shape-compatibility
+        additions now (cheap pre-RAG) vs deferred (expensive
+        once data accumulates).
+      - **(B) Proactive — Gemini Enterprise pattern emulation**:
+        which Google archetypal choices to adopt *now* in our
+        single-big-model archetype (per row of comparison table
+        in v2 "Gemini Enterprise migration path" section). Per-
+        row decisions: orchestrator/internal-A2A-shape,
+        backend/HTTP-MCP, persistent-state/office-memory-concept,
+        cross-department-workflow/A2A-internal-messages, audit-
+        trail/agent-identity, governance/data-classification +
+        Model-Armor + Agent-Simulation analogues.
+    - Output: `docs/decisions/a2a-and-gemini-pattern-emulation.md`
+      documenting both sides per row.
+    - Scope: 1 session (was ~half-day; expanded for proactive
+      emulation per row of comparison table).
     - Order rationale: smallest commitment, informs every
       downstream schema decision (#6 AuditEvent, #7 bootstrap-
       write tool interfaces, #9 pattern-vs-instance split, #12
-      department identity, #11 Cowork agent identity). First in
-      pre-RAG queue.
+      department identity + cross-department messaging shape,
+      #11 Cowork agent identity). First in pre-RAG queue.
 
 11. **Cowork as primary end-user runtime — DEEP integration**
     (per ROADMAP commitment #11, revised session-7 late under

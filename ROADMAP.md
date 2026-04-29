@@ -441,19 +441,23 @@ today.
   far enough along that the schema is stable; doesn't depend on
   #7 (bootstrap-write tools) — those can run in parallel.
 
-**10. A2A schema compatibility decision gate** (session 7, market
-context) — see ROADMAP v2 "AI-office builder" entry's "Market
-context" section.
+**10. A2A schema compatibility + Gemini Enterprise pattern
+emulation decision gate** (session 7, market context) — see
+ROADMAP v2 "AI-office builder" + "Gemini Enterprise migration
+path" entries.
 
-- **Why a decision gate, not implementation**: A2A protocol
-  (Linux Foundation governed, 150+ orgs in production as of
-  April 2026) is the emerging cross-agent communication standard.
-  We don't need to *implement* A2A pre-RAG, but we do need to
-  decide whether our schemas are A2A-shape-compatible *now*
-  (cheap addition) or accept a future migration cost (expensive
-  if data has accumulated). Pre-RAG is the unique cost-cheap
-  decision window.
-- **Concrete questions to answer**:
+- **Two-sided decision gate**:
+  - **(A) Defensive — A2A-shape compatibility**: are our schemas
+    A2A-friendly enough that future migration (per "Gemini
+    Enterprise migration path" in v2 section) is cheap? Cost-
+    cheap to decide pre-RAG; expensive once data accumulates.
+  - **(B) Proactive — Gemini Enterprise pattern emulation**:
+    which of Google's archetypal choices should we adopt *now*
+    (additively, within our single-big-model archetype)? The
+    Gemini Enterprise comparison table in v2 section names the
+    trade-offs row by row; this commitment decides per row what
+    to emulate proactively.
+- **Defensive (A) — concrete questions to answer**:
   - **AuditEvent schema**: A2A's "signed agent cards" pattern
     expects cryptographic provenance + agent identity per event.
     Our AuditEvent has `actor` and event signatures aren't
@@ -471,19 +475,69 @@ context" section.
   - **`record_audit_event` MCP tool**: events that originate
     from another A2A peer should be distinguishable from local
     events. Add `origin_agent_card?: str` field?
-- **Output**: a short decision record `docs/decisions/
-  a2a-compatibility.md` documenting which schemas got A2A-
-  shape-compatibility additions, which deferred, and why.
-- **Scope**: 1 short session (~half day to 1 session) — analysis
-  + schema additions. Implementation of an actual A2A endpoint
-  (if decided) is a separate follow-on.
+- **Proactive (B) — Gemini Enterprise pattern emulation
+  questions** (per row of v2 comparison table):
+  - **Orchestrator (single Opus session vs N agents via A2A)**:
+    we partially adopt N-agent pattern via plugin agents
+    (commitment #11). Decision: how A2A-shaped should our
+    INTERNAL skill→agent delegation be? If we shape skill→agent
+    calls as A2A-message-shaped today, the same protocol serves
+    internal coordination AND external A2A peer requests later.
+    Cost-cheap; potentially elegant. Decide.
+  - **Backend (local stdio vs HTTP managed)**: HTTP MCP endpoints
+    for our pbs_mcp server in addition to stdio? Would let
+    non-Cowork clients (any A2A-speaking system) consume our
+    tools. Decision: defer (likely yes) — solo-deployment doesn't
+    need it pre-RAG. Document the path.
+  - **Persistent state (state.md vs Memory Bank)**: their Memory
+    Bank is session-spanning persistent context. Our state.md is
+    per-project + memory taxonomy is layered. Decision: do we
+    add a session-spanning "office memory" concept (scope wider
+    than project, narrower than universal)? Or stay with current
+    taxonomy? Likely defer — current taxonomy probably sufficient
+    for solo, but document.
+  - **Cross-department workflow (in-session orchestration vs A2A
+    message-passing)**: COULD adopt A2A-shaped INTERNAL message-
+    passing for department coordination today. Means same protocol
+    works for departments-within-office AND offices-cross-system.
+    Decision: design department-coordination as A2A-shape now?
+    Tightly coupled to commitment #12 (department modularization).
+  - **Audit trail (custom JSONL vs Agent Identity cryptographic)**:
+    add cryptographic-friendly fields to AuditEvent (already
+    captured in (A) above). PLUS: explicit "agent identity" as
+    first-class — distinguish skill-as-agent vs human-as-actor
+    vs external-A2A-peer-as-agent. Cost-cheap additive fields.
+  - **Governance (meta-rules vs Agent Gateway/Model Armor/Agent
+    Simulation)**:
+    - **Agent Gateway analogue**: data classification annotations
+      on contract-bearing fields (PII, business-sensitive, public).
+      Cost-cheap additive Pydantic field annotations. Decision:
+      adopt now? Likely yes (small, additive).
+    - **Model Armor analogue**: input validation pattern at MCP
+      gate for skill-invoked tool calls (defend against prompt
+      injection in user inputs). Defer (probably) — not pre-RAG-
+      critical for solo, but document.
+    - **Agent Simulation analogue**: stress-test pattern for
+      cross-skill workflows. We have audit + design-review (partial
+      coverage). Defer to v2 — full simulation is heavy.
+  - **Model**: identical (Claude both archetypes). Skip.
+- **Output**: decision record `docs/decisions/a2a-and-gemini-
+  pattern-emulation.md` documenting both defensive (A) and
+  proactive (B) decisions per row. Adopted patterns implemented;
+  deferred patterns documented for future revisit.
+- **Scope** (revised): 1 session (was ~half-day) — analysis +
+  schema additions per row of comparison table. Larger because
+  the proactive (B) side adds emulation decisions per element,
+  not just A2A-shape additions per element. Implementation of
+  an actual A2A endpoint or HTTP MCP endpoints (if decided)
+  remains separate follow-on.
 - **Order note**: **execute FIRST in pre-RAG queue** (session 7
   late insight, user-directed pull-forward). Smallest commitment,
   informs every downstream schema decision (#6 AuditEvent shape,
   #7 bootstrap-write tool interfaces, #9 pattern-vs-instance
-  split, #12 department identity, #11 Cowork integration agent
-  identity). Doing it last means risk of schema refactor on
-  every prior item.
+  split, #12 department identity + cross-department messaging
+  shape, #11 Cowork integration agent identity). Doing it last
+  means risk of schema refactor on every prior item.
 
 **11. Cowork as primary end-user runtime** (session 7, market
 context) — see ROADMAP v2 "AI-office builder" entry's "Market
