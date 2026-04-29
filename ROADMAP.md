@@ -1291,6 +1291,134 @@ that trigger invoicing, status reports auto-generated from state.md
 
 ## v2 — extensions
 
+### AI-office builder (meta-skill) — long-horizon vision
+
+**Why**: PBS-bureau is one instance of a pattern: an AI office
+that coordinates document work for a specific domain (German
+planning law). The architectural commitments being made through
+sessions 5-7 — meta-rule 4 boundary discipline, fail-closed
+corollary, strict-validation, Skill Bundle frontmatter convention,
+five-entity-type taxonomy, prep → implementation → review cycle,
+three-axis VISION (intertwining / sparring / authorship
+preservation) — are *pattern-level*, not PBS-specific. They
+generalize to any knowledge-work domain: legal practice,
+research-paper review, engineering documentation, medical-records
+workflow, regulatory-filing, etc.
+
+The vision: a meta-skill (or meta-plugin) that **builds a new AI
+office** from a domain spec + the accumulated architectural
+patterns + infrastructure templates. Generative reuse, not just
+library reuse — the builder produces complete working plugin
+scaffolds for new domains, instantiating the pattern with
+domain-specific content.
+
+**Distinct from "Generalize + publish domain-agnostic skills"**
+(v1.x ROADMAP entry above): that's library reuse — pull `audit`
++ `design-review` into other projects as drop-in components. The
+builder is generative reuse — given a description of a new
+domain's offices/practices, scaffold an entire working plugin
+including its orchestrator, drafting skills templated for the
+domain's doctypes, review skills with domain-specific slices,
+memory taxonomy, manifests, etc. Both directions are valuable
+and complementary.
+
+**What the builder produces (per generated office)**:
+- Complete plugin scaffold (`plugin/skills/<name>/SKILL.md` for
+  each domain skill, with frontmatter populated)
+- Orchestrator skill instantiated with domain-specific phase
+  model (PBS uses Phase A/B/C; a legal office might use
+  intake/discovery/filing/argument phases)
+- Domain-specific MCP tools (drafting helpers, validation gates)
+  vs reused generic infrastructure
+- Memory taxonomy for the domain (PBS has bausteine; legal might
+  have precedents/citations/templates)
+- Manifests + reference structure (PBS has gesetze/leitfäden/
+  urteile in layered manifests; medical might have drug-protocols/
+  treatment-guidelines/regulatory-mandates)
+- office-config schema with domain-specific fields
+- Doctype skeletons + style conventions
+- Initial decision records seeding the architectural commitments
+  (each generated office starts with ARCHITECTURE.md and the
+  same meta-rules 1-4 in place, plus a domain-specific VISION
+  capturing that domain's three-axis equivalents)
+
+**Domain-spec inputs** (the builder's interface):
+- Domain identity: name, scope, regulatory anchor
+- Actor types (practices/roles within the office)
+- Doctype list with templates / structural conventions
+- Workflow phases + transition rules
+- Memory taxonomy: what kinds of records the domain accumulates
+- Review layers: what counts as structural / fachlich / formal
+  for this domain
+- External authority types (PBS has UNB / Behörde / höhere
+  Verwaltungsbehörde; legal has courts / opposing-counsel /
+  regulators; research has reviewers / journals / funding-bodies)
+
+**The builder is itself an AI office** (the office-of-offices).
+It runs Claude-Code-mediated; conversational with the user
+describing the new domain; iterates on scaffold; emits a
+complete plugin tree.
+
+**Refactoring needed before this is buildable**:
+
+- **Pattern vs instance separation in PBS**: today the orchestrator
+  bakes "B-Plan" / "Begründung" / "Festsetzungen" into PROCEDURE.md
+  routing examples, the office-config schema has
+  planning-specific fields, manifest schemas embed German legal
+  taxonomy. These need to factor cleanly into "pattern (stays in
+  the builder)" vs "instance content (lives in PBS-the-domain)."
+- **Domain-spec format**: needs design — a declarative format for
+  describing a domain that's expressive enough to generate working
+  scaffolds but not so detailed it duplicates writing the plugin
+  by hand.
+- **Generation pipeline**: the builder reads the spec + applies
+  templates + emits files. Likely Pydantic-validated spec input;
+  Jinja-templated skill bodies; conversational refinement loop.
+
+The session-7 architectural hardening is exactly the right work
+to enable this future. Each commitment (fail-closed corollary,
+target 9 subsumption check, framing skill, audit-trail v2's
+single-write architecture) bakes in *pattern* discipline that
+the builder will scaffold-by-default into every generated office.
+Without these commitments, the builder would scaffold weak
+defaults; with them, it scaffolds correct-by-construction
+offices.
+
+**Pull-forward trigger** (multi-stage):
+
+1. **Validation stage**: at least 2-3 manually-built domain
+   instances exist (PBS + e.g. a legal-practice office + a
+   research-paper-review office, hand-built on top of the
+   extracted audit/design-review base). This empirically reveals
+   which parts of PBS are pattern vs instance.
+2. **Spec format design stage**: domain-spec format proposed,
+   tested against the 2-3 instances retroactively (could the
+   spec describe each existing office? if not, what's missing?).
+3. **First-build stage**: build the first new office *via the
+   builder* rather than by hand. Compare the generated scaffold
+   against what would have been hand-written. Measure delta;
+   refine.
+
+Each stage is a real gate. Don't skip ahead to step 3.
+
+**Distance from current state**: probably 18-36 months of
+sustained PBS work + at least one second domain instance to
+get to the validation stage. Long-horizon. But every session's
+architectural decisions either move toward this future or away
+from it; framing it explicitly here makes that legible.
+
+**Open questions** (defer until validation stage):
+- Should the builder be a plugin itself (Claude-Code-mediated
+  conversational tool that emits other plugins) or a CLI/library?
+- How to update generated offices when the underlying patterns
+  evolve (analogous to OpenAPI-generated client regeneration —
+  but for architectural commitments).
+- Multi-domain offices (e.g., a planning bureau that also does
+  light legal advisory work) — composable patterns or separate
+  offices that share state?
+- Naming: "AI Office Builder" / "Office-of-Offices" /
+  "knowledge-work-plugin-generator" / TBD.
+
 ### Reference versioning
 
 **Why**: Laws amend. Currently `archive_versions: true` in manifest
