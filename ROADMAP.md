@@ -89,32 +89,6 @@ addition still needs migration support.
 **Pull-forward trigger**: first user-visible session that saves
 a baustein. Until then, no baustein exists to migrate.
 
-### Backend conventions doc (testing / logging / error handling)
-
-**Why**: Meta-rule 5 introduces the `pbs_core` discipline (plain
-Python; testable). Currently no test setup, no test conventions,
-no logging strategy, no MCP error format spec. As the backend
-grows (Tier 1 tools, RAG pipeline, etc.) these gaps cause
-inconsistent error UX and untested code paths.
-
-**Sketch (small doc, ~1 page)**: at `backend/CONVENTIONS.md`:
-- Test layout: `backend/mcp-server/tests/` mirrors source tree;
-  pytest as runner; fixtures for office_config + temp memory
-  tree.
-- Logging: `pbs_core` logs via stdlib `logging` to stderr;
-  level via env var. MCP layer captures + re-emits as MCP
-  notifications when relevant.
-- Error handling: `pbs_core` raises typed exceptions
-  (`ManifestNotFound`, `SchemaValidationError`, etc.); MCP tool
-  wrappers translate to structured MCP errors with `code` +
-  `message` + `suggestion` fields.
-- Anti-patterns: bare `except`; printing instead of logging;
-  silently degraded execution without surfacing.
-
-**Pull-forward trigger**: write the doc when Tier 1 MCP tools
-land — that's when the conventions get applied for the first
-time. Don't pre-build before there's code to apply them to.
-
 ### Pioneer-instance validation strategy
 
 **Why**: Per VISION.md "PBS as pioneer instance" — a one-user
