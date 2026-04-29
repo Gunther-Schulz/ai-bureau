@@ -1,5 +1,33 @@
 # Session handoff — pbs-bureau
 
+## ⚡ For next session — essential framing
+
+**Read these three before substantive work, in this order:**
+
+1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
+2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
+3. **`ARCHITECTURE.md`** — six durable disciplines (pattern-vs-instance, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns or violate established discipline.**
+
+**Read conditionally** (when context calls for it):
+- `docs/strategic-positioning.md` — consulting positioning, marketplace decisions, brand questions, sparring-mode pitch
+- `docs/decisions/<specific>.md` — when working in that decision's area (audit-trail-v2 for retrofits; office-vs-department for department modules; a2a-and-gemini-pattern-emulation for schema work)
+- Specific ROADMAP commitment #N entry — when working on commitment #N
+- Specific skill bundle (`plugin/skills/<name>/SKILL.md` + `references/`) — when modifying that skill
+- `docs/plugin-conventions.md` (especially §11 + §11b) — writing or editing skills
+- `docs/backend-conventions.md` — backend code work
+- `~/dev/reference/knowledge-work-plugins/` — when working on #11 (Cowork integration)
+
+**Read situationally** (rare; when explicitly relevant):
+- `docs/audits/` + `docs/design-reviews/` — running follow-up reviews
+- `docs/rag-pipeline-decisions.md` — Phase 0/1 RAG work
+- All decision records together — when designing a new architectural discipline (rare)
+
+The detailed "Read order for next session" section further down is the long-form version of this trio + conditional list. The trio above is the **minimum viable framing** for any session.
+
+**Re-grounding mid-session is valid** when drift is detected — when AI's framings lean toward easy answers, when an architectural discipline isn't being applied, when the user pushes back on something that suggests oracle-mode drift. See `memory/feedback_vision_arch_grounding.md`.
+
+---
+
 End of session 9 (2026-04-29). This session executed pre-RAG
 commitment **#12 (Office-vs-department modularization)** —
 primarily design work resolving the open architectural question
