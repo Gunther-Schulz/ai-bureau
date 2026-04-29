@@ -41,12 +41,22 @@ extensions, not yet implemented" (below) so future sessions know
 they're coming and don't re-discover them.
 
 Periodically (definitely after any meta-rule addition or refactor),
-run a comprehensive audit. The procedure is codified as a skill —
-see `plugin/skills/audit/` (SKILL.md + PROCEDURE.md + 3 reference
-files). Triggers + slice library + stopping criterion + claim-scope
-rule + output conventions all live there. Audit artifacts land at
-`docs/audits/<scope>-<YYYYMMDD>.md` (frozen snapshots; closures
-tracked via HANDOFF + closure banners).
+run a comprehensive audit. Two complementary skills handle this:
+
+- **`plugin/skills/audit/`** — drift detection ("does X match what
+  X claims to be?"). Compliance-focused. Artifacts land at
+  `docs/audits/<scope>-<YYYYMMDD>.md`.
+- **`plugin/skills/design-review/`** — first-principles soundness
+  review ("is X's claim about itself the right shape?"). Challenges
+  the design itself with explicit anti-status-quo bias mechanism
+  (greenfield reframe). Artifacts land at
+  `docs/design-reviews/<scope>-<YYYYMMDD>.md`.
+
+Both skills produce frozen snapshots; closures tracked via HANDOFF
++ closure banners. Use `audit` to verify alignment with current
+design; use `design-review` to challenge whether the current
+design is the right design — particularly during the pre-launch /
+pre-distribution window when radical reshapes are cost-cheap.
 
 **Scope boundary**: this doc covers placement (which tier / which
 entity type / where does it belong). For *within-tier idioms* —
