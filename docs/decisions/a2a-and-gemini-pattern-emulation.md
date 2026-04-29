@@ -6,19 +6,32 @@
 
 ## Context
 
-PBS-bureau is built on a **single-big-model orchestration archetype** (Tiers 1-2 of the deployment ladder per ROADMAP v2). The Linux-Foundation-governed **A2A protocol** v1.0 (Anthropic + Microsoft + Google + AWS + Salesforce + SAP + ServiceNow) defines a different archetype — N agents communicating via signed message-passing — that becomes load-bearing only at Tier 3 (Gemini Enterprise scale: 1000+ users, federated authority, cross-org workflows).
+PBS-bureau is built on a **single-big-model orchestration archetype**. PBS itself deploys on **Tier 2** of the deployment ladder per ROADMAP v2 — Coolify-hosted, multi-user (Gunther + colleague on day one), HTTP MCP transport, shared cloud persistence. Same archetype as Tier 1 (local stdio); the runtime mechanics differ.
 
-Tier 3 may never be needed. But two facts make pre-RAG decisions about A2A worthwhile anyway:
+The Linux-Foundation-governed **A2A protocol** v1.0 (Anthropic + Microsoft + Google + AWS + Salesforce + SAP + ServiceNow) defines a **different archetype** — N agents communicating across trust boundaries via signed message-passing. The canonical A2A deployment context is **Tier 3** (Gemini Enterprise: 1000+ users, federated authority, cross-org workflows), but A2A's actual technical surface (cross-trust-boundary signed messaging) becomes relevant in any cross-agent-trust-boundary scenario, not only enterprise scale.
 
-1. **Schema additions cost nothing now and a lot later.** AuditEvent + ProjectState fields shaped for future A2A-compat are ~1 hour of work pre-RAG; refactoring once thousands of events exist is a migration script + multi-skill retrofit.
-2. **Some Google archetypal choices generalize today, regardless of archetype.** Distinguishing skill-as-actor vs human-as-actor in audit events is correct under our archetype too — Google's Agent Identity gestures at a discrimination we should make for our own reasons (#11 plugin agents, #12 departments).
+PBS-the-instance will not reach Tier 3. PBS-the-instance also has no near-term cross-trust-boundary scenario. **Yet pre-RAG schema decisions about A2A-shape compatibility are still load-bearing**, because PBS's architectural patterns multiply through three downstream paths that *do* reach scenarios A2A is built for:
 
-This decision record commits per row of the v2 Gemini Enterprise comparison table what to adopt **proactively now**, what to defer (with documented path), and the concrete defensive schema additions to AuditEvent.
+### Why A2A-compatibility is load-bearing — the three multipliers
+
+1. **The AI-office-builder (v2 generative reuse)** — per ROADMAP §1901+, the v2 vision is a meta-skill that scaffolds new AI offices for any knowledge-work domain (legal, research, medical, regulatory, etc.) from a domain spec + accumulated patterns. **PBS schemas are the patterns the builder ships.** If `AuditEvent` is A2A-shape-compatible in PBS, every generated office is A2A-shape-compatible by inheritance. If not, every generated office inherits the same migration debt. A single generated office at enterprise scale (government regulatory body, multinational consulting firm, hospital network) hits A2A territory; getting the pattern right pre-RAG means getting every future office right by default.
+
+2. **The consulting business (direct methodology application)** — per ROADMAP §2293-2316, the consulting IP is "office-abstraction-design, archetype-independent — single-big-model orchestration for solo/small; multi-agent A2A on Gemini Enterprise for enterprise federation; methodology and architectural discipline are vendor-neutral and scale-independent." When a consulting prospect at enterprise scale asks "can your methodology deploy on Gemini Enterprise from day one?", the answer needs to be **"yes, the patterns are archetype-portable"** — not "yes, but with months of refactor first." A2A-incompatible patterns make that a no. The first enterprise consulting engagement could land in months, not years; A2A becomes load-bearing immediately when it does.
+
+3. **PBS itself reaching cross-agent-trust-boundary scenarios mid-term** — even Tier 2 PBS has plausible cross-boundary triggers: cross-bureau federation (PBS adopted by 2-3 cooperating Planungsbüros wanting joint projects + shared baustein library + peer review), third-party tools (UNB-side automation, survey-tool agents, vendor integrations) wanting to interact with our audit trail, plugin marketplace ecosystem with other plugins emitting events into our office. None forecasted; any plausible. Probability low, surface area broad.
+
+### Pattern-vs-instance discipline as the load-bearing argument
+
+Per ARCHITECTURE.md v0.8 "Pattern-vs-instance discipline": *"every commitment that doesn't generalize is a future migration cost the builder will pay; every commitment that does generalize is the builder's foundation."* A2A-compatibility is a pattern-level decision. Locking it correctly pre-RAG benefits every multiplication path; locking it incorrectly imposes the migration tax everywhere.
+
+The cost asymmetry is the operative reason for *when*: schema additions cost ~1 hour pre-RAG; refactoring once thousands of events accumulate (post-Phase-1 corpus, post-first-project-bind) is a migration script + multi-skill retrofit. Pre-RAG is the unique cost-cheap window.
+
+This decision record commits per row of the v2 Gemini Enterprise comparison table what to adopt **proactively now**, what to defer (with documented path + revisit triggers), and the concrete defensive schema additions to AuditEvent.
 
 The two-sided framing per ROADMAP commitment #10:
 
-- **Defensive (A) — A2A-shape compatibility**: which schemas should grow A2A-friendly fields now so future migration is cheap?
-- **Proactive (B) — pattern emulation**: which Google archetypal choices to adopt within our single-big-model archetype, additively, because they're independently good?
+- **Defensive (A) — A2A-shape compatibility**: which schemas should grow A2A-friendly fields now so future migration is cheap across the three multipliers?
+- **Proactive (B) — pattern emulation**: which Google archetypal choices to adopt within our single-big-model archetype, additively, because they're independently good (independent of A2A)?
 
 ## Decisions per row
 
@@ -38,7 +51,7 @@ The v2 comparison table maps 1:1 to the rows below. Each row gets a verdict, rat
 
 **Verdict: adopt HTTP MCP alongside stdio. Implementation in commitment #13, not here.**
 
-**Why**: Tier 2 of the deployment ladder (cloud-hosted container, same archetype, multi-user-per-office) is realistic near-term for consulting engagements. Anthropic's `legal` plugin (knowledge-work-plugins) demonstrates the Cowork pattern for HTTP MCP via custom connectors (`mcp.box.com` etc.). Our backend needs the same dual-transport shape: stdio for solo/local, HTTP for cloud-deployed clients.
+**Why**: Tier 2 (cloud-hosted container, same archetype, multi-user-per-office) is **PBS itself's deployment target** — Coolify-hosted, Gunther + colleague on day one. Not a hypothetical "realistic for consulting clients" — the actual reference deployment per commitment #13. Plus consulting engagements multiply the consumer count further. Anthropic's `legal` plugin (knowledge-work-plugins) demonstrates the Cowork pattern for HTTP MCP via custom connectors (`mcp.box.com` etc.). Our backend needs the same dual-transport shape: stdio for local dev / Tier 1 single-user, HTTP for Tier 2 multi-user (PBS itself + every consulting client + every builder-generated office).
 
 **What #10 commits**: the **decision** to support both transports as pluggable layers. Concrete implementation is commitment #13's pre-RAG scope (deployment flexibility + Coolify reference deployment + multi-user readiness).
 
@@ -183,17 +196,39 @@ Anthropic Claude in both archetypes (Tier 3 via Gemini Enterprise's Model Garden
 
 ## Why pre-RAG (timing)
 
-Same logic as commitments #6 + #9: schema decisions made pre-data-accumulation are cheap; same decisions made post-accumulation cost a migration script + multi-skill retrofit per change. Today zero projects are bound and zero AuditEvents exist; the schema additions are a Pydantic edit. After Phase 1 corpus download starts (and especially after first project bind), every additional schema change pays the migration tax.
+The Context section above named the three multipliers — builder, consulting, mid-term-PBS-cross-boundary scenarios. The timing argument follows from there: pattern-level decisions locked correctly pre-RAG benefit every multiplication path; locked incorrectly, they impose the migration tax everywhere the pattern goes.
 
-The asymmetry argues for over-shooting on cheap defensive additions: even if `actor_card` and `origin_agent_card` go unused for years, their cost today is two `Optional` field declarations. If they DO become load-bearing later (Tier 3 migration, third-party plugin emits events into our trail, audit trail consumed by an external auditor), they're already present.
+Cost asymmetry is the operative reason for *now specifically*:
+- Pre-RAG, with zero projects bound and zero AuditEvents on disk: schema additions are a Pydantic edit.
+- Post-Phase-1 corpus + post-first-project-bind: schema changes require a migration script + multi-skill retrofit + per-event-kind backfill rules.
+- Builder ships v2 (1-2 year horizon): generates offices that already encode whatever pattern PBS shipped. Late changes mean every generated office inherits a migration burden.
+- First enterprise consulting engagement (could land in months): client expects archetype-portable patterns immediately; mid-engagement schema refactor is a credibility hit.
+
+The asymmetry argues for over-shooting on cheap defensive additions. Even if `actor_card` and `origin_agent_card` go unused for years, their cost today is two `Optional` field declarations. If they DO become load-bearing later (any trigger across the three multipliers), they're already present and every consumer that *was* designed pre-trigger is forward-compatible.
+
+The asymmetry argues *against* over-shooting on expensive defensive additions. Cryptographic signing fields, deterministic JSON canonicalization, and full Memory Bank schemas are NOT cheap to add now (require companion implementation: signing function, canonicalizer, persistence adapter), and they ARE cheap to add at trigger time (JSONL is naturally append-extensible; existing events read cleanly with new optional fields as None). So those defer.
 
 ## Revisit triggers
 
-- **Anytime** a real cross-organizational scenario emerges (consulting prospect, plugin marketplace external publish, etc.) — re-read the deferred items (signing, canonicalization, data classification) and decide if they're now load-bearing.
+The triggers are framed in terms of the three multipliers, not Tier-3-only. A2A's actual technical surface (cross-agent-trust-boundary signed messaging) becomes load-bearing in any of the scenarios below — Tier 3 is the most formal version, not the only one.
+
+**Multiplier 1 — AI-office-builder (v2)**:
+- **First builder-spec design pass** — confirm the three `actor_*` fields generalize across at least 2 of the 3-5 hypothetical domains used in pattern-vs-instance reasoning (legal practice / research / engineering / medical / regulatory). Adjust if any domain's actor taxonomy doesn't fit `human | skill | external_agent`.
+- **First builder-generated office** — confirm the inherited schema serves a domain meaningfully different from PBS without per-domain refactor.
+
+**Multiplier 2 — Consulting business**:
+- **First enterprise consulting prospect with cross-org or federated requirement** (multinational firm, government agency, hospital network) — re-read the deferred items (signing, canonicalization, data classification) and decide if they need to ship in that engagement's scope. The cost moves from "defer indefinitely" to "ship in this client's deployment."
+- **First consulting engagement asking explicitly about Gemini Enterprise / Tier 3** — activate the full deferred set; the engagement becomes the first real Tier 3 reference.
+
+**Multiplier 3 — PBS itself reaches cross-boundary scenario**:
+- **Cross-bureau federation event** (PBS adopted by 2+ cooperating Planungsbüros, joint workflow proposed) — `external_agent` field gets its first consumer; signing question moves to load-bearing.
+- **Third-party agent integration** (UNB-side automation, vendor tool, plugin marketplace participant) emits events into our trail — same trigger.
+- **Open-source release of PBS** that gets external traction — be ready: any of the above can follow.
+
+**Internal — at downstream commitments**:
 - **At #6 (audit-trail v2 retrofit)**: confirm the three new fields' semantics survive contact with real skill retrofits. Adjust if a fourth `actor_kind` value emerges (e.g., `system` for migration scripts, scheduled tasks).
 - **At #12 (office-vs-department)**: confirm event-shaped coordination is workable. If pure-event coordination produces unacceptable latency or coupling, revisit and consider a hybrid (events for cross-department signaling, in-process function calls for tight coupling within a department).
 - **At #13 (deployment flexibility)**: confirm `user_id` field added per multi-user readiness composes cleanly with the three `actor_*` fields here. If the four fields together are confusing, refactor the actor model.
-- **First Tier 3 trigger** (per ROADMAP v2 "When this might pull forward"): activate the deferred signing + canonicalization + Memory Bank port + Apigee bridge work.
 
 ## Files touched
 
