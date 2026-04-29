@@ -314,33 +314,7 @@ the migration framework AND setup-office's "reshape detected;
 walk newly-required fields" flow. Catches any v2_to_v3 bugs
 before they're encountered post-launch.
 
-### Phase 0 item 4 — Testing methodology + harness
-
-**Discussion-first** per user directive.
-
-Per the user's specific concern: "if we have a limited RAG at first
-with no vision how do we track what we need to ingest at a later
-time (the pieces we will be missing)?"
-
-Three layered concerns to design:
-
-- **Coverage-gap tracking**: per-manifest-entry `coverage:` field
-  schema (text/images/tables/graph + last_indexed + coverage_score).
-  Chunkers self-report at ingest time. Rolls up to
-  `<roots.references>/coverage-report.md`.
-- **Ground-truth set**: `tests/ground_truth/legal-queries.yaml` with
-  15-25 hand-curated query/expected-doc pairs. **User curates** these
-  (Claude can scaffold candidates from existing memory references).
-  Pytest test asserts top-5 reranked hits include expected doc.
-- **Determinism + regression detection**: embedding seed pinned;
-  reranker tie-break by ID. Baseline retrieval-quality scores stored;
-  diff on chunker/model changes.
-
-Output: `docs/rag-testing-strategy.md` documenting the three layers
-+ acceptance criteria for each phase gate (e.g. "Phase 2b passes
-when ground-truth set top-5 ≥ 70% relevance").
-
-### Phase 0 item 5 — Feature-survey skill design (NEW)
+### Phase 0 item 4 — Feature-survey skill design (NEW)
 
 Per the design-review skill scope question raised at session-5
 close: design-review covers **structural design quality**, not
@@ -366,6 +340,32 @@ this session). Feature-survey is still missing.
 Same pattern as audit + design-review (parallel slice agents +
 synthesis + frozen artifact). Discussion-first; expect ~half-day
 to design well.
+
+### Phase 0 item 5 — Testing methodology + harness
+
+**Discussion-first** per user directive.
+
+Per the user's specific concern: "if we have a limited RAG at first
+with no vision how do we track what we need to ingest at a later
+time (the pieces we will be missing)?"
+
+Three layered concerns to design:
+
+- **Coverage-gap tracking**: per-manifest-entry `coverage:` field
+  schema (text/images/tables/graph + last_indexed + coverage_score).
+  Chunkers self-report at ingest time. Rolls up to
+  `<roots.references>/coverage-report.md`.
+- **Ground-truth set**: `tests/ground_truth/legal-queries.yaml` with
+  15-25 hand-curated query/expected-doc pairs. **User curates** these
+  (Claude can scaffold candidates from existing memory references).
+  Pytest test asserts top-5 reranked hits include expected doc.
+- **Determinism + regression detection**: embedding seed pinned;
+  reranker tie-break by ID. Baseline retrieval-quality scores stored;
+  diff on chunker/model changes.
+
+Output: `docs/rag-testing-strategy.md` documenting the three layers
++ acceptance criteria for each phase gate (e.g. "Phase 2b passes
+when ground-truth set top-5 ≥ 70% relevance").
 
 ### Then — Phase 1 corpus download
 
