@@ -1,15 +1,22 @@
 ---
 name: survey-project
 description: This skill should be used when first binding to an existing project that has no _ai/ folder yet. It walks the project root, clusters files by likely role (artifacts, inputs, sent versions, correspondence, cruft), and proposes a file-map.md interpretation for user confirmation. Triggered by orchestrator's binding flow (Checkpoint 11) or by direct user phrases like "survey this project", "scan the folder", "binde dieses Projekt".
-version: 0.1.0
+version: 0.2.0
 license: MIT
+mcp_tools_required: [list_doctypes_manifests]
+mcp_tools_optional: [search_inputs, list_skeletons]
+fallback_when_mcp_absent: "warn user; degrade to direct filesystem Read of extensions/{universal,domain/<X>}/doctypes.yaml. Per-ambiguous-file content sniffing still possible without MCP, just slower."
 ---
 
 # survey-project
 
-Specialist skill for first-bind clustering of project files. Reads a
-project's filesystem, identifies likely roles per file/cluster, and
-proposes a `_ai/file-map.md` for user confirmation.
+Specialist skill for first-bind clustering of project files. Reads
+a project's filesystem, identifies likely roles per file/cluster,
+and proposes a `_ai/file-map.md` for user confirmation. Per priority
+touchpoint refactor (HANDOFF), uses **per-ambiguous-file iteration**
+(filename → content sniff → mtime → related files) instead of
+one-shot classification. Strengthens classification accuracy on
+projects with non-canonical layouts.
 
 ## Load this now
 
@@ -17,77 +24,107 @@ Read `<repo>/memory/universal/project-structure.md` for the canonical
 new-project folder structure. Existing projects often diverge from
 it; the divergence is exactly what file-map.md captures.
 
-Read `<repo>/memory/universal/doctypes.yaml` for doctype identification
-heuristics.
+Call `list_doctypes_manifests()` (MCP tool) for the layered doctype
+registry — universal + per-active-domain. Each doctype entry
+declares filename heuristics, master-file conventions, and
+folder-name patterns used for classification.
 
 ## When invoked
 
 By orchestrator's binding flow when a referenced project has no
 `_ai/` or `.ai/` folder. Inputs:
 
-- **Project root path** — absolute path under `office_config.paths.projects_root`
-  (or anywhere the user provides).
+- **Project root path** — absolute path under
+  `office_config.paths.projects_root` (or anywhere the user
+  provides).
 - **Project name** — for state.md construction.
-- **Practices guess** — orchestrator's guess of one or more practice
-  ids from `office_config.practices`, derived from path/file heuristic
-  (presence of doctype-relevant files vs other practices' workspace
-  markers).
+- **Practices guess** — orchestrator's guess of one or more
+  practice ids from `office_config.practices`, derived from
+  path/file heuristic (presence of doctype-relevant files vs.
+  other practices' workspace markers).
 
-## Behavior
+## Behavior — per-ambiguous-file iteration (priority refactor)
 
-1. **Recursive glob to depth 4** of the project root, with
-   exclusions:
+Old pattern: glob recursively, classify each file by single
+heuristic, surface clusters. Replaced with iterative classification:
+
+1. **Recursive glob to depth 4** of the project root, with exclusions:
    - Build artifacts: `*.aux`, `*.fdb_latexmk`, `*.fls`, `*.log`,
      `*.lot`, `*.toc`, `*.synctex.gz`
    - Office lockfiles: `~$*`
    - macOS detritus: `.DS_Store`, `._.*`
    - Backup files: `*.bak`, `*.old`
 
-2. **Cluster by mtime windows**: files modified within ~1 week of
-   each other often belong to the same work session. Group accordingly
-   for context.
+2. **Confident first-pass classification** — files matching strong
+   heuristics get classified immediately:
+   - `Schriftverkehr/eml/*.eml` → correspondence
+   - `inputs/auftraggeber/*.pdf` → inputs (active)
+   - `B-Plan/Begründung/*.tex` → doctype-relevant artifact
+   - `Fotos/`, `Bilder/`, `Karten/` directories → resources to
+     leave alone
 
-3. **Classify each file/folder by heuristic**, using the office's
-   configured folder layout from `office_config.conventions.project_folder_layout`
-   plus the doctype registry in `memory/universal/doctypes.yaml`:
-   - **Doctype-relevant artifacts**: `.tex` files, `.pdf` outputs,
-     `Textbausteine/`, doctype subfolders (B-Plan/, Umweltbericht/,
-     Externe Gutachten/, etc. per registry), per-doctype LaTeX
-     working files.
-   - **Inputs**: the configured `inputs/` subfolder, plus any
-     subfolder containing client-supplied raw material (briefings,
-     surveys, drone scans, GIS data files).
-   - **Correspondence**: the configured `correspondence/` subfolder,
-     `*.eml`, telefon-notizen/, besprechungsprotokolle/, plus the
-     `toeb/` subfolder.
-   - **Sent / archived versions**: the configured `sent_versions/`
-     subfolder, plus pattern `*_v[N].tex`, `*_final*`, files in
-     subfolders named `alt/`, `archive/`, `sent/`.
-   - **Other-practice workspace**: files belonging to a different
-     practice's tooling (e.g. a sibling practice's `scripts/`,
-     `workflow.yaml`, `*.qgz`, GIS exports) — read-only for this
-     skill; flag in file-map for awareness.
-   - **Resources to leave alone**: `Fotos/`, `Bilder/`, `Karten/`,
-     `ProjektBeispiel*` (templates).
-   - **Cruft / unclassifiable**: surface for user to decide.
+3. **Per ambiguous file, iterate** (the priority refactor):
 
-4. **Detect stale inputs**: if multiple files match the same kind
+   For each file that didn't match a strong heuristic, run the
+   classification chain step-by-step:
+
+   a. **Filename pattern** — does the name match a doctype
+      registry pattern (from `list_doctypes_manifests()`)? a
+      typical input pattern? a sent-version pattern (`_v[N]`,
+      `_final`, dates in name)?
+
+   b. **Content sniff** — read first 500 chars or so. LaTeX
+      preamble? PDF magic bytes? markdown frontmatter? German
+      Begründungs-style prose vs. Stellungnahme-style prose?
+      Use this to narrow type.
+
+   c. **mtime context** — when was this last modified? Recent
+      activity → likely active. Old + others nearby older →
+      possibly archived. Old + nothing else nearby → orphan
+      (likely cruft).
+
+   d. **Related files** — same directory, same mtime cluster?
+      That gives context. A `.tex` next to a `.pdf` of the
+      same date is likely the source + output pair. A loose
+      `.docx` with no nearby siblings is likely legacy.
+
+   e. **Decide**: confident classification, or surface to user
+      with the iteration trail visible:
+      ```
+      <path/to/file.tex>:
+        - filename: matches no canonical pattern
+        - content: LaTeX article-class with German prose
+        - mtime: 2025-08-15 (4 months ago)
+        - nearby: alone in this directory
+        - guess: orphan / superseded? Or undocumented active?
+        → user-decide
+      ```
+
+4. **Cluster by mtime windows**: files modified within ~1 week of
+   each other often belong to the same work session. Group
+   accordingly for context display.
+
+5. **Detect stale inputs**: if multiple files match the same kind
    pattern (e.g. multiple `briefing-*.pdf` with different dates),
    propose newest as active and others as superseded.
 
-5. **Detect doctype-progress**: which doctype folders exist? Which
-   contain `.tex` (LaTeX active) vs only `.doc` (legacy in
-   transition)? Inform `state.md.doctype_status` proposal.
+6. **Detect doctype-progress**: which doctype folders exist?
+   Which contain `.tex` (LaTeX active) vs only `.doc` (legacy
+   in transition)? Inform `state.md.doctype_status` proposal.
+   Use `list_skeletons(doctype)` to know what a fully-scaffolded
+   doctype subfolder should look like.
 
-6. **Compose draft `file-map.md`** per `state-format.md` per
+7. **Compose draft `file-map.md`** per
    `<repo>/plugin/skills/orchestrator/references/state-format.md`
    structure:
    - Frontmatter: project, last_survey, last_modified_at_survey,
      survey_method.
-   - Sections: Current artifacts / Sent versions / Inputs (active) /
-     Inputs (superseded) / Stellungnahmen / Resources / Cruft / Notes.
+   - Sections: Current artifacts / Sent versions / Inputs (active)
+     / Inputs (superseded) / Stellungnahmen / Resources / Cruft / Notes.
+   - Surface the iteration trail for any file the user needs to
+     decide on (don't hide the reasoning).
 
-7. **Propose `state.md`** with detected fields:
+8. **Propose `state.md`** with detected fields:
    - `lifecycle` — guess from latest mtime + sent-version presence:
      - No sent versions → `draft`
      - Sent version + no response yet → `awaiting-response`
@@ -99,20 +136,23 @@ By orchestrator's binding flow when a referenced project has no
    - `phase` — best guess from correspondence dates + sent-version
      metadata.
 
-8. **Surface clusters and proposals to user**, walk through each
-   cluster, get confirmation/correction before writing.
+9. **Surface clusters and proposals to user**, walk through each
+   cluster, get confirmation/correction before writing. For
+   ambiguous files, show the iteration trail so the user can
+   verify the reasoning.
 
-9. **On user confirmation**, write:
-   - `_ai/state.md` with confirmed/corrected fields.
-   - `_ai/file-map.md` with confirmed cluster assignments.
-   - `_ai/decisions.md` empty (no decisions yet).
-   - `_ai/correspondence-log.md` with one row per detected `.eml` /
-     call note found in `Schriftverkehr/`.
-   - `_ai/module-decisions.md` empty.
-   - `_ai/snapshots/` empty directory.
+10. **On user confirmation**, write:
+    - `_ai/state.md` with confirmed/corrected fields.
+    - `_ai/file-map.md` with confirmed cluster assignments.
+    - `_ai/decisions.md` empty (no decisions yet).
+    - `_ai/correspondence-log.md` with one row per detected
+      `.eml` / call note found in `Schriftverkehr/`.
+    - `_ai/module-decisions.md` empty.
+    - `_ai/snapshots/` empty directory.
 
-10. **Append project to** `<state_root>/projects-index.md`
-    (`state_root` resolved via `office_config.paths.state_root`).
+11. **Append project to**
+    `<state_root>/projects-index.md` (`state_root` resolved via
+    `office_config.paths.state_root`).
 
 ## Output
 
@@ -121,18 +161,33 @@ Step-by-step interactive walk:
 ```
 Surveying YY-NN <Client> - <Location>...
 
-Found 142 files, 8 folders. Clustering...
+Found 142 files, 8 folders. Confident classification: 89 files.
+Ambiguous: 53 — iterating per-file.
 
-Cluster 1 — Doctype artifacts:
-  - B-Plan/<doctype-master>.tex (working draft, mtime YYYY-MM-DD)
+Ambiguous file 1: alt/B-Plan-v2.tex
+  - filename: matches "_v<N>" sent-version pattern
+  - content: LaTeX scrreprt; date 2024-03 in title
+  - mtime: 2024-03-22 (over 1 year ago)
+  - nearby: B-Plan-v2.pdf same date
+  → guess: sent version (paired source + output)
+  Confirm as "Sent / archived versions"? [y/n/modify]
+
+Ambiguous file 2: working/old-bodenschutz.tex
+  - filename: "old-" prefix
+  - content: incomplete; partial Bodenschutz-section
+  - mtime: 2024-08-04 (older than current Begründung)
+  - nearby: none active
+  → guess: orphan / unmerged drafts
+  Surface for decision? [y/n/modify]
+
+[... continues per ambiguous file ...]
+
+Cluster 1 — Doctype artifacts (confident):
+  - B-Plan/Begründung/<doctype-master>.tex (working draft, mtime YYYY-MM-DD)
   - …
   Confirm as "Current artifacts"? [y/n/modify]
 
-Cluster 2 — Sent versions:
-  - alt/<artifact>_v2_UNB-YYYY-MM.tex (sent YYYY-MM-DD)
-  Confirm as "Sent / archived versions"? [y/n/modify]
-
-...
+[... clusters as before ...]
 
 Proposed state.md:
   lifecycle: revision-requested
@@ -155,15 +210,32 @@ Confirm? [y/n/modify]
   sibling GIS practice's `scripts/`, `workflow.yaml`, `*.qgz`):
   add the corresponding practice id to `practices`. Don't write to
   that practice's directories — they are read-only here.
-- **Project size huge (thousands of files)**: cap glob; surface
-  warning that survey is partial; let user prioritize sub-folders.
+- **Project size huge (thousands of files)**: cap glob; cap
+  iteration to top-N ambiguous files by mtime. Surface warning
+  that survey is partial; let user prioritize sub-folders for
+  deeper iteration.
 - **mtime cluster spans years**: project has long history; expect
   many "sent versions". Propose most recent N as candidates for
   active; user decides.
+- **Doctype manifest empty** (newly-deployed office): fall back
+  to filename-only heuristics for doctype identification. Surface
+  as T6 capability gap (would benefit from manifest population).
 
 ## Tools used
 
+- `list_doctypes_manifests(scope_filter=true)` (MCP, required) —
+  layered doctype registry for filename / folder pattern matching.
+- `search_inputs(project, query)` (MCP, optional) — only useful
+  AFTER first ingest; not used during initial bind.
+- `list_skeletons(doctype)` (MCP, optional) — knowing what a
+  scaffolded doctype subfolder looks like helps detect partial
+  scaffolds.
 - `Glob` — recursive file enumeration.
-- `Read` — sample file content for doctype/role identification.
+- `Read` — sample file content for doctype/role identification
+  + iteration content-sniff step.
 - `Bash` — file metadata via stat (when needed for mtime).
-- No MCP backend dependency.
+
+When MCP backend unreachable: fall back to direct filesystem reads
+of `extensions/{universal,domain/<X>}/doctypes.yaml`. Per-
+ambiguous-file iteration still works without MCP — content sniff
++ mtime + neighbor analysis are pure filesystem operations.
