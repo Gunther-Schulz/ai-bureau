@@ -5,9 +5,11 @@ pipeline choices (1–3) required before first ingest, per HANDOFF
 "Pre-RAG architectural decisions" section. Each gets a verdict
 (yes/no + reasoning).
 
-**Status**: PROPOSED — final confirmation at task #21 (full pre-RAG
-architectural audit). The verdicts here represent the design pass;
-the audit gates them before code lands.
+**Status**: **ACCEPTED** (session 5, 2026-04-29). Pre-RAG architectural
+audit (`docs/audit-pre-rag.md`) closed conditional-pass; F-batch
+drift (commit `ad01b18`), U1 decision-recording backfill (`d0f3f91`),
+U2 backend conventions (`501eaa1`) all landed. RAG kickoff per
+implementation order below is unblocked.
 
 **Why this doc exists**: re-ingesting 57 entries through OCR +
 DRM-removal + multimodal pipelines is expensive; deferring an
@@ -654,4 +656,4 @@ These decisions resolve / shape several ROADMAP items:
 | 2 | Query rewriting | Defer; HyDE for save-baustein dedupe is first consumer when added. |
 | 3 | Reranker model | bge-reranker-v2-m3 baseline. |
 
-**Final confirmation**: at task #21 audit gate.
+**Status**: ACCEPTED at task #21 audit gate (session 5).
