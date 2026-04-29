@@ -420,6 +420,17 @@ ROADMAP v2 "AI-office builder" entry.
     supported. Generalizes meta-rule 1's existing integration-
     adapter pattern (auxiliary integrations → primary department
     system-of-record).
+  - **Adapter-emitted events** (per session-9 followup #4
+    infrastructure-primitive review, Gap B): adapter Protocol
+    gains `subscribe_to_changes(callback)` OR `poll_for_changes()
+    -> list[Event]` method. External state changes (Lexware
+    webhook on invoice paid; Harvest external timesheet edit;
+    calendar adapter on new meeting) translate to native
+    AuditEvents with `actor_kind=external_agent` and
+    `origin_agent_card=<adapter URL>` per #10's existing design.
+    Without this, adapter-mode managed entities have one-way
+    visibility (PBS asks but never hears); with it, audit trail
+    captures full bidirectional change history.
   - `ProjectState` refactor: move from
     `backend/mcp-server/src/pbs_mcp/project_state.py` to
     `extensions/department/planning/entities/project.py`. Reframe
@@ -824,6 +835,19 @@ migration path" + commitment #10's HTTP MCP decision.
       NOT track read/unread state — receiving channel (inbox) is
       state-of-record. Async cross-user notifications become load-
       bearing once Gunther + colleague work concurrently.
+    - **Time-driven trigger infrastructure** (per session-9
+      followup #4 infrastructure-primitive review, Gap A):
+      server-side cron-like scheduler that fires "tick" audit
+      events on a schedule; subscribers react via existing event-
+      subscription primitive. MCP tool sketch:
+      `register_scheduled_trigger(condition, event_kind, cadence)`.
+      Extends event sources from "skill-emitted only" to "skill-
+      emitted + time-emitted." Load-bearing for proactive deadline
+      warnings (Frist-X-days-before), scheduled report generation,
+      automatic Fristverlängerung filing on missed deadlines.
+      Tier 2 cloud deployment naturally hosts the scheduler;
+      Tier 1 local deployment can run it as a backend service or
+      skip it (interactive-only mode).
 
   **Deferred to post-RAG**:
   - Compute infrastructure choice for OTHER consulting clients

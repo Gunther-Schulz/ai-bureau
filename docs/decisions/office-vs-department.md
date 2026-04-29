@@ -388,6 +388,36 @@ Critical-eye pass against real-world business operations to check for systemic g
 
 **What this confirms**: the architecture as it stands captures common business workflows without major gaps. New business primitives (when they arise) should run through the 3-test before being elevated. Most will fail and resolve to event-kinds + nested fields + memory entries. The few that pass are genuinely entities.
 
+#### Infrastructure-primitive review (session-9 followup #4)
+
+Distinct from the broader app-concern review above: this pass stress-tests our **core infrastructure primitives** (skills, managed entities, audit events, memory, integration adapters, cross-department coordination) against expressibility of arbitrary business processes. **Two genuine architectural gaps surface**, both fold into existing commitments:
+
+**Gap A — Proactive time-driven triggers**: today's event sources are reactive (audit events fire when skills emit) + interactive (user starts session). Missing: proactive (deadline fires when no session is active; Frist-X-days-before warning surfaces without anyone present). Concrete failure: "B-Plan deadline approaching → notify principal" can detect-when-asked but can't fire-when-due. **Folds into #13** (Tier 2 cloud deployment naturally hosts a scheduler). Server-side cron-like infrastructure fires "tick" audit events on a schedule; subscribers react via existing event-subscription primitive. No new primitive type — extends event sources from "skill-emitted only" to "skill-emitted + time-emitted." MCP tool sketch: `register_scheduled_trigger(condition, event_kind)`.
+
+**Gap B — Adapter-emitted events** (external state changes): integration adapters today are request-response (PBS asks Lexware → Lexware answers). Missing: adapters surfacing changes (Lexware webhooks PBS when invoice paid; Harvest tells PBS when timesheet edited externally). Concrete failure: external action in adapter-mode system → PBS audit trail misses it until next reconciliation. **Folds into #9** (department module contract design — when generalizing the integration-adapter pattern). Adapter Protocol gains `subscribe_to_changes(callback)` OR `poll_for_changes() -> list[Event]`. External changes translate to native AuditEvents with `actor_kind=external_agent` per #10's existing design.
+
+**Coverage after gap-fills** (9/9 process expressibility):
+
+| Process need | Primitive |
+|---|---|
+| State | managed entities |
+| Actions | skills + audit events |
+| Rules | skill logic + event subscriptions |
+| History | audit trail |
+| Knowledge | memory |
+| People | Actor entity (post-#15) |
+| Time | deadlines (nested) + scheduler (Gap A — folded into #13) |
+| External world | integration adapters + adapter-emitted events (Gap B — folded into #9) |
+| Workflows / sequences | phases + lifecycle on entities |
+
+**Smaller future-watch items (deferred with documented intent)**:
+- Workflow-as-data (BPMN-style declarative state machines for high-compliance environments) — defer until first compliance-strict client demands.
+- Centralized RBAC policy engine — defer; per-skill authorization fine for solo + small bureau.
+- Team hierarchy (sub-department actor groupings) — defer; nested relationships under Department + Actor; first-class only when concrete need.
+- Resource modeling for limited shared resources (rooms, equipment) — adapter pattern handles; no new primitive needed.
+
+**Net assessment**: zero new commitment numbers from this pass. Architecture's core primitives are sufficient after the two folded gaps land in #13 + #9.
+
 ## Implementation scope (this commitment)
 
 **Schema additions** (ship now):

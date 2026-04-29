@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.13 (post-session-9 followup #2 + entity-elevation discipline + office-level managed entities)**.
+Status: **v0.14 (post-session-9 followup #4 + infrastructure-primitive review + 9/9 process-expressibility coverage)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,31 @@ Status: **v0.13 (post-session-9 followup #2 + entity-elevation discipline + offi
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.13 → v0.14**: **Infrastructure-primitive review pass**
+  (session-9 followup #4) — stress-tests core primitives (skills,
+  managed entities, audit events, memory, integration adapters,
+  cross-department coordination) against expressibility of
+  arbitrary business processes. Result: **9/9 process-need
+  coverage** (state, actions, rules, history, knowledge, people,
+  time, external world, workflows/sequences) after two genuine
+  gaps fold into existing commitments. **Gap A — proactive
+  time-driven triggers**: today's event sources are reactive +
+  interactive only; missing scheduler-fired "tick" events for
+  proactive deadline warnings, scheduled reports, Fristverlängerung
+  automation. Folds into #13 (Tier 2 cloud naturally hosts
+  scheduler); extends event sources from "skill-emitted" to
+  "skill-emitted + time-emitted." **Gap B — adapter-emitted
+  events**: adapters today are request-response; missing
+  surfacing of external state changes (Lexware webhook on payment;
+  Harvest external timesheet edit). Folds into #9 (department
+  module contract); adapter Protocol gains
+  `subscribe_to_changes` / `poll_for_changes`; external changes
+  translate to native AuditEvents with `actor_kind=external_agent`
+  per #10. No new commitment numbers; both gaps fold into
+  existing scope. Smaller deferred items: workflow-as-data,
+  centralized RBAC, team hierarchy, resource modeling for limited
+  resources. See `docs/decisions/office-vs-department.md`
+  "Infrastructure-primitive review" subsection.
 - **v0.12 → v0.13**: **Entity-elevation discipline introduced +
   office-level managed entities concept added** (session-9 followup
   #2, post-broader-review). The discipline: prefer events + nested

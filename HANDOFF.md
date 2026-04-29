@@ -447,6 +447,15 @@ deferred to #6.
    existing infrastructure / scope expansion of existing commitments
    / defer-to-concrete-need / out-of-scope-per-pattern-vs-instance.
    No new commitment numbers added.
+   **Infrastructure-primitive review pass (session-9 followup #4)**
+   stress-tested core primitives (skills, managed entities, audit
+   events, memory, integration adapters, cross-department
+   coordination) against business-process expressibility. 9/9
+   coverage after two genuine gaps fold into existing commitments:
+   Gap A (proactive time-driven triggers → server-side scheduler
+   in #13) and Gap B (adapter-emitted events for external state
+   changes → adapter Protocol generalization in #9). No new
+   commitment numbers.
 
 7. **Memory captures**: existing 6 feedback memories carry
    forward. The "leave legacy behind" + "judgment-not-menus" +
