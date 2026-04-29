@@ -619,6 +619,28 @@ discipline": every commitment must work at pattern level (not
 just for PBS), tested against 3-5 hypothetical-domain thought
 experiments. The pattern is the IP; PBS is the proving instance.
 
+### Office vs department (open architectural question, session 7)
+
+PBS is not just one office — when fully realized, it's an office
+with **multiple departments**: planning-document-work + project-
+management + invoicing (eventually) + others. Today PBS implements
+one department (planning-document-work) with office-level
+scaffolding around it; the office-vs-department boundary is
+blurred. Pre-RAG commitment #12 (`ROADMAP.md`) is the structural
+discussion that explicitly separates the layers: office contains
+N departments coordinated via shared state + natural abstractions
++ ad-hoc context sharing + integration/setup configuration.
+
+This refines the AI-office-builder vision: it scaffolds *multi-
+department* offices, not single-department plugins. Domain spec
+input includes department composition (planning + PM + invoicing
+for a planning-bureau; legal-work + matter-management +
+invoicing for a legal practice; research + grant-management +
+lab-operations for a research lab) plus per-department config
+plus integration spec. Each department might be analogous to one
+of Anthropic's `knowledge-work-plugins` — but coordinated as a
+coherent office, not as standalone plugins.
+
 Validation under the single-domain-pioneer constraint
 (`ARCHITECTURE.md` extends this): the user is a planning-domain
 expert and won't authentically build offices in other domains.

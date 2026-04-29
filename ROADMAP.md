@@ -501,29 +501,76 @@ context" section.
   - **Backend**: same MCP server in both; same skill conventions;
     same memory layout. The runtime difference is the
     front-end agent loop, not the office.
-- **Concrete decisions for the gate**:
-  - Confirm Claude Code skills work in Cowork as-is (verify by
-    deploying PBS as a Cowork plugin and end-to-end testing).
-    If they don't (frontmatter incompatibilities, hook
-    differences, etc.), document the deltas + decide whether
-    to maintain dual-target compatibility or pick one.
-  - Decide PBS package shape: a Cowork-plugin-compatible bundle
-    (`.claude-plugin/plugin.json` + `.mcp.json` + skills/ +
-    commands/), AND a Claude Code dev experience. Probably the
-    same files + a packaging step.
-  - Decide whether to study + adopt Anthropic's plugin
-    conventions (their `commands/` for slash commands; their
-    `.mcp.json` shape; their plugin manifest fields). We have
-    parallel conventions; reconciliation may be needed.
-  - Output: short decision record `docs/decisions/
-    cowork-deployment.md` documenting the package shape +
-    runtime-target decision + any incompatibilities found
-    during the verification.
-- **Scope**: 1-2 sessions (decision + verification + minor
-  packaging work).
-- **Order note**: schedule before D (plugin version bump) since
-  the bump should reflect Cowork-target packaging if that's
-  decided. Schedule after #9 so we don't redo schema work.
+- **Scope directive (session 7)**: **Deep + complete integration,
+  no consideration for sunk costs.** Adopt Anthropic's plugin
+  shape wholesale where it differs from ours. We don't preserve
+  current implementations just because we built them — we converge
+  with the canonical Cowork-plugin pattern unless there's a
+  specific load-bearing reason to diverge. Full integration with
+  Anthropic's existing infrastructure is the goal; partial
+  alignment isn't.
+- **Concrete work items** (deep + complete scope):
+  - **Plugin shape conformance**:
+    - `.mcp.json` at plugin root with `pbs_mcp` declared as stdio
+      MCP server
+    - `marketplace.json` at `.claude-plugin/marketplace.json` for
+      distribution metadata
+    - `CONNECTORS.md` documenting external services (Hidrive,
+      email, etc.) PBS would use
+    - LICENSE file at plugin root (verify present)
+    - **Polished README** as marketing front door — sells the
+      value prop, quick-start, lists components
+  - **Slash commands as primary user surface** (Cowork-native
+    invocation):
+    - `commands/<name>.md` for major user operations
+    - **Department-namespaced** per commitment #12:
+      `/planning:draft-begruendung`, `/planning:review-draft`,
+      `/planning:send-to-authority`, `/pm:create-timesheet`,
+      `/invoicing:generate-invoice`, etc.
+    - Slash commands invoke skills behind the scenes
+    - Map every user-facing operation in current trigger-routing
+      to an explicit slash command
+  - **Plugin agents formalized** (lift from "deferred to v1+"):
+    - Concrete agents:
+      - `research-references-fetcher` — autonomous corpus fetch
+        + checksum + ingest (currently runs ad-hoc in
+        research-references skill via subagent)
+      - `audit-slice-runner` — per-slice autonomous execution
+      - `design-review-target-runner` — per-target autonomous
+        execution
+      - Future: `legal-reviewer` (deep §-by-§ checks per ROADMAP
+        v2 entry)
+    - Each agent has `<example>` blocks per Anthropic's pattern
+    - Re-evaluate ARCHITECTURE meta-rule 4 placement table —
+      "agents deferred until concrete need" no longer applies
+  - **Migrate `office-config.yaml` → `pbs.local.md`** (markdown
+    + YAML frontmatter), the Cowork-native pattern. Old YAML
+    file deprecated; one-time migration script. Decision: the
+    Cowork pattern is the standard; we adopt it.
+  - **Skill frontmatter alignment**:
+    - Adopt their fields where applicable (`argument-hint`,
+      `user-invocable: false`)
+    - Add `<example>` blocks per skill description
+    - Keep our extra fields (mcp_tools_required, etc.) as
+      additive — they don't conflict
+    - Add `department:` field per commitment #12
+  - **Test in actual Cowork** (not just Claude Code):
+    - Install PBS as a Cowork plugin via
+      `claude plugins add github.com/Gunther-Schulz/pbs-bureau`
+    - End-to-end test of a representative workflow
+      (e.g., `/planning:draft-begruendung` from blank project)
+    - Document any incompatibilities; resolve by changing PBS
+      (per "no sunk costs" directive)
+  - **Decision record**: `docs/decisions/cowork-deployment.md`
+    documenting all the shape decisions + migration outcomes.
+- **Scope**: **3-5 sessions** (was 1-2; revised under deep-
+  integration directive). Substantial work touching every
+  user-facing surface.
+- **Order note**: execute AFTER #12 (department modularization)
+  so slash command namespacing + skill frontmatter use the right
+  shape. Before D (plugin version bump). Before #6/#7/#9 if
+  possible (so audit-trail v2 + bootstrap-write tools land in
+  the new shape, not the old).
 - **Studying anthropics/knowledge-work-plugins repo**: planned
   as a discovery activity that informs this commitment. Multiple
   plugins are relevant to our work — not just for "how to
@@ -551,7 +598,68 @@ context" section.
     Anthropic structures domain-specific vs domain-agnostic
     elements informs our split.
 
-All eleven items: pre-RAG architectural commitments. Phase 1
+**12. Office-vs-department modularization** (session 7, post-
+partner-built-comparison insight) — see `ARCHITECTURE.md`
+"Office-vs-department distinction" + companion to commitments
+#9 (pattern-vs-instance split) and #11 (Cowork runtime).
+
+- **The insight**: PBS-bureau today conflates "office" with
+  "single department" (planning-document-work). A real Schulz
+  Planungsbüro has at least three departments: planning-document-
+  work + project-management (PM) + invoicing. Other PBS-shaped
+  offices follow the same pattern. Anthropic's brand-voice plugin
+  is a single-department plugin; we're trying to be a
+  multi-department office.
+- **Why pre-RAG**: schemas + skill conventions designed without
+  department-awareness will need expensive refactor once data
+  accumulates. Same logic as #9 (pattern-vs-instance) and #10
+  (A2A schema gate). Pre-RAG is the unique cost-cheap window.
+- **Scope** — primarily a design + discussion session, not
+  heavy implementation. Outputs:
+  - **Decision record**: `docs/decisions/office-vs-department.md`
+    capturing the architectural distinction + chosen
+    implementation approach.
+  - **Skill frontmatter convention**: add `department: <slug>`
+    field; orchestrator routes via department + skill.
+  - **Office-config schema**: gain `departments.<name>` sections;
+    each department declares its scope, doctypes, actors, etc.
+  - **Memory taxonomy decision**: does scope-orthogonality gain
+    a department axis (universal × domain × state × project ×
+    department)? Or does the domain axis fork per department?
+    Open question; #12 produces the decision.
+  - **Cross-department workflow patterns**: lifecycle events
+    triggering reactions across departments (e.g., "Begründung
+    sent to UNB" → invoicing department asks "should we invoice
+    this milestone?"). Document the pattern; don't necessarily
+    implement multiple departments in this session.
+  - **Setup integration**: how a multi-department office gets
+    set up — extends `setup-office` to scaffold chosen
+    departments, OR a new `integrate-department` skill. Connects
+    to AI-office-builder (v2 vision).
+- **Method**: examine current PBS skills; classify each as
+  office-level scaffolding vs department-of-planning-work; design
+  the explicit boundary; specify how PM + invoicing departments
+  would slot in; produce decision record.
+- **Order**: schedule as commitment #12 but execute FIRST
+  (before #11) because #11 (Cowork integration) needs department-
+  aware namespacing and frontmatter. Doing #11 first means
+  redoing slash command names + skill frontmatter once #12 lands.
+
+**Recommended next-session order** (revised under session-7
+late insight):
+
+```
+Session 8:  #12 (department modularization design)        1 session
+Session 9:  #11 (Cowork integration refactor)             1-2 sessions
+Session 10+: #6 → #7 → #9 → #10 → #8 → C → D              (per existing queue)
+```
+
+The original "next-immediate-session" sequence (#6 → #7 → #9 → #10
+→ #11 → #8) shifts: #12 + #11 land first because they affect the
+*shape* of the schemas + skill conventions that #6/#7/#9 modify.
+Doing them after would cause redo work.
+
+All twelve items: pre-RAG architectural commitments. Phase 1
 corpus download unblocks pending sections B (audit-trail
 single-write integration per v2), C (sparring-output integration),
 D (plugin version bump), and the Phase 0 items 4 (feature-survey

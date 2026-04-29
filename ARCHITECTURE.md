@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.8 (post-session-7 + pattern-vs-instance discipline)**.
+Status: **v0.9 (post-session-7 + office-vs-department open question)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -61,6 +61,14 @@ Status: **v0.8 (post-session-7 + pattern-vs-instance discipline)**.
   Skill Bundle convention, meta-rules 1-4, fail-closed corollary,
   target 9 subsumption check — all pattern-level by construction —
   into a coherent discipline that constrains future commitments.
+- **v0.8 → v0.9**: **Office-vs-department distinction** captured
+  as open architectural question (post-partner-built-comparison
+  insight). PBS today conflates "office" with "single department"
+  (planning-document-work). Real offices contain multiple
+  departments (PM, invoicing, etc.) coordinated via shared state +
+  natural abstractions + ad-hoc context sharing + integration/
+  setup configuration. Scoped as pre-RAG commitment #12 for
+  structural design discussion before Phase 1 corpus download.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -260,6 +268,66 @@ Pre-RAG commitment #9 (`ROADMAP.md`) is the concrete realization:
 the reasoning pass + best-effort split implementation + PBS
 regression validation are bundled as one work stream, scheduled
 before Phase 1 corpus download.
+
+### Office-vs-department distinction (open architectural question)
+
+**Problem surfaced session 7 (after partner-built plugin
+comparison)**: the term "office" in PBS-bureau is used for
+two distinct things that should be separated:
+
+- **Department**: a single capability area with its own
+  workflow, doctypes, memory, and external authorities. Examples:
+  planning-document-work (what PBS implements today), project-
+  management, invoicing, HR, marketing, brand-voice, legal-work.
+  Anthropic's `partner-built/brand-voice` is a department-shaped
+  plugin (one capability, three skills, three commands).
+- **Office**: a container for *multiple departments*, coordinated
+  via shared office-level state (projects, clients, deadlines,
+  actors), natural abstractions (a "project" entity flows between
+  departments), ad-hoc context sharing (explicit data-passing for
+  non-obvious flows), and integration/setup configuration.
+
+PBS-bureau today **conflates the two**: we have one department
+(planning-document-work) wrapped in office-level scaffolding
+(setup-office, office-config.yaml, projects-index, references-
+manifest, orchestrator). A real Schulz Planungsbüro has at least
+three departments: planning-document-work + project-management +
+invoicing. Other PBS-shaped offices would have similar shapes.
+
+**Implications under pattern-vs-instance discipline:**
+
+- Pattern: office structure containing N departments.
+- Instance: PBS office contains {planning-document-work, PM,
+  invoicing} (eventually); a hypothetical legal practice office
+  contains {legal-work, matter-management, invoicing}; a
+  research lab office contains {research, grant-management,
+  lab-operations}.
+- Office-config.yaml gains `departments.<name>` sections.
+- Skills gain a `department:` frontmatter field; orchestrator
+  routes via department + skill specialization.
+- Memory taxonomy: scope-orthogonality (universal × domain ×
+  state × project) may gain a department axis, OR the domain
+  axis forks per department. Open question.
+- Cross-department workflows: lifecycle events trigger reactions
+  across departments (e.g., "Begründung sent to UNB" triggers
+  invoicing department to ask "should we invoice this milestone?").
+- AI-office-builder (v2) generates *multi-department* offices,
+  not single-department plugins. The builder's domain spec input
+  includes department composition + per-department config +
+  integration spec.
+
+**Why this matters now (pre-RAG)**: same logic as commitments
+#9 (pattern-vs-instance split) and #10 (A2A schema gate).
+Schemas designed pre-RAG without department-awareness will need
+expensive refactor once data accumulates. Pre-RAG is the unique
+cost-cheap window. The actual structural design is its own
+discussion (pre-RAG commitment #12 in `ROADMAP.md`); this
+section captures the open question so it isn't lost.
+
+**Connection to brand-voice comparison**: brand-voice is a
+single-department plugin. PBS today is one-department-with-
+office-scaffolding. Neither is a multi-department office.
+Articulating the gap is the prerequisite for closing it.
 
 ---
 
