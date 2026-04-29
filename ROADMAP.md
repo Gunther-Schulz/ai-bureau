@@ -489,10 +489,16 @@ path" entries.
     - Data classification annotations on contract-bearing
       Pydantic fields (PII, business-sensitive, public — Agent
       Gateway analogue, additive field annotations)
+    - **HTTP MCP endpoints alongside stdio** (revised session-7
+      late from "defer" to "adopt"). Cloud-deployability for
+      consulting engagements is realistic near-term — backend
+      should expose both stdio (Gunther's local use) and HTTP
+      (cloud-deployed clients accessing via Cowork's HTTP MCP
+      pattern, like Anthropic's `legal` plugin uses
+      `mcp.box.com`/etc.). Decision made here; full cloud
+      deployment architecture is commitment #13.
   - **Likely defer** (real but not pre-RAG-critical; document
     path for future):
-    - HTTP MCP endpoints alongside stdio (solo deployment doesn't
-      need it; documented for future scale-out trigger)
     - Session-spanning "office-memory" concept (current memory
       taxonomy probably sufficient for solo; revisit if needed)
     - Model Armor analogue (input validation against prompt
@@ -512,10 +518,14 @@ path" entries.
     internal coordination AND external A2A peer requests later.
     Cost-cheap; potentially elegant. Decide.
   - **Backend (local stdio vs HTTP managed)**: HTTP MCP endpoints
-    for our pbs_mcp server in addition to stdio? Would let
+    for our pbs_mcp server in addition to stdio. Would let
     non-Cowork clients (any A2A-speaking system) consume our
-    tools. Decision: defer (likely yes) — solo-deployment doesn't
-    need it pre-RAG. Document the path.
+    tools AND enables cloud deployment for consulting engagements
+    (clients access via Cowork's HTTP MCP pattern). **Decision:
+    adopt** (revised session-7 late — cloud-deployability for
+    consulting is realistic near-term, makes this load-bearing
+    pre-RAG). Full cloud deployment architecture handled in
+    commitment #13.
   - **Persistent state (state.md vs Memory Bank)**: their Memory
     Bank is session-spanning persistent context. Our state.md is
     per-project + memory taxonomy is layered. Decision: do we
@@ -735,14 +745,115 @@ partner-built-comparison insight) — see `ARCHITECTURE.md`
   means redoing slash command names + skill frontmatter once
   #12 lands.
 
+**13. Cloud deployment architecture decision** (session 7,
+post-Cowork-research insight) — see ROADMAP v2 "Gemini Enterprise
+migration path" + commitment #10's HTTP MCP decision.
+
+- **Why pre-RAG**: Gunther's local PBS use can stay local — for
+  the consulting offering, cloud deployment is the better
+  deployment model. Each consulting client needs cloud-hosted
+  PBS instance (or self-hosted Docker) accessible via Cowork's
+  HTTP MCP pattern (same shape as Anthropic's `legal` plugin
+  uses `mcp.box.com` etc.). Architectural decision must happen
+  before backend is structured around local-only assumptions —
+  pre-RAG window prevents "rewrite the persistence layer once
+  data accumulates locally."
+
+- **The deployment model in plain terms**:
+  - **Local on user's machine**: just Claude Code (or Cowork)
+    installed. No Python, no LanceDB, no local files.
+  - **In cloud**: HTTP MCP server + ALL persistence (state.md
+    per project, audit-trail.jsonl, bausteine, manifests,
+    office-config, decisions/file-maps/correspondence-logs/
+    snapshots) + vector store + embedding service + LaTeX
+    compile service.
+  - **Connection**: `.mcp.json` points at
+    `https://pbs.<client>.example.com/mcp`. HTTPS over the wire.
+  - **Onboarding new client employee**: install Claude Code
+    locally, configure endpoint, done. Zero local backend setup.
+  - **Multi-user at one client office**: receptionist + planner
+    + bookkeeper at the same bureau access the shared backend.
+  - **Cross-device**: laptop ↔ desktop ↔ mobile, same data,
+    no sync setup.
+  - **Compliance**: German client gets EU-region cloud instance
+    for GDPR; their data stays in jurisdiction.
+  - **Trade-offs honestly**: internet required (no offline
+    mode), HTTP latency (vs stdio's zero-latency local), ongoing
+    cloud infra cost.
+  - **Hybrid**: Gunther's PBS daily use can stay local mode
+    (faster, offline-capable, free). Consulting deployments are
+    cloud-only. Same backend code, two deployment modes.
+- **The constraint and the fix**: today's pbs_mcp is stdio-based,
+  spawned per-session, runs on user's machine. For consulting
+  deployments at other companies, cloud is better — clients
+  don't want to manage Python installs, LanceDB disk growth,
+  cross-device sync, multi-user backend sharing, or update
+  coordination.
+- **Concrete decisions for the gate** (1-2 sessions design):
+  - **Transport**: HTTP MCP server (already decided in #10's
+    proactive emulation) — long-running service, accepts
+    authenticated requests. stdio mode preserved for local Gunther
+    use; both share core domain logic.
+  - **Persistence layer abstraction**: design pluggable backends
+    so the same code runs on:
+    - Local files (`state.md`, `_ai/`, LanceDB on disk) for
+      Gunther's PBS instance
+    - Cloud storage (S3/GCS/R2 for state + audit-trail; managed
+      vector service or self-hosted vector DB for embeddings;
+      document DB or object store for memory bausteine) for
+      consulting deployments
+    - Pydantic models stay identical; persistence interface is
+      a separate concern
+  - **Authentication**: API keys / OAuth / signed agent cards
+    (A2A pattern). Per-office isolation. Multi-tenant or
+    single-tenant-per-deployment (likely single-tenant for
+    consulting — each client gets their own instance, simpler
+    isolation).
+  - **Compute infrastructure choice**: evaluate Cloud Run /
+    Fly.io / Render / containerized self-hosted. **Initial
+    recommendation**: containerized deploy on Cloud Run or
+    Fly.io (cheapest, simplest, scales-to-zero, easy to package
+    for consulting clients). Self-hosted Docker for clients who
+    want their own infra.
+  - **Embedding (bge-m3)**: GPU-friendly Cloud Run revision or
+    fast CPU instance; benchmark required.
+  - **LaTeX compile**: container with TeX Live; same
+    container or sidecar.
+  - **Memory + state migration tools**: from local PBS to cloud
+    deployment (and back, if needed). Bidirectional path documented.
+  - **Cost model for consulting deployments**: per-deployment
+    cloud instance (client pays infra), per-user pricing
+    (shared infra), or self-deploy (client owns ops). **Initial
+    recommendation**: per-deployment (client pays their cloud)
+    + self-deploy Docker — simplest model for a solo consultant
+    selling to small offices.
+- **Output**: decision record `docs/decisions/cloud-deployment-
+  architecture.md` documenting transport + persistence + auth +
+  infrastructure decisions. Plus a minimum-viable cloud deploy
+  artifact (Dockerfile + minimal HTTP MCP server) as proof-of-
+  shape.
+- **Scope**:
+  - Pre-RAG: design + decision record + Dockerfile/HTTP MCP
+    skeleton (1-2 sessions)
+  - Post-RAG: full implementation — auth system, persistence-
+    layer abstractions, cloud deployment automation, tested
+    end-to-end consulting deployment (3-5 sessions, post-launch
+    when first consulting engagement is in sight)
+- **Order note**: execute FOURTH in pre-RAG queue (after
+  #10/#12/#11). Reason: needs #11's plugin shape decisions
+  (Cowork integration) settled, but the persistence-layer
+  abstraction must influence #6/#7/#9 schema work. So #13
+  design before #6/#7/#9 implementation.
+
 **Recommended next-session order** (revised under session-7
-late insight + A2A pull-forward):
+late insight + A2A pull-forward + cloud deployment addition):
 
 ```
-Session 8:    #10 (A2A schema gate decision)             1 session
+Session 8:    #10 (A2A + Gemini emulation gate)          1 session
 Session 9:    #12 (department modularization design)     1 session
 Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
-Session 14+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 14-15: #13 (cloud deployment architecture)       1-2 sessions
+Session 16+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
 ```
 
 The reasoning:
@@ -755,10 +866,14 @@ The reasoning:
 - **Cowork integration third** (deep + complete refactor under
   no-sunk-costs directive; runs on the new department-aware
   shape).
+- **Cloud deployment architecture fourth** (persistence-layer
+  abstraction + transport must influence #6/#7/#9 schema work;
+  benefits from #11's plugin shape being settled first).
 - **Audit-trail v2 + bootstrap-write + pattern-vs-instance
-  fourth** (build on the new shape, not refactor the old).
+  fifth** (build on the new shape — including cloud-aware
+  persistence — not refactor the old).
 
-All twelve items: pre-RAG architectural commitments. Phase 1
+All thirteen items: pre-RAG architectural commitments. Phase 1
 corpus download unblocks pending sections B (audit-trail
 single-write integration per v2), C (sparring-output integration),
 D (plugin version bump), and the Phase 0 items 4 (feature-survey

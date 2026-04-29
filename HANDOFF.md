@@ -209,17 +209,19 @@ hardening BEFORE first project bind, not a delay of RAG.
 
 ---
 
-## ⏳ Pre-RAG gating items (12 commitments, post-session-7 state)
+## ⏳ Pre-RAG gating items (13 commitments, post-session-7 state)
 
-The 12 v1 commitments enumerated in ROADMAP.md "v1 commitments"
+The 13 v1 commitments enumerated in ROADMAP.md "v1 commitments"
 section. **Revised recommended execution order** (session-7
-late-insight pivot, with A2A pulled to position 1):
+late-insight pivot, with A2A pulled to position 1 + cloud
+deployment added):
 
 ```
-Session 8:    #10 (A2A schema gate decision)                  1 session
+Session 8:    #10 (A2A + Gemini emulation gate)               1 session
 Session 9:    #12 (department modularization design)          1 session
 Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 14+:  #6 → #7 → #9 → #8                               per existing queue
+Session 14-15: #13 (cloud deployment architecture)            1-2 sessions
+Session 16+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus
