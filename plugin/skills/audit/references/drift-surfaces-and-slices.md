@@ -1122,6 +1122,120 @@ a distinct question: not "does X comply with claims?" but
 
 ---
 
+### Slice 20 — Entity-elevation drift scan
+
+**Drift surfaces**: cross-cutting (overlaps with backend Pydantic
++ decision records, but with a distinct question: not "does X comply
+with claims?" or "is X at the right level?" — but "is X *entity-
+shaped at all* (vs event/nested/memory/config)?")
+
+**Scope**:
+- `backend/mcp-server/src/pbs_mcp/**/*.py` — every Pydantic model
+  declared as a managed entity (today: `ProjectState`, `AuditEvent`;
+  post-#9: department-module entity classes under
+  `extensions/department/<dept>/entities/`).
+- `extensions/department/<dept>/entities/*.py` (post-#9) — native-
+  mode managed entities contributed by department modules.
+- `extensions/office/entities/*.py` (post-#15) — office-level
+  managed entities (Client, Actor).
+- `extensions/department/<dept>/department.yaml` (post-#11) —
+  declared `managed_entities:` per the office-vs-department spec.
+- Decision records under `docs/decisions/*.md` — any record naming
+  a new managed entity must include explicit 3-test verdict.
+- ARCHITECTURE.md "Designed extensions" — proposed entities not
+  yet implemented.
+
+**Brief template**:
+
+> You are running Slice 20 — entity-elevation drift scan per
+> `ARCHITECTURE.md` "Entity-elevation discipline" + design-review
+> target 11 (the prospective companion to this retrospective scan).
+>
+> Per the discipline: prefer events + nested fields + memory entries
+> over new managed entity types. Elevate to first-class managed
+> entity only when ALL THREE of: stable identity (persists across
+> sessions, referenced by other things), state of record
+> (authoritative current value matters; mutable), lifecycle
+> (phases or status that progress over time). Avoids the
+> architecture creeping toward a relational SQL schema —
+> catastrophic for LLM-mediated AI offices. Right level: knowledge
+> graph + document store with stable references, not Oracle.
+>
+> Walk every managed entity in scope and run the 3-test:
+>
+> 1. **Identity check**: does the entity have an ID-like field
+>    (slug, UUID, deterministic name) that persists across sessions
+>    and is referenced by other entities or audit-event details?
+> 2. **State-of-record check**: does the entity have mutable fields
+>    whose authoritative current value matters? Or is it
+>    effectively immutable once created (snapshot-shaped)?
+> 3. **Lifecycle check**: does the entity have a `lifecycle` /
+>    `phase` / `status` field with explicit transitions? Or is it
+>    a flat record with no progression model?
+>
+> Audit for FOUR finding patterns:
+>
+> 1. **Entity that's actually event-shaped**: managed entity
+>    declared, but each "instance" is really one moment-in-time
+>    with no state evolution after creation. Detect: model has
+>    timestamp + actor + details fields but no `status` /
+>    `lifecycle` / mutable-state field; existing instances are
+>    immutable in practice; queries treat the model as event log
+>    rather than state lookup. Refactor: convert to AuditEvent
+>    `kind:` value with details payload schema.
+>
+> 2. **Entity that's actually nested-shaped**: managed entity
+>    declared, but instances are only ever accessed in the context
+>    of a parent entity; no independent CRUD operations exist;
+>    `parent_entity_id` is required. Detect: every read/write site
+>    starts from the parent; the "entity" has no independent
+>    lifecycle or state-of-record beyond its parent's. Refactor:
+>    convert to nested Pydantic field on the parent.
+>
+> 3. **Entity that's actually reference-data-shaped**: managed
+>    entity declared, but no lifecycle (static across deployment
+>    lifetime); state changes only via deployment-config edits;
+>    no per-session evolution. Detect: model has only "what is
+>    this thing" fields, no "what state is it in" fields; instances
+>    populated at office setup and never modified. Refactor: move
+>    to office-config field or extensions/<scope>/ manifest.
+>
+> 4. **Entity that's actually adapter-mode but PBS-modeled**:
+>    managed entity declared in native mode, but the authoritative
+>    state-of-record actually lives in an external system (the
+>    PBS native instance is a stale cache). Detect: instances need
+>    frequent re-sync from external source; updates flow only
+>    one-way (PBS reads, doesn't write back authoritatively).
+>    Refactor: convert to adapter-mode managed entity per
+>    office-vs-department.md "two delivery modes."
+>
+> For each finding: classify pattern (1/2/3/4), name file paths
+> + line ranges, propose the refactor (event-kind shape with
+> proposed details schema / nested-field shape with parent /
+> reference-data location / adapter Protocol contract). For
+> backend Pydantic findings, sketch the proposed schema change.
+>
+> **Agent-discipline note**: this slice surfaces *over-elevation
+> candidates* — actual refactor decisions are the user's. The
+> 3-test is heuristic, not mechanical: borderline cases where
+> identity + state are clearly yes but lifecycle is "evolves
+> slowly over years" rather than through explicit phases (e.g.,
+> Actor: joined → active → left, transitions implicit not workflow-
+> driven) are still legitimate entities. Findings should be framed
+> as "this looks over-elevated; consider re-shaping" not "this is
+> definitively wrong." Reserve BLOCKER for cases where the
+> over-elevation actively breaks the LLM-friendly architecture
+> property (e.g., a Pydantic schema with N foreign-key-like fields
+> that produces SQL-join-shaped queries instead of event-trail
+> filters).
+>
+> Output structured findings. Cap at 1500 words. Group findings
+> by location (backend Pydantic / department-entities / office-
+> entities / decision records) so the user can scope refactor
+> work appropriately.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |

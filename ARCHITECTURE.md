@@ -476,6 +476,124 @@ N=0/1/many uniformly.
 
 ---
 
+## Entity-elevation discipline
+
+A load-bearing companion to pattern-vs-instance discipline. Where
+pattern-vs-instance asks "is this commitment at the right *level*
+(pattern or instance)?", entity-elevation asks "is this concept
+*entity-shaped at all* (vs event / nested / memory / config)?"
+
+**The principle**:
+
+> **Prefer events + nested fields + memory entries over new
+> managed entity types. Elevate to first-class managed entity
+> only when stable-identity + state-of-record + lifecycle ALL
+> apply.**
+
+**Why this matters**: pre-emptively elevating concepts to
+first-class managed entities (Pydantic schemas + MCP CRUD tools +
+persistence) creates schema sprawl. Each new entity adds: storage
+layer commitments, query surface, migration burden, schema
+versioning overhead, and cognitive load on every consumer. The
+risk if undisciplined is the architecture creeping toward a
+**relational SQL schema** — one entity per noun, foreign keys,
+joins, normalization. That's catastrophic for LLM-mediated AI
+offices: it makes the architecture brittle, slow to evolve, and
+re-implements enterprise software's worst tendency.
+
+**Right level**: closer to **knowledge graph + document store
+with stable references** than Oracle. Entities have identity
+(referenced by ID); relationships ride in audit-event details +
+ID fields on entities; "joins" are answered via filtered queries
+over events / per-entity stores / memory / adapter APIs. **No
+join planner needed.**
+
+### The 3-test (all three required to elevate)
+
+For each candidate, walk all three:
+
+1. **Stable identity** — has an ID/slug that persists across
+   sessions and is referenced by other things?
+2. **State of record** — has fields whose authoritative current
+   value matters (not just historical)?
+3. **Lifecycle** — has phases or status that progress over time?
+
+**If all three**: managed entity. Lock in.
+**If any missing**: route to the appropriate alternative —
+event-kinds (moments-when-things-happened), nested fields
+(data only meaningful in context of a parent), memory entries
+(prose-shaped knowledge), or reference data (static / config).
+
+### Worked-example reasoning
+
+| Concept | Identity | State | Lifecycle | Verdict |
+|---|---|---|---|---|
+| Project, Client, Actor, Invoice, Asset, Matter, Manuscript | ✅ | ✅ | ✅ | ✅ entity |
+| Approval, Decision, Send, PhaseTransition | each is one moment | fixed at action | doesn't progress | ❌ event kinds on AuditEvent |
+| LineItem, Deadline, ContactPerson | only as part of parent | not independent | none | ❌ nested fields |
+| Notification | inbox is state-of-record | external system | external system | ❌ adapter + event |
+| Report, Dashboard | generated on demand | projection | none | ❌ generated artifact (render_*) |
+| BusinessCalendar | yes | yes | none | ❌ reference data (config) |
+| DocumentVersion | snapshot ID | immutable | none | ❌ event + bytes |
+
+### How "joins" are answered without foreign keys
+
+| Question | SQL approach | PBS approach |
+|---|---|---|
+| "All invoices for client X" | `JOIN` | Adapter API: `lexware.invoices(client_id=X)`. Or audit-trail filter. |
+| "All projects with overdue deadlines" | `WHERE deadline < NOW()` | Native query on Project store filtered by `deadlines[].date < today`. |
+| "Audit history of decisions made by colleague Y" | Multi-table join | Audit-trail filter: `actor=Y AND kind=decision`. |
+| "Which bausteine cite §44 BNatSchG?" | Full-text + reference table | Memory query (post-#14): `search_memory(query="§44 BNatSchG", kinds=["baustein"])`. |
+
+Filtered queries over a small set of stores. No join planner.
+
+### Where the discipline is enforced (multi-checkpoint)
+
+Defense in depth — discipline applied at five points in the workflow:
+
+1. **Conversational gate (in-chat)** — when proposing a new entity
+   during design discussion, walk the 3-test out loud before
+   anything is persisted.
+2. **Design-review target 11 (PRIMARY GATE — prospective)** —
+   when a decision record / refactor / new commitment proposes a
+   managed entity, target 11 enforces the 3-test before persistence.
+   Same role as target 9 (subsumption) and target 10 (pattern-vs-
+   instance).
+3. **Decision-record convention** — any decision record naming a
+   new managed entity must include explicit 3-test verdict
+   subsection (per-criterion yes/no with reasoning).
+4. **`integrate-department` runtime gate (post-#11)** — when
+   onboarding a new department to a deployment, the skill walks
+   each `managed_entities:` declaration in `department.yaml` and
+   runs the 3-test interactively. Catches department-module-
+   author drift.
+5. **Audit slice 20 (retrospective)** — scheduled / on-demand scan
+   of `extensions/.../entities/` Pydantic schemas + decision
+   records, scoring against the 3-test. Catches drift over time.
+
+Each catches a different failure mode. Discipline in design AND
+in code AND in audit — analogous to meta-rule 4's strict-validation
+defense in depth.
+
+### Connection to other disciplines
+
+- **Pattern-vs-instance** (above): different question. Pattern-
+  vs-instance asks "right *level*?" Entity-elevation asks
+  "entity-shaped *at all*?" Both apply at design time.
+- **Subsumption check (target 9 / slice 18)**: when entity-
+  elevation passes (entity-shaped is right), subsumption check
+  separately asks what existing mechanism it replaces.
+- **Strict validation (meta-rule 4)**: once an entity is correctly
+  elevated, meta-rule 4's discipline applies to its Pydantic
+  contract (required fields strictly required, no silent defaults
+  for missing data, fail-loud on contract violation).
+
+See `docs/decisions/office-vs-department.md` "When to elevate to
+managed entity (the three-test discipline)" subsection for the
+full reasoning + examples.
+
+---
+
 # Meta-rules
 
 The architecture rests on **four meta-rules**. Plus one named

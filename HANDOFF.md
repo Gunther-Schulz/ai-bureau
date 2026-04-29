@@ -108,8 +108,8 @@ defers, not YAGNI.
 10. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing
 11. **`docs/backend-conventions.md`** — backend idioms
 12. **`plugin/CLAUDE.md`** — meta-rule 4 summary
-13. **`plugin/skills/audit/`** — **0.8.0**
-14. **`plugin/skills/design-review/`** — **0.7.0**
+13. **`plugin/skills/audit/`** — **0.9.0** (slice 20 added)
+14. **`plugin/skills/design-review/`** — **0.8.0** (target 11 added)
 15. **`plugin/skills/orchestrator/`** — **0.10.0**
 16. **`backend/mcp-server/src/pbs_mcp/audit_trail.py`** — session 8
     schema with ActorKind + new fields + cross-ref validator
@@ -359,9 +359,9 @@ frontmatter sweep + slash command namespacing.
 
 | Skill | Version |
 |---|---|
-| audit | 0.8.0 |
+| audit | **0.9.0** (slice 20 — entity-elevation drift scan, session-9 followup) |
 | author-manifest | 0.4.0 |
-| design-review | 0.7.0 |
+| design-review | **0.8.0** (target 11 — entity-elevation check, session-9 followup) |
 | draft-cover-mail | 0.6.0 |
 | draft-textteil-b | 0.5.0 |
 | draft-textteil-c | 0.5.0 |

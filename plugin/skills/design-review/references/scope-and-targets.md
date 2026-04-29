@@ -455,6 +455,130 @@ Both apply at design time; both belong.
 
 ---
 
+### Target 11 — Entity-elevation check (managed entity over-modeling)
+
+**Files**: any decision record, refactor proposal, or commitment
+design that proposes a new managed entity (Pydantic schema +
+MCP CRUD tools + persistence) at office-level or department-level.
+
+**Why this matters**: per `ARCHITECTURE.md` "Entity-elevation
+discipline" (v0.13+), the architecture must stay closer to
+**knowledge graph + document store with stable references** than
+relational SQL schema. Pre-emptively elevating concepts to
+first-class managed entities creates schema sprawl that LLMs
+don't think well in. Every concept proposed as "an entity" should
+prove it actually is one — most fail and resolve to event-kinds
++ nested fields + memory entries.
+
+This target is the prospective-check companion to audit slice 20
+(retrospective sweep). Same prep-vs-review pairing as target 9 +
+slice 18 and target 10 + slice 19.
+
+**The 3-test (all three required to elevate to managed entity)**:
+
+For each proposed entity, the reviewer walks all three:
+
+1. **Stable identity** — has an ID/slug that persists across
+   sessions and is referenced by other things?
+2. **State of record** — has fields whose authoritative current
+   value matters (not just historical record)?
+3. **Lifecycle** — has phases or status that progress over time?
+
+**If all three**: managed entity. Lock in.
+**If any missing**: route to the appropriate alternative
+primitive — event-kinds (for moments-when-things-happened),
+nested fields (for data only meaningful in context of a parent),
+memory entries (for prose-shaped knowledge), or reference data
+(for static/configuration values).
+
+**Worked-example reasoning patterns**:
+
+| Concept | Verdict | Why |
+|---|---|---|
+| Project, Client, Actor, Invoice, Asset, Matter, Manuscript | ✅ entity | All three apply: persistent identity, evolving state, lifecycle |
+| Approval, Decision, Send, PhaseTransition | ❌ event kinds | Each is a moment, not a thing with state evolving over time |
+| LineItem, Deadline, ContactPerson | ❌ nested fields | Only meaningful as data on a parent entity |
+| Notification | ❌ adapter + event | Receiving channel (inbox) is state-of-record; PBS handles trigger + delivery + log |
+| Report | ❌ generated artifact | Projection on demand, not entity with persistent state |
+| BusinessCalendar | ❌ reference data | No lifecycle (static); fits as office-config field |
+| DocumentVersion | ❌ event + bytes | Snapshot is immutable; capture as send event with causes[] chain + snapshot bytes |
+| Conflict-of-interest | depends | Pattern-level: not architecture; per-department per-domain (legal practice has its own Conflict managed entity if its 3-test passes there) |
+
+**Anti-patterns** the target catches:
+
+- ❌ Proposing a managed entity for a moment-when-something-
+  happened (Approval, Decision, Action, StateTransition). These
+  are events, not entities.
+- ❌ Proposing a managed entity for data that only makes sense
+  in context of a parent (LineItem, Deadline, ContactPerson,
+  PhaseEntry). These are nested fields.
+- ❌ Proposing a managed entity for generated artifacts (Report,
+  Dashboard, RenderedTimeline). These are projections.
+- ❌ Proposing a managed entity for static reference data
+  (BusinessCalendar, HolidayCalendar, CountryList). These are
+  configuration / reference content.
+- ❌ Proposing a managed entity for state owned by an external
+  system (Notification-after-delivery, Email-in-inbox,
+  Calendar-event-after-sync). These are adapter-mode where the
+  external system is system-of-record.
+- ❌ Proposing a "container" entity to group related entities
+  when ID-references + audit-trail filters suffice (no need
+  for a CustomerProjects entity that lists Project IDs — just
+  query Projects where client_id=X).
+
+**Exceptions** (where elevation is justified despite the test
+feeling marginal):
+
+- **Borderline-on-lifecycle**: if identity + state are clearly
+  yes but lifecycle is "evolves slowly over years" rather than
+  through explicit phases (e.g., Actor: joined → active → left,
+  but the transitions are implicit not workflow-driven), the
+  elevation is still right — Actor IS an entity. Lifecycle
+  question relaxes when the other two are strong.
+- **Borderline-on-state**: rare; usually means it's actually
+  reference data, not entity. Resist elevation.
+
+**Output expectation**:
+
+For each proposed managed entity:
+
+1. **3-test verdict per criterion**: identity (yes/no + why),
+   state (yes/no + why), lifecycle (yes/no + why). Explicit, not
+   hand-waved.
+2. **Verdict**: ✅ entity / ❌ alternative-primitive (specify which)
+3. **If ❌**: the recommended alternative primitive shape — event
+   kinds (with proposed `kind:` values), nested fields (with
+   proposed parent entity), memory record kind, reference data
+   shape, or adapter Protocol contract.
+4. **If ✅**: confirm the entity belongs at office-level or
+   department-level (which department); native or adapter
+   delivery mode.
+
+**When to invoke**: at design time for any decision record /
+refactor / commitment that proposes one or more new managed
+entities. NOT for incremental skill-level changes (skills don't
+typically introduce entities). MUST be invoked when:
+
+- A decision record names a new Pydantic-modeled entity type
+- A refactor proposes splitting an existing entity into multiple
+- A new commitment scope includes "we'll add a [Foo] entity"
+- A department module's `department.yaml` declares
+  `managed_entities:` (each declared entry runs the 3-test)
+
+**Relationship to slice 20**: target 11 is the prospective check
+(at design time, cheap to refuse the elevation). Slice 20 is the
+retrospective sweep (catches what target 11 missed across the
+whole stack — entities introduced before this discipline existed,
+or that drifted from valid 3-test status). Both, not either.
+
+**Relationship to targets 9 and 10**: complementary checks.
+Target 9 asks "what does this *replace*?" Target 10 asks "is this
+at the right *level* (pattern vs instance)?" Target 11 asks "is
+this *entity-shaped at all* (vs event/nested/memory/config)?"
+All three apply at design time; all three belong.
+
+---
+
 ## Focused-mode targets
 
 For "design review the chunkers" / "is X sound" / etc., review one
