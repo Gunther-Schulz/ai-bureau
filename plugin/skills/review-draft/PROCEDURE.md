@@ -197,8 +197,7 @@ Review complete.
 When all three layers pass:
 
 1. Final compile_latex passes.
-2. Update `_ai/state.md`:
-   - lifecycle: `internal-review` → ready-for-phase-C
+2. Call `update_project_state(project, updates={"lifecycle": "ready-for-phase-C"}, body_append="- <YYYY-MM-DD> — Layered review passed; ready for Phase C.")`. Never write state.md directly (meta-rule 4).
 3. Append `_ai/decisions.md` entries for:
    - Each Layer 2 A-finding fixed (with reasoning summary)
    - Each Layer 2 C-finding flagged for external scrutiny

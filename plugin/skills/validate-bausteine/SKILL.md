@@ -1,17 +1,16 @@
 ---
 name: validate-bausteine
 description: This skill should be used to sweep memory for stale or flagged bausteine — review_due dates passed, status=flagged, citation drift detected, or successive UNB rejections. Triggered at session-open by the orchestrator (when the in-scope domain has bausteine), by direct user phrases like "check bausteine", "freshness sweep", "are my bausteine current", or after a research-references run that may have flagged dependents.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [list_bausteine]
 mcp_tools_optional: [list_reference_manifests, find_bausteine_by_reference, search_corpus, flag_baustein, archive_baustein]
-fallback_when_mcp_absent: "warn user; degrade to filesystem Glob over memory/bausteine/{universal,domain/<X>,state/<X>}/ tree + Read of frontmatter. Citation-drift check skipped (requires manifest + corpus access)."
+fallback_when_mcp_absent: "without list_bausteine the skill cannot operate — bausteine are contract-bearing (frontmatter has status, last_validated, review_due invariants per ARCHITECTURE meta-rule 4 fail-closed corollary). The skill's whole purpose is freshness sweep; without the gate it cannot reliably read invalidation contract fields. Surface 'MCP unreachable; restart backend' and stop."
 summary: Sweeps memory for stale or flagged bausteine — review_due passed, status=flagged, citation drift, successive UNB rejections.
 routing_mode: direct
 triggers:
-  - {phrase: "check bausteine", lang: en}
-  - {phrase: "freshness sweep", lang: en}
-  - {phrase: "are my bausteine current", lang: en}
+  - check bausteine freshness
+  - sweep stale bausteine
 handoffs: []
 phase_role: utility
 ---

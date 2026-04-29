@@ -1,18 +1,17 @@
 ---
 name: validate-latex-style
 description: This skill should be used during the formal review layer of any layered review (orchestrator Checkpoint 4.2, layer 3) — diffs a LaTeX document's preamble and structural choices against the canonical style-spec.md plus any per-active-domain office-style overlays. Triggered by user phrases like "style check", "spec-Abweichung", "validate style", "stilprüfung", or as part of pre-send formal review.
-version: 0.4.0
+version: 0.5.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []
-fallback_when_mcp_absent: "skill operates entirely on filesystem reads; no MCP dependencies. Office-config (loaded by orchestrator) provides scope.domains for overlay enumeration."
+fallback_when_mcp_absent: "skill operates entirely on filesystem reads of contract-free files (style-spec.md prose + LaTeX source + per-domain overlay files). Office-config is loaded by the orchestrator before delegating here — this skill consumes the already-validated `scope.domains` for overlay enumeration. No contract-bearing reads of its own — no fail-closed concern."
 summary: Layer-3 formal review — diffs LaTeX preamble + structural choices against canonical style-spec.md plus per-domain office-style overlays.
 routing_mode: delegated
 triggers:
-  - {phrase: "style check", lang: en}
-  - {phrase: "spec-Abweichung", lang: de}
-  - {phrase: "validate style", lang: en}
-  - {phrase: "stilprüfung", lang: de}
+  - style check
+  - validate LaTeX style
+  - Stilprüfung        # German technical anchor
 delegated_from: [review-draft]
 handoffs: []
 phase_role: layer_3

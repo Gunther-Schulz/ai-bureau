@@ -66,7 +66,21 @@ Skills declare their MCP-tool dependencies in YAML frontmatter:
 `fallback_when_mcp_absent`. The orchestrator + `list_skills` MCP
 tool read these to plan tool calls. Deterministic logic lives in
 MCP gates (validation, dedupe, etc.); skills compose, never
-re-implement. See ARCHITECTURE.md meta-rule 4 for the full rule.
+re-implement.
+
+**Fail-closed for contract-bearing reads** (post-v0.7 corollary):
+when MCP is unreachable, skills MUST surface to user and stop,
+never bypass the contract via direct filesystem `Read`. Applies to
+state.md, office-config.yaml, doctype/reference manifests, baustein
+YAML, projects-index.md (any file with a Pydantic loader,
+schema_version, cross-ref invariants, or invalidation-contract
+fields). Contract-free prose (HANDOFF, decisions.md, file-map.md,
+README, prose memory) remains skill-direct. See
+`docs/decisions/mcp-fallback-policy.md` and `docs/plugin-
+conventions.md` §11b for the full policy + writing rules for
+`fallback_when_mcp_absent` strings.
+
+See ARCHITECTURE.md meta-rule 4 for the full rule.
 
 ## Versioning
 

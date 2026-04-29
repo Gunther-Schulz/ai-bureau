@@ -239,6 +239,95 @@ architecture, not architecture-implementation).
 
 ---
 
+### Target 9 — Subsumption check (legacy retirement at design time)
+
+**Files**: the new mechanism's design proposal/decision-record AND
+the existing landscape it lands in (ARCHITECTURE.md current entity
+inventory, current decision records, current plugin entities,
+current persistence structures the new thing might replace).
+
+**Why this matters**: adding a new mechanism without explicitly
+asking "what does this subsume?" leaves load-bearing legacy in
+place by inertia. Each new commitment gets layered on top, but no
+one walks back and asks "is the prior decision still necessary
+now that this one exists?" The audit-trail v1→v2 reversal in
+session 7 is canonical: v1 added a unified JSONL log alongside
+6 prose sources with dual-write discipline, when in fact 5 of 6
+prose sources were subsumable. The retirement question wasn't
+asked at v1 design time. v2 corrected it, but only after a fresh
+review surfaced the gap.
+
+This target exists to make the question MANDATORY at design time,
+not retrospective.
+
+**Greenfield questions** (mandatory when proposing any structural
+mechanism — meta-rule, entity type, MCP tool, persistence
+structure, decision record-grade commitment):
+
+- **What does this new thing replace?** Walk every existing
+  mechanism in the same domain (audit, persistence, routing,
+  validation, etc.). For each: does the new mechanism subsume it
+  partially, fully, or not at all?
+- **What stays for non-redundant reasons?** For each mechanism
+  the new thing partially or fully subsumes: what UNIQUE value
+  does the legacy still carry that the new thing doesn't replace?
+  ("Legacy provenance," "human-readable form," "external-tool
+  compatibility," "regulatory requirement," etc. — name the
+  specific load-bearing reason, not "we might want it.")
+- **What can be RETIRED?** Anything where the new thing fully
+  subsumes the old AND the old has no unique non-redundant value.
+  Retirement is the default; preservation needs explicit
+  justification.
+- **Migration path for retired mechanisms**: existing instances
+  (data, files, references in skills/docs) need a migration
+  story. If migration is too painful, that's a signal the new
+  mechanism isn't actually a clean replacement — surface the
+  pain, don't paper over it.
+- **Decision record for the retirement**: each retired mechanism
+  gets a "supersedes" note in the new mechanism's decision record,
+  AND the legacy's decision record (if one exists) gets a
+  "superseded by" header. The audit trail of architectural
+  evolution stays legible.
+
+**Anti-patterns** the target catches:
+
+- ❌ "We're adding X alongside Y" without checking if Y becomes
+  redundant. Default-additive thinking.
+- ❌ "Y is too established to retire" — without naming the
+  specific load-bearing reason. Inertia masquerading as
+  load-bearing-ness.
+- ❌ Decision record proposes new mechanism with no "what does
+  this replace?" section. Mandatory section.
+- ❌ Retirement deferred to "future cleanup" — that future never
+  comes, and the legacy continues consuming maintenance attention.
+
+**Output expectation**:
+
+For each new structural mechanism reviewed:
+
+1. **Subsumption table**: existing mechanism × {fully-subsumed |
+   partially-subsumed | unaffected} × name unique-value-retained
+   if not fully subsumed.
+2. **Retirement list**: which existing mechanisms can/should be
+   retired. Include migration sketch.
+3. **Preservation justifications**: for each "preserved alongside"
+   item, the specific load-bearing reason. Reject "might be
+   useful," "established," "we're used to it."
+4. **Required decision-record sections**: list of
+   `supersedes` / `superseded by` notes the decision records need.
+
+**When to invoke**: at design time for any new commitment grade
+mechanism (decision record-worthy proposal, meta-rule addition,
+new entity type, new persistence structure). NOT for incremental
+patches or skill-level changes — those rarely subsume anything.
+
+**Relationship to slice 18**: target 9 is the prospective check
+(at design time, cheap to fix). Slice 18 is the retrospective
+sweep (catches what target 9 missed across the whole stack).
+Both, not either.
+
+---
+
 ## Focused-mode targets
 
 For "design review the chunkers" / "is X sound" / etc., review one

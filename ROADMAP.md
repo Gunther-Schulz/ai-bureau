@@ -11,6 +11,75 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ## v1.x — likely soon
 
+### Generalize + publish domain-agnostic skills as separate plugin(s)
+
+**Why**: Several skills in this plugin are battle-tested infrastructure
+patterns that aren't PBS-domain-specific — the architectural
+discipline (meta-rule 4 boundary, mcp_tools_required, fail-closed
+fallback policy, trigger-convention) and the cross-cutting skills
+(audit, design-review, watch-list, memory-record patterns,
+orchestrator routing infrastructure, promote-to-skill) generalize
+to any knowledge-work plugin domain. Once the PBS use-case has
+exercised them through real project work, the generic core can be
+extracted and published as standalone reusable plugin(s) for other
+domains (legal practice management, research-paper review,
+engineering-doc workflows, etc.).
+
+**Generalization candidates** (high value, low PBS-coupling):
+
+- `audit` skill — drift detection framework with slice-based
+  composition. Today's slices reference PBS-specific surfaces
+  (manifests, bausteine) but the frame is generic.
+- `design-review` skill — first-principles soundness review with
+  anti-bias mechanism. Targets are domain-flavored but the method
+  is generic.
+- `watch-list` skill — six-trigger continuous-watch infrastructure
+  + four-way decision menu. Generic pattern.
+- Memory-record pattern (`save-baustein` / `record-feedback` /
+  `validate-bausteine`) — generic memory-as-content with
+  invalidation contracts; "baustein" maps to "snippet" / "pattern"
+  / "case" in other domains.
+- `orchestrator` infrastructure — meta-rule-4 enforcement,
+  list_skills introspection, phase-routing framework. Generic.
+- `promote-to-skill` — graduation-from-memory pattern. Generic.
+- Backend infrastructure — `pbs_core/`-style plain-Python +
+  `pbs_mcp/`-style thin MCP wrappers; StrictModel + fail-closed
+  discipline. Generic.
+
+**PBS-specific (stays here)**: `draft-textteil-b/c`,
+`draft-cover-mail`, `validate-checklist`, `validate-latex-style`,
+`verify-citations`, `research-references`, `survey-project`,
+`setup-office`, `author-manifest`. These encode planning-bureau
+domain knowledge.
+
+**Sketch of the split**:
+
+- A new repo (working name: `knowledge-work-plugin` or similar)
+  hosting the generalizable skills + backend infrastructure.
+- pbs-bureau becomes a *consumer* of that base plugin, adding only
+  PBS-specific skills and PBS-specific extensions (manifests,
+  doctype scaffolds, office-style, korrektur-rules).
+- Versioning: the generic plugin evolves on its own track; PBS
+  declares a version dependency. Other domains (e.g. a
+  legal-practice plugin) consume the generic core with their own
+  domain-specific top layer.
+
+**Pull-forward trigger**: after first ~3-5 real PBS projects have
+exercised the cross-cutting skills enough that the generic /
+domain-specific split is empirically clear. Today's split is
+proposed by structure-reading; the empirical split may differ.
+Don't extract prematurely — extracting before battle-test risks
+splitting in the wrong place.
+
+**Open questions**:
+- Naming + scope of the generic plugin
+- Backend infrastructure split: does `pbs_core/` become its own
+  PyPI package, or does each plugin vendor its own copy? PyPI
+  package is cleaner; vendoring is more flexible early on.
+- Test surface: how does the generic plugin test domain-agnostic
+  skills without a domain to test against? Likely with a synthetic
+  reference domain (e.g., a "demo" domain with stub manifests).
+
 ### Tier 2 MCP cross-reference tools (during first project work) — partial
 
 **Status**: `find_bausteine_by_reference` landed in session 4 (see
@@ -203,15 +272,108 @@ MCP tools shipped session 6 (covered in the same bundle since
 state.md was already YAML-frontmatter shape — gap was validation,
 not format).
 
-- Remaining: the 8 skills that read state.md (orchestrator,
-  survey-project, draft-cover-mail, validate-checklist, review-draft,
-  draft-textteil-b/c, promote-to-skill) declare get_project_state
-  + update_project_state in mcp_tools_required and route through
-  the gate instead of direct Read. No projects bound yet, so this
-  retrofit is non-blocking until first project bind.
+- ✅ **Done session 7**: all 8 skills (orchestrator, survey-project,
+  draft-cover-mail, validate-checklist, review-draft, draft-textteil-b/c,
+  promote-to-skill) declare get_project_state / update_project_state
+  in mcp_tools_required and route reads/writes through the gate.
+- Verification: audit slice 14 run after retrofit confirms no direct
+  Read/Write of state.md remains.
 
-All three items: skill retrofits land in the next-immediate-session
-before any RAG work begins.
+**4. Fail-closed fallback corollary** (session 7) — see
+`docs/decisions/mcp-fallback-policy.md`.
+
+- Meta-rule 4 corollary added to ARCHITECTURE.md (v0.6 → v0.7):
+  contract-bearing reads have no fallback path; MCP-unreachable
+  surfaces to user and stops, never bypasses the contract.
+- Plugin-wide sweep (session 7): all 19 skills' `fallback_when_mcp_absent`
+  strings rewritten under the rule. Audit slice 14 brief extended
+  with violation pattern 5 to scan fallback strings for declared
+  future bypasses.
+- ✅ **Done session 7**.
+
+**5. Trigger-convention simplification** (session 7) — see
+`docs/decisions/trigger-convention.md`.
+
+- Old `{phrase, lang}` structured form retired for flat concept
+  labels; LLM matches semantically across languages. German
+  technical anchors (UNB, Stellungnahme, Festsetzungen) preserved
+  when domain-bearing.
+- ✅ **Done session 7**: all 19 skills updated; convention codified
+  in `docs/plugin-conventions.md` §11.
+
+**6. Audit-trail v1 → v2 reversal** (session 7) — see
+`docs/decisions/audit-trail-v2.md`. Supersedes v1.
+
+- Single-write architecture: skills call `record_audit_event` only;
+  the `record_decision` gate atomically mirrors to `decisions.md`.
+  No skill-side dual-write discipline.
+- 5 prose sources retired (`module-decisions.md`,
+  `correspondence-log.md`, references `changelog.md`,
+  `state.md.phase_history`) — render-time prose synthesis via new
+  `render_audit_trail` MCP tool.
+- 2 prose sources stay: `decisions.md` (legal-defense provenance)
+  and `snapshots/` (artifact bytes).
+- Remaining: `record_decision` + `render_audit_trail` MCP tools;
+  schema additions (`user_confirmation` event, full reasoning
+  text); skill retrofits per v2 plan; ProjectState schema drop
+  `phase_history` field.
+
+**7. Bootstrap-write MCP tools** (session 7) — close the meta-rule
+4 fail-closed gap surfaced by audit slice 14.
+
+- Two skills (`author-manifest`, `setup-office`) currently scaffold
+  contract-bearing files via direct `Write` because no MCP gate
+  exists for *first-write* of those file types. The v0.7 fail-
+  closed corollary makes this a known architectural gap; the
+  skills declare the bypass loudly rather than silently. Pre-RAG
+  is the right window — fix architecture before deployment.
+- Sketch:
+  - `create_manifest(target_path, kind: 'domain'|'state', name: str,
+    initial_entries?: list[dict]) -> CreateManifestOutput` —
+    scaffold a valid empty manifest YAML through Pydantic, write
+    file via loader. Replaces author-manifest's direct Write.
+  - `create_office_config(values: dict) -> CreateOfficeConfigOutput`
+    — Pydantic-validate the wizard's collected values, write
+    office-config.yaml through the loader. Replaces setup-office's
+    bootstrap-then-validate pattern with gate-only-write.
+- Skill retrofits: author-manifest + setup-office update bodies +
+  `mcp_tools_required` to use the new gates; fallback strings drop
+  the "known bypass" caveat.
+
+**8. Pre-action framing/preparation skill** (session 7) — close
+the prep → implementation → review cycle. The current meta-skills
+(audit, design-review) form the *review* layer. Implementation
+skills (orchestrator + specialists) form the *implementation*
+layer. There is no formal *preparation* layer; today we
+informally discuss before acting, but no skill surfaces the right
+preparation questions.
+
+- Sketch: a new meta-skill (working name: `frame-task` or
+  `scoping`) that fires before any non-trivial task, asking:
+  - What's the actual problem we're solving (not just the user's
+    surface request)?
+  - What's in scope, what's out?
+  - What approaches exist? Which one fits the constraints?
+  - What constraints are non-negotiable (legal, architectural,
+    deadlines)?
+  - What does success look like — observable outcome, not "feels
+    done"?
+- Triggered on non-trivial task starts (orchestrator routes here
+  before routing to implementation specialists). Outputs a brief
+  framing artifact the implementation skills consume.
+- The audit-trail v1→v2 reversal in session 7 is example: with a
+  proper framing pass at v1 design time, target 9's "what does
+  this subsume?" question would have been asked then, and v2
+  wouldn't have been a reversal — it would have been v1.
+- Pull-forward trigger: pre-RAG bundle (this commitment list).
+  The skill is preventive of design errors that compound after
+  launch — better in place before real project work begins.
+
+All eight items: pre-RAG architectural commitments. Phase 1 corpus
+download unblocks pending sections B (audit-trail single-write
+integration per v2), C (sparring-output integration), D (plugin
+version bump), and the Phase 0 items 4 (feature-survey skill) + 5
+(testing methodology) per HANDOFF.md.
 
 ### Pioneer-instance validation strategy
 

@@ -1,20 +1,18 @@
 ---
 name: setup-office
 description: This skill should be used the first time the plugin is deployed to a new planning bureau, when the office-config.yaml is missing, or when the user asks to "set up office", "first-time setup", "bootstrap office", "deploy to a new office", "Kanzlei einrichten", or "configure office". The orchestrator auto-routes here when office_config.load() raises OfficeConfigNotFoundError. Walks the user interactively through every required field, writes office-config.yaml at the resolved location, bootstraps the office state directory tree, validates the result.
-version: 0.5.0
+version: 0.6.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []
-fallback_when_mcp_absent: "skill is filesystem-only (Glob/Read/Write/Edit/Bash + office_config.load() Python helper); no MCP dependencies. The wizard's final validation step calls office_config.load() in-process, not via MCP."
+fallback_when_mcp_absent: "skill is filesystem-only (Glob/Read/Write/Edit/Bash + office_config.load() Python helper); no MCP dependencies. Bootstrap-then-validate pattern: the wizard writes office-config.yaml directly then calls office_config.load() in-process to validate. This bypasses the gate-only-write rule by design (no `create_office_config` MCP tool exists for first-deploy bootstrap; the validation-after-write closes the loop). Future fix: a `create_office_config` MCP tool for full fail-closed compliance — tracked in ROADMAP."
 summary: First-time office deployment wizard — writes office-config.yaml + bootstraps state directory tree. Re-runs for migration or reconfigure.
 routing_mode: direct
 triggers:
-  - {phrase: "set up office", lang: en}
-  - {phrase: "first-time setup", lang: en}
-  - {phrase: "bootstrap office", lang: en}
-  - {phrase: "deploy to a new office", lang: en}
-  - {phrase: "Kanzlei einrichten", lang: de}
-  - {phrase: "configure office", lang: en}
+  - set up office
+  - first-time deployment
+  - configure office
+  - Kanzlei einrichten        # German technical anchor
 handoffs: [author-manifest]
 phase_role: bureau_setup
 ---

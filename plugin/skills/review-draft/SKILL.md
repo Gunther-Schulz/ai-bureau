@@ -1,21 +1,18 @@
 ---
 name: review-draft
 description: This skill should be used when the user asks to review a drafted document — Begründung, Festsetzungen, Umweltbericht, or Gutachten. Triggered by phrases like "review draft", "prüfe das", "Begründung durchgehen", "structural + fachlich + formal", "korrigieren", "Lektorat", "schau mal drüber". Phase B entry skill — runs the layered review framework after Phase A drafting completes.
-version: 0.3.0
+version: 0.5.0
 license: MIT
-mcp_tools_required: [compile_latex]
+mcp_tools_required: [compile_latex, get_project_state, update_project_state]
 mcp_tools_optional: [list_doctypes_manifests, search_corpus, list_reference_manifests]
-fallback_when_mcp_absent: "warn user; degrade to Bash latexmk for compile. Layered review delegations (validate-checklist, validate-latex-style, verify-citations) each have their own fallback paths."
+fallback_when_mcp_absent: "without get/update_project_state the skill cannot proceed — state.md is gate-only per ARCHITECTURE meta-rule 4 fail-closed corollary. Surface 'MCP unreachable; restart backend' and stop. When the gate is up but compile_latex is unavailable: latexmk via Bash. Layered review delegations (validate-checklist, validate-latex-style, verify-citations) carry their own fallback paths."
 summary: Reviews a drafted document via layered framework — structural (L1) → fachlich (L2) → formal (L3). Phase B entry skill.
 routing_mode: direct
 triggers:
-  - {phrase: "review draft", lang: en}
-  - {phrase: "prüfe das", lang: de}
-  - {phrase: "Begründung durchgehen", lang: de}
-  - {phrase: "structural + fachlich + formal", lang: en}
-  - {phrase: "korrigieren", lang: de}
-  - {phrase: "Lektorat", lang: de}
-  - {phrase: "schau mal drüber", lang: de}
+  - review draft
+  - layered review (L1/L2/L3)
+  - Begründung durchgehen        # German technical anchor
+  - Lektorat
 handoffs: [validate-checklist, verify-citations, validate-latex-style]
 phase_role: phase_b_entry
 ---
@@ -58,8 +55,9 @@ By orchestrator (Phase B entry) or direct user request. Inputs:
 
 - **Document path** — what to review.
 - **Doctype** (optional; identified by path/content if absent).
-- **Project context** — state.md, decisions.md,
-  module-decisions.md.
+- **Project context** — load state via `get_project_state(project)`
+  (never Read state.md directly per ARCHITECTURE meta-rule 4);
+  `decisions.md`, `module-decisions.md` (contract-free, direct Read fine).
 - **Source materials** (optional) — for fachlich layer to
   cross-check claims against inputs.
 

@@ -1,22 +1,18 @@
 ---
 name: research-references
 description: This skill should be used to fetch, update, or check freshness of legal references (gesetze, leitfäden, urteile) tracked across the office's layered references manifests. Triggered by user phrases like "update references", "neue Fassung holen", "BauGB current?", "research new law", "are our laws current?", "refresh references", "gesetze aktualisieren", "fetch BVerwG ruling", or scheduled refresh checks.
-version: 0.4.0
+version: 0.5.0
 license: MIT
 mcp_tools_required: [list_reference_manifests, ingest_paths]
 mcp_tools_optional: [find_bausteine_by_reference]
-fallback_when_mcp_absent: "without list_reference_manifests + ingest_paths the skill cannot run a refresh — fail loud and route the user to restart the backend. find_bausteine_by_reference is optional; without it, dependent-baustein cross-reference falls back to a filesystem scan of memory/bausteine/**."
+fallback_when_mcp_absent: "without list_reference_manifests + ingest_paths the skill cannot run a refresh — manifests are contract-bearing (last_updated / last_fetched / checksum_sha256 invariants per ARCHITECTURE meta-rule 4 fail-closed corollary). Surface 'MCP unreachable; restart backend' and stop. find_bausteine_by_reference is optional; without it, dependent-baustein cross-reference falls back to a filesystem scan of memory/bausteine/** but only the bausteine themselves require the gate for validation — read-only enumeration via Glob is acceptable for *finding* candidates."
 summary: Fetches/refreshes/checks freshness of legal references across layered manifests. Three modes — full refresh, targeted, new-entry registration.
 routing_mode: direct
 triggers:
-  - {phrase: "update references", lang: en}
-  - {phrase: "neue Fassung holen", lang: de}
-  - {phrase: "BauGB current?", lang: en}
-  - {phrase: "research new law", lang: en}
-  - {phrase: "are our laws current?", lang: en}
-  - {phrase: "refresh references", lang: en}
-  - {phrase: "gesetze aktualisieren", lang: de}
-  - {phrase: "fetch BVerwG ruling", lang: en}
+  - update references
+  - refresh laws
+  - fetch new ruling
+  - check reference freshness
 handoffs: [author-manifest]
 phase_role: utility
 ---

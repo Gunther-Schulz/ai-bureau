@@ -1,15 +1,15 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.9.0
+version: 0.10.0
 license: MIT
-mcp_tools_required: [list_projects, list_skills]
+mcp_tools_required: [list_projects, list_skills, get_project_state, update_project_state]
 mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
-fallback_when_mcp_absent: "warn user and suggest backend restart. Orchestrator can still surface decisions and route to specialists from skill descriptions, but session-open project enumeration and watch-list cross-references degrade to filesystem reads."
+fallback_when_mcp_absent: "warn user and suggest backend restart. Without get/update_project_state, orchestrator cannot read or transition project lifecycle (state.md is a strict-validated contract — no direct skill Read/Write per ARCHITECTURE meta-rule 4). Other capabilities (project enumeration, watch-list cross-references) degrade to filesystem reads."
 summary: Master coordination skill — routes user input + holds workflow gates. Auto-loads when in planning-bureau scope; specialists own their own invariants. Watch-list logic delegated to `watch-list` skill (post-v0.5 split per design-review S3).
 routing_mode: always_active
 triggers:
-  - {phrase: "auto-loaded on planning-bureau context", lang: meta}
+  - auto-loaded on planning-bureau context        # meta — not user-typed
 handoffs: [setup-office, draft-textteil-b, draft-textteil-c, review-draft, save-baustein, validate-bausteine, record-feedback, promote-to-skill, validate-latex-style, validate-checklist, verify-citations, draft-cover-mail, research-references, author-manifest, survey-project, audit, design-review, watch-list]
 phase_role: routing
 ---
@@ -74,8 +74,9 @@ configured per deployment in `office-config.yaml`:
   project folder.
 
 If the user works on a project, get its root path from
-`bind_project`'s result or from `_ai/state.md.project_root`. Do not
-infer paths from convention.
+`bind_project`'s result or from `get_project_state(project).state.project_root`.
+Do not infer paths from convention. Direct Read/Write of state.md is a
+meta-rule 4 persistence-boundary leak — always route through the MCP gate.
 
 ## Specialist skills
 

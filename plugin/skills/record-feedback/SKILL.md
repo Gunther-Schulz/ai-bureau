@@ -1,18 +1,17 @@
 ---
 name: record-feedback
 description: This skill should be used when external feedback (rejection, approval, partial, suggestion) on planning-bureau work needs to be captured. Triggered by user pasting a UNB Stellungnahme, mentioning a Behörden-Reaktion, "UNB hat abgelehnt", "approval kam von <Person>", "Stellungnahme festhalten", "feedback log", "record this rejection", or similar.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [list_bausteine, flag_baustein]
 mcp_tools_optional: [find_bausteine_by_reference, search_corpus, read_corpus_file]
-fallback_when_mcp_absent: "warn user; degrade to filesystem Write of feedback entry + Edit of baustein frontmatter directly. Per-concern cross-referencing via Grep instead of search_corpus."
+fallback_when_mcp_absent: "without list_bausteine / flag_baustein the skill cannot operate on bausteine — bausteine are contract-bearing (frontmatter has status, last_validated, review_due invariants) per ARCHITECTURE meta-rule 4 fail-closed corollary. Surface 'MCP unreachable; restart backend' and stop. Per-concern cross-referencing via Grep is fine when the gate is up (corpus is content, not contract)."
 summary: Captures external feedback (rejection/approval/partial/suggestion) on PBS work, with side-effects on addressed bausteine.
 routing_mode: direct
 triggers:
-  - {phrase: "UNB hat abgelehnt", lang: de}
-  - {phrase: "Stellungnahme festhalten", lang: de}
-  - {phrase: "feedback log", lang: en}
-  - {phrase: "record this rejection", lang: en}
+  - record feedback
+  - capture Stellungnahme        # German technical anchor
+  - log UNB rejection
 handoffs: []
 phase_role: utility
 ---

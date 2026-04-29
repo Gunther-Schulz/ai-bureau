@@ -1,17 +1,17 @@
 ---
 name: survey-project
 description: This skill should be used when first binding to an existing project that has no _ai/ folder yet. It walks the project root, clusters files by likely role (artifacts, inputs, sent versions, correspondence, cruft), and proposes a file-map.md interpretation for user confirmation. Triggered by orchestrator's binding flow (Checkpoint 11) or by direct user phrases like "survey this project", "scan the folder", "binde dieses Projekt".
-version: 0.4.0
+version: 0.5.0
 license: MIT
-mcp_tools_required: [list_doctypes_manifests]
-mcp_tools_optional: [search_inputs, list_skeletons]
-fallback_when_mcp_absent: "warn user; degrade to direct filesystem Read of extensions/{universal,domain/<X>}/doctypes.yaml. Per-ambiguous-file content sniffing still possible without MCP, just slower."
+mcp_tools_required: [list_doctypes_manifests, bind_project, update_project_state]
+mcp_tools_optional: [search_inputs, list_skeletons, get_project_state]
+fallback_when_mcp_absent: "warn user; without bind_project the skill cannot create state.md (strict-validated contract per ARCHITECTURE meta-rule 4 — direct write forbidden). Doctype-manifest fallback to direct Read of extensions/{universal,domain/<X>}/doctypes.yaml works; per-ambiguous-file content sniffing still works without MCP."
 summary: First-bind clustering of project files into a _ai/file-map.md interpretation. Walks ambiguous files iteratively.
 routing_mode: direct
 triggers:
-  - {phrase: "survey this project", lang: en}
-  - {phrase: "scan the folder", lang: en}
-  - {phrase: "binde dieses Projekt", lang: de}
+  - survey project
+  - bind project from existing folder
+  - scan project folder
 handoffs: []
 phase_role: lifecycle
 ---
@@ -45,7 +45,7 @@ By orchestrator's binding flow when a referenced project has no
 - **Project root path** — absolute path under
   `office_config.roots.projects` (or anywhere the user
   provides).
-- **Project name** — for state.md construction.
+- **Project name** — for `bind_project` invocation that constructs state.md through the ProjectState contract.
 - **Practices guess** — orchestrator's guess of one or more
   practice ids from `office_config.actors` (kind=internal), derived from
   path/file heuristic (presence of doctype-relevant files vs.
@@ -149,14 +149,15 @@ heuristic, surface clusters. Replaced with iterative classification:
    ambiguous files, show the iteration trail so the user can
    verify the reasoning.
 
-10. **On user confirmation**, write:
-    - `_ai/state.md` with confirmed/corrected fields.
-    - `_ai/file-map.md` with confirmed cluster assignments.
-    - `_ai/decisions.md` empty (no decisions yet).
-    - `_ai/correspondence-log.md` with one row per detected
-      `.eml` / call note found in `Schriftverkehr/`.
-    - `_ai/module-decisions.md` empty.
-    - `_ai/snapshots/` empty directory.
+10. **On user confirmation**:
+    - Call `bind_project(name, root_path, bundesland, verfahren_type, phase)` — creates `_ai/state.md` through the ProjectState Pydantic contract (strict-validated; never write state.md directly per ARCHITECTURE meta-rule 4).
+    - For any survey-derived fields beyond bind_project's required inputs (e.g. `doctype_status`, `practices`, `lifecycle` corrections, `client`, `location`), call `update_project_state(project, updates={...})`.
+    - Write directly (these files have no schema contract):
+      - `_ai/file-map.md` with confirmed cluster assignments.
+      - `_ai/decisions.md` empty (no decisions yet).
+      - `_ai/correspondence-log.md` with one row per detected `.eml` / call note found in `Schriftverkehr/`.
+      - `_ai/module-decisions.md` empty.
+      - `_ai/snapshots/` empty directory.
 
 11. **Append project to**
     `<state_root>/projects-index.md` (`state_root` resolved via
@@ -233,6 +234,11 @@ Confirm? [y/n/modify]
 
 - `list_doctypes_manifests(scope_filter=true)` (MCP, required) —
   layered doctype registry for filename / folder pattern matching.
+- `bind_project(...)` (MCP, required) — creates state.md through
+  the ProjectState contract on user confirmation. Direct write of
+  state.md is forbidden (ARCHITECTURE meta-rule 4).
+- `update_project_state(project, updates)` (MCP, required) — applies
+  survey-derived fields to state.md after bind_project creates it.
 - `search_inputs(project, query)` (MCP, optional) — only useful
   AFTER first ingest; not used during initial bind.
 - `list_skeletons(doctype)` (MCP, optional) — knowing what a
@@ -240,7 +246,7 @@ Confirm? [y/n/modify]
   scaffolds.
 - `Glob` — recursive file enumeration.
 - `Read` — sample file content for doctype/role identification
-  + iteration content-sniff step.
+  + iteration content-sniff step. NOT used for state.md.
 - `Bash` — file metadata via stat (when needed for mtime).
 
 When MCP backend unreachable: fall back to direct filesystem reads

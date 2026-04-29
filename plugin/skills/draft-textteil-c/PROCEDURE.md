@@ -42,7 +42,7 @@ For Solar PV typical content:
 - Folgenutzung landwirtschaftlich (§9 Abs.1 Nr.18a BauGB)
 - 30-Jahre-Frist mit konkretem Ablaufdatum
 
-Source for Vorhaben-spezifische Werte: state.md + briefing inputs.
+Source for Vorhaben-spezifische Werte: `get_project_state(project).state` + briefing inputs (state.md is gate-only per meta-rule 4).
 
 ### Rule 2 — Maß der baulichen Nutzung
 
@@ -211,8 +211,7 @@ Rechtsgrundlagen drafted:
 2. Verify single-page output.
 3. Cross-consistency check with Begründung.
 4. Surface PDF + .tex source paths.
-5. Append to `_ai/state.md` History: "Festsetzungen-Erstentwurf
-   fertig <date>".
+5. Call `update_project_state(project, updates={}, body_append="- <YYYY-MM-DD> — Festsetzungen-Erstentwurf fertig.")`. Never write state.md directly (meta-rule 4).
 6. Hand control to orchestrator for Phase B review.
 
 ## What not to do

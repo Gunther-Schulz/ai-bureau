@@ -1,18 +1,16 @@
 ---
 name: watch-list
 description: This skill carries the continuous watch-list infrastructure — six triggers (T1 reusable-pattern / T2 citation-drift / T3 baustein-promotion / T4 style-deviation / T5 standing-rule / T6 capability-gap) detected during work, with explicit data model, decay rules, and the four-way decision menu. Mostly invoked by the orchestrator as part of normal workflow rather than by user phrase — but admin/debug phrases like "show watch queue", "check watch list state", "watch-list status" route here directly.
-version: 0.1.0
+version: 0.2.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_bausteine]
-fallback_when_mcp_absent: "skill is mostly an in-conversation protocol; only the T3 detection (use_count check) needs list_bausteine — without it, T3 falls back to filesystem scan of memory/bausteine/**/<name>.md frontmatter."
+fallback_when_mcp_absent: "skill is mostly an in-conversation protocol over ephemeral session state — no contract-bearing reads of its own. The T3 detection (use_count check) needs list_bausteine to read use_count from frontmatter; without it, T3 detection is skipped (skill cannot read invalidation-contract fields by direct Read per ARCHITECTURE meta-rule 4 fail-closed corollary). Surfacing a partial watch list with T1/T2/T4/T5/T6 still works since those don't read contract-bearing data."
 summary: Continuous in-session watch list — surfaces six trigger types via four-way decision menu with explicit data model + decay rules; auto-backlogs T6 capability gaps. Mostly invoked by orchestrator.
 routing_mode: delegated
 triggers:
-  - {phrase: "show watch queue", lang: en}
-  - {phrase: "watch list status", lang: en}
-  - {phrase: "check watch list state", lang: en}
-  - {phrase: "Watch-Liste anzeigen", lang: de}
+  - show watch list
+  - watch-list status
 delegated_from: [orchestrator]
 handoffs: [save-baustein, promote-to-skill, validate-latex-style, verify-citations]
 phase_role: utility

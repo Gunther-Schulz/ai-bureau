@@ -1,19 +1,16 @@
 ---
 name: save-baustein
 description: This skill should be used when the user authorizes capturing a reusable text, argumentation pattern, technical specification, or citation as a baustein in memory. Triggered by the orchestrator's four-way decision menu when "capture-now" is chosen, or by direct user phrases like "save this as a baustein", "speichere das", "merken für später", "capture", "festhalten als baustein".
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [save_baustein, list_bausteine]
 mcp_tools_optional: [find_bausteine_by_reference]
-fallback_when_mcp_absent: "warn user; degrade to filesystem Write of the baustein markdown file at the canonical path per `references/format.md`. Skip dedupe + INDEX.md update."
+fallback_when_mcp_absent: "without save_baustein / list_bausteine the skill cannot create or dedupe bausteine — bausteine are contract-bearing (frontmatter has status, last_validated, review_due, references[] invariants) per ARCHITECTURE meta-rule 4 fail-closed corollary. Surface 'MCP unreachable; restart backend' and stop. Direct Write of the markdown file would bypass dedupe + frontmatter validation + INDEX.md update — exactly the silent contract bypass the corollary forbids."
 summary: Captures reusable text, argumentation, technical specs, or citations as bausteine in memory.
 routing_mode: direct
 triggers:
-  - {phrase: "save this as a baustein", lang: en}
-  - {phrase: "speichere das", lang: de}
-  - {phrase: "merken für später", lang: de}
-  - {phrase: "capture", lang: en}
-  - {phrase: "festhalten als baustein", lang: de}
+  - save baustein
+  - capture pattern for reuse
 handoffs: [promote-to-skill]
 phase_role: utility
 ---

@@ -1,20 +1,17 @@
 ---
 name: draft-textteil-b
 description: This skill should be used when the user asks to draft a B-Plan Begründung (Textteil B) from project source materials. Triggered by phrases like "Entwurf Begründung", "Begründung schreiben", "draft Begründung", "Textteil B aufsetzen", "neue Begründung", "Vorentwurf Begründung". Phase A entry skill — orchestrator routes here when a project requires fresh Begründung drafting.
-version: 0.3.0
+version: 0.5.0
 license: MIT
-mcp_tools_required: [list_skeletons, list_bausteine, search_corpus, compile_latex]
+mcp_tools_required: [list_skeletons, list_bausteine, search_corpus, compile_latex, get_project_state, update_project_state]
 mcp_tools_optional: [list_doctypes_manifests, list_reference_manifests, get_baustein, search_inputs, ingest_project_inputs, scaffold_project, find_bausteine_by_reference, read_corpus_file]
-fallback_when_mcp_absent: "warn user; degrade to filesystem reads + Bash latexmk for compile. Bausteine retrieval via Glob; corpus search via Grep over references_root + projects_root. Recall worse without semantic search."
+fallback_when_mcp_absent: "without get/update_project_state the skill cannot proceed (state.md is gate-only per ARCHITECTURE meta-rule 4 fail-closed corollary; surface 'MCP unreachable; restart backend' and stop). When the gate is up but optional MCP tools are unavailable: latexmk via Bash for compile; corpus search via Grep over references_root + projects_root (recall worse without semantic search). Bausteine retrieval requires the gate (frontmatter contract — also fail-closed)."
 summary: Drafts a B-Plan Begründung (Textteil B) from project source materials. Phase A entry skill.
 routing_mode: direct
 triggers:
-  - {phrase: "Entwurf Begründung", lang: de}
-  - {phrase: "Begründung schreiben", lang: de}
-  - {phrase: "draft Begründung", lang: en}
-  - {phrase: "Textteil B aufsetzen", lang: de}
-  - {phrase: "neue Begründung", lang: de}
-  - {phrase: "Vorentwurf Begründung", lang: de}
+  - draft Begründung      # B-Plan Textteil B; German technical anchor
+  - Vorentwurf Begründung
+  - new Begründung from project sources
 handoffs: [review-draft]
 phase_role: phase_a_entry
 ---
@@ -57,7 +54,7 @@ flag them on amendment.
 
 By orchestrator (Phase A entry) or direct user request. Inputs:
 
-- **Project** — bound or proposed; loads state.md if bound.
+- **Project** — bound or proposed; if bound, load state via `get_project_state(project)` (never Read state.md directly per ARCHITECTURE meta-rule 4).
 - **Source materials** — `inputs/` content (briefing, surveys,
   drone scans, regulatory inputs, prior Stellungnahmen).
 - **Doctype focus** — confirmed `b-plan-begruendung` (not c, not
@@ -110,7 +107,7 @@ By orchestrator (Phase A entry) or direct user request. Inputs:
      in office-config) takes precedence over the layered
      default.
    - Instantiate `Projektdaten.tex` with project metadata from
-     state.md.
+     `get_project_state(project).state` (gate-only access).
    - `git init` the LaTeX subfolder if user wants Overleaf sync.
 
 6. **Draft section-by-section** per PROCEDURE.md. Each section:

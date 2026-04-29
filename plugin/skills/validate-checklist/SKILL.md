@@ -1,19 +1,17 @@
 ---
 name: validate-checklist
 description: This skill should be used during the structural review layer of any layered review (orchestrator Checkpoint 4.2, layer 1) — checks a document against its doctype-specific required sections, project-data macros, and end-blocks. Triggered when the user asks "structural check", "strukturell prüfen", "validate structure", "Strukturprüfung", "check Festsetzungen", "check required sections", or as part of pre-send validation. NOTE — generic phrases like "review" / "prüfen" route to review-draft (the orchestrator-level review entry), which then delegates here for Layer 1.
-version: 0.4.0
+version: 0.6.0
 license: MIT
-mcp_tools_required: [list_doctypes_manifests]
+mcp_tools_required: [list_doctypes_manifests, get_project_state]
 mcp_tools_optional: [search_corpus, read_corpus_file, list_reference_manifests]
-fallback_when_mcp_absent: "warn user; degrade to filesystem Read of extensions/{universal,domain/<X>}/doctypes.yaml directly. Reference-fetch enrichment skipped (matches section names only, not the citing references)."
+fallback_when_mcp_absent: "without list_doctypes_manifests the skill cannot operate — doctype manifests are contract-bearing (last_updated, last_fetched, checksum invariants per ARCHITECTURE meta-rule 4 fail-closed corollary). Without get_project_state the doctype_status check is also gate-only. Surface 'MCP unreachable; restart backend' and stop. When the gate is up but optional tools are unavailable: reference-fetch enrichment skipped (matches section names only)."
 summary: Layer-1 structural review — checks document against doctype-specific required sections, project-data macros, end-blocks. Mostly delegated from review-draft.
 routing_mode: delegated
 triggers:
-  - {phrase: "structural check", lang: en}
-  - {phrase: "strukturell prüfen", lang: de}
-  - {phrase: "validate structure", lang: en}
-  - {phrase: "Strukturprüfung", lang: de}
-  - {phrase: "check Festsetzungen", lang: en}
+  - structural check
+  - validate doctype structure
+  - check Festsetzungen sections        # German technical anchor
 delegated_from: [review-draft]
 handoffs: []
 phase_role: layer_1
@@ -73,9 +71,9 @@ By orchestrator at Layer 1 of layered review, or by direct user
 request. Inputs:
 
 - **Document path** — the .tex file to validate.
-- **Project context** (optional) — for `_ai/state.md` data so
-  doctype_status and module-decisions can inform what's
-  required/optional.
+- **Project context** (optional) — load via `get_project_state(project)`
+  so `doctype_status` and module-decisions can inform what's
+  required/optional. Never Read state.md directly (meta-rule 4).
 
 ## Behavior
 

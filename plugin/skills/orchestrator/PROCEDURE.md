@@ -52,7 +52,7 @@ THEN load context for the detected scope:
 | Scope | Read at open |
 |---|---|
 | Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (path via `office_config.roots.state`); call `list_projects()` and `list_skills()` MCP tools |
-| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries are Configuration entity in `extensions/`). |
+| Project | Call `get_project_state(project)` (returns validated state + body — never Read state.md directly per ARCHITECTURE meta-rule 4); `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries are Configuration entity in `extensions/`). |
 | Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md`, `<repo>/VISION.md`, `<repo>/ARCHITECTURE.md` |
 
 Load `<repo>/memory/universal/style/style-spec.md` and `<repo>/memory/universal/conventions/korrektur-rules.md` whenever LaTeX work is in scope. Note: `memory/global/` no longer exists — content moved to `memory/universal/` (cross-cutting knowledge) and `memory/bausteine/` (instance records) per the orthogonality refactor.
@@ -131,7 +131,7 @@ Before drafting a transmittal mail, copying artifacts to a deliverables location
 - [ ] User confirmed?
   - Required. Output: "Senden an: \<recipient\>. Anhang: \<file list\>. Mail-Vorschau: \<inline preview or path\>. Bestätigen?" Wait for explicit confirmation.
 
-Only then update `_ai/state.md` lifecycle to `sent-to-authority`.
+Only then call `update_project_state(project, updates={"lifecycle": "sent-to-authority"}, body_append="- <date> — Sent to <recipient>.")`. Never write state.md directly.
 
 ### 4.4 State transition gate
 
@@ -145,7 +145,7 @@ revision-requested → finalized → archived
 To advance a state:
 - Output current state and proposed next state.
 - Wait for user confirmation.
-- Update `<project-root>/_ai/state.md` with the new state, timestamp, and the action that triggered it.
+- Call `update_project_state(project, updates={"lifecycle": "<new>"}, body_append="- <YYYY-MM-DD> — <triggering action>.")`. The MCP gate validates the merged state before writing; never edit state.md directly.
 
 Never advance state silently. Particularly: never mark `finalized` until the user explicitly confirms the project is closed (the bausteine-promotion guard depends on this — see Checkpoint 6.4).
 
@@ -214,7 +214,7 @@ Module decisions made conversationally without logging are a protocol violation 
 
 ### 6.4 Baustein promotion guard
 
-A baustein in `<project_root>/_ai/bausteine/...` (project scope) may only be promoted to broader scope (`universal`, `domain`, or `state` under `<repo>/memory/bausteine/<layer>/<key>/`) after the source project's `_ai/state.md` lifecycle is `finalized`. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the bureau (or worse, across deployments via universal/domain) is wrong.
+A baustein in `<project_root>/_ai/bausteine/...` (project scope) may only be promoted to broader scope (`universal`, `domain`, or `state` under `<repo>/memory/bausteine/<layer>/<key>/`) after the source project's lifecycle is `finalized` — read via `get_project_state(source_project).state.lifecycle`, never via direct state.md Read. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the bureau (or worse, across deployments via universal/domain) is wrong.
 
 Promotion before finalization → BLOCK. Output: "Quellprojekt ist noch \<state\>. Promotion erst nach finalized erlaubt." If the user insists, require an explicit "ich autorisiere die frühe Promotion" — log the override in `<repo>/memory/product-backlog.md` for later audit.
 
@@ -264,7 +264,7 @@ State lives in `<project-root>/_ai/state.md`. Transitions follow Checkpoint 4.4.
 
 ### 8.2 Ownership modes (existing projects only)
 
-When binding to an existing project for the first time (Checkpoint 11), detect state and propose a mode. Record in `_ai/state.md`. Modes:
+When binding to an existing project for the first time (Checkpoint 11), detect state and propose a mode. Record via `update_project_state(project, updates={"ownership_mode": "<mode>"})` (or via the `bind_project` MCP tool on initial creation). Modes:
 
 | Mode | What the orchestrator may write | What it must not touch |
 |---|---|---|

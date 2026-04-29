@@ -1,176 +1,211 @@
 # Session handoff — pbs-bureau
 
-End of session 6 (2026-04-29). This session was the largest pre-RAG
-architectural hardening pass since session 5's simplification. It
-ran through 9 distinct work streams in three phases:
+End of session 7 (2026-04-29). This session expanded the pre-RAG
+architectural commitments from session 6's three (state.md gate +
+audit-trail-v1 + sparring-v1) to **eight**, driven by sharper
+review of where session-6 commitments left load-bearing legacy in
+place. Three reversals/extensions plus three new mechanisms.
 
-**Phase 1 — boundary refinement** (ARCHITECTURE v0.5 → v0.6):
-- Sharpened meta-rule 4 with refinements A (typed-contract test) +
-  B (positive reuse rule)
-- Added audit slice 14 (boundary-adherence) + design-review target
-  7 (LLM/Python placement-soundness)
-- Persisted v2 → v3 office-config migration to disk
-- Landed slice 14's 2a finding inline (path_classification
-  optional v3 block, no schema bump)
+**Phase 1 — task A retrofit (state.md gate)**:
+- 8 skills (orchestrator, survey-project, draft-cover-mail,
+  validate-checklist, review-draft, draft-textteil-b/c,
+  promote-to-skill) declare `get_project_state` /
+  `update_project_state` in `mcp_tools_required` + route through
+  the gate. Direct Read/Write of state.md eliminated.
+- Audit slice 14 verification: clean.
 
-**Phase 2 — VISION/ARCH coupling** (ARCHITECTURE meta-rule 3 sharpening):
-- Added design-review target 8 (VISION ↔ ARCHITECTURE coupling)
-  + audit slice 15 (invalidation-contract coverage)
-- Sharpened meta-rule 3 prose for the layered reading
-  (research-references vs validate-bausteine)
+**Phase 2 — fail-closed corollary** (meta-rule 4 reads-side
+symmetry): when MCP is unreachable, contract-bearing reads MUST
+surface to user and stop, never bypass via direct filesystem
+Read. Decision record `mcp-fallback-policy.md` + ARCHITECTURE.md
+v0.6 → v0.7 + slice 14 brief extended with violation pattern 5
+(declared fail-open in fallback strings). Plugin-wide sweep:
+all 19 skills' `fallback_when_mcp_absent` rewritten under the
+rule.
 
-**Phase 3 — pre-RAG resolution** (the big one — user direction:
-"all of these things resolved before RAG"):
-- State.md MCP gate: ProjectState Pydantic + 2 MCP tools
-  (get/update_project_state) + skill-format doc updated. **No
-  more direct skill Read of state.md.**
-- Strict-validation discipline added to ARCHITECTURE meta-rule 4
-  + audit slice 16 (validation-gate coverage). All 4 slice-16
-  findings fixed in-session (bind_project routed through
-  ProjectState contract; StrictModel base added with
-  `extra="forbid"` for all 15 contract-bearing models;
-  parse_frontmatter no longer swallows YAMLError;
-  _manifest_info catches narrow exceptions + reports via
-  explicit `errors[]` field).
-- F2 unified audit trail: PULLED FORWARD to v1. Decision record
-  + AuditEvent Pydantic + record_audit_event/query_audit_trail
-  MCP tools shipped. Skill-side dual-write retrofit deferred to
-  next-immediate-session.
-- Axis 2 sparring structural promotion: PULLED FORWARD to v1.
-  Decision record + ReviewOutput/RecommendationOutput schemas +
-  validate_skill_output MCP tool shipped. 3 of 7 axis-2
-  mechanisms (counter-argument, confidence, reasoning) promoted
-  to structural. Skill retrofits deferred.
+**Phase 3 — trigger convention simplification**: old
+`{phrase, lang}` structured form retired for flat concept
+labels. LLM matches semantically across languages without
+explicit translation pairs. Decision record `trigger-convention.md`.
+Plugin-wide sweep: all 19 skills' triggers collapsed to concept
+labels. German technical anchors preserved (UNB, Stellungnahme,
+Festsetzungen).
 
-The user's strict-validation principle — **"all data needs to
-be strictly validated, no bad defaults or fallbacks, clean clear
-failures only"** — became an architectural commitment this
-session, not just a stance. New `StrictModel` base + slice 16
-+ meta-rule 4 corollary captures this.
+**Phase 4 — audit-trail v1 → v2 reversal**: dual-write discipline
+retired for single-write architecture. Decision record
+`audit-trail-v2.md` (supersedes v1). Skills call
+`record_audit_event` only; gate-side `record_decision` MCP tool
+atomically mirrors to `decisions.md`. Five prose sources retired
+(`module-decisions.md`, `correspondence-log.md`, references
+`changelog.md`, `state.md.phase_history` field) — render-time
+prose synthesis via new `render_audit_trail` MCP tool. Two stay:
+`decisions.md` (legal-defense provenance) + `snapshots/`
+(artifact bytes).
+
+**Phase 5 — design-review target 9 + audit slice 18 (Subsumption
++ Legacy Retirement)**: the audit-trail v1→v2 reversal exposed a
+generic gap — adding new mechanisms without explicitly asking
+"what does this subsume?" leaves load-bearing legacy in place
+by inertia. Target 9 makes the question MANDATORY at design
+time (prospective check); slice 18 catches what target 9
+missed (retrospective sweep across all decision records,
+ARCHITECTURE entities, plugin entities).
+
+**Phase 6 — bootstrap-write tools promotion**: `author-manifest`
++ `setup-office` currently scaffold contract-bearing files via
+direct Write. Promoted from v1.x ROADMAP to pre-RAG commitment
+#7. Sketches: `create_manifest` + `create_office_config` MCP
+tools wrap the loader for first-write through the gate.
+
+**Phase 7 — pre-action framing skill (new pre-RAG commitment
+#8)**: completes the prep → implementation → review cycle.
+Today's meta-skills (audit, design-review) are post-action only;
+new skill (working name `frame-task` / `scoping`) fires before
+non-trivial work to surface scoping/approach/constraints/success.
+Pre-RAG-worthy because it's preventive of design errors that
+compound after launch.
+
+**Plus ROADMAP additions** (deferred but tracked):
+- Generalize + publish domain-agnostic skills (audit, design-review,
+  watch-list, memory-record patterns, orchestrator infrastructure)
+  as a separate plugin for cross-domain reuse. Pull-forward
+  trigger: after first ~3-5 real PBS projects exercise the
+  cross-cutting skills empirically.
+
+The session 7 commitment count went from 3 (session 6's) to 8
+pre-RAG items. Phase 1 corpus download deferred until all 8
+land. Cleanest framing: this session was the architectural
+hardening BEFORE first project bind, not a delay of RAG.
 
 ---
 
 ## Read order for next session
 
 1. **This file (HANDOFF.md)** — current state
-2. **`ARCHITECTURE.md`** — **v0.6** post-session-6 boundary +
-   meta-rule 4 strict-validation discipline + meta-rule 3
-   layered reading prose. 4 meta-rules + scope-orthogonality
-   layering convention. 5 entity types (Memory now has 3 sub-
-   kinds: prose, records, audit-log).
-3. **`VISION.md`** — three-axis thesis (unchanged structurally;
-   target 8 first run validated it as the canonical "why"
-   anchor)
-4. **`docs/decisions/`** — three new v1-commitment decision
-   records this session: `audit-trail-v1.md`,
-   `sparring-output-v1.md`. Plus session-5 backend decision
-   records (test layout, logging, MCP error format).
-5. **`docs/audits/`** — three new artifacts this session:
-   `boundary-adherence-20260429.md` (slice 14),
-   `invalidation-contract-20260429.md` (slice 15),
-   `validation-gate-20260429.md` (slice 16). Plus session-5
-   audit-pre-rag.md.
-6. **`docs/design-reviews/`** — `vision-arch-coupling-20260429.md`
-   (target 8 first run; 5 findings) + session-5
-   foundations-20260429.md.
-7. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing.
-8. **`docs/plugin-conventions.md`** — Skill Bundle idioms; new
-   `output_schema:` frontmatter field documented.
-9. **`docs/backend-conventions.md`** — Backend idioms.
-10. **`ROADMAP.md`** — v1 commitments at the top (audit trail,
-    sparring promotion, state.md gate); old "Audit trail" entry
-    further down redirects to v1 commitment.
-11. **`plugin/skills/audit/`** — **0.6.0** (slices 1-16; surfaces
-    1-12)
-12. **`plugin/skills/design-review/`** — **0.4.0** (targets 1-8)
-13. **`plugin/skills/orchestrator/`** — 0.9.0 (unchanged session 6;
-    references/state-format.md updated to mention MCP gate)
-14. **Backend additions session 6**:
-    - `pbs_mcp/_strict.py` — `StrictModel` base
-    - `pbs_mcp/project_state.py` — ProjectState contract
-    - `pbs_mcp/audit_trail.py` — AuditEvent contract
-    - `pbs_mcp/skill_outputs/` — ReviewOutput, RecommendationOutput
-    - `pbs_mcp/tools/audit.py` — record/query audit-trail
-    - `pbs_mcp/tools/sparring.py` — validate_skill_output
-    - `pbs_mcp/tools/projects.py` — get/update_project_state added
-    - 5 new MCP tools registered
+2. **`ARCHITECTURE.md`** — **v0.7** post-session-7. Meta-rule 4
+   gained a fail-closed-for-reads corollary (symmetric with the
+   write-side persistence boundary). 4 meta-rules + scope-
+   orthogonality layering convention, 5 entity types, Memory now
+   has 4 sub-kinds: prose, records, audit-log, **(new)**
+   audit-log-v2-canonical-replacing-most-prose-sources.
+3. **`docs/decisions/`** — three new session-7 decision records:
+   - `mcp-fallback-policy.md` (fail-closed corollary)
+   - `trigger-convention.md` (concept labels, semantic match)
+   - `audit-trail-v2.md` (single-write, supersedes v1)
+   - Plus session-6 records still authoritative (sparring-output-v1,
+     audit-trail-v1 with SUPERSEDED header, backend records)
+4. **`ROADMAP.md`** — **8 pre-RAG v1 commitments at the top**.
+   Plus generalize-and-publish entry in v1.x.
+5. **`docs/plugin-conventions.md`** — §11 (triggers convention) +
+   §11b (fail-closed fallback policy with anti-patterns + writing
+   rules for `fallback_when_mcp_absent`)
+6. **`VISION.md`** — unchanged structurally
+7. **`docs/audits/`** — session-6 first-runs + session-5 audit-pre-rag
+8. **`docs/design-reviews/`** — session-6 target-8 first run +
+   session-5 foundations-20260429
+9. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing
+10. **`docs/backend-conventions.md`** — Backend idioms
+11. **`plugin/CLAUDE.md`** — meta-rule 4 summary now includes the
+    fail-closed corollary one-liner pointing at the policy doc
+12. **`plugin/skills/audit/`** — **0.7.0** (slices 1-16 + 18;
+    surfaces 1-12; slice 17 still deferred per audit-trail-v2
+    simplification; brief extended with violation pattern 5)
+13. **`plugin/skills/design-review/`** — **0.6.0** (targets 1-9)
+14. **`plugin/skills/orchestrator/`** — **0.10.0** (state.md gate
+    routed; references/state-format.md still reflects v1 layout
+    — needs update to v2 once dropped sources actually retire)
+15. All other 16 skills — single-bumped per session-7 changes (see
+    "Skill versions snapshot" below)
 
 ---
 
-## ⏳ Pre-RAG gating items (next-immediate-session-before-RAG)
+## ⏳ Pre-RAG gating items (8 commitments, post-session-7 state)
 
-The user's directive was clear: **all of these resolved before
-Phase 1 corpus download.** This session shipped the architectural
-commitments (Pydantic models, MCP tool stubs, decision records).
-Remaining work is skill-side retrofits + integration loops.
+The 8 v1 commitments enumerated in ROADMAP.md "v1 commitments"
+section:
 
-### A. Skill retrofits to use new MCP gates
+### Already shipped session 6 + 7 (architectural backstops only)
 
-8 skills currently reference `state.md` directly; they need to
-declare `get_project_state` + `update_project_state` in
-`mcp_tools_required` and route reads through the gate:
-orchestrator, survey-project, draft-cover-mail, validate-checklist,
-review-draft, draft-textteil-b, draft-textteil-c, promote-to-skill.
+1. ✅ **Unified audit trail** — schema + Pydantic + 2 MCP tools
+   shipped session 6 (per v1). v2 reversal (session 7) makes the
+   skill-side simpler than originally planned.
+2. ✅ **Sparring-output structural promotion** — schemas + MCP tool
+   + plugin-conventions field shipped session 6.
+3. ✅ **State.md MCP gate** — Pydantic + 2 MCP tools shipped
+   session 6. **Skill retrofits done session 7.**
+4. ✅ **Fail-closed corollary** — done session 7 (decision record
+   + meta-rule 4 corollary + slice 14 brief + 19-skill sweep).
+5. ✅ **Trigger-convention simplification** — done session 7.
 
-Audit slice 14 catches direct Read/Write of schema-bearing files;
-running it after retrofit verifies completion.
+### Remaining for next-immediate-session-before-RAG
 
-### B. Audit trail dual-write integration
+6. **Audit-trail v2 retrofit** (per `audit-trail-v2.md`):
+   - **Backend**: build `record_decision` MCP tool (atomic
+     dual-write inside the gate); build `render_audit_trail` MCP
+     tool (deterministic prose synthesis). Add
+     `user_confirmation` event kind to AuditEvent; expand
+     `decision`/`module_decision` `details` to require
+     `reasoning_full_text`. Drop `phase_history` field from
+     ProjectState; write migration script.
+   - **Skills**: orchestrator + save-baustein + record-feedback
+     + draft-textteil-b/c + review-draft + research-references
+     declare `record_audit_event` (and `record_decision` where
+     applicable) in `mcp_tools_required` + invoke at appropriate
+     checkpoints. **Single-write per v2** — NO dual-write to
+     prose sources from skills.
+   - **Migration**: `backfill_audit_trail` walks legacy prose
+     sources, emits events, optionally retires the subsumed source
+     files after round-trip render comparison. Today: zero
+     projects bound; backfill is academic until first-bind.
 
-Per `docs/decisions/audit-trail-v1.md`. Skills that produce
-audit-relevant events declare `record_audit_event` in
-`mcp_tools_required` and invoke at appropriate checkpoints:
-- orchestrator: phase_transition, lifecycle_transition,
-  scope_change, decision events
-- save-baustein: baustein_use (successful) events
-- record-feedback: baustein_use (rejected) events
-- draft-textteil-b/c: module_decision events (when
-  including/excluding optional sections)
-- review-draft: decision events (when reviewer makes calls)
-- research-references: reference_update events
-- (future) send-gate skill: send events
+7. **Bootstrap-write MCP tools** (per ROADMAP commitment #7):
+   - Build `create_manifest` + `create_office_config` MCP tools
+     (Pydantic-validated first-write through loader; replace
+     direct Write).
+   - Skill retrofits: `author-manifest` + `setup-office` declare
+     the new tools in `mcp_tools_required` + use them in body.
+     Drop the "known bypass" caveat from fallback strings.
+   - Audit slice 14 re-run after retrofit confirms no remaining
+     contract-bearing direct Write.
 
-Plus build the `backfill_audit_trail` MCP tool — walks 6 existing
-sources (decisions.md, snapshots/, changelog.md, etc.) and emits
-events into the unified log. One-shot per project; no projects
-bound today so backfill is academic until first bind.
+8. **Pre-action framing skill** (per ROADMAP commitment #8):
+   - Design + scaffold a new meta-skill (working name
+     `frame-task` or `scoping`).
+   - Triggered on non-trivial task starts (orchestrator routes
+     here before routing to implementation specialists).
+   - Outputs a brief framing artifact (problem, scope, approach,
+     constraints, success-criteria) that implementation skills
+     consume.
+   - Decision: build skill bundle (SKILL.md + references/);
+     decide if it warrants a PROCEDURE.md (probably yes — phase
+     gates).
 
-### C. Sparring-output validation integration
+### Sparring-output integration (still per v1 plan, unchanged)
 
-Per `docs/decisions/sparring-output-v1.md`. Two skills retrofit:
 - `review-draft` declares `output_schema: ReviewOutput` in
-  frontmatter; body adds Output Format section explaining the
-  required headers (## Confidence, ## Counter-argument, etc.)
-- `orchestrator` PROCEDURE.md Checkpoint 13: when producing a
-  recommendation, declare phase-specific schema_hint=
-  "RecommendationOutput" and call `validate_skill_output` post-
-  output; loop on missing-fields up to 3x.
+  frontmatter; body adds Output Format section.
+- `orchestrator` PROCEDURE.md Checkpoint 13: declare phase-
+  specific `RecommendationOutput` schema; call
+  `validate_skill_output` post-output; loop on missing-fields
+  up to 3x.
+- Heuristic markdown-field parser refinement after first
+  real-use feedback.
 
-The heuristic markdown-field parser in `pbs_mcp/tools/sparring.py`
-may need refinement after first real-use feedback (currently it
-matches `## Counter-argument` and `**Counter-argument**` styles).
+### Plugin version bump
 
-### D. Plugin version bump
-
-Plugin.json is at 0.3.0 from session 5. Session 6's substantial
-additions (5 new MCP tools, new entity sub-kind, new
-frontmatter field) warrant 0.3.0 → 0.4.0. After all retrofits
-land, bump + re-run `bash dev-link.sh`.
+- `plugin.json` 0.3.0 → 0.5.0 (v1 commitments 4, 5, 6, 7, 8 are
+  substantial — multiple new MCP tools, new entity sub-kind
+  retired, new frontmatter conventions, fail-closed corollary).
+  Run `bash dev-link.sh` after.
 
 ### Then — Phase 0 items 4 + 5
 
-After retrofits land, the original session 5 close named these:
-
-**Phase 0 item 4 — Feature-survey skill design**: greenfield-
-the-vision sibling to audit + design-review. Discussion-first.
-Asks "given the user's goals + system purpose, what features
-should exist that don't?" Same pattern as audit + design-review
-(parallel slice agents + synthesis + frozen artifact).
-
-**Phase 0 item 5 — Testing methodology + harness**: discussion-
-first. Three layered concerns: coverage-gap tracking, ground-
-truth set, determinism + regression detection. Output:
-`docs/rag-testing-strategy.md`.
+After all v1 commitments land:
+- **Phase 0 item 4 — Feature-survey skill**: greenfield-the-vision
+  sibling to audit + design-review. Will likely benefit from
+  pre-action framing skill being in place first.
+- **Phase 0 item 5 — Testing methodology + harness**: discussion-
+  first. `docs/rag-testing-strategy.md` output.
 
 ### Then — Phase 1 corpus download
 
@@ -186,102 +221,117 @@ fetch + checksum + manifest population only.
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
 | `VISION.md` | Three-axis thesis (canonical "why") |
-| `ARCHITECTURE.md` | **v0.6** + strict-validation discipline corollary |
-| `ROADMAP.md` | v1 commitments at top (3 items pulled forward); rest deferred |
-| `docs/decisions/audit-trail-v1.md` | F2 v1 commitment design record |
-| `docs/decisions/sparring-output-v1.md` | F1 (axis 2) v1 commitment design record |
-| `docs/decisions/backend-{test-layout,logging,mcp-error-format}.md` | Session-5 records |
-| `docs/audits/boundary-adherence-20260429.md` | Slice 14 first run |
-| `docs/audits/invalidation-contract-20260429.md` | Slice 15 first run |
-| `docs/audits/validation-gate-20260429.md` | Slice 16 first run + 4 in-session fixes |
-| `docs/design-reviews/vision-arch-coupling-20260429.md` | Target 8 first run |
+| `ARCHITECTURE.md` | **v0.7** + fail-closed corollary |
+| `ROADMAP.md` | 8 pre-RAG commitments at top; generalize-publish in v1.x |
+| `docs/decisions/mcp-fallback-policy.md` | Session-7 fail-closed corollary record |
+| `docs/decisions/trigger-convention.md` | Session-7 concept-labels record |
+| `docs/decisions/audit-trail-v2.md` | Session-7 reversal record |
+| `docs/decisions/audit-trail-v1.md` | SUPERSEDED (header note added) |
+| `docs/decisions/sparring-output-v1.md` | Session-6 v1 commitment |
+| `docs/decisions/backend-{test-layout,logging,mcp-error-format}.md` | Session-5 backend records |
+| `docs/audits/boundary-adherence-20260429.md` | Slice 14 first run (session 6) |
+| `docs/audits/invalidation-contract-20260429.md` | Slice 15 first run (session 6) |
+| `docs/audits/validation-gate-20260429.md` | Slice 16 first run (session 6) |
+| `docs/design-reviews/vision-arch-coupling-20260429.md` | Target 8 first run (session 6) |
 | `docs/design-reviews/foundations-20260429.md` | Session-5 design-review |
-| `docs/office-config.schema.yaml` | v3 + path_classification optional block |
-| `plugin/skills/audit/` | **0.6.0** — slices 1-16; surfaces 1-12 |
-| `plugin/skills/design-review/` | **0.4.0** — targets 1-8 |
-| `plugin/skills/orchestrator/` | 0.9.0; references/state-format.md updated |
-| `backend/mcp-server/src/pbs_mcp/_strict.py` | StrictModel base (new session 6) |
-| `backend/mcp-server/src/pbs_mcp/project_state.py` | ProjectState contract (new) |
-| `backend/mcp-server/src/pbs_mcp/audit_trail.py` | AuditEvent contract (new) |
-| `backend/mcp-server/src/pbs_mcp/skill_outputs/` | ReviewOutput, RecommendationOutput (new) |
-| `backend/mcp-server/src/pbs_mcp/tools/audit.py` | record/query_audit_trail handlers (new) |
-| `backend/mcp-server/src/pbs_mcp/tools/sparring.py` | validate_skill_output handler (new) |
-| `~/.config/pbs-bureau/office.yaml` | v3 (no path_classification block; defaults active) |
-| `~/.config/pbs-bureau/office.yaml.v2-backup` | session-6 migration backup |
+| `plugin/skills/audit/` | **0.7.0** — slices 1-16 + 18 |
+| `plugin/skills/design-review/` | **0.6.0** — targets 1-9 |
+| `plugin/skills/orchestrator/` | **0.10.0** |
+| `plugin/CLAUDE.md` | Updated meta-rule 4 summary (fail-closed line) |
+| `docs/plugin-conventions.md` | §11 (triggers) + §11b (fallback policy) |
+| `~/.config/pbs-bureau/office.yaml` | v3 (session 6 migration) |
 
 ---
 
-## Skill versions snapshot (post-session 6)
+## Skill versions snapshot (post-session 7)
 
-| Skill | Version | Change this session |
+| Skill | Version | Change session 7 |
 |---|---|---|
-| audit | **0.6.0** | + slices 14, 15, 16; + drift surfaces 10, 11, 12 |
-| design-review | **0.4.0** | + targets 7, 8; targets 1-2 drift fixed |
-| orchestrator | 0.9.0 | references/state-format.md updated (gate note) |
-| (other 16 skills) | (unchanged) | retrofits queued for next session |
-| plugin.json | 0.3.0 | (will bump 0.4.0 after next-session retrofits) |
+| audit | **0.7.0** | + slice 18; brief extended (violation pattern 5) |
+| author-manifest | **0.4.0** | trigger collapse + fallback note about ROADMAP gap |
+| design-review | **0.6.0** | + target 9 (Subsumption check) |
+| draft-cover-mail | **0.6.0** | state.md gate + trigger collapse |
+| draft-textteil-b | **0.5.0** | state.md gate + trigger collapse + fallback rewrite |
+| draft-textteil-c | **0.5.0** | state.md gate + trigger collapse + fallback rewrite |
+| orchestrator | **0.10.0** | state.md gate + meta trigger format |
+| promote-to-skill | **0.5.0** | state.md gate + fallback rewrite + trigger collapse |
+| record-feedback | **0.4.0** | fallback rewrite (fail-closed for bausteine) + trigger collapse |
+| research-references | **0.5.0** | fallback tightened + trigger collapse |
+| review-draft | **0.5.0** | state.md gate + fallback rewrite + trigger collapse |
+| save-baustein | **0.4.0** | fallback rewrite (fail-closed for bausteine) + trigger collapse |
+| setup-office | **0.6.0** | fallback notes ROADMAP gap + trigger collapse |
+| survey-project | **0.5.0** | bind_project + update_project_state in tools_required + trigger collapse |
+| validate-bausteine | **0.4.0** | fallback rewrite (fail-closed for bausteine) + trigger collapse |
+| validate-checklist | **0.6.0** | state.md gate + manifest fail-closed + trigger collapse |
+| validate-latex-style | **0.5.0** | trigger collapse + fallback tightened |
+| verify-citations | **0.5.0** | manifest fail-closed + trigger collapse |
+| watch-list | **0.2.0** | bauseine fail-closed + trigger collapse |
+| plugin.json | 0.3.0 | unchanged this session; will bump 0.5.0 after session 8 retrofits |
 
 ---
 
-## New MCP tools shipped session 6
+## MCP tools shipped session 7
 
-| Tool | Purpose |
-|---|---|
-| `get_project_state` | Read+validate state.md (replaces direct Read in skills) |
-| `update_project_state` | Validated partial-update of state.md frontmatter + body |
-| `record_audit_event` | Append to unified `<project>/_ai/audit-trail.jsonl` |
-| `query_audit_trail` | Filter the unified log across one or all projects |
-| `validate_skill_output` | Validate sparring-mode output against declared output_schema |
-
-5 new tools; total backend tool count rises to ~32 (verify via
-`list_skills` after restart).
+None this session — all session-7 work was at the markdown / skill
+/ documentation layer. The session-6 tools (5 new) remain the
+current backend surface. New backend tools planned for session 8:
+- `record_decision` (audit-trail v2)
+- `render_audit_trail` (audit-trail v2)
+- `create_manifest` (bootstrap-write)
+- `create_office_config` (bootstrap-write)
+- (plus AuditEvent schema additions: `user_confirmation` event,
+  `reasoning_full_text` in details)
 
 ---
 
 ## Working-style notes (carried + new)
 
-1. **Pre-RAG gating is the right discipline pre-launch.** The user
-   pulled F2 + axis 2 forward rather than ROADMAPing both. The
-   value: schema designs land before any real data accumulates
-   under them, so we never retrofit. Session 6 demonstrated this
-   principle works — 5 new MCP tools shipped, all with
-   contract-strict Pydantic, zero migration debt.
+1. **Pre-action framing matters more than post-action review** for
+   architectural correctness. The audit-trail v1 → v2 reversal
+   exposed the gap: review skills caught the redundancy
+   *retrospectively*. Target 9 + slice 18 + the future framing
+   skill aim to catch this *prospectively*. The user's framing:
+   "preparation → implementation → review" — the prep layer was
+   missing.
 
-2. **Strict-validation discipline becomes architecturally
-   load-bearing.** The user's stance "no bad defaults / fail loud"
-   went from feedback memory to ARCHITECTURE meta-rule 4 corollary
-   to enforced StrictModel base to slice 16 first-run-with-fixes.
-   Each layer makes the principle harder to drift away from.
+2. **Legacy retirement is the default, not the exception.** When
+   adding a new mechanism, asking "what does this subsume?" is
+   mandatory. Inertia ("we're used to it," "it's established")
+   isn't a load-bearing reason. Names the specific role the
+   legacy plays that the new doesn't fill, or retire.
 
-3. **Agent push-back held twice this session** — slice 15 first
-   run mis-classified manifest schema as BLOCKER; slice 16 first
-   run correctly avoided BLOCKER overreach (the brief's tighter
-   language worked). Pattern: tighter agent briefs reduce verdict
-   overreach. Future audits/design-reviews should fold this
-   discipline directly into the briefs.
+3. **Decision-record reversals are normal and tracked.** The
+   `Supersedes` / `superseded by` chain in decision records IS
+   the architecture's evolution log. Each reversal teaches
+   something — v1→v2 audit-trail teaches "always ask
+   subsumption before adding alongside."
 
-4. **Decision records are the right shape for v1 commitments.**
-   `audit-trail-v1.md` + `sparring-output-v1.md` capture design
-   + alternatives + implementation plan + revisit triggers.
-   Reusable pattern; mirrors session-5's backend decision records.
-   New v1 work should follow this template.
+4. **Plugin-wide sweeps after policy changes are forced moves.**
+   The fail-closed corollary touched 19 skills' fallback strings;
+   the trigger convention touched 19 skills' triggers. Both
+   sweeps were tedious but unavoidable — a policy that doesn't
+   apply uniformly is worse than no policy. Future policy
+   changes will follow the same pattern.
 
-5. **Memory captures**: existing 6 feedback memories carry forward
-   unchanged. The strict-validation principle is now in
-   ARCHITECTURE.md (more durable than memory) but
-   `feedback_llm_instruction_tightness.md` still anchors the *why*.
+5. **Fail-closed for contract-bearing reads is symmetric with
+   the write-side rule.** Pre-session-7 the persistence boundary
+   was write-asymmetric (skills couldn't write contract-bearing
+   files but could read them via fallback). v0.7 closes this
+   asymmetry. Audit slice 14's violation-pattern 5 catches
+   regression.
+
+6. **Memory captures**: existing 6 feedback memories carry forward.
+   The "leave legacy behind" principle is now in
+   ARCHITECTURE.md (target 9 + slice 18) — more durable than
+   memory.
 
 ---
 
-## Session 6 commits (chronological)
+## Session 7 commits (chronological)
 
 | # | Commit | Theme |
 |---|---|---|
-| 1 | `cefb5ab` | HANDOFF: swap Phase 0 items 4/5 |
-| 2 | `ea838cf` | HANDOFF: mark v2→v3 office-config migration done |
-| 3 | `986857d` | boundary refinement v0.5→v0.6: meta-rule 4 + slice 14 + target 7 |
-| 4 | `b35c384` | VISION/ARCH coupling: target 8 + slice 15 + 2a fix + meta-rule 3 prose |
-| 5 | (this commit) | pre-RAG resolution: state.md gate + strict-validation + slice 16 + audit-trail v1 + sparring-output v1 |
+| 1 | (this commit) | session 7 close: state.md retrofit + fail-closed corollary + trigger convention + audit-trail v2 + target 9 + slice 18 + bootstrap-write promote + framing skill ROADMAP |
 
 All pushed to origin/main.
 
@@ -290,22 +340,21 @@ All pushed to origin/main.
 ## Misc context for next session
 
 - **User's machine**: Linux, RTX 5090 (32GB VRAM). Python 3.13.
-- **Plugin cache symlink**: bump plugin.json AND re-run
-  `bash dev-link.sh` after next-session skill retrofits.
+- **Plugin cache symlink**: bump `plugin.json` AND re-run
+  `bash dev-link.sh` after session-8 retrofits.
 - **Hooks active**: `restrict-bash-paths.py`,
   `restrict-file-paths.py` in dotfiles. Hidrive path whitelisted.
 - **Settings symlink**: verify
   `~/.claude/settings.json -> dotfiles/claude/settings.json`
   before any operation that might write settings.
-- **Office-config**: v3 on disk; no `path_classification` block
-  declared (canonical-layout defaults apply). Add the block only
-  if the office layout deviates from defaults.
-- **No projects bound yet**: state.md gate has no consumers; the
-  retrofit is design-time-pending until first project bind.
+- **Office-config**: v3 on disk; no `path_classification` block.
+- **No projects bound yet**: the session-7 retrofits are
+  design-time-pending until first project bind. Backfill is
+  academic until first-bind.
 - **Auto-memory** at `~/.claude/projects/.../memory/`:
   - `feedback_blocked_actions.md`
   - `feedback_judgment_and_automate.md`
   - `feedback_push_after_commit.md`
   - `feedback_refine_pareto.md`
   - `feedback_defer_instinct.md`
-  - `feedback_llm_instruction_tightness.md` (session 6)
+  - `feedback_llm_instruction_tightness.md`

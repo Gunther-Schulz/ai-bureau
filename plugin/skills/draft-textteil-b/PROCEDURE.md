@@ -202,10 +202,8 @@ When all canonical sections drafted + compile passes:
 
 1. Final compile_latex run with full TOC + Listoftables.
 2. Surface PDF path to user.
-3. Update `_ai/state.md`:
-   - `lifecycle: internal-review` (if was draft)
-   - `phase`: confirm with user (likely "Vorentwurf-fertig" or "4-billigungs-prep")
-4. Append History entry: "Begründung-Erstentwurf fertig <date>".
+3. Confirm new phase with user (likely "Vorentwurf-fertig" or "4-billigungs-prep").
+4. Call `update_project_state(project, updates={"lifecycle": "internal-review", "phase": "<confirmed>"}, body_append="- <YYYY-MM-DD> — Begründung-Erstentwurf fertig.")`. Never write state.md directly (meta-rule 4).
 5. Hand control to orchestrator for Phase B review entry.
 
 ## What not to do

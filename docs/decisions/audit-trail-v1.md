@@ -1,6 +1,11 @@
 # Decision record: unified audit trail (v1 commitment)
 
-**Status**: ACCEPTED (pulled forward from ROADMAP defer per
+**Status**: SUPERSEDED by `audit-trail-v2.md` (session 7,
+2026-04-29). v1's dual-write discipline retired in favor of
+single-write architecture with gate-mediated atomic mirror to
+`decisions.md`. Most prose sources retired entirely; see v2 for
+current architecture.
+**Original status**: ACCEPTED (pulled forward from ROADMAP defer per
 target 8 first-run finding F2, 2026-04-29 session 6)
 **Owner**: per-session HANDOFF; full build spans 1-2 sessions
 

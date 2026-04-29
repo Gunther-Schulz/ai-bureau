@@ -683,7 +683,7 @@ not *audited*. Plus a focused check on dependency / build files
 > interpretive → one Skill Bundle reference loaded by multiple
 > skill consumers.
 >
-> Audit for FOUR violation patterns:
+> Audit for FIVE violation patterns:
 >
 > 1. **Inverted-determinism in skills**: skill body or
 >    PROCEDURE.md contains procedural text that two
@@ -715,11 +715,28 @@ not *audited*. Plus a focused check on dependency / build files
 >    function. Detect: textual similarity ≥ ~70% across two
 >    consumers on a non-trivial block (≥ ~10 lines).
 >
-> For each finding: classify which violation pattern (1-4),
+> 5. **Declared fail-open in fallback strings** (post-v0.7
+>    corollary): skill's `fallback_when_mcp_absent:` frontmatter
+>    string declares a fallback that bypasses a contract-bearing
+>    read. Detect: the string contains "fall back to filesystem
+>    Read" / "degrade to direct Read" / "warn user; degrade to
+>    Read" / "skill operates entirely on... state.md" / similar,
+>    AND the file named is contract-bearing (state.md,
+>    office-config.yaml, doctype manifests in `extensions/`,
+>    reference manifests in `extensions/`, baustein YAML in
+>    `memory/bausteine/`, projects-index.md, or any file owned
+>    by a Pydantic loader in `pbs_mcp/`). Per ARCHITECTURE
+>    meta-rule 4 fail-closed corollary, the right fallback for a
+>    contract-bearing dependency is "surface to user; stop" — not
+>    silent contract bypass. Counter-example (NOT a violation):
+>    fallback string says "direct Read of HANDOFF.md / decisions.md
+>    / file-map.md / prose memory" — those have no contract.
+>
+> For each finding: classify which violation pattern (1-5),
 > name the file paths + line ranges, propose the canonical home
 > (which MCP tool / Skill Bundle reference / `pbs_core` function
-> should own it). If the canonical home doesn't yet exist,
-> propose its name.
+> should own it; for pattern 5, the corrected fallback string).
+> If the canonical home doesn't yet exist, propose its name.
 >
 > Pre-launch state: every violation is cheap to fix now. Post-
 > launch, each callsite becomes a migration. Surface even
@@ -903,6 +920,98 @@ not *audited*. Plus a focused check on dependency / build files
 > tightening-discipline, not stopping-the-line.
 >
 > Output structured findings. Cap at 1500 words.
+
+---
+
+### Slice 18 — Legacy retirement scan
+
+**Drift surfaces**: cross-cutting (overlaps 1, 4, 6, 8 — but with a
+distinct question: not "does X match its claims?" but "is X still
+load-bearing in light of newer commitments?")
+
+**Scope**:
+- All `docs/decisions/*.md` — every decision record
+- `ARCHITECTURE.md` (meta-rules + entity types + named conventions)
+- `ROADMAP.md` (deferred + v1 commitments)
+- `plugin/skills/` skill inventory (esp. anything `routing_mode:
+  delegated` or `phase_role: meta` that may have been subsumed)
+- Memory entity types in `memory/` (especially when overlap exists
+  between sub-kinds)
+- Persistence structures across `<project>/_ai/` and `<office>/_ai/`
+  (do they overlap? did one supersede another without retirement?)
+
+**Brief template**:
+
+> You are running Slice 18 — legacy retirement scan per
+> ARCHITECTURE.md meta-rule 4 + design-review target 9 (the
+> retrospective companion to that prospective check).
+>
+> The question this slice asks is NOT "does X comply with its
+> claims" (that's slices 1-17) — it's **"is X still load-bearing
+> in light of later commitments, or is it preserved by inertia?"**
+>
+> Walk every persistent mechanism in scope and ask:
+>
+> 1. **What does THIS thing do?** Read the entity's purpose
+>    (decision record's "Decision" section, ARCHITECTURE entry's
+>    description, skill's summary, etc.).
+> 2. **What other mechanisms now exist that might subsume it?**
+>    Specifically scan for: newer decision records in same domain;
+>    newer ARCHITECTURE entities/meta-rules; newer MCP tools;
+>    newer skills with overlapping `phase_role` or trigger
+>    concepts. Cross-reference the `Supersedes` headers on newer
+>    decisions to surface explicit-supersession chains.
+> 3. **For each candidate-subsumer**: does it fully subsume,
+>    partially subsume, or merely overlap-without-replacement?
+>    The test for subsumption: every load-bearing capability the
+>    legacy provides is also provided by the newer mechanism.
+> 4. **For partial subsumption**: what UNIQUE non-redundant value
+>    does the legacy still carry? Name the specific reason. If
+>    the answer is "we're used to it," "it's established," or
+>    "removing it would be churn" — that's inertia, not
+>    load-bearing-ness, and the entity is a retirement candidate.
+>
+> Audit for THREE finding patterns:
+>
+> 1. **Fully-subsumed entity, no retirement**: a mechanism whose
+>    every load-bearing capability is now provided by a newer
+>    commitment, but the legacy is still present without explicit
+>    retirement plan. Detect: a newer decision record's
+>    `Supersedes`/related discussion explicitly or implicitly
+>    covers the legacy's purpose, but the legacy file/entity/
+>    mechanism still exists with no `Superseded by` header.
+>
+> 2. **Partial subsumption with unjustified preservation**: a
+>    mechanism whose unique-value-claim is generic ("might be
+>    useful," "established," "external readers expect it") rather
+>    than specifying a load-bearing reason. Detect: skill body or
+>    decision record preserves alongside-the-new without naming
+>    the specific role the legacy plays that the new doesn't fill.
+>
+> 3. **Redundant overlap**: two or more mechanisms in the same
+>    domain (e.g., two persistence formats for similar data, two
+>    skills triggered by overlapping concepts) where neither
+>    subsumes the other but the duplication isn't justified by
+>    different consumer needs. Detect: similar trigger labels,
+>    similar entity-type purpose statements, similar persistence
+>    schemas without explicit "why both" justification.
+>
+> For each finding: name the entity/file/mechanism, name the
+> candidate-subsumer (if any), classify the pattern (1/2/3),
+> propose the retirement path (full retirement | scope reduction
+> | merge into successor | accept as known overlap with explicit
+> justification added).
+>
+> **Agent-discipline note**: this slice surfaces *candidates* —
+> the actual retirement decision is the user's. Findings shape
+> "we should consider retiring X"; never classify retirement as
+> BLOCKER unless the legacy actively conflicts with the new (e.g.,
+> writes the same field in incompatible ways).
+>
+> Output structured findings. Cap at 1500 words. Group findings
+> by domain (audit-trail, persistence, skills, memory, etc.) so
+> the user can decide retirement-by-domain rather than entity-
+> by-entity.
 
 ---
 

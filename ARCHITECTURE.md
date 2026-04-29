@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.6 (post-session-6 boundary refinement)**.
+Status: **v0.7 (post-session-7 fail-closed corollary)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -42,6 +42,15 @@ Status: **v0.6 (post-session-6 boundary refinement)**.
   MCP tool; shared interpretive logic → Skill Bundle reference. The
   audit's slice 14 + design-review's target 7 land on this sharpened
   boundary.
+- **v0.6 → v0.7**: meta-rule 4 fail-closed corollary. The rule
+  symmetrizes for reads: when MCP is unreachable, contract-bearing
+  reads MUST surface and stop, never bypass via direct filesystem
+  `Read`. The strict-validation principle (no bad defaults / fail
+  loud) extends to availability: a contract that is enforced on
+  successful read but bypassed when MCP is down is not a contract.
+  See `docs/decisions/mcp-fallback-policy.md`. Audit slice 14 brief
+  extended to scan `fallback_when_mcp_absent` strings for declared
+  future violations.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -361,6 +370,43 @@ walks every MCP tool's input/output models + every entity
 Pydantic model and flags `Optional` on fields the rule says are
 required, silent defaults that mask missing data, and exception
 swallowing that converts contract violations to soft failures.
+
+**Fail-closed for contract-bearing reads.** When MCP is
+unreachable, skills MUST surface to the user and stop, never
+bypass the contract via direct filesystem `Read`. The gate is the
+only correctness path; bypass produces silent invalid output that
+violates the strict-validation principle just established.
+
+The rule applies symmetrically to writes (already covered by
+"persistence-layer boundary" above) and reads. A skill that
+"falls back to direct Read of state.md when MCP is down" gets:
+
+- pre-migration frontmatter the loader would have updated
+- partial-invalid state the Pydantic model would have rejected
+- cross-reference-broken state (lifecycle ↔ phase mismatch) the
+  invariant check would have caught
+
+The right MCP-unreachable behavior for a contract-bearing read is
+a clean failure surfacing: "MCP unreachable; cannot operate on
+\<X\>. Restart backend." Contract-free prose (HANDOFF.md, prose
+memory, decisions.md, file-map.md, READMEs, top-level docs)
+remains skill-direct — no contract exists to bypass.
+
+The test for "contract-bearing": Pydantic model owns its shape, OR
+`schema_version` with migrations applied on read, OR cross-
+reference invariants, OR a loader function in `pbs_mcp/`
+constructs a typed object, OR `last_updated` / `last_fetched` /
+`checksum_sha256` declares an invalidation contract. If any
+yes → fail closed. Otherwise → direct Read fine.
+
+Per-skill: `fallback_when_mcp_absent` strings declare what is
+still possible; for contract-bearing dependencies the answer is
+"nothing — surface and stop." Audit slice 14 scans these strings
+and flags any "fall back to filesystem Read of \<contract-bearing
+file\>" pattern as a declared future violation.
+
+See `docs/decisions/mcp-fallback-policy.md` for the full
+rationale and rollout.
 
 ### Backend organization (consequence of meta-rule 4)
 

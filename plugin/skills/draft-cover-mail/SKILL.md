@@ -1,19 +1,17 @@
 ---
 name: draft-cover-mail
 description: This skill should be used to draft a transmittal cover mail (Anschreiben) when sending project artifacts to authorities (UNB, Behörden, höhere Verwaltungsbehörde) or clients. Triggered as part of orchestrator's send gate (Checkpoint 4.3), or by direct user phrases like "Mail an UNB aufsetzen", "Anschreiben für die Stellungnahme", "draft cover mail", "Begleitmail", "transmittal letter".
-version: 0.5.0
+version: 0.6.0
 license: MIT
-mcp_tools_required: []
+mcp_tools_required: [get_project_state]
 mcp_tools_optional: [list_bausteine, search_corpus]
-fallback_when_mcp_absent: "skill operates entirely on office-config + filesystem reads (correspondence-log, state.md). MCP optional only for reusable greeting bausteine + similar past mail lookup."
+fallback_when_mcp_absent: "without get_project_state the skill cannot read project lifecycle/recipient context (state.md is a strict-validated contract — no direct skill Read per ARCHITECTURE meta-rule 4). Office-config + correspondence-log filesystem reads still work; MCP optional only for reusable greeting bausteine + similar past mail lookup."
 summary: Drafts transmittal cover mails (Anschreiben) when sending project artifacts to authorities or clients. Phase-aware tone calibration.
 routing_mode: direct
 triggers:
-  - {phrase: "Mail an UNB aufsetzen", lang: de}
-  - {phrase: "Anschreiben für die Stellungnahme", lang: de}
-  - {phrase: "draft cover mail", lang: en}
-  - {phrase: "Begleitmail", lang: de}
-  - {phrase: "transmittal letter", lang: en}
+  - draft cover mail
+  - Anschreiben für UNB / Behörde     # German technical anchor
+  - send transmittal
 handoffs: []
 phase_role: utility
 ---
@@ -57,7 +55,7 @@ formal.
 
 By orchestrator's send gate, or by direct user request. Inputs:
 
-- **Project** — project ID; loads state.md context.
+- **Project** — project ID; loads project state via `get_project_state(project)` (returns validated state + body — never Read state.md directly).
 - **Recipient** — authority/contact name. If `contact` field
   is set in correspondence-log → use collegiate. If not →
   formal.
@@ -174,7 +172,9 @@ itself (LaTeX-style markup not needed for mail).
   (in-memory), not from any markdown file.
 - `Grep` — search prior mail for tone calibration.
 
-When MCP backend unreachable: skill still functions — most of
-its work is reading office-config + correspondence-log + state.md
-+ composing the mail. MCP optional bits (baustein retrieval,
-similar-past-mail search) degrade to filesystem operations.
+When MCP backend unreachable: skill cannot read state.md (gate-
+required) so project-context-driven tone calibration degrades — fall
+back to asking the user for lifecycle/phase/recipient role inline.
+Office-config + correspondence-log + composing the mail still work
+on filesystem. Optional MCP bits (baustein retrieval, similar-past-
+mail search) degrade to Glob/Grep.

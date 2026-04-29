@@ -23,17 +23,17 @@ Every `SKILL.md` carries YAML frontmatter at the very top:
 ```yaml
 ---
 name: <kebab-case-skill-name>
-description: This skill should be used when... <trigger criteria> + concrete trigger phrases (German + English).
+description: This skill should be used when... <trigger criteria> + concrete trigger phrases.
 version: 0.X.Y
 license: MIT
 mcp_tools_required: [tool_a, tool_b]
 mcp_tools_optional: [tool_c]
-fallback_when_mcp_absent: "<one-sentence describing degraded mode>"
+fallback_when_mcp_absent: "<see §11 fallback-policy>"
 summary: <1-2 sentence what-and-when, language-agnostic>
 routing_mode: direct        # | delegated | always_active
 triggers:
-  - {phrase: "<phrase>", lang: en}
-  - {phrase: "<phrase>", lang: de}
+  - <concept-label>          # one entry per concept; LLM matches semantically
+  - <German technical term>  # only when domain-anchor (UNB, Stellungnahme, …)
 delegated_from: [<skill>]   # only when routing_mode=delegated
 handoffs: [<skill1>, <skill2>]
 phase_role: utility         # | phase_a_entry | phase_b_entry | layer_1 | layer_2 | layer_3 | routing | bureau_setup | manifest_authoring | lifecycle | meta
@@ -43,7 +43,7 @@ phase_role: utility         # | phase_a_entry | phase_b_entry | layer_1 | layer_
 ### Required identity fields
 
 - **name** — kebab-case; matches the directory name (`plugin/skills/<name>/SKILL.md`).
-- **description** — opens with `"This skill should be used when…"` (or close variant: `"to draft…"`, `"during the structural review layer…"`). Names concrete trigger phrases in **both German and English**. **Canonical Claude-Code-readable trigger surface** — Claude Code's auto-router reads this field directly. The structured `triggers[]` field below is supplementary (machine-checkable).
+- **description** — opens with `"This skill should be used when…"` (or close variant: `"to draft…"`, `"during the structural review layer…"`). Names concrete trigger phrases in whatever language is natural; LLM auto-router matches semantically across languages (per `docs/decisions/trigger-convention.md`). German technical terms (UNB, Stellungnahme, Bauleitplanung, Festsetzungen) belong here when they're domain-anchors, not as bilingual translation pairs. **Canonical Claude-Code-readable trigger surface** — Claude Code's auto-router reads this field directly. The `triggers[]` list below is the scannable concept-label index.
 - **version** — semver per §3 below.
 - **license** — `MIT` (matches plugin license).
 
@@ -51,7 +51,7 @@ phase_role: utility         # | phase_a_entry | phase_b_entry | layer_1 | layer_
 
 - **mcp_tools_required** — list of MCP tool names the skill *cannot operate without*. Empty array `[]` is valid (positive declaration of "no MCP tools needed").
 - **mcp_tools_optional** — list of MCP tool names the skill *uses when available* but degrades gracefully without.
-- **fallback_when_mcp_absent** — one sentence describing what degraded behavior looks like when MCP is unreachable. For pure-filesystem skills, say so explicitly.
+- **fallback_when_mcp_absent** — one sentence describing skill behavior when MCP is unreachable. **Per ARCHITECTURE meta-rule 4 fail-closed corollary** (`docs/decisions/mcp-fallback-policy.md`): contract-bearing reads have no fallback path; the skill must surface to user and stop. Fallback strings declare what is *still possible* (contract-free reads, optional-tool degradations) and what causes a hard stop (any contract-bearing dependency). For pure-filesystem skills with no contract-bearing reads, say so explicitly.
 
 The orchestrator + the `list_skills` MCP tool consume these fields for planning. Empty arrays are positive declarations and **must** be present even when no tools are needed.
 
@@ -64,7 +64,7 @@ Five additional fields make routing semantics machine-checkable:
   - `direct`: user-typed phrases auto-route here (the common case)
   - `delegated`: this skill is invoked by another skill; user phrases that match its triggers go to the *delegating* skill first (which may then delegate)
   - `always_active`: skill auto-loads whenever the plugin is in scope (orchestrator only)
-- **triggers** — list of `{phrase, lang}` pairs that auto-route to this skill. Each `phrase` is a literal Claude-Code trigger phrase from `description`, and `lang` is `en` | `de` | `mixed` | `meta`. The structured form lets `list_skills` detect overlap programmatically.
+- **triggers** — flat list of concept labels that auto-route to this skill. Each entry is one concept; the LLM matches semantically across languages without explicit translation pairs (per `docs/decisions/trigger-convention.md`, session 7). Prefer English concept labels; include German technical terms only when they're domain-anchors (UNB, Stellungnahme, Bauleitplanung, Festsetzungen, Anschreiben), not when they're translations of an English label already present. The old `{phrase, lang}` structured form was retired session 7 — see `docs/decisions/trigger-convention.md` for the rationale (the structure suggested deterministic routing logic that no consumer actually implements; the LLM is the consumer and matches semantically). If a future consumer needs the structure, restore it.
 - **delegated_from** — list of skill names that delegate to this one. Required when `routing_mode: delegated`. Reverse direction of `handoffs`.
 - **handoffs** — list of skill names this skill explicitly hands off to (e.g. `review-draft → [validate-checklist, verify-citations, validate-latex-style]`). Closes the rename-drift loop: an audit slice can verify every name in `handoffs` resolves to an existing skill.
 - **phase_role** — controlled enum locating this skill in the workflow:
@@ -246,13 +246,52 @@ Skills calling these tools use the exact snake_case form in body text.
 
 ## 11. Trigger-phrase discipline
 
-Skill `description:` fields drive Claude Code's auto-routing. Two skills routing on the same phrase = ambiguous routing.
+Skill `description:` fields drive Claude Code's auto-routing. Two skills routing on the same concept = ambiguous routing.
 
-- **Be specific**: `"structural check"`, `"strukturell prüfen"`, `"Strukturprüfung"` — not bare `"review"` / `"prüfen"`.
-- **Cover both languages**: every domain-relevant phrase should appear in German + English (English first on default).
-- **Top-level vs. delegated routing**: skills that the user *invokes directly* (e.g. `review-draft`) own broad trigger phrases. Skills that the orchestrator *delegates to* (e.g. `validate-checklist` for Layer 1 of layered review) should narrow their trigger phrases to delegation-specific phrases — and explicitly note in the description that broad phrases route to the delegating skill instead.
+**Triggers are concept labels, not exact-string match targets.** The orchestrator's skill-routing is LLM-mediated — a user typing "schreib mal die Begleitmail an die UNB" routes to the skill listing `draft cover mail` without that exact phrase appearing in triggers. Add an entry only when the concept itself is new or when a German technical term is a domain-anchor (UNB, Stellungnahme, Bauleitplan, Festsetzungen) rather than a translation of a label already present.
 
-The session-5 audit caught `validate-checklist` claiming bare `"review"` / `"prüfen"` triggers; those were tightened to `"structural check"` / `"strukturell prüfen"` etc. Pattern to repeat for any future delegated skill.
+- **Be specific**: `structural check`, `validate doctype structure` — not bare `review`. Specificity prevents cross-skill ambiguity, not language coverage.
+- **Concept labels in English by default.** German technical terms join only when domain-anchors. Avoid one-to-one translation pairs (`draft cover mail` + `Anschreiben` of the same concept = redundant, drop one).
+- **Top-level vs. delegated routing**: skills that the user *invokes directly* (e.g. `review-draft`) own broad concept labels. Skills that the orchestrator *delegates to* (e.g. `validate-checklist` for Layer 1) narrow their concept labels — and explicitly note in the description that broad phrases route to the delegating skill instead.
+
+History: session 5 audit caught `validate-checklist` claiming bare `review` / `prüfen` triggers; those were tightened. Session 7 retired the old `{phrase, lang}` structured form for flat concept labels (`docs/decisions/trigger-convention.md`).
+
+---
+
+## 11b. Fail-closed fallback policy
+
+**The rule** (per ARCHITECTURE.md meta-rule 4 fail-closed corollary + `docs/decisions/mcp-fallback-policy.md`): when MCP is unreachable, contract-bearing reads MUST surface to user and stop. No silent contract bypass via direct `Read`.
+
+**The test for "contract-bearing":** does the file have any of —
+- A Pydantic model that validates its shape
+- A `schema_version` field with migrations applied on read
+- Cross-reference invariants (validity depends on other files' state)
+- A loader function in `pbs_mcp/` that constructs a typed object
+- A `last_updated` / `last_fetched` / `checksum_sha256` field
+  declaring an invalidation contract
+
+If yes → contract-bearing → fail closed. If no → contract-free prose → direct `Read` fine.
+
+**Two file classes, two policies:**
+
+| Class | Examples | If MCP unreachable |
+|---|---|---|
+| Contract-bearing | state.md, office-config.yaml, doctype manifests (`extensions/.../doctypes.yaml`), reference manifests (`extensions/.../references-manifest.yaml`), baustein YAML (`memory/bausteine/.../*.md`), projects-index.md | **Fail closed.** Surface "MCP unreachable; restart backend." Skill stops. |
+| Contract-free prose | HANDOFF.md, decisions.md, file-map.md, correspondence-log.md, module-decisions.md, README, prose memory under `memory/universal/{style,conventions,verfahren,...}/`, top-level docs | Direct Read fine. No gate exists; nothing to bypass. |
+
+**`fallback_when_mcp_absent:` writing rules:**
+- For contract-bearing dependencies: explicit fail-closed phrasing — "without \<tool\> the skill cannot operate (\<file class\> is gate-only per fail-closed corollary). Surface 'MCP unreachable; restart backend' and stop."
+- For contract-free dependencies: degradation paths are valid — "direct Read of \<contract-free-file\>" is fine.
+- For mixed (some contract-bearing tools, some optional): name the gate-required ones first (hard stop), then describe how the skill degrades when *only* optional tools are unavailable (gate is up).
+
+**Anti-patterns:**
+- ❌ "fall back to filesystem Read of state.md / office-config.yaml / doctype manifests / baustein frontmatter" — this is the silent contract bypass the corollary forbids. Audit slice 14 catches it.
+- ❌ "warn user; degrade to direct Read of \<contract-bearing\>" — same bypass, polite phrasing.
+- ❌ "skill operates entirely on filesystem reads" when the skill *does* have contract-bearing deps — under-specified and misleading.
+
+**Counter-example (NOT a violation):** "Glob over memory/bausteine/** to *enumerate candidates*" — listing files is not reading content; no contract bypassed. Reading content via the gate is required for validation.
+
+History: session 7 introduced the corollary + plugin-wide sweep. Audit slice 14 brief extended to scan fallback strings. See `docs/decisions/mcp-fallback-policy.md` for full rationale.
 
 ---
 
