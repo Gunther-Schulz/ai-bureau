@@ -381,10 +381,17 @@ slice 21. Changes to it must:
 
 ## 15. Open items growing in beyond #9
 
-- **Section-addressable bodies** (D2 in `ai-as-runtime-hybrid-shape.md`):
-  if entity bodies grow large enough, formalize section-anchor
-  conventions so AI can selectively read sub-sections without
-  loading the whole body. Defer until pain felt.
+- **Gate-level selective section read** (D2 in
+  `ai-as-runtime-hybrid-shape.md`): if entity bodies grow large
+  enough, extend `read_entity(path)` with a `sections:` parameter
+  that returns only matching h2-anchored regions. **Sharper
+  trigger**: revisit when median entity body > 1500 tokens OR
+  any single entity body > 4000 tokens routinely. Whichever
+  fires first. Folds into #9 gate work when triggered (parameter
+  extension, no new task). The capability of "AI focuses on a
+  named section" already exists today via §16 anchor-and-grep
+  technique; D2 is a context-cost optimization, not a capability
+  gap.
 - **Body-spec per-deployment override**: a specific deployment may
   want additional recommended sections per entity type. Resolve
   via Layer 3 extension mechanism once decided.
@@ -394,6 +401,99 @@ slice 21. Changes to it must:
 
 ---
 
+## 16. Body-size discipline + selective-read techniques (D2 mitigations)
+
+The D2 deferral (gate-level selective section read) assumes
+bodies stay small enough that loading the whole body is cheap.
+The mitigations below keep that assumption true — the trigger
+ideally never fires.
+
+### 16.1 Section-size guidance
+
+| Section size | Status | Action |
+|---|---|---|
+| ≤500 tokens | ✅ healthy | none |
+| 500-1000 tokens | ⚠ on watch | review at next edit; consider whether content can be tightened |
+| >1000 tokens | ❌ over budget | split section into sub-sections (h3) OR factor content out (e.g., long examples → linked memory entry; long historical notes → separate `## History` section that's understood as append-only) |
+
+### 16.2 Body-size guidance
+
+| Body size | Status | Action |
+|---|---|---|
+| ≤1500 tokens | ✅ healthy | none |
+| 1500-3000 tokens | ⚠ on watch | review whether sections are pulling weight; consider pruning stale content |
+| >3000 tokens | ❌ over budget | split entity OR aggressively prune stale content. **Splitting is non-trivial** — consult design-review target 11 (entity-elevation 3-test) before splitting; pre-emptive splitting can create entity sprawl. |
+
+### 16.3 Pruning norm
+
+Bodies are NOT append-only (except `## History` sections on
+project entities, which ARE append-only by convention). Older
+content that's no longer load-bearing should be pruned during
+edits — like normal documentation maintenance. Brief commit
+message captures what was removed and why.
+
+This applies especially to:
+
+- **Reference entities** — `## Recent amendments to watch`
+  accumulates; old amendments past their relevance window get
+  pruned (e.g., post-2024 §13b reintroduction note can be
+  shortened once verified consistently in fetched corpora)
+- **Doctype entities** — `## Domain-specific deviations` may
+  accumulate edge cases that turn out to be rare; consolidate or
+  remove
+- **Process entities** — `## Exceptions and shortcuts`
+  accumulates; rare exceptions that haven't fired in N projects
+  can be pruned (or moved to a "rare-cases" linked memory entry)
+
+### 16.4 Anchor-and-grep technique (selective focus today, no infrastructure needed)
+
+Today the gate returns full body. AI can still selectively focus:
+
+1. Body sections have stable h2 anchors per §6 conventions
+2. To focus on `## When this applies` in a doctype, AI:
+   - Loads the body (full read)
+   - Locates `## When this applies` heading
+   - Reads from that heading until the next `## ` heading or end of body
+   - Uses ONLY that section in its reasoning chain
+
+This is a documented technique, not infrastructure. It works
+today. Only when bodies get large enough that even the full-load
+becomes expensive does D2's gate-level selective return become
+needed.
+
+### 16.5 Selective-include in skill orchestration
+
+When orchestrator dispatches a sub-agent that needs to reason
+about a specific entity aspect (e.g., "is this doctype applicable
+for §13a?"), it can:
+
+1. Read the entity's full body
+2. Extract just the relevant section (per §16.4)
+3. Pass the extracted section to the sub-agent via prompt
+
+This pushes selective-read into skill-side composition rather
+than gate-side parameter. Works today. Future audit slice
+(post-#9) can flag skills that pass full bodies when a single
+section would suffice.
+
+### 16.6 Audit slice 21 telemetry sub-check
+
+Audit slice 21 (entity-md frontmatter + body conformance scan)
+gains a body-size telemetry sub-check:
+
+- **Per-entity output**: section sizes (token counts), total body
+  size, oldest section unedited (for pruning signal)
+- **Aggregate output**: median body size across all entities;
+  max body size; count of entities over §16.1/§16.2 thresholds
+- **D2 trigger detection**: if median > 1500 OR max > 4000,
+  flag in audit report — signal that D2 should be revisited and
+  folded into #9-followup gate work
+
+The telemetry runs on every audit slice 21 invocation; cheap to
+compute, valuable for monitoring.
+
+---
+
 **Last meaningful edit**: 2026-04-30 (session 10 followup —
 scaffold authored alongside #16 decision record + ARCHITECTURE
-v0.16 bump).
+v0.16 bump; §16 D2 mitigations added in same followup).
