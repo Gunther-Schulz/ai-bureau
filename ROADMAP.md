@@ -1030,14 +1030,93 @@ Grounding architecture pattern).
   swap full-load for selective retrieval transparently when
   this commitment lands.
 
-**Recommended next-session order** (revised post-session-9):
+**15. Office-level managed entities (Client + Actor)** (session 9
+followup #2, post-broader-review) — see
+`docs/decisions/office-vs-department.md` "Department-managed
+entities + delivery modes" + "When to elevate to managed entity"
+discipline.
+
+- **Why**: real businesses have entities that span departments —
+  Client and Actor (person) are the canonical examples. Every
+  department references them: Project.client (planning),
+  Invoice.client (invoicing), Timesheet.actor (PM),
+  AuditEvent.actor (office-level). Without first-class shared
+  entities, cross-department workflows have client/actor data
+  drift from day one. This is what enterprise systems call
+  Master Data Management — but kept light per the entity-
+  elevation discipline.
+- **Justification per the 3-test discipline**:
+  - **Client**: stable identity (yes — across years), state of
+    record (yes — contact, billing terms, conflict flags),
+    lifecycle (yes — active/dormant/terminated). ✅ entity.
+  - **Actor (person)**: stable identity (yes — person persists
+    across sessions/years), state of record (yes — role,
+    contact, email), lifecycle (partial — joined/active/left).
+    ✅ entity. Today's `office-config.actors[]` is semi-typed
+    config; #15 promotes Actor to first-class native managed
+    entity.
+- **Concrete deliverables**:
+  - **Office-level managed entities concept** introduced —
+    `extensions/office/entities/<entity>.py` (parallel to
+    `extensions/department/<dept>/entities/`); entities owned
+    by the office substrate, not any single department.
+  - **Client Pydantic schema** (native mode by default; adapter
+    mode possible if a deployment uses external CRM).
+    Fields: id (slug), display_name, billing_address,
+    contact_persons (list of actor refs), billing_terms,
+    conflicts_with (list of client refs), status, notes.
+  - **Actor refactor**: migrate from `office-config.actors[]`
+    semi-typed config to first-class Actor entity.
+    `office-config` retains `actors_external_lookup_class:` for
+    OAuth/SSO integration in #13's multi-user mode (adapter to
+    BambooHR/Personio/Coolify SSO).
+  - **MCP tools**: `list_clients`, `get_client`, `update_client`;
+    same for Actor (or `list_actors`, etc.).
+  - **Cross-department reference convention**: department
+    entities (Project, Invoice, etc.) have `client_id: str`
+    field referencing Client; gate validates the reference
+    exists at write time. No FK enforcement at storage layer
+    (per knowledge-graph-not-SQL principle); validation is at
+    the gate.
+  - **Migration**: existing `office-config.actors[]` migrated
+    to Actor entities via schema bump (CURRENT_SCHEMA_VERSION
+    bump + migration script).
+- **Pattern-vs-instance check**: Office-level managed entities
+  generalize. Every AI office has clients/customers and people.
+  Pattern-level. ✅
+- **Forward-compat with #13 (multi-user)**: Actor entity is the
+  identity primitive for #13's multi-user auth. Gunther + colleague
+  are two Actor entries; auth maps to Actor.id; AuditEvent.actor
+  references Actor.id.
+- **Order note**: schedule **AFTER #13** (multi-user readiness
+  needed for Actor's auth integration) **BEFORE #6** (audit-trail
+  v2 retrofit references Actor; approval event kinds also
+  reference Actor for `approving_actor`).
+- **Scope**: 1-2 sessions — Pydantic schemas + MCP tools +
+  office-config migration + cross-department reference convention
+  documentation.
+
+**6 (expanded)**: per session-9 followup #2, commitment #6's
+scope gains **approval event kinds** (`approval_requested`,
+`approval_granted`, `approval_rejected`) on AuditEvent. Approval
+flows are event-driven, NOT entity-shaped — the thing being
+approved is an entity (Invoice, Project-submission); the approval
+chain is in its event history. Authorization rules ("Invoice
+>€10K needs partner approval") live in skill logic, not entity
+schema. Folds into #6 because it's already adding event kinds
+(`user_confirmation`); approval kinds add cleanly with no new
+infrastructure.
+
+**Recommended next-session order** (revised post-session-9
+followup #2):
 
 ```
 Session 8:    #10 (A2A + Gemini emulation gate)          1 session   ✅ DONE
 Session 9:    #12 (department modularization design)     1 session   ✅ DONE
 Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
 Session 14-16: #13 (deployment flex + Coolify ref dep)   2-3 sessions
-Session 17+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 17-18: #15 (Client + Actor as office entities)   1-2 sessions
+Session 19+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
               + #14 (Memory Bank) bundled with Phase 1   2 sessions
 ```
 

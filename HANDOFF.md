@@ -120,16 +120,18 @@ defers, not YAGNI.
 
 ---
 
-## ⏳ Pre-RAG gating items (12 commitments remaining, post-session-9)
+## ⏳ Pre-RAG gating items (13 commitments remaining, post-session-9 followups)
 
 **#10 ✅ shipped session 8.** **#12 ✅ shipped session 9.**
-**#14 (Memory Bank) added session-8 followup**, scheduled
-alongside Phase 1 corpus. Recommended execution order:
+**#14 (Memory Bank) added session-8 followup.** **#15 (Client +
+Actor) added session-9 followup #2** — pre-RAG, scheduled between
+#13 and #6. Recommended execution order:
 
 ```
 Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
 Session 14-16: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
-Session 17+:  #6 → #7 → #9 → #8                               per existing queue
+Session 17-18: #15 (Client + Actor as office entities)         1-2 sessions
+Session 19+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
@@ -184,7 +186,24 @@ Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
   triggered to GEX44/GEX131 if needed.
 - 2-3 sessions.
 
-**#6 — Audit-trail v2 retrofit** (per `audit-trail-v2.md`):
+**#15 — Office-level managed entities (Client + Actor)** (added
+session-9 followup #2):
+- Office-level managed entities concept introduced —
+  `extensions/office/entities/<entity>.py` (parallel to
+  `extensions/department/<dept>/entities/`).
+- **Client** Pydantic schema (native default) — referenced by
+  Project (planning), Invoice (invoicing), Timesheet (PM), etc.
+- **Actor** refactor — migrate from `office-config.actors[]`
+  semi-typed config to first-class native managed entity. Identity
+  primitive for #13's multi-user auth.
+- Cross-department reference convention: entities hold
+  `<entity>_id: str` fields; gate validates references exist;
+  no FK enforcement at storage layer.
+- 1-2 sessions; AFTER #13 (multi-user); BEFORE #6 (audit retrofit
+  references Actor).
+
+**#6 — Audit-trail v2 retrofit** (per `audit-trail-v2.md`,
+**scope expanded session-9 followup #2**):
 - Backend: `record_decision` + `render_audit_trail` tools;
   `user_confirmation` event kind; `reasoning_full_text` in
   decision/module_decision details; drop `phase_history` from
@@ -195,6 +214,15 @@ Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
   to memory tooling. Gate-side `departments_active` update logic
   + cached skill→department registry. `query_audit_trail`
   `department:` filter.
+- **Per #15 constraint**: AuditEvent.actor references Actor.id
+  (office-level managed entity); replaces today's free-form actor
+  string with typed reference.
+- **Per session-9 followup #2 (approval flows)**: add event kinds
+  `approval_requested`, `approval_granted`, `approval_rejected`.
+  Details payload: `approving_actor`, `policy_rule`, `subject_entity_id`.
+  Approval flows are event-driven, NOT entity-shaped (per the
+  3-test entity-elevation discipline). Authorization rules live in
+  skill logic, not entity schema.
 - Skills: orchestrator + save-baustein + record-feedback +
   draft-textteil-b/c + review-draft + research-references retrofits.
 - Migration: `backfill_audit_trail` walks legacy prose sources.
@@ -402,9 +430,21 @@ deferred to #6.
    passed to #9 (Pattern-vs-instance split). Without the check
    we'd have shipped a pattern that doesn't actually generalize.
 
-6. **Memory captures**: existing 6 feedback memories carry
+6. **Entity-elevation discipline (session-9 followup #2)**: prefer
+   events + nested fields + memory entries over new managed entity
+   types. Elevate to first-class managed entity only when stable-
+   identity + state-of-record + lifecycle ALL apply. Avoids the
+   architecture creeping toward an SQL schema (catastrophic for
+   LLM-mediated AI offices). Right level: knowledge graph + document
+   store with stable references, not Oracle. Demoted Approval from
+   proposed managed entity to event-kinds on AuditEvent (folded
+   into #6's scope). Future audit/design-review check (target 11)
+   should scan for over-modeled entities.
+
+7. **Memory captures**: existing 6 feedback memories carry
    forward. The "leave legacy behind" + "judgment-not-menus" +
-   "defer-instinct" principles all paid off this session.
+   "defer-instinct" + "entity-elevation discipline" principles all
+   paid off in this conversation cycle.
 
 ---
 

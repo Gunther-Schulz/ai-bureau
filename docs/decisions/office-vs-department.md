@@ -280,6 +280,96 @@ Per session-7 design-review target 9: when adding a new mechanism, ask what it s
 
 No new mechanisms left in legacy. Subsumption check passes.
 
+#### Sub-entities — composable, but mostly via nesting
+
+Real entities have sub-structure: Invoice has LineItems, Project has Tasks, Matter has Filings, Manuscript has Sections. Three patterns, with criteria for choosing:
+
+| Pattern | When to use | Example |
+|---|---|---|
+| **Nested fields** (default) | Sub-entity has no independent operations; CRUD'd through parent | Invoice → LineItems (always together; Lexware exposes them as nested response fields) |
+| **First-class with `parent_entity:`** | Sub-entity has independent operations, audit events, or different delivery mode than parent | Project → Tasks where Tasks live in Asana adapter while Project is native |
+| **Hybrid (Protocol-internal)** | Adapter mode where external system handles sub-entity access internally; PBS doesn't model sub-entities at architecture layer | PM department → Timesheet's daily entries (Harvest API exposes them; PBS treats Timesheet as a single entity) |
+
+**Criterion to elevate a sub-entity to first-class managed entity** (any one):
+- Independent system-of-record / different delivery mode than parent
+- Independent audit events meaningful (e.g., "task X completed by colleague Y" needs its own audit attribution)
+- Independent CRUD operations needed (not just via-parent access)
+
+If none apply: keep nested. The default is the parsimonious choice.
+
+`department.yaml` schema gains optional `parent_entity:` + `cardinality:` fields when first-class:
+
+```yaml
+managed_entities:
+  project:
+    description: "B-Plan project"
+    default_mode: native
+  task:
+    description: "task within a project"
+    default_mode: adapter
+    adapter_protocol: task-system
+    parent_entity: project
+    cardinality: many
+```
+
+#### When to elevate to managed entity (the three-test discipline)
+
+Adding a managed entity is **heavy** (Pydantic schema, MCP tools, persistence layer, possibly an adapter contract). Adding event kinds or memory entries is **light** (a `Literal` value, audit-event details `dict`, or a memory record).
+
+The risk if undisciplined: **the architecture creeps toward a relational SQL schema** — one entity per noun, foreign keys, joins, normalization rules. That's catastrophic for an LLM-mediated AI office: it makes the architecture brittle, slow to evolve, and re-implements enterprise software's worst tendency. AI offices should sit closer to **knowledge graph + document store with stable references**, not Oracle.
+
+**Test (all three required to elevate to managed entity)**:
+1. **Stable identity** — has an ID/slug that persists across sessions and is referenced by other things
+2. **State of record** — has fields whose authoritative current value matters (not just historical)
+3. **Lifecycle** — has phases or status that progress over time
+
+If all three: managed entity. If any missing: prefer **event kinds + nested fields + memory entries**.
+
+**Worked examples**:
+
+| Concept | Identity | State | Lifecycle | Verdict |
+|---|---|---|---|---|
+| **Client** | yes (stable across years) | yes (contact info, billing terms, conflict flags) | yes (active/dormant/terminated) | ✅ managed entity |
+| **Actor** (person) | yes (person identity persists) | yes (role, contact, email) | partial (joined/active/left) | ✅ managed entity |
+| **Project** | yes | yes | yes | ✅ managed entity (planning) |
+| **Invoice** | yes | yes | yes (drafted/sent/paid) | ✅ managed entity (invoicing) |
+| **Approval** | no (each approval is one moment) | no (it's a fact, not state) | no (instantaneous) | ❌ **event kinds** (e.g., `approval_requested`, `approval_granted`, `approval_rejected` on AuditEvent) |
+| **LineItem** (within Invoice) | only as part of Invoice | not independently | no | ❌ nested field |
+| **Deadline** | no (date attached to something) | no | no | ❌ nested field on Project / Invoice |
+| **Document version** | maybe (snapshots have IDs) | minimal | partial | ❌ events + snapshot bytes (already what audit trail does) |
+| **Task** (within Project) | maybe (if independently tracked) | maybe | maybe | depends — first-class only if tracked independently |
+| **BusinessCalendar** (work hours, holidays) | yes | yes | minimal | borderline; defer until concrete need |
+
+**How "joins" are answered without foreign keys**:
+
+| Question | SQL approach | PBS approach |
+|---|---|---|
+| "All invoices for client X" | `SELECT ... JOIN ...` | Adapter API: `lexware.invoices(client_id=X)`. Or audit-trail filter: `kind=invoice_issued AND details.client_id=X`. |
+| "All projects with overdue deadlines" | `SELECT ... WHERE deadline < NOW()` | Native query on Project entity store filtered by `deadlines[].date < today`. |
+| "Audit history of decisions made by colleague Y" | Multi-table join | Audit-trail filter: `actor=Y AND kind=decision`. |
+| "Which bauseine cite §44 BNatSchG?" | Full-text + reference table | Memory query (per #14): `search_memory(query="§44 BNatSchG", kinds=["baustein"])`. |
+
+Everything's a filtered query over a small set of stores: native entities, audit trail, memory, adapter APIs. **No join planner needed.**
+
+**The principle, stated**:
+
+> **Prefer events + nested fields + memory entries over new managed entity types. Elevate to first-class managed entity only when stable-identity + state-of-record + lifecycle all apply.**
+
+This belongs as a discipline check at design time. Likely **target 11 of design-review** (and a future audit slice that scans for over-modeled entities). Captured here as binding architectural guidance for future commitments touching managed entities.
+
+#### Approval flows are event-driven, not entity-shaped
+
+Application of the three-test discipline. Real businesses have hierarchical approvals: "Invoice >€10K needs partner approval"; "B-Plan submission needs principal sign-off." Approval is a fact (it happened), not an entity (with state evolving over time). The thing being approved IS an entity (Invoice, Project-submission); the approval chain is in its event history.
+
+**Implementation** (folded into #6 audit-trail v2 retrofit; NOT a separate commitment):
+
+- New AuditEvent kinds: `approval_requested`, `approval_granted`, `approval_rejected`. Details payload includes `approving_actor`, `policy_rule` (which authorization rule triggered), `subject_entity_id` (what was approved).
+- Authorization rules ("Invoice >€10K needs partner approval") live in **skill logic**, not entity schema. The skill drafting an Invoice checks the rule and emits `approval_requested` if needed; orchestrator surfaces to the human approver.
+- Entity gains a queryable status via audit-trail filter: "this Invoice's most recent approval-event chain says: requested → granted by Anna at T."
+- No new managed entity. No schema migration for approval state. Light, correct.
+
+Folds into commitment #6 (audit-trail v2 retrofit) — that retrofit is already adding event kinds; approval kinds added there.
+
 ## Implementation scope (this commitment)
 
 **Schema additions** (ship now):

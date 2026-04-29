@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.12 (post-session-9 followup + managed-entity concept + integration-adapter pattern generalized)**.
+Status: **v0.13 (post-session-9 followup #2 + entity-elevation discipline + office-level managed entities)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,32 @@ Status: **v0.12 (post-session-9 followup + managed-entity concept + integration-
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.12 → v0.13**: **Entity-elevation discipline introduced +
+  office-level managed entities concept added** (session-9 followup
+  #2, post-broader-review). The discipline: prefer events + nested
+  fields + memory entries over new managed entity types. Elevate
+  to first-class managed entity only when **stable-identity +
+  state-of-record + lifecycle all apply**. Avoids the architecture
+  creeping toward a relational SQL schema (one entity per noun,
+  foreign keys, joins, normalization rules — catastrophic for
+  LLM-mediated AI offices). Right level: closer to **knowledge
+  graph + document store with stable references**, not Oracle.
+  "Joins" are answered via audit-trail filters, per-entity
+  ID-based queries, memory queries, or adapter APIs — no join
+  planner needed. New concept: **office-level managed entities**
+  (Client, Actor) — owned by the office substrate, referenced by
+  multiple departments. Distinct from department-level managed
+  entities (Project, Invoice, Timesheet) — owned by a single
+  department. Cross-department reference convention: entities
+  hold `<entity>_id: str` fields referencing other entities; gate
+  validates references exist at write time; no FK enforcement at
+  storage layer. Approval flows demoted from managed-entity
+  proposal to event-kinds on AuditEvent (folds into #6) per the
+  three-test discipline. New v1 commitment **#15 (Client + Actor
+  as office-level managed entities)** scheduled between #13 and
+  #6. See `docs/decisions/office-vs-department.md` "When to
+  elevate to managed entity" + "Approval flows are event-driven"
+  subsections.
 - **v0.11 → v0.12**: **Managed-entity concept introduced + meta-rule
   1 integration-adapter pattern generalized** (session-9 followup).
   The post-#12 first-pass realization: each department defines its
