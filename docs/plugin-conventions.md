@@ -170,9 +170,9 @@ The orchestrator's PROCEDURE.md §10 specialist routing list is the **at-a-glanc
 |---|---|
 | `<repo>/` | Plugin/repo root. Two directories up from any `plugin/skills/<name>/SKILL.md`. |
 | `<project>/_ai/` or `<project>/.ai/` | Per-project AI memory. Both forms are supported (legacy `_ai/` for adopted projects, `.ai/` for new bindings — see `memory/universal/project-structure.md`). Skills should accept either. |
-| `<state-root>/` | Office state root, resolved via `office_config.paths.state_root`. |
-| `<references-root>/` | RAG corpus root, resolved via `office_config.paths.references_root`. |
-| `<projects-root>/` | Client projects root, resolved via `office_config.paths.projects_root`. |
+| `<state-root>/` | Office state root, resolved via `office_config.roots.state`. |
+| `<references-root>/` | RAG corpus root, resolved via `office_config.roots.references`. |
+| `<projects-root>/` | Client projects root, resolved via `office_config.roots.projects`. |
 
 Never hardcode absolute paths in skill bodies. Always derive from `office-config.yaml` (loaded by orchestrator into in-memory `office_config`).
 

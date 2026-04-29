@@ -9,7 +9,7 @@ references_used:
 # New-project folder structure
 
 Every new project is created with this layout under
-`office_config.paths.projects_root`. The folder name follows
+`office_config.roots.projects`. The folder name follows
 `office_config.conventions.project_naming` (default
 `{year_2}-{nr} {client} - {location}`). The AI owns the entire project
 root (full ownership, not quarantined).

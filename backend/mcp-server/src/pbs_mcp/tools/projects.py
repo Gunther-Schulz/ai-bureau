@@ -37,7 +37,7 @@ def _projects_index_path() -> Path:
 
 
 def _default_practice_id() -> str:
-    return office_config.load().default_practice().id
+    return office_config.load().default_internal_actor().id
 
 
 def _read_projects_index() -> list[dict]:
@@ -255,8 +255,8 @@ def setup_project(input: SetupProjectInput) -> SetupProjectOutput:
     cfg = office_config.load()
 
     name = input.name or _generate_project_name(cfg, input)
-    target = Path(input.target_root) if input.target_root else cfg.paths.projects_root / name
-    practice = input.practice or cfg.default_practice().id
+    target = Path(input.target_root) if input.target_root else cfg.roots.projects / name
+    practice = input.practice or cfg.default_internal_actor().id
 
     mode = _detect_mode(target)
     if mode == "bound":

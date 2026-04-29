@@ -1,7 +1,7 @@
 ---
 name: survey-project
 description: This skill should be used when first binding to an existing project that has no _ai/ folder yet. It walks the project root, clusters files by likely role (artifacts, inputs, sent versions, correspondence, cruft), and proposes a file-map.md interpretation for user confirmation. Triggered by orchestrator's binding flow (Checkpoint 11) or by direct user phrases like "survey this project", "scan the folder", "binde dieses Projekt".
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_doctypes_manifests]
 mcp_tools_optional: [search_inputs, list_skeletons]
@@ -35,11 +35,11 @@ By orchestrator's binding flow when a referenced project has no
 `_ai/` or `.ai/` folder. Inputs:
 
 - **Project root path** — absolute path under
-  `office_config.paths.projects_root` (or anywhere the user
+  `office_config.roots.projects` (or anywhere the user
   provides).
 - **Project name** — for state.md construction.
 - **Practices guess** — orchestrator's guess of one or more
-  practice ids from `office_config.practices`, derived from
+  practice ids from `office_config.actors` (kind=internal), derived from
   path/file heuristic (presence of doctype-relevant files vs.
   other practices' workspace markers).
 

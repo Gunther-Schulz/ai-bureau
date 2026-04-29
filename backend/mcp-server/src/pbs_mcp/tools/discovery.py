@@ -78,31 +78,43 @@ def _manifest_info(path: Path, layer: str, scope_key: str | None) -> ManifestInf
     )
 
 
-def _enumerate_manifests(mmap, scope_filter: bool, scope) -> list[tuple[Path, str, str | None]]:
-    """Return (path, layer, scope_key) tuples per the layered ManifestMap.
+def _enumerate_manifests_full_union(kind: str) -> list[tuple[Path, str, str | None]]:
+    """Return (path, layer, scope_key) for ALL manifests in the app extensions
+    tree (and office_extensions if set), regardless of scope.
 
-    scope_filter=True restricts to office's active scope.{domains,states};
-    False yields the full union (every key declared in the ManifestMap).
+    Used when scope_filter=false — caller wants the full union, not the
+    scope-filtered subset.
     """
-    out: list[tuple[Path, str, str | None]] = []
-    if mmap.universal is not None:
-        out.append((mmap.universal, "universal", None))
-    domain_keys = list(scope.domains) if scope_filter else list(mmap.domain.keys())
-    for k in domain_keys:
-        p = mmap.domain.get(k)
-        if p is not None:
-            out.append((p, "domain", k))
-    state_keys = list(scope.states) if scope_filter else list(mmap.state.keys())
-    for k in state_keys:
-        p = mmap.state.get(k)
-        if p is not None:
-            out.append((p, "state", k))
+    from pbs_mcp.office_config import Scope, StateCode
+
+    # Synthesize a scope that covers every directory under domain/ and state/.
+    cfg = office_config.load()
+    app = config.app_extensions_dir()
+    full_domains: list[str] = []
+    if (app / "domain").is_dir():
+        full_domains = sorted(p.name for p in (app / "domain").iterdir() if p.is_dir())
+    full_states: list[str] = []
+    if (app / "state").is_dir():
+        full_states = [p.name for p in sorted((app / "state").iterdir()) if p.is_dir()]
+    full_scope = Scope(
+        domains=full_domains,
+        states=[s for s in full_states if s in (
+            "BB", "BW", "BY", "BE", "HB", "HH", "HE", "MV",
+            "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH",
+        )],
+    )
+
+    out = config._walk_extensions_tree(app, kind, full_scope)
+    if cfg.roots.office_extensions is not None:
+        out.extend(config._walk_extensions_tree(cfg.roots.office_extensions, kind, full_scope))
     return out
 
 
 def list_reference_manifests(input: ListReferenceManifestsInput) -> ListReferenceManifestsOutput:
-    cfg = office_config.load()
-    items = _enumerate_manifests(cfg.extensions.references_manifests, input.scope_filter, cfg.scope)
+    if input.scope_filter:
+        items = config.all_references_manifests()
+    else:
+        items = _enumerate_manifests_full_union("references")
     manifests = [_manifest_info(p, layer, key) for p, layer, key in items]
     return ListReferenceManifestsOutput(
         manifests=manifests,
@@ -112,8 +124,10 @@ def list_reference_manifests(input: ListReferenceManifestsInput) -> ListReferenc
 
 
 def list_doctypes_manifests(input: ListDoctypesManifestsInput) -> ListDoctypesManifestsOutput:
-    cfg = office_config.load()
-    items = _enumerate_manifests(cfg.extensions.doctypes_manifests, input.scope_filter, cfg.scope)
+    if input.scope_filter:
+        items = config.all_doctypes_manifests()
+    else:
+        items = _enumerate_manifests_full_union("doctypes")
     manifests = [_manifest_info(p, layer, key) for p, layer, key in items]
     return ListDoctypesManifestsOutput(
         manifests=manifests,

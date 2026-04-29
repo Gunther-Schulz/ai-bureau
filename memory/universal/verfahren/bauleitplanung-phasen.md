@@ -58,7 +58,7 @@ in this domain document.
 
 **Authoritative federal source:** BauGB current text via
 `gesetze-im-internet.de/baugb/` — fetched and indexed by
-`research-references` into `office_config.paths.references_root`.
+`research-references` into `office_config.roots.references`.
 
 ---
 

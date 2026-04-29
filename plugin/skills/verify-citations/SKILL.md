@@ -1,7 +1,7 @@
 ---
 name: verify-citations
 description: This skill should be used to cross-check legal citations (laws, paragraphs, court rulings, leitfäden) in a document or baustein against the current reference index. Triggered by phrases like "verify citations", "Zitate prüfen", "are citations current", "check §-references", as part of layered review (Layer 2 fachlich + Layer 3 formal), at compile-time validation, or after a reference update by research-references.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [search_corpus, list_reference_manifests]
 mcp_tools_optional: [read_corpus_file, find_bausteine_by_reference]
@@ -25,7 +25,7 @@ Resolve the references in scope via `list_reference_manifests()`
 (MCP tool). Returns the layered manifest set per office's active
 scope.{domains,states} — universal + per-domain + per-state. Each
 manifest entry has `id`, `current_amendment_form`, and pointers
-into the references corpus at `office_config.paths.references_root`.
+into the references corpus at `office_config.roots.references`.
 
 If the manifest set is empty (newly-deployed office; no manifests
 yet) or the references corpus is missing, the skill cannot validate
@@ -174,7 +174,7 @@ End with one-line verdict: `BLOCK / WARN / PASS`.
   `verified_against_version` agrees with the doc under review.
 
 When MCP backend unreachable: fall back to `Grep` over the office's
-references corpus at `office_config.paths.references_root` and
+references corpus at `office_config.roots.references` and
 `Read` of manifest YAMLs. Iterative resolution still possible but
 slower; recall worse without semantic search. Warn user about
 degraded mode.

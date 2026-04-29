@@ -1,7 +1,7 @@
 ---
 name: setup-office
 description: This skill should be used the first time the plugin is deployed to a new planning bureau, when the office-config.yaml is missing, or when the user asks to "set up office", "first-time setup", "bootstrap office", "deploy to a new office", "Kanzlei einrichten", or "configure office". The orchestrator auto-routes here when office_config.load() raises OfficeConfigNotFoundError. Walks the user interactively through every required field, writes office-config.yaml at the resolved location, bootstraps the office state directory tree, validates the result.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []
@@ -23,7 +23,10 @@ script — what to ask in what order, what defaults to suggest, what
 to write where.
 
 Read `<repo>/docs/office-config.schema.yaml` for the schema this
-skill must produce (currently v2).
+skill must produce (currently v3 — post-design-review session 5
+consolidation: office+identity merged, paths→roots, practices+
+partners→actors, manifests now derived from scope, integrations is
+a free-form list).
 
 ## When invoked
 
@@ -37,13 +40,12 @@ Three modes:
   than the running app supports. Backend forward-migrates in memory
   on load; this skill is responsible for writing the migrated form
   back to disk + asking the user to fill in any newly-required
-  fields (e.g. v1→v2 leaves `scope` empty — user picks domains/states
-  here).
+  fields. Migration paths: v1→v2 (legacy), v2→v3 (current).
 - **Reconfigure**: user asks to change a value (add a domain to
   scope, register an additional state, swap an integration adapter,
-  add a practice). Trigger: phrases like "add Wind to scope",
+  add an actor). Trigger: phrases like "add Wind to scope",
   "register BB references", "switch to thunderbird email", "add a
-  practice".
+  practice", "add a partner".
 
 ## Behavior — first-time bootstrap
 
@@ -54,45 +56,47 @@ Three modes:
 
 2. **Walk the wizard** (per `references/wizard-flow.md`). The wizard
    covers, in order:
-   - Office identity (name, short, language, address, signature).
-   - Practices (default: single `main` practice).
-   - Partners (optional list of external collaborators).
-   - Filesystem paths (state_root, references_root, projects_root).
-   - **Scope** (NEW v0.2): multi-select domains + Bundesländer from
-     what's available under `<repo>/extensions/{domain,state}/`.
-   - Conventions (project naming, numbering, folder layout).
-   - Templates (skeleton source, office_style_dir, identity_macros)
-     — and for each domain in scope, offer the matching domain-style
-     overlay (`office-style.<DOMAIN>.sty`) as starter content.
-   - **Reference + doctype manifests** (NEW shape v0.2): build the
-     layered `extensions.{references,doctypes}_manifests` map
-     automatically from scope. The user does not list paths
-     individually — the skill derives:
-       - `universal: <repo>/extensions/universal/<...>.yaml`
-       - For each domain: `<repo>/extensions/domain/<X>/<...>.yaml`
-       - For each state: `<repo>/extensions/state/<X>/<...>.yaml`
-     The user is shown the resolved set + asked to confirm.
-   - **Integrations** (NEW v0.2): per class (email, calendar,
-     scanner, phone, accounting), default `none`. Offer the
-     available adapters; if the user wants email integration,
-     also collect adapter-specific config.
+   - **Office identity** (single block — name, short, language,
+     title, address_lines, phone/mobile/email/web optional,
+     specializations, logo/signature image paths, signature_block).
+   - **Actors** (≥1 internal required; external partners optional).
+     Each: id, kind (internal|external), label, signer, email,
+     email_match_patterns, optional phone/web/specialization. Default:
+     single internal actor with id=main.
+   - **Filesystem roots** (state, references, projects; optional
+     local_repos, office_style_dir, office_extensions).
+   - **Scope**: multi-select domains + Bundesländer from what's
+     available under `<repo>/extensions/{domain,state}/`. Manifests
+     are no longer listed in config — they're auto-discovered from
+     scope at runtime.
+   - **Integrations** (free-form list): for each external system
+     the office uses (email, calendar, scanner, etc.), declare
+     `{class, adapter, config}`. Omit classes the office doesn't
+     use. Available adapters per class are discovered from
+     `backend/.../integrations/<class>/*.py`.
+   - **Conventions** (project naming, numbering, folder layout).
+   - **Templates**: skeleton_source (default `app`),
+     identity_macros (default `auto`), doctype_overrides (rare).
+     For each domain in scope, offer the matching domain-style
+     overlay (`office-style.<DOMAIN>.sty`) as starter content
+     (`roots.office_style_dir` will host them).
 
 3. **Write the YAML**. Validate by calling
    `office_config.load()`; abort + surface error if invalid.
 
 4. **Bootstrap the office state directory** (per
-   `references/wizard-flow.md` Step 9):
-   - Empty state files at `<state_root>/`.
-   - `<state_root>/templates/office-style.sty` — copy of the
+   `references/wizard-flow.md`):
+   - Empty state files at `<roots.state>/`.
+   - `<roots.office_style_dir>/office-style.sty` — copy of the
      app-shipped default.
    - For each domain in scope: optionally copy
      `office-style.<DOMAIN>.sty` overlay if user wanted it.
-   - Empty `<references_root>/{gesetze/{bund,eu,<state>},
+   - Empty `<roots.references>/{gesetze/{bund,eu,<state>},
      leitfaeden,urteile,beispiele}/` + `changelog.md`.
 
 5. **Verify**: re-run `office_config.load()`; confirm
-   `cfg.all_references_manifests()` returns a non-empty list (means
-   scope properly wires through to manifests).
+   `config.all_references_manifests()` returns a non-empty list
+   (means scope properly wires through to manifests).
 
 6. **Suggest next steps**:
    - "Run `research-references` to fetch the references corpus
@@ -106,10 +110,12 @@ Three modes:
 3. Walk only the changed sections (don't re-prompt unchanged ones).
 4. If scope changes (adding a domain or state):
    - Update `scope.{domains,states}`.
-   - Add the corresponding entries to
-     `extensions.{references,doctypes}_manifests.{domain,state}`.
+   - **No** manifest-map updates needed (v3 derives manifests from
+     scope at runtime). Confirm the corresponding extension files
+     exist at `<repo>/extensions/{domain,state}/<X>/...`; if not,
+     hand off to `author-manifest` to scaffold.
    - Bootstrap any missing directories (e.g. new state's
-     `<references_root>/gesetze/<state>/`).
+     `<roots.references>/gesetze/<state>/`).
 5. Write the updated file. Validate.
 
 ## Behavior — migration
@@ -119,10 +125,12 @@ Three modes:
    `office_config_migrations/`). Re-run `office_config.load()` to get
    the migrated dict.
 3. For each newly-required field with empty defaults, prompt the
-   user to fill in (most commonly: `scope.domains`, `scope.states`,
-   `extensions.{references,doctypes}_manifests.universal`).
+   user to fill in. Most common cases:
+   - v1→v2 left `scope` empty — user picks domains/states
+   - v2→v3 dropped the manifest map (now derived) and reshaped
+     several blocks; verify the migrated shape is correct
 4. Write the fully-migrated + filled-in form back to disk. Validate.
-5. Report: which fields were added, which the user filled in.
+5. Report: which fields were added/reshaped, which the user filled in.
 
 ## Conversational style
 
@@ -130,13 +138,18 @@ Match the user's language (German or English). Surface defaults
 clearly so the user can accept with `y`/`Enter`. Don't ask
 philosophical questions — just walk through what's required.
 
-For single-practice offices, suggest the simplest answer
-(`practices: [{id: main, label: "Büro"}]`); offer to expand only
-if the user mentions multiple sub-disciplines.
+For single-actor offices, suggest the simplest answer:
+`actors: [{id: main, kind: internal, label: "Büro", signer: "<name>"}]`;
+offer to expand only if the user mentions multiple sub-disciplines or
+external partners.
 
 For scope: discover what's available by listing
 `<repo>/extensions/domain/*/` and `<repo>/extensions/state/*/`.
 Skip empty placeholder dirs (those with only `.gitkeep`).
+
+For integrations: ask which external systems the office actually
+uses; only declare those. Don't fill in `adapter: none` placeholders
+— omit the class entirely.
 
 ## Output
 
@@ -144,18 +157,19 @@ A summary block at the end:
 
 ```
 Office configured at: <config-path>
-Office state at: <state-root>
-References corpus at: <references-root>
-Projects root at: <projects-root>
+Office state at: <roots.state>
+References corpus at: <roots.references>
+Projects root at: <roots.projects>
 
 Scope:
   Domains: PV-FFA, Wind, Naturschutz
   States: MV
 
-Practices: main, …
-Partners: hendrik (deroekologe), …
+Actors:
+  internal: main (Planungsbüro Schulz, signer: G. Schulz)
+  external: hendrik (deroekologe), …
 
-Reference manifests selected (in load order):
+Reference manifests in scope (auto-discovered, in load order):
   universal: <repo>/extensions/universal/references-manifest.yaml
   domain/PV-FFA: <repo>/extensions/domain/PV-FFA/references-manifest.yaml
   domain/Wind: <repo>/extensions/domain/Wind/references-manifest.yaml
@@ -164,14 +178,12 @@ Reference manifests selected (in load order):
 
 Integrations:
   email: thunderbird-maildir → ~/.thunderbird/<profile>/
-  calendar: none
   scanner: hot-folder → ~/Documents/Scans/
-  phone: none
-  accounting: none
+  (other classes omitted — declare in office-config when needed)
 
-Office style: default + PV-FFA overlay + Wind overlay
-  (customize at <state-root>/templates/office-style.sty and
-  office-style.PV-FFA.sty + office-style.Wind.sty)
+Office style: default + PV-FFA overlay + Wind overlay + Naturschutz overlay
+  (customize at <roots.office_style_dir>/office-style.sty and
+  office-style.PV-FFA.sty etc.)
 
 Next steps:
   - Run /research-references to fetch your scoped references corpus.
@@ -180,7 +192,7 @@ Next steps:
 
 ## Edge cases
 
-- **Path doesn't exist**: state_root, references_root, projects_root
+- **Path doesn't exist**: roots.state, roots.references, roots.projects
   may not exist when first declared. Create them with user
   confirmation.
 - **Path on offline network mount**: surface error; ask user to
@@ -195,7 +207,10 @@ Next steps:
   placeholder-only; offer to scaffold an empty manifest at
   `<repo>/extensions/state/<X>/references-manifest.yaml` and route
   through `author-manifest` to populate.
-- **state_root coincides with projects_root**: allowed, warn.
+- **roots.state coincides with roots.projects**: allowed, warn.
+- **office_extensions tree not present even though field set**: the
+  loader silently skips missing directories — this is fine for
+  initial setup; user adds office-local extensions over time.
 
 ## Tools used
 

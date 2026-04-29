@@ -25,7 +25,7 @@ THEN load context for the detected scope:
 
 | Scope | Read at open |
 |---|---|
-| Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (paths via `office_config.paths.state_root`); call `list_projects()` and `list_skills()` MCP tools |
+| Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (path via `office_config.roots.state`); call `list_projects()` and `list_skills()` MCP tools |
 | Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries moved to `extensions/` per Type H). |
 | Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md`, `<repo>/VISION.md`, `<repo>/ARCHITECTURE.md` |
 
@@ -276,7 +276,7 @@ For new projects (Checkpoint 12), the AI owns the entire project root. No quaran
 ### 8.4 Multi-practice projects
 
 `_ai/state.md` carries `practices: [<id>, ...]` where the ids come
-from `office_config.practices`. When more than one practice id appears
+from `office_config.actors` (filtered to kind=internal). When more than one practice id appears
 in the array, the project is multi-practice (e.g. text-document
 practice + GIS practice working on the same job).
 
@@ -403,9 +403,9 @@ Binding is a one-time per project event. Subsequent bindings load the existing a
 
 When the user requests a new project ("neues Projekt", "new project", "scaffold ..."):
 
-1. Solicit core metadata: project number (auto-suggested from `office_config.conventions.project_numbering` if `auto_increment: true`, else asked), client, location, doctype focus, practice (defaults to first entry in `office_config.practices`). Resolve the folder name from `office_config.conventions.project_naming` template.
+1. Solicit core metadata: project number (auto-suggested from `office_config.conventions.project_numbering` if `auto_increment: true`, else asked), client, location, doctype focus, practice (defaults to the first internal actor — `office_config.default_internal_actor()`). Resolve the folder name from `office_config.conventions.project_naming` template.
 
-2. Call the `setup_project` MCP tool with the gathered metadata. The tool resolves target path under `office_config.paths.projects_root` and handles three modes by detecting the target folder state:
+2. Call the `setup_project` MCP tool with the gathered metadata. The tool resolves target path under `office_config.roots.projects` and handles three modes by detecting the target folder state:
    - **absent** → creates folder + scaffolds layout
    - **empty** → scaffolds inside the existing folder
    - **populated** → routes to survey + bind flow (Checkpoint 11)

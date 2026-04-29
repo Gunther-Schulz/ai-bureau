@@ -43,7 +43,7 @@ fallback proves friction.
 ### Tier 3 MCP introspection tools (deferred)
 
 **Why**: Skills currently know office-config schema field paths
-(`office_config.identity.signature_block` etc.); changes to schema
+(`office_config.office.signature_block` etc.); changes to schema
 ripple through every skill. Same for per-project state queries
 that today are file-grep.
 

@@ -25,7 +25,7 @@ _REGISTRY: dict[tuple[int, int], Callable[[dict], dict]] | None = None
 def _build_registry() -> dict[tuple[int, int], Callable[[dict], dict]]:
     """Discover migrations by importing the v{N}_to_v{N+1} modules."""
     registry: dict[tuple[int, int], Callable[[dict], dict]] = {}
-    for from_v, to_v in [(1, 2)]:
+    for from_v, to_v in [(1, 2), (2, 3)]:
         modname = f"pbs_mcp.office_config_migrations.v{from_v}_to_v{to_v}"
         try:
             mod = importlib.import_module(modname)

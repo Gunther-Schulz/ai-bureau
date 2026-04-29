@@ -50,7 +50,7 @@ last_session: YYYY-MM-DD
 # Lifecycle
 lifecycle: internal-review                # draft | internal-review | sent-to-authority | awaiting-response | revision-requested | finalized | archived
 ownership_mode: new-work-only              # full | migrate | new-work-only | quarantine
-practices: [<practice-id-1>, <practice-id-2>]   # ids from office_config.practices
+practices: [<practice-id-1>, <practice-id-2>]   # ids from office_config.actors (kind=internal)
 verfahren_type: vorhabensbezogen           # regelverfahren | vereinfachtes (§13) | beschleunigtes (§13a) | vorhabensbezogen (§12)
 
 # Scope — which doctypes are in/out for this project

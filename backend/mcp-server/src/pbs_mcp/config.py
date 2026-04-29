@@ -1,15 +1,19 @@
 """Runtime path resolution.
 
 App-internal paths (repo root, lancedb data dir, app-shipped extensions)
-are resolved here. Office-specific paths (state_root, references_root,
-projects_root, local_repos_root) and selected manifests come from
-`office_config`.
+are resolved here. Office-specific paths come from `office_config.roots`.
+
+Manifest discovery (v3+): the loader no longer stores manifest paths in
+office-config. Instead, `all_references_manifests()` and
+`all_doctypes_manifests()` walk `<repo>/extensions/` (and optionally the
+office's `roots.office_extensions/` tree) filtered by the office's scope.
 """
 from __future__ import annotations
 
 import os
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pbs_mcp import office_config
 
@@ -71,34 +75,94 @@ def app_state_doctypes_manifest(state: str) -> Path:
     return app_extensions_dir() / "state" / state / "doctypes.yaml"
 
 
-# === Manifest resolution (delegates to office_config) ====================
+# === Manifest discovery (v3 — walk extensions tree filtered by scope) ====
 
-def all_references_manifests() -> list[Path]:
-    """All reference manifests selected by this office's scope."""
-    return office_config.load().all_references_manifests()
+ManifestKind = Literal["references", "doctypes"]
 
 
-def all_doctypes_manifests() -> list[Path]:
-    """All doctype manifests selected by this office's scope."""
-    return office_config.load().all_doctypes_manifests()
+def _filename_for(kind: ManifestKind) -> str:
+    return "references-manifest.yaml" if kind == "references" else "doctypes.yaml"
+
+
+def _walk_extensions_tree(
+    root: Path, kind: ManifestKind, scope: office_config.Scope
+) -> list[tuple[Path, str, str | None]]:
+    """Return (path, layer, scope_key) triples for manifests in `root` matching scope.
+
+    Layers walked: universal, then per-domain (in scope.domains order),
+    then per-state (in scope.states order). Files that don't exist are
+    silently skipped — non-existence in a given layer is normal (e.g.
+    the universal layer doesn't ship every doctype).
+    """
+    filename = _filename_for(kind)
+    out: list[tuple[Path, str, str | None]] = []
+
+    universal = root / "universal" / filename
+    if universal.is_file():
+        out.append((universal, "universal", None))
+
+    for domain in scope.domains:
+        p = root / "domain" / domain / filename
+        if p.is_file():
+            out.append((p, "domain", domain))
+
+    for state in scope.states:
+        p = root / "state" / state / filename
+        if p.is_file():
+            out.append((p, "state", state))
+
+    return out
+
+
+def _all_manifests(kind: ManifestKind) -> list[tuple[Path, str, str | None]]:
+    """All manifests of given kind selected by this office's scope.
+
+    Walks `<repo>/extensions/` first (canonical app-shipped manifests),
+    then `<roots.office_extensions>/` if set (office-local additions).
+    Both trees use the same `<universal,domain/<X>,state/<X>>` layout.
+    """
+    cfg = office_config.load()
+    out = _walk_extensions_tree(app_extensions_dir(), kind, cfg.scope)
+    if cfg.roots.office_extensions is not None:
+        out.extend(_walk_extensions_tree(cfg.roots.office_extensions, kind, cfg.scope))
+    return out
+
+
+def all_references_manifests() -> list[tuple[Path, str, str | None]]:
+    """All reference manifests selected by this office's scope.
+
+    Returns (path, layer, scope_key) triples. layer ∈ {universal, domain, state}.
+    scope_key is None for universal, the domain key (e.g. 'PV-FFA') or
+    state key (e.g. 'MV') otherwise. Walks app extensions tree first,
+    then office_extensions if configured.
+    """
+    return _all_manifests("references")
+
+
+def all_doctypes_manifests() -> list[tuple[Path, str, str | None]]:
+    """All doctype manifests selected by this office's scope.
+
+    Same return shape as all_references_manifests.
+    """
+    return _all_manifests("doctypes")
 
 
 # === Office-config-derived paths =========================================
 
 def projects_root() -> Path:
-    return office_config.load().paths.projects_root
+    return office_config.load().roots.projects
 
 
 def references_root() -> Path:
-    return office_config.load().paths.references_root
+    return office_config.load().roots.references
 
 
 def office_state_root() -> Path:
-    return office_config.load().paths.state_root
+    return office_config.load().roots.state
 
 
 def local_repos_root() -> Path | None:
-    return office_config.load().paths.local_repos_root
+    return office_config.load().roots.local_repos
 
 
 # === App-shipped templates ===============================================

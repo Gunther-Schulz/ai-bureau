@@ -32,8 +32,8 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
 
 - Auto-load: orchestrator skill auto-activates whenever any session
   references planning-bureau work (project under
-  `office_config.paths.projects_root` or
-  `office_config.paths.local_repos_root`, or German planning
+  `office_config.roots.projects` or
+  `office_config.roots.local_repos`, or German planning
   terminology in user input).
 - Specialist skills (`draft-textteil-b`, `review-draft`,
   `save-baustein`, etc.) load when their context matches.

@@ -1,7 +1,7 @@
 ---
 name: draft-cover-mail
 description: This skill should be used to draft a transmittal cover mail (Anschreiben) when sending project artifacts to authorities (UNB, Behörden, höhere Verwaltungsbehörde) or clients. Triggered as part of orchestrator's send gate (Checkpoint 4.3), or by direct user phrases like "Mail an UNB aufsetzen", "Anschreiben für die Stellungnahme", "draft cover mail", "Begleitmail", "transmittal letter".
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_bausteine, search_corpus]
@@ -26,11 +26,11 @@ Office identity values are read from `office_config` in-memory
 (loaded by orchestrator at session-open). Specifically:
 
 - `office_config.office.name` — office identity
-- `office_config.identity.address_lines` — address block
-- `office_config.identity.signature_block` — signature, used
+- `office_config.office.address_lines` — address block
+- `office_config.office.signature_block` — signature, used
   verbatim at end of mail
-- `office_config.identity.phone`, `identity.email`,
-  `identity.web` — header metadata if needed
+- `office_config.office.phone`, `office.email`,
+  `office.web` — header metadata if needed
 - `office_config.office.language` — defaults to `de_DE`;
   English only on explicit user override
 
@@ -115,10 +115,10 @@ By orchestrator's send gate, or by direct user request. Inputs:
      (from input).
    - Closing: anbieten Rückfragen / Telefonklärung / weiterer
      Austausch.
-   - Signature: insert `office_config.identity.signature_block`
-     verbatim. If the active practice has its own
-     `practices[].signer` set, prepend the signer's name
-     above the signature block.
+   - Signature: insert `office_config.office.signature_block`
+     verbatim. If the active actor (internal practice) has its own
+     `signer` set, prepend the signer's name above the
+     signature block.
 
 6. **Reference attachments** in body and list at end.
 
@@ -141,7 +141,7 @@ itself (LaTeX-style markup not needed for mail).
 - **Multi-practice project**: signature includes both
   practices' signers if appropriate (e.g. for joint Gutachten
   signed by multiple practices). Pull each signer from the
-  relevant entry in `office_config.practices`.
+  relevant entry in `office_config.actors` (kind=internal).
 - **Late response to received Stellungnahme**: tone needs
   explicit acknowledgment of late response; suggest user
   verify Frist passed before sending.
