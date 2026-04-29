@@ -1,8 +1,11 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.1.0
+version: 0.2.0
 license: MIT
+mcp_tools_required: [list_projects, list_skills]
+mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference]
+fallback_when_mcp_absent: "warn user and suggest backend restart. Orchestrator can still surface decisions and route to specialists from skill descriptions, but session-open project enumeration and watch-list cross-references degrade to filesystem reads."
 ---
 
 # Bureau orchestrator
@@ -29,8 +32,13 @@ truth:
   writing conventions (German quotes `\glqq…\grqq{}`, non-breaking
   spaces before §/units/dates, German number formatting, hyphenation
   hints, source line wrap).
-- `<repo>/memory/universal/doctypes.yaml` — registry of supported
-  doctypes, master file conventions, ownership rules.
+- **Doctypes registry** — call `list_doctypes_manifests()` (MCP
+  tool) to enumerate the layered doctype set: universal layer plus
+  per-active-domain overlays from `extensions/{universal,domain/<X>}/
+  doctypes.yaml`. Do not reference the legacy
+  `memory/universal/doctypes.yaml` path — registries moved to
+  `extensions/` (Type H entity per ARCHITECTURE.md) post-orthogonality
+  refactor.
 
 Resolve `<repo>` to the plugin's repo root. From inside the plugin,
 that is two directories up from this SKILL.md.
@@ -70,23 +78,41 @@ reviewing, or finalizing directly. When a routing target does not
 yet exist as its own skill, perform the work inline AND log a T6
 (capability gap) trigger.
 
+For canonical, queryable inventory: call `list_skills()` (MCP tool)
+— returns every skill's `name`, `description`, `version`, and
+declared `mcp_tools_required[]`. This list below is for at-glance
+reference; the MCP tool is authoritative.
+
 - `setup-office` — first-time deployment wizard (creates
-  office-config.yaml, bootstraps state directories)
-- `setup_project` — create / initialize / bind a project (called via
-  the MCP tool of the same name)
+  office-config.yaml, bootstraps state directories, walks
+  scope multi-select for domains + states)
+- `setup_project` — create / initialize / bind a project (called
+  via the MCP tool of the same name)
+- `survey-project` — first-bind clustering of project files into
+  a `_ai/file-map.md`
 - `draft-textteil-b` — draft a Begründung from project sources
 - `draft-textteil-c` — draft Textliche Festsetzungen (Teil B Text)
 - `review-draft` — layered review of an existing draft
 - `save-baustein` — capture a reusable text or argument to memory
-- `promote-to-skill` — promote a frequently-used baustein to a skill
-- `validate-latex-style` — diff a doc against `style-spec.md` + the
-  office's `office-style.sty`
-- `validate-checklist` — run doctype-specific required-section checks
-- `verify-citations` — cross-check legal references against the RAG
+  (validated via `save_baustein` MCP gate per meta-rule 5)
+- `validate-bausteine` — periodic freshness sweep of saved
+  bausteine; surfaces stale / flagged / review_due candidates
+- `record-feedback` — capture external feedback (UNB Stellungnahmen,
+  approvals, rejections); side-effects on addressed bausteine
+- `promote-to-skill` — promote a frequently-used baustein to a
+  skill (orchestrator guard 6.4: source project must be finalized)
+- `validate-latex-style` — diff a doc against `style-spec.md` +
+  the office's `office-style.sty` (+ per-active-domain overlays)
+- `validate-checklist` — run doctype-specific required-section
+  checks; consults layered doctypes manifest via
+  `list_doctypes_manifests()`
+- `verify-citations` — cross-check legal references against the
+  RAG; iterative resolution per priority touchpoint refactor
 - `draft-cover-mail` — draft transmittal mails to authorities
-- `survey-project` — first-bind clustering of project files into a
-  `_ai/file-map.md`
 - `research-references` — fetch / refresh legal references corpus
+  (walks layered manifest set per office's scope)
+- `author-manifest` — scaffold new domain or state manifests for
+  scopes that don't yet have content
 
 ## What this skill is and is not
 

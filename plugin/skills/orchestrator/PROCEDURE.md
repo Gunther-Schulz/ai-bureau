@@ -25,11 +25,11 @@ THEN load context for the detected scope:
 
 | Scope | Read at open |
 |---|---|
-| Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (paths via `office_config.paths.state_root`) |
-| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`, `<repo>/memory/universal/<doctype>/` |
-| Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md` if present |
+| Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (paths via `office_config.paths.state_root`); call `list_projects()` and `list_skills()` MCP tools |
+| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries moved to `extensions/` per Type H). |
+| Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md`, `<repo>/VISION.md`, `<repo>/ARCHITECTURE.md` |
 
-Load `<repo>/memory/global/` in every scope. Load `<repo>/memory/universal/style/style-spec.md` and `<repo>/memory/universal/conventions/korrektur-rules.md` whenever LaTeX work is in scope.
+Load `<repo>/memory/universal/style/style-spec.md` and `<repo>/memory/universal/conventions/korrektur-rules.md` whenever LaTeX work is in scope. Note: `memory/global/` no longer exists — content moved to `memory/universal/` (cross-cutting knowledge) and `memory/bausteine/` (instance records) per the orthogonality refactor.
 
 THEN announce loaded context in one terse line: "Mode: project (\<name\>). Loaded: state, file-map, \<doctype\> domain, style-spec." or equivalent. Do not narrate at length.
 
@@ -46,7 +46,7 @@ output. Each trigger surfaces a four-way decision menu (Checkpoint 3).
 |---|---|
 | **T1. Reusable pattern** | A drafted argument, justification, or section reads as something that could apply across projects in the same domain. |
 | **T2. Citation drift** | A legal citation in memory or in the document differs from what the RAG returns for the same reference today. |
-| **T3. Promotion** | A baustein has been referenced ≥ 3 times across the last 30 days of session history (count by file path in `<repo>/memory/<scope>/INDEX.md` use-log). |
+| **T3. Promotion** | A baustein has been referenced ≥ 3 times across the last 30 days of session history (use_count from `list_bausteine` / per-baustein frontmatter). |
 | **T4. Style deviation** | The current document violates `style-spec.md` (different class, different package set, different geometry, missing required macros). |
 | **T5. Standing rule** | The user says "always X", "remember Y", "never Z", "from now on", or any phrasing that prescribes future behavior across sessions. |
 | **T6. Capability gap** | A tool, skill, or template that would have helped does not exist. The orchestrator notices this when it has to perform a workaround. |
@@ -172,17 +172,27 @@ Each of these cannot be violated. State the violation if it would occur and ask 
 
 Project deliverables (.tex, .pdf, mails, captions, file names inside the project) are written in German. The conversation between user and orchestrator may be German, English, or mixed. When producing artifact content, German is required regardless of the conversation language.
 
-### 6.2 Memory write scopes
+### 6.2 Memory write scopes (post-orthogonality)
 
-`save-baustein` writes to one of three scopes: `global`, `domain`, `projects/<project>`. Routing rules:
+`save-baustein` writes to one of four scopes per ARCHITECTURE.md scope orthogonality (universal × domain × state) plus per-project: `universal`, `domain`, `state`, `project`. Each requires `scope_key` (except universal). Routing rules:
 
-| Content kind | Scope |
-|---|---|
-| Office-wide fact (signature block, default Quellen, language conv.) | global |
-| Reusable across projects in a doctype (steinriegel-spec, §45-Nr.5 argumentation) | domain |
-| Single-project fact (specific UNB contact, project-specific decision) | projects/\<project\> |
+| Content kind | Scope | scope_key |
+|---|---|---|
+| Cross-bureau pattern (signature conventions, language rules, universal frameworks like BauGB process) | `universal` | none |
+| Reusable in a planning domain (e.g. PV-FFA, Wind, Naturschutz argumentation patterns) | `domain` | domain key (`Naturschutz`, `PV-FFA`, etc.) |
+| State-specific knowledge (LUNG-MV interpretation, OVG-MV ruling application, MV Landesgesetze) | `state` | state code (`MV`, etc.) |
+| Single-project fact (specific UNB contact, project-specific decision) | `project` | project name OR project_root |
 
-Writes to `global` scope require explicit user confirmation. Domain and project scopes follow standard four-way menu authorization. The orchestrator proposes the scope as part of the menu line.
+Writes to `universal` scope require explicit user confirmation. Domain/state/project scopes follow standard four-way menu authorization. The orchestrator proposes the scope+scope_key as part of the menu line.
+
+**Path resolution** (handled by `save_baustein` MCP tool per meta-rule 5):
+
+- `universal` → `<repo>/memory/bausteine/universal/<name>.md`
+- `domain` → `<repo>/memory/bausteine/domain/<scope_key>/<name>.md`
+- `state` → `<repo>/memory/bausteine/state/<scope_key>/<name>.md`
+- `project` → `<project_root>/_ai/bausteine/<name>.md`
+
+Project-scope bausteine may set `cross_project_visible: true` to surface in `list_bausteine` queries from other projects in the same office without yet promoting to broader scope (resolves promote-or-keep-locked binary). See save-baustein/references/format.md for the field semantics.
 
 ### 6.3 Module-decision logging
 
@@ -199,9 +209,11 @@ Module decisions made conversationally without logging are a protocol violation 
 
 ### 6.4 Baustein promotion guard
 
-A baustein in `memory/projects/<project>/...` may only be promoted to `memory/universal/...` after the source project's `_ai/state.md` lifecycle is `finalized`. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the practice is wrong.
+A baustein in `<project_root>/_ai/bausteine/...` (project scope) may only be promoted to broader scope (`universal`, `domain`, or `state` under `<repo>/memory/bausteine/<layer>/<key>/`) after the source project's `_ai/state.md` lifecycle is `finalized`. Reasoning: until a project is signed off, the argumentation may still change, and propagating an unvalidated pattern across the bureau (or worse, across deployments via universal/domain) is wrong.
 
 Promotion before finalization → BLOCK. Output: "Quellprojekt ist noch \<state\>. Promotion erst nach finalized erlaubt." If the user insists, require an explicit "ich autorisiere die frühe Promotion" — log the override in `<repo>/memory/product-backlog.md` for later audit.
+
+Note: setting `cross_project_visible: true` on a project-scope baustein is NOT promotion — it just extends search visibility within the same office. No guard required for that flag. See save-baustein/references/format.md.
 
 ---
 
@@ -304,9 +316,12 @@ The backend (`<repo>/backend/`) is not yet built. When MCP tools are available, 
 
 | Tool | Use for | Fallback |
 |---|---|---|
-| `list_bausteine(scope, domain?)` | Enumerate memory entries in a scope | `Glob` over `<repo>/memory/<scope>/` |
-| `get_baustein(name)` | Read a specific baustein by name | `Read` the corresponding markdown file |
-| `save_baustein(scope, name, content, source)` | Write a new baustein with provenance | `Write` the markdown file directly with frontmatter recording source-project + date |
+| `list_bausteine(scope?, scope_key?, project_root?)` | Scope-aware enumeration: universal/domain/state/project per orthogonality | `Glob` over `<repo>/memory/bausteine/{universal,domain/<X>,state/<X>}/` |
+| `get_baustein(name, scope?, scope_key?)` | Read a specific baustein by name | `Read` the corresponding markdown file |
+| `save_baustein(scope, scope_key?, project_root?, name, type, title, body, references, tags)` | Write with full validation per meta-rule 5 | `Write` directly only as degraded fallback; warn user |
+| `flag_baustein(name, reason)` | Mark stale / drifted (used by record-feedback rejections, research-references citation drift) | `Edit` the frontmatter directly |
+| `archive_baustein(name, superseded_by?)` | Lifecycle close-out (used by promote-to-skill) | `Edit` the frontmatter directly |
+| `find_bausteine_by_reference(law?, paragraph?, ruling?, leitfaden?)` | Cross-reference dependents (used by research-references on diff) | `Grep` over baustein files |
 
 ### 9.4 Build and project ops
 
@@ -324,20 +339,27 @@ When falling back, note the fallback in the response so the user knows the tool 
 
 ## 10. Specialist routing
 
-The orchestrator does not draft, review, or finalize directly. Each operation routes to a specialist skill in v1+. Specialists do not exist in v0.1.0 — perform the work inline AND log the missing specialist as a T6 (capability gap) trigger to `<repo>/memory/product-backlog.md`.
+The orchestrator does not draft, review, or finalize directly. Each operation routes to a specialist skill. When a routing target is missing, perform the work inline AND log a T6 (capability gap) trigger to `<repo>/memory/product-backlog.md`.
 
-| Operation | Specialist (v1+) | Trigger phrases |
+For canonical, queryable inventory call `list_skills()` (MCP tool) — returns every skill's name, description, version, and `mcp_tools_required[]`. Table below is at-glance reference; MCP tool is authoritative.
+
+| Operation | Specialist | Trigger phrases |
 |---|---|---|
+| First-time office setup | `setup-office` | "deploy", "set up office", "first run", absent office-config |
 | Draft Begründung from sources | `draft-textteil-b` | "Entwurf Textteil B", "Begründung schreiben", "draft Begründung for ..." |
 | Draft Festsetzungen | `draft-textteil-c` | "Entwurf Festsetzungen", "Textteil C schreiben", "Satzungstext" |
 | Layered review | `review-draft` | "review", "prüfe", "schau drüber", "korrigieren" |
 | Capture baustein | `save-baustein` | (always: triggered by capture-now decision) |
-| Promote baustein | `promote-to-skill` | (always: triggered by T3 → handle-now) |
+| Baustein freshness sweep | `validate-bausteine` | "freshness check", "stale bausteine", session-open auto |
+| Record external feedback | `record-feedback` | UNB Stellungnahme arrives, "Behörden-Reaktion", "approval kam von..." |
+| Promote baustein → skill | `promote-to-skill` | (always: triggered by T3 → handle-now; guard 6.4) |
 | Style validation | `validate-latex-style` | "style check", "spec-Abweichung", part of formal review |
 | Doctype checklist | `validate-checklist` | part of structural review |
 | Citation verification | `verify-citations` | "Zitate prüfen", part of formal review, T2 surfacing |
 | Cover mail draft | `draft-cover-mail` | "Mail an UNB", "Anschreiben aufsetzen", part of send gate |
 | First-bind project survey | `survey-project` | (always: triggered when binding to existing project) |
+| Refresh references corpus | `research-references` | "update references", "neue Fassung", "refresh corpus" |
+| Author new manifest | `author-manifest` | "new domain", "scaffold <Domain>", "add manifest for <STATE>" |
 
 When performing inline what would be a specialist's job, hold the same checkpoints active: source-grounding, style-spec compliance, korrektur-rules, layered review structure.
 
