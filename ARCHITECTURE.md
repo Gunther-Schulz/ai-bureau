@@ -4,14 +4,19 @@ This document is the canonical placement reference. When in doubt
 about where new content belongs, walk the meta-rules first, then the
 decision rules below.
 
-> **Vision anchor.** PBS is **intertwined-AI-workflow, not
-> tacked-on AI features**. The architecture serves continuous
-> human-AI collaboration on the actual work — persistent state,
-> orchestrated behaviors, source-grounded outputs, surfaced
-> decisions, explicit human-authority gates. See `VISION.md` for
-> the full thesis, intertwining requirements, and trust
-> infrastructure. Every meta-rule and decision rule below traces
-> back to this anchor.
+> **Vision anchor.** PBS is built on three interlocking principles:
+> **intertwined-AI-workflow (not tacked-on features)**, **sparring
+> partner (not answer machine)**, and **authorship preservation
+> (the user remains defensible expert author of everything PBS
+> produces on their behalf)**. The architecture serves continuous
+> human-AI collaboration with built-in challenge in service of
+> defensible output — persistent state, orchestrated behaviors,
+> source-grounded outputs, surfaced decisions, explicit human-
+> authority gates, counter-arguments, calibrated confidence,
+> selective friction. See `VISION.md` for the full thesis,
+> intertwining requirements, trust infrastructure, sparring
+> requirements, and authorship preservation. Every meta-rule and
+> decision rule below traces back to this anchor.
 
 Status: **v0.4 (post-execution-locality)**.
 - v0.1 → v0.2: nine entity types + 6 decision rules.

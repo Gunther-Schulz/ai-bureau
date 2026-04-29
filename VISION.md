@@ -8,9 +8,45 @@ thesis first.
 
 ## The thesis
 
-**PBS is intertwined-AI-workflow, not tacked-on AI features.**
+PBS is built on three interlocking principles. None alone is
+sufficient; all three together define the design space:
 
-The contrast that makes this concrete:
+1. **PBS is intertwined-AI-workflow, not tacked-on AI features.**
+   The AI is a co-worker in the workflow itself, not a feature
+   bolted onto an unchanged human workflow.
+
+2. **The AI is a sparring partner, not an answer machine.** It
+   challenges, generates counter-arguments, names uncertainty,
+   resists giving easy answers — keeping the user critically
+   engaged with the work.
+
+3. **PBS produces output the user remains the author of.** Not
+   teaching, not capacity-building in the abstract; preserving
+   the user's role as the expert author who can defend, sign,
+   and stand behind the produced work.
+
+Three axes. Each must be served:
+
+| Layer | Axis | Failure mode | PBS aim |
+|---|---|---|---|
+| Surface | Workflow embedding | Tacked-on: discrete AI features in unchanged workflow | Intertwined: AI as continuous co-worker |
+| Process | Interaction mode | Answer machine: oracle / sycophant / easy answers | Sparring partner: challenger / interrogator / counter-argument |
+| Purpose | Outcome orientation | Rubber-stamping: AI produces, human signs without engagement | Authorship preservation: user remains defensible expert author |
+
+A system can fail on any axis independently:
+
+- Tacked-on but well-designed sparring (a "find weaknesses"
+  button) is still tacked-on (axis 1 failure).
+- Intertwined but answer-machine (AI runs the office, human
+  rubber-stamps) breaks axes 2 and 3.
+- Intertwined sparring that produces work the user can't defend
+  (no audit trail, opaque reasoning, no engagement with
+  judgment calls) breaks axis 3.
+
+PBS aims for all three: **intertwined sparring partnership in
+service of defensible authorship.**
+
+The contrast that makes axis 1 concrete:
 
 | Tacked-on AI | Intertwined AI |
 |---|---|
@@ -109,6 +145,231 @@ that makes intertwining viable. Without them, intertwining
 collapses — either back to tacked-on (low-trust, every output
 checked) or forward into "AI runs the office" (false-trust,
 undetectable drift). Both fail.
+
+## Sparring partner, not answer machine
+
+The second axis. Even an intertwined AI can fail badly if it
+operates in answer-machine mode.
+
+### The research
+
+Theoretical neuroscientist and cognitive scientist **Vivienne Ming**
+ran an experiment (reported in Wall Street Journal; expanded in her
+book *Robot-Proof: When Machines Have All The Answers, Build Better
+People*) testing human teams, AI teams, and human-AI hybrid teams
+at predicting real-world events against prediction markets. Three
+modes of hybrid interaction emerged, with starkly different
+outcomes:
+
+- **AI as oracle** (most hybrid teams): humans submitted AI's
+  answer as their own. Human contribution: zero. Performance:
+  same as AI alone.
+- **AI as validator** (some hybrid teams): humans asked AI to
+  support their preconceptions. Confirmation-bias loop;
+  sycophancy. Performance: **worse than AI alone.**
+- **AI as sparring partner** (5–10% of hybrid teams): humans
+  pushed back, demanded evidence, interrogated assumptions. AI
+  generated counter-arguments, surfaced doubts, resisted easy
+  answers. Performance: rivaled or beat prediction markets —
+  insights neither human nor AI alone could reach.
+
+Only the third mode produces the value. The first two waste
+the human partner — and the second actively degrades it.
+
+### The deeper warning
+
+Ming names the **Information-Exploration Paradox**: as the cost
+of information approaches zero, human exploration collapses.
+Students perform better on AI-assisted tasks, worse on
+everything afterward. Developers ship more code, understand it
+less. "We are slowly optimizing ourselves out of the loop."
+
+The capacities AI is consuming are precisely the ones that
+matter:
+
+- Capacity to be wrong in public and stay curious
+- Sitting with a question your phone could answer in three
+  seconds
+- Reading a confident, fluent AI response and asking "what's
+  missing?" instead of defaulting to "great, that's done"
+- Disagreeing with something that sounds authoritative and
+  trusting your instinct enough to follow it
+
+Most AI products are designed to deliver the answer before the
+user feels the discomfort of not having one. PBS aims for the
+opposite: deliver discomfort productively, in service of the
+user's growing capacity.
+
+### What this means architecturally (sparring requirements)
+
+Sparring-partner mode has its own architectural requirements,
+distinct from intertwining requirements:
+
+- **Counter-argument as first-class output.** Every significant
+  AI-generated argument or recommendation comes with the
+  strongest case against it. User reviews both. Borrows Ming's
+  specific recommendation: *"before you accept an AI's answer,
+  ask it for the strongest argument against itself."*
+- **Confidence calibration.** When AI is high-confidence, name
+  it and explicitly invite challenge. When low-confidence, name
+  uncertainty rather than hide it. Resist false-confidence
+  sycophancy.
+- **"What's missing?" as an explicit checkpoint.** Layered
+  review currently asks "are required elements present?" The
+  sparring extension also asks "what's absent that should be
+  considered?" Different question, different mode.
+- **Anti-sycophancy guard.** The orchestrator does not
+  capitulate to user disagreement without reason. If a position
+  is defensible, it defends. If user disagreement reveals a
+  real flaw, it updates. But it does not soften because the
+  user pushed back.
+- **Selective friction calibration.** PBS is **frictionless
+  except where you need to be.** Mechanical work — compile,
+  format, citation lookup, scaffold, routine cross-references —
+  is automated seamlessly. Friction is reserved for accountability
+  moments (send, lifecycle transitions) and judgment moments
+  (which argumentation type, scope changes, module decisions —
+  places where the user's expertise must engage). The
+  architectural question for any new feature: "is this mechanical
+  or judgment-bearing?" Automate the first; surface the second.
+- **Asymmetric knowledge respect.** Sparring is not between
+  equals. AI has breadth (legal corpus, prior projects, every
+  baustein); user has depth (this client, this Bürgermeister,
+  this political moment, deep tacit knowledge that never gets
+  written down). PBS surfaces the asymmetry rather than hiding
+  it: when the orchestrator proposes, it names "here's what I
+  know; here's what only you know that changes this; how does
+  your context apply?" Not "here's the answer," but "here's my
+  contribution to a question only you can fully answer."
+- **Commit to recommendations.** The orchestrator surfaces
+  decisions as recommendation + tradeoff, not as open menu.
+  Discussion emerges from the position taken; non-commitment
+  turns interaction into permission-seeking and breaks sparring
+  (you can't argue with a question; you can argue with a
+  position). Already in PROCEDURE.md Checkpoint 13: "commit to
+  a position the user can react to." The sparring framing
+  elevates it from style note to architectural requirement.
+- **Visible reasoning.** AI outputs come with reasoning, not
+  just verdicts. The user can interrogate the reasoning, not
+  just accept the conclusion.
+
+### Why text-first matters here
+
+Sparring is a text-shaped interaction. You can argue with text
+— push back, demand evidence, ask follow-ups, sit with a
+counter-argument. You cannot argue with a "summarize" button or
+an autocomplete suggestion. The CLI's pure text I/O is the
+most sparring-shaped surface possible.
+
+Speech-to-text counts (text-equivalent). GUIs that funnel
+through chat-shaped surfaces count. But GUIs that reduce
+interaction to button-presses and form-fills break sparring —
+they revert toward answer-machine mode by design. This is part
+of the category-collapse risk in frontend integrations: a host
+environment that doesn't support text-first discussion will
+collapse PBS into a tacked-on feature regardless of architectural
+intent.
+
+## Authorship preservation, not rubber-stamping
+
+The third axis. Even an intertwined AI in sparring mode can
+fail if the produced output isn't something the user can
+genuinely defend.
+
+### What PBS is and isn't
+
+PBS is **an output-producing tool for an expert practitioner.**
+It is not a teaching tool. The user is already an expert
+Begründungs-author with years of domain knowledge; PBS does
+not exist to make them a better Begründungs-writer. It exists
+to help them produce more Begründungen, more consistently,
+with better citation hygiene, in less time.
+
+But the produced Begründungen go out under the user's name.
+They get signed, sent to authorities, defended in Stellungnahme
+exchanges, debated in council meetings. The user is legally
+and professionally accountable for everything PBS produces on
+their behalf.
+
+This creates the third axis: **PBS produces output; the user
+remains the author.** Authorship in the professional/legal
+sense — capable of defending the output, accountable for what's
+signed, having engaged with the judgment calls. Capacity-
+building in the abstract is a side effect when it happens;
+authorship preservation is the actual purpose.
+
+### The defensibility test
+
+A sharp, operational test for whether the architecture is doing
+its job:
+
+> **Will the user be able to defend this output six months
+> from now under UNB challenge, having forgotten the details?**
+
+If yes — the user understood the judgment calls, the reasoning
+is reconstructable, the audit trail captures the why — the
+architecture works. If no — AI did the work, user signed; no
+engagement, no defense — that's authorship collapse, regardless
+of how good the output looked when shipped.
+
+This test cuts through edge cases:
+
+- A perfectly automated drafting feature that removes the
+  user's engagement with §45 argumentation choice fails
+  (user can't defend the choice later).
+- A "skip review" shortcut that bypasses layered review fails.
+- A summarization feature that compresses reasoning into pithy
+  bullet points (losing the chain) fails (defense requires the
+  full chain).
+- A fully automated send pipeline (no user review of the cover
+  mail) fails (the user owns the words sent under their name).
+
+All might pass axes 1 and 2 (intertwined, sparring-friendly in
+some sense). They fail axis 3.
+
+### What authorship preservation requires
+
+- **The user understands what they're signing** — visible
+  reasoning, not black-box outputs. Layered review preserves
+  this; rendering of the full reasoning chain at checkpoints
+  reinforces it.
+- **The user has engaged with judgment calls** — sparring
+  surfaces them; selective friction makes the user pause at
+  the right moments.
+- **The user is the explicit decision-maker at gates** — four-
+  way menu, send confirmations, lifecycle transitions are
+  authored, not automatic.
+- **The user can reconstruct *why* later** — audit trail (when
+  it lands), `decisions.md`, `module-decisions.md`, snapshots
+  all preserve the chain of reasoning for future challenge.
+- **AI does the labor; user provides the judgment + the
+  signature** — clear division. AI assembles, drafts, looks
+  up, formats, cross-references. User chooses argumentation
+  type, weighs alternatives, authorizes transitions, signs.
+
+### Trust + sparring + authorship together
+
+Three layers, three forms of protection:
+
+- **Trust infrastructure** (axis 1 mechanisms): protects the
+  user *from* the AI — no invented citations, no silent state
+  changes, no unauthorized sends.
+- **Sparring infrastructure** (axis 2): protects the user
+  *from comfortable but degrading interaction patterns* — no
+  oracle worship, no sycophancy loop, no easy answers
+  everywhere.
+- **Authorship preservation** (axis 3): protects the user's
+  *professional/legal standing* in everything PBS produces on
+  their behalf — no rubber-stamping, no signature without
+  engagement, no work the user can't defend.
+
+A system with full trust + sparring but weak authorship
+preservation produces accurate, well-reasoned drafts the user
+signs without understanding — works until challenged. A system
+with full authorship preservation but weak trust or sparring
+is engaged but unreliable — the user defends bad output well.
+PBS aims for all three, in service of work that is **correct,
+defensible, and genuinely the user's.**
 
 ## Implications and open questions
 
@@ -225,20 +486,50 @@ become use cases for possibility 3's hosted version.
 
 ## How to use this document
 
-- **Before adding any new feature**: check it against the
-  intertwining requirements list. Does it serve persistent-state /
-  orchestration / source-grounding / audit / continuous-awareness /
-  human-authority? If not, ask whether it belongs.
-- **Before adopting a frontend integration**: check whether it
-  exposes intertwined workflow or reduces PBS to a tacked-on
-  feature in someone else's tool. The first is a frontend; the
-  second is category collapse.
-- **When making architectural decisions**: trace back to this
-  thesis. The architecture is sound when it serves intertwining;
-  over-engineered when it adds layers that don't.
-- **When auditing for drift**: check that recent changes still
-  serve the thesis. Subtle shifts toward "AI feature catalog"
-  are the drift to watch for.
+Three checklists, one per axis:
+
+**Axis 1 — Workflow embedding (intertwining):**
+
+- Does the proposed feature serve persistent-state /
+  orchestration / source-grounding / audit / continuous-
+  awareness / human-authority? If discrete and disconnected,
+  ask whether it belongs.
+
+**Axis 2 — Interaction mode (sparring):**
+
+- Does the proposed feature support counter-argument /
+  confidence calibration / "what's missing?" checkpoints /
+  selective friction / asymmetric knowledge respect /
+  commit-to-recommendations / visible reasoning? Or does it
+  deliver easy answers, suppress uncertainty, automate
+  engagement away?
+
+**Axis 3 — Authorship preservation (defensibility):**
+
+- Will the user be able to defend the output six months from
+  now under challenge, having forgotten the details? Does the
+  feature preserve the user's role as expert author, or edge
+  them toward rubber-stamping?
+
+**For frontend integrations:**
+
+- Axis 1 check: does it expose intertwined workflow, or reduce
+  PBS to a tacked-on feature in someone else's tool?
+- Axis 2 check: does the frontend support text-first discussion,
+  or funnel through buttons that break sparring?
+- Axis 3 check: does the frontend preserve the user's visible
+  engagement with judgment calls, or hide them behind UX
+  convenience?
+
+**For drift audits:**
+
+- Has any recent addition collapsed PBS toward "AI feature
+  catalog" (axis 1 drift)?
+- Has any recent addition collapsed PBS toward "answer machine"
+  (axis 2 drift)?
+- Has any recent addition collapsed PBS toward "rubber-stamp
+  signing" (axis 3 drift)?
 
 This is the deepest anchor. ARCHITECTURE.md describes how the
-system is structured; this document describes why.
+system is structured; this document describes why and against
+what failure modes.
