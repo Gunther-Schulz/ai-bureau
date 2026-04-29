@@ -498,11 +498,116 @@ intertwined workflow, or does it reduce PBS to a "summarize this"
 plugin in someone else's tool? The first is a frontend; the
 second is category collapse.
 
+## PBS as pioneer instance
+
+All deployment possibilities below depend on a deeper purpose.
+PBS is **a pioneer instance of a category that doesn't yet
+exist mature in the market**: intertwined-AI-workflow +
+sparring-partner + authorship-preservation as integrated
+pattern in expert-practitioner work. The transferable IP is
+the architecture (meta-rules, trust mechanisms, three axes,
+scope orthogonality, MCP discipline); PBS-specific code is
+incidental.
+
+"Pioneer instance" is more accurate than "proving ground." A
+proving ground validates an existing thesis. PBS is doing more
+— *co-discovering* the architectural patterns through the work
+itself. The patterns don't pre-exist waiting to be proven; they
+emerge as the construction proceeds. The five-month design
+pass that produced this vision document, the meta-rules, the
+three-axis framing — that wasn't preparation for the work. It
+was the work.
+
+### Triple purpose, all simultaneous
+
+- **Working tool** for the practitioner's actual planning bureau
+  work. Precondition; without it, nothing real is being
+  validated. PBS must serve Gunther's daily output, or the
+  pioneer claim is empty.
+- **Proving ground** for the architectural patterns. Deliberate
+  IP capture; the meta-rules and decision rules are designed
+  to be transferable to other expert-practitioner domains.
+  What works for German planning bureau work should generalize
+  to legal, medical, engineering, accounting, etc. with domain
+  swap-out.
+- **Research lab** for discovering what AI-augmented expert
+  work can be. Construction-as-research: the architectural
+  discussions ARE the work, not preparation for it. We're not
+  proving a known architecture; we're co-discovering one.
+  This third purpose justifies the architectural depth even
+  before real-project density accumulates.
+
+### Implicit hierarchy among deployment possibilities
+
+Under the pioneer-instance framing, the three deployment
+possibilities below are not parallel — they form a sequence
+with implicit ranking:
+
+1. **Production + consulting** (primary). Pattern transfer is
+   the natural realization of pioneer IP. Other companies
+   adopt the architecture (with domain swap-out); PBS as
+   reference deployment + Gunther as consultant.
+2. **Sell to other Planungsbüros** (secondary). Productizing
+   creates tension with pioneering — products are rigid,
+   optimized for adoption rather than discovery. Possible
+   later, after patterns stabilize. Not a near-term goal.
+3. **SaaS / multi-frontend** (distant). Fully productized; the
+   pioneer phase is over by then. Years out, not months.
+
+Optimizing too early for productization (possibilities 2 or 3)
+sacrifices pioneer-instance value. Stay in pioneer mode until
+the patterns are mature enough to bear product weight.
+
+### The honest risks of one-user pioneering
+
+A pioneer instance with one user generates thin validation:
+
+- **Survivorship bias** — what works for Gunther might not
+  generalize.
+- **Architectural over-fitting** — optimized for one
+  practitioner's specific style.
+- **Low evidence sample** — few real-world tests to validate
+  patterns against.
+- **Confirmation bias** — the user also designed the
+  architecture; testing his own hypotheses.
+
+The triple-purpose framing partially addresses these (the
+research-lab role accepts that discovery, not just proof, is
+happening). But the risks are real and shouldn't be hand-
+waved. Validation strategy must acknowledge them and find ways
+to compensate — synthetic projects with expert review,
+historical-project replay, comparison with documented
+professional standards, etc. **The validation evidence types
+that count for a pioneer instance with sparse real-world tests
+are different from what counts for a productized tool with
+many users.** This is an open work area, not a solved problem.
+
+### Milestones (not a terminal state)
+
+There's no "proven" terminal state. Patterns evolve as the
+field matures. But there are milestones worth naming:
+
+- First month of fully-operational intertwined workflow.
+- First real-project test where source-grounding catches an
+  error.
+- First counter-argument from sparring that prevents a real
+  misstep.
+- First successful Stellungnahme defense traceable to
+  authorship-preservation infrastructure.
+- First cross-deployment of patterns to another domain
+  (consulting engagement; second deployment).
+
+These are the *evidence types* the pioneer instance generates
+over time. They accumulate as the system runs. None requires
+PBS to be "done."
+
 ## Three deployment possibilities
 
-Realistic futures for PBS as an instance of the intertwined-AI-
-workflow vision. All three reinforce the architecture as built;
-none demand stripping it back.
+Realistic futures for PBS as a pioneer instance of the
+intertwined-AI-workflow vision. All three reinforce the
+architecture as built; none demand stripping it back. Hierarchy
+under the pioneer framing is named above (production +
+consulting primary; selling secondary; SaaS distant).
 
 1. **Real production + testing/validation ground for consulting.**
    PBS runs as Gunther Schulz's actual planning bureau AND serves
