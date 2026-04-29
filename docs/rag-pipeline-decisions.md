@@ -33,6 +33,27 @@ page-image retrieval (ColPali). Defer table extraction.**
 | **Page-image retrieval** (ColPali) | YES | KNE-Anlagengestaltung diagrams + LUNG-MV Karten + future Hendrik Kartierberichte have non-trivial visual content. Re-ingesting all 57 entries to add image embeddings later is the cost we're avoiding. ColPali is bounded effort; RTX 5090 + 32GB VRAM handles it. |
 | **Table extraction** (Camelot/Tabula) | NO (defer) | Narrow value: Helgoländer species×distance is the highest-value table; isolated work. Can ingest tables as images via ColPali for now (Claude session reads them); precise structured extraction lands when first table-symbolic-query use case surfaces. |
 
+**Alternatives considered**:
+
+- **Defer all multimodal sub-pieces until first concrete need**:
+  rejected — re-ingesting 57 entries to add OCR/DRM/ColPali later
+  re-pays the OCR + ColPali compute cost, plus risk that early
+  bausteine cite text only available post-OCR. RTX 5090 capacity
+  is in surplus; cheaper now than retrofit.
+- **OCR everything indiscriminately** (including text-PDFs):
+  rejected — most KNE/BfN PDFs already carry extractable text;
+  OCR'ing them adds noise (OCR errors degrade text retrieval).
+  Ingest pipeline branches on PDF text-availability heuristic.
+- **Include table extraction in first ingest**: rejected — narrow
+  value, high per-PDF tuning cost (Camelot/Tabula), ColPali handles
+  visual representation adequately for Claude-session reading.
+
+**Revisit trigger**: first-run sample-search shows scanned PDFs
+missing from results despite OCR (OCR-quality issue); OR a
+table-symbolic-query use case surfaces (revisit table extraction);
+OR re-ingest cost proves cheap enough to add deferred sub-pieces
+in batch.
+
 ### A.2 LanceDB storage schema
 
 Page images stored as **filesystem references + LanceDB metadata**,
@@ -61,6 +82,21 @@ for diagram clarity.
   per `research-references` "single source of truth" principle;
   page images don't move
 
+**Alternatives considered**:
+
+- **Blob field in LanceDB**: rejected — slows hot-path queries,
+  bloats on-disk size, complicates backup/inspection.
+- **External object store** (S3/MinIO): rejected — fights
+  local-first / no-Docker stance for a 57-entry corpus.
+- **JPEG over PNG**: rejected — diagram clarity matters for
+  Bestandskarten + Anlagengestaltung detail; PNG size cost
+  negligible at this corpus scale.
+
+**Revisit trigger**: corpus grows past ~1000 PDFs (filesystem-ref
+scaling friction); OR backup/sync friction suggests blobs would
+be easier to manage; OR JPEG fidelity proves sufficient on
+real-usage patterns.
+
 ### A.3 New MCP tool surface
 
 ```
@@ -78,6 +114,21 @@ search_corpus(filter={modality: "image"})
 `read_corpus_file(path)` continues to return text only (existing
 behavior). New `read_corpus_page_image` is dedicated to image
 bytes for clarity.
+
+**Alternatives considered**:
+
+- **Extend `read_corpus_file` to return image bytes** (single
+  tool, modality discrimination by file-type): rejected — clarity
+  matters more than tool-count parsimony; image return is a
+  different return type.
+- **Inline image bytes in `search_corpus` results**: rejected —
+  bloats search payload, forces every caller to handle bytes.
+  Two-step (search returns hit+path; caller fetches bytes) is the
+  right pattern for token-budgeted image blocks.
+
+**Revisit trigger**: a skill consistently needs both text and
+image bytes from the same call (bundling would pay off); OR the
+path-then-fetch pattern proves a friction point in real use.
 
 ### A.4 Token-budget protocol for image content blocks
 
@@ -174,6 +225,26 @@ alongside LanceDB.**
   extraction not required at ingest time
 - **Simple storage**: SQLite single file alongside LanceDB
 
+**Alternatives considered**:
+
+- **§-graph at runtime** (extract on-demand from chunks at
+  query-time): rejected — repeats extraction cost per query, adds
+  runtime latency, loses ingest-time global view (transitive
+  citation chains can't be precomputed).
+- **Defer §-graph entirely** until first concrete need: rejected
+  — citation-aware skills (`verify-citations`, `validate-checklist`,
+  `draft-textteil-b/c`) are exactly the day-1 consumers; running
+  without graph means falling back to grep-the-corpus.
+- **LLM-extracted §-graph at ingest** (Claude session emits
+  citation edges): rejected — bounded extraction risk is low;
+  regex catches 90%+ of well-formed citations; LLM cost not
+  justified for the 10% edge cases.
+
+**Revisit trigger**: regex extraction shows <80% citation recall
+on real corpus (LLM extraction needed for the long tail); OR
+query patterns reveal symbolic-query use cases not anticipated
+(drives schema additions).
+
 ### B.2 Storage choice
 
 **SQLite** (over Kùzu / Neo4j / dedicated graph DB):
@@ -185,6 +256,26 @@ alongside LanceDB.**
 - Trade-off: graph traversal is SQL-with-recursive-CTEs, not
   Cypher; expressivity is fine for our query patterns
 - Path: `<references_root>/legal-graph.sqlite` (parallel to LanceDB)
+
+**Alternatives considered**:
+
+- **Kùzu** (embedded graph DB): rejected — Cypher is genuinely
+  better for some traversal queries, but the 57-entry corpus
+  doesn't justify a new dependency; SQLite recursive-CTEs handle
+  the queries we actually need.
+- **Neo4j**: rejected — full server, fights local-first /
+  no-Docker stance.
+- **NetworkX-on-disk** (Python in-process graph): rejected — not
+  durable across sessions, weaker query expressivity than SQL
+  recursive-CTE.
+- **Graph rows in LanceDB** (reuse existing vector store):
+  rejected — LanceDB is optimized for vector queries, not graph
+  traversals; mixing concerns degrades both.
+
+**Revisit trigger**: corpus grows past ~10K nodes/edges and
+recursive-CTE queries become slow (>100ms for typical traversals);
+OR a query pattern emerges that needs Cypher-like path expressions
+awkward to write in SQL.
 
 ### B.3 Schema sketch
 
@@ -232,6 +323,22 @@ For each chunk being indexed into LanceDB:
    bibliographic refs).
 5. Special handling for ruling text: extract which §s the
    ruling interprets → insert edges of type `interprets`.
+
+**Alternatives considered**:
+
+- **LLM extraction at ingest** (Claude reads each chunk and emits
+  edges): rejected as default — see B.1. Reserved as fallback if
+  regex recall proves inadequate.
+- **Spacy-NLP + custom rules**: rejected — heavy dependency for
+  marginal gain over regex on well-formed German legal citations.
+- **No edge typing** (treat all citations as undifferentiated
+  `references` edges): rejected — the `references` vs `interprets`
+  vs `cites` distinction is what makes graph queries useful.
+
+**Revisit trigger**: regex recall measurably bad (<80%) on real
+corpus AND missing citations are the load-bearing kind for skill
+behavior; OR a citation form not covered by current regex (BVerwG
+vs OLG vs OVG patterns differ) appears repeatedly.
 
 ### B.5 New MCP tool
 
@@ -299,14 +406,29 @@ Same source PDF chunked **twice**, one pipeline per modality:
 Chunks from both pipelines land in LanceDB with `modality`
 discriminator; query-time retrieval merges hits per A.5.
 
-### C.4 What did NOT need adding
+### C.4 What did NOT need adding (alternatives considered)
 
-- Sentence-level chunking: too granular; leads to over-fragmented
+- **Sentence-level chunking**: too granular; over-fragmented
   context. Skipped.
-- Document-level (whole-doc) chunking: too coarse; defeats
+- **Document-level (whole-doc) chunking**: too coarse; defeats
   retrieval purpose. Skipped.
-- Sliding-window: not needed given the four strategies cover
-  natural document boundaries.
+- **Sliding-window**: not needed given the four existing strategies
+  cover natural document boundaries.
+- **Extend `per-section` to handle long sections in-place** (split
+  internally without parent/child structure): rejected for C.2 —
+  loses the section-level coherent context that reranker can prefer
+  when the answer spans paragraphs.
+- **Single shared text+image chunking** (one chunk per page,
+  text+image together): rejected for C.3 — text retrieval benefits
+  from finer-grained chunks (paragraph/section); image retrieval
+  needs page-level. Forcing one shared granularity degrades both.
+
+**Revisit trigger** (across C): retrieval quality on first-run
+sample searches reveals a chunk-size mismatch (e.g. answers
+consistently span chunk boundaries — split too small; OR retrieved
+chunks consistently too noisy — split too large); OR a
+ruling/Leitfaden form emerges that doesn't match the existing four
+patterns (suggests a new strategy is warranted).
 
 ---
 
@@ -330,6 +452,28 @@ verified-against versions, comparison against manifest's
 `current_amendment_form`) lands as v2 ROADMAP work. The schema
 slot now is forward-compatible.
 
+**Alternatives considered**:
+
+- **No version field on bausteine** (rely on manifest
+  `current_amendment_form` alone): rejected — bausteine outlive
+  individual law amendments; without per-baustein version capture,
+  every law update would require re-validating every dependent
+  baustein from scratch instead of comparing-and-skipping.
+- **Hash-based versioning** (SHA of cited text): rejected — too
+  brittle (whitespace/format changes invalidate); the
+  amendment-form string is the human-meaningful version identifier
+  that the law publishes itself.
+- **Required (not optional) field**: rejected — would block early
+  baustein capture before `verify-citations` has run; optional
+  with strong recommendation lets the field populate as bausteine
+  pass through verification.
+
+**Revisit trigger**: first reference refresh shows the field is
+unpopulated on >50% of saved bausteine (suggests strong
+recommendation isn't enough — needs save-time gate); OR cited-text
+hash diffs prove more useful than amendment-form strings for
+detecting drift.
+
 ---
 
 ## Pipeline choices (1–3)
@@ -347,6 +491,24 @@ ColBERT-v2 is a ROADMAP item conditional on first-run
 sample-searches showing quality issues with bge-m3 on German legal
 text. Don't preempt; the conditional adoption path is documented
 in ROADMAP "Late-interaction retrieval (ColBERT-v2)".
+
+**Alternatives considered**:
+
+- **ColBERT-v2 from day 1**: rejected for now — late-interaction
+  models are heavier (per-token storage, per-query compute) and
+  bge-m3 is the proven multilingual baseline. Adopt conditionally.
+- **OpenAI text-embedding-3-large**: rejected — fights local-first
+  (external API dependency, ongoing per-query cost), and the
+  multilingual quality gap vs bge-m3 doesn't justify the trade-off
+  for German legal text.
+- **No reranker** (single-stage retrieval): rejected — first-stage
+  retrieval recall is reliable but precision benefits significantly
+  from reranking on well-formed German legal text.
+
+**Revisit trigger**: first-run sample searches show <70% relevance
+on top-5 reranked hits for typical legal queries (suggests model
+upgrade); OR ColBERT-v2 publishes a German-trained variant that
+materially outperforms bge-m3 on planning-domain corpora.
 
 ### 2. Query rewriting placement
 
@@ -366,6 +528,25 @@ Add HyDE selectively when first concrete value surfaces:
 Decomposition + expansion: add when concrete drafting need
 surfaces (e.g. multi-§-claim drafting needs decomposed retrieval).
 
+**Alternatives considered**:
+
+- **HyDE in first ingest as a default**: rejected — adds latency
+  + cost to every query without proven recall gain on German legal
+  text; defer until a use case (save-baustein dedupe) makes the
+  cost justifiable.
+- **Query decomposition by default**: rejected — most retrieval
+  queries in current skills are well-formed single-claim queries;
+  decomposition is overhead for the common case.
+- **Query expansion via synonym lookup**: rejected — German legal
+  vocabulary is precise (`Eingriff` ≠ `Beeinträchtigung` ≠
+  `Auswirkung`); naive synonym expansion injects noise.
+
+**Revisit trigger**: save-baustein dedupe shows poor near-duplicate
+detection (HyDE's first concrete consumer); OR multi-§-claim
+drafting workflow surfaces and decomposed retrieval is the natural
+fit; OR observed retrieval failures cluster on
+vocabulary-mismatch (suggests targeted expansion).
+
 ### 3. Reranker model choice
 
 **Verdict**: **bge-reranker-v2-m3 for first ingest.** Already
@@ -373,6 +554,22 @@ pinned in `pyproject.toml`.
 
 Switch to jina-reranker-multilingual if German legal text shows
 poor reranking quality during first-run sample-searches.
+
+**Alternatives considered**:
+
+- **jina-reranker-multilingual**: viable alternative, kept on the
+  shelf. Comparable quality on multilingual benchmarks; not
+  preempted only because bge-reranker-v2-m3 pairs naturally with
+  bge-m3 retriever (same model family, consistent training data).
+- **Cohere Rerank** (API-based): rejected — fights local-first and
+  adds per-query cost.
+- **No reranker, rely on retrieval scores**: rejected — see
+  pipeline choice 1; reranking is the precision lift.
+
+**Revisit trigger**: first-run sample searches show poor reranking
+on German planning-law queries (top-1 not the right answer when
+it should be); OR jina publishes a German-tuned variant with
+materially better benchmarks.
 
 ---
 
