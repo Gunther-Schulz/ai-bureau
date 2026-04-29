@@ -122,13 +122,55 @@ Smoke test results (all green):
   unrelated addresses return None ✓
 - All 5 integration adapters loadable; `probe()` returns ok ✓
 
-### ⏳ Pending — first task next session
+### ⏳ Pending — first tasks next session (revised work order)
+
+This session's design conversation surfaced a 5th architectural
+meta-rule (**execution locality**) and reordered the pre-RAG work.
+New order:
+
+1. **Backend Tier 1 MCP discovery tools** (NEW, must precede the
+   sweep) — `list_reference_manifests`, `list_doctypes_manifests`,
+   `list_skills`, `list_skeletons`, scope-aware `list_bausteine`.
+   Wraps existing Python in `config.py`. ~1-2h backend work.
+   See ROADMAP "Backend MCP discovery layer (Tier 1 — pre-RAG)".
+2. **Full skill-alignment sweep** — all 16 PBS skills, now
+   referencing the new MCP tools (no more Glob/Read fallbacks
+   for manifest enumeration) and declaring
+   `mcp_tools_required[]` + `mcp_tools_optional[]` +
+   `fallback_when_mcp_absent` in frontmatter per meta-rule 5.
+   Also includes baustein-format extension (item D below):
+   add `verified_against_version` field to `references[]`
+   entries in `save-baustein/references/format.md` to reserve
+   the schema slot for future reference-versioning logic.
+3. **Pre-RAG architectural decisions doc**
+   (`docs/rag-pipeline-decisions.md`) — promoted from "RAG-
+   options assessment" because three of its items are
+   architectural, not just pipeline choices. Each gets a
+   verdict (yes/no + reasoning) before any ingest code runs.
+   See "Pre-RAG architectural decisions" section below for
+   items A, B, C with framing.
+4. **Full pre-RAG architectural audit** (NEW final gate) —
+   coherence pass across ARCHITECTURE.md / ROADMAP.md /
+   HANDOFF.md / all 16 skills. Catch: cross-doc inconsistencies,
+   schema gaps (memory data records still have no migration
+   framework), missing test / logging / error-handling
+   conventions for backend, deployment shipping bundle for
+   second-office, and any drift introduced by the alignment
+   sweep itself. Surface findings; resolve or explicitly
+   defer-with-reasoning before RAG kickoff.
+5. **RAG kickoff** (unchanged).
+
+Reasoning for the reorder: skills written during the sweep should
+reference the canonical MCP tool API, not document a Glob fallback
+that will be deprecated. Building the tools first means the sweep
+encodes the right pattern from day one.
 
 **Full skill-alignment sweep** — all 16 PBS skills reviewed for
 consistency with this session's architectural realizations, BEFORE
 first-run RAG ingestion. Reasoning: this session changed a lot
 (scope orthogonality, layered manifests, new skills, iterate/rewrite
-patterns, baustein landing layout, references_used[] frontmatter).
+patterns, baustein landing layout, references_used[] frontmatter,
+**execution-locality meta-rule + frontmatter dependency declarations**).
 Existing skills were largely written before these emerged — they
 likely don't yet leverage or respect them. Aligning them BEFORE
 first user-visible sessions means the new architecture actually
@@ -141,8 +183,9 @@ references/):
 
 - **Scope orthogonality**: does it use
   `office_config.scope.{domains,states}` to filter bausteine /
-  references / doctypes? Does it walk `all_references_manifests()`
-  or assume the old flat federal-core?
+  references / doctypes? Does it walk the layered manifest set
+  via the new MCP tools (`list_reference_manifests`,
+  `list_doctypes_manifests`) or assume the old flat federal-core?
 - **Baustein landing site**: when it writes a baustein (save-
   baustein) or queries them, does it respect
   `memory/bausteine/{universal,domain/<X>,state/<X>}/` layout
@@ -152,15 +195,45 @@ references/):
   query rewriting where applicable (esp. baustein dedupe).
 - **Decision rules + entity types** (ARCHITECTURE.md): are
   generated artifacts placed per Rules 1–6 with the right entity
-  type (incl. new H = layered manifests, I = integration adapters)?
+  type (incl. H = layered manifests, I = integration adapters)?
 - **`references_used[]` frontmatter**: does the skill emit /
   maintain it on memory docs that name laws? Does it read it for
   staleness checks?
-- **Layered loaders**: does it call `cfg.all_references_manifests()`,
-  `cfg.all_doctypes_manifests()`, `app_universal_skeleton_for(...)`
-  + `app_domain_skeleton_for(...)` instead of hardcoded paths?
+- **MCP tools instead of Python/Glob**: does it call
+  `list_reference_manifests`, `list_doctypes_manifests`,
+  `list_skeletons`, `list_bausteine` (Tier 1 discovery tools)
+  instead of `cfg.all_references_manifests()`-style Python or
+  filesystem Glob fallbacks?
+- **Frontmatter dependency declarations** (NEW, meta-rule 5):
+  does SKILL.md frontmatter declare `mcp_tools_required[]`,
+  `mcp_tools_optional[]`, and `fallback_when_mcp_absent`? Are
+  the listed tools actually referenced in the skill body?
 - **Trigger description accuracy**: still matches what the skill
   actually does after this session's changes?
+
+**Concrete path / location decisions to make in the sweep**
+(small but real; surface explicitly so they're not hand-waved):
+
+- **Feedback entries' new layered location**. Today the spec at
+  `record-feedback/references/format.md` uses
+  `memory/universal/<domain>/feedback/<...>.md` (pre-orthogonality
+  path). Three plausible new homes:
+  1. `memory/bausteine/<scope>/<key>/feedback/<...>.md` —
+     under each baustein dir (clean co-location but feedback
+     isn't itself a baustein, it's *about* one).
+  2. `memory/feedback/<scope>/<key>/<...>.md` — parallel tree
+     to bausteine (sibling, mirrors layered shape).
+  3. `memory/bausteine/<scope>/<key>/_feedback/<...>.md` —
+     per-baustein subdir (tightest coupling).
+  Decide during the alignment sweep; record verdict in HANDOFF
+  follow-up.
+
+- **`memory/product-backlog.md` location**. Referenced by
+  orchestrator T6 capability-gap logging. Currently flat at
+  `memory/product-backlog.md`. Stays flat (it's app-wide, not
+  per-scope) or moves to `memory/universal/product-backlog.md`?
+  Default: stays flat — it's not scoped knowledge, it's
+  development backlog.
 
 **Five concrete refactor touchpoints already identified** (most
 urgent within the alignment sweep):
@@ -200,13 +273,66 @@ These are skill-protocol changes (markdown SKILL.md +
 (`search_corpus`, `read_corpus_file`, manifest accessors) already
 support what the protocols need.
 
-Then RAG-options assessment (BEFORE first ingest — re-ingesting 57
-entries through OCR + DRM-removal + multimodal pipelines is
-expensive, so decide pipeline shape first):
+Then **pre-RAG architectural decisions doc** (the upgraded
+"RAG-options assessment" — BEFORE first ingest because re-
+ingesting 57 entries through OCR + DRM-removal + multimodal
+pipelines is expensive, AND because three of the items below are
+architectural decisions, not just pipeline choices: deferring
+them means later data migration / re-processing).
 
-**Pre-ingest decisions to make** (ROADMAP items already drafted —
-this is the "which to wire in for first ingest, which to defer"
-pass):
+**Pre-RAG architectural decisions (A–D)** — must resolve with a
+verdict (yes/no + reasoning) before any ingest code is written:
+
+- **A. Multimodal storage schema (in LanceDB).** If we ingest
+  text-only and add multimodal later, every entry needs re-
+  processing. Decide:
+  - LanceDB schema: page images as blob fields, or filesystem
+    reference + LanceDB metadata?
+  - New MCP tool surface (`read_corpus_page_image` etc.) — how
+    image bytes flow back to the Claude session as image content
+    blocks.
+  - Token-budget protocol: cap on images-per-turn, deduplication
+    of large images across multiple hits.
+  - Co-existence rules: text-RAG and image-RAG both return
+    candidates → how does the reranker / orchestrator decide
+    which to surface?
+
+- **B. Legal §-graph extraction at ingest (yes/no).** If we
+  extract §-references at first ingest into a separate graph
+  store, schema and storage need designing now. If we defer to
+  a later post-process pass over already-chunked text, that's
+  one extra full pass over all 57 entries. Decide:
+  - Yes for first ingest? Then: storage choice (SQLite alongside
+    LanceDB? Kùzu? embedded graph?), entity types (law,
+    paragraph, citation, ruling, leitfaden), edge types
+    (references, interprets, applies-to, amends), extraction
+    logic (regex over chunked text as ingest stage).
+  - No? Then commit explicitly to the cost of a later re-process.
+
+- **C. Chunking strategy sanity-check.** Each manifest entry
+  specifies `chunking_strategy: per-paragraph | per-randnummer |
+  per-section | per-article`. Two questions worth resolving
+  before they're baked into LanceDB:
+  - Are the four strategies sufficient, or do we need hybrid
+    (e.g., per-section with per-paragraph sub-chunking)?
+  - Does multimodal change anything (page-image embeddings
+    have a different "chunk" concept than text)?
+  - If we change chunking later, we re-ingest. Cheap to nail now.
+
+- **D. Reference versioning fields in baustein frontmatter.**
+  SMALL but real schema reservation. Today `references[]`
+  entries don't track "verified against amendment X". Without
+  it, `verify-citations` can't tell whether a baustein was
+  validated against the current law version or an old one.
+  Adding the field LATER means baustein-format migration across
+  all saved bausteine. Resolution: add `verified_against_version`
+  field to `references[]` schema NOW (during the alignment
+  sweep — change to `save-baustein/references/format.md`).
+  Reserves the slot; actual versioning logic stays a v2 item.
+
+**Pre-ingest decisions to make** (the remaining items — pipeline
+choices, not architecture; ROADMAP items already drafted, this
+is the "which to wire in for first ingest, which to defer" pass):
 
 1. **Text-retrieval baseline**: stick with bge-m3 + cross-encoder
    reranker, or swap straight to ColBERT-v2 (RAGatouille/PLAID)?

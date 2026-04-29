@@ -11,6 +11,152 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ## v1.x — likely soon
 
+### Backend MCP discovery layer (Tier 1 — pre-RAG)
+
+**Why**: Today the layered manifest API (`cfg.all_references_manifests()`,
+`app_universal_skeleton_for(...)`, etc.) lives only as Python in
+`backend/.../config.py`. Skills can't call Python directly — they
+fall back to Glob/Read of `extensions/` which bypasses scope
+filtering and is non-deterministic. Closing this gap is the
+prerequisite for the alignment sweep + RAG kickoff: re-ingesting
+57 entries through a wrong pipeline is the cost we're avoiding,
+and the same logic applies to skill behavior — every skill
+referencing the manifest set should call a tool, not improvise.
+
+**Sketch (5 MCP tools)**:
+
+- `list_reference_manifests(scope_filter=true)` — wraps
+  `cfg.all_references_manifests()`. Returns
+  `[{path, layer, scope_key, entry_count, last_updated}, ...]`.
+  Default scope-filtered (only manifests in active
+  `scope.{domains,states}`); pass `scope_filter=false` for the
+  full union.
+- `list_doctypes_manifests(scope_filter=true)` — same shape for
+  doctype manifests; wraps `cfg.all_doctypes_manifests()`.
+- `list_skills()` — reads `plugin/skills/*/SKILL.md` frontmatter,
+  returns `[{name, version, description, trigger_phrases_excerpt,
+  mcp_tools_required, mcp_tools_optional, path}, ...]`. Replaces
+  the manually-maintained "Specialist routing" inventory in
+  orchestrator PROCEDURE.md with auto-discovery.
+- `list_skeletons(doctype)` — wraps `app_universal_skeleton_for(...)`
+  + `app_domain_skeleton_for(...)`. Returns the layered
+  universal + per-domain overlay set for a given doctype.
+- `list_bausteine(scope, scope_key=None)` — scope-aware
+  enumeration with new orthogonality semantics
+  (`universal | domain | state | project`). Replaces the stale
+  signature in skills referencing `global | domain | project`.
+
+**Order**: build these BEFORE the alignment sweep. Skills written
+in the sweep then reference the new tools by name (and declare
+them in `mcp_tools_required[]` per meta-rule 5).
+
+### Tier 2 MCP cross-reference tools (during first project work)
+
+**Why**: When `research-references` updates a law and needs to
+find every dependent baustein and memory doc, today there's no
+graph query. Already referenced as planned in `research-references`
+SKILL.md but not implemented.
+
+**Sketch**:
+
+- `find_bausteine_by_reference(law=, paragraph=, ruling=,
+  leitfaden=)` — scans baustein frontmatter `references[]` for
+  matches; returns paths.
+- `find_memory_docs_by_reference(...)` — same pattern for
+  cross-cutting memory docs declaring `references_used[]`
+  frontmatter.
+- `find_manifest_entry(id)` — single-entry lookup across the
+  union of in-scope manifests.
+
+Build when the first reference refresh fires and the manual
+fallback proves friction.
+
+### Tier 3 MCP introspection tools (deferred)
+
+**Why**: Skills currently know office-config schema field paths
+(`office_config.identity.signature_block` etc.); changes to schema
+ripple through every skill. Same for per-project state queries
+that today are file-grep.
+
+**Sketch**:
+
+- `get_active_practices()`, `get_signature_block(practice?)`,
+  `get_office_identity()` — schema introspection helpers.
+- `get_project_state(project)`, `list_snapshots(project)`,
+  `list_correspondence(project, since?)`, `list_decisions(project)`
+  — per-project state queries.
+- `list_office_style_overlays()` — returns the active `.sty`
+  stack per active domains.
+
+Don't pre-build. Add when first redundant string-matching is
+observed in real skill code.
+
+### Schema migration framework for memory data records
+
+**Why**: Office-config has migrations
+(`office_config_migrations/v<N>_to_v<N+1>.py`) that forward-migrate
+on load. Type D memory data records (bausteine, manifests'
+entries, state.md, feedback entries) have no equivalent. Today
+that's fine because PBS has zero saved bausteine — but the moment
+first ingest writes any, the next schema change becomes painful
+(touch every file by hand). The new `verified_against_version`
+field added to `references[]` during the alignment sweep is a
+schema reservation precisely to avoid this pain; the next
+addition still needs migration support.
+
+**Sketch**:
+- Mirror the office-config pattern: `pbs_core/memory_migrations/`
+  per-record-kind (bausteine, manifests, state, feedback) with
+  `migrate_v<N>_to_v<N+1>(data: dict) -> dict` exporters.
+- Each record type carries `schema_version: <N>` in frontmatter.
+- The MCP tool that writes (e.g., `save_baustein`,
+  `update_project_state`) checks the schema version on read and
+  applies migrations in-memory; writes back with updated version.
+- `setup-office` reconcile mode triggers a sweep migration of
+  all in-scope records.
+- Decision-rule update in ARCHITECTURE.md: Type D record edits
+  go through MCP tools that handle migration, never direct Edit.
+
+**Pull-forward trigger**: first user-visible session that saves
+a baustein. Until then, no baustein exists to migrate.
+
+### Backend conventions doc (testing / logging / error handling)
+
+**Why**: Meta-rule 5 introduces the `pbs_core` discipline (plain
+Python; testable). Currently no test setup, no test conventions,
+no logging strategy, no MCP error format spec. As the backend
+grows (Tier 1 tools, RAG pipeline, etc.) these gaps cause
+inconsistent error UX and untested code paths.
+
+**Sketch (small doc, ~1 page)**: at `backend/CONVENTIONS.md`:
+- Test layout: `backend/mcp-server/tests/` mirrors source tree;
+  pytest as runner; fixtures for office_config + temp memory
+  tree.
+- Logging: `pbs_core` logs via stdlib `logging` to stderr;
+  level via env var. MCP layer captures + re-emits as MCP
+  notifications when relevant.
+- Error handling: `pbs_core` raises typed exceptions
+  (`ManifestNotFound`, `SchemaValidationError`, etc.); MCP tool
+  wrappers translate to structured MCP errors with `code` +
+  `message` + `suggestion` fields.
+- Anti-patterns: bare `except`; printing instead of logging;
+  silently degraded execution without surfacing.
+
+**Pull-forward trigger**: write the doc when Tier 1 MCP tools
+land — that's when the conventions get applied for the first
+time. Don't pre-build before there's code to apply them to.
+
+### SKILL.md version-bump reminder hook
+
+**Why**: Per meta-rule 5, hooks earn their keep on out-of-band
+detection. Pure-advisory exception worth a 5-line
+PostToolUse hook: when `plugin/skills/**/SKILL.md` is edited,
+remind to bump `version:` and run `dev-link.sh`. No data
+integrity at stake — just discipline.
+
+**Order**: defer until a real version-bump miss causes friction.
+Cheap to add later.
+
 ### Email adapter implementations
 
 **Why**: integration adapter scaffolding is in place
@@ -280,6 +426,34 @@ out of ROADMAP into immediate next-session work. See HANDOFF.md
 
 ## v1.x-v2 — when first project needs it
 
+### Plugin / deployment shipping bundle
+
+**Why**: PBS is designed deployable to other German Planungsbüros
+(per ARCHITECTURE.md meta-rule 1: app vs office). What gets
+shipped to a second office is currently undocumented. Without
+a coherent bundle definition, second-deployment friction is
+unknown and the deployment story stays implicit.
+
+**Sketch (small doc, ~1 page)**: at `docs/deployment.md`:
+- Plugin payload: `plugin/skills/`, `plugin/templates/`,
+  `plugin.json`, `dev-link.sh`. Versioned via plugin.json.
+- Backend payload: `backend/mcp-server/` with pinned deps.
+- Memory payload: `memory/universal/` (knowledge content),
+  `memory/bausteine/` skeleton (empty subdirs for layered
+  scope), `memory/product-backlog.md` template.
+- Extensions payload: `extensions/universal/` (manifests),
+  `extensions/{domain,state}/` skeletons (placeholder dirs for
+  unselected scope keys).
+- Office-config: not shipped — generated by `setup-office` per
+  deployment.
+- Docs: README → setup-office, ARCHITECTURE.md, ROADMAP.md.
+- What is NOT shipped: `_ai-references/` corpus, per-project
+  data, office-config.yaml.
+
+**Pull-forward trigger**: first concrete second-deployment
+conversation (another Planungsbüro evaluates the app, or PBS
+themselves wants to test fresh-install on a clean machine).
+
 ### Maps/GIS integration
 
 **Why**: Joint Schulz+Hendrik projects use both PBS text-document
@@ -438,6 +612,26 @@ When a new MCP becomes useful (or new internal adapter, or new skill),
 making it *known* to the orchestrator + queryable by capability is
 itself a gap.
 
+**Pull-forward triggers** (don't build until at least one fires):
+
+- **Capability-vocabulary friction** — orchestrator string-
+  matching tool descriptions becomes unwieldy; routing decisions
+  are repeatedly wrong because the orchestrator can't query
+  callables by capability.
+- **Total callable count exceeds ~50** — current count is ~30
+  (16 skills + 5 integration adapters + ~10 planned MCP tools +
+  1 external MCP `gis-utils`). At this scale the orchestrator
+  holds the inventory in context fine; at 50+ a registry pays
+  off.
+- **Second deployment** — PBS-only doesn't justify cross-office
+  knowledge propagation; a second Planungsbüro adopting the app
+  forces it (registry entries become reusable across offices).
+
+Until at least one trigger fires, the Tier 1 `list_skills()` MCP
+tool + frontmatter `mcp_tools_required[]` declarations + snake_case
+tool naming convention (per ARCHITECTURE.md meta-rule 5) cover the
+immediate need with forward-compatible string IDs.
+
 **Sketch (topic-level)**:
 - A 4th layered manifest type alongside references + doctypes:
   `integrations-manifest.yaml` per scope (universal / domain / state).
@@ -500,6 +694,14 @@ but distribution + collaborative review still happens out-of-band
 and clients to comment / annotate / discuss in-place — and for those
 annotations to come back into the workflow — we need a web UI.
 Self-hosted in Coolify (PBS's existing PaaS).
+
+**Architectural trigger**: implementing this is the load-bearing
+event for the `pbs_core` / `pbs_mcp` physical split (see
+ARCHITECTURE.md → Backend organization). Until the web UI lands,
+the conceptual split inside the monolithic MCP module is
+sufficient; the web UI is the first concrete non-MCP consumer
+that forces promoting `pbs_core` to its own package + wrapping it
+as a persistent service.
 
 **Sketch (topic-level)**:
 - Web app receives uploads from the backend (PDFs + metadata
@@ -620,15 +822,34 @@ session.
 
 Similar pattern for `style-auditor` (deep style+korrektur sweep).
 
-### Hooks / event triggers
+### Hooks / event triggers (revised per meta-rule 5)
 
-**Why**: Currently no hooks. Possible future events:
-- `state-transition` — log to `decisions.md` automatically
-- `snapshot-on-send` — auto-create snapshot when send-gate fires
-- `pre-compile` — auto-run validate-latex-style as gate
-- `post-ingest` — auto-flag affected bausteine after research-references
+**Why (revised)**: Per meta-rule 5 (execution locality), most
+operations formerly imagined as hooks belong inside MCP tools as
+atomic side-effects, not as separate hook scripts:
 
-Defer until specific friction emerges.
+- `state-transition` → logged inside the `update_project_state`
+  MCP tool, not a hook on Edit.
+- `snapshot-on-send` → atomic write inside the snapshot-creation
+  MCP tool, not a hook on Bash send-mail.
+- `pre-compile validate-latex-style` → step inside `compile_latex`
+  MCP tool's pipeline, not a PreToolUse hook.
+- `post-ingest baustein-flag` → atomic in the `ingest_paths` MCP
+  tool's transaction (already planned per `research-references`
+  SKILL.md cross-reference handling).
+
+The genuinely hook-shaped niche that survives is **out-of-band
+file change detection between sessions** — when state changes
+outside Claude Code's view (user manually edits a manifest YAML
+in a text editor; hidrive sync brings in changes from a sibling
+practice; an external script touches `office-config.yaml`). A
+SessionStart hook could detect mtime deltas against a
+last-session marker and trigger validation / cross-ref re-eval
+before the orchestrator does its first action.
+
+**Defer**: until concrete out-of-band-change friction is observed
+in real use. Pre-designing for hypothetical out-of-band edits
+adds enforcement scaffolding nobody asked for.
 
 ---
 

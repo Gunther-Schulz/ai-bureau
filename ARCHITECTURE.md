@@ -4,11 +4,15 @@ This document is the canonical placement reference. When in doubt
 about where new content belongs, walk the meta-rules first, then the
 decision rules below.
 
-Status: **v0.3 (post-orthogonality)**.
+Status: **v0.4 (post-execution-locality)**.
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality meta-rule live, layered
   manifests in repo, integration adapter scaffolding deployed,
   schema migration framework in place.
+- v0.3 → v0.4: execution-locality meta-rule (validation in MCP
+  gates; skills declare `mcp_tools_required[]` in frontmatter;
+  `settings.json` permissions for static path blocks; hooks
+  deferred until concrete need).
 
 ## Maintenance discipline
 
@@ -232,6 +236,103 @@ and navigation, never authoring. The §-label "§3 Abs.2 BauGB"
 appearing in memory does NOT satisfy the citation-evidence
 requirement when drafting.
 
+## Meta-rule: execution locality (where deterministic work lives)
+
+The fifth meta-rule. About *where* operations execute, not where
+content lives.
+
+**Core principle.** Operations with a single deterministic correct
+execution — validation, schema enforcement, transactional writes,
+side-effect coupling, cross-reference consistency, computed
+properties (hashes, indexes), migrations — live in MCP gates
+(Type E backend code, exposed as MCP tools). Skills are for
+judgment, conversation, and surfacing decisions; they orchestrate
+MCP tool calls, never reimplement what those tools do.
+
+**The persistence-layer boundary.** Cleanest line: *anything that
+touches durable state goes through MCP; session-ephemeral state
+stays in skills.* The orchestrator's watch list, in-conversation
+findings, surfacings queued during a turn — all skill. Writes to
+bausteine, manifests, state.md, office-config — all MCP.
+
+**Deterministic vs interpretive verdicts.** Validation with a single
+right answer (frontmatter shape, ISO state code, schema conformance,
+citation drift on exact-string match) is deterministic → MCP.
+Validation requiring interpretation (does this baustein content
+actually concern §44 BNatSchG? does this language read as collegiate
+or formal?) is interpretive → skill, surfaces verdict to user. When
+unclear, ask: would two implementations agree byte-for-byte on the
+verdict? If yes, MCP. If no, skill.
+
+**Enumeration-vs-selection corollary.** "List the candidates" is
+deterministic, scope-aware → MCP (`list_bausteine`,
+`list_reference_manifests`). "Pick the right one for this drafting
+context" is judgment → skill. Both halves run in the same workflow;
+the skill calls the MCP tool, then interprets the candidates.
+
+**Static path-based access control belongs in `settings.json`,
+not in code.** Where a path should never be written outside a
+specific MCP tool's context (e.g., direct Write to
+`memory/bausteine/**`), use a permission deny rule. Cheaper than
+scaffolding code paths that re-enforce what the harness can
+already block.
+
+**Skill frontmatter declares MCP-tool dependencies.** Every skill's
+`SKILL.md` frontmatter declares which MCP tools it relies on:
+
+```yaml
+---
+name: save-baustein
+mcp_tools_required: [save_baustein, list_bausteine]
+mcp_tools_optional: [find_similar_bausteine]
+fallback_when_mcp_absent: "warn user; degrade to filesystem write without dedupe check"
+---
+```
+
+Semantics:
+
+- `mcp_tools_required[]` — skill cannot operate correctly without
+  these. If unavailable at invocation time, fail loud: surface to
+  user, suggest setup-office reconcile or backend-restart.
+- `mcp_tools_optional[]` — skill can degrade gracefully without
+  these. Document the degradation in `fallback_when_mcp_absent`.
+- `fallback_when_mcp_absent` — explicit degradation contract.
+  Skills without a meaningful fallback omit the field and treat
+  all dependencies as required.
+
+This makes dependencies machine-checkable, enables the future
+integration registry (designed extension; see below) to query
+"which skills depend on tool X?", and forces skill authors to think
+about graceful-failure semantics before shipping. For pre-existing
+skills, declarations are added during the alignment sweep — that's
+the canonical pre-RAG checklist item.
+
+**MCP tool naming convention.** Every MCP tool exposed by the
+backend uses snake_case matching the Python function name in
+`pbs_core/`. `pbs_core.save_baustein()` exposes as MCP tool
+`save_baustein`; `pbs_core.list_reference_manifests()` as
+`list_reference_manifests`. Stable IDs that survive future
+refactoring. Frontmatter declarations like
+`mcp_tools_required: [save_baustein]` will resolve as foreign keys
+into the future integration registry (designed extension; see
+below) without schema migration of existing skills — string IDs
+today are forward-compatible with registry-resolved IDs later.
+
+**Linting (today: convention; future: automated).** A meta-skill
+or backend audit can check: every tool name in
+`mcp_tools_required[]` exists in the MCP server's tool registry;
+every tool referenced in the skill body appears in the frontmatter
+declarations. Today this is review discipline; once the
+integration registry lands, it becomes an automated check.
+
+**On hooks.** PBS does not currently use plugin-level hooks. The
+validation locality principle holds without them — MCP gates +
+`settings.json` permissions cover both deterministic execution
+and path-based access control. If a future need emerges (out-of-
+band file change detection between sessions is the most plausible
+candidate), hooks would be the natural place; until then, this
+layer is not designed.
+
 ## The nine entity types
 
 | # | Type | Where | Frontmatter | What it does |
@@ -245,6 +346,37 @@ requirement when drafting.
 | **G** | **Office config (per-deployment)** | Outside the repo: `$PBS_OFFICE_CONFIG` or `~/.config/pbs-bureau/office.yaml`. Office-style.sty + state-overlay manifests live under `paths.state_root`. | YAML schema v2 (see `docs/office-config.schema.yaml`) | Per-deployment values: identity, paths, practices, scope, manifest map, integrations, LaTeX styling. NOT versioned with the app. |
 | **H** | **Layered manifests** | `extensions/{universal,domain/<X>,state/<X>}/{references-manifest,doctypes}.yaml` | YAML with `scope`/`scope_key` self-describing fields | Reference + doctype registries layered along the (universal × domain × state) axes; loader walks the union per office's scope. |
 | **I** | **Integration adapters** | `backend/mcp-server/src/pbs_mcp/integrations/<class>/{protocol,<adapter-name>}.py` | Python; `Adapter` class implements the protocol | Pluggable adapters for external systems (email, calendar, scanner, phone, accounting); selected via `office_config.integrations.<class>.adapter`. |
+
+## Backend organization (Type E internals)
+
+Backend code (Type E) splits conceptually into two layers:
+
+- **`pbs_core/`** (planned package; currently part of `pbs_mcp/`):
+  plain Python — config schema, validation, layered manifest API,
+  integration adapters, RAG pipeline, project lifecycle, audit
+  trail. Takes Python args, returns Python objects, raises Python
+  exceptions. Knows nothing about MCP.
+- **`pbs_mcp/tools/`**: thin MCP tool definitions that wrap
+  `pbs_core` functions — parse JSON args, call core, format
+  response, translate exceptions to MCP errors. Contains no
+  business logic.
+
+This discipline applies starting now even though the two layers
+live in the same module today. Consumer-side of meta-rule 5:
+meta-rule 5 says "validation in MCP gates"; this organization
+adds "MCP gates are themselves thin wrappers around plain Python
+core."
+
+When the first non-MCP consumer emerges (the web UI on ROADMAP
+being the load-bearing case), the physical split — promoting
+`pbs_core` to its own package, optionally wrapping it as a
+persistent service — is a small refactor, not a re-architecture.
+
+**Don't do the physical split until a real second consumer
+exists.** The conceptual discipline gives most of the
+maintainability + testability benefit at near-zero cost; the
+physical split adds packaging/deployment complexity that doesn't
+pay off without a second frontend.
 
 ## The decision rules (apply IN ORDER until classified)
 
@@ -299,6 +431,7 @@ declare them in `references_used[]` frontmatter.
 | A future `<project>/_ai/state.md` | Rule 2: instance record. | `D` |
 | `orchestrator` SKILL.md | Rule 5: auto-loaded on trigger match. | `A` |
 | `save-baustein` SKILL.md | Rule 5: same. | `A` |
+| `save-baustein` declares `mcp_tools_required: [save_baustein, list_bausteine]` in frontmatter | Meta-rule 5: skill is the orchestrator; MCP tool is the validator. Frontmatter makes the dependency explicit. | `A` (skill, with new convention) |
 
 ## What changes invalidate what
 
