@@ -353,6 +353,17 @@ than landing the new shape first.
         Model-Armor + Agent-Simulation analogues.
     - Output: `docs/decisions/a2a-and-gemini-pattern-emulation.md`
       documenting both sides per row.
+    - **Preliminary leans for proactive (B)** (to confirm at
+      session 8):
+      - **Adopt**: A2A-shape internal messaging (skill→agent +
+        department→department), agent-identity as first-class
+        in audit trail, data-classification annotations on
+        contract-bearing Pydantic fields
+      - **Defer (document path)**: HTTP MCP endpoints, session-
+        spanning office-memory concept, Model-Armor-equivalent
+      - **Defer to v2**: Agent-Simulation-equivalent stress
+        testing
+      - **Skip**: model layer (no archetype difference)
     - Scope: 1 session (was ~half-day; expanded for proactive
       emulation per row of comparison table).
     - Order rationale: smallest commitment, informs every

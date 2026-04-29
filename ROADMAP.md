@@ -475,8 +475,35 @@ path" entries.
   - **`record_audit_event` MCP tool**: events that originate
     from another A2A peer should be distinguishable from local
     events. Add `origin_agent_card?: str` field?
-- **Proactive (B) — Gemini Enterprise pattern emulation
-  questions** (per row of v2 comparison table):
+- **Proactive (B) — preliminary leans** (to be confirmed at
+  session 8 when commitment runs; current best guesses based on
+  cost-cheap / load-bearing / pre-RAG-critical analysis):
+  - **Likely adopt now** (additive, cost-cheap, ties into other
+    pre-RAG commitments):
+    - A2A-shape internal skill→agent + department→department
+      messaging (same protocol shape internal + external; ties
+      to commitment #12 department modularization)
+    - Agent identity as first-class in audit trail (skill-as-
+      agent vs human-as-actor vs A2A-peer-as-agent — additive
+      Pydantic fields)
+    - Data classification annotations on contract-bearing
+      Pydantic fields (PII, business-sensitive, public — Agent
+      Gateway analogue, additive field annotations)
+  - **Likely defer** (real but not pre-RAG-critical; document
+    path for future):
+    - HTTP MCP endpoints alongside stdio (solo deployment doesn't
+      need it; documented for future scale-out trigger)
+    - Session-spanning "office-memory" concept (current memory
+      taxonomy probably sufficient for solo; revisit if needed)
+    - Model Armor analogue (input validation against prompt
+      injection at MCP gate boundary)
+  - **Defer to v2** (heavy work, post-launch):
+    - Agent Simulation analogue (stress-test pattern for cross-
+      skill workflows; partial coverage via audit + design-review)
+  - **Skip** (no archetype difference):
+    - Model layer (Claude in both archetypes; no decision needed)
+
+- **Proactive (B) — per-row analysis** (per v2 comparison table):
   - **Orchestrator (single Opus session vs N agents via A2A)**:
     we partially adopt N-agent pattern via plugin agents
     (commitment #11). Decision: how A2A-shaped should our
