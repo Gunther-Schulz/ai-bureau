@@ -745,44 +745,96 @@ partner-built-comparison insight) — see `ARCHITECTURE.md`
   means redoing slash command names + skill frontmatter once
   #12 lands.
 
-**13. Cloud deployment architecture decision** (session 7,
+**13. Deployment-mode flexibility architecture** (session 7,
 post-Cowork-research insight) — see ROADMAP v2 "Gemini Enterprise
 migration path" + commitment #10's HTTP MCP decision.
 
-- **Why pre-RAG**: Gunther's local PBS use can stay local — for
-  the consulting offering, cloud deployment is the better
-  deployment model. Each consulting client needs cloud-hosted
-  PBS instance (or self-hosted Docker) accessible via Cowork's
-  HTTP MCP pattern (same shape as Anthropic's `legal` plugin
-  uses `mcp.box.com` etc.). Architectural decision must happen
-  before backend is structured around local-only assumptions —
-  pre-RAG window prevents "rewrite the persistence layer once
-  data accumulates locally."
+- **Why pre-RAG**: the architectural commitment is **deployment-
+  mode flexibility**, not "pick a mode." Per-deployment decisions
+  (local vs cloud, which cloud, on-prem, hybrid) happen
+  case-by-case based on client needs, compliance constraints,
+  budget, scale. What matters pre-RAG: the architecture supports
+  any of these without rewriting. Designing flexibility post-RAG
+  (after data accumulates in one specific mode's shape) is
+  expensive; designing it pre-RAG is cheap.
 
-- **The deployment model in plain terms**:
-  - **Local on user's machine**: just Claude Code (or Cowork)
-    installed. No Python, no LanceDB, no local files.
-  - **In cloud**: HTTP MCP server + ALL persistence (state.md
-    per project, audit-trail.jsonl, bausteine, manifests,
-    office-config, decisions/file-maps/correspondence-logs/
-    snapshots) + vector store + embedding service + LaTeX
-    compile service.
-  - **Connection**: `.mcp.json` points at
-    `https://pbs.<client>.example.com/mcp`. HTTPS over the wire.
-  - **Onboarding new client employee**: install Claude Code
-    locally, configure endpoint, done. Zero local backend setup.
-  - **Multi-user at one client office**: receptionist + planner
-    + bookkeeper at the same bureau access the shared backend.
-  - **Cross-device**: laptop ↔ desktop ↔ mobile, same data,
-    no sync setup.
-  - **Compliance**: German client gets EU-region cloud instance
-    for GDPR; their data stays in jurisdiction.
-  - **Trade-offs honestly**: internet required (no offline
-    mode), HTTP latency (vs stdio's zero-latency local), ongoing
-    cloud infra cost.
-  - **Hybrid**: Gunther's PBS daily use can stay local mode
-    (faster, offline-capable, free). Consulting deployments are
-    cloud-only. Same backend code, two deployment modes.
+- **The flexibility commitment**:
+  Three deployment modes the architecture must support without
+  refactoring:
+  - **Local** (current): stdio MCP, all persistence in local
+    files, no auth, single user. Gunther's daily PBS use; some
+    consulting clients who want their data on their own laptop.
+  - **Cloud-hosted**: HTTP MCP, all persistence in cloud
+    storage, auth required, multi-user-per-office. Consulting
+    clients who want a managed service. Cloud provider chosen
+    per client (Cloud Run / Fly.io / Render / managed K8s /
+    on-prem K8s).
+  - **Hybrid**: HTTP MCP with persistence split — some local
+    (per-user cache, sensitive working state), some cloud
+    (shared bausteine, audit trail, manifests). For clients
+    with strict compliance requirements where some data can't
+    leave premises but other data can.
+
+  All three run the same backend code. The transport layer
+  (stdio vs HTTP), persistence layer (local files vs cloud
+  storage vs hybrid), and auth layer (off vs API key vs OAuth
+  vs A2A signed agent cards) are pluggable.
+
+- **What "local Claude install + flexible backend" enables**:
+  - Local backend: Gunther's offline-capable, free, fast
+  - Cloud backend: multi-user per-client office, cross-device,
+    cloud-managed backups, EU-region GDPR-friendly for German
+    clients
+  - Hybrid: compliance-strict clients (some on-prem, some cloud)
+  - In all cases, **local install is just Claude Code** (or
+    Cowork). The local install never carries the backend
+    weight; it's always just the client.
+
+- **Concrete decisions for the gate** (1-2 sessions design):
+  - **Transport layer abstraction**: backend exposes both stdio
+    (in-process) and HTTP (long-running service). Same handlers,
+    different transports. Already adopted via #10's HTTP MCP
+    decision.
+  - **Persistence layer abstraction**: pluggable storage backend
+    interface. Implementations:
+    - `LocalFsBackend` — current state.md / `_ai/` / LanceDB-on-
+      disk pattern
+    - `CloudObjectBackend` — S3/GCS/R2 for documents, managed
+      vector service or self-hosted vector DB for embeddings
+    - `HybridBackend` — declares per-entity routing rules
+    - Pydantic models stay identical; backend interface is
+      separate
+  - **Auth layer abstraction**: pluggable auth modes. None
+    (local), API key, OAuth, A2A signed agent cards.
+  - **Compute infrastructure**: NOT decided pre-RAG (per-
+    deployment decision). The architecture supports
+    containerized deploy on any IaaS / PaaS. Initial
+    Dockerfile + HTTP MCP skeleton ships as proof-of-shape;
+    actual cloud deployment chosen per consulting engagement.
+  - **Migration tools**: between deployment modes (local ↔
+    cloud, cloud-A ↔ cloud-B, etc.). Bidirectional,
+    well-tested. So a client can start local, migrate to cloud
+    as they grow, migrate to a different cloud if needed.
+  - **Cost model for consulting deployments**: NOT decided
+    pre-RAG. Per-engagement decision based on client size +
+    compliance + budget. Architecture doesn't constrain the
+    pricing model.
+- **Output**: decision record `docs/decisions/deployment-mode-
+  flexibility.md` documenting the abstraction interfaces +
+  trade-offs per mode + decision tree for choosing modes per
+  engagement. Plus minimum-viable proof-of-shape: Dockerfile +
+  HTTP MCP skeleton + persistence-layer interface design.
+- **Scope**:
+  - Pre-RAG: design + decision record + abstraction interfaces +
+    Dockerfile/HTTP skeleton (1-2 sessions)
+  - Post-RAG: full implementations of each backend (CloudObject,
+    Hybrid), auth modes, migration tools, end-to-end testing
+    of each mode (3-5 sessions, post-launch)
+- **Order note**: execute FOURTH in pre-RAG queue (after
+  #10/#12/#11). Reason: needs #11's plugin shape decisions
+  (Cowork integration) settled, but the persistence-layer
+  abstraction must influence #6/#7/#9 schema work. So #13
+  design before #6/#7/#9 implementation.
 - **The constraint and the fix**: today's pbs_mcp is stdio-based,
   spawned per-session, runs on user's machine. For consulting
   deployments at other companies, cloud is better — clients

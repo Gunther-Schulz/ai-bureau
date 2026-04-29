@@ -220,12 +220,23 @@ deployment added):
 Session 8:    #10 (A2A + Gemini emulation gate)               1 session
 Session 9:    #12 (department modularization design)          1 session
 Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 14-15: #13 (cloud deployment architecture)            1-2 sessions
+Session 14-15: #13 (deployment-mode flexibility design)       1-2 sessions
 Session 16+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus
 ```
+
+**Note on commitment #13**: the architectural commitment is
+**deployment-mode flexibility**, not picking a specific mode.
+Three modes supported without refactoring: local (stdio,
+local files, no auth — Gunther's offline-capable use), cloud-
+hosted (HTTP MCP, cloud storage, auth, multi-user — typical
+consulting deployment), hybrid (per-entity persistence routing —
+compliance-strict clients). Per-deployment choice is case-by-case.
+Pre-RAG output: pluggable persistence + auth + transport
+abstractions, decision record, Dockerfile/HTTP skeleton.
+Implementation of full cloud / hybrid backends is post-RAG.
 
 **Why #10 first**: smallest commitment (~half-day to 1 session,
 decision + minor schema additions). Informs every downstream
