@@ -1,11 +1,20 @@
 ---
 name: record-feedback
 description: This skill should be used when external feedback (rejection, approval, partial, suggestion) on planning-bureau work needs to be captured. Triggered by user pasting a UNB Stellungnahme, mentioning a Behörden-Reaktion, "UNB hat abgelehnt", "approval kam von <Person>", "Stellungnahme festhalten", "feedback log", "record this rejection", or similar.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_bausteine, flag_baustein]
 mcp_tools_optional: [find_bausteine_by_reference, search_corpus, read_corpus_file]
 fallback_when_mcp_absent: "warn user; degrade to filesystem Write of feedback entry + Edit of baustein frontmatter directly. Per-concern cross-referencing via Grep instead of search_corpus."
+summary: Captures external feedback (rejection/approval/partial/suggestion) on PBS work, with side-effects on addressed bausteine.
+routing_mode: direct
+triggers:
+  - {phrase: "UNB hat abgelehnt", lang: de}
+  - {phrase: "Stellungnahme festhalten", lang: de}
+  - {phrase: "feedback log", lang: en}
+  - {phrase: "record this rejection", lang: en}
+handoffs: []
+phase_role: utility
 ---
 
 # record-feedback

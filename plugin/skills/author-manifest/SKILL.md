@@ -1,11 +1,21 @@
 ---
 name: author-manifest
 description: This skill should be used to author a brand-new manifest in the layered extensions tree — when a domain doesn't yet have content (e.g. first office deploys with Hochwasserschutz domain) or a Bundesland's manifest is still placeholder-only. Triggered by phrases like "create a new domain manifest", "scaffold Hochwasserschutz domain", "author manifest for BB", "neue Domain anlegen", "Manifest für SH erstellen". Distinct from research-references — this skill creates the file structure, research-references populates entries afterwards.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []
 fallback_when_mcp_absent: "skill is filesystem-only (Glob/Read/Write/Edit/Bash + office_config.load() Python helper); no MCP dependencies."
+summary: Scaffolds new layered manifests (domain or state). Creates file structure; research-references populates entries afterwards.
+routing_mode: direct
+triggers:
+  - {phrase: "create a new domain manifest", lang: en}
+  - {phrase: "scaffold <DomainName> domain", lang: en}
+  - {phrase: "author manifest for <STATE>", lang: en}
+  - {phrase: "neue Domain anlegen", lang: de}
+  - {phrase: "Manifest für <STATE> erstellen", lang: de}
+handoffs: [research-references]
+phase_role: manifest_authoring
 ---
 
 # author-manifest

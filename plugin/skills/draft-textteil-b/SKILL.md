@@ -1,11 +1,22 @@
 ---
 name: draft-textteil-b
 description: This skill should be used when the user asks to draft a B-Plan Begründung (Textteil B) from project source materials. Triggered by phrases like "Entwurf Begründung", "Begründung schreiben", "draft Begründung", "Textteil B aufsetzen", "neue Begründung", "Vorentwurf Begründung". Phase A entry skill — orchestrator routes here when a project requires fresh Begründung drafting.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_skeletons, list_bausteine, search_corpus, compile_latex]
 mcp_tools_optional: [list_doctypes_manifests, list_reference_manifests, get_baustein, search_inputs, ingest_project_inputs, scaffold_project, find_bausteine_by_reference, read_corpus_file]
 fallback_when_mcp_absent: "warn user; degrade to filesystem reads + Bash latexmk for compile. Bausteine retrieval via Glob; corpus search via Grep over references_root + projects_root. Recall worse without semantic search."
+summary: Drafts a B-Plan Begründung (Textteil B) from project source materials. Phase A entry skill.
+routing_mode: direct
+triggers:
+  - {phrase: "Entwurf Begründung", lang: de}
+  - {phrase: "Begründung schreiben", lang: de}
+  - {phrase: "draft Begründung", lang: en}
+  - {phrase: "Textteil B aufsetzen", lang: de}
+  - {phrase: "neue Begründung", lang: de}
+  - {phrase: "Vorentwurf Begründung", lang: de}
+handoffs: [review-draft]
+phase_role: phase_a_entry
 ---
 
 # draft-textteil-b

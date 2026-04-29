@@ -1,11 +1,22 @@
 ---
 name: validate-checklist
 description: This skill should be used during the structural review layer of any layered review (orchestrator Checkpoint 4.2, layer 1) — checks a document against its doctype-specific required sections, project-data macros, and end-blocks. Triggered when the user asks "structural check", "strukturell prüfen", "validate structure", "Strukturprüfung", "check Festsetzungen", "check required sections", or as part of pre-send validation. NOTE — generic phrases like "review" / "prüfen" route to review-draft (the orchestrator-level review entry), which then delegates here for Layer 1.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [list_doctypes_manifests]
 mcp_tools_optional: [search_corpus, read_corpus_file, list_reference_manifests]
 fallback_when_mcp_absent: "warn user; degrade to filesystem Read of extensions/{universal,domain/<X>}/doctypes.yaml directly. Reference-fetch enrichment skipped (matches section names only, not the citing references)."
+summary: Layer-1 structural review — checks document against doctype-specific required sections, project-data macros, end-blocks. Mostly delegated from review-draft.
+routing_mode: delegated
+triggers:
+  - {phrase: "structural check", lang: en}
+  - {phrase: "strukturell prüfen", lang: de}
+  - {phrase: "validate structure", lang: en}
+  - {phrase: "Strukturprüfung", lang: de}
+  - {phrase: "check Festsetzungen", lang: en}
+delegated_from: [review-draft]
+handoffs: []
+phase_role: layer_1
 ---
 
 # validate-checklist

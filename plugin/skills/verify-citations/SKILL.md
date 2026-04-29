@@ -1,11 +1,21 @@
 ---
 name: verify-citations
 description: This skill should be used to cross-check legal citations (laws, paragraphs, court rulings, leitfäden) in a document or baustein against the current reference index. Triggered by phrases like "verify citations", "Zitate prüfen", "are citations current", "check §-references", as part of layered review (Layer 2 fachlich + Layer 3 formal), at compile-time validation, or after a reference update by research-references.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [search_corpus, list_reference_manifests]
 mcp_tools_optional: [read_corpus_file, find_bausteine_by_reference]
 fallback_when_mcp_absent: "warn user; degrade to Grep over <office>/_ai-references/ corpus + filesystem Read of manifest YAMLs. Iterative resolution still possible but slower; recall worse without semantic search."
+summary: Layer-2 fachlich review — cross-checks legal citations (laws, rulings, leitfäden) against the current reference index. Per-citation iterative resolution.
+routing_mode: delegated
+triggers:
+  - {phrase: "verify citations", lang: en}
+  - {phrase: "Zitate prüfen", lang: de}
+  - {phrase: "are citations current", lang: en}
+  - {phrase: "check §-references", lang: en}
+delegated_from: [review-draft]
+handoffs: []
+phase_role: layer_2
 ---
 
 # verify-citations

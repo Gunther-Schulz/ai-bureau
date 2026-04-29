@@ -1,11 +1,21 @@
 ---
 name: draft-textteil-c
 description: This skill should be used when the user asks to draft B-Plan Textliche Festsetzungen (the binding-rules part of the Satzung, Teil B Text). Triggered by phrases like "Entwurf Festsetzungen", "Festsetzungen schreiben", "draft Textliche Festsetzungen", "Satzungstext aufsetzen", "Teil B Text". Phase A entry skill for the second canonical B-Plan doctype.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_skeletons, list_bausteine, search_corpus, compile_latex]
 mcp_tools_optional: [list_doctypes_manifests, list_reference_manifests, get_baustein, scaffold_project, find_bausteine_by_reference]
 fallback_when_mcp_absent: "warn user; degrade to filesystem reads + Bash latexmk for compile. Bausteine retrieval via Glob; corpus search via Grep. Recall worse without semantic search."
+summary: Drafts B-Plan Textliche Festsetzungen (Teil B Text) — the binding-rules section. Phase A entry skill.
+routing_mode: direct
+triggers:
+  - {phrase: "Entwurf Festsetzungen", lang: de}
+  - {phrase: "Festsetzungen schreiben", lang: de}
+  - {phrase: "draft Textliche Festsetzungen", lang: en}
+  - {phrase: "Satzungstext aufsetzen", lang: de}
+  - {phrase: "Teil B Text", lang: de}
+handoffs: [review-draft]
+phase_role: phase_a_entry
 ---
 
 # draft-textteil-c

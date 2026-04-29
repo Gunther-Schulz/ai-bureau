@@ -1,11 +1,21 @@
 ---
 name: draft-cover-mail
 description: This skill should be used to draft a transmittal cover mail (Anschreiben) when sending project artifacts to authorities (UNB, Behörden, höhere Verwaltungsbehörde) or clients. Triggered as part of orchestrator's send gate (Checkpoint 4.3), or by direct user phrases like "Mail an UNB aufsetzen", "Anschreiben für die Stellungnahme", "draft cover mail", "Begleitmail", "transmittal letter".
-version: 0.4.0
+version: 0.5.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_bausteine, search_corpus]
 fallback_when_mcp_absent: "skill operates entirely on office-config + filesystem reads (correspondence-log, state.md). MCP optional only for reusable greeting bausteine + similar past mail lookup."
+summary: Drafts transmittal cover mails (Anschreiben) when sending project artifacts to authorities or clients. Phase-aware tone calibration.
+routing_mode: direct
+triggers:
+  - {phrase: "Mail an UNB aufsetzen", lang: de}
+  - {phrase: "Anschreiben für die Stellungnahme", lang: de}
+  - {phrase: "draft cover mail", lang: en}
+  - {phrase: "Begleitmail", lang: de}
+  - {phrase: "transmittal letter", lang: en}
+handoffs: []
+phase_role: utility
 ---
 
 # draft-cover-mail

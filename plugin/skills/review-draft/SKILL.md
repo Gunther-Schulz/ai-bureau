@@ -1,11 +1,23 @@
 ---
 name: review-draft
 description: This skill should be used when the user asks to review a drafted document — Begründung, Festsetzungen, Umweltbericht, or Gutachten. Triggered by phrases like "review draft", "prüfe das", "Begründung durchgehen", "structural + fachlich + formal", "korrigieren", "Lektorat", "schau mal drüber". Phase B entry skill — runs the layered review framework after Phase A drafting completes.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [compile_latex]
 mcp_tools_optional: [list_doctypes_manifests, search_corpus, list_reference_manifests]
 fallback_when_mcp_absent: "warn user; degrade to Bash latexmk for compile. Layered review delegations (validate-checklist, validate-latex-style, verify-citations) each have their own fallback paths."
+summary: Reviews a drafted document via layered framework — structural (L1) → fachlich (L2) → formal (L3). Phase B entry skill.
+routing_mode: direct
+triggers:
+  - {phrase: "review draft", lang: en}
+  - {phrase: "prüfe das", lang: de}
+  - {phrase: "Begründung durchgehen", lang: de}
+  - {phrase: "structural + fachlich + formal", lang: en}
+  - {phrase: "korrigieren", lang: de}
+  - {phrase: "Lektorat", lang: de}
+  - {phrase: "schau mal drüber", lang: de}
+handoffs: [validate-checklist, verify-citations, validate-latex-style]
+phase_role: phase_b_entry
 ---
 
 # review-draft

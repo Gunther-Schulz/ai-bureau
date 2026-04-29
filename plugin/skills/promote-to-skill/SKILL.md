@@ -1,11 +1,19 @@
 ---
 name: promote-to-skill
 description: This skill should be used when a baustein has been used frequently enough (≥3 references) that codifying it as its own skill is justified. Triggered by orchestrator's watch list T3 (promotion) when the user accepts via the four-way menu, or by direct user phrases like "promote this baustein", "make this a skill", "skill draus machen".
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [get_baustein, archive_baustein]
 mcp_tools_optional: [list_bausteine, find_bausteine_by_reference]
 fallback_when_mcp_absent: "warn user; degrade to filesystem Read of the source baustein + Edit on its frontmatter for archive. Skill scaffold (Write) is filesystem-direct regardless."
+summary: Promotes a frequently-used baustein (≥3 references) to its own skill.
+routing_mode: direct
+triggers:
+  - {phrase: "promote this baustein", lang: en}
+  - {phrase: "make this a skill", lang: en}
+  - {phrase: "skill draus machen", lang: de}
+handoffs: []
+phase_role: utility
 ---
 
 # promote-to-skill

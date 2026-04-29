@@ -387,14 +387,27 @@ class ListDoctypesManifestsOutput(BaseModel):
     scope_filtered: bool
 
 
+class SkillTrigger(BaseModel):
+    phrase: str
+    lang: str = "en"  # en | de | mixed | meta
+
+
 class SkillInfo(BaseModel):
     name: str
     version: str | None = None
     description: str
     path: str
+    # Meta-rule 5 dependency declarations
     mcp_tools_required: list[str] = Field(default_factory=list)
     mcp_tools_optional: list[str] = Field(default_factory=list)
     fallback_when_mcp_absent: str | None = None
+    # Routing + handoff contract (post-design-review session 5, Subsystem 4)
+    summary: str | None = None
+    routing_mode: str | None = None  # direct | delegated | always_active
+    triggers: list[SkillTrigger] = Field(default_factory=list)
+    delegated_from: list[str] = Field(default_factory=list)
+    handoffs: list[str] = Field(default_factory=list)
+    phase_role: str | None = None
 
 
 class ListSkillsInput(BaseModel):

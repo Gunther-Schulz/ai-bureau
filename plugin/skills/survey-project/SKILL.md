@@ -1,11 +1,19 @@
 ---
 name: survey-project
 description: This skill should be used when first binding to an existing project that has no _ai/ folder yet. It walks the project root, clusters files by likely role (artifacts, inputs, sent versions, correspondence, cruft), and proposes a file-map.md interpretation for user confirmation. Triggered by orchestrator's binding flow (Checkpoint 11) or by direct user phrases like "survey this project", "scan the folder", "binde dieses Projekt".
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [list_doctypes_manifests]
 mcp_tools_optional: [search_inputs, list_skeletons]
 fallback_when_mcp_absent: "warn user; degrade to direct filesystem Read of extensions/{universal,domain/<X>}/doctypes.yaml. Per-ambiguous-file content sniffing still possible without MCP, just slower."
+summary: First-bind clustering of project files into a _ai/file-map.md interpretation. Walks ambiguous files iteratively.
+routing_mode: direct
+triggers:
+  - {phrase: "survey this project", lang: en}
+  - {phrase: "scan the folder", lang: en}
+  - {phrase: "binde dieses Projekt", lang: de}
+handoffs: []
+phase_role: lifecycle
 ---
 
 # survey-project

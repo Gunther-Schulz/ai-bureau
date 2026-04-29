@@ -1,11 +1,24 @@
 ---
 name: audit
 description: This skill should be used when the user requests a system audit / drift sweep — phrases like "audit", "audit the system", "drift check", "drift sweep", "structural sweep", "pre-phase audit", "audit gate", "comprehensive audit", "Drift-Prüfung", "Systemaudit". Distinct from validate-checklist (document structural review) and validate-bausteine (baustein freshness sweep) — this audits the architecture, codebase, and documentation themselves for drift. Triggered before phase boundaries, after meta-rule additions / refactor sweeps, when stale claims are noticed, or as a periodic sweep.
-version: 0.1.0
+version: 0.2.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_skills]
 fallback_when_mcp_absent: "skill is filesystem-only; dispatches general-purpose subagents that read files directly. list_skills is convenience for skill enumeration but agents glob plugin/skills/*/SKILL.md if absent."
+summary: Drift audit for the system itself — architecture, plugin entities, backend code, documentation. Compliance-focused (does X match what X claims to be?).
+routing_mode: direct
+triggers:
+  - {phrase: "audit", lang: en}
+  - {phrase: "drift check", lang: en}
+  - {phrase: "structural sweep", lang: en}
+  - {phrase: "pre-phase audit", lang: en}
+  - {phrase: "audit gate", lang: en}
+  - {phrase: "comprehensive audit", lang: en}
+  - {phrase: "Drift-Prüfung", lang: de}
+  - {phrase: "Systemaudit", lang: de}
+handoffs: []
+phase_role: meta
 ---
 
 # audit

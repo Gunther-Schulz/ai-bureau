@@ -29,13 +29,21 @@ license: MIT
 mcp_tools_required: [tool_a, tool_b]
 mcp_tools_optional: [tool_c]
 fallback_when_mcp_absent: "<one-sentence describing degraded mode>"
+summary: <1-2 sentence what-and-when, language-agnostic>
+routing_mode: direct        # | delegated | always_active
+triggers:
+  - {phrase: "<phrase>", lang: en}
+  - {phrase: "<phrase>", lang: de}
+delegated_from: [<skill>]   # only when routing_mode=delegated
+handoffs: [<skill1>, <skill2>]
+phase_role: utility         # | phase_a_entry | phase_b_entry | layer_1 | layer_2 | layer_3 | routing | bureau_setup | manifest_authoring | lifecycle | meta
 ---
 ```
 
-### Required fields
+### Required identity fields
 
 - **name** — kebab-case; matches the directory name (`plugin/skills/<name>/SKILL.md`).
-- **description** — opens with `"This skill should be used when…"` (or close variant: `"to draft…"`, `"during the structural review layer…"`). Names concrete trigger phrases in **both German and English**. Trigger phrases should be specific enough not to overlap with other skills' triggers (see §10 for trigger-phrase discipline).
+- **description** — opens with `"This skill should be used when…"` (or close variant: `"to draft…"`, `"during the structural review layer…"`). Names concrete trigger phrases in **both German and English**. **Canonical Claude-Code-readable trigger surface** — Claude Code's auto-router reads this field directly. The structured `triggers[]` field below is supplementary (machine-checkable).
 - **version** — semver per §3 below.
 - **license** — `MIT` (matches plugin license).
 
@@ -47,6 +55,29 @@ fallback_when_mcp_absent: "<one-sentence describing degraded mode>"
 
 The orchestrator + the `list_skills` MCP tool consume these fields for planning. Empty arrays are positive declarations and **must** be present even when no tools are needed.
 
+### Routing + handoff contract (post-design-review session 5, Subsystem 4)
+
+Five additional fields make routing semantics machine-checkable:
+
+- **summary** — 1-2 sentence what-and-when, language-agnostic. Distilled essence of the description for human + machine readers.
+- **routing_mode** — one of:
+  - `direct`: user-typed phrases auto-route here (the common case)
+  - `delegated`: this skill is invoked by another skill; user phrases that match its triggers go to the *delegating* skill first (which may then delegate)
+  - `always_active`: skill auto-loads whenever the plugin is in scope (orchestrator only)
+- **triggers** — list of `{phrase, lang}` pairs that auto-route to this skill. Each `phrase` is a literal Claude-Code trigger phrase from `description`, and `lang` is `en` | `de` | `mixed` | `meta`. The structured form lets `list_skills` detect overlap programmatically.
+- **delegated_from** — list of skill names that delegate to this one. Required when `routing_mode: delegated`. Reverse direction of `handoffs`.
+- **handoffs** — list of skill names this skill explicitly hands off to (e.g. `review-draft → [validate-checklist, verify-citations, validate-latex-style]`). Closes the rename-drift loop: an audit slice can verify every name in `handoffs` resolves to an existing skill.
+- **phase_role** — controlled enum locating this skill in the workflow:
+  - `routing` — orchestrator (always_active, routes to specialists)
+  - `phase_a_entry` — drafting entry skill (e.g. `draft-textteil-b`)
+  - `phase_b_entry` — review entry skill (e.g. `review-draft`)
+  - `layer_1` / `layer_2` / `layer_3` — layered review delegations
+  - `bureau_setup` — first-time office setup
+  - `manifest_authoring` — content scaffolding
+  - `lifecycle` — project lifecycle (bind, survey)
+  - `meta` — system-introspection skills (audit, design-review)
+  - `utility` — everything else (research, baustein management, etc.)
+
 ### Anti-patterns
 
 - ❌ Omitting any of the three meta-rule-5 fields (silent absence ≠ positive declaration).
@@ -54,6 +85,8 @@ The orchestrator + the `list_skills` MCP tool consume these fields for planning.
 - ❌ Calling MCP tools in the body that aren't declared.
 - ❌ Trigger phrases that overlap with another skill's (e.g. bare "review" routing to both `review-draft` and `validate-checklist`).
 - ❌ Description that just restates the name (`"This skill drafts cover mails"` — instead, say *when* it's used and what triggers it).
+- ❌ `triggers[]` and `description` drift: every phrase in `triggers[]` should appear in `description` and vice versa. Audit slice can detect this.
+- ❌ `handoffs[]` referencing a skill that doesn't exist (rename drift). Audit slice can detect this.
 
 ---
 

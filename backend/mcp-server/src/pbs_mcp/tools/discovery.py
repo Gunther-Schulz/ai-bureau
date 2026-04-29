@@ -29,6 +29,7 @@ from pbs_mcp.schemas import (
     ManifestInfo,
     SkeletonInfo,
     SkillInfo,
+    SkillTrigger,
 )
 
 logger = logging.getLogger(__name__)
@@ -170,6 +171,17 @@ def list_skills(input: ListSkillsInput) -> ListSkillsOutput:
         if not fm:
             continue
         version = fm.get("version")
+        # Parse triggers list — accepts either flat strings or {phrase, lang} dicts
+        raw_triggers = fm.get("triggers") or []
+        triggers: list[SkillTrigger] = []
+        for t in raw_triggers:
+            if isinstance(t, str):
+                triggers.append(SkillTrigger(phrase=t))
+            elif isinstance(t, dict):
+                triggers.append(SkillTrigger(
+                    phrase=t.get("phrase") or "",
+                    lang=t.get("lang") or "en",
+                ))
         skills.append(SkillInfo(
             name=fm.get("name") or skill_dir.name,
             version=str(version) if version is not None else None,
@@ -178,6 +190,12 @@ def list_skills(input: ListSkillsInput) -> ListSkillsOutput:
             mcp_tools_required=list(fm.get("mcp_tools_required") or []),
             mcp_tools_optional=list(fm.get("mcp_tools_optional") or []),
             fallback_when_mcp_absent=fm.get("fallback_when_mcp_absent"),
+            summary=fm.get("summary"),
+            routing_mode=fm.get("routing_mode"),
+            triggers=triggers,
+            delegated_from=list(fm.get("delegated_from") or []),
+            handoffs=list(fm.get("handoffs") or []),
+            phase_role=fm.get("phase_role"),
         ))
     return ListSkillsOutput(skills=skills, total=len(skills))
 
