@@ -1234,6 +1234,163 @@ shaped at all* (vs event/nested/memory/config)?")
 > entities / decision records) so the user can scope refactor
 > work appropriately.
 
+### Slice 21 — Entity-md frontmatter + body conformance scan
+
+**Drift surfaces**: cross-cutting (entity-md files written by
+skills + humans across the lifecycle of the system).
+
+**Scope**:
+- `extensions/**/*.md` — every entity-md file. Post-#9 migrations
+  this includes doctype mds + reference mds; post-#11 it includes
+  `department.yaml` files (md+frontmatter); post-#15 it includes
+  Client + Actor mds.
+- `<project-root>/state.md` — the existing project entity.
+- Decision records under `docs/decisions/*.md` proposing new
+  entity types — verify Layer 1 + Layer 2 frontmatter spec is
+  declared.
+
+**Load-bearing reference**: `docs/conventions/entity-md-spec.md`.
+The slice validates entity-mds against THIS spec, not against
+ARCHITECTURE prose. Any spec change ripples into slice 21
+findings on the next run.
+
+**Brief template**:
+
+> You are running Slice 21 — entity-md frontmatter + body
+> conformance scan per `ARCHITECTURE.md` "AI-as-runtime
+> hybrid-shape principle" + `docs/decisions/ai-as-runtime-
+> hybrid-shape.md` + `docs/conventions/entity-md-spec.md`.
+> Companion to design-review target 12 (the prospective
+> authoring-time check); this slice is the retrospective sweep.
+>
+> Per the principle: every managed entity is a single md file with
+> three-layer frontmatter (Layer 1 universal Pydantic base + Layer
+> 2 per-entity-type subclass + Layer 3 per-deployment extension)
+> + free-form markdown body with recommended sections per
+> entity type. Layer 1 + Layer 2 are gate-validated (strict);
+> body sections are convention (recommended-not-enforced; this
+> slice WARNS, does not BLOCK).
+>
+> Walk every entity-md in scope and run **five sub-checks**:
+>
+> **Sub-check 1 — Layer 1 frontmatter conformance** (per
+> entity-md-spec.md §3):
+> - Required fields present: `id`, `label`, `type`, `scope`,
+>   `scope_key`, `status`, `last_updated`
+> - Field naming convention: snake_case (no camelCase, no
+>   kebab-case in field names)
+> - `id` is kebab-case (`[a-z0-9-]+`) AND matches file basename
+>   (`<id>.md`) AND is unique within scope
+> - `last_updated` is ISO 8601 (`YYYY-MM-DD`)
+> - Enum values match allowed set (`type`, `scope`, `status`)
+> - Booleans lowercase, dates ISO 8601, lists in YAML block style
+>
+> **Sub-check 2 — Layer 2 frontmatter conformance** (per
+> entity-md-spec.md §4):
+> - Type-specific required fields present per the Pydantic
+>   subclass for the declared `type:`
+> - Field types match (string vs int vs date vs enum)
+> - Cross-referenced `<entity>_id:` fields point to existing
+>   entities (read-time validation; flag dangling references)
+>
+> **Sub-check 3 — Body section conformance** (per entity-md-spec.md
+> §6):
+> - Recommended sections per entity type are present (warn on
+>   missing; do NOT fail)
+> - Section headings are h2 (`## `), not h1 or h3-as-top-level
+> - No h1 in body (frontmatter `label:` carries the display name)
+> - Sections have substantive content (warn on empty / placeholder
+>   like "TBD" / single-line filler)
+>
+> **Sub-check 4 — Body-size telemetry** (per entity-md-spec.md
+> §16.6):
+> - Per-entity: section sizes (token counts), total body size,
+>   oldest section unedited (date-based on commit history if
+>   available, else heuristic)
+> - Aggregate: median body size across all entities; max body
+>   size; count of entities over §16.1 (section >1000 tokens)
+>   and §16.2 (body >3000 tokens) thresholds
+> - **D2 trigger detection**: if median > 1500 tokens OR any
+>   single body > 4000 tokens routinely, FLAG in audit report
+>   — signal that D2 (gate-level selective section read) should
+>   be revisited and folded into #9-followup gate work as
+>   `read_entity(path, sections=[...])` parameter extension
+>
+> **Sub-check 5 — Cross-reference + hybrid-shape principle
+> adherence** (per entity-md-spec.md §7):
+> - Cross-references resolve (no dead links to other entities,
+>   memory entries, references)
+> - No wikilinks (`[[id]]`) — all refs use entity-md-spec.md §7
+>   syntax
+> - Body contains prose-shaped content (process flow, conditional
+>   rules, domain knowledge) — flag entity-mds where body is
+>   filler or absent when type's body conventions call for ≥1
+>   substantive section
+> - Structured data NOT in body (catch tables that should be
+>   Layer 2 fields, e.g., `paired_with` declared in body prose
+>   instead of frontmatter)
+>
+> Audit for SIX finding patterns:
+>
+> 1. **Layer 1 violation**: required field missing OR enum value
+>    invalid OR `id` doesn't match file basename OR `last_updated`
+>    not ISO 8601. **Severity**: BLOCKER (gate would reject; flag
+>    immediately).
+>
+> 2. **Layer 2 violation**: type-specific field missing or
+>    wrong-typed. **Severity**: BLOCKER for required fields; WARN
+>    for optional-but-recommended.
+>
+> 3. **Body section drift**: recommended sections missing OR
+>    section names diverging from entity-md-spec.md §6 (e.g.,
+>    `## Application Notes` instead of `## When this applies`).
+>    **Severity**: WARN.
+>
+> 4. **Body-size threshold breach**: section >1000 tokens or
+>    body >3000 tokens. **Severity**: WARN; flag for pruning
+>    review per §16.3 norm.
+>
+> 5. **D2 trigger fired** (aggregate threshold): median >1500 OR
+>    any single body >4000 tokens. **Severity**: WARN; surface
+>    as architectural recommendation to revisit D2.
+>
+> 6. **Hybrid-shape violation**: prose stuffed into Layer 2
+>    fields (multi-paragraph `description: > ...`) OR structured
+>    data in body (markdown table that should be Layer 2 dict).
+>    **Severity**: WARN; flag for refactor.
+>
+> For each finding: classify pattern (1-6), name file paths +
+> line ranges (or section anchors for body findings), propose
+> the fix (specific field add/rename, section header rename,
+> content move from body to frontmatter or vice versa, pruning
+> recommendation).
+>
+> **Agent-discipline note**: Layer 1 + Layer 2 violations are
+> gate-enforced and SHOULD be BLOCKERs (gate would reject the
+> file at next read). Body section + size violations are
+> recommended-not-enforced and SHOULD be WARNs (the principle
+> explicitly says body conventions are convention, not validator).
+> Do NOT escalate body-section warnings to BLOCKERs — that
+> recreates the SQL-DB-trap rigidity the principle prevents.
+>
+> Output structured findings. Cap at 1500 words. Group findings
+> by entity type (doctype / reference / project / client / actor
+> / process) so the user can scope work per type.
+
+**Implementation timing**: scaffold scheduled with #9 (when
+generic entity gate + Layer-2 Pydantic subclasses + first
+entity-md migrations all land). Slice 21 has nothing to scan
+pre-#9 except `state.md` (and only if a project is bound; today
+zero projects are bound).
+
+**Relationship to slice 20 + design-review targets**: target 11
+(prospective entity-elevation) + slice 20 (retrospective
+entity-elevation drift) ensure the *right things* are entities;
+target 12 (prospective entity-md authoring) + **slice 21
+(retrospective entity-md conformance)** ensure entities that
+are correctly-elevated also have correct *shape*. Both pairs
+share the prospective-design + retrospective-sweep structure.
+
 ---
 
 ## Combining slices for full audits
@@ -1248,8 +1405,12 @@ shaped at all* (vs event/nested/memory/config)?")
 | **Optional** | **14** | **Boundary adherence** (LLM/Python placement) — run after major refactors that may have moved logic across the boundary, or when surfacing a coverage gap audit didn't catch |
 | **Optional** | **15** | **Invalidation-contract coverage** (meta-rule 3 enforcement) — run after adding new entity instances (manifests, prose docs, bausteine), after schema changes, or before a refresh cycle to verify handlers will actually read what's declared |
 | **Optional** | **16** | **Validation-gate coverage** (strict-validation discipline) — run after adding new Pydantic models, after handler refactors, or when tightening contract-enforcement rigor (e.g., before any post-launch deployment where lax validation would compound) |
+| **Optional** | **18** | **Legacy retirement scan** — run after major refactors to confirm replaced concepts/files are gone (paired with design-review target 9) |
+| **Optional** | **19** | **Pattern-vs-instance scan** — run after architectural commitments to verify pattern/instance boundary holds (paired with design-review target 10) |
+| **Optional** | **20** | **Entity-elevation drift scan** — run after entity additions or when reviewing the managed-entity surface (paired with design-review target 11) |
+| **Optional** | **21** | **Entity-md frontmatter + body conformance scan** — run after entity-md migrations (#9 doctypes; Phase 1 references; #11 department.yaml; #15 Client+Actor) and periodically thereafter to catch drift + monitor body-size telemetry for D2 trigger (paired with design-review target 12) |
 
-Slices 11-16 are **not part of the default round sequence** —
+Slices 11-21 are **not part of the default round sequence** —
 they're correctness-orthogonal. Run them when a phase boundary
 increases exposure on that axis (e.g., before Phase 1 corpus
 download = run slice 11 to confirm test coverage; before any
@@ -1258,7 +1419,8 @@ boundary-affecting refactor or before locking placement = run
 slice 14; after schema changes that touch invalidation contracts
 or before a `research-references` refresh = run slice 15;
 after Pydantic model additions or before tightening validation
-discipline = run slice 16).
+discipline = run slice 16; after entity-md migrations or to
+monitor D2 trigger = run slice 21).
 
 If a round catches BLOCKERS, immediately run a verification pass
 (scope = changed files only) before declaring round complete.

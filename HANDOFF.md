@@ -519,7 +519,7 @@ directly (continuous low-rate writes).
 | `docs/design-reviews/foundations-20260429.md` | Session-5 design-review |
 | `backend/mcp-server/src/pbs_mcp/audit_trail.py` | Session 8 — ActorKind + 3 new fields + cross-ref validator |
 | `backend/mcp-server/src/pbs_mcp/project_state.py` | **Session 9** — `departments_active: list[str]` field |
-| `plugin/skills/audit/` | **0.9.0** — slices 1-16 + 18 + 19 + 20 (slice 21 entity-md scheduled with #9) |
+| `plugin/skills/audit/` | **0.10.0** — slices 1-16 + 18 + 19 + 20 + 21 (slice 21 description scaffolded session 10 followup-3; first-run scheduled with #9 entity-md migrations) |
 | `plugin/skills/design-review/` | **0.9.0** — targets 1-11 + 12 (entity-md authoring) + 13 (pattern emergence) + 14 (discipline gap); failure-mode-catalog.md added |
 | `docs/conventions/entity-md-spec.md` | **Session 10 followup** — single source of truth for hybrid-shape contract: file layout + Layer 1 fields + Layer 2 scaffold + body conventions + cross-ref syntax |
 | `plugin/skills/design-review/references/failure-mode-catalog.md` | **Session 10 followup** — living catalog of architectural failure modes + their named-discipline coverage status |
@@ -540,7 +540,7 @@ namespacing.
 
 | Skill | Version |
 |---|---|
-| audit | **0.9.0** (slice 20 — entity-elevation drift scan, session-9 followup; slice 21 entity-md conformance scheduled with #9) |
+| audit | **0.10.0** (slice 21 — entity-md frontmatter + body conformance + body-size telemetry, session 10 followup-3; first-run scheduled with #9 entity-md migrations) |
 | author-manifest | 0.4.0 |
 | design-review | **0.9.0** (targets 12 + 13 + 14 added session 10 followup) |
 | draft-cover-mail | 0.6.0 |
