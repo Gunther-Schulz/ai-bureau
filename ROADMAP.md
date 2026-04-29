@@ -441,11 +441,121 @@ today.
   far enough along that the schema is stable; doesn't depend on
   #7 (bootstrap-write tools) — those can run in parallel.
 
-All nine items: pre-RAG architectural commitments. Phase 1 corpus
-download unblocks pending sections B (audit-trail single-write
-integration per v2), C (sparring-output integration), D (plugin
-version bump), and the Phase 0 items 4 (feature-survey skill) + 5
-(testing methodology) per HANDOFF.md.
+**10. A2A schema compatibility decision gate** (session 7, market
+context) — see ROADMAP v2 "AI-office builder" entry's "Market
+context" section.
+
+- **Why a decision gate, not implementation**: A2A protocol
+  (Linux Foundation governed, 150+ orgs in production as of
+  April 2026) is the emerging cross-agent communication standard.
+  We don't need to *implement* A2A pre-RAG, but we do need to
+  decide whether our schemas are A2A-shape-compatible *now*
+  (cheap addition) or accept a future migration cost (expensive
+  if data has accumulated). Pre-RAG is the unique cost-cheap
+  decision window.
+- **Concrete questions to answer**:
+  - **AuditEvent schema**: A2A's "signed agent cards" pattern
+    expects cryptographic provenance + agent identity per event.
+    Our AuditEvent has `actor` and event signatures aren't
+    designed in. Decision: add cryptographic-signature-friendly
+    shape now (e.g., reserve `signature_hint`, `agent_card_id`
+    fields) or defer?
+  - **ProjectState identity**: A2A expects agent-card identity
+    for each agent in cross-office workflows. Our
+    `ProjectState.project` is a slug; does it need a stronger
+    identity field (UUID, agent-card reference)?
+  - **MCP server endpoint**: should the PBS backend expose an
+    A2A endpoint stub now (decision: accept connections from
+    other A2A-speaking offices), or defer until concrete
+    cross-office scenario?
+  - **`record_audit_event` MCP tool**: events that originate
+    from another A2A peer should be distinguishable from local
+    events. Add `origin_agent_card?: str` field?
+- **Output**: a short decision record `docs/decisions/
+  a2a-compatibility.md` documenting which schemas got A2A-
+  shape-compatibility additions, which deferred, and why.
+- **Scope**: 1 short session (~half day) — analysis +
+  schema additions. Implementation of an actual A2A endpoint
+  (if decided) is a separate follow-on.
+- **Order note**: schedule alongside #9 (pattern-vs-instance
+  split) since both touch schema shapes; same session efficient.
+
+**11. Cowork as primary end-user runtime** (session 7, market
+context) — see ROADMAP v2 "AI-office builder" entry's "Market
+context" section.
+
+- **Why this matters**: Cowork (Anthropic's desktop agent for
+  knowledge workers) supports MCP servers, Agent Skills, and
+  Plugins natively. "Custom connectors work across every Claude
+  client" — including Cowork. Anthropic ships an open-source
+  plugin library (`github.com/anthropics/knowledge-work-plugins`)
+  with domain plugins for legal / finance / HR / marketing /
+  design / operations. PBS-bureau aligns architecturally with
+  this pattern.
+- **The runtime split**:
+  - **Dev runtime**: Claude Code (developer-mode; Gunther uses
+    this to *build* PBS via skills + MCP server in this repo)
+  - **End-user runtime**: Cowork (knowledge-work mode; the
+    actual planning bureau worker uses this to *operate* the
+    office)
+  - **Backend**: same MCP server in both; same skill conventions;
+    same memory layout. The runtime difference is the
+    front-end agent loop, not the office.
+- **Concrete decisions for the gate**:
+  - Confirm Claude Code skills work in Cowork as-is (verify by
+    deploying PBS as a Cowork plugin and end-to-end testing).
+    If they don't (frontmatter incompatibilities, hook
+    differences, etc.), document the deltas + decide whether
+    to maintain dual-target compatibility or pick one.
+  - Decide PBS package shape: a Cowork-plugin-compatible bundle
+    (`.claude-plugin/plugin.json` + `.mcp.json` + skills/ +
+    commands/), AND a Claude Code dev experience. Probably the
+    same files + a packaging step.
+  - Decide whether to study + adopt Anthropic's plugin
+    conventions (their `commands/` for slash commands; their
+    `.mcp.json` shape; their plugin manifest fields). We have
+    parallel conventions; reconciliation may be needed.
+  - Output: short decision record `docs/decisions/
+    cowork-deployment.md` documenting the package shape +
+    runtime-target decision + any incompatibilities found
+    during the verification.
+- **Scope**: 1-2 sessions (decision + verification + minor
+  packaging work).
+- **Order note**: schedule before D (plugin version bump) since
+  the bump should reflect Cowork-target packaging if that's
+  decided. Schedule after #9 so we don't redo schema work.
+- **Studying anthropics/knowledge-work-plugins repo**: planned
+  as a discovery activity that informs this commitment. Multiple
+  plugins are relevant to our work — not just for "how to
+  package a plugin" but as **leverage candidates** (parts we
+  could adopt rather than reinvent):
+  - **`legal`** — most architecturally analogous to our planning-
+    bureau work (regulatory expert practice with document-heavy
+    workflow). Best comparison target for skill conventions,
+    memory taxonomy, document review patterns.
+  - **`enterprise-search`** — directly relevant to our RAG /
+    legal references retrieval work. Likely handles cross-tool
+    search patterns we'd otherwise reinvent. Decision: adopt
+    parts of it for our `research-references` / `verify-citations`
+    workflows? Or stay with our own LanceDB-based approach?
+  - **`cowork-plugin-management`** — Anthropic's meta-plugin for
+    building/customizing plugins. Closest existing analog to our
+    AI-office-builder vision. Worth deep study before designing
+    our builder; may subsume parts of what we'd build.
+  - **`productivity`** — generic knowledge-work patterns; useful
+    for understanding their "common-case" baseline conventions
+    so our PBS-specific patterns are clearly differentiated.
+  - **Others** (sales, finance, marketing, customer-support,
+    product-management, data, bio-research) — relevant for
+    pattern-vs-instance discipline (commitment #9): seeing how
+    Anthropic structures domain-specific vs domain-agnostic
+    elements informs our split.
+
+All eleven items: pre-RAG architectural commitments. Phase 1
+corpus download unblocks pending sections B (audit-trail
+single-write integration per v2), C (sparring-output integration),
+D (plugin version bump), and the Phase 0 items 4 (feature-survey
+skill) + 5 (testing methodology) per HANDOFF.md.
 
 ### Pioneer-instance validation strategy
 
@@ -1499,6 +1609,103 @@ does.
   offices that share state?
 - Naming: "AI Office Builder" / "Office-of-Offices" /
   "knowledge-work-plugin-generator" / TBD.
+
+#### Market context (April 2026)
+
+Three relevant launches landed late April 2026 — Claude Connectors
+for Creatives (9 MCP-based tool integrations), Microsoft Agent
+Framework 1.0 (production-ready Python+.NET multi-agent runtime),
+Gemini Enterprise Agent Platform (formerly Vertex AI; agent
+runtime + Memory Bank + A2A protocol governance). Plus Claude
+Cowork (Anthropic's desktop agent for knowledge workers), already
+shipping domain-specific plugins for legal / finance / HR /
+marketing / design / operations / data analysis.
+
+**Honest reading of where this leaves us:**
+
+We are a single-user, single-domain, pre-launch project with
+thoughtful architecture and an unvalidated thesis. Anthropic /
+Microsoft / Google are shipping adjacent runtime + agent products
+to thousands or millions of users today. The "domain office"
+abstraction layer the AI-office-builder vision targets is a
+*structural distinction we drew*, not a defensible category we
+occupy. It might prove a real differentiation (best case);
+Anthropic could ship Cowork+templates that subsume it (likely);
+or it might turn out to be a distinction without a difference
+(worst case).
+
+**What this changes — five concrete takeaways:**
+
+1. **MCP investment validated.** Heavy MCP usage is forward-
+   compatible with where the market is converging. Connectors
+   prove the pattern at consumer scale; A2A complements (cross-
+   agent) without replacing (in-agent). Empirical, not boasting —
+   our architectural bet here is correct.
+
+2. **MS Agent Framework is the strongest substrate candidate
+   when v2 work starts.** Subsumes (likely): graph-based workflow
+   runtime, multi-agent orchestration patterns (sequential /
+   concurrent / handoff / group chat / Magentic-One),
+   OpenTelemetry observability, A2A interop. Does NOT subsume:
+   domain office structure, memory taxonomy, three-axis VISION
+   discipline, audit-trail-as-canonical-source. **Target 9
+   (Subsumption check) at v2 design time should explicitly
+   evaluate: build vs adopt MS Agent Framework as the office-
+   builder runtime?**
+
+3. **Claude Cowork is the natural end-user deployment substrate
+   (NOT v2 long-horizon — pre-RAG concrete).** Cowork supports
+   MCP servers, Agent Skills, and Plugins natively. Custom
+   connectors work across all Claude clients (claude.ai, Cowork,
+   Desktop, mobile). Anthropic is already shipping domain plugins
+   for common verticals. **PBS-bureau deploys as a Cowork plugin
+   for end-users**; Claude Code remains the dev runtime. The
+   AI-office-builder vision becomes concrete: "scaffold a Cowork
+   plugin for any expert-practitioner niche domain." See pre-RAG
+   commitment #11 for the immediate decision gate.
+
+4. **A2A protocol awareness should enter the architecture now
+   (lightly).** Future offices may communicate via A2A (e.g.,
+   PBS-bureau ↔ legal-practice office for combined planning /
+   legal consulting work). Schemas should stay A2A-shape-
+   compatible at pattern layer — particularly audit events
+   (already cryptographic-friendly) and project state (already
+   has identity fields). See pre-RAG commitment #10 for the
+   decision gate.
+
+5. **Gemini's Memory Bank + Agent Identity + Model Armor are
+   competitive infrastructure for primitives we currently build
+   ourselves.** Long-running agent state, persistent memory,
+   signed agent cards, prompt-injection defense. Build-vs-buy
+   decisions per primitive when v2 work starts; don't assume we
+   build everything from scratch.
+
+**What stays useful regardless of how the vision plays out:**
+
+- PBS-bureau as a working tool for the user's planning bureau
+  (load-bearing claim — independent of v2 success)
+- Architectural discipline as internal quality framework
+  (load-bearing — pays back in PBS quality whether or not the
+  vision validates)
+- MCP as integration protocol (forward-compatible regardless)
+
+**What could subsume the vision** (named honestly so future-you
+can recognize it):
+
+- Anthropic ships "Cowork plugin templates per vertical" with
+  scaffold tooling — the AI-office-builder becomes their
+  feature, not our differentiation
+- MS Agent Framework adds "domain office templates" — same
+  outcome from different vendor
+- The "domain office" layer turns out to just be "well-structured
+  Cowork plugins" — distinction without a difference
+
+If any of these arrive before our v2 work, the vision pivots
+(e.g., from "build a builder" to "ship the best Cowork plugin for
+expert planning work, with optional patterns documented for
+others to copy"). That pivot is acceptable — the underlying
+discipline (meta-rules, fail-closed, three-axis VISION, etc.) was
+worth doing for PBS-the-instance regardless.
 
 ### Reference versioning
 

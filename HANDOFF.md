@@ -2,12 +2,17 @@
 
 End of session 7 (2026-04-29). This session expanded the pre-RAG
 architectural commitments from session 6's three (state.md gate +
-audit-trail-v1 + sparring-v1) to **nine**, driven by sharper
+audit-trail-v1 + sparring-v1) to **eleven**, driven by sharper
 review of where session-6 commitments left load-bearing legacy in
-place. Three reversals/extensions, three new mechanisms, plus a
+place. Three reversals/extensions, three new mechanisms, a
 late-session pattern-vs-instance discipline + best-effort split
-work item (commitment #9) that emerged from a meta-vision
-discussion about the AI-office builder.
+work item (#9) from a meta-vision discussion about the AI-office
+builder, plus two market-context-driven additions (#10 A2A
+schema gate, #11 Cowork as primary end-user runtime) after
+researching Claude Connectors / MS Agent Framework 1.0 / Gemini
+Enterprise Agent Platform / Claude Cowork — and a corrective
+overselling check that produced an honest market-context section
+in the v2 builder ROADMAP entry.
 
 **Phase 1 — task A retrofit (state.md gate)**:
 - 8 skills (orchestrator, survey-project, draft-cover-mail,
@@ -185,11 +190,17 @@ hardening BEFORE first project bind, not a delay of RAG.
 
 ---
 
-## ⏳ Pre-RAG gating items (9 commitments, post-session-7 state)
+## ⏳ Pre-RAG gating items (11 commitments, post-session-7 state)
 
-The 9 v1 commitments enumerated in ROADMAP.md "v1 commitments"
-section. Recommended execution order: #6 → #7 → #9 → #8 → C → D
-→ Phase 0 items 4 + 5 → Phase 1 corpus.
+The 11 v1 commitments enumerated in ROADMAP.md "v1 commitments"
+section. Recommended execution order: #6 → #7 → #9 → #10 → #11 →
+#8 → C → D → Phase 0 items 4 + 5 → Phase 1 corpus.
+
+#10 (A2A schema gate) bundles cleanly with #9 (pattern-vs-instance
+split) since both touch schema shapes — same session efficient.
+#11 (Cowork runtime decision) goes after #9/#10 so packaging
+reflects final schemas; before D so plugin bump captures Cowork-
+target shape.
 
 ### Already shipped session 6 + 7 (architectural backstops only)
 
@@ -272,6 +283,40 @@ section. Recommended execution order: #6 → #7 → #9 → #8 → C → D
      validation across domains) waits for second-domain
      implementation, possibly indefinite. Working method is
      best-effort split per single-domain-pioneer constraint.
+
+10. **A2A schema compatibility decision gate** (per ROADMAP
+    commitment #10):
+    - Decide whether AuditEvent / ProjectState / MCP server
+      get A2A-shape-compatibility additions now (cheap pre-RAG)
+      vs deferred (expensive once data accumulates).
+    - Output: `docs/decisions/a2a-compatibility.md` documenting
+      schema additions accepted vs deferred.
+    - Scope: ~half-day analysis + minor schema additions.
+    - Order note: bundle with #9 (same schema-touching session).
+
+11. **Cowork as primary end-user runtime** (per ROADMAP
+    commitment #11):
+    - Cowork natively supports MCP + Skills + Plugins (verified
+      via web search). Anthropic ships an open-source plugin
+      library `github.com/anthropics/knowledge-work-plugins`
+      with `legal`, `enterprise-search`, `cowork-plugin-
+      management` (meta-plugin), `productivity`, etc.
+    - Discovery activity: **clone the repo + study** (especially
+      `legal`, `enterprise-search`, `cowork-plugin-management`)
+      before locking the Cowork-deployment shape. May reframe
+      our packaging conventions, our research-references / RAG
+      approach (enterprise-search may subsume parts), and our
+      office-builder vision (cowork-plugin-management is the
+      closest existing analog).
+    - Decide PBS package shape: dual-target (Claude Code dev +
+      Cowork end-user) vs Cowork-primary; align our plugin
+      conventions with Anthropic's where practical.
+    - Output: `docs/decisions/cowork-deployment.md` + any
+      packaging changes.
+    - Scope: 1-2 sessions (study + decisions + minor packaging).
+    - Order note: schedule after #9/#10 (so packaging reflects
+      final schemas), before D (so plugin bump captures the
+      Cowork-target shape).
 
 ### Sparring-output integration (still per v1 plan, unchanged)
 
