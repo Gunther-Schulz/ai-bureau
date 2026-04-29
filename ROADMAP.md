@@ -754,6 +754,51 @@ custom build. Custom annotation server is last resort.
   it on next session-open, or wait for explicit `fetch-review-
   feedback` call?
 
+### Anthropic-native-app / third-party GUI-frontend integrations
+
+**Why**: As the AI-augmented workforce grows, users uncomfortable
+with CLI need GUI on-ramps. Anthropic itself is building native
+GUI apps with workspace features and integrations; similar
+trajectories elsewhere (Cursor, Zed, etc.). PBS-style intertwined
+workflow could be exposed through these GUIs as another frontend
+over the same `pbs_core` engine — same intertwining model, more
+accessible surface.
+
+**The crucial guard (per VISION.md → category-collapse risk)**:
+integrating with native GUIs is fine ONLY when the integration
+exposes intertwined workflow. The risk is category collapse —
+PBS reduced to a "summarize this email" plugin in someone else's
+tool. That's tacked-on, not intertwined; it betrays the thesis.
+Any integration must preserve continuous orchestration, persistent
+state, source-grounding, and the human-authority gates. If the
+host environment can't accommodate those, the integration should
+be deferred or rejected outright.
+
+**Sketch (topic-level, speculative)**:
+
+- `pbs_core` exposed via HTTP / WebSocket / similar transport so
+  GUI clients can call it (post-physical-split per ARCHITECTURE.md
+  → Backend organization).
+- Integration registry's `kind` field grows `frontend` or `client`
+  alongside `mcp` / `adapter` / `skill`.
+- Each GUI integration registered with metadata about which
+  workflow surfaces it exposes (orchestrator chat? specific
+  specialist skills? read-only state browser?) — surface mapping
+  becomes auditable against the intertwining requirements.
+- Authentication / multi-user concerns surface here (also tied
+  to "Office as multi-human + AI" open question in VISION.md).
+
+**Pull-forward triggers**:
+
+- A specific GUI host emerges that can carry intertwined workflow
+  faithfully (not just discrete features).
+- A non-CLI colleague needs PBS-Office access and CLI is the
+  bottleneck (Hendrik becomes a full participant, or PBS hires).
+- SaaS pivot becomes concrete (possibility 3 in VISION.md).
+
+Until then: defer. CLI (Claude Code) + planned web UI cover the
+immediate frontend needs.
+
 ### Project management + invoicing
 
 **Why**: Project work today has no time/billable tracking, no

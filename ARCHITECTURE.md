@@ -4,6 +4,15 @@ This document is the canonical placement reference. When in doubt
 about where new content belongs, walk the meta-rules first, then the
 decision rules below.
 
+> **Vision anchor.** PBS is **intertwined-AI-workflow, not
+> tacked-on AI features**. The architecture serves continuous
+> human-AI collaboration on the actual work — persistent state,
+> orchestrated behaviors, source-grounded outputs, surfaced
+> decisions, explicit human-authority gates. See `VISION.md` for
+> the full thesis, intertwining requirements, and trust
+> infrastructure. Every meta-rule and decision rule below traces
+> back to this anchor.
+
 Status: **v0.4 (post-execution-locality)**.
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality meta-rule live, layered
@@ -367,10 +376,24 @@ meta-rule 5 says "validation in MCP gates"; this organization
 adds "MCP gates are themselves thin wrappers around plain Python
 core."
 
-When the first non-MCP consumer emerges (the web UI on ROADMAP
-being the load-bearing case), the physical split — promoting
-`pbs_core` to its own package, optionally wrapping it as a
-persistent service — is a small refactor, not a re-architecture.
+When the first non-MCP frontend emerges, the physical split —
+promoting `pbs_core` to its own package, optionally wrapping it
+as a persistent service — is a small refactor, not a re-
+architecture. Multiple frontends are anticipated by the design:
+
+- **Web UI for collaborative review** (ROADMAP) — load-bearing
+  near-term trigger.
+- **Anthropic-native-app or third-party GUI client integrations**
+  (ROADMAP) — speculative; relevant as the AI-augmented workforce
+  expands beyond CLI users.
+- **Future SaaS / hosted frontend** — possibility 3 in `VISION.md`.
+
+All frontends are surfaces over the same `pbs_core` engine. CLI
+(Claude Code) is the current frontend; the others are deferred
+until concrete need (per `VISION.md` → "Frontend determines
+accessibility"). The category-collapse risk noted in `VISION.md`
+applies: any GUI integration must expose intertwined workflow,
+not reduce PBS to a tacked-on feature in the host's UX.
 
 **Don't do the physical split until a real second consumer
 exists.** The conceptual discipline gives most of the
