@@ -330,6 +330,14 @@ not format).
   schema additions (`user_confirmation` event, full reasoning
   text); skill retrofits per v2 plan; ProjectState schema drop
   `phase_history` field.
+- **Per #16 constraint (session 10)**: AuditEvent schema remains
+  Pydantic-shaped (events are interface contracts — rightly
+  structured); hybrid-shape principle does NOT touch event
+  format. **Gate-side conformance**: when retrofit adds
+  `actor_kind` + `department:` filtering, also verify entity-write
+  events route through the new generic entity gate (post-#9).
+  `details.reasoning_full_text` may surface markdown for free-form
+  fields (minor, not load-bearing).
 
 **7. Bootstrap-write MCP tools** (session 7) — close the meta-rule
 4 fail-closed gap surfaced by audit slice 14.
@@ -476,6 +484,29 @@ ROADMAP v2 "AI-office builder" entry.
 - **Dependencies**: depends on #6 (audit-trail v2 retrofit) being
   far enough along that the schema is stable; doesn't depend on
   #7 (bootstrap-write tools) — those can run in parallel.
+- **Per #16 constraint (session 10)**: hybrid-shape principle is
+  the **central design lens** for #9's managed-entity concept
+  work. Concrete deliverables that originate in #16 land here:
+  - **Generic entity gate** (`read_entity` / `write_entity` with
+    `type:`-field dispatch to Layer-2 Pydantic subclass) replaces
+    per-entity tools. Body preserved as-is across read/write.
+  - **Per-deployment customization mechanism** (Layer 3) decision
+    — three options on the table (Pydantic subclass / declared
+    `extra_fields` / `metadata: dict` escape hatch). Pick with
+    rationale.
+  - **Body specs document** (`docs/conventions/entity-body-specs.md`)
+    authored alongside Layer-2 Pydantic subclasses (one section
+    per entity type).
+  - **ProjectState refactor**: when relocated to
+    `extensions/department/planning/entities/project.py`, also
+    publish corresponding entity-body-spec section.
+  - **Migration of `extensions/universal/doctypes.yaml`** + per-
+    domain `doctypes.yaml` files → per-entity md files (per
+    #16 D3 defer).
+  - **Audit slice 21** (entity-md frontmatter + body conformance
+    scan) implementation, parallel to slice 20.
+  - **Design-review target 12** (entity authoring conformance)
+    implementation, parallel to target 11.
 
 **10. A2A schema compatibility + Gemini Enterprise pattern
 emulation decision gate** — see
@@ -600,13 +631,23 @@ context" section.
 - **Scope**: **3-5 sessions** (was 1-2; revised under deep-
   integration directive). Substantial work touching every
   user-facing surface.
-- **Order note**: execute THIRD in pre-RAG queue (after #10
-  A2A decision + #12 department modularization). Slash command
-  namespacing + skill frontmatter use the post-#12 shape. A2A
-  decisions inform whether agent-card identity matters for
-  Cowork-deployed offices. Before D (plugin version bump).
-  Before #6/#7/#9 if possible (so audit-trail v2 + bootstrap-
-  write tools land in the new shape, not the old).
+- **Order note**: execute FOURTH in pre-RAG queue (after #10
+  A2A decision + #12 department modularization + #16 hybrid-shape
+  framing). Slash command namespacing + skill frontmatter use the
+  post-#12 shape. `department.yaml` adopts hybrid-shape from
+  inception per #16. A2A decisions inform whether agent-card
+  identity matters for Cowork-deployed offices. Before D (plugin
+  version bump). Before #6/#7/#9 if possible (so audit-trail v2 +
+  bootstrap-write tools land in the new shape, not the old).
+- **Per #16 constraint (session 10)**: `extensions/department/
+  <dept>/department.yaml` file format **adopts hybrid-shape
+  (md+frontmatter), NOT pure YAML**. Frontmatter declares
+  `event_subscriptions:` + `managed_entities:` registry +
+  department-level config; body describes department character +
+  conventions in prose. Skill frontmatter sweep (per #12) doesn't
+  conflict with #16 — frontmatter pattern is the same in both.
+  See `docs/decisions/ai-as-runtime-hybrid-shape.md` for full
+  Layer-1 + Layer-2 + body-conventions spec.
 - **Studying anthropics/knowledge-work-plugins repo**: planned
   as a discovery activity that informs this commitment. Multiple
   plugins are relevant to our work — not just for "how to
@@ -1135,6 +1176,104 @@ discipline.
 - **Scope**: 1-2 sessions — Pydantic schemas + MCP tools +
   office-config migration + cross-department reference convention
   documentation.
+- **Per #16 constraint (session 10)**: Client + Actor entity
+  definitions land **as md files** at `extensions/office/entities/
+  clients/<id>.md` and `extensions/office/entities/actors/<id>.md`,
+  following the three-layer frontmatter contract. Layer-2 fields
+  spec'd in `docs/decisions/ai-as-runtime-hybrid-shape.md`. Body
+  conventions: Client uses `## Communication preferences` /
+  `## Billing conventions` / `## Project history summary` /
+  `## Watch-outs`; Actor uses `## Role + responsibilities` /
+  `## Working preferences` / `## Capabilities + limits`.
+
+**16. AI-as-runtime hybrid-shape contract — entity-md +
+manifest decomposition + gate generalization** (session 10) —
+see `docs/decisions/ai-as-runtime-hybrid-shape.md` +
+ARCHITECTURE.md "AI-as-runtime hybrid-shape principle" section.
+
+- **Why**: existing `extensions/universal/doctypes.yaml` +
+  `references-manifest.yaml` files contain prose squeezed into
+  YAML block scalars (`description: >`, `notes: |`). The notes
+  fields ARE the rule (when does §13a apply, what to verify in
+  fetched text) but block-scalar form suppresses the form prose
+  wants to take — no headings, no structured lists, no links, no
+  examples. ProjectState/state.md already uses the hybrid pattern
+  (frontmatter + md body) but it hasn't been generalized.
+  Generalizing now is upstream of #11 (locks `department.yaml`
+  format), #15 (locks Client/Actor entity shape), and #9 (central
+  design lens for managed-entity concept).
+- **Scope (session 10)**: principle locked + ARCHITECTURE
+  discipline added + ROADMAP slot inserted + downstream
+  constraints flowed. **No migration this session** — bundled into
+  #9 (doctypes) + Phase 1 corpus (references) + #11
+  (department.yaml format, never persisted as pure YAML to begin
+  with).
+- **The principle, stated**: *Domain semantics, process flow,
+  conditional rules, and contextual knowledge live in markdown
+  bodies attached to entity files — not in encoded schemas or
+  hardcoded skill procedures. Cross-domain portability is achieved
+  by AI reading prose, not by abstracting over schema variants.
+  Structured layers reserved for interfaces, identity, persistence,
+  machine contracts; everything else is prose; AI is the runtime
+  that fuses them at use-time.*
+- **Three-layer frontmatter contract**:
+  - **Layer 1 (universal, strict-locked, Pydantic base)**: `id`,
+    `label`, `type`, `scope`, `scope_key`, `status`,
+    `last_updated`, optional `description`, optional `tags`. The
+    `type:` field routes to Layer-2 Pydantic subclass at gate.
+  - **Layer 2 (per-entity-type, strict-locked, Pydantic
+    subclass)**: doctypes have `style_ref` / `master_file_pattern`
+    / `paired_with` / etc.; references have `source_url` /
+    `canonical_path` / `fetch_method` / etc.; projects have
+    today's ProjectState fields (relocated). Each type's
+    frontmatter locked against its subclass.
+  - **Layer 3 (per-deployment extension fields)**: deferred to #9.
+- **Body conventions** (recommended-not-enforced; warned by audit
+  + design-review skills, NEVER blocked by gate). Per-entity-type
+  body specs at `docs/conventions/entity-body-specs.md`
+  (authored alongside Layer-2 schemas in #9).
+- **Where conditional rules live**: rules about *when* something
+  applies belong with the *process*, NOT the entity. Process-as-md
+  per verfahren (`extensions/department/planning/processes/
+  beschleunigtes.md` etc.) declares which doctypes its flow
+  produces; the doctype md describes what the doctype IS.
+  Resolves the "Umweltbericht required when §13a doesn't apply"
+  ambiguity.
+- **MCP gate generalization**: generic `read_entity(path)` /
+  `write_entity(path, file)` with `type:`-field dispatch to the
+  appropriate Layer-2 Pydantic subclass. Replaces per-entity-tool
+  sprawl. Body preserved as-is across read/write cycles. Lands
+  in #9.
+- **Audit slice 21** (added to audit skill): scans
+  `extensions/**/*.md` entity files for Layer-1 + Layer-2
+  frontmatter conformance + body recommended-section presence.
+  Implementation bundled with #9.
+- **Design-review target 12** (added to design-review skill):
+  when authoring or modifying an entity md, validates frontmatter
+  against the appropriate Pydantic subclass + suggests missing
+  recommended sections. Coordinates with target 11
+  (entity-elevation discipline). Implementation bundled with #9.
+- **Pattern-vs-instance check**: principle generalizes. Legal
+  practice (cases get state.md-shape, precedents become reference
+  entities), research-paper review (manuscripts get state.md-shape,
+  citations become reference entities), engineering-doc workflows
+  (specs get state.md-shape, RFCs become reference entities) —
+  same shape, different prose per domain. Pattern-level. ✅
+- **Connection to existing disciplines**: applies AFTER
+  entity-elevation 3-test verdict; IS how pattern-vs-instance
+  cross-domain portability is achieved; complements glue-not-
+  replacement (adapter-mode entities use the same contract);
+  respects strict-validation (Layer 1 + Layer 2 fail-loud); body
+  unconstrained by design.
+- **Order note**: **POSITION 1 in pre-RAG queue, BEFORE #11.**
+  Same shape as session 9's #12 work — single-session
+  decision-heavy slot, no implementation. #11's
+  `department.yaml` format must adopt hybrid-shape from
+  inception, NOT pure YAML.
+- **Scope**: 1 session of dedicated framing-pass work (session 10
+  produced the deliverables above). No further #16-only sessions
+  needed; downstream migration work happens during the commitments
+  it constrains.
 
 **6 (expanded)**: per session-9 followup #2, commitment #6's
 scope gains **approval event kinds** (`approval_requested`,
@@ -1147,16 +1286,16 @@ schema. Folds into #6 because it's already adding event kinds
 (`user_confirmation`); approval kinds add cleanly with no new
 infrastructure.
 
-**Recommended next-session order** (revised post-session-9
-followup #2):
+**Recommended next-session order** (revised session 10):
 
 ```
 Session 8:    #10 (A2A + Gemini emulation gate)          1 session   ✅ DONE
 Session 9:    #12 (department modularization design)     1 session   ✅ DONE
-Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
-Session 14-16: #13 (deployment flex + Coolify ref dep)   2-3 sessions
-Session 17-18: #15 (Client + Actor as office entities)   1-2 sessions
-Session 19+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 10:   #16 (AI-as-runtime hybrid-shape contract)  1 session   ✅ DONE
+Session 11-14: #11 (Cowork integration refactor)         3-5 sessions
+Session 15-17: #13 (deployment flex + Coolify ref dep)   2-3 sessions
+Session 18-19: #15 (Client + Actor as office entities)   1-2 sessions
+Session 20+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
               + #14 (Memory Bank) bundled with Phase 1   2 sessions
 ```
 

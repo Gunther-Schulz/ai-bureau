@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.15 (post-session-9 followup #6 + glue-not-replacement principle as architectural commitment)**.
+Status: **v0.16 (session 10 — AI-as-runtime hybrid-shape principle locked + entity-md three-layer frontmatter contract)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,34 @@ Status: **v0.15 (post-session-9 followup #6 + glue-not-replacement principle as 
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.15 → v0.16**: **AI-as-runtime hybrid-shape principle**
+  added as top-level architectural discipline (parallel to
+  pattern-vs-instance + entity-elevation + glue-not-replacement).
+  The principle: domain semantics, process flow, conditional
+  rules, and contextual knowledge live in **markdown bodies
+  attached to entity files**, not in encoded schemas or hardcoded
+  skill procedures. Cross-domain portability is achieved by AI
+  reading prose, not by abstracting over schema variants.
+  Structured layers reserved for **interfaces, identity,
+  persistence, machine contracts**; everything else is prose;
+  AI is the runtime that fuses them at use-time. Three-layer
+  frontmatter contract introduced: Layer 1 universal (every
+  entity, Pydantic base, strict-locked); Layer 2 type-specific
+  (Pydantic subclass per entity type, strict-locked); Layer 3
+  per-deployment extension (deferred to #9). Body conventions
+  recommended-not-enforced (mirrors how memories conventionally
+  use Why:/How-to-apply: lines without validator enforcement).
+  Resolves the "where do conditional rules live?" question:
+  rules about *when* something applies belong with the *process*
+  (process-as-md), not with the entity itself. New v1 commitment
+  **#16 (AI-as-runtime hybrid-shape contract — entity-md +
+  manifest decomposition + gate generalization)** scheduled
+  position 1 in pre-RAG queue, BEFORE #11. Migration of existing
+  `doctypes.yaml` + `references-manifest.yaml` (prose squeezed
+  into block scalars) bundled with #9 + Phase 1 corpus
+  respectively. Audit slice 21 + design-review target 12 added
+  for entity-md conformance scanning. See
+  `docs/decisions/ai-as-runtime-hybrid-shape.md`.
 - **v0.14 → v0.15**: **Glue-not-replacement principle** added as
   top-level architectural discipline (parallel to pattern-vs-
   instance + entity-elevation). PBS is the **glue / coordination
@@ -736,6 +764,184 @@ native when:
 The architecture supports both modes uniformly (#12); the
 principle expresses the strong preference toward integration when
 viable.
+
+---
+
+## AI-as-runtime hybrid-shape principle
+
+> **Domain semantics, process flow, conditional rules, and
+> contextual knowledge live in markdown bodies attached to entity
+> files — not in encoded schemas or hardcoded skill procedures.
+> Cross-domain portability is achieved by AI reading prose, not
+> by abstracting over schema variants. Structured layers are
+> reserved for interfaces, identity, persistence, and machine
+> contracts; everything else is prose; AI is the runtime that
+> fuses them at use-time.**
+
+### Why this matters
+
+Trying to capture domain richness (sub-entity required/optional
+rules, process flow, conditional logic, expert reasoning) in
+formal schemas leads to two failure modes:
+
+1. **The SQL-DB trap**: schemas grow until they recreate
+   relational-database complexity. Per the entity-elevation
+   discipline this is *catastrophic for LLM-mediated AI offices*
+   — brittle, slow to evolve, re-implements enterprise software's
+   worst tendency.
+2. **Prose squeezed into structured fields**: the existing strain
+   visible in `extensions/universal/doctypes.yaml` and
+   `references-manifest.yaml` — `description: >` and `notes: |`
+   block scalars holding what is fundamentally prose
+   (descriptions, expert reasoning, when-this-applies notes).
+   Block scalars work mechanically but suppress the form prose
+   wants to take: no headings, no structured lists, no links, no
+   examples.
+
+The corrective: **AI processing is not a bridging layer between
+structured + freeform; it REPLACES the encoded-rules layer
+entirely.** The model already in use elsewhere — memories
+(frontmatter + markdown body, AI does the understanding) — is the
+canonical pattern. There is no memory engine parsing rules; the
+memory describes the thing in prose, AI applies it at runtime.
+
+This is the explicit implementation of v0.13's gesture: *"closer
+to knowledge graph + document store with stable references, not
+Oracle."*
+
+### The three-layer frontmatter contract
+
+Every managed entity, every manifest entry, every doctype
+declaration follows this shape:
+
+| Layer | Lock-down | Enforced by |
+|---|---|---|
+| **Layer 1 — Universal frontmatter** (every entity) | STRICT (fail-loud) | MCP gate (Pydantic base) |
+| **Layer 2 — Type frontmatter** (per-entity-type) | STRICT (fail-loud) | MCP gate (Pydantic subclass per type) |
+| **Layer 3 — Per-deployment extension fields** | TBD per #9 | TBD per #9 |
+| **Body conventions** (recommended sections per type) | RECOMMENDED (warn) | Audit skill + design-review skill (NOT gate) |
+| **Body free prose** | UNCONSTRAINED | — |
+
+**Layer 1 fields** (every entity): `id`, `label`, `type`, `scope`,
+`scope_key`, `status`, `last_updated`, optional `description`,
+optional `tags`. The `type:` field routes to the Layer-2 Pydantic
+subclass at gate-read time.
+
+**Layer 2 fields**: per-entity-type, locked. Doctypes have
+`style_ref`, `master_file_pattern`, `paired_with`, `document_class`,
+etc. References have `source_url`, `canonical_path`,
+`fetch_method`, `last_fetched`, `checksum_sha256`, etc. Projects
+have `bundesland`, `verfahren_type`, `lifecycle`, `phase`,
+`departments_active`, etc. (today's ProjectState fields, relocated).
+
+**Body conventions** (per entity type, documented at
+`docs/conventions/entity-body-specs.md`, audit-enforced not
+gate-enforced):
+
+| Entity type | Conventional body sections |
+|---|---|
+| `doctype` | When this doctype applies / Section conventions / Pairing semantics / Domain-specific deviations |
+| `reference` | Why this matters / Key sections for our work / Recent amendments / Common citations / Cross-refs |
+| `project` | Context / History (append-only) / Open questions / Decisions |
+| `client` | Communication preferences / Billing conventions / Project history summary / Watch-outs |
+| `process` | Phase sequence / Required doctypes per phase / Mandatory triggers / Exceptions and shortcuts |
+| `actor` | Role + responsibilities / Working preferences / Capabilities + limits |
+
+Recommended-not-required avoids the rigidity that hard-enforced
+templates produce (entities that don't fit the template get filler
+text). Same pattern memories already use — feedback memories
+conventionally have **Why:** + **How to apply:** lines (documented
+in CLAUDE.md), but no validator enforces it; review/practice does.
+
+### Where conditional rules live
+
+Resolved: **rules about *when* something applies belong with the
+*process*, not with the entity itself.** The doctype md describes
+what the doctype IS; the **process md** (per verfahren type)
+describes the flow + which doctypes the flow produces; the
+project entity's body is per-instance narrative, not rules.
+
+Worked example: `extensions/department/planning/processes/
+beschleunigtes.md` (§13a) declares its phase sequence WITHOUT
+Umweltbericht. `regelverfahren.md` declares Umweltbericht as
+required. Project state references `verfahren_type:
+beschleunigtes`; orchestrator loads the matching process md to
+know what's expected. This is **process-as-md, not
+state-machine-as-data**.
+
+### MCP gate generalization (lands in #9)
+
+Today: per-entity tools (`read_project_state`, `write_project_state`).
+
+Tomorrow (per #9 implementation): generic `read_entity(path)` /
+`write_entity(path, file)` with `type:`-field dispatch to the
+appropriate Layer-2 Pydantic subclass. Body preserved as-is across
+read/write cycles (same shape state.md uses today). Replaces
+per-entity-tool sprawl.
+
+### Connections to other disciplines
+
+| Discipline | Connection |
+|---|---|
+| **Entity-elevation** | Hybrid-shape applies AFTER the 3-test verdict. Entity-elevation says "don't over-elevate"; hybrid-shape says "for things that DO elevate, here's their shape." |
+| **Pattern-vs-instance** | Hybrid-shape IS how cross-domain portability is achieved. Same shape (frontmatter + body), different prose per domain. |
+| **Glue-not-replacement** | Adapter-mode entities use the same hybrid-shape contract; per-deployment markdown body is the natural home for "how does THIS office use the external system." |
+| **Strict-validation (meta-rule 4)** | Layer 1 + Layer 2 frontmatter respect strict-validation: required fields fail-loud, no silent defaults. Body is unconstrained by design — that's the principle. |
+| **Source-of-truth (meta-rule 3)** | Hybrid-shape doesn't change source-of-truth placement; it changes **how** source-of-truth content is shaped (when content is semantic/process rather than identity/config). |
+
+### What stays structured (counter-cases)
+
+The principle does NOT push everything to markdown. Things that
+remain rightly structured:
+
+- **Office-config** (`~/.config/pbs-bureau/office.yaml`):
+  deployment switches, paths, mode/adapter selection. Pure config.
+- **AuditEvent / Pydantic schemas**: events are interface
+  contracts between skills + tools. Structured by design.
+- **Adapter Protocols**: Pydantic Protocols defining
+  machine-readable contracts that adapter implementations satisfy.
+- **plugin.json**: plugin manifest. Mechanical.
+- **office-config.schema.yaml**: schema spec. Pure structural.
+
+The boundary: **structured for interfaces, identity, persistence,
+machine contracts; markdown for semantics, rules, domain knowledge,
+process descriptions; AI as runtime fuses them.**
+
+### Discipline check at audit + design-review time
+
+- **Audit slice 21** (entity-md conformance): scans
+  `extensions/**/*.md` entity files for Layer-1 + Layer-2
+  frontmatter conformance + body recommended-section presence.
+  Warns on missing sections; doesn't fail. Implementation bundled
+  with #9.
+- **Design-review target 12** (entity authoring conformance):
+  when authoring or modifying an entity md, validates frontmatter
+  against the appropriate Pydantic subclass + suggests missing
+  recommended body sections. Coordinates with target 11
+  (entity-elevation) so over-elevation gets caught alongside
+  shape-misuse.
+- **Decision-record convention**: any decision proposing a new
+  managed entity type or new manifest type must include
+  Layer-1 + Layer-2 frontmatter spec + body-spec sections.
+
+### Connection to VISION
+
+The principle is the architectural expression of VISION axis 1
+(intertwining-AI-workflow). AI is not a feature of the system; it
+is the runtime that fuses the layers. Without AI as runtime, the
+markdown bodies are inert prose; with AI as runtime, they ARE the
+rules + process + domain knowledge.
+
+Memory drift toward oracle-mode framings shows up as architectural
+drift toward over-structuring: when AI is treated as a passive
+answerer (oracle), the architecture compensates by encoding rules
+in schemas. When AI is treated as a workflow participant
+(intertwining axis), the architecture relies on AI to read prose.
+The hybrid-shape principle locks in the latter.
+
+See `docs/decisions/ai-as-runtime-hybrid-shape.md` for the full
+decision record (worked examples, downstream constraints, defers,
+revisit triggers).
 
 ---
 

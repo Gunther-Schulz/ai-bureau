@@ -6,7 +6,7 @@
 
 1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
 2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
-3. **`ARCHITECTURE.md`** — six durable disciplines (pattern-vs-instance, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns or violate established discipline.**
+3. **`ARCHITECTURE.md`** — **v0.16**. Seven durable disciplines (pattern-vs-instance, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement, **AI-as-runtime hybrid-shape**) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns or violate established discipline.**
 
 **Read conditionally** (when context calls for it):
 - `docs/strategic-positioning.md` — consulting positioning, marketplace decisions, brand questions, sparring-mode pitch
@@ -25,6 +25,68 @@
 The detailed "Read order for next session" section further down is the long-form version of this trio + conditional list. The trio above is the **minimum viable framing** for any session.
 
 **Re-grounding mid-session is valid** when drift is detected — when AI's framings lean toward easy answers, when an architectural discipline isn't being applied, when the user pushes back on something that suggests oracle-mode drift. See `memory/feedback_vision_arch_grounding.md`.
+
+---
+
+End of session 10 (2026-04-29). This session executed pre-RAG
+commitment **#16 (AI-as-runtime hybrid-shape contract)** —
+single-session framing-pass work resolving the structured-vs-
+markdown boundary for managed entities + manifests, before #11's
+`department.yaml` format would lock the wrong choice. Same shape
+as session 9's #12 work: decision record + ARCHITECTURE bump +
+ROADMAP slot + downstream constraints.
+
+**What shipped session 10**:
+
+- **Decision record**: `docs/decisions/ai-as-runtime-hybrid-shape.md`
+  — the principle ("AI is the runtime that fuses structured +
+  markdown, not a bridging layer between them"), three-layer
+  frontmatter contract (Layer 1 universal Pydantic base + Layer 2
+  type Pydantic subclass + Layer 3 per-deployment deferred to #9),
+  body conventions per entity type (recommended-not-enforced),
+  resolution of "where do conditional rules live" (process-as-md,
+  not entity-shaped), MCP gate generalization spec, worked
+  examples (b-plan-begruendung, BauGB, adapter-mode Invoice), 6
+  defers each with specific home + cost being avoided.
+- **ARCHITECTURE.md v0.15 → v0.16**: new top-level discipline
+  section "AI-as-runtime hybrid-shape principle" added (parallel
+  to pattern-vs-instance + entity-elevation + glue-not-replacement).
+  Version log entry. Boundary: structured for interfaces / identity
+  / persistence / machine contracts; markdown for semantics / rules
+  / domain knowledge / process descriptions.
+- **ROADMAP.md commitment #16** inserted at position 1 of pre-RAG
+  queue (BEFORE #11). Constraints flowed to #11 (department.yaml
+  adopts hybrid-shape from inception, NOT pure YAML), #15 (Client
+  + Actor entity definitions land as md files following the
+  contract), #9 (gate generalization + body specs + doctypes
+  migration + audit slice 21 + design-review target 12 all
+  bundled), #6 (gate-side conformance check; AuditEvent format
+  unchanged). Recommended next-session order updated.
+- **Memory `feedback_ai_as_runtime.md`** added — captures the
+  pattern correction: when AI processing is named as load-bearing
+  pillar of an architecture, mirror the memory pattern (minimal
+  skeleton + md body + AI as runtime); resist adding rule-encoding
+  layers (even in prose) because that's the SQL-DB trap in
+  disguise.
+
+**Migration timing per #16 (no urgent migration this session)**:
+
+- `extensions/universal/doctypes.yaml` + per-domain `doctypes.yaml`
+  → per-entity md files: bundled with #9.
+- `extensions/{universal,domain,state}/references-manifest.yaml`
+  → per-reference md files: bundled with Phase 1 corpus
+  (`research-references` already touches every entry during a
+  full refresh).
+- `extensions/department/<dept>/department.yaml` (new file format,
+  #11): adopts hybrid-shape from inception — never persisted as
+  pure YAML to begin with.
+- Audit slice 21 + design-review target 12 implementation:
+  bundled with #9 (depends on entity gate existence).
+
+**Carried forward — session 9 work** (not duplicated, see
+prior history below for full detail). #12 office-vs-department
+shipped session 9; #15 Client+Actor added session-9 followup #2;
+ARCH v0.10 → v0.15 cumulative.
 
 ---
 
@@ -109,57 +171,70 @@ defers, not YAGNI.
 ## Read order for next session
 
 1. **This file (HANDOFF.md)** — current state
-2. **`ARCHITECTURE.md`** — **v0.11**. Office-vs-department resolved;
-   scope-orthogonality 4 axes; meta-rule 3 invalidation includes
-   ProjectState.departments_active.
-3. **`docs/decisions/office-vs-department.md`** — session-9
+2. **`ARCHITECTURE.md`** — **v0.16**. AI-as-runtime hybrid-shape
+   discipline added (session 10). Office-vs-department resolved
+   (v0.11); scope-orthogonality 4 axes; meta-rule 3 invalidation
+   includes ProjectState.departments_active.
+3. **`docs/decisions/ai-as-runtime-hybrid-shape.md`** — session-10
+   load-bearing artifact. Read before tackling #11 (which adopts
+   the hybrid-shape principle for `department.yaml` from
+   inception). Three-layer frontmatter contract; body conventions
+   per entity type; process-as-md.
+4. **`docs/decisions/office-vs-department.md`** — session-9
    load-bearing artifact. Read before tackling #11 (which
    implements much of the structural sweep).
-4. **`docs/decisions/a2a-and-gemini-pattern-emulation.md`** —
+5. **`docs/decisions/a2a-and-gemini-pattern-emulation.md`** —
    session-8 artifact. Per-row decisions + constraints. Rows 8-9
    added in session-8 followup.
-5. **`docs/decisions/`** — other authoritative records:
+6. **`docs/decisions/`** — other authoritative records:
    - `mcp-fallback-policy.md` (session 7, fail-closed corollary)
    - `trigger-convention.md` (session 7, concept labels)
    - `audit-trail-v2.md` (session 7, single-write supersedes v1)
    - `audit-trail-v1.md` (SUPERSEDED, header note)
    - `sparring-output-v1.md` (session 6)
    - `backend-{test-layout,logging,mcp-error-format}.md` (session 5)
-6. **`ROADMAP.md`** — commitments #10 + #12 shipped. Remaining
-   pre-RAG queue: **#11 → #13 → #6 → #7 → #9 → #8 → C → D →
-   Phase 0 → Phase 1+#14**. Generalize-and-publish in v1.x.
-   AI-office builder + Agent Simulation in v2.
-7. **`docs/plugin-conventions.md`** — §11 (triggers) + §11b
+7. **`ROADMAP.md`** — commitments #10 + #12 + #16 shipped.
+   Remaining pre-RAG queue: **#11 → #13 → #15 → #6 → #7 → #9 →
+   #8 → C → D → Phase 0 → Phase 1+#14**. Generalize-and-publish
+   in v1.x. AI-office builder + Agent Simulation in v2.
+8. **`docs/plugin-conventions.md`** — §11 (triggers) + §11b
    (fail-closed fallback policy)
-8. **`VISION.md`** — pioneer-instance milestones
-9. **`docs/audits/`** + **`docs/design-reviews/`** — first runs
-10. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing
-11. **`docs/backend-conventions.md`** — backend idioms
-12. **`plugin/CLAUDE.md`** — meta-rule 4 summary
-13. **`plugin/skills/audit/`** — **0.9.0** (slice 20 added)
-14. **`plugin/skills/design-review/`** — **0.8.0** (target 11 added)
-15. **`plugin/skills/orchestrator/`** — **0.10.0**
-16. **`backend/mcp-server/src/pbs_mcp/audit_trail.py`** — session 8
-    schema with ActorKind + new fields + cross-ref validator
-17. **`backend/mcp-server/src/pbs_mcp/project_state.py`** —
-    session 9 `departments_active` field
-18. All other 16 skills — session-7 versions snapshot still current
-    (no skill bodies touched session 8 or 9)
+9. **`VISION.md`** — pioneer-instance milestones
+10. **`docs/audits/`** + **`docs/design-reviews/`** — first runs
+11. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing
+12. **`docs/backend-conventions.md`** — backend idioms
+13. **`plugin/CLAUDE.md`** — meta-rule 4 summary
+14. **`plugin/skills/audit/`** — **0.9.0** (slice 20 added; slice
+    21 entity-md conformance scheduled with #9)
+15. **`plugin/skills/design-review/`** — **0.8.0** (target 11
+    added; target 12 entity authoring conformance scheduled with
+    #9)
+16. **`plugin/skills/orchestrator/`** — **0.10.0**
+17. **`backend/mcp-server/src/pbs_mcp/audit_trail.py`** —
+    session 8 schema with ActorKind + new fields + cross-ref
+    validator
+18. **`backend/mcp-server/src/pbs_mcp/project_state.py`** —
+    session 9 `departments_active` field; will refactor to
+    `extensions/department/planning/entities/project.md` per
+    #16 + #9
+19. All other 16 skills — session-7 versions snapshot still
+    current (no skill bodies touched sessions 8, 9, or 10)
 
 ---
 
-## ⏳ Pre-RAG gating items (13 commitments remaining, post-session-9 followups)
+## ⏳ Pre-RAG gating items (post-session-10 — #16 shipped)
 
 **#10 ✅ shipped session 8.** **#12 ✅ shipped session 9.**
+**#16 ✅ shipped session 10** (AI-as-runtime hybrid-shape contract).
 **#14 (Memory Bank) added session-8 followup.** **#15 (Client +
 Actor) added session-9 followup #2** — pre-RAG, scheduled between
 #13 and #6. Recommended execution order:
 
 ```
-Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 14-16: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
-Session 17-18: #15 (Client + Actor as office entities)         1-2 sessions
-Session 19+:  #6 → #7 → #9 → #8                               per existing queue
+Session 11-14: #11 (deep Cowork integration refactor)         3-5 sessions
+Session 15-17: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
+Session 18-19: #15 (Client + Actor as office entities)         1-2 sessions
+Session 20+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
@@ -183,6 +258,13 @@ Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 8. ✅ **Office-vs-department modularization** — **done session 9**.
    Decision record + ProjectState schema addition + ARCHITECTURE
    bump.
+9. ✅ **AI-as-runtime hybrid-shape contract** — **done session 10**.
+   Decision record + ARCHITECTURE bump (v0.15→v0.16) + ROADMAP
+   commitment #16 + downstream constraints to #11/#15/#9/#6.
+   Three-layer frontmatter contract (universal Pydantic base +
+   per-type Pydantic subclass + per-deployment deferred). Body
+   conventions per entity type, recommended-not-enforced.
+   Process-as-md, not state-machine-as-data.
 
 ### Remaining for next-immediate-session-before-RAG
 
@@ -350,9 +432,10 @@ directly (continuous low-rate writes).
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
 | `VISION.md` | Three-axis thesis (canonical "why") |
-| `ARCHITECTURE.md` | **v0.11** — office-vs-department resolved + 4-axis scope-orthogonality |
-| `ROADMAP.md` | 14 v1 commitments (#10 + #12 ✅ shipped); remaining queue + downstream constraints |
+| `ARCHITECTURE.md` | **v0.16** — AI-as-runtime hybrid-shape principle added (session 10); office-vs-department resolved (v0.11) + 4-axis scope-orthogonality |
+| `ROADMAP.md` | 16 v1 commitments (#10 + #12 + #16 ✅ shipped); remaining queue + downstream constraints |
 | `~/dev/reference/knowledge-work-plugins/` | Cloned Anthropic plugins repo for #11 study |
+| `docs/decisions/ai-as-runtime-hybrid-shape.md` | **Session-10 deliverable** — three-layer frontmatter contract + body conventions per entity type + process-as-md + gate generalization spec + 6 defers |
 | `docs/decisions/office-vs-department.md` | **Session-9 deliverable** — per-question decisions + downstream constraints + 3 defers |
 | `docs/decisions/a2a-and-gemini-pattern-emulation.md` | Session-8 deliverable — 9 rows of decisions + multipliers framing |
 | `docs/decisions/mcp-fallback-policy.md` | Session-7 fail-closed corollary |
@@ -548,3 +631,5 @@ All pushed to origin/main.
   - `feedback_refine_pareto.md`
   - `feedback_defer_instinct.md`
   - `feedback_llm_instruction_tightness.md`
+  - `feedback_vision_arch_grounding.md`
+  - `feedback_ai_as_runtime.md` (session 10 — when AI processing is named as load-bearing pillar, mirror the memory pattern; resist rule-encoding layers even in prose)
