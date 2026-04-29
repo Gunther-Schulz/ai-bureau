@@ -1999,6 +1999,76 @@ Compared to:
   enterprise platform overhead before you have one client;
   vendor-locked from the start."
 
+**The agent-typology gap that defines our consulting niche**
+
+Three distinct agent types currently dominate the market — and
+the one that matters most for "AI office" abstraction is the
+LEAST commoditized:
+
+| Agent type | Examples | Shape | Market state |
+|---|---|---|---|
+| **Product-wrapper** (vendor tool exposed as agent) | Salesforce CRM agent, Workday HR agent, ServiceNow agent, Box/Adobe/Oracle agents in Gemini Agent Gallery; Slack/Notion/DocuSign Cowork connectors | One SaaS product's API as agent capabilities | **Heavily commoditized** — every vendor ships theirs |
+| **Capability-slice** (single workflow specialist) | Spellbook (contract redlines), Harvey-tools (contract analysis), EuclidHL (zoning Q&A), brand-voice slices | One workflow within a domain | Crowded commercial space |
+| **Department-shaped** (functional-area plugin with multi-skill coverage) | Anthropic's `legal`, `finance`, `hr` plugins; PBS-bureau today | Functional area, may use multiple tools, multi-skill | Sparse — Anthropic ships ~11 shallow examples |
+| **Multi-department office** (coordinated multi-functional with shared state + lifecycle + discipline) | (PBS-bureau eventually, after #12 lands) | Office abstraction with N departments coordinating | **Empty in open source; rare even commercially** |
+
+**What big companies CAN buy off-the-shelf**: product-wrapper
+agents for every SaaS they pay for + cross-SaaS automation via
+A2A protocol. That's "agentic iPaaS" (integration platform with
+LLM-mediated workflows replacing declarative pipes). Useful but
+NOT an AI office — it's AI-mediated cross-SaaS access.
+
+**Concrete user-facing example of what the off-the-shelf platform
+gives you**:
+
+> User: "Update the Salesforce opportunity, create a Workday entry
+> for the new hire, and ping ServiceNow for IT setup."
+> → Salesforce agent updates → A2A message to Workday → Workday
+> creates HR record → A2A message to ServiceNow → IT request queued
+
+That's product-wrapper-agents-talking-to-each-other. It's
+useful. It is not a coherent AI office.
+
+**What big companies CANNOT buy off-the-shelf**:
+- **Department-shaped agents** for their actual departments —
+  Anthropic's `legal`/`finance`/`hr` plugins are shallow
+  (single-department, no orchestrator, no lifecycle, no audit
+  discipline)
+- **Multi-department office coordination** — domain-coherent
+  shared state across departments, with architectural discipline
+  ensuring coherence
+- **The office layer** that turns the agent fleet into a coherent
+  operation rather than a federated automation pipeline
+
+**The consulting positioning sharpens to**:
+
+> "Your fleet of product-wrapper agents (Salesforce, Workday,
+> ServiceNow) plus your A2A cross-SaaS automation gives you
+> AI-mediated SaaS integration. That's agentic iPaaS — not an AI
+> office. The actual office layer — domain-coherent multi-
+> department coordination with shared state, lifecycle, audit
+> trail, and architectural discipline — has to be deliberately
+> designed. **That's what I do.** I architect the office
+> abstraction that turns your fleet of agents into a coherent
+> operation, on whatever runtime archetype fits your scale (our
+> single-big-model orchestration for solo/small; multi-agent A2A
+> on Gemini Enterprise for enterprise federation). Methodology
+> and architectural discipline are vendor-neutral and scale-
+> independent; the office abstraction is the IP."
+
+This is meaningfully different from competing consulting offers:
+- **"I'll build you another product-wrapper agent"**: already
+  commoditized; vendor agents are free.
+- **"I'll connect your SaaS apps via A2A"**: Gemini Enterprise +
+  Apigee already does this declaratively.
+- **"I'll write you Python"**: any consultant.
+
+**Methodology + office-abstraction-design is the consulting IP.**
+Independent of runtime archetype, the office-design layer is what's
+missing in the market. PBS-bureau (and the AI-office-builder vision)
+is the open-source proof-of-concept that makes this offering
+credible to consulting prospects.
+
 **Open questions** (deferred until trigger arises):
 - Does the v2 AI-office-builder generate Cowork-deployable
   offices AND Gemini-Enterprise-deployable offices from the same
