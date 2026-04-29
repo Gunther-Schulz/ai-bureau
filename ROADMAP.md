@@ -1183,6 +1183,31 @@ single-write integration per v2), C (sparring-output integration),
 D (plugin version bump), and the Phase 0 items 4 (feature-survey
 skill) + 5 (testing methodology) per HANDOFF.md.
 
+### Marketing + branding strategy (pre-launch todo)
+
+**Status**: not yet defined. Open question flagged here so it doesn't get lost in the architectural-work queue. NOT a pre-RAG commitment; lands before any public consulting launch.
+
+**What needs to be decided** (slow-moving, durable choices — not tactics):
+
+- **Brand identity** — what's the consulting practice called? Options: "Gunther Schulz" (personal brand), "pbs-bureau" (artifact name reused), or a third brand (e.g., "AI Office Architecture" or similar). Each has tradeoffs (personal-brand limits scale; artifact-reuse confuses framework-vs-consulting; new brand needs separate building). Resolve before public launch artifacts.
+- **ICP (Ideal Customer Profile)** — formal definition: domain / size / budget / pain / decision-maker profile. Today implicit ("solo professionals + small companies in expert-practitioner domains"); needs formalization for sales discipline.
+- **Channel priorities** — broad ordering only (not specific tactics). Where does lead generation start: open-source repo + blog + conference talks; or also Twitter/LinkedIn; or also podcasts; etc. Prioritize the high-leverage few.
+- **Content pipeline themes** — categories that compound (decision records as essays; comparative architecture writing; public design-review sessions; case studies post-deployment); not specific posts.
+- **Domain / website strategy** — does pbs-bureau.com or guntherschulz.de or a new domain anchor consulting? Connects to brand identity decision.
+
+**What's intentionally NOT in scope here**:
+- Specific conference submissions (depend on what's accepting when launch happens)
+- Specific blog post drafts (write when ready to publish)
+- Pitch deck (build per first concrete prospect; varies)
+- Pricing / proposal templates (depend on first 1-3 engagements as calibration)
+- Visual brand identity (logo, palette, etc. — defer until brand-name decision is made)
+
+**Pull-forward trigger**: before any public launch / open-source-repo announcement / first consulting outreach. The brand identity decision in particular is a one-time choice; making it before launch is much cheaper than rebranding after.
+
+**Output (when activated)**: marketing/branding section added to `docs/strategic-positioning.md` (or sibling `docs/marketing-strategy.md` if substantial enough); decisions captured; pre-launch checklist resolved.
+
+**Connection to existing positioning**: `docs/strategic-positioning.md` already covers strategic positioning, competitive landscape, sharpest-pitch drafts, lived-experience credibility. The marketing/branding workstream operationalizes that strategic content — what brand voice carries it, which channels distribute it, who's the audience.
+
 ### Strategic milestone — Schulz Planungsbüro as exit / "AI-augmented business" sale (session 7, user-articulated)
 
 **The framing**: Gunther's father (co-founder of Schulz
