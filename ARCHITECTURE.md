@@ -1,8 +1,9 @@
 # pbs-bureau architecture — what goes where
 
 This document is the canonical placement reference. When in doubt
-about where new content belongs, walk the meta-rules first, then the
-decision rules below.
+about where new content belongs, walk the **three decision rules**
+below. Meta-rules establish principles; the decision rules apply
+them.
 
 > **Vision anchor.** PBS is built on three interlocking principles:
 > **intertwined-AI-workflow (not tacked-on features)**, **sparring
@@ -13,69 +14,82 @@ decision rules below.
 > defensible output — persistent state, orchestrated behaviors,
 > source-grounded outputs, surfaced decisions, explicit human-
 > authority gates, counter-arguments, calibrated confidence,
-> selective friction. See `VISION.md` for the full thesis,
-> intertwining requirements, trust infrastructure, sparring
-> requirements, and authorship preservation. Every meta-rule and
-> decision rule below traces back to this anchor.
+> selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.4 (post-execution-locality)**.
+Status: **v0.5 (post-design-review session 5 simplification)**.
+
 - v0.1 → v0.2: nine entity types + 6 decision rules.
-- v0.2 → v0.3: scope-orthogonality meta-rule live, layered
-  manifests in repo, integration adapter scaffolding deployed,
-  schema migration framework in place.
-- v0.3 → v0.4: execution-locality meta-rule (validation in MCP
-  gates; skills declare `mcp_tools_required[]` in frontmatter;
-  `settings.json` permissions for static path blocks; hooks
-  deferred until concrete need).
+- v0.2 → v0.3: scope-orthogonality live, layered manifests in
+  repo, integration adapter scaffolding deployed, schema migration
+  framework in place.
+- v0.3 → v0.4: execution-locality meta-rule (skills declare
+  `mcp_tools_required[]`; `settings.json` permissions; hooks
+  deferred).
+- **v0.4 → v0.5**: design-review-driven simplification. **5 meta-rules
+  → 4 + 1 named convention**: integration-adapter demoted to corollary
+  of app-vs-office; scope-orthogonality demoted to layering convention;
+  execution-locality renamed to execution-determinism; new
+  source-of-truth & invalidation meta-rule added. **9 entity types
+  → 5**: A+B merged into Skill Bundle; G+H merged into Configuration;
+  I demoted (it's an internal pattern of E, not a peer). A-I letter
+  scheme dropped — names speak for themselves. **6 decision rules
+  → 3** audience-first.
+
+> **Scope boundary.** This doc covers placement (which entity type /
+> where). For *within-tier idioms* (how to write the thing once
+> you've decided where it goes) see:
+>
+> - `docs/plugin-conventions.md` — Skill Bundle idioms (frontmatter,
+>   semver, body patterns, references organization, routing
+>   handoffs).
+> - `docs/backend-conventions.md` — Backend idioms (test layout,
+>   logging, MCP error format).
+>
+> Conventions docs trace decisions back here but never re-litigate
+> placement.
 
 ## Maintenance discipline
 
-**Keep this document up to date.** Every meta-rule change, new
-entity type, schema bump, integration class, or significant
-architectural refactor lands here in the same commit that
-introduces the change. If you change how content is placed, the
-change has not been made until ARCHITECTURE.md reflects it.
+A 3-line checklist:
 
-ROADMAP-tracked extensions get a one-line pointer under "Designed
-extensions, not yet implemented" (below) so future sessions know
-they're coming and don't re-discover them.
+1. Every meta-rule change, schema bump, or significant refactor
+   lands in the same commit as the ARCHITECTURE.md update.
+2. After meta-rule additions / refactor sweeps, run `audit` (drift
+   detection) and `design-review` (soundness review) — see
+   `plugin/skills/{audit,design-review}/`.
+3. Sunset deprecated concepts via the deprecation procedure (below).
 
-Periodically (definitely after any meta-rule addition or refactor),
-run a comprehensive audit. Two complementary skills handle this:
+### Deprecation procedure
 
-- **`plugin/skills/audit/`** — drift detection ("does X match what
-  X claims to be?"). Compliance-focused. Artifacts land at
-  `docs/audits/<scope>-<YYYYMMDD>.md`.
-- **`plugin/skills/design-review/`** — first-principles soundness
-  review ("is X's claim about itself the right shape?"). Challenges
-  the design itself with explicit anti-status-quo bias mechanism
-  (greenfield reframe). Artifacts land at
-  `docs/design-reviews/<scope>-<YYYYMMDD>.md`.
+When retiring a concept (entity type, meta-rule, MCP tool name,
+skill, etc.):
 
-Both skills produce frozen snapshots; closures tracked via HANDOFF
-+ closure banners. Use `audit` to verify alignment with current
-design; use `design-review` to challenge whether the current
-design is the right design — particularly during the pre-launch /
-pre-distribution window when radical reshapes are cost-cheap.
+| Concept | Procedure |
+|---|---|
+| **Skill** | Bump major + add `deprecated: true` to frontmatter; remove after 1 plugin release. Document successor in description. |
+| **MCP tool** | Alias old name → new for one minor version of pbs-mcp; remove after that. |
+| **Entity type** | Pre-launch (now): rewrite ARCHITECTURE.md + sed across repo in one commit. Post-launch: announce in HANDOFF, add to deprecated-concepts list, give 1 release deprecation window. |
+| **Meta-rule** | Reformulate in-place with explicit replaces-X note. Audit + design-review on next refactor verifies the replacement holds. |
+| **Office-config field** | Bump schema_version + write migration that drops the field; existing offices forward-migrate transparently. |
 
-**Scope boundary**: this doc covers placement (which tier / which
-entity type / where does it belong). For *within-tier idioms* —
-how to write the thing once you've decided where it goes — see:
+Pre-launch / pre-distribution: deprecation is essentially
+free — change in place. After first user-facing release the
+procedure tightens.
 
-- `docs/plugin-conventions.md` — Type A (skills) + Type B (skill
-  references) idioms: frontmatter contract, version semver, body
-  patterns, references organization, routing handoff conventions.
-- `docs/backend-conventions.md` — Type E (backend code) idioms:
-  test layout, logging, MCP error format.
+---
 
-Conventions docs trace decisions back here (especially meta-rule 5
-execution locality) but never re-litigate placement.
+# Meta-rules
 
-## Meta-rule: app vs office (deployment portability)
+The architecture rests on **four meta-rules**. Plus one named
+convention (scope-orthogonality) that applies *within* layered
+content. New content goes through the relevant meta-rule before
+placement.
+
+## Meta-rule 1: app vs office (deployment portability)
 
 The repository is **a generic German planning-bureau workflow app**
 that any Planungsbüro can deploy. It is not a PBS-specific instance.
-Per-deployment configuration — paths, identity, practices, styling,
+Per-deployment configuration — paths, identity, actors, styling,
 state-law extensions — lives **outside the repo** in an
 `office-config.yaml` resolved via:
 
@@ -89,308 +103,190 @@ the `setup-office` skill on first run.
 **Hard rules for app code (skills, backend, hooks, memory):**
 
 - Never hardcode hidrive/projects/state paths. Read them from
-  `paths.*` in the loaded office-config.
+  `roots.*` in the loaded office-config.
 - Never hardcode office identity (name, address, signature, phone,
-  email). Read them from `identity.*`.
-- Never hardcode practice names ("schulz", "hendrik"). Read
-  `practices[]` from config.
-- Never hardcode client/project names (Maxsolar, Friedrichshof,
-  Vorbeck). Use neutral examples in docs (`YY-NN <Client> -
-  <Location>`); refer to live projects only via paths the user
-  provides at runtime.
-- State-specific and domain-specific references live in
-  `extensions.{references,doctypes}_manifests` as a layered map
-  (`{universal, domain: {<X>: path}, state: {<X>: path}}`).
-  Loader walks the union per the office's `scope.{domains,states}`
-  selection. Bundesland is a per-PROJECT property
-  (`state.md.bundesland`), not an office property — offices freely
-  take projects in any state in their scope.
-- LaTeX styling (geometry, header layout, fonts, colors) lives in the
-  office's `office-style.sty`, NOT in app skeletons or classes.
+  email). Read them from `office.*` (post-v3 merge of identity into
+  office).
+- Never hardcode actor names. Read `actors[]` from config (kind=internal
+  for practices, kind=external for partners).
+- Never hardcode client/project names. Use neutral examples in docs
+  (`YY-NN <Client> - <Location>`); refer to live projects only via
+  paths the user provides at runtime.
+- State-specific and domain-specific references are discovered by
+  walking `<repo>/extensions/{universal,domain/<X>,state/<X>}/`
+  filtered by the office's `scope.{domains,states}` (loader walks
+  the union; manifests are NOT enumerated in office-config).
+  Bundesland is a per-PROJECT property (`state.md.bundesland`), not
+  an office property.
+- LaTeX styling lives in the office's `office-style.sty`, NOT in
+  app skeletons or classes.
 - Office identity macros (`\OfficeName`, `\OfficeAddressLines`,
-  `\OfficeSigner`) are auto-generated by the backend from
-  `identity.*` before each compile, NOT hand-written in app or
-  office files.
+  `\OfficeSigner`) are auto-generated by the backend from `office.*`
+  before each compile, NOT hand-written.
 
-**Skill author checklist** (review before merging any skill change):
+### Mechanism: pluggable integration adapters
 
-1. Does this skill mention a specific office, client, project, or
-   path? Replace with config lookup or neutral example.
-2. Does this skill assume a specific federal state's laws or
-   leitfäden? If yes, those references must move to
-   `extensions.references_manifest`.
-3. Does this skill assume a particular folder layout? If yes, the
-   layout values come from `conventions.project_folder_layout`.
-4. Does this skill assume office identity content? Pull from
-   `identity.*`, never embed.
-5. Does this skill assume a single-practice office? Verify it works
-   with `practices: [{id: main, label: "Büro"}]`.
+Where the app interfaces with external systems whose mechanism
+varies per deployment (email service, calendar, scanner, phone,
+accounting, DMS, GIS, etc.), the implementation lives behind a
+small **protocol + adapter pattern**: a Python `Protocol` defines
+the contract; each adapter (`thunderbird-maildir`, `imap`, `caldav`,
+etc.) implements it; office-config selects which adapter is active
+per class.
 
-**The reference deployment.** PBS is the reference deployment of this
-app — its config is *outside the repo*, at the env-var or XDG
-location, never committed.
+Same architectural lesson as paths/identity/actors/scope: no
+hardcoded mechanism. The adapter boundary is in place from day one;
+concrete adapters land per demand. Adapters live at
+`backend/mcp-server/src/pbs_mcp/integrations/<class>/<adapter>.py`,
+each exporting an `Adapter(config: dict)` class implementing the
+protocol at `<class>/protocol.py`. `load_adapter(class_name)`
+resolves via `cfg.find_integration(class_name)` (v3 free-form
+list).
+
+The class set is open — any string is valid as long as a matching
+subpackage exists. (Per design-review: integration adapters are
+*backend-internal organizing pattern*, not a top-level meta-rule
+peer; they're a consequence of app-vs-office deployment portability.)
 
 **Schema versioning + migrations.** Adding fields to office-config
 schema requires bumping `CURRENT_SCHEMA_VERSION` in
 `backend/.../office_config.py` and adding a migration at
-`backend/.../office_config_migrations/v<N>_to_v<N+1>.py` exporting
-`migrate(data: dict) -> dict`. The dispatcher applies migrations
-sequentially in-memory on every load; existing PBS configs forward-
-migrate transparently. The `setup-office` skill reconcile mode
-prompts the user for any newly-required field and writes the
-migrated form back to disk.
+`backend/.../office_config_migrations/v<N>_to_v<N+1>.py`. The
+dispatcher applies migrations sequentially in-memory on every load.
 
-**Skill versioning.** Every SKILL.md carries `version:` (semver) in
-frontmatter. Bump on behavioral change (minor for new behavior,
-patch for fixes). Reload via `/reload-plugins` after edits;
-`dev-link.sh` keeps the cache symlinked.
+## Meta-rule 2: memory vs RAG (citation freshness)
 
-## Meta-rule: scope orthogonality (universal × domain × state)
-
-The third meta-rule. Reference content, doctype registries, skeletons,
-and bausteine all decompose along the same three orthogonal axes:
-
-- **universal** — applies to every German Planungsbüro deploying this
-  app, regardless of planning domain or Bundesland.
-- **domain** — applies to bureaus working in a specific planning
-  domain (e.g. PV-FFA, Wind, Naturschutz, Innenentwicklung).
-  Multiple domains can be active simultaneously.
-- **state** — applies to bureaus working in a specific Bundesland
-  (BB, BW, BY, ..., TH). Multiple states can be active simultaneously.
-
-A bureau's effective configuration is its `(domains × states)`
-selection (set in `office-config.yaml > scope.{domains,states}`).
-Layered loaders merge the universal layer with each selected domain
-and state layer at runtime.
-
-**Where this lives:**
-
-- **References manifests**: `extensions/{universal,domain/<X>,state/<X>}/references-manifest.yaml`
-- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>}/doctypes.yaml`
-- **Skeletons**: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
-- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`
-- **Office-style overlays**: `plugin/templates/office-style/office-style.{default,<DOMAIN>}.sty`
-
-**Hard rules for placing new content:**
-
-- Decide the scope BEFORE the path. Ask: does this apply to every
-  German bureau (universal), every bureau in this domain (domain),
-  every bureau in this state (state)?
-- A baustein has exactly one scope. If a candidate baustein applies
-  to multiple, either promote it up the layer (`universal` if truly
-  cross-domain) or split it.
-- An entry's home is independent of who created it. PBS adding a
-  Naturschutz entry today doesn't make that entry PBS-specific —
-  it lives in the universal Naturschutz domain and applies to any
-  future bureau that selects Naturschutz.
-
-**The `author-manifest` skill** scaffolds new domain or state manifests
-for scopes that don't yet have content. New domains added this way
-become available to every future deployment.
-
-**The scope is part of the public API.** Adding a new domain or state
-is a deliberate architectural extension, not a one-off addition.
-
-## Meta-rule: integration adapter pattern (capability swappability)
-
-Where the app interfaces with external systems whose mechanism varies
-per deployment (email service, calendar, scanner, phone system,
-accounting), the implementation lives behind a small **protocol +
-adapter pattern**: a Python `Protocol` defines the contract; each
-adapter (`thunderbird-maildir`, `imap`, `caldav`, etc.) implements
-it; office-config selects which adapter is active per class.
-
-Same architectural lesson as paths/identity/practices/scope: no
-hardcoded mechanism. The adapter boundary is in place from day one
-(currently all default to `none`); concrete adapters land per
-demand.
-
-Adapters live at
-`backend/mcp-server/src/pbs_mcp/integrations/<class>/<adapter>.py`,
-each exporting an `Adapter(config: dict)` class implementing the
-protocol at `<class>/protocol.py`. `load_adapter(class_name)`
-resolves via `office_config.integrations.<class>.adapter`.
-
-This pattern is entity type **I**.
-
-## Meta-rule: memory vs RAG (citation freshness)
-
-A second hard line: **what lives in memory** vs **what lives in the
-RAG corpus**. The split protects against legal-citation rot.
+A hard line: **what lives in memory** vs **what lives in the RAG
+corpus**. The split protects against legal-citation rot.
 
 **Memory** (loaded into context every session) holds:
-- Workflow logic — phase order, phase→state mapping, phase→folder
-  mapping, doctype structure, two-axis Beteiligungs-Logik.
+- Workflow logic — phase order, phase→state mapping, doctype structure.
 - Conventions — German number formatting, quotation conventions,
   hyphenation rules, korrektur-rules.
 - Reference content (project-structure.md, per-project-memory
   format docs).
-- Saved bausteine (Type D records under
-  `memory/bausteine/{universal,domain/<X>,state/<X>}/`).
+- Saved bausteine.
 - Universal reasoning patterns that don't depend on current law text.
 
 (Note: doctype + reference registries are NOT memory — they're
-layered manifests in `extensions/`, type H. Memory holds the
-prose conventions and saved instance records.)
+layered manifests in `extensions/`. Memory holds prose conventions
+and saved instance records.)
 
-**RAG** (`<references_root>/`, retrieved on demand via
+**RAG** (`<roots.references>/`, retrieved on demand via
 `search_corpus` / `read_corpus_file`) holds:
 - Verbatim legal text (BauGB §X, BNatSchG §Y, etc.).
-- Verbatim Verfahrensvermerk wording (state-specific, varies per
-  Verfahrenstyp; lives in state-leitfäden).
+- Verbatim Verfahrensvermerk wording.
 - Court ruling text.
 - Leitfaden content from publishing bodies (KNE, LUNG, etc.).
 - Anything that can be amended at the source.
 
 **§-references as labels are allowed in memory** ("Phase 5a —
-§3 Abs.2 BauGB") for navigation and identification. Verbatim legal
-text and paraphrased law-text are NOT — those route through RAG.
+§3 Abs.2 BauGB") for navigation. Verbatim legal text and paraphrased
+law-text are NOT — those route through RAG.
 
-**Tracking dependencies on referenced laws:** any cross-cutting
-memory doc that names a law declares its dependencies in
-frontmatter:
+**Source-grounding rule.** Any legal citation in produced output
+(drafts, reviews, mails) must be backed by a tool result — even if
+the same §-number appears in memory. Memory's role is naming and
+navigation, never authoring. The §-label "§3 Abs.2 BauGB" appearing
+in memory does NOT satisfy the citation-evidence requirement when
+drafting.
+
+## Meta-rule 3: source-of-truth & invalidation
+
+Every entity declares its invalidation contract: how the system
+detects that this thing is stale, superseded, or wrong, and what
+needs to happen when it is.
+
+**Per entity type** (see "The five entity types" below for full
+list):
+
+| Entity | Invalidation contract |
+|---|---|
+| Skill Bundle | semver `version:` field; bump on behavior change. Body changes invalidate skill behavior on `/reload-plugins`. |
+| Memory (prose) | `references_used: []` frontmatter declares dependent law refs. `research-references` flags affected docs in `memory/product-backlog.md` when a referenced law is updated. |
+| Memory (records) | `status: active|flagged|archived|superseded`, `last_validated`, `review_due`, `references[].verified_against_version`. `validate-bausteine` sweeps for stale records. |
+| Backend | Python imports + Pydantic schemas; restart MCP server after changes. No declarative invalidation hook. |
+| Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
+| External data | Per-project `_ai/state.md.lifecycle` declares phase + status; `roots.references_root` corpus carries `changelog.md`. |
+
+**Cross-cutting concern handler.** `research-references` is the
+canonical refresh skill: after fetching an updated reference, it
+scans both bausteine (`references[]`) and memory docs
+(`references_used[]`) for matches. Bausteine matching → flagged.
+Memory docs matching → logged to `memory/product-backlog.md` with
+affected paths.
+
+**Frontmatter declares invalidation hooks.** Cross-cutting docs
+that name laws declare them in frontmatter:
 
 ```yaml
 ---
 references_used:
   - {law: BauGB, paragraph: §3 Abs.2}
-  - {law: BauGB, paragraph: §4 Abs.2}
   - {ruling: BVerwG-9-A-22-11}
   - {leitfaden: KNE-Anlagengestaltung}
 ---
 ```
 
-`research-references` is the cross-cutting concern handler. After
-fetching a refreshed reference, it scans both bausteine
-(`references[]`) and memory docs (`references_used[]`) for matches.
-On change:
-- Matching bausteine → `status: flagged`.
-- Matching memory docs → log to `<repo>/memory/product-backlog.md`
-  with the affected doc path + which references changed (memory has
-  no status field; the orchestrator surfaces flagged docs at session
-  open via the four-way menu).
+This rule was previously implicit (scattered across "What changes
+invalidate what" prose + per-entity-type schemas). Promoting to a
+meta-rule forces every new entity type to answer "how does the
+system know you're stale?" before shipping.
 
-**Source-grounding rule unchanged**: any legal citation in produced
-output (drafts, reviews, mails) must be backed by a tool result —
-even if the same §-number appears in memory. Memory's role is naming
-and navigation, never authoring. The §-label "§3 Abs.2 BauGB"
-appearing in memory does NOT satisfy the citation-evidence
-requirement when drafting.
+## Meta-rule 4: execution determinism (where deterministic work lives)
 
-## Meta-rule: execution locality (where deterministic work lives)
-
-The fifth meta-rule. About *where* operations execute, not where
-content lives.
+About *where* operations execute, not where content lives.
 
 **Core principle.** Operations with a single deterministic correct
 execution — validation, schema enforcement, transactional writes,
 side-effect coupling, cross-reference consistency, computed
-properties (hashes, indexes), migrations — live in MCP gates
-(Type E backend code, exposed as MCP tools). Skills are for
-judgment, conversation, and surfacing decisions; they orchestrate
-MCP tool calls, never reimplement what those tools do.
+properties (hashes, indexes), migrations — live in **MCP gates**
+(backend code, exposed as MCP tools). Skills are for judgment,
+conversation, and surfacing decisions; they orchestrate MCP tool
+calls, never reimplement what those tools do.
+
+(Renamed from "execution locality" in v0.4. Locality suggests
+*physical location*; the actual axis is determinism — single-right-
+answer vs. judgment.)
 
 **The persistence-layer boundary.** Cleanest line: *anything that
 touches durable state goes through MCP; session-ephemeral state
-stays in skills.* The orchestrator's watch list, in-conversation
-findings, surfacings queued during a turn — all skill. Writes to
-bausteine, manifests, state.md, office-config — all MCP.
+stays in skills.* Watch list, in-conversation findings, surfacings
+queued during a turn — all skill. Writes to bausteine, manifests,
+state.md, office-config — all MCP.
 
-**Deterministic vs interpretive verdicts.** Validation with a single
-right answer (frontmatter shape, ISO state code, schema conformance,
-citation drift on exact-string match) is deterministic → MCP.
-Validation requiring interpretation (does this baustein content
-actually concern §44 BNatSchG? does this language read as collegiate
-or formal?) is interpretive → skill, surfaces verdict to user. When
-unclear, ask: would two implementations agree byte-for-byte on the
-verdict? If yes, MCP. If no, skill.
+**Deterministic vs interpretive verdicts.** Validation with a
+single right answer (frontmatter shape, ISO state code, schema
+conformance, citation drift on exact-string match) is deterministic
+→ MCP. Validation requiring interpretation (does this baustein
+content actually concern §44 BNatSchG? does this language read as
+collegiate or formal?) is interpretive → skill, surfaces verdict
+to user. When unclear, ask: would two implementations agree byte-
+for-byte on the verdict? If yes, MCP. If no, skill.
 
 **Enumeration-vs-selection corollary.** "List the candidates" is
 deterministic, scope-aware → MCP (`list_bausteine`,
 `list_reference_manifests`). "Pick the right one for this drafting
-context" is judgment → skill. Both halves run in the same workflow;
-the skill calls the MCP tool, then interprets the candidates.
+context" is judgment → skill.
+
+**Skill frontmatter declares MCP-tool dependencies.** Every skill's
+`SKILL.md` frontmatter declares which MCP tools it relies on
+(`mcp_tools_required[]`, `mcp_tools_optional[]`,
+`fallback_when_mcp_absent`). See `docs/plugin-conventions.md` §1
+for the full contract. Tools are referenced by snake_case name —
+matches the Python function name in `pbs_core/`. Frontmatter is
+machine-checkable; future audit slices verify every declared tool
+exists in the MCP server's registry.
 
 **Static path-based access control belongs in `settings.json`,
 not in code.** Where a path should never be written outside a
-specific MCP tool's context (e.g., direct Write to
-`memory/bausteine/**`), use a permission deny rule. Cheaper than
-scaffolding code paths that re-enforce what the harness can
+specific MCP tool's context, use a permission deny rule. Cheaper
+than scaffolding code paths that re-enforce what the harness can
 already block.
 
-**Skill frontmatter declares MCP-tool dependencies.** Every skill's
-`SKILL.md` frontmatter declares which MCP tools it relies on:
+### Backend organization (consequence of meta-rule 4)
 
-```yaml
----
-name: save-baustein
-mcp_tools_required: [save_baustein, list_bausteine]
-mcp_tools_optional: [find_similar_bausteine]
-fallback_when_mcp_absent: "warn user; degrade to filesystem write without dedupe check"
----
-```
-
-Semantics:
-
-- `mcp_tools_required[]` — skill cannot operate correctly without
-  these. If unavailable at invocation time, fail loud: surface to
-  user, suggest setup-office reconcile or backend-restart.
-- `mcp_tools_optional[]` — skill can degrade gracefully without
-  these. Document the degradation in `fallback_when_mcp_absent`.
-- `fallback_when_mcp_absent` — explicit degradation contract.
-  Skills without a meaningful fallback omit the field and treat
-  all dependencies as required.
-
-This makes dependencies machine-checkable, enables the future
-integration registry (designed extension; see below) to query
-"which skills depend on tool X?", and forces skill authors to think
-about graceful-failure semantics before shipping. For pre-existing
-skills, declarations are added during the alignment sweep — that's
-the canonical pre-RAG checklist item.
-
-**MCP tool naming convention.** Every MCP tool exposed by the
-backend uses snake_case matching the Python function name in
-`pbs_core/`. `pbs_core.save_baustein()` exposes as MCP tool
-`save_baustein`; `pbs_core.list_reference_manifests()` as
-`list_reference_manifests`. Stable IDs that survive future
-refactoring. Frontmatter declarations like
-`mcp_tools_required: [save_baustein]` will resolve as foreign keys
-into the future integration registry (designed extension; see
-below) without schema migration of existing skills — string IDs
-today are forward-compatible with registry-resolved IDs later.
-
-**Linting (today: convention; future: automated).** A meta-skill
-or backend audit can check: every tool name in
-`mcp_tools_required[]` exists in the MCP server's tool registry;
-every tool referenced in the skill body appears in the frontmatter
-declarations. Today this is review discipline; once the
-integration registry lands, it becomes an automated check.
-
-**On hooks.** PBS does not currently use plugin-level hooks. The
-validation locality principle holds without them — MCP gates +
-`settings.json` permissions cover both deterministic execution
-and path-based access control. If a future need emerges (out-of-
-band file change detection between sessions is the most plausible
-candidate), hooks would be the natural place; until then, this
-layer is not designed.
-
-## The nine entity types
-
-| # | Type | Where | Frontmatter | What it does |
-|---|---|---|---|---|
-| **A** | **Skill** | `plugin/skills/<name>/SKILL.md` | Required (Claude Code uses for trigger detection) | Behavioral protocol. Auto-loaded on trigger match. Tells AI HOW to act. |
-| **B** | **Skill reference** | `plugin/skills/<name>/references/<file>.md` | Not required | Detailed protocol or specs the parent skill loads on demand. Format specs, checklists, procedures. |
-| **C** | **Memory reference content** | `memory/universal/...` | Optional (`references_used: []` for cross-cutting docs) | Domain knowledge / factual reference / external-reality descriptions consumed by multiple skills. |
-| **D** | **Memory data record** | `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`, `<project>/_ai/...` | Required (machine-readable fields tools query — including `scope`, `verified_against_version`, `cross_project_visible` for bausteine; full schema in `plugin/skills/save-baustein/references/format.md`) | Instance records produced by skill behavior over time. Bausteine, feedback entries, state.md. |
-| **E** | **Backend code & docs** | `backend/mcp-server/...` | Code: none. Docs: markdown without frontmatter. | Python implementation + technical schema docs. |
-| **F** | **External data** | Resolved via office-config: `paths.projects_root/...`, `paths.references_root/...`, `paths.state_root/...`, per-project `<project>/_ai/...` | Varies | Real user data: legal texts, project artifacts, runtime state, correspondence. |
-| **G** | **Office config (per-deployment)** | Outside the repo: `$PBS_OFFICE_CONFIG` or `~/.config/pbs-bureau/office.yaml`. Office-style.sty + state-overlay manifests live under `paths.state_root`. | YAML schema v2 (see `docs/office-config.schema.yaml`) | Per-deployment values: identity, paths, practices, scope, manifest map, integrations, LaTeX styling. NOT versioned with the app. |
-| **H** | **Layered manifests** | `extensions/{universal,domain/<X>,state/<X>}/{references-manifest,doctypes}.yaml` | YAML with `scope`/`scope_key` self-describing fields | Reference + doctype registries layered along the (universal × domain × state) axes; loader walks the union per office's scope. |
-| **I** | **Integration adapters** | `backend/mcp-server/src/pbs_mcp/integrations/<class>/{protocol,<adapter-name>}.py` | Python; `Adapter` class implements the protocol | Pluggable adapters for external systems (email, calendar, scanner, phone, accounting); selected via `office_config.integrations.<class>.adapter`. |
-
-## Backend organization (Type E internals)
-
-Backend code (Type E) splits conceptually into two layers:
+Backend code splits conceptually into two layers:
 
 - **`pbs_core/`** (planned package; currently part of `pbs_mcp/`):
   plain Python — config schema, validation, layered manifest API,
@@ -402,183 +298,186 @@ Backend code (Type E) splits conceptually into two layers:
   response, translate exceptions to MCP errors. Contains no
   business logic.
 
+This is the consumer-side of the meta-rule: meta-rule 4 says
+"deterministic logic in MCP gates"; this organization adds "MCP
+gates are themselves thin wrappers around plain Python core."
+
 This discipline applies starting now even though the two layers
-live in the same module today. Consumer-side of meta-rule 5:
-meta-rule 5 says "validation in MCP gates"; this organization
-adds "MCP gates are themselves thin wrappers around plain Python
-core."
+live in the same module today. When the first non-MCP frontend
+emerges (web UI is the load-bearing trigger per ROADMAP), the
+physical split — promoting `pbs_core` to its own package — is a
+small refactor, not a re-architecture.
 
-When the first non-MCP frontend emerges, the physical split —
-promoting `pbs_core` to its own package, optionally wrapping it
-as a persistent service — is a small refactor, not a re-
-architecture. Multiple frontends are anticipated by the design:
+**Don't do the physical split until a real second consumer exists.**
+The conceptual discipline gives most of the maintainability +
+testability benefit at near-zero cost.
 
-- **Web UI for collaborative review** (ROADMAP) — load-bearing
-  near-term trigger.
-- **Anthropic-native-app or third-party GUI client integrations**
-  (ROADMAP) — speculative; relevant as the AI-augmented workforce
-  expands beyond CLI users.
-- **Future SaaS / hosted frontend** — possibility 3 in `VISION.md`.
+---
 
-All frontends are surfaces over the same `pbs_core` engine. CLI
-(Claude Code) is the current frontend; the others are deferred
-until concrete need (per `VISION.md` → "Frontend determines
-accessibility"). The category-collapse risk noted in `VISION.md`
-applies: any GUI integration must expose intertwined workflow,
-not reduce PBS to a tacked-on feature in the host's UX.
+# Layering convention: scope orthogonality (universal × domain × state)
 
-**Don't do the physical split until a real second consumer
-exists.** The conceptual discipline gives most of the
-maintainability + testability benefit at near-zero cost; the
-physical split adds packaging/deployment complexity that doesn't
-pay off without a second frontend.
+(Demoted from meta-rule in v0.5 per design-review. It's a
+*layering pattern* applied to specific entity types, not a placement
+axis itself — it doesn't answer "where does this go?", it answers
+"once you know it's the kind of thing that layers, which subdirectory?".)
 
-## The decision rules (apply IN ORDER until classified)
+Reference content, doctype registries, skeletons, and bausteine all
+decompose along the same three orthogonal axes:
 
-For any new piece of content, ask in sequence:
+- **universal** — applies to every German Planungsbüro deploying
+  this app, regardless of planning domain or Bundesland.
+- **domain** — applies to bureaus working in a specific planning
+  domain (e.g. PV-FFA, Wind, Naturschutz, Innenentwicklung).
+  Multiple domains can be active simultaneously.
+- **state** — applies to bureaus working in a specific Bundesland
+  (BB, BW, BY, ..., TH). Multiple states can be active simultaneously.
 
-**Rule 1 — Is this Python code or backend technical schema?**
-→ Then ask: **is it an integration adapter implementation?**
-- YES → `I` (`backend/.../integrations/<class>/<adapter>.py`)
-- NO → `E` (`backend/...`)
+A bureau's effective content is its `(domains × states)` selection
+(set in `office-config.yaml > scope.{domains,states}`). Layered
+loaders merge the universal layer with each selected domain/state
+layer at runtime.
 
-**Rule 2 — Is this a registry of references / doctypes?**
-→ Then ask: **what scope does it apply to?** (universal, a specific
-domain, or a specific state)
-- → `H` (`extensions/<layer>/<key>/{references-manifest,doctypes}.yaml`)
-  with `scope`/`scope_key` self-describing fields. Use `author-manifest`
-  skill for scope skeletons that don't yet exist.
+**Where this applies:**
 
-**Rule 3 — Is this an instance record produced by a skill's behavior over time** (a saved baustein, a feedback entry written today, a project's `state.md`)?
-→ `D` (with frontmatter for queryable fields). For bausteine: pick
-the scope (universal/domain/state) BEFORE the path; place at
-`memory/bausteine/<layer>/<key>/<name>.md`.
+- **References manifests**: `extensions/{universal,domain/<X>,state/<X>}/references-manifest.yaml`
+- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>}/doctypes.yaml`
+- **Skeletons**: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
+- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`
+- **Office-style overlays**: `plugin/templates/office-style/office-style.{default,<DOMAIN>}.sty`
 
-**Rule 4 — Does this tell the AI HOW to do something** (instruction, format spec, checklist, procedure)?
-→ Then ask: **is it consumed by ONE skill or MULTIPLE skills?**
-- ONE → `B` (skill reference, lives with the skill)
-- MULTIPLE (cross-cutting) → `C` (memory) — exception: cross-skill content shouldn't live in one skill's folder
+**Hard rules for placing layered content:**
 
-**Rule 5 — Does this describe WHAT something IS** (domain knowledge, external reality, factual reference)?
-→ `C` (memory reference content). Cross-cutting docs that name laws
-declare them in `references_used[]` frontmatter.
+- Decide the scope BEFORE the path. Ask: does this apply to every
+  German bureau (universal), every bureau in this domain (domain),
+  every bureau in this state (state)?
+- A baustein has exactly one scope. If a candidate baustein applies
+  to multiple, either promote it up the layer (`universal` if truly
+  cross-domain) or split it.
+- An entry's home is independent of who created it.
 
-**Rule 6 — Should Claude Code auto-discover this and load it on trigger match?**
-→ `A` (skill, with frontmatter)
+**Out of scope (entity types this convention doesn't apply to):**
+Skill Bundles, Backend, External Data — none of these layer along
+(universal × domain × state). Configuration partially applies (its
+manifest tree under `extensions/` does; the office-config file
+itself doesn't).
 
-## Worked examples
+**The `author-manifest` skill** scaffolds new domain or state
+manifests for scopes that don't yet have content.
+
+---
+
+# The five entity types
+
+| Type | Where | Invalidation | What it does |
+|---|---|---|---|
+| **Skill Bundle** | `plugin/skills/<name>/SKILL.md` + `references/*.md` | semver `version:`; reload via `/reload-plugins` | Behavioral protocol auto-loaded on trigger match. SKILL.md is the entry point; references hold detailed format specs / checklists / procedures. (Combines former Type A skill + Type B skill reference — they're chapters of one bundle, not peers.) |
+| **Memory** | `memory/universal/...` (prose), `memory/bausteine/{universal,domain/<X>,state/<X>}/...` + `<project>/_ai/...` (records) | references_used/status/review_due/verified_against_version | Two sub-kinds: **authored prose** (universal domain knowledge consumed across skills — style-spec, korrektur-rules, verfahren docs) + **generated records** (bausteine, feedback entries, project state.md). Mutability differs sharply between them; both share Memory's invalidation hooks. |
+| **Backend** | `backend/mcp-server/...` (code + protocols + adapters + technical docs) | none declarative; restart MCP server after changes | Python implementation. Splits conceptually into `pbs_core/` (plain Python) + `pbs_mcp/tools/` (MCP wrappers) per meta-rule 4. Integration adapters live as a sub-organization here (`pbs_mcp/integrations/<class>/<adapter>.py`); they're an internal pattern, not a peer entity type. |
+| **Configuration** | `office-config.yaml` (single per deployment, outside repo) + `extensions/{universal,domain/<X>,state/<X>}/{references,doctypes}-manifest.yaml` (scope-keyed, in repo) | `schema_version` + migration framework | Deployment-controlled YAML. Two sub-kinds — single-file (office-config) and scope-keyed (layered manifests) — distinguished by where they live + how they're discovered, but both are configuration-shaped (versioned, schema-validated, deployment-scoped). |
+| **External data** | Resolved via `roots.*` (projects, references, state) + per-project `<project>/_ai/...` | Varies; project state via `_ai/state.md.lifecycle`; references corpus via `<roots.references>/changelog.md` | Real user data: legal texts, project artifacts, runtime state, correspondence. NOT versioned with the app. |
+
+**Why 5 not 9** (per design-review session 5):
+- **Skill Bundle** = former A (Skill) + B (Skill reference). A skill reference has no meaning outside its parent skill — it's a chapter of the bundle, not a peer. Decision rules collapse from "is this a skill or a skill-reference?" to "is it part of a skill bundle?"
+- **Configuration** = former G (Office config) + H (Layered manifests). Both are deployment-controlled YAML; the only difference is single-file vs scope-keyed, which is *where* they live, not *what kind of thing* they are.
+- **Backend** = former E (Backend code) + I (Integration adapters). Adapters are a backend-internal organizing pattern (same language, same package, same restart semantics) — not a peer entity type.
+- **Drop A-I letters**: false ordinality + false peerage. Names ("Skill Bundle", "Memory", "Backend") are self-documenting.
+
+(For migration: any prior reference to "Type A" / "Type B" / "Type C" / etc. should be re-read as the corresponding new name. Most references to the old letters can be dropped without replacement; the new names speak for themselves in context.)
+
+---
+
+# The three decision rules
+
+For any new piece of content, walk these in order. The first to
+classify wins.
+
+## Rule 1 — Is this consumed by Claude at runtime as behavior?
+
+If it tells the AI HOW to act, what to load, how to converse, when
+to delegate — it's part of a Skill Bundle.
+
+→ **Skill Bundle**: `plugin/skills/<name>/SKILL.md` (entry point,
+with frontmatter) + optional `references/*.md` (detailed protocols,
+format specs, checklists — no frontmatter).
+
+If multiple skills consume the same content (e.g. korrektur-rules,
+style-spec, verfahren-phasen), it's *cross-cutting authored prose*
+— route to Rule 3 (Memory: prose).
+
+## Rule 2 — Is this Python code?
+
+If it's `.py` — backend code, MCP tool wrappers, integration
+adapters, technical schema docs.
+
+→ **Backend**: `backend/mcp-server/...`. Adapters are a sub-pattern
+(same package), not a separate type.
+
+## Rule 3 — Then by mutability:
+
+**3a. Authored prose** (humans/AI write; cross-cutting knowledge):
+
+- Universal domain knowledge → `memory/universal/...` →
+  **Memory (prose)**.
+- Layered (universal × domain × state) reference manifests +
+  doctype registries → `extensions/<scope>/<key>/*.yaml` →
+  **Configuration (scope-keyed manifest)**.
+- Per-deployment values (paths, identity, actors, scope) →
+  `office-config.yaml` (outside repo) → **Configuration (office-config)**.
+
+**3b. Generated records** (tools write; instance state):
+
+- Bausteine, feedback entries, project state — `memory/bausteine/<scope>/<key>/<name>.md` or `<project>/_ai/...` → **Memory (record)**.
+
+**3c. External data** (user files, not versioned with app):
+
+- Legal text corpus, client project artifacts, runtime state →
+  `<roots.*>` paths, per-project `_ai/...` → **External data**.
+
+## How the rules compose
+
+Rule 1 catches everything Claude reads as instruction. Rule 2
+catches everything written in Python. Rule 3 splits the rest by
+who-writes-it (authored vs generated vs external).
+
+The 4-mutability breakdown in Rule 3 is *one rule with sub-cases*,
+not 4 separate rules. The decision is "what kind of content is
+this?" (prose / record / config / external), not a sequential walk.
+
+(This collapses the v0.4 6-rule walk to 3 rules + sub-cases. The
+former Rules 4 and 5 — "HOW vs WHAT" — were a false axis: every
+cross-cutting memory doc has *both* HOW and WHAT properties; the
+real distinction is consumer breadth, which Rule 1's "multiple
+skills" branch handles directly.)
+
+---
+
+# Worked examples
 
 | Content | Reasoning | Type |
 |---|---|---|
-| `style-spec.md` (universal B-Plan LaTeX domain) | Rule 4: describes WHAT the structural domain IS. Cross-cutting (review-draft, draft-*, validate-*). Office-specific styling lives in office-config Layer 2. | `C` |
-| `korrektur-rules.md` (German writing conventions) | Rule 3: HOW to write — but cross-cutting (multiple skills). Per Rule 3 exception → `C` | `C` |
-| `bauleitplanung-phasen.md` (BauGB process) | Rule 4: describes WHAT the process IS. Cross-cutting. | `C` |
-| `extensions/universal/doctypes.yaml` (registry) | Rule 2: registry of doctypes, scope=universal. | `H` |
-| `extensions/domain/Naturschutz/doctypes.yaml` | Rule 2: registry, scope=domain/Naturschutz. | `H` |
-| `baustein-format.md` (how to write a baustein) | Rule 3: instruction. Single-skill (save-baustein). | `B` |
-| `feedback-format.md` | Same as above. | `B` |
-| `state-format.md` | Rule 3: HOW to write state.md. Currently single-skill (orchestrator does the writes). | `B` |
-| `manifest-schema.md` | Rule 3: HOW manifest is structured. Single-skill (research-references). | `B` |
-| Doctype checklists | Rule 3: HOW to validate. Single-skill (validate-checklist). | `B` |
-| `vector-metadata-schema.md` | Rule 1: backend technical schema. | `E` |
-| A future saved baustein | Rule 2: instance record. | `D` |
-| A future feedback entry | Rule 2: instance record. | `D` |
-| A future `<project>/_ai/state.md` | Rule 2: instance record. | `D` |
-| `orchestrator` SKILL.md | Rule 5: auto-loaded on trigger match. | `A` |
-| `save-baustein` SKILL.md | Rule 5: same. | `A` |
-| `save-baustein` declares `mcp_tools_required: [save_baustein, list_bausteine]` in frontmatter | Meta-rule 5: skill is the orchestrator; MCP tool is the validator. Frontmatter makes the dependency explicit. | `A` (skill, with new convention) |
+| `style-spec.md` (universal B-Plan LaTeX domain) | Rule 1: cross-cutting (multiple skills); Rule 3a: authored universal prose. | Memory (prose) |
+| `korrektur-rules.md` (German writing conventions) | Same — cross-cutting prose; Rule 3a. | Memory (prose) |
+| `bauleitplanung-phasen.md` (BauGB process) | Rule 3a: authored universal prose, cross-cutting. | Memory (prose) |
+| `extensions/universal/doctypes.yaml` | Rule 3a: scope-keyed manifest. | Configuration (manifest) |
+| `extensions/domain/Naturschutz/doctypes.yaml` | Same; scope=domain/Naturschutz. | Configuration (manifest) |
+| `office-config.yaml` (outside repo) | Rule 3a: per-deployment configuration. | Configuration (office-config) |
+| `baustein-format.md` (how to write a baustein) | Rule 1: instruction; consumed by ONE skill (save-baustein). Part of skill bundle. | Skill Bundle (reference) |
+| `state-format.md` | Rule 1: instruction; single-skill (orchestrator). | Skill Bundle (reference) |
+| `manifest-schema.md` | Rule 1: single-skill (research-references). | Skill Bundle (reference) |
+| Doctype checklists | Rule 1: single-skill (validate-checklist). | Skill Bundle (reference) |
+| `vector-metadata-schema.md` | Rule 2: backend technical schema. | Backend |
+| A future saved baustein | Rule 3b: generated record. Apply layering convention to pick scope. | Memory (record) |
+| A future feedback entry | Rule 3b: generated record. | Memory (record) |
+| A future `<project>/_ai/state.md` | Rule 3b: generated record. | Memory (record) |
+| `orchestrator` SKILL.md | Rule 1: skill bundle entry point. | Skill Bundle |
+| `save-baustein` SKILL.md declares `mcp_tools_required: [save_baustein, list_bausteine]` | Meta-rule 4: skill is the orchestrator; MCP tool is the validator. Frontmatter makes the dependency explicit. | Skill Bundle |
+| Email integration adapter Python | Rule 2: backend Python. (Sub-pattern: integration adapter.) | Backend |
+| Court ruling text from BVerwG website | External data; lives in RAG corpus at `<roots.references>/urteile/...`. | External data |
+| `references_used: []` frontmatter | Meta-rule 3 invalidation hook. | (per containing entity type) |
 
-## What changes invalidate what
+---
 
-- **Update to a Skill (A)** → AI's behavior changes. Bump
-  `version:` in frontmatter; `/reload-plugins` to pick up.
-- **Update to a Skill reference (B)** → parent skill behavior
-  precision changes on next session.
-- **Update to Memory reference content (C)** → AI's domain
-  knowledge changes; downstream skills may produce different output.
-- **Update to Memory data record (D)** → that record's instance
-  state changes; tools see new field values.
-- **Update to Backend (E)** → backend behavior changes; restart
-  MCP server.
-- **Update to External data (F)** → runtime state changes; if
-  ingested into RAG, re-ingest the changed paths.
-- **Update to Office config (G)** → bump `schema_version` if
-  shape changes; add migration at
-  `office_config_migrations/v<N>_to_v<N+1>.py`. Existing PBS
-  config forward-migrates on next load.
-- **Update to Layered manifests (H)** → loader picks up on next
-  start; entries flagged for ingest re-fetch by `research-references`;
-  affected bausteine + memory docs flagged via `references_used[]`
-  cross-reference.
-- **Update to Integration adapter (I)** → restart MCP server; the
-  `adapter` field in `office_config.integrations.<class>` may need
-  updating to point at the new adapter name.
-
-## Borderline cases (resolved here for now)
-
-### `korrektur-rules.md` — instruction or knowledge?
-
-Borderline. It's HOW to write LaTeX. But it's consumed by multiple
-skills (review-draft, draft-*, validate-latex-style). Per Rule 3
-exception: cross-cutting wins → `C` (memory).
-
-Alternative: a "shared-references" pattern where multiple skills
-load by path. Works but less clean. We'd revisit if more cross-skill
-references emerge.
-
-### `state-format.md` — single skill or future-multi-skill?
-
-Today the orchestrator does state.md writes (during binding). If a
-binding-specialist or scope-change-handler skill is later extracted,
-state-format.md may need to move (or become cross-cutting → `C`).
-For now: single-skill, lives at
-`plugin/skills/orchestrator/references/`.
-
-### Office-specific vs domain-generic in `memory/`
-
-Resolved by the meta-rule. `memory/universal/` contains only universal
-German planning-bureau domain knowledge — content that applies to
-every Planungsbüro regardless of state, client mix, or styling
-choices.
-
-- `style-spec.md` documents the **structural domain** of B-Plan
-  LaTeX (KOMA scrreprt, ngerman babel, German number conventions,
-  Roman/Arabic flip, Projektdaten macro framework) — universal.
-  Office-specific styling (geometry, fonts, colors, header layout)
-  belongs in the office's `office-style.sty` (Layer 2 of the
-  template stack — see `docs/office-config.schema.yaml`).
-- `korrektur-rules.md` documents German writing conventions —
-  universal across all DE planning offices.
-- `verfahren/bauleitplanung-phasen.md` documents the BauGB
-  Regelverfahren — universal federal process.
-- `doctypes.yaml` registers the canonical doctypes (Begründung,
-  Festsetzungen, Umweltbericht, Gutachten variants) — universal.
-
-PBS-specific values (its address, its specific font choice, its
-project naming convention, its KNE leitfäden subset) live entirely
-in PBS's `office-config.yaml` outside the repo.
-
-## How to use this document
-
-When adding new content:
-
-1. Walk Rules 1-6 above. Pick the first one that classifies.
-2. Place the content in the matching path.
-3. If classification is unclear, surface the case to the user with
-   reasoning before placing.
-4. If a new pattern emerges that doesn't fit cleanly, propose an
-   amendment to this document — don't silently break the taxonomy.
-
-When reviewing existing content during refactors:
-
-1. For each file, check: does its current location match Rules 1-6?
-2. If not, propose move with reasoning.
-3. Don't move silently.
-
-This document evolves with the system. Refinements expected as
-real-use surfaces edge cases.
-
-## Designed extensions, not yet implemented
+# Designed extensions, not yet implemented
 
 These ROADMAP items will extend or modify the architecture when
 implemented. Recorded here so future sessions don't re-discover
@@ -594,39 +493,35 @@ them. Full design lives in `ROADMAP.md`.
 - **Audit trail** — unified change/decision/version log across
   artifacts, references, manifests, configs, integrations,
   bausteine, plans, correspondence. Today scattered (`decisions.md`,
-  `snapshots/`, `changelog.md`, manifest archives, git). Will likely
-  add a new entity type or formalize as a layered manifest.
+  `snapshots/`, `changelog.md`, manifest archives, git). Will
+  formalize as a Memory (record) sub-kind or a new
+  Configuration-style log. Per meta-rule 3, every entity already
+  declares invalidation; this extension unifies the log.
 - **Human-readable artifact generation at checkpoints** — every
   meaningful checkpoint (send-gate, phase transition, draft-invoice,
   baustein-promotion, config-change) produces a PDF/HTML alongside
-  machine state. Today only LaTeX renders cleanly.
-- **Integration registry** — 4th layered manifest type
-  (`integrations-manifest.yaml` per scope) cataloging callables
-  (MCPs + internal adapters + skills) with capability metadata.
-  Will extend type H to a third manifest kind alongside
-  references-manifest + doctypes.
+  machine state.
+- **Integration registry** — discovery API over callables (skills,
+  MCP tools, adapters) with capability metadata. Skills already
+  carry `capabilities[]`-equivalent in their `phase_role` +
+  `handoffs[]` frontmatter (post-design-review session 5);
+  registry will federate that with backend tool registration.
 - **Web UI for collaborative review** — Coolify-hosted; review-
-  platform integration adapter class (specific case of meta-rule
-  III). Annotations + comments queryable back via MCP.
+  platform integration adapter class. First non-MCP frontend —
+  triggers the `pbs_core/pbs_mcp` physical split.
 - **PM + invoicing** — per-project `_ai/billing.md` ledger;
   `log-time` + `draft-invoice` skills; uses accounting integration
   adapter.
 - **Multimodal RAG ingest pipeline** — page-image retrieval
-  (ColPali), table extraction, OCR for scanned PDFs, DRM removal.
-  Architecture decided: local pre-processing + embedding +
-  matching; reading + reasoning happens via the in-loop Claude
-  session (vision-capable). No separate vision-LLM in stack for
-  interactive use.
-- **Structural retrieval** — legal §-graph + project-cross-
-  project graph + verfahren state-machine. Likely separate store
-  (SQLite or graph DB) alongside LanceDB.
-- **Query rewriting** (HyDE + decomposition + expansion) +
-  **agentic retrieval** (per-claim search during drafting) +
-  **late-interaction text retrieval** (ColBERT-v2, conditional)
-  — all retrieval-pattern improvements, mostly skill-protocol
-  changes; covered in HANDOFF Phase-8 alignment sweep + RAG-
-  options assessment.
+  (ColPali), table extraction, OCR, DRM removal. Architecture
+  decided: local pre-processing + embedding + matching; reading +
+  reasoning happens via the in-loop Claude session.
+- **Structural retrieval** — legal §-graph + project-cross-project
+  graph + verfahren state-machine. SQLite alongside LanceDB.
+- **Query rewriting** (HyDE, decomposition, expansion) +
+  **agentic retrieval** (per-claim search) + **late-interaction
+  text retrieval** (ColBERT-v2, conditional) — all retrieval-
+  pattern improvements.
 - **Per-domain memory directories** (`memory/domain/<X>/`) —
-  introduce when first domain-scoped reference content lands
-  (Artenschutz verfahren reference is the natural trigger).
+  introduce when first domain-scoped reference content lands.
   Mirror of references / doctypes layering.

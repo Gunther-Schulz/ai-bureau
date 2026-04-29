@@ -43,7 +43,7 @@ src/pbs_mcp/
 │                                    gesetz-paragraph, urteil-randnr, leitfaden-
 │                                    section, latex-enumerate, latex-textbaustein,
 │                                    pdf-heading, eml, baustein-body)
-├── integrations/                    Type I adapters (email/calendar/scanner/
+├── integrations/                    Integration adapters (Backend sub-pattern;
 │                                    phone/accounting; protocol.py + none.py
 │                                    each — concrete adapters land per demand)
 └── tools/

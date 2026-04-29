@@ -43,7 +43,7 @@ truth:
   per-active-domain overlays from `extensions/{universal,domain/<X>}/
   doctypes.yaml`. Do not reference the legacy
   `memory/universal/doctypes.yaml` path — registries moved to
-  `extensions/` (Type H entity per ARCHITECTURE.md) post-orthogonality
+  `extensions/` (Configuration entity per ARCHITECTURE.md) post-orthogonality
   refactor.
 
 Resolve `<repo>` to the plugin's repo root. From inside the plugin,
@@ -100,7 +100,7 @@ reference; the MCP tool is authoritative.
 - `draft-textteil-c` — draft Textliche Festsetzungen (Teil B Text)
 - `review-draft` — layered review of an existing draft
 - `save-baustein` — capture a reusable text or argument to memory
-  (validated via `save_baustein` MCP gate per meta-rule 5)
+  (validated via `save_baustein` MCP gate per meta-rule 4)
 - `validate-bausteine` — periodic freshness sweep of saved
   bausteine; surfaces stale / flagged / review_due candidates
 - `record-feedback` — capture external feedback (UNB Stellungnahmen,

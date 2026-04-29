@@ -140,6 +140,6 @@ Audit fatigue is a real cost. Binding stopping prevents it.
 - Mid-debugging. Different problem class; debugging is targeted,
   audits are systematic.
 - After every commit. That's a hook (which we explicitly defer
-  per ARCHITECTURE meta-rule 5).
+  per ARCHITECTURE meta-rule 4).
 - For every minor wording fix. Reserve audits for state changes
   in skills, code, manifests, conventions.

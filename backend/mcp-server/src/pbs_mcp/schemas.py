@@ -354,7 +354,7 @@ class SetupProjectOutput(BaseModel):
 
 # === Discovery tools (Tier 1, pre-RAG) ===
 # Per ROADMAP "Backend MCP discovery layer (Tier 1 — pre-RAG)" + ARCHITECTURE.md
-# meta-rule 5: thin MCP wrappers over the layered manifest API in office_config /
+# meta-rule 4: thin MCP wrappers over the layered manifest API in office_config /
 # config. Skills declare these in `mcp_tools_required[]` instead of falling back
 # to filesystem Glob.
 

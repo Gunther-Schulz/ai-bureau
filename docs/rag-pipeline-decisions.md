@@ -588,7 +588,7 @@ Discussion + small implementation. No corpus contact.
 
 - Meta-audit slice (close remaining drift not caught in
   audit-pre-rag.md)
-- `docs/plugin-conventions.md` (Type A/B idioms — sibling to
+- `docs/plugin-conventions.md` (Skill Bundle idioms — sibling to
   backend-conventions.md)
 - Integration registry design + implementation (4th layered
   manifest type? capability vocabulary? query API shape?)

@@ -26,7 +26,7 @@ meta-rule sections.
   for "where does new content belong"?
 - Are 5 meta-rules the right count? Could it be 3? 7?
 - Are these the right 5 axes (app vs office; scope orthogonality;
-  integration adapters; memory vs RAG; execution locality)?
+  memory vs RAG; source-of-truth & invalidation; execution determinism)?
   Greenfield might cut a different decomposition.
 - Each meta-rule: is this a fundamental axis, or a derived
   consequence of another rule?
@@ -42,7 +42,7 @@ decision rules".
   we still get 9?
 - Are the boundaries between A/B/C/D/E/F/G/H/I clean, or do they
   blur at the edges?
-- Are 6 decision rules the right scaffolding? Could placement
+- Are 3 decision rules the right scaffolding? Could placement
   decisions be made simpler / clearer?
 - Are any entity types accumulating "miscellaneous" content — a
   smell that the decomposition is wrong?
@@ -76,7 +76,7 @@ files (orchestrator + a drafter + a validator + a baustein-related
 - If designing the skill spec from scratch, what frontmatter
   would we require? (Currently: name, description, version,
   license, mcp_tools_required, _optional, fallback)
-- Is meta-rule 5's `mcp_tools_required[]` declaration the right
+- Is meta-rule 4's `mcp_tools_required[]` declaration the right
   abstraction, or could deps be expressed differently?
 - Should skills declare their *capabilities* (per the
   integration-registry design) directly in frontmatter? Or
@@ -109,7 +109,7 @@ SKILL.md + `setup-office/references/wizard-flow.md`.
 
 **Greenfield questions**:
 
-- The 6 decision rules form a placement scaffold. Are they the
+- The 3 decision rules form a placement scaffold. Are they the
   right 6? Could placement be simpler / more deterministic?
 - Are the conventions docs (plugin-conventions, backend-
   conventions) at the right level of abstraction? Greenfield

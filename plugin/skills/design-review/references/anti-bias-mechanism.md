@@ -136,7 +136,7 @@ questions, not just "is there bloat?":
 ### 4. Surface anchoring
 
 - The whole review is anchored on a framing that itself needs
-  challenge (e.g., "given the current 9 entity types, how do we
+  challenge (e.g., "given the current 5 entity types, how do we
   improve them?" anchors on 9; greenfield might propose 7 or 12)
 - The recommendations all stay within an existing decomposition
   even though greenfield would re-decompose

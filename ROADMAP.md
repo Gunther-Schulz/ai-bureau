@@ -64,7 +64,7 @@ observed in real skill code.
 
 **Why**: Office-config has migrations
 (`office_config_migrations/v<N>_to_v<N+1>.py`) that forward-migrate
-on load. Type D memory data records (bausteine, manifests'
+on load. Memory (record) entities (bausteine, manifests'
 entries, state.md, feedback entries) have no equivalent. Today
 that's fine because PBS has zero saved bausteine — but the moment
 first ingest writes any, the next schema change becomes painful
@@ -83,7 +83,7 @@ addition still needs migration support.
   applies migrations in-memory; writes back with updated version.
 - `setup-office` reconcile mode triggers a sweep migration of
   all in-scope records.
-- Decision-rule update in ARCHITECTURE.md: Type D record edits
+- Decision-rule update in ARCHITECTURE.md: Memory (record) edits
   go through MCP tools that handle migration, never direct Edit.
 
 **Pull-forward trigger**: first user-visible session that saves
@@ -182,7 +182,7 @@ trade-offs):
 
 ### SKILL.md version-bump reminder hook
 
-**Why**: Per meta-rule 5, hooks earn their keep on out-of-band
+**Why**: Per meta-rule 4 (execution-determinism), hooks earn their keep on out-of-band
 detection. Pure-advisory exception worth a 5-line
 PostToolUse hook: when `plugin/skills/**/SKILL.md` is edited,
 remind to bump `version:` and run `dev-link.sh`. No data
@@ -662,7 +662,7 @@ itself a gap.
 
 Until at least one trigger fires, the Tier 1 `list_skills()` MCP
 tool + frontmatter `mcp_tools_required[]` declarations + snake_case
-tool naming convention (per ARCHITECTURE.md meta-rule 5) cover the
+tool naming convention (per ARCHITECTURE.md meta-rule 4) cover the
 immediate need with forward-compatible string IDs.
 
 **Sketch (topic-level)**:
@@ -847,7 +847,7 @@ layer is what makes intertwined workflow viable in real
 companies — they have knowledge in many places.
 
 **Sketch**: MCP connectors as the inbound knowledge layer
-(parallel to integration adapters as the outbound layer, Type I).
+(parallel to integration adapters as the outbound layer; both are Backend sub-patterns).
 Each company picks connectors that match their stack:
 
 - SharePoint connector reads a configured folder; ingests at
@@ -1052,9 +1052,9 @@ session.
 
 Similar pattern for `style-auditor` (deep style+korrektur sweep).
 
-### Hooks / event triggers (revised per meta-rule 5)
+### Hooks / event triggers (revised per meta-rule 4)
 
-**Why (revised)**: Per meta-rule 5 (execution locality), most
+**Why (revised)**: Per meta-rule 4 (execution-determinism), most
 operations formerly imagined as hooks belong inside MCP tools as
 atomic side-effects, not as separate hook scripts:
 

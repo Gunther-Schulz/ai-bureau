@@ -26,7 +26,7 @@ THEN load context for the detected scope:
 | Scope | Read at open |
 |---|---|
 | Office | `<state_root>/projects-index.md`, `<state_root>/pending-actions.md` (path via `office_config.roots.state`); call `list_projects()` and `list_skills()` MCP tools |
-| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries moved to `extensions/` per Type H). |
+| Project | `<project-root>/_ai/state.md` (or `.ai/state.md`), `<project-root>/_ai/file-map.md`, `<project-root>/_ai/decisions.md`. For doctype context: call `list_doctypes_manifests()` (no longer at `<repo>/memory/universal/doctypes.yaml` — registries are Configuration entity in `extensions/`). |
 | Product | `<repo>/memory/product-backlog.md`, `<repo>/ROADMAP.md`, `<repo>/VISION.md`, `<repo>/ARCHITECTURE.md` |
 
 Load `<repo>/memory/universal/style/style-spec.md` and `<repo>/memory/universal/conventions/korrektur-rules.md` whenever LaTeX work is in scope. Note: `memory/global/` no longer exists — content moved to `memory/universal/` (cross-cutting knowledge) and `memory/bausteine/` (instance records) per the orthogonality refactor.
@@ -185,7 +185,7 @@ Project deliverables (.tex, .pdf, mails, captions, file names inside the project
 
 Writes to `universal` scope require explicit user confirmation. Domain/state/project scopes follow standard four-way menu authorization. The orchestrator proposes the scope+scope_key as part of the menu line.
 
-**Path resolution** (handled by `save_baustein` MCP tool per meta-rule 5):
+**Path resolution** (handled by `save_baustein` MCP tool per meta-rule 4):
 
 - `universal` → `<repo>/memory/bausteine/universal/<name>.md`
 - `domain` → `<repo>/memory/bausteine/domain/<scope_key>/<name>.md`
@@ -318,7 +318,7 @@ The backend (`<repo>/backend/`) is not yet built. When MCP tools are available, 
 |---|---|---|
 | `list_bausteine(scope?, scope_key?, project_root?)` | Scope-aware enumeration: universal/domain/state/project per orthogonality | `Glob` over `<repo>/memory/bausteine/{universal,domain/<X>,state/<X>}/` |
 | `get_baustein(name, scope?, scope_key?)` | Read a specific baustein by name | `Read` the corresponding markdown file |
-| `save_baustein(scope, scope_key?, project_root?, name, type, title, body, references, tags)` | Write with full validation per meta-rule 5 | `Write` directly only as degraded fallback; warn user |
+| `save_baustein(scope, scope_key?, project_root?, name, type, title, body, references, tags)` | Write with full validation per meta-rule 4 | `Write` directly only as degraded fallback; warn user |
 | `flag_baustein(name, reason)` | Mark stale / drifted (used by record-feedback rejections, research-references citation drift) | `Edit` the frontmatter directly |
 | `archive_baustein(name, superseded_by?)` | Lifecycle close-out (used by promote-to-skill) | `Edit` the frontmatter directly |
 | `find_bausteine_by_reference(law?, paragraph?, ruling?, leitfaden?)` | Cross-reference dependents (used by research-references on diff) | `Grep` over baustein files |

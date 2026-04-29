@@ -13,7 +13,8 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
 
 - **Plugin** (this directory) — skills (auto-discovered from
   `skills/*/SKILL.md`); `agents/` and `hooks/` deferred to v1+
-  per ARCHITECTURE meta-rule 5 ("hooks deferred until concrete need").
+  per ARCHITECTURE meta-rule 4 (execution-determinism;
+  "hooks deferred until concrete need").
 - **Backend** (`<repo>/backend/`) — single Python MCP server holding
   LanceDB (vector store), an in-process embedder (fastembed +
   `BAAI/bge-m3`), and a LaTeX compile wrapper. No Docker, no separate
@@ -43,12 +44,12 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
 
 - **Skills** in `skills/<name>/SKILL.md` — orchestrator + specialists,
   conversational logic. Detailed protocols / specs / format references
-  live in `skills/<name>/references/<file>.md` (Type B per
-  ARCHITECTURE.md). Idioms for writing skills live in
+  live in `skills/<name>/references/<file>.md` (part of the Skill
+  Bundle per ARCHITECTURE.md). Idioms for writing skills live in
   `<repo>/docs/plugin-conventions.md`.
 - **Agents** (deferred to v1+): planned home is
   `plugin/agents/<name>.md`. Empty until first concrete need.
-- **Hooks** (deferred to v1+ per meta-rule 5): planned home is
+- **Hooks** (deferred to v1+ per meta-rule 4): planned home is
   `plugin/hooks/hooks.json`. Empty until event-driven automation
   proves necessary; static path-blocks go through
   `settings.json` permissions instead.
@@ -58,14 +59,14 @@ in the **orchestrator** skill — see `skills/orchestrator/SKILL.md`.
   NOT here. Conventions for backend code live in
   `<repo>/docs/backend-conventions.md`.
 
-## Meta-rule 5 (execution-locality) summary
+## Meta-rule 4 (execution-determinism) summary
 
 Skills declare their MCP-tool dependencies in YAML frontmatter:
 `mcp_tools_required[]`, `mcp_tools_optional[]`,
 `fallback_when_mcp_absent`. The orchestrator + `list_skills` MCP
 tool read these to plan tool calls. Deterministic logic lives in
 MCP gates (validation, dedupe, etc.); skills compose, never
-re-implement. See ARCHITECTURE.md meta-rule 5 for the full rule.
+re-implement. See ARCHITECTURE.md meta-rule 4 for the full rule.
 
 ## Versioning
 

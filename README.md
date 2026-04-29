@@ -46,28 +46,35 @@ pbs-bureau/
 
 ## Architectural meta-rules
 
-This codebase enforces five meta-rules. New content goes through
-them before placement:
+This codebase enforces four meta-rules + one named layering
+convention. New content goes through them before placement:
 
-1. **App vs office** — no PBS-specific values in repo content. All
-   identity / paths / practices / styling come from `office-config.yaml`
-   resolved via env-var-then-XDG.
-2. **Memory vs RAG** — verbatim legal text lives in the RAG corpus
-   (queryable on demand); memory holds workflow logic, conventions,
-   §-references as labels only.
-3. **Scope orthogonality (universal × domain × state)** — references,
-   doctypes, skeletons, bausteine all decompose along the same three
-   axes. Bureaus pick their `(domains × states)` selection in
-   `office-config.yaml > scope`; layered loaders merge accordingly.
-4. **Integration adapter pattern** — capability-swappability for
-   external systems (email/calendar/scanner/phone/accounting)
-   via a Protocol-typed adapter contract.
-5. **Execution locality** — deterministic logic lives in MCP tools
-   (gates), not skill behavior. Skills declare their MCP-tool
-   dependencies in YAML frontmatter (`mcp_tools_required[]`,
-   `_optional[]`, `fallback_when_mcp_absent`).
+1. **App vs office (deployment portability)** — no PBS-specific
+   values in repo content. All identity / paths / actors / styling
+   come from `office-config.yaml` resolved via env-var-then-XDG.
+   Pluggable integration adapters (email/calendar/scanner/etc.)
+   are a corollary of this rule — no hardcoded mechanism.
+2. **Memory vs RAG (citation freshness)** — verbatim legal text
+   lives in the RAG corpus (queryable on demand); memory holds
+   workflow logic, conventions, §-references as labels only.
+3. **Source-of-truth & invalidation** — every entity declares its
+   invalidation contract (semver, references_used, status flags,
+   schema_version). `research-references` is the cross-cutting
+   refresh handler.
+4. **Execution determinism** — deterministic logic lives in MCP
+   tools (gates), not skill behavior. Skills declare their
+   MCP-tool dependencies in YAML frontmatter
+   (`mcp_tools_required[]`, `_optional[]`, `fallback_when_mcp_absent`).
 
-See `ARCHITECTURE.md` for the full taxonomy + 9 entity types + 6
+**Plus** a named layering convention: **Scope orthogonality
+(universal × domain × state)** — references, doctypes, skeletons,
+bausteine all decompose along these three axes. Bureaus pick their
+`(domains × states)` selection in `office-config.yaml > scope`;
+layered loaders merge accordingly. (Demoted from meta-rule status
+in v0.5 — it's a layering pattern *within* configuration entities,
+not a placement axis itself.)
+
+See `ARCHITECTURE.md` for the full taxonomy + 5 entity types + 3
 decision rules. See also:
 
 - `VISION.md` — three-axis thesis (intertwined-AI-workflow /

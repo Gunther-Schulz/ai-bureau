@@ -167,7 +167,7 @@ template (the agent prompt).
 > - Tool count matches HANDOFF claim?
 > - Pydantic input/output models match the documented signatures?
 > - Handler bodies don't import MCP framework types
->   (pbs_core/pbs_mcp discipline per ARCHITECTURE meta-rule 5)?
+>   (pbs_core/pbs_mcp discipline per ARCHITECTURE meta-rule 4)?
 > - Legacy patterns: `global/domain/project` scope vocab in
 >   handlers, dead branches, commented-out code?
 > - Tool description strings match the actual signature?
@@ -186,13 +186,13 @@ template (the agent prompt).
 - `plugin/templates/office-style/*.sty`
 - `plugin/agents/*` (if exists)
 - `plugin/hooks/*` (if exists)
-- `plugin/skills/*/references/*.md` (Type B sample)
+- `plugin/skills/*/references/*.md` (Skill Bundle reference sample)
 
 **Brief template**:
 
 > Audit plugin scaffolding. Check:
 > - plugin/CLAUDE.md reflects current architecture (orthogonality,
->   meta-rule 5, current entity types)?
+>   meta-rule 4, current entity types)?
 > - plugin.json description + keywords current?
 > - office-style/ overlay set complete (one .sty per canonical
 >   domain in scope)?
@@ -215,9 +215,8 @@ template (the agent prompt).
 
 **Brief template**:
 
-> Audit Type C (memory reference content) + Type H (layered
-> manifests). Check:
-> - Type C frontmatter convention (`references_used: []`) applied?
+> Audit Memory (prose) + Configuration (manifest) entities. Check:
+> - Memory-prose frontmatter convention (`references_used: []`) applied?
 > - Manifest top-level shape (version, scope, scope_key,
 >   last_updated, maintainer) correct?
 > - Per-entry shape correct (id, title, source_url, fetch_method,
@@ -328,7 +327,7 @@ template (the agent prompt).
 > adapter scaffolding. Check:
 > - Docs that claim things about other parts of the system —
 >   are those claims still true?
-> - Type I integration adapters: protocol.py + adapter
+> - Integration adapters (Backend sub-pattern): protocol.py + adapter
 >   implementations consistent?
 > - Adapter classes match office_config.Integrations Pydantic
 >   model (5 expected: email/calendar/scanner/phone/accounting)?

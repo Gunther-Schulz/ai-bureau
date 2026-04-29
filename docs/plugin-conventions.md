@@ -1,10 +1,10 @@
 # Plugin conventions
 
-> **Scope boundary.** This doc covers idioms within Type A (skills)
-> and Type B (skill references) — and prospectively Type-A-adjacent
+> **Scope boundary.** This doc covers idioms within Skill Bundles
+> (SKILL.md + skill references) — and prospectively Skill-adjacent
 > scaffolding for agents/hooks when those land. For "where does X
 > belong?" questions, see `ARCHITECTURE.md`. Specifically, meta-rule
-> 5 (execution locality) decides what is a tool vs. skill behavior;
+> 4 (execution-determinism) decides what is a tool vs. skill behavior;
 > this doc decides *how* a skill is written once that's settled.
 > Backend Python idioms live in `docs/backend-conventions.md`.
 
@@ -90,9 +90,9 @@ Five additional fields make routing semantics machine-checkable:
 
 ---
 
-## 2. Skill reference (Type B) frontmatter
+## 2. Skill reference frontmatter
 
-Files under `plugin/skills/<name>/references/<file>.md` are Type B per ARCHITECTURE.md. **No frontmatter required.** Add frontmatter only when a reference file declares data the platform should query (rare); a plain `# heading` start is standard.
+Files under `plugin/skills/<name>/references/<file>.md` are part of the Skill Bundle per ARCHITECTURE.md (post-v0.5: A+B merged). **No frontmatter required.** Add frontmatter only when a reference file declares data the platform should query (rare); a plain `# heading` start is standard.
 
 ---
 
@@ -164,7 +164,7 @@ Variations: orchestrator + review-draft have a separate `PROCEDURE.md` for multi
 
 ---
 
-## 5. References organization (Type B)
+## 5. References organization
 
 `plugin/skills/<name>/references/*.md` holds detailed protocols, format specs, checklists, or worked examples that the parent SKILL.md loads on demand. Keep these files focused: one file per topic.
 
@@ -285,4 +285,4 @@ When the first agent lands at `plugin/agents/<name>.md`, conventions will be add
 
 ## 15. Hooks (deferred until concrete need)
 
-Hooks land at `plugin/hooks/hooks.json`. Per ARCHITECTURE meta-rule 5: "static path-blocks go through `settings.json` permissions instead." Hooks should be reserved for genuinely event-driven automation (e.g. detect external file change → re-ingest), not for replicating tool-permission logic.
+Hooks land at `plugin/hooks/hooks.json`. Per ARCHITECTURE meta-rule 4 (execution-determinism): "static path-blocks go through `settings.json` permissions instead." Hooks should be reserved for genuinely event-driven automation (e.g. detect external file change → re-ingest), not for replicating tool-permission logic.
