@@ -799,6 +799,158 @@ be deferred or rejected outright.
 Until then: defer. CLI (Claude Code) + planned web UI cover the
 immediate frontend needs.
 
+### Generalized knowledge ingestion via MCP connectors
+
+**Why**: Today the architecture has two ingestion paths — legal
+references via `research-references` (publishers' websites,
+KNE/LUNG/BfN portals) and per-project inputs via
+`ingest_project_inputs` (briefings, surveys, Stellungnahmen
+dropped in `inputs/`). Companies have many more knowledge
+sources: SharePoint, Confluence, Notion, internal wikis, custom
+DMS, CRM systems, project management tools, billing systems,
+internal email archives, recorded meeting notes. PBS doesn't
+yet address how to bring these in. Generalizing the ingestion
+layer is what makes intertwined workflow viable in real
+companies — they have knowledge in many places.
+
+**Sketch**: MCP connectors as the inbound knowledge layer
+(parallel to integration adapters as the outbound layer, Type I).
+Each company picks connectors that match their stack:
+
+- SharePoint connector reads a configured folder; ingests at
+  the appropriate scope per the layered manifest pattern.
+- Notion connector exposes a configured workspace.
+- Confluence connector reads a configured space.
+- Custom DMS connectors via simple HTTP / file-system adapters.
+
+The pattern mirrors `research-references`: each manifest entry
+declares its `fetch_method` and source URL/connector.
+Generalize the fetch_method enum to include MCP-connector kinds
+(`mcp-sharepoint`, `mcp-notion`, `mcp-confluence`, etc.).
+Ingested content lands in LanceDB at the appropriate scope,
+searchable via `search_corpus` with source_type filtering.
+
+**Pull-forward triggers**:
+
+- First office that needs to ingest from an external source
+  beyond legal references.
+- First prospect (consulting / sales) with a structured DMS
+  that PBS-style intertwined workflow needs to draw on.
+- A non-legal corpus becomes valuable enough to PBS itself
+  (e.g., archived correspondence + meeting notes corpus for
+  cross-project pattern recognition).
+
+**Open questions**:
+
+- Schema: how do non-legal references differ from legal in
+  manifest entry shape? Probably a unified schema with optional
+  fields per source kind.
+- Authentication: many corporate sources require OAuth /
+  service accounts. Connector responsibility, but auth state
+  needs persistence (office-config? per-connector credentials
+  store?).
+- Refresh policy: legal references refresh monthly-ish; live
+  Notion / Confluence might want continuous sync. Per-connector
+  configurable.
+- New scope dimension? "Office-private" knowledge (this office's
+  own SharePoint, internal docs) doesn't fit any of the
+  shareable scopes (universal/domain/state). Either treat as
+  per-deployment override of universal, or introduce a fifth
+  scope kind. Resolve when first office-private connector lands.
+
+### Cross-deployment community knowledge content
+
+**Why**: The integration registry (above) covers cross-deployment
+*callable* integrations — once "Hypothesis is good for collaborative
+review" is captured, every office that adopts that scope inherits
+the recommendation. But knowledge *content* (bausteine, refined
+argumentations, captured patterns) currently has no cross-deployment
+story. Each office is siloed. If PBS captures a valuable Naturschutz
+baustein that proved itself in real Stellungnahme exchanges, no
+mechanism exists for other Naturschutz-domain offices to benefit.
+
+**Distinct from integration registry**: registry catalogs
+*callables*; this catalogs *knowledge artifacts*. Both are
+cross-office, both scope-aware, but they carry different things.
+
+**Sketch (topic-level, speculative)**:
+
+- A "community" layer above the (universal × domain × state)
+  scopes — content that's been proven in one office and made
+  available to others.
+- Bausteine + memory docs explicitly marked as community-
+  shareable; opt-in pull from receiving offices.
+- Provenance preserved: who originated, who validated, with
+  what feedback record.
+- Curation question: who decides what's community-quality?
+  Likely human curation by domain shepherds (one or more
+  recognized practitioners per domain).
+
+**Pull-forward triggers**:
+
+- Second deployment exists (PBS-only doesn't justify;
+  multi-office does).
+- Concrete value example surfaces ("we wish we had Office X's
+  Naturschutz bausteine").
+- Curation infrastructure question becomes real (who validates,
+  how distribution works).
+
+**Open questions**:
+
+- Distribution: git-mirror? Custom registry server? Bundled
+  with releases?
+- Trust model: how does Office Y verify Office X's baustein is
+  worth adopting?
+- Conflict resolution: community baustein vs. local baustein
+  with same name?
+- Privacy: bausteine may contain client-specific or politically
+  sensitive context; sanitization required before community
+  publishing.
+
+### Cross-practice knowledge integration
+
+**Why**: PBS-Office today supports multi-practice projects
+(`practices: [<id>, ...]` in state.md, sibling-practice with
+read-only crossing). The model assumes light coexistence: PBS
+reads Hendrik's GIS exports as static inputs; doesn't write to
+his workspace, doesn't query his database directly.
+
+But intertwined workflow benefits from richer integration.
+Hendrik's GIS findings (FFH-Gebiet boundaries, species
+distribution plots, habitat photographs from Begehungen,
+Bestandskarten) contain knowledge PBS could draw on directly
+for artenschutzrechtliche reasoning. Today that knowledge is in
+his GIS database; PBS sees it only via static exported PDFs/PNGs.
+
+**Sketch (topic-level, speculative)**:
+
+- Practice-aware MCP boundaries: each practice's tooling exposes
+  its knowledge via MCP; cross-practice queries authorized per
+  project (multi-practice flag) or per scope (cross-cutting).
+- Or simpler: cross-practice knowledge surfaces as a special
+  source kind in `search_corpus` (filter by practice).
+- Authorship preservation matters here: if PBS draws on
+  Hendrik's GIS finding, who is the author of the resulting
+  Begründung paragraph? Joint authorship? Citation? Provenance
+  recorded in audit trail.
+
+**Pull-forward triggers**:
+
+- First multi-practice project with significant cross-practice
+  reasoning required (Begründung Section citing GIS-derived
+  spatial analysis with traceable provenance).
+- Hendrik's tooling becomes MCP-accessible (currently CLI /
+  file-based).
+
+**Open questions**:
+
+- Trust + authorship: cross-practice knowledge enters PBS's
+  output; whose responsibility is the integrated reasoning?
+- Granularity: full GIS database access, or curated findings
+  the GIS practice explicitly exposes?
+- Conflict: when GIS finding contradicts text-practice
+  assumption, who reconciles?
+
 ### Project management + invoicing
 
 **Why**: Project work today has no time/billable tracking, no

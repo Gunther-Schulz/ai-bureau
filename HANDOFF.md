@@ -138,10 +138,20 @@ New order:
    for manifest enumeration) and declaring
    `mcp_tools_required[]` + `mcp_tools_optional[]` +
    `fallback_when_mcp_absent` in frontmatter per meta-rule 5.
-   Also includes baustein-format extension (item D below):
-   add `verified_against_version` field to `references[]`
-   entries in `save-baustein/references/format.md` to reserve
-   the schema slot for future reference-versioning logic.
+   Also includes two baustein-format extensions:
+   - **D (verified_against_version)** — add `verified_against_version`
+     field to `references[]` entries in `save-baustein/references/format.md`
+     to reserve the schema slot for future reference-versioning logic.
+   - **E (cross_project_visible flag)** — add optional
+     `cross_project_visible: bool` flag on project-scope
+     bausteine. When true, the baustein surfaces in
+     `search_bausteine` queries from OTHER projects in the
+     same office (still scope=project; just visibility
+     extended). Resolves the promote-or-keep-locked binary —
+     a baustein can be reusable across same-office projects
+     before it's generalizable enough to promote to
+     universal/domain/state. Update `save-baustein` and
+     `list_bausteine` MCP tool semantics accordingly.
 3. **Pre-RAG architectural decisions doc**
    (`docs/rag-pipeline-decisions.md`) — promoted from "RAG-
    options assessment" because three of its items are
