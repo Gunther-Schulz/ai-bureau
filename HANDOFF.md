@@ -115,10 +115,12 @@ inline `uv run python` verification):
 
 ---
 
-## ⏳ Pre-RAG gating items (12 commitments remaining, post-session-8)
+## ⏳ Pre-RAG gating items (13 commitments remaining, post-session-8)
 
-The 13 v1 commitments enumerated in ROADMAP.md "v1 commitments"
-section. **#10 ✅ shipped session 8.** Recommended execution order:
+The 14 v1 commitments enumerated in ROADMAP.md "v1 commitments"
+section. **#10 ✅ shipped session 8.** **#14 (Memory Bank) added
+session-8 followup**, scheduled alongside Phase 1 corpus.
+Recommended execution order:
 
 ```
 Session 9:    #12 (department modularization design)          1 session
@@ -127,7 +129,7 @@ Session 14-16: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
 Session 17+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
-Then:         Phase 0 items 4 + 5 → Phase 1 corpus
+Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 ```
 
 ### Already shipped (architectural backstops)

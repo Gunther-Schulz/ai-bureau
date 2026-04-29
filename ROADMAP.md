@@ -879,15 +879,77 @@ migration path" + commitment #10's HTTP MCP decision.
   abstraction must influence #6/#7/#9 schema work. So #13
   design before #6/#7/#9 implementation.
 
-**Recommended next-session order** (revised under session-7
-late insight + A2A pull-forward + cloud deployment addition):
+**14. Memory Bank — selective retrieval over the memory layer**
+(session 8, post-#10 followup) — see also Row 8 of
+`docs/decisions/a2a-and-gemini-pattern-emulation.md` (RAG /
+Grounding architecture pattern).
+
+- **Why**: Inspired by Vertex AI's Memory Bank (managed
+  persistent-context service for agents). The PBS-relevant
+  insight isn't the managed-cloud transport — our `memory/`
+  files are the equivalent local persistence — but the
+  **selective retrieval** pattern.
+- **The problem this solves**: today every session loads
+  `memory/universal/...` + `memory/bausteine/...` + relevant
+  project `_ai/` files in full. Fine when memory is small,
+  but as bausteine accumulate (target: hundreds per domain
+  across years of practice) and cross-project actor reputation
+  / deadline / korrektur-history grows, full-load becomes
+  wasteful and eventually context-limit-relevant. Selective
+  retrieval over memory mirrors the RAG pattern over corpus —
+  same architectural shape, different content.
+- **Concrete deliverables**:
+  - `search_memory(query, scopes, kinds)` MCP tool —
+    deterministic embedding + filter + rerank; same retrieval
+    discipline as `search_corpus`; scoped query (universal +
+    domain + state + project + department, weighted).
+  - `read_memory_entry(path)` MCP tool for full-text follow-up
+    after retrieval surfaces a candidate.
+  - Embedding job over `memory/` content; incremental on
+    memory writes (record_baustein / record_feedback /
+    record_audit_event hooks).
+  - LanceDB index for memory (separate from corpus index).
+  - Skill retrofits: skills that today full-load bausteine
+    switch to `search_memory` calls. Validate via existing
+    audit + design-review pre-bind.
+  - Multi-user continuity behavior: shared memory pool
+    queryable across Gunther + colleague (per #13 multi-user
+    deployment); selective retrieval surfaces relevant
+    entries regardless of authorship.
+- **Pattern-vs-instance check**: the selective-retrieval
+  contract (query → ranked memory entries with metadata) is
+  pattern-level — applies to any AI office regardless of
+  domain. The embedding backend (local bge-m3 / hosted Vertex
+  Memory Bank / hybrid) is instance-level per Row 8 of #10's
+  decision record. Per #10's Phase 1 constraint: design the
+  `search_memory` interface to be retrieval-backend-agnostic,
+  same as `search_corpus`.
+- **Order note**: schedule **alongside Phase 1 corpus work**
+  (right before or after RAG ingest, per session-8
+  follow-up). Memory + corpus retrieval share embedding
+  infrastructure (bge-m3, LanceDB, rerank pipeline); building
+  them together is cheaper than separately. Lands BEFORE
+  first project bind, so the first real PBS workflow runs on
+  selective retrieval from day one rather than full-load.
+- **Scope**: ~2 sessions design + impl, plus skill retrofits
+  bundled with Phase 1 corpus work.
+- **Forward-compat for #11/#12/#13**: skill bodies must NOT
+  hard-assume "all bausteine in scope are loaded into context."
+  They call `list_bausteine` (already gate-mediated) with
+  filters and consume results. That discipline already lets us
+  swap full-load for selective retrieval transparently when
+  this commitment lands.
+
+**Recommended next-session order** (revised session-8
+post-followup — adds #14 alongside Phase 1):
 
 ```
-Session 8:    #10 (A2A + Gemini emulation gate)          1 session
+Session 8:    #10 (A2A + Gemini emulation gate)          1 session   ✅ DONE
 Session 9:    #12 (department modularization design)     1 session
 Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
 Session 14-16: #13 (deployment flex + Coolify ref dep)   2-3 sessions
 Session 17+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+              + #14 (Memory Bank) bundled with Phase 1   2 sessions
 ```
 
 The reasoning:
@@ -2452,6 +2514,59 @@ business → AI-office-builder v2 → THEN evaluate marketplace.
 **Status**: long-horizon speculative watch position. No
 commitment to build. Re-evaluate annually against trigger
 conditions.
+
+### Agent Simulation — runtime stress-test framework (long-horizon)
+
+**Why**: Inspired by Vertex AI's Agent Simulation pattern (cross-
+agent stress testing at scale, adversarial scenarios, structured
+eval reports as regression suite). Distinct from `audit` +
+`design-review` (static-analysis quality framework — review
+artifacts and discipline) and from the planned testing harness
+(Phase 0 item 5; runtime eval framework — runs scenarios and
+scores outcomes). Agent Simulation is the **adversarial /
+edge-case / cross-agent stress-test** layer on top of those:
+once basic eval works (Phase 0 #5), Agent Simulation adds
+adversarial mode + cross-agent interaction testing + scale.
+
+**What it adds beyond Phase 0 #5 testing harness**:
+- **Adversarial scenarios**: red-team inputs (prompt injection
+  attempts, ambiguous instructions, context manipulation,
+  jailbreak edges)
+- **Cross-agent interaction tests**: when multiple plugin
+  agents (per #11) or departments (per #12) coordinate on a
+  workflow, simulate the full multi-agent run including failure
+  modes at handoff boundaries
+- **Scale**: hundreds-to-thousands of scenarios per release,
+  not the dozens that a hand-curated regression suite carries
+- **Failure-mode classification**: structured taxonomy of agent
+  errors (hallucination / policy violation / missed citation /
+  latency outlier / handoff failure) with per-mode reporting
+
+**Pre-trigger commitment**: NONE. Phase 0 #5 lands first; its
+eval-result schema (per Row 9 of `a2a-and-gemini-pattern-
+emulation.md`) is designed to support Agent Simulation
+extension later — same `EvalRun` / `Scenario` / `EvalResult`
+types, just larger volume + adversarial scenario kinds.
+
+**Pull-forward triggers**:
+- **First enterprise consulting client** asking explicitly about
+  adversarial / red-team eval (regulated industries, government,
+  healthcare may demand this).
+- **First multi-department office in production** (post-#12) —
+  cross-department workflows have more failure surface; basic
+  regression isn't sufficient.
+- **AI-office-builder v2 ships** — scaling stress-test across
+  generated offices means we need scenario suites that
+  generalize per-domain, not just PBS-specific.
+- **Anthropic ships an Agent Simulation analogue** as a managed
+  service that we can integrate (much cheaper than building from
+  scratch).
+
+**Status**: deferred to v2. Agnostic of A2A — applies whether
+we stay single-Opus or migrate to multi-agent A2A archetype.
+Different "agents" in the simulation correspond to different
+shapes of consumer (skills today; plugin agents post-#11; A2A
+peers post-Tier-3-trigger).
 
 ### Reference versioning
 
