@@ -41,8 +41,12 @@ extensions, not yet implemented" (below) so future sessions know
 they're coming and don't re-discover them.
 
 Periodically (definitely after any meta-rule addition or refactor),
-sweep all skills against the current meta-rules to catch drift.
-That sweep is currently the next-session priority — see HANDOFF.md.
+run a comprehensive audit. The procedure is codified as a skill —
+see `plugin/skills/audit/` (SKILL.md + PROCEDURE.md + 3 reference
+files). Triggers + slice library + stopping criterion + claim-scope
+rule + output conventions all live there. Audit artifacts land at
+`docs/audits/<scope>-<YYYYMMDD>.md` (frozen snapshots; closures
+tracked via HANDOFF + closure banners).
 
 **Scope boundary**: this doc covers placement (which tier / which
 entity type / where does it belong). For *within-tier idioms* —

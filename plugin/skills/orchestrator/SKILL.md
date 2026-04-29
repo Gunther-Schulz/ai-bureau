@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.3.0
+version: 0.4.0
 license: MIT
 mcp_tools_required: [list_projects, list_skills]
 mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
@@ -113,6 +113,9 @@ reference; the MCP tool is authoritative.
   (walks layered manifest set per office's scope)
 - `author-manifest` — scaffold new domain or state manifests for
   scopes that don't yet have content
+- `audit` — comprehensive drift audit (architecture / plugin /
+  backend / docs / cross-references); triggered by phrases like
+  "audit", "drift check", "structural sweep", "pre-phase audit"
 
 ## What this skill is and is not
 
