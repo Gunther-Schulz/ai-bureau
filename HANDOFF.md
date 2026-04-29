@@ -266,6 +266,25 @@ larger reshape. Defer to next major architectural session OR
 when a gate's logic surface grows beyond what fits in
 orchestrator/PROCEDURE.md.
 
+### ✅ Audit slices 11-13 — implementation-quality (commit-pending)
+
+Added to `plugin/skills/audit/references/drift-surfaces-and-slices.md`
+in audit v0.3.0:
+
+- **Slice 11 — test-coverage**: tests covering load-bearing
+  handlers / chunkers / migrations
+- **Slice 12 — security / data-handling**: SQL escape, input
+  validation, secret handling, path traversal
+- **Slice 13 — performance / efficiency**: hot-path complexity,
+  embedder loading, LanceDB query patterns, caching
+
+These are **not part of the default round sequence** (slices 1-10
+remain default). Run 11-13 before phase boundaries that increase
+exposure on those axes — e.g., before Phase 1 corpus download =
+slice 11.
+
+Audit skill version 0.2.0 → 0.3.0.
+
 ### ⏸️ U3 — fresh-eyes review of VISION + ARCHITECTURE wording
 
 Still deferred per earlier user decision. ARCHITECTURE.md was
@@ -274,7 +293,26 @@ VISION fresh-eyes review still pending.
 
 ---
 
-## ⏳ Pending — next-session task
+## ⏳ Pending — next-session tasks
+
+### First action: trigger v2 → v3 office-config migration
+
+The user's existing `~/.config/pbs-bureau/office.yaml` is at v2.
+Backend forward-migrates transparently in memory on every load,
+but the file on disk is permanently v2 (and now drifts from the
+in-memory shape — `practices: []` + `paths.X_root` etc. on disk
+vs. `actors: []` + `roots.X` in code).
+
+**Action**: run `setup-office` in **reconcile mode** to persist
+v3 to disk. Cleaner state + tests the v2_to_v3 migration we just
+shipped (which has only been exercised by the loader's in-memory
+forward-migration so far; reconcile mode is the persistence path).
+
+This is a **good test opportunity**: the migration is bounded,
+the user has a real v2 file, and reconcile mode exercises both
+the migration framework AND setup-office's "reshape detected;
+walk newly-required fields" flow. Catches any v2_to_v3 bugs
+before they're encountered post-launch.
 
 ### Phase 0 item 4 — Testing methodology + harness
 
@@ -302,12 +340,39 @@ Output: `docs/rag-testing-strategy.md` documenting the three layers
 + acceptance criteria for each phase gate (e.g. "Phase 2b passes
 when ground-truth set top-5 ≥ 70% relevance").
 
+### Phase 0 item 5 — Feature-survey skill design (NEW)
+
+Per the design-review skill scope question raised at session-5
+close: design-review covers **structural design quality**, not
+**feature gaps** ("what's missing from the system that should
+exist?") or **implementation quality** (test coverage, security,
+performance).
+
+Implementation-quality is now covered by audit slices 11-13
+(test-coverage / security / performance — added in audit v0.3.0
+this session). Feature-survey is still missing.
+
+**Build a `feature-survey` skill** with:
+- Mechanism: greenfield-the-vision (vs. design-review's
+  greenfield-the-architecture). Asks "given the user's goals
+  and the system's purpose, what features should exist that
+  don't?"
+- Slice library: feature gaps per axis (workflow gaps, UX gaps,
+  data-model gaps, integration gaps, observability gaps,
+  collaboration gaps, lifecycle gaps).
+- Output format: per-gap recommendation with priority + cost
+  + alignment-with-VISION.md.
+
+Same pattern as audit + design-review (parallel slice agents +
+synthesis + frozen artifact). Discussion-first; expect ~half-day
+to design well.
+
 ### Then — Phase 1 corpus download
 
-After items 4 closes. Fetch all 57 entries via `research-references`
-full refresh. **No embeddings yet** — raw fetch + checksum + manifest
-population only. Surfaces real corpus shape (DRM/scanned/manual-discovery)
-before chunker code commits.
+After Phase 0 items 4 + 5 close. Fetch all 57 entries via
+`research-references` full refresh. **No embeddings yet** — raw
+fetch + checksum + manifest population only. Surfaces real corpus
+shape (DRM/scanned/manual-discovery) before chunker code commits.
 
 ---
 

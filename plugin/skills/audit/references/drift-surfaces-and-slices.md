@@ -1,9 +1,17 @@
 # Drift surfaces + slice library
 
-## The 6 drift-surface categories
+## The 9 drift-surface categories
 
 Every finding falls into one of these. Slices target one or more
 categories; rounds combine slices to cover the surface space.
+
+The first 6 are *correctness* drift (claims vs. reality, schemas
+vs. usage, etc.). The last 3 are *implementation quality* drift
+(test coverage, security, performance) — added in v0.2 of the
+audit skill per design-review session-5 follow-up. Audit's scope
+is broader than just structural-correctness; implementation rigor
+is part of compliance with the system's own claims (e.g., "we
+have a test suite" implies the test suite covers things).
 
 ### 1. Documentation drift
 
@@ -83,6 +91,53 @@ correct for its scope but read as system-wide.
 **Why dangerous**: a "verified clean" claim discourages future
 auditors from re-checking. Without scope-bounding, the claim
 implicitly covers more than it actually verified.
+
+### 7. Test-coverage drift
+
+Code paths without tests. Tests that exist but don't actually
+exercise the load-bearing logic. Tests that mock what should be
+real.
+
+**Examples**: a chunker module with 200 lines of dispatch logic
+and zero tests; a Pydantic schema with no round-trip tests;
+integration tests marked but never run; mock-based unit tests
+that don't exercise the SQL/embedding path the production code
+uses.
+
+**Why dangerous**: untested paths fail silently in production.
+Pre-launch, this is theoretical; once data lands in LanceDB,
+test gaps become invisible bugs.
+
+### 8. Security / data-handling drift
+
+Code paths that touch sensitive data without appropriate care.
+Inputs not validated. Outputs that leak. Auth/permission
+inconsistencies.
+
+**Examples**: SQL string interpolation without escape (caught
+session-5: `db.delete_by_path` was unescaped); user input flowing
+unsanitized to filesystem operations; office-config secrets
+logged at INFO; MCP tool inputs not validated against malicious
+shapes; path traversal in file operations.
+
+**Why dangerous**: pre-launch, attack surface is small (single
+user). Post-launch / multi-deployment, security drift is the
+high-impact risk.
+
+### 9. Performance / efficiency drift
+
+Hot paths with non-obvious complexity. Repeated work that
+should be cached. Algorithms that scale badly with corpus
+growth. Memory leaks or unbounded growth.
+
+**Examples**: a chunker that re-loads the embedder per chunk;
+filesystem walks that re-stat the same files; LanceDB queries
+without indexes; in-process caches that grow unbounded; LLM
+calls in tight loops without batching.
+
+**Why dangerous**: corpus is small now (57 entries). Post-RAG,
+hot-path inefficiencies become user-visible latency or cost
+spikes.
 
 ---
 
@@ -340,7 +395,7 @@ template (the agent prompt).
 
 ### Slice 10 — final-pass-cross-cutting
 
-**Drift surfaces**: all 6, but specifically looking for what
+**Drift surfaces**: all 9, but specifically looking for what
 prior slices missed because their scope didn't reach.
 
 **Scope**: any file that's been *referenced* by other slices but
@@ -370,14 +425,131 @@ not *audited*. Plus a focused check on dependency / build files
 
 ---
 
+### Slice 11 — test-coverage
+
+**Drift surfaces**: 7 (test-coverage)
+
+**Scope**:
+- `backend/mcp-server/tests/` (when populated; expected gap until
+  Phase 0 conventions migration)
+- `backend/mcp-server/src/pbs_mcp/tools/*.py` — load-bearing
+  handlers should have corresponding test files
+- `backend/mcp-server/src/pbs_mcp/chunkers/*.py` — chunker
+  dispatch + per-chunker logic
+- `backend/mcp-server/src/pbs_mcp/office_config.py` +
+  `office_config_migrations/*.py` — schema validation +
+  migration round-trip
+
+**Brief template**:
+
+> Audit test coverage. Check:
+> - Does every load-bearing handler / chunker / migration have a
+>   corresponding test file?
+> - Are tests actually exercising the load-bearing path, or are
+>   they trivial smoke tests that pass without exercising
+>   anything?
+> - Are integration tests (LanceDB / SQLite touchers) marked +
+>   runnable?
+> - Are mocks used where real-instance tests would be cheap (per
+>   `docs/decisions/backend-test-layout.md`)?
+> - For each module without tests: is it deferred-by-design (per
+>   ROADMAP) or a gap?
+>
+> Pre-launch state: most modules expected to have zero tests
+> until Phase 0 conventions migration. Flag the ones that are
+> already in production-equivalent code paths.
+>
+> Output structured findings. Cap at 1000 words.
+
+---
+
+### Slice 12 — security / data-handling
+
+**Drift surfaces**: 8 (security)
+
+**Scope**:
+- `backend/mcp-server/src/pbs_mcp/tools/*.py` (all handlers)
+- `backend/mcp-server/src/pbs_mcp/db.py` (SQL construction)
+- `backend/mcp-server/src/pbs_mcp/office_config.py` (config
+  loading + secret handling)
+- `backend/mcp-server/src/pbs_mcp/integrations/**/*.py` (external
+  data flow)
+
+**Brief template**:
+
+> Audit security + data-handling. Check:
+> - Any SQL/path string interpolation without escape (caught
+>   session-5: `db.delete_by_path` was unescaped)
+> - User input sanitization at MCP tool boundaries
+> - Output: anything logged at INFO that could contain
+>   secrets/PII (config values, mail headers, etc.)
+> - File path operations: any `..` traversal possibility?
+> - MCP tool inputs: do Pydantic validators catch malicious
+>   shapes (overly long strings, recursive structures)?
+> - Office-config secrets (passwords, API tokens): how are they
+>   stored? Plain YAML? `password_ref: <env-var>` indirection?
+> - Integration adapters: do they sanitize external data before
+>   it crosses the trust boundary into pbs_core?
+>
+> Pre-launch state: single-user attack surface is small. Flag
+> issues by severity assuming future multi-user / hosted
+> deployment.
+>
+> Output structured findings. Cap at 1000 words.
+
+---
+
+### Slice 13 — performance / efficiency
+
+**Drift surfaces**: 9 (performance)
+
+**Scope**:
+- `backend/mcp-server/src/pbs_mcp/embedder.py` — model loading,
+  inference loops
+- `backend/mcp-server/src/pbs_mcp/db.py` — LanceDB queries
+- `backend/mcp-server/src/pbs_mcp/chunkers/*.py` — per-chunk
+  cost
+- `backend/mcp-server/src/pbs_mcp/tools/*.py` — hot-path tool
+  handlers
+- Caching layers (lru_cache decorators, in-process state)
+
+**Brief template**:
+
+> Audit performance + efficiency. Check:
+> - Embedder loaded once per process or per call? (Should be once.)
+> - Filesystem walks: do they re-stat the same files across
+>   repeated calls? Is there a cache?
+> - LanceDB queries: do they have indexes on the filtered
+>   columns? Are queries N+1 patterns?
+> - Chunkers: any per-chunk LLM call or heavy computation that
+>   could be batched?
+> - In-process caches (lru_cache): unbounded growth risk?
+> - Memory profile: any obvious leaks or unbounded structures?
+> - Cold-start cost: how long does first MCP tool call take?
+>
+> Pre-launch state: corpus small (57 entries). Flag issues
+> assuming corpus grows to 500+ entries (post-deployment scale)
+> or session length grows to hours.
+>
+> Output structured findings. Cap at 1000 words.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |
 |---|---|---|
-| 1 | 1, 2, 3 | Highest-leverage surfaces (top-level docs, skills, backend tools) |
-| 2 | 4, 5, 9 | Adjacent surfaces (plugin scaffolding, content, self-audit) |
+| 1 | 1, 2, 3 | Highest-leverage correctness surfaces (top-level docs, skills, backend tools) |
+| 2 | 4, 5, 9 | Adjacent correctness surfaces (plugin scaffolding, content, self-audit) |
 | 3 | 6, 7, 8 | Deep cuts (code, cross-refs, READMEs) |
 | 4 | 10 | Final-pass cross-cutting + stopping decision |
+| **5+ (optional)** | **11, 12, 13** | **Implementation quality** (test coverage, security, performance) — typically run before phase boundaries that increase exposure (first ingest, deployment, multi-user) |
+
+Slices 11-13 are **not part of the default round sequence** —
+they're correctness-orthogonal. Run them when a phase boundary
+increases exposure on that axis (e.g., before Phase 1 corpus
+download = run slice 11 to confirm test coverage; before any
+multi-user deployment = run slice 12 for security).
 
 If a round catches BLOCKERS, immediately run a verification pass
 (scope = changed files only) before declaring round complete.
