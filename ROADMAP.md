@@ -165,67 +165,53 @@ where author-discipline visual checking stops scaling. PBS today
 has 8 manifests authored by one person; the visual check is
 trivial. Post-second-deployment, this becomes load-bearing.
 
-### Axis-2 (sparring) structural promotion (from target 8, 2026-04-29)
+### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)
 
-**Why**: Design-review target 8's first run found that all 7
-VISION axis-2 (sparring) mechanisms are behavioral-only —
-counter-argument, confidence calibration, anti-sycophancy guard,
-asymmetric knowledge respect, etc. Only meta-rule 4's selective-
-friction calibration provides structural enforcement. This is
-exactly the LLM-inference surface area that
-`feedback_llm_instruction_tightness.md` warns about: brittle,
-drifts silently, high overhead each session. VISION names "answer
-machine" (axis-2 collapse) as one of three category-collapse
-risks; axis 2 today has zero structural defense against it.
+Three architectural items were *pulled forward to v1* — they MUST
+land before Phase 1 corpus download. Each has a decision record
+and an initial scaffold; remaining work is skill retrofits +
+integration. Tracked here for visibility; full plans in the
+linked decision records.
 
-See full analysis at
-`docs/design-reviews/vision-arch-coupling-20260429.md` finding F1.
+**1. Unified audit trail** — see `docs/decisions/audit-trail-v1.md`.
 
-**Sketch**:
+- Schema + Pydantic + 2 MCP tools (record_audit_event,
+  query_audit_trail) shipped session 6.
+- Remaining: backfill_audit_trail tool; skill-side dual-write
+  retrofits (orchestrator, save-baustein, record-feedback,
+  draft-textteil-b/c, review-draft, research-references each
+  declare record_audit_event in mcp_tools_required + invoke at
+  appropriate checkpoints); slice 17 cross-reference invariant
+  audit (deferred until first projects accumulate events).
 
-- New `sparring-output` MCP tool that validates output schemas
-  carry counter-argument + confidence + reasoning fields where
-  declared.
-- Skill Bundle convention: `validates_via: <tool-name>`
-  frontmatter declaration; `list_skills` returns it; orchestrator
-  wires the validation per skill phase.
-- Anti-sycophancy guard as deterministic check (heuristic — e.g.,
-  "did this response soften vs. the prior response on the same
-  question without new evidence?").
-- Confidence-metadata schema in skill outputs (high/medium/low
-  with required-when rules).
-- Goal: move 2-3 of the 7 axis-2 mechanisms from behavioral to
-  structural; the rest stay behavioral but with clearer skill-
-  body assertion-language.
+**2. Sparring-output structural promotion** — see
+`docs/decisions/sparring-output-v1.md`.
 
-**Pull-forward trigger**: before any frontend that funnels through
-non-text UX (axis-2 collapse risk amplifies in button-driven
-interfaces per VISION's text-first reasoning); OR before
-multi-user / multi-deployment (each new consumer multiplies the
-LLM-inference cost of behavioral enforcement). Pre-launch is also
-defensible — design while the patterns are still cheap to evolve.
+- ReviewOutput + RecommendationOutput schemas + validate_skill_output
+  MCP tool + plugin-conventions output_schema field shipped
+  session 6.
+- Remaining: heuristic markdown-field parser refinement;
+  orchestrator PROCEDURE.md validation-loop integration; skill
+  retrofits (review-draft declares output_schema + reformats body
+  output sections; orchestrator's Checkpoint 13 declares schema
+  for recommendation outputs); first end-to-end test on a sample
+  document.
 
-### Unified audit trail — promotion decision pending
+**3. State.md MCP gate** — schema-bearing project state lives at
+`<project>/_ai/state.md`; ProjectState Pydantic + get/update_project_state
+MCP tools shipped session 6 (covered in the same bundle since
+state.md was already YAML-frontmatter shape — gap was validation,
+not format).
 
-**Why**: VISION's defensibility test ("user defends six months
-later") is an axis-3 load-bearer. Today the audit trail spans 6
-locations (decisions.md, snapshots/, changelog.md, git, manifests,
-module-decisions.md) with no query layer. User reconstructs
-manually.
+- Remaining: the 8 skills that read state.md (orchestrator,
+  survey-project, draft-cover-mail, validate-checklist, review-draft,
+  draft-textteil-b/c, promote-to-skill) declare get_project_state
+  + update_project_state in mcp_tools_required and route through
+  the gate instead of direct Read. No projects bound yet, so this
+  retrofit is non-blocking until first project bind.
 
-Audit trail unified tracking is already on ROADMAP further down
-under "Audit trail — unified change/decision/version tracking" —
-but with no pull-forward trigger. **Target 8 finding F2 is a
-v1-scope-decision call**: keep deferred (defensibility relies on
-manual assembly until ROADMAP lands), or pull forward to v1
-(unified Memory record subkind + query layer + integrate the 6
-existing scattered sources).
-
-See full analysis at
-`docs/design-reviews/vision-arch-coupling-20260429.md` finding F2.
-
-**Decision needed**: defer (status quo) vs. pull-forward to v1.
-If pull-forward, scope = multi-day. Awaiting user judgment.
+All three items: skill retrofits land in the next-immediate-session
+before any RAG work begins.
 
 ### Pioneer-instance validation strategy
 
@@ -684,42 +670,10 @@ spec'ing.
 
 ### Audit trail — unified change/decision/version tracking
 
-**Why**: Currently audit-trail-like things are scattered across the
-system without a coherent design:
-- per-project `decisions.md` captures user-facing decisions
-- per-project `snapshots/` captures frozen artifact versions
-- references corpus `changelog.md` captures reference fetches
-- git history captures code/skill changes
-- references-manifest entries carry `last_fetched`, archived versions
-
-There's no unified picture of "what happened to this piece, when,
-why, by whom" across all the moving parts (project artifacts,
-references, manifests, configs, integrations, bausteine, plans,
-correspondence). When a UNB later asks "show me what changed
-between Vorentwurf and Entwurf for §X", we should be able to
-answer cleanly. When citation drift breaks a baustein months later,
-we should be able to trace the chain.
-
-**Sketch (topic-level only — design TBD)**:
-- A unified event log with stable schema (timestamp, actor, kind,
-  scope, target, before/after pointers, rationale).
-- Per-domain handlers (project artifacts → snapshot manifest;
-  references → changelog; bausteine → status flips; configs →
-  schema migrations; etc.) emit into the same log.
-- Query path: "what changed in scope X between dates A and B" or
-  "what was the state of artifact Y at date Z".
-- Privacy / retention boundaries: per-project audit lives with the
-  project; cross-cutting (references, configs) at office level.
-
-**Open questions** (deliberately unresolved):
-- Single append-only event log file vs distributed per-domain logs
-  with a query layer over them?
-- Schema across domains: how rigid? per-kind subschemas?
-- How does this interact with snapshots/, decisions.md, changelog.md
-  — do those become projections of the unified log, or stay
-  authoritative with the log as a thin index?
-- External-actor attribution (UNB sends a Stellungnahme — that's
-  also an event, but the actor is outside the system).
+**Status**: PROMOTED to v1 commitment (session 6, 2026-04-29).
+Initial design + Pydantic + MCP tools shipped. See decision record
+at `docs/decisions/audit-trail-v1.md` and the v1 commitments
+section near the top of this ROADMAP.
 
 ### Human-readable artifact generation at checkpoints
 

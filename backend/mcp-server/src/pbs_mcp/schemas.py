@@ -249,8 +249,22 @@ class ListProjectsOutput(BaseModel):
 
 
 class BindProjectInput(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1)
     root_path: str | None = None
+    # Required state.md initialization fields (per ProjectState contract).
+    # bind_project writes these into a fresh state.md; if reading an existing
+    # one, these are ignored. Defaults match what setup-office's wizard
+    # would prompt for; setup-project (a richer flow) gathers them
+    # interactively.
+    bundesland: Literal[
+        "BB", "BW", "BY", "BE", "HB", "HH", "HE", "MV",
+        "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH",
+    ] = "MV"
+    verfahren_type: Literal[
+        "regelverfahren", "vereinfachtes",
+        "beschleunigtes", "vorhabensbezogen",
+    ] = "regelverfahren"
+    phase: str = "0-aufstellungsbeschluss"
 
 
 class BindProjectOutput(BaseModel):
@@ -352,6 +366,103 @@ class SetupProjectOutput(BaseModel):
     next_steps: list[str]
 
 
+# === Project state tools ===
+# state.md is schema-bearing per ARCHITECTURE.md meta-rule 4 refinement A:
+# durable state with a typed contract goes through MCP, never direct skill
+# Read/Write. Owning module: pbs_mcp/project_state.py (Pydantic + parse +
+# serialize). These tool I/O schemas wrap that module.
+
+class GetProjectStateInput(BaseModel):
+    project: str = Field(..., min_length=1)  # project name (matches index)
+
+
+class GetProjectStateOutput(BaseModel):
+    """Full state.md content: validated frontmatter + raw body."""
+    state: dict[str, Any]  # serialized ProjectState (from project_state.py)
+    body: str               # markdown body after frontmatter (History etc.)
+    state_path: str
+
+
+class UpdateProjectStateInput(BaseModel):
+    project: str = Field(..., min_length=1)
+    updates: dict[str, Any] = Field(..., min_length=1)  # partial frontmatter merge
+    body_append: str | None = None  # append to History body (preserves existing)
+
+
+class UpdateProjectStateOutput(BaseModel):
+    """Post-update validated state."""
+    state: dict[str, Any]
+    state_path: str
+    fields_updated: list[str]
+
+
+# === Audit trail tools (per docs/decisions/audit-trail-v1.md) ===
+# Unified audit log per project. AuditEvent is owned by audit_trail.py;
+# these are MCP tool I/O wrappers.
+
+class RecordAuditEventInput(BaseModel):
+    """Append a single audit event to a project's audit-trail.jsonl.
+    Server-side fills `id` (UUID) and `timestamp` (now-UTC) if the
+    caller-supplied values are empty."""
+    project: str = Field(..., min_length=1)
+    event: dict[str, Any]  # validated by audit_trail.AuditEvent on append
+
+
+class RecordAuditEventOutput(BaseModel):
+    """Post-validation event (with server-filled id + timestamp)."""
+    event: dict[str, Any]
+    event_id: str
+    trail_path: str
+
+
+class QueryAuditTrailInput(BaseModel):
+    """Filter the unified log. None = no filter on that dimension.
+
+    project=None means "all bound projects" (fan-out across projects-
+    index). Other filters are AND-combined.
+    """
+    project: str | None = None
+    kind: str | list[str] | None = None  # EventKind or list
+    since: datetime | None = None
+    until: datetime | None = None
+    actor: str | None = None
+    references_paragraph: str | None = None  # full-text match on summary/details
+    references_baustein: str | None = None
+    limit: int = 100
+
+
+class QueryAuditTrailOutput(BaseModel):
+    events: list[dict[str, Any]]
+    total: int  # before limit
+    sources_referenced: dict[str, int]  # source-file → event count
+
+
+# === Skill output validation tools (per docs/decisions/sparring-output-v1.md) ===
+# Structural enforcement of axis-2 (sparring) mechanisms.
+
+class ValidateSkillOutputInput(BaseModel):
+    """Validate a skill's output against its declared output_schema.
+
+    Used by the orchestrator after a sparring-mode skill produces
+    output. If validation fails, orchestrator kicks back to the
+    skill with the missing fields.
+    """
+    skill_name: str = Field(..., min_length=1)
+    output_text: str = Field(..., min_length=1)
+    schema_hint: str | None = None  # explicit schema name override
+                                     # (for phase-specific schemas like
+                                     # RecommendationOutput on orchestrator)
+
+
+class ValidateSkillOutputOutput(BaseModel):
+    valid: bool
+    schema_name: str | None = None  # which Pydantic schema was applied; None if none registered
+    missing_fields: list[str] = Field(default_factory=list)
+    weak_fields: list[str] = Field(default_factory=list)  # parsed but min_length etc. failed
+    suggestions: list[str] = Field(default_factory=list)  # what skill should add
+    parsed: dict[str, Any] | None = None  # extracted fields, if parse succeeded
+
+
 # === Discovery tools (Tier 1, pre-RAG) ===
 # Per ROADMAP "Backend MCP discovery layer (Tier 1 — pre-RAG)" + ARCHITECTURE.md
 # meta-rule 4: thin MCP wrappers over the layered manifest API in office_config /
@@ -365,6 +476,11 @@ class ManifestInfo(BaseModel):
     exists: bool
     entry_count: int | None = None
     last_updated: str | None = None
+    # Explicit error reporting per strict-validation discipline: when
+    # a manifest exists but cannot be parsed, the tool surfaces the
+    # failure rather than silently returning entry_count=None as if
+    # the manifest were merely empty. Empty list = parsed cleanly.
+    errors: list[str] = Field(default_factory=list)
 
 
 class ListReferenceManifestsInput(BaseModel):

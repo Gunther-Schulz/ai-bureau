@@ -12,11 +12,13 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from pbs_mcp import config, office_config
+from pbs_mcp import config, office_config, project_state
 from pbs_mcp.db import get_db
 from pbs_mcp.schemas import (
     BindProjectInput,
     BindProjectOutput,
+    GetProjectStateInput,
+    GetProjectStateOutput,
     ListProjectsInput,
     ListProjectsOutput,
     ProjectSummary,
@@ -26,6 +28,8 @@ from pbs_mcp.schemas import (
     SurveyProjectOutput,
     UnbindProjectInput,
     UnbindProjectOutput,
+    UpdateProjectStateInput,
+    UpdateProjectStateOutput,
 )
 from pbs_mcp.tools.memory import compose_baustein, parse_frontmatter
 
@@ -90,23 +94,29 @@ def bind_project(input: BindProjectInput) -> BindProjectOutput:
 
     if created:
         ai_dir.mkdir(parents=True, exist_ok=True)
-        state_fm = {
-            "project": input.name,
-            "project_root": str(root),
-            "lifecycle": "draft",
-            "ownership_mode": "new-work-only",
-            "practices": [_default_practice_id()],
-            "doctype_focus": [],
-            "doctype_status": {},
-            "phase": None,
-            "phase_history": [],
-            "deadlines": [],
-            "linked_projects": [],
-            "created": date.today().isoformat(),
-            "last_session": date.today().isoformat(),
-        }
-        body = "# History\n\n- " + date.today().isoformat() + " — Project bound.\n"
-        state_path.write_text(compose_baustein(state_fm, body), encoding="utf-8")
+        # Route through ProjectState contract: build a validated state model,
+        # serialize. Catches contract violations at write time per
+        # ARCHITECTURE.md meta-rule 4 strict-validation discipline.
+        today = date.today()
+        new_state = project_state.ProjectState(
+            project=input.name,
+            project_root=root,
+            bundesland=input.bundesland,
+            lifecycle="draft",
+            ownership_mode="new-work-only",
+            practices=[_default_practice_id()],
+            verfahren_type=input.verfahren_type,
+            phase=input.phase,
+            created=today,
+            last_session=today,
+            doctype_status={},
+            phase_history=[project_state.PhaseEntry(phase=input.phase, entered=today)],
+            deadlines=[],
+            linked_projects=[],
+        )
+        body = f"# History\n\n- {today.isoformat()} — Project bound.\n"
+        new_file = project_state.ProjectStateFile(state=new_state, body=body)
+        project_state.write_project_state(state_path, new_file)
 
     # Append to projects-index
     entries = _read_projects_index()
@@ -549,3 +559,78 @@ def _git_init(target: Path) -> None:
         )
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
         logger.warning("git init failed for %s: %s", target, e)
+
+
+# === Project state (state.md) handlers ===
+
+def _resolve_state_md_path(project_name: str) -> Path:
+    """Locate state.md for a named project. Checks both _ai/ (existing
+    projects, hybrid ownership) and .ai/ (new projects, AI-owned).
+    Raises FileNotFoundError if neither exists."""
+    entries = _read_projects_index()
+    project_root: Path | None = None
+    for e in entries:
+        if e.get("name") == project_name:
+            pr = e.get("project_root")
+            if pr:
+                project_root = Path(pr).expanduser()
+                break
+    if project_root is None:
+        raise FileNotFoundError(
+            f"project '{project_name}' not in projects-index; bind it first"
+        )
+    for ai_dir in ("_ai", ".ai"):
+        candidate = project_root / ai_dir / "state.md"
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError(
+        f"state.md not found at {project_root}/_ai/state.md or "
+        f"{project_root}/.ai/state.md; project may not be initialized"
+    )
+
+
+def get_project_state(input: GetProjectStateInput) -> GetProjectStateOutput:
+    """Read + validate a project's state.md. Raises on missing file or
+    contract violation. The strict-validation discipline applies: no
+    silent partial returns."""
+    state_path = _resolve_state_md_path(input.project)
+    file = project_state.read_project_state(state_path)
+    return GetProjectStateOutput(
+        state=file.state.model_dump(mode="json", exclude_none=True),
+        body=file.body,
+        state_path=str(state_path),
+    )
+
+
+def update_project_state(input: UpdateProjectStateInput) -> UpdateProjectStateOutput:
+    """Apply a partial update to a project's state.md frontmatter, then
+    re-validate. Optionally append to the History body. Raises if the
+    merged state violates the contract — never writes a partial-invalid
+    state."""
+    state_path = _resolve_state_md_path(input.project)
+    current = project_state.read_project_state(state_path)
+
+    # Merge partial updates over current frontmatter dict.
+    merged = current.state.model_dump(mode="json", exclude_none=True)
+    fields_updated: list[str] = []
+    for key, value in input.updates.items():
+        if merged.get(key) != value:
+            merged[key] = value
+            fields_updated.append(key)
+
+    # Re-validate the merged shape; raises if contract violated.
+    new_state = project_state.ProjectState.model_validate(merged)
+
+    body = current.body
+    if input.body_append:
+        sep = "" if body.endswith("\n") else "\n"
+        body = f"{body}{sep}{input.body_append}\n"
+
+    new_file = project_state.ProjectStateFile(state=new_state, body=body)
+    project_state.write_project_state(state_path, new_file)
+
+    return UpdateProjectStateOutput(
+        state=new_state.model_dump(mode="json", exclude_none=True),
+        state_path=str(state_path),
+        fields_updated=fields_updated,
+    )

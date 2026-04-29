@@ -213,6 +213,7 @@ list):
 | Skill Bundle | semver `version:` field; bump on behavior change. Body changes invalidate skill behavior on `/reload-plugins`. |
 | Memory (prose) | `references_used: []` frontmatter declares dependent law refs. `research-references` flags affected docs in `memory/product-backlog.md` when a referenced law is updated. |
 | Memory (records) | `status: active|flagged|archived|superseded`, `last_validated`, `review_due`, `references[].verified_against_version`. `validate-bausteine` sweeps for stale records. |
+| Memory (audit-log) | Append-only `<project>/_ai/audit-trail.jsonl` per docs/decisions/audit-trail-v1.md. Each `AuditEvent` carries `id`, `timestamp`, `kind`, `sources[]`. Events never invalidate (immutable history); `causes[]` chain captures supersession. `query_audit_trail` MCP tool is the canonical query layer; existing prose sources (decisions.md, snapshots/, etc.) remain authoritative for human-readable context. Dual-write discipline: every event-producing skill calls `record_audit_event`. |
 | Backend | Python imports + Pydantic schemas; restart MCP server after changes. No declarative invalidation hook. |
 | Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
 | External data | Per-project `_ai/state.md.lifecycle` declares phase + status; `roots.references_root` corpus carries `changelog.md`. |
@@ -340,6 +341,26 @@ not in code.** Where a path should never be written outside a
 specific MCP tool's context, use a permission deny rule. Cheaper
 than scaffolding code paths that re-enforce what the harness can
 already block.
+
+**Strict-validation discipline.** Every MCP gate that owns a
+typed contract validates via Pydantic. Required fields are
+strictly required (no `Optional` for required, no silent default
+to `None`). On contract violation, raise loud with descriptive
+errors naming the offending field; never return partial data,
+never coerce a missing required field to a placeholder. Defaults
+are reserved for fields where missing semantically means
+"not-yet-known" (`None`) — not for required fields where missing
+would mean "broken data."
+
+This discipline is what makes the gate a gate. A Pydantic model
+that liberally uses `Optional` to "be flexible" silently accepts
+malformed data and breaks the contract-enforcement guarantee.
+
+Audit slice 16 (validation-gate coverage) checks adherence: it
+walks every MCP tool's input/output models + every entity
+Pydantic model and flags `Optional` on fields the rule says are
+required, silent defaults that mask missing data, and exception
+swallowing that converts contract violations to soft failures.
 
 ### Backend organization (consequence of meta-rule 4)
 

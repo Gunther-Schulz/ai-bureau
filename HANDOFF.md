@@ -1,239 +1,182 @@
 # Session handoff — pbs-bureau
 
-End of session 6 (2026-04-29, same-day continuation of session 5).
-Session 5 closed with the largest pre-RAG cleanup the system had
-seen (architectural simplification, schema v3, frontmatter
-migration, orchestrator split — see prior commits `f3fe2d0` and
-back). Session 6 ran a follow-up boundary-and-coupling refinement
-pass:
+End of session 6 (2026-04-29). This session was the largest pre-RAG
+architectural hardening pass since session 5's simplification. It
+ran through 9 distinct work streams in three phases:
 
-- **Sharpened meta-rule 4** (LLM/Python boundary) with two
-  refinements: typed-contract persistence test (loose markdown is
-  skill-direct), explicit reuse direction (deterministic→MCP,
-  interpretive→Skill Bundle reference). ARCHITECTURE v0.5 → v0.6.
-- **Added audit slice 14** (boundary-adherence) + slice 15
-  (invalidation-contract coverage). Audit skill 0.3.0 → 0.5.0.
-  New drift surfaces 10 (placement) + 11 (invalidation-contract).
-- **Added design-review target 7** (LLM/Python placement-soundness)
-  + target 8 (VISION ↔ ARCHITECTURE coupling traceability).
-  Design-review skill 0.2.0 → 0.4.0. Fixed pre-existing v0.5 drift
-  in targets 1+2 (5/9 entity types + A-I scheme references).
-- **Persisted v2 → v3 office-config migration** to disk via in-
-  process `apply_migrations()` + Pydantic round-trip (zero defects;
-  v2 backup at `~/.config/pbs-bureau/office.yaml.v2-backup`).
-- **Landed 2a fix** (path_classification config block) as purely-
-  additive optional in v3 — no schema bump. PathClassification
-  Pydantic + classifier consults config first, falls back to
-  hardcoded patterns. Kicked off after slice 14's first-run finding.
-- **Ran first runs** of slice 14, slice 15, target 7, target 8.
-  Surfaced 7 findings total across the 4; 1 in-session fix, 5
-  ROADMAP entries, 1 pushed-back-on agent overreach.
+**Phase 1 — boundary refinement** (ARCHITECTURE v0.5 → v0.6):
+- Sharpened meta-rule 4 with refinements A (typed-contract test) +
+  B (positive reuse rule)
+- Added audit slice 14 (boundary-adherence) + design-review target
+  7 (LLM/Python placement-soundness)
+- Persisted v2 → v3 office-config migration to disk
+- Landed slice 14's 2a finding inline (path_classification
+  optional v3 block, no schema bump)
 
-The boundary work was driven by user observation: LLMs paper over
-imprecise markdown instructions silently, so pre-launch is the
-unique window to tighten the LLM-consumed layer. New feedback
-memory captures this rationale
-(`feedback_llm_instruction_tightness.md`).
+**Phase 2 — VISION/ARCH coupling** (ARCHITECTURE meta-rule 3 sharpening):
+- Added design-review target 8 (VISION ↔ ARCHITECTURE coupling)
+  + audit slice 15 (invalidation-contract coverage)
+- Sharpened meta-rule 3 prose for the layered reading
+  (research-references vs validate-bausteine)
+
+**Phase 3 — pre-RAG resolution** (the big one — user direction:
+"all of these things resolved before RAG"):
+- State.md MCP gate: ProjectState Pydantic + 2 MCP tools
+  (get/update_project_state) + skill-format doc updated. **No
+  more direct skill Read of state.md.**
+- Strict-validation discipline added to ARCHITECTURE meta-rule 4
+  + audit slice 16 (validation-gate coverage). All 4 slice-16
+  findings fixed in-session (bind_project routed through
+  ProjectState contract; StrictModel base added with
+  `extra="forbid"` for all 15 contract-bearing models;
+  parse_frontmatter no longer swallows YAMLError;
+  _manifest_info catches narrow exceptions + reports via
+  explicit `errors[]` field).
+- F2 unified audit trail: PULLED FORWARD to v1. Decision record
+  + AuditEvent Pydantic + record_audit_event/query_audit_trail
+  MCP tools shipped. Skill-side dual-write retrofit deferred to
+  next-immediate-session.
+- Axis 2 sparring structural promotion: PULLED FORWARD to v1.
+  Decision record + ReviewOutput/RecommendationOutput schemas +
+  validate_skill_output MCP tool shipped. 3 of 7 axis-2
+  mechanisms (counter-argument, confidence, reasoning) promoted
+  to structural. Skill retrofits deferred.
+
+The user's strict-validation principle — **"all data needs to
+be strictly validated, no bad defaults or fallbacks, clean clear
+failures only"** — became an architectural commitment this
+session, not just a stance. New `StrictModel` base + slice 16
++ meta-rule 4 corollary captures this.
 
 ---
 
 ## Read order for next session
 
 1. **This file (HANDOFF.md)** — current state
-2. **`ARCHITECTURE.md`** — **v0.6** post-session-6 boundary
-   refinement. 4 meta-rules + scope-orthogonality layering
-   convention. 5 entity types. 3 decision rules. Meta-rule 4
-   sharpened (typed-contract test + reuse direction). Meta-rule 3
-   prose sharpened (research-references vs validate-bausteine
-   layered reading). **Read fully if anything looks unfamiliar.**
-3. **`VISION.md`** — three-axis thesis (unchanged; explicitly
-   verified in target 8 first run as the canonical "why" anchor)
-4. **`docs/audits/`** — boundary-adherence-20260429.md (slice 14
-   first run; 3 findings, 0 BLOCKERS, 1 in-session fix);
-   invalidation-contract-20260429.md (slice 15 first run;
-   2 findings, 0 BLOCKERS, agent's BLOCKER call rejected)
-5. **`docs/design-reviews/`** — foundations-20260429.md (session 5
-   artifact); vision-arch-coupling-20260429.md (target 8 first
-   run; 5 findings including F2 "unified audit trail v1-scope
-   decision pending user judgment")
-6. **`docs/rag-pipeline-decisions.md`** — ACCEPTED; Phase 0/1/
-   2a/2b/3a/3b/4 phasing
-7. **`docs/plugin-conventions.md`** — Skill Bundle idioms
-   (frontmatter contract extended)
-8. **`docs/backend-conventions.md`** — Backend idioms (decision
-   records extracted to docs/decisions/)
-9. **`docs/decisions/`** — per-decision records
-10. **`ROADMAP.md`** — deferred work; **5 new entries** added in
-    session 6: dedupe_bausteine, record_baustein_use, manifest
-    Pydantic models, axis-2 sparring structural promotion, unified
-    audit trail v1-scope decision (boundary-placement 2a removed —
-    landed in-session)
-11. **`plugin/skills/orchestrator/`** — 0.9.0 (unchanged session 6)
-12. **`plugin/skills/{audit,design-review}/`** — both bumped this
-    session; new slices/targets in their references/
-13. **`plugin/skills/watch-list/`** — 0.1.0 (unchanged session 6)
+2. **`ARCHITECTURE.md`** — **v0.6** post-session-6 boundary +
+   meta-rule 4 strict-validation discipline + meta-rule 3
+   layered reading prose. 4 meta-rules + scope-orthogonality
+   layering convention. 5 entity types (Memory now has 3 sub-
+   kinds: prose, records, audit-log).
+3. **`VISION.md`** — three-axis thesis (unchanged structurally;
+   target 8 first run validated it as the canonical "why"
+   anchor)
+4. **`docs/decisions/`** — three new v1-commitment decision
+   records this session: `audit-trail-v1.md`,
+   `sparring-output-v1.md`. Plus session-5 backend decision
+   records (test layout, logging, MCP error format).
+5. **`docs/audits/`** — three new artifacts this session:
+   `boundary-adherence-20260429.md` (slice 14),
+   `invalidation-contract-20260429.md` (slice 15),
+   `validation-gate-20260429.md` (slice 16). Plus session-5
+   audit-pre-rag.md.
+6. **`docs/design-reviews/`** — `vision-arch-coupling-20260429.md`
+   (target 8 first run; 5 findings) + session-5
+   foundations-20260429.md.
+7. **`docs/rag-pipeline-decisions.md`** — Phase 0/1/2/3/4 phasing.
+8. **`docs/plugin-conventions.md`** — Skill Bundle idioms; new
+   `output_schema:` frontmatter field documented.
+9. **`docs/backend-conventions.md`** — Backend idioms.
+10. **`ROADMAP.md`** — v1 commitments at the top (audit trail,
+    sparring promotion, state.md gate); old "Audit trail" entry
+    further down redirects to v1 commitment.
+11. **`plugin/skills/audit/`** — **0.6.0** (slices 1-16; surfaces
+    1-12)
+12. **`plugin/skills/design-review/`** — **0.4.0** (targets 1-8)
+13. **`plugin/skills/orchestrator/`** — 0.9.0 (unchanged session 6;
+    references/state-format.md updated to mention MCP gate)
+14. **Backend additions session 6**:
+    - `pbs_mcp/_strict.py` — `StrictModel` base
+    - `pbs_mcp/project_state.py` — ProjectState contract
+    - `pbs_mcp/audit_trail.py` — AuditEvent contract
+    - `pbs_mcp/skill_outputs/` — ReviewOutput, RecommendationOutput
+    - `pbs_mcp/tools/audit.py` — record/query audit-trail
+    - `pbs_mcp/tools/sparring.py` — validate_skill_output
+    - `pbs_mcp/tools/projects.py` — get/update_project_state added
+    - 5 new MCP tools registered
 
 ---
 
-## What landed this session (session 6 detail)
+## ⏳ Pre-RAG gating items (next-immediate-session-before-RAG)
 
-### ✅ Boundary refinement (commit `986857d`)
+The user's directive was clear: **all of these resolved before
+Phase 1 corpus download.** This session shipped the architectural
+commitments (Pydantic models, MCP tool stubs, decision records).
+Remaining work is skill-side retrofits + integration loops.
 
-ARCHITECTURE.md meta-rule 4 sharpened with two refinements
-identified after the user's question "what does the LLM/Python
-boundary actually look like, and is it audited?":
+### A. Skill retrofits to use new MCP gates
 
-- **(A) Typed-contract persistence test**: durable state with a
-  Pydantic + loader + cross-reference invariant goes through MCP;
-  loose markdown (HANDOFF, prose memory, READMEs) is skill-direct.
-  The test is contract enforcement, not file extension.
-- **(B) Reuse direction (positive form)**: shared deterministic →
-  MCP tool; shared interpretive → Skill Bundle reference. Was
-  implicit in "skills compose, never reimplement"; now explicit.
+8 skills currently reference `state.md` directly; they need to
+declare `get_project_state` + `update_project_state` in
+`mcp_tools_required` and route reads through the gate:
+orchestrator, survey-project, draft-cover-mail, validate-checklist,
+review-draft, draft-textteil-b, draft-textteil-c, promote-to-skill.
 
-Audit slice 14 (boundary-adherence) + design-review target 7
-(LLM/Python placement-soundness) added to detect violations of
-the sharpened rule. ARCHITECTURE v0.5 → v0.6. Audit 0.3.0 →
-0.4.0. Design-review 0.2.0 → 0.3.0.
+Audit slice 14 catches direct Read/Write of schema-bearing files;
+running it after retrofit verifies completion.
 
-Slice 14 first run found 3 findings, 0 BLOCKERS — see
-`docs/audits/boundary-adherence-20260429.md`. All 3 were
-ROADMAPed; one (2a path_classification) later landed in-session
-as additive v3 block.
+### B. Audit trail dual-write integration
 
-### ✅ VISION ↔ ARCH coupling work (commit pending)
+Per `docs/decisions/audit-trail-v1.md`. Skills that produce
+audit-relevant events declare `record_audit_event` in
+`mcp_tools_required` and invoke at appropriate checkpoints:
+- orchestrator: phase_transition, lifecycle_transition,
+  scope_change, decision events
+- save-baustein: baustein_use (successful) events
+- record-feedback: baustein_use (rejected) events
+- draft-textteil-b/c: module_decision events (when
+  including/excluding optional sections)
+- review-draft: decision events (when reviewer makes calls)
+- research-references: reference_update events
+- (future) send-gate skill: send events
 
-User question: "anything else in ARCHITECTURE.md or even VISION.md
-we should cover similarly?" Two real gaps surfaced:
+Plus build the `backfill_audit_trail` MCP tool — walks 6 existing
+sources (decisions.md, snapshots/, changelog.md, etc.) and emits
+events into the unified log. One-shot per project; no projects
+bound today so backfill is academic until first bind.
 
-- **Gap A** — design-review target 8 (VISION/ARCH coupling
-  traceability). First run produced bidirectional maps:
-  - **Map 1 (VISION → ARCH)**: 6 axis-1 + 7 axis-2 + 5 axis-3
-    mechanisms; classified `structural` / `behavioral` /
-    `unenforced`.
-  - **Map 2 (ARCH → VISION)**: each meta-rule's coupling to
-    each axis; classified `load-bearing` / `supporting` /
-    `floating`.
-  - **5 findings** including F1 (axis-2 sparring structurally
-    weak — all 7 mechanisms behavioral; highest-leverage gap),
-    F2 (unified audit trail v1-scope decision pending user
-    judgment), F3 (push-back on agent's "meta-rule 1 is
-    overhead" claim — meta-rule 1 IS load-bearing for axes 1+3).
-  - Artifact: `docs/design-reviews/vision-arch-coupling-20260429.md`.
-  - Design-review 0.3.0 → 0.4.0. Fixed pre-existing v0.5 drift
-    in targets 1+2 while in the file.
+### C. Sparring-output validation integration
 
-- **Gap B** — audit slice 15 (invalidation-contract coverage).
-  First run found 2 findings, 0 BLOCKERS:
-  - F1 reframed (rejected agent's BLOCKER call): no Pydantic
-    model validates manifest YAML structure — contract is
-    document-discipline only. All 8 current manifests honor
-    contract; gap is forward-looking. ROADMAPed.
-  - F2 informational: ARCHITECTURE.md prose obscured layered
-    reading (research-references + validate-bausteine).
-    Sharpened in-session.
-  - Artifact: `docs/audits/invalidation-contract-20260429.md`.
-  - Audit 0.4.0 → 0.5.0. New drift surface 11.
+Per `docs/decisions/sparring-output-v1.md`. Two skills retrofit:
+- `review-draft` declares `output_schema: ReviewOutput` in
+  frontmatter; body adds Output Format section explaining the
+  required headers (## Confidence, ## Counter-argument, etc.)
+- `orchestrator` PROCEDURE.md Checkpoint 13: when producing a
+  recommendation, declare phase-specific schema_hint=
+  "RecommendationOutput" and call `validate_skill_output` post-
+  output; loop on missing-fields up to 3x.
 
-### ✅ 2a fix landed in-session
+The heuristic markdown-field parser in `pbs_mcp/tools/sparring.py`
+may need refinement after first real-use feedback (currently it
+matches `## Counter-argument` and `**Counter-argument**` styles).
 
-`path_classification` optional block added to office-config v3
-schema (no version bump — purely additive). PathClassification
-Pydantic model + extended `Conventions`. `_infer_source_subtype`
-now consults config first, falls back to hardcoded patterns for
-canonical layout. Verified existing v3 office.yaml loads cleanly
-without the new block; classifier produces same results as before
-when block is absent. Schema doc updated.
+### D. Plugin version bump
 
-### ✅ v2 → v3 office-config migration persisted
+Plugin.json is at 0.3.0 from session 5. Session 6's substantial
+additions (5 new MCP tools, new entity sub-kind, new
+frontmatter field) warrant 0.3.0 → 0.4.0. After all retrofits
+land, bump + re-run `bash dev-link.sh`.
 
-PBS office-config persisted to v3 via in-process
-`apply_migrations(v2, target=3)` + Pydantic round-trip
-validation. v2 backup at `~/.config/pbs-bureau/office.yaml.v2-backup`.
-1 internal + 1 external actor (was practices + partners), 0
-integrations (all v2 had `adapter: none`, dropped per migration).
+### Then — Phase 0 items 4 + 5
 
-### ✅ Memory addition
+After retrofits land, the original session 5 close named these:
 
-New feedback memory `feedback_llm_instruction_tightness.md`
-capturing the rationale for prioritizing markdown-layer
-sharpening pre-launch. The asymmetric brittleness argument:
-LLMs paper over imprecise markdown silently; deterministic
-Python self-fails. Bias toward sharpening the LLM-consumed
-layer when pre-launch.
+**Phase 0 item 4 — Feature-survey skill design**: greenfield-
+the-vision sibling to audit + design-review. Discussion-first.
+Asks "given the user's goals + system purpose, what features
+should exist that don't?" Same pattern as audit + design-review
+(parallel slice agents + synthesis + frozen artifact).
 
----
-
-## ⏳ Pending — next-session tasks
-
-### F2 follow-up — unified audit trail v1-scope decision
-
-Target 8 first run named this as a user-judgment call (axis 3's
-defensibility test depends on unified audit-trail reconstruction;
-today scattered across 6 sources with no query layer).
-
-**Options**:
-- (a) Keep deferred — defensibility relies on manual assembly
-  until ROADMAP "Audit trail — unified change/decision/version
-  tracking" lands. Acceptable pre-launch.
-- (b) Pull forward to v1 — design + build unified Memory (record)
-  subkind with query layer. Multi-day work. Closes axis-3
-  structural gap.
-
-Awaiting user judgment. Revisit before any axis-3-stress event
-(first real Stellungnahme defense, first historical project
-replay).
-
-### Phase 0 item 4 — Feature-survey skill design
-
-Per session-5 close: design-review covers structural design
-quality, not feature gaps ("what's missing from the system that
-should exist?"). Implementation-quality is now covered by audit
-slices 11-13; placement is now covered by slice 14; invalidation
-is now covered by slice 15. Feature-survey is still missing.
-
-**Build a `feature-survey` skill** with:
-- Mechanism: greenfield-the-vision (vs. design-review's
-  greenfield-the-architecture). Asks "given the user's goals
-  and the system's purpose, what features should exist that
-  don't?"
-- Slice library: feature gaps per axis (workflow gaps, UX gaps,
-  data-model gaps, integration gaps, observability gaps,
-  collaboration gaps, lifecycle gaps).
-- Output format: per-gap recommendation with priority + cost
-  + alignment-with-VISION.md.
-
-Same pattern as audit + design-review (parallel slice agents +
-synthesis + frozen artifact). Discussion-first; expect ~half-day
-to design well.
-
-### Phase 0 item 5 — Testing methodology + harness
-
-**Discussion-first** per user directive. Three layered concerns:
-
-- **Coverage-gap tracking**: per-manifest-entry `coverage:` field
-  schema (text/images/tables/graph + last_indexed +
-  coverage_score). Chunkers self-report at ingest time. Rolls up
-  to `<roots.references>/coverage-report.md`.
-- **Ground-truth set**: `tests/ground_truth/legal-queries.yaml`
-  with 15-25 hand-curated query/expected-doc pairs. **User
-  curates**; Claude can scaffold candidates from existing memory
-  references. Pytest test asserts top-5 reranked hits include
-  expected doc.
-- **Determinism + regression detection**: embedding seed pinned;
-  reranker tie-break by ID. Baseline retrieval-quality scores
-  stored; diff on chunker/model changes.
-
-Output: `docs/rag-testing-strategy.md` documenting the three
-layers + acceptance criteria for each phase gate.
+**Phase 0 item 5 — Testing methodology + harness**: discussion-
+first. Three layered concerns: coverage-gap tracking, ground-
+truth set, determinism + regression detection. Output:
+`docs/rag-testing-strategy.md`.
 
 ### Then — Phase 1 corpus download
 
-After Phase 0 items 4+5 close. Fetch all 57 entries via
+The actual RAG ingest start. Fetch all 57 entries via
 `research-references` full refresh. **No embeddings yet** — raw
-fetch + checksum + manifest population only. Surfaces real
-corpus shape (DRM/scanned/manual-discovery) before chunker code
-commits.
+fetch + checksum + manifest population only.
 
 ---
 
@@ -243,22 +186,28 @@ commits.
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
 | `VISION.md` | Three-axis thesis (canonical "why") |
-| `ARCHITECTURE.md` | **v0.6**: meta-rule 4 sharpened with typed-contract test + reuse direction; meta-rule 3 prose layered-reading sharpened |
-| `ROADMAP.md` | Deferred work; pull-forward triggers; **5 new entries this session** |
-| `docs/audits/boundary-adherence-20260429.md` | Slice 14 first-run; 3 findings, 1 in-session fix |
-| `docs/audits/invalidation-contract-20260429.md` | Slice 15 first-run; 2 findings |
-| `docs/design-reviews/vision-arch-coupling-20260429.md` | Target 8 first-run; 5 findings |
+| `ARCHITECTURE.md` | **v0.6** + strict-validation discipline corollary |
+| `ROADMAP.md` | v1 commitments at top (3 items pulled forward); rest deferred |
+| `docs/decisions/audit-trail-v1.md` | F2 v1 commitment design record |
+| `docs/decisions/sparring-output-v1.md` | F1 (axis 2) v1 commitment design record |
+| `docs/decisions/backend-{test-layout,logging,mcp-error-format}.md` | Session-5 records |
+| `docs/audits/boundary-adherence-20260429.md` | Slice 14 first run |
+| `docs/audits/invalidation-contract-20260429.md` | Slice 15 first run |
+| `docs/audits/validation-gate-20260429.md` | Slice 16 first run + 4 in-session fixes |
+| `docs/design-reviews/vision-arch-coupling-20260429.md` | Target 8 first run |
 | `docs/design-reviews/foundations-20260429.md` | Session-5 design-review |
-| `docs/audit-pre-rag.md` | Frozen session-5 audit snapshot |
-| `docs/office-config.schema.yaml` | **v3** schema with new optional `conventions.path_classification` block |
-| `plugin/skills/audit/` | **0.5.0** — slices 1-15; surfaces 1-11 |
-| `plugin/skills/design-review/` | **0.4.0** — targets 1-8 + focused-mode targets |
-| `plugin/skills/orchestrator/` | 0.9.0 (unchanged session 6) |
-| `plugin/skills/watch-list/` | 0.1.0 (unchanged session 6) |
-| `backend/mcp-server/src/pbs_mcp/office_config.py` | v3 Pydantic + new `PathClassification` model |
-| `backend/mcp-server/src/pbs_mcp/tools/ingest.py` | `_infer_source_subtype` now config-aware with hardcoded fallback |
-| `~/.config/pbs-bureau/office.yaml` | v3 (unchanged from session-6 open; path_classification optional, not declared) |
-| `~/.config/pbs-bureau/office.yaml.v2-backup` | v2 backup from session-6 migration |
+| `docs/office-config.schema.yaml` | v3 + path_classification optional block |
+| `plugin/skills/audit/` | **0.6.0** — slices 1-16; surfaces 1-12 |
+| `plugin/skills/design-review/` | **0.4.0** — targets 1-8 |
+| `plugin/skills/orchestrator/` | 0.9.0; references/state-format.md updated |
+| `backend/mcp-server/src/pbs_mcp/_strict.py` | StrictModel base (new session 6) |
+| `backend/mcp-server/src/pbs_mcp/project_state.py` | ProjectState contract (new) |
+| `backend/mcp-server/src/pbs_mcp/audit_trail.py` | AuditEvent contract (new) |
+| `backend/mcp-server/src/pbs_mcp/skill_outputs/` | ReviewOutput, RecommendationOutput (new) |
+| `backend/mcp-server/src/pbs_mcp/tools/audit.py` | record/query_audit_trail handlers (new) |
+| `backend/mcp-server/src/pbs_mcp/tools/sparring.py` | validate_skill_output handler (new) |
+| `~/.config/pbs-bureau/office.yaml` | v3 (no path_classification block; defaults active) |
+| `~/.config/pbs-bureau/office.yaml.v2-backup` | session-6 migration backup |
 
 ---
 
@@ -266,59 +215,73 @@ commits.
 
 | Skill | Version | Change this session |
 |---|---|---|
-| audit | **0.5.0** | + slices 14, 15; + drift surfaces 10, 11 |
+| audit | **0.6.0** | + slices 14, 15, 16; + drift surfaces 10, 11, 12 |
 | design-review | **0.4.0** | + targets 7, 8; targets 1-2 drift fixed |
-| orchestrator | 0.9.0 | (unchanged) |
-| setup-office | 0.5.0 | (unchanged) |
-| watch-list | 0.1.0 | (unchanged) |
-| (others) | (unchanged) | |
-| plugin.json | 0.3.0 | (will likely bump 0.4.0 next session — orchestrator + watch-list reshape from session 5; not bumped session 6) |
+| orchestrator | 0.9.0 | references/state-format.md updated (gate note) |
+| (other 16 skills) | (unchanged) | retrofits queued for next session |
+| plugin.json | 0.3.0 | (will bump 0.4.0 after next-session retrofits) |
+
+---
+
+## New MCP tools shipped session 6
+
+| Tool | Purpose |
+|---|---|
+| `get_project_state` | Read+validate state.md (replaces direct Read in skills) |
+| `update_project_state` | Validated partial-update of state.md frontmatter + body |
+| `record_audit_event` | Append to unified `<project>/_ai/audit-trail.jsonl` |
+| `query_audit_trail` | Filter the unified log across one or all projects |
+| `validate_skill_output` | Validate sparring-mode output against declared output_schema |
+
+5 new tools; total backend tool count rises to ~32 (verify via
+`list_skills` after restart).
 
 ---
 
 ## Working-style notes (carried + new)
 
-1. **Boundary work + coupling work were the right pre-launch
-   detour.** Started as "let's just understand the LLM/Python
-   boundary" (user observation), expanded to a coherent
-   meta-infrastructure tightening pass: target 7 + slice 14 (the
-   boundary itself), target 8 + slice 15 (the next layers up,
-   surfaced because the boundary work surfaced them). User's
-   "anything else?" question after slice 14 was the
-   leverage-multiplier prompt.
+1. **Pre-RAG gating is the right discipline pre-launch.** The user
+   pulled F2 + axis 2 forward rather than ROADMAPing both. The
+   value: schema designs land before any real data accumulates
+   under them, so we never retrofit. Session 6 demonstrated this
+   principle works — 5 new MCP tools shipped, all with
+   contract-strict Pydantic, zero migration debt.
 
-2. **Agent push-back happened twice in this session** — target 8
-   first run mis-classified meta-rule 1; slice 15 first run
-   mis-classified the manifest schema as a BLOCKER. Both caught
-   by human cross-check. The pattern: agents do solid evidence-
-   gathering but can over-state verdicts. Always read the
-   evidence before accepting the conclusion.
+2. **Strict-validation discipline becomes architecturally
+   load-bearing.** The user's stance "no bad defaults / fail loud"
+   went from feedback memory to ARCHITECTURE meta-rule 4 corollary
+   to enforced StrictModel base to slice 16 first-run-with-fixes.
+   Each layer makes the principle harder to drift away from.
 
-3. **Pareto-refinement caught a real schema-bump avoidance**.
-   Original 2a plan was v3 → v4 migration; refinement found that
-   `path_classification` could be purely additive optional in v3.
-   Saved ~2h + removed migration risk. The challenge "why is
-   this the most aggressive change?" did the work.
+3. **Agent push-back held twice this session** — slice 15 first
+   run mis-classified manifest schema as BLOCKER; slice 16 first
+   run correctly avoided BLOCKER overreach (the brief's tighter
+   language worked). Pattern: tighter agent briefs reduce verdict
+   overreach. Future audits/design-reviews should fold this
+   discipline directly into the briefs.
 
-4. **Memory captures**: new feedback memory
-   `feedback_llm_instruction_tightness.md` makes the
-   markdown-vs-Python brittleness asymmetry reusable for future
-   prioritization decisions.
+4. **Decision records are the right shape for v1 commitments.**
+   `audit-trail-v1.md` + `sparring-output-v1.md` capture design
+   + alternatives + implementation plan + revisit triggers.
+   Reusable pattern; mirrors session-5's backend decision records.
+   New v1 work should follow this template.
 
-5. **Carried**: refine-Pareto, defer-instinct-restraint,
-   judgment-and-automate, push-after-commit, blocked-actions —
-   all still apply.
+5. **Memory captures**: existing 6 feedback memories carry forward
+   unchanged. The strict-validation principle is now in
+   ARCHITECTURE.md (more durable than memory) but
+   `feedback_llm_instruction_tightness.md` still anchors the *why*.
 
 ---
 
-## Session 6 commit list (chronological)
+## Session 6 commits (chronological)
 
 | # | Commit | Theme |
 |---|---|---|
-| 1 | `cefb5ab` | HANDOFF: swap Phase 0 items 4/5 — feature-survey before testing-methodology |
+| 1 | `cefb5ab` | HANDOFF: swap Phase 0 items 4/5 |
 | 2 | `ea838cf` | HANDOFF: mark v2→v3 office-config migration done |
-| 3 | `986857d` | boundary refinement v0.5→v0.6: meta-rule 4 sharpening + slice 14 + target 7 |
-| 4 | (this commit) | VISION/ARCH coupling: target 8 + slice 15 + 2a fix + meta-rule 3 prose + memory + HANDOFF |
+| 3 | `986857d` | boundary refinement v0.5→v0.6: meta-rule 4 + slice 14 + target 7 |
+| 4 | `b35c384` | VISION/ARCH coupling: target 8 + slice 15 + 2a fix + meta-rule 3 prose |
+| 5 | (this commit) | pre-RAG resolution: state.md gate + strict-validation + slice 16 + audit-trail v1 + sparring-output v1 |
 
 All pushed to origin/main.
 
@@ -327,22 +290,22 @@ All pushed to origin/main.
 ## Misc context for next session
 
 - **User's machine**: Linux, RTX 5090 (32GB VRAM). Python 3.13.
-- **Plugin cache symlink**: re-run `bash dev-link.sh` after any
-  plugin.json version bump. Session 6 didn't bump plugin.json.
+- **Plugin cache symlink**: bump plugin.json AND re-run
+  `bash dev-link.sh` after next-session skill retrofits.
 - **Hooks active**: `restrict-bash-paths.py`,
   `restrict-file-paths.py` in dotfiles. Hidrive path whitelisted.
 - **Settings symlink**: verify
   `~/.claude/settings.json -> dotfiles/claude/settings.json`
   before any operation that might write settings.
-- **Office-config v3** persisted; backup retained at
-  `office.yaml.v2-backup`. New optional
-  `conventions.path_classification` block defaults to empty;
-  classifier falls through to hardcoded patterns for canonical
-  layout.
+- **Office-config**: v3 on disk; no `path_classification` block
+  declared (canonical-layout defaults apply). Add the block only
+  if the office layout deviates from defaults.
+- **No projects bound yet**: state.md gate has no consumers; the
+  retrofit is design-time-pending until first project bind.
 - **Auto-memory** at `~/.claude/projects/.../memory/`:
   - `feedback_blocked_actions.md`
   - `feedback_judgment_and_automate.md`
   - `feedback_push_after_commit.md`
   - `feedback_refine_pareto.md`
   - `feedback_defer_instinct.md`
-  - `feedback_llm_instruction_tightness.md` **(new session 6)**
+  - `feedback_llm_instruction_tightness.md` (session 6)

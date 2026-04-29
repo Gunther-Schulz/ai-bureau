@@ -1,12 +1,12 @@
 ---
 name: audit
 description: This skill should be used when the user requests a system audit / drift sweep — phrases like "audit", "audit the system", "drift check", "drift sweep", "structural sweep", "pre-phase audit", "audit gate", "comprehensive audit", "Drift-Prüfung", "Systemaudit". Distinct from validate-checklist (document structural review) and validate-bausteine (baustein freshness sweep) — this audits the architecture, codebase, and documentation themselves for drift. Triggered before phase boundaries, after meta-rule additions / refactor sweeps, when stale claims are noticed, or as a periodic sweep.
-version: 0.5.0
+version: 0.6.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_skills]
 fallback_when_mcp_absent: "skill is filesystem-only; dispatches general-purpose subagents that read files directly. list_skills is convenience for skill enumeration but agents glob plugin/skills/*/SKILL.md if absent."
-summary: Drift audit for the system itself — architecture, plugin entities, backend code, documentation, plus implementation-quality dimensions (test coverage, security, performance) via slices 11-13, boundary-placement (LLM/Python tier-correctness) via slice 14, and invalidation-contract coverage (meta-rule 3 enforcement) via slice 15. Compliance-focused (does X match what X claims to be?).
+summary: Drift audit for the system itself — architecture, plugin entities, backend code, documentation, plus implementation-quality dimensions (test coverage, security, performance) via slices 11-13, boundary-placement (LLM/Python tier-correctness) via slice 14, invalidation-contract coverage (meta-rule 3 enforcement) via slice 15, and validation-gate coverage (strict-validation discipline) via slice 16. Compliance-focused (does X match what X claims to be?).
 routing_mode: direct
 triggers:
   - {phrase: "audit", lang: en}
@@ -39,9 +39,9 @@ warranted. Each instance produces a frozen artifact at
 
 Read the three reference files (in this order):
 
-1. `references/drift-surfaces-and-slices.md` — the 11 drift-surface
+1. `references/drift-surfaces-and-slices.md` — the 12 drift-surface
    categories the audit looks for, plus the slice library
-   (15 reusable slice templates). Each slice catches a specific
+   (16 reusable slice templates). Each slice catches a specific
    subset of drift surfaces.
 2. `references/triggers-and-stopping.md` — when to run an audit
    (mandatory triggers, periodic schedule, on-suspicion); when to

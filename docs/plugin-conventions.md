@@ -77,6 +77,7 @@ Five additional fields make routing semantics machine-checkable:
   - `lifecycle` — project lifecycle (bind, survey)
   - `meta` — system-introspection skills (audit, design-review)
   - `utility` — everything else (research, baustein management, etc.)
+- **output_schema** (optional) — name of a Pydantic model in `pbs_mcp/skill_outputs/` that the skill's output must validate against. Per `docs/decisions/sparring-output-v1.md`: skills producing sparring-mode output (counter-argument, confidence, reasoning) declare an `output_schema`; the orchestrator calls `validate_skill_output` after the skill's output and kicks back to the skill with missing-fields if validation fails. Initial v1 schemas: `ReviewOutput` (declared by `review-draft`), `RecommendationOutput` (used by orchestrator's Checkpoint-13 commit-to-recommendation pattern). Skills without this field are not output-validated. Adding the field is a behavior change → minor version bump per §3.
 
 ### Anti-patterns
 

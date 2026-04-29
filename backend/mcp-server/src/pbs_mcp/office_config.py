@@ -29,13 +29,15 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from pbs_mcp._strict import StrictModel
+
 
 CURRENT_SCHEMA_VERSION = 3
 
 
 # === Office identity (merged from v2's office + identity) ================
 
-class Office(BaseModel):
+class Office(StrictModel):
     """Office identity. v3 merges v2's `office` + `identity` into one block."""
     name: str = Field(..., min_length=1)
     short: str = Field(..., min_length=1)
@@ -62,7 +64,7 @@ class Office(BaseModel):
 
 # === Actors (merged from v2's practices + partners) ======================
 
-class Actor(BaseModel):
+class Actor(StrictModel):
     """A signing entity — internal practice or external partner.
 
     v3 merges v2's `practices[]` and `partners[]` into a single
@@ -82,7 +84,7 @@ class Actor(BaseModel):
 
 # === Roots (merged from v2's paths + templates.office_style_dir) =========
 
-class Roots(BaseModel):
+class Roots(StrictModel):
     """All filesystem roots in one block. v3 consolidates v2's `paths` +
     `templates.office_style_dir` into a single section.
     """
@@ -113,7 +115,7 @@ StateCode = Literal[
 ]
 
 
-class Scope(BaseModel):
+class Scope(StrictModel):
     """Which planning domains and Bundesländer this office operates in.
 
     Drives layered manifest resolution (see config.all_references_manifests
@@ -132,8 +134,12 @@ class Integration(BaseModel):
     v3 removes the fixed-key map (email/calendar/scanner/phone/accounting)
     in favor of a free-form list. Any class string is valid; the adapter
     is resolved dynamically from `pbs_mcp.integrations.<class>.<adapter>`.
+
+    Inherits BaseModel directly (not StrictModel) because it needs
+    `populate_by_name=True` for the `class` alias; merges in
+    `extra="forbid"` to keep strict-validation discipline parity.
     """
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     cls: str = Field(..., alias="class", min_length=1)  # `class` is reserved in Python
     adapter: str = "none"
@@ -142,7 +148,7 @@ class Integration(BaseModel):
 
 # === Templates ===========================================================
 
-class Templates(BaseModel):
+class Templates(StrictModel):
     """LaTeX template configuration. v3 removes office_style_dir
     (consolidated into Roots).
     """
@@ -153,19 +159,19 @@ class Templates(BaseModel):
 
 # === Conventions =========================================================
 
-class FolderLayout(BaseModel):
+class FolderLayout(StrictModel):
     inputs: str = "inputs/"
     sent_versions: str = "Auslieferung/"
     correspondence: str = "Schriftverkehr/"
     toeb: str = "TöB/"
 
 
-class ProjectNumbering(BaseModel):
+class ProjectNumbering(StrictModel):
     pattern: Literal["YY-NN", "YYYY-NN", "NN", "YY/NN"] = "YY-NN"
     auto_increment: bool = True
 
 
-class PathClassification(BaseModel):
+class PathClassification(StrictModel):
     """Optional per-source-type substring patterns that classify a path
     into a subtype.
 
@@ -194,7 +200,7 @@ class PathClassification(BaseModel):
     baustein: dict[str, list[str]] = Field(default_factory=dict)
 
 
-class Conventions(BaseModel):
+class Conventions(StrictModel):
     project_naming: str = "{year_2}-{nr} {client} - {location}"
     project_numbering: ProjectNumbering = Field(default_factory=ProjectNumbering)
     project_folder_layout: FolderLayout = Field(default_factory=FolderLayout)
@@ -203,7 +209,7 @@ class Conventions(BaseModel):
 
 # === Top-level OfficeConfig ==============================================
 
-class OfficeConfig(BaseModel):
+class OfficeConfig(StrictModel):
     schema_version: int
     office: Office
     actors: list[Actor] = Field(..., min_length=1)

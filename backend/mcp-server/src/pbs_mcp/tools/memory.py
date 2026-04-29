@@ -38,17 +38,31 @@ logger = logging.getLogger(__name__)
 # === Frontmatter parsing ===
 
 def parse_frontmatter(content: str) -> tuple[dict, str]:
-    """Split a markdown file into (frontmatter dict, body)."""
+    """Split a markdown file into (frontmatter dict, body).
+
+    Per ARCHITECTURE.md meta-rule 4 strict-validation discipline:
+    - "No frontmatter present" (no leading `---` or no closing `---`)
+      returns ({}, content) — that's a valid "this file has no
+      frontmatter" interpretation, not a contract violation.
+    - YAML parse error on present-but-malformed frontmatter raises
+      yaml.YAMLError with file context. Silent swallow would mask
+      malformed memory records as "no frontmatter" and let invalid
+      data slip through unnoticed.
+    """
     if not content.startswith("---"):
         return {}, content
     parts = content.split("---", 2)
     if len(parts) < 3:
         return {}, content
-    try:
-        frontmatter = yaml.safe_load(parts[1]) or {}
-    except yaml.YAMLError as e:
-        logger.warning(f"Failed to parse frontmatter: {e}")
-        return {}, content
+    # Let yaml.YAMLError propagate per fail-loud discipline. Callers
+    # walking many files can wrap a try/except yaml.YAMLError if they
+    # want to skip-and-continue with explicit error reporting; the
+    # default is fail-loud.
+    frontmatter = yaml.safe_load(parts[1]) or {}
+    if not isinstance(frontmatter, dict):
+        raise ValueError(
+            f"frontmatter must be a YAML mapping, got {type(frontmatter).__name__}"
+        )
     body = parts[2].lstrip("\n")
     return frontmatter, body
 

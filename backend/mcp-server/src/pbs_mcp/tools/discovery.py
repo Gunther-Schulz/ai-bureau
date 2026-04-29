@@ -51,14 +51,34 @@ def _count_entries(categories: dict) -> int:
 
 
 def _manifest_info(path: Path, layer: str, scope_key: str | None) -> ManifestInfo:
-    """Build a ManifestInfo from a path; populate entry_count + last_updated."""
+    """Build a ManifestInfo from a path; populate entry_count + last_updated.
+
+    Per strict-validation discipline (ARCHITECTURE.md meta-rule 4):
+    parse failures are reported via the explicit `errors` field on
+    ManifestInfo, not silently swallowed into a partial result. The
+    caller (list_reference_manifests / list_doctypes_manifests) can
+    surface these to the user instead of hiding broken manifests
+    behind entry_count=None.
+    """
     exists = path.is_file()
     entry_count: int | None = None
     last_updated: str | None = None
+    errors: list[str] = []
     if exists:
         try:
             data = yaml.safe_load(path.read_text(encoding="utf-8"))
-            if isinstance(data, dict):
+        except yaml.YAMLError as e:
+            errors.append(f"yaml parse failed: {e}")
+            data = None
+        except OSError as e:
+            errors.append(f"read failed: {e}")
+            data = None
+        if data is not None:
+            if not isinstance(data, dict):
+                errors.append(
+                    f"manifest top-level must be a mapping, got {type(data).__name__}"
+                )
+            else:
                 lu = data.get("last_updated")
                 last_updated = str(lu) if lu else None
                 cats = data.get("categories")
@@ -67,8 +87,6 @@ def _manifest_info(path: Path, layer: str, scope_key: str | None) -> ManifestInf
                 doctypes = data.get("doctypes")
                 if isinstance(doctypes, dict) and entry_count is None:
                     entry_count = len(doctypes)
-        except Exception as e:
-            logger.warning(f"failed to parse manifest at {path}: {e}")
     return ManifestInfo(
         path=str(path),
         layer=layer,  # type: ignore[arg-type]
@@ -76,6 +94,7 @@ def _manifest_info(path: Path, layer: str, scope_key: str | None) -> ManifestInf
         exists=exists,
         entry_count=entry_count,
         last_updated=last_updated,
+        errors=errors,
     )
 
 

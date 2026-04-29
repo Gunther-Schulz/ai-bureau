@@ -1,6 +1,6 @@
 # Drift surfaces + slice library
 
-## The 11 drift-surface categories
+## The 12 drift-surface categories
 
 Every finding falls into one of these. Slices target one or more
 categories; rounds combine slices to cover the surface space.
@@ -14,11 +14,16 @@ added in v0.4 alongside meta-rule 4's session-6 sharpening.
 **11 is *invalidation-contract* drift** — entities that don't
 declare (or don't honor) their staleness contract per meta-rule 3,
 added in v0.5 alongside design-review target 8's coupling review.
+**12 is *validation-gate* drift** — Pydantic models that fail to
+enforce contracts strictly (silent `Optional` on required fields,
+defaults that mask missing data, exception-swallowing that hides
+violations), added in v0.6 with the strict-validation discipline
+in meta-rule 4.
 
 Audit's scope is broader than just structural-correctness;
-implementation rigor, architectural placement, and contract-
-enforcement are all part of compliance with the system's own
-claims.
+implementation rigor, architectural placement, contract-
+enforcement, and validation-strictness are all part of compliance
+with the system's own claims.
 
 ### 1. Documentation drift
 
@@ -209,6 +214,43 @@ is declared — `research-references` (or its peer refresh tools)
 must actually read the declaration. A declared-but-unread
 invalidation hook is worse than none, because it gives false
 assurance.
+
+### 12. Validation-gate drift
+
+Pydantic models that fail to enforce their contracts strictly per
+the strict-validation discipline (ARCHITECTURE.md meta-rule 4).
+The discipline says: required fields are strictly required (no
+`Optional` for required, no silent default to `None`); on
+contract violation raise loud with descriptive errors; never
+return partial data; never coerce missing required to placeholder.
+
+Distinct from invalidation-contract drift: invalidation drift is
+"the entity doesn't declare its staleness rule." Validation-gate
+drift is "the gate that should enforce the contract is too lax —
+accepts malformed data silently, hides violations behind soft
+failures."
+
+**Examples**: `ManifestInfo.last_updated: str | None = None` when
+the rule says it's required (silent acceptance of malformed
+manifests; flagged as too-strict in slice 15 first run, but the
+*pattern* is real and worth checking elsewhere); a tool handler
+that catches `ValidationError` and returns an empty result instead
+of propagating; a Pydantic model with `model_config = ConfigDict(
+extra="allow")` that quietly accepts unknown fields; a default
+value (`""`, `0`, `[]`) that masks "this field wasn't provided."
+
+**Why dangerous**: the validation gate is what turns "structured
+data" into "contract-enforced structured data." A lax gate gives
+false assurance — the type checker says "yes, ManifestInfo,"
+the loader doesn't crash, downstream code assumes the contract
+holds. Bugs surface only when behavior diverges from intent —
+and by then the invalid data has propagated.
+
+**The fail-loud test**: for every required field, ask "if this
+field were missing from the input, would the model raise a
+clear, descriptive error naming the field — or would it silently
+return a partial / defaulted value?" The first is a gate; the
+second is a leak.
 
 ---
 
@@ -783,6 +825,87 @@ not *audited*. Plus a focused check on dependency / build files
 
 ---
 
+### Slice 16 — validation-gate coverage
+
+**Drift surfaces**: 12 (validation-gate)
+
+**Scope**:
+- All Pydantic models in `backend/mcp-server/src/pbs_mcp/`:
+  - `schemas.py` (MCP tool I/O models)
+  - `office_config.py` (OfficeConfig + nested models)
+  - `project_state.py` (ProjectState + helpers)
+  - any future per-entity schema modules (manifests, etc.)
+- All MCP tool handlers in `backend/mcp-server/src/pbs_mcp/tools/`
+  — focus on exception-handling patterns; flag any `try/except` that
+  swallows `ValidationError` or returns soft-failure on contract
+  violation
+
+**Brief template**:
+
+> You are running Slice 16 — validation-gate coverage per
+> ARCHITECTURE.md meta-rule 4 strict-validation discipline. The
+> discipline:
+>
+> - Required fields are strictly required (no `Optional` for
+>   required, no silent default to `None`)
+> - On contract violation, raise loud with descriptive errors
+>   naming the offending field
+> - Never return partial data; never coerce missing required to
+>   placeholder
+> - Defaults are reserved for fields where missing semantically
+>   means "not-yet-known" (`None`) — not for required fields
+>
+> Audit for FOUR violation patterns. **Important: do not flag
+> Optional fields that are genuinely optional** (e.g.,
+> `client_contact: str | None = None` on ProjectState — that's
+> "not-yet-known," fine). Distinguish *required-but-typed-Optional*
+> (violation) from *truly-optional* (acceptable).
+>
+> 1. **Optional-on-required**: a field's documented contract says
+>    required (per ARCHITECTURE.md, schema docs, or skill specs),
+>    but the Pydantic model declares it `Optional[X] = None` or
+>    `X | None = None`. The model accepts missing data silently.
+>    Detect: read the contract docs first; THEN check the Pydantic
+>    model. Flag mismatches.
+>
+> 2. **Default-masks-missing**: a Pydantic field has a default
+>    value (`""`, `0`, `[]`, `{}`) that's semantically distinct
+>    from "missing" but the field is treated as required by
+>    callers. Default lets the model parse without the field but
+>    callers assume the value is meaningful. Detect: defaults on
+>    fields that the caller code or contract treats as required.
+>
+> 3. **Exception swallowing**: handler code catches
+>    `ValidationError` (or `ValueError`, `TypeError`) and returns
+>    soft-failure (empty result, `None`, default object) instead
+>    of propagating. Detect: `try/except` blocks around Pydantic
+>    parsing or validation in tool handlers; flag those that
+>    convert violations to silent partial responses.
+>
+> 4. **Loose-shape config**: Pydantic model has
+>    `model_config = ConfigDict(extra="allow")` or no `extra=`
+>    setting (Pydantic v2 default is "ignore" — also too loose
+>    for contract enforcement). The strict default for
+>    contract-bearing models is `extra="forbid"`. Detect:
+>    `extra="allow"`, `extra="ignore"`, or absent
+>    `model_config` on contract-bearing models.
+>
+> For each finding: classify pattern (1-4), name file paths +
+> line ranges, propose fix (make field required / drop default /
+> let exception propagate / add `extra="forbid"`).
+>
+> **Agent-discipline note (this slice specifically)**: do not
+> classify findings as BLOCKER unless the violation actively
+> ships malformed data to the next consumer. "Field could
+> theoretically be missing if input were malformed" is a finding,
+> not a BLOCKER. Two prior session-6 first-runs had agent
+> verdict-overreach; this slice's findings are about
+> tightening-discipline, not stopping-the-line.
+>
+> Output structured findings. Cap at 1500 words.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |
@@ -794,15 +917,18 @@ not *audited*. Plus a focused check on dependency / build files
 | **Optional** | **11, 12, 13** | **Implementation quality** (test coverage, security, performance) — run before phase boundaries that increase exposure (first ingest, deployment, multi-user) |
 | **Optional** | **14** | **Boundary adherence** (LLM/Python placement) — run after major refactors that may have moved logic across the boundary, or when surfacing a coverage gap audit didn't catch |
 | **Optional** | **15** | **Invalidation-contract coverage** (meta-rule 3 enforcement) — run after adding new entity instances (manifests, prose docs, bausteine), after schema changes, or before a refresh cycle to verify handlers will actually read what's declared |
+| **Optional** | **16** | **Validation-gate coverage** (strict-validation discipline) — run after adding new Pydantic models, after handler refactors, or when tightening contract-enforcement rigor (e.g., before any post-launch deployment where lax validation would compound) |
 
-Slices 11-15 are **not part of the default round sequence** —
+Slices 11-16 are **not part of the default round sequence** —
 they're correctness-orthogonal. Run them when a phase boundary
 increases exposure on that axis (e.g., before Phase 1 corpus
 download = run slice 11 to confirm test coverage; before any
 multi-user deployment = run slice 12 for security; after a
 boundary-affecting refactor or before locking placement = run
 slice 14; after schema changes that touch invalidation contracts
-or before a `research-references` refresh = run slice 15).
+or before a `research-references` refresh = run slice 15;
+after Pydantic model additions or before tightening validation
+discipline = run slice 16).
 
 If a round catches BLOCKERS, immediately run a verification pass
 (scope = changed files only) before declaring round complete.

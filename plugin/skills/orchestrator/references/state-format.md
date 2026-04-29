@@ -29,6 +29,27 @@ its root. New projects use `.ai/`; existing projects use `_ai/`.
 
 Single source of project lifecycle truth.
 
+**Access via MCP tools, not direct Read/Write.** state.md is
+schema-bearing per ARCHITECTURE.md meta-rule 4 refinement A: a
+`ProjectState` Pydantic model owns the frontmatter contract,
+forward-migrations apply on read, and cross-reference invariants
+(lifecycle/phase consistency, date order, required-fields-present)
+fail loud on parse. Skills MUST use:
+
+- `get_project_state(project)` — read + validate; returns typed
+  state + raw markdown body. Raises on contract violation.
+- `update_project_state(project, updates, body_append?)` — apply
+  partial frontmatter merge + validate before writing; never
+  writes a partial-invalid state.
+
+Direct skill `Read`/`Write`/`Edit` of state.md is a meta-rule 4
+persistence-boundary leak. Audit slice 14 catches violations.
+
+The schema below is the *frontmatter shape* the Pydantic model
+enforces. Owning module: `pbs_mcp/project_state.py`. The
+markdown body (History section, free-form notes) is preserved
+unchanged across read/write cycles; not schema-validated.
+
 ```yaml
 ---
 # Identity
