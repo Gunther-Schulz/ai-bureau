@@ -2597,12 +2597,39 @@ The v2 builder design constraint (marketplace-compatible
 blueprint format) is the only load-bearing implication for
 current work.
 
-### Gemini Enterprise migration path (multi-agent A2A archetype) — Tier 3 of deployment ladder
+### Gemini Enterprise port + parallel development — Tier 3 of deployment ladder
 
-**Why this is in the roadmap**: persistence of the option, not
-commitment to use it. **This is Tier 3** of the three-tier
-deployment ladder; Tiers 1-2 are covered by pre-RAG commitment
-#13 (deployment-mode flexibility within our archetype).
+**Why this is in the roadmap (revised session 9 followup)**:
+**planned post-validation, regardless of client demand**. Was
+previously framed as "persistence of the option, probably never";
+upgraded to **planned workstream** post-v1-validation, motivated
+by **exposure + learning** (not specific business case). The user
+will port + parallel-develop on Gemini Enterprise once PBS's
+performance is validated through real Schulz Planungsbüro use,
+even without a big client trigger. **This is Tier 3** of the
+three-tier deployment ladder; Tiers 1-2 are covered by pre-RAG
+commitment #13 (deployment-mode flexibility within our archetype).
+
+**Motivation (sharpened)**: building the Gemini port is the
+**necessary precondition for credible multi-archetype consulting**.
+You can't sell "we run on both archetypes; clients pick what fits
+their scale" without having actually built on both. The port IS
+the validation work that enables the consulting offering; without
+it, the multi-archetype pitch is theoretical, not verifiable.
+
+In priority order:
+1. **Validation-through-use → enables consulting offering**: the
+   primary motivation. Building the port is what earns the
+   "verified track record across archetypes" credibility signal
+   `docs/strategic-positioning.md` "Multi-archetype credibility"
+   relies on. No port = no verifiable claim.
+2. **Capability building**: building on a different archetype
+   (multi-agent A2A vs single-Opus orchestration) teaches things
+   that staying on one archetype doesn't.
+3. **Exposure**: being on Gemini Enterprise's platform / Model
+   Garden / Agentspace gets visibility we wouldn't otherwise have.
+   Anthropic Claude is in Gemini Enterprise's Model Garden —
+   credibility flows from running there.
 
 **The three-tier deployment ladder**:
 
@@ -2624,14 +2651,26 @@ Identity becomes governance layer. **Substantial refactor**
 when that need arises.
 
 PBS today is built on the single-big-model archetype (Tiers 1-2).
-**If scalability or federation needs ever arise, a migration path
-to Gemini Enterprise's multi-agent A2A archetype exists** — and
-the load-bearing IP (domain content + architectural discipline)
+**Post-v1 validation, the user will port + parallel-develop on
+Gemini Enterprise's multi-agent A2A archetype** — Tiers 1-2 stay
+the primary archetype for solo / small clients; Tier 3 runs in
+parallel as additional deployment + capability investment. The
+load-bearing IP (domain content + architectural discipline)
 ports over.
 
-**When this might pull forward** (probably never, possibly
-someday):
-- Consulting engagement with an enterprise scale (1000+ users,
+**Pull-forward triggers** (revised — was "probably never, possibly
+someday"; now "build is the validation, post-Tier-1-2 maturity"):
+
+**Primary (planned, definite)**:
+- **Tiers 1-2 maturity**: PBS-bureau working in real Schulz
+  Planungsbüro use; pre-RAG queue completed; Phase 1 corpus
+  ingested; first project bound and producing real work. Once the
+  primary archetype is mature enough to be a stable substrate, the
+  parallel Gemini port begins. **Building IS the validation** —
+  the port enables the consulting credibility, doesn't wait for it.
+
+**Additional (would accelerate)**:
+- Consulting engagement with enterprise scale (1000+ users,
   parallel tasks, federated authority)
 - Cross-organization federation requirement (e.g., PBS-bureau ↔
   legal-practice office ↔ client-CRM agent across orgs)
@@ -2639,6 +2678,9 @@ someday):
   100 planning bureaus, each with own data, governed centrally)
 - Government / regulator deployment requiring formal Agent
   Identity / Agent Gateway / Model Armor governance
+
+**Notably absent from the new triggers**: a specific big client.
+The port is committed without that.
 
 **What survives the migration unchanged** (the load-bearing IP):
 - Domain knowledge: skill bodies, manifests, korrektur-rules,

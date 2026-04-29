@@ -307,6 +307,39 @@ Different niches; positioning around specialization:
 
 ---
 
+## Multi-archetype credibility (planned, post-Tiers-1-2-maturity)
+
+Most AI-office consultants will run on ONE archetype — either single-big-model (open-source / Anthropic-shop) or multi-agent A2A (Gemini Enterprise / enterprise platform). Few will run on both.
+
+**The plan** (per ROADMAP v2 "Gemini Enterprise port + parallel development"): once Tiers 1-2 are mature (PBS-bureau working in real Schulz Planungsbüro use; pre-RAG queue completed; Phase 1 corpus ingested; first project producing real work), the architect ports + parallel-develops on Gemini Enterprise's multi-agent A2A archetype — **regardless of specific client demand**. The motivation is multi-archetype credibility for the consulting offering: building IS the validation work that earns the verified track record other consultants can't easily match.
+
+**The consulting positioning shift this enables** (vs single-archetype peers):
+
+> **"I've actually built and run on both archetypes. Tiers 1-2 (single-big-model orchestration) for the work you'll see today — Schulz Planungsbüro running on Coolify with PBS-bureau. Tier 3 (multi-agent A2A on Gemini Enterprise) for the work you'll see when scale demands it — same domain content, same architectural discipline, different runtime archetype. The methodology + patterns port cleanly because they were designed to from the start (per A2A schema compatibility decisions made pre-RAG). Other AI-office consultants will tell you they have a 'migration path'; I have a verified port + active parallel deployment. You pick the archetype that fits your scale; I architect the office on whichever you choose."**
+
+**Why this matters competitively**:
+
+- **Vertical-SaaS replacement competitors** (Harvey, Filevine, Spellbook): single-archetype, single-domain, rip-and-replace. We're cross-archetype, multi-domain, glue-not-replacement.
+- **Single-archetype open-source AI-office consultants** (whoever else builds in this space): theoretical migration paths; no verified Gemini track record.
+- **Enterprise-platform-native consultants** (Gemini Enterprise / Apigee specialists): no open-source archetype credibility; locked into one platform.
+
+**Verifiability is the moat**. Theory-only consultants can claim "we work on any archetype." We can demonstrate it on demand: live deployment on Tiers 1-2 + live deployment on Tier 3 + the open-source repo showing the port architecture + the decision records showing the schema-compatibility work that enabled it.
+
+**Honest framing of the investment**:
+
+- Building the Gemini port is **substantial work** (3-6 months realistic estimate per ROADMAP §2667). Not free. Not casual.
+- It's a **strategic investment in consulting capability**, not an immediate revenue play. Pays back through credibility + lead conversion + premium pricing on multi-archetype engagements.
+- It's **post-Tiers-1-2 maturity** — not a parallel pre-launch effort. Tiers 1-2 must be working production-grade first.
+
+**The architectural pre-work that enables this** (already committed pre-RAG):
+- **#10 (A2A schema compatibility)** — AuditEvent + ProjectState + adapter Protocols all designed to be A2A-shape-compatible. The port doesn't require a schema migration; it requires a runtime swap.
+- **Pattern-vs-instance discipline** — domain content + architectural patterns are pattern-level; runtime-specific code is instance-level. Clean separation makes the port conceptually clean.
+- **Glue-not-replacement principle** — integration-adapter pattern works the same on either archetype.
+
+**The consulting promise is structurally sound, not aspirational.** When activated, this section gets concrete metrics from the actual port (timeline, observed differences between archetypes, quality comparison, etc.).
+
+---
+
 ## Review triggers
 
 Update this document when:
