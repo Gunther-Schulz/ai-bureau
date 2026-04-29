@@ -46,6 +46,36 @@ A system can fail on any axis independently:
 PBS aims for all three: **intertwined sparring partnership in
 service of defensible authorship.**
 
+## Foundations
+
+Vision documents need anchors. PBS draws on specific research and
+thinking that future alignment checks should reference back to:
+
+- **Vivienne Ming** (theoretical neuroscientist and cognitive
+  scientist). Wall Street Journal article and book *Robot-Proof:
+  When Machines Have All The Answers, Build Better People*. Her
+  experiment on AI-human hybrid teams (three modes: oracle,
+  validator, sparring partner) is the research basis for axis 2
+  of the thesis. Her concept of the **Information-Exploration
+  Paradox** (as the cost of information approaches zero, human
+  exploration collapses) anchors why axes 2 and 3 matter
+  operationally. Full treatment in "Sparring partner, not answer
+  machine" section below.
+
+When auditing for drift (per "How to use this document" below),
+this foundation is the reference point: are we still doing what
+Ming's research identified as the productive mode? Are we still
+serving the concerns she names about capacity atrophy? PBS's
+framing is its own (three axes; authorship preservation as the
+third); the alignment with Ming is on axis 2 (sparring) and on
+the underlying capacity-atrophy concern that motivates axis 3.
+Axis 1 (intertwining) is our own framing, not derived from her
+work.
+
+Foundations grow as we engage with more research. Add new entries
+here when external work becomes a reference for our own alignment
+checks.
+
 The contrast that makes axis 1 concrete:
 
 | Tacked-on AI | Intertwined AI |
@@ -233,14 +263,30 @@ distinct from intertwining requirements:
   architectural question for any new feature: "is this mechanical
   or judgment-bearing?" Automate the first; surface the second.
 - **Asymmetric knowledge respect.** Sparring is not between
-  equals. AI has breadth (legal corpus, prior projects, every
-  baustein); user has depth (this client, this Bürgermeister,
-  this political moment, deep tacit knowledge that never gets
-  written down). PBS surfaces the asymmetry rather than hiding
-  it: when the orchestrator proposes, it names "here's what I
-  know; here's what only you know that changes this; how does
-  your context apply?" Not "here's the answer," but "here's my
-  contribution to a question only you can fully answer."
+  equals. AI's strength is **codified knowledge** — the legal
+  corpus, prior projects, every captured baustein, statistical
+  pattern recognition across the historical record. The user's
+  strength is **tacit, current, causal** — this Bürgermeister's
+  politics, the conversation in last week's Gemeinderat, the
+  client's recent shift in priorities, the political moment.
+  The gap is largely *temporal*: AI has historical depth, user
+  has present awareness. The asymmetry is also *dynamic* — as
+  bausteine accumulate and project state persists, AI gains
+  depth in PBS-specific context; what stays user-only is the
+  most-recent and the unrecorded.
+
+  PBS surfaces the asymmetry **tentatively**: when the
+  orchestrator proposes, it can name "here's what I'm drawing
+  on; this might be a case where local/recent context I don't
+  have should change the conclusion — does it?" Not deference
+  ("you decide, I'm just suggesting") and not authority ("here's
+  the answer") — a deliberate naming of which knowledge each
+  party brings.
+
+  *Asymmetric respect is not user-deference.* If the AI sees a
+  structural issue, it pushes back even when the user has better
+  local context. The asymmetry is about *what kind* of knowledge,
+  not *whose* knowledge wins.
 - **Commit to recommendations.** The orchestrator surfaces
   decisions as recommendation + tradeoff, not as open menu.
   Discussion emerges from the position taken; non-commitment
