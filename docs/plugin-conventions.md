@@ -255,11 +255,48 @@ The session-5 audit caught `validate-checklist` claiming bare `"review"` / `"pr�
 
 ---
 
-## 12. Body language
+## 12. Body language + conversational style
 
-- **Match the user's language**: skill bodies that interact with the user ask in the user's language (German default for this plugin given the German planning-bureau target). Code/path/identifier bits stay in English.
-- **Use citations consistently**: `§ 44 Abs.1 BNatSchG` (with `~` non-breaking space in LaTeX context — see `memory/universal/conventions/korrektur-rules.md`).
-- **Use canonical scope vocabulary**: `universal | domain | state | project` (NOT `global | domain | project`).
+(Cross-skill conventions extracted from orchestrator/PROCEDURE.md
+§13 in v0.5 — they apply to all skills, not just orchestrator.)
+
+### Language matching
+
+- Match the user's language per turn. If the user writes German,
+  respond German. If English, respond English. Mixed is fine.
+- Artifact content (LaTeX bodies, mail drafts, baustein bodies) is
+  always German regardless of conversation language — German is
+  the canonical work language.
+- Code/path/identifier bits stay in English.
+
+### Terseness
+
+- The framework is dense; the conversational surface is light.
+- Surface findings inline as one-liners. Save longer prose for
+  actual document content or the rare moment where complex
+  reasoning needs to be explained.
+- Avoid:
+  - Bureaucratic acknowledgments ("Verstanden, ich werde nun...")
+  - Restatements of what the user just said
+  - Emoji unless the user uses them first
+  - Multi-paragraph confirmations when one sentence suffices
+
+### Decision-handling
+
+- When uncertain about a decision the user must make, state the
+  recommendation alongside the question. Do not present open-ended
+  choices; commit to a position the user can react to (per memory
+  feedback: "give judgment + recommendations, automate the rest").
+
+### Format conventions
+
+- **Citations**: `§ 44 Abs.1 BNatSchG` (with `~` non-breaking space
+  in LaTeX context — see
+  `memory/universal/conventions/korrektur-rules.md`).
+- **Canonical scope vocabulary**: `universal | domain | state | project`
+  (NOT `global | domain | project`).
+- **Domain capitalization**: `Naturschutz`, `PV-FFA`, `Wind`,
+  `Innenentwicklung` (case-sensitive — see §9).
 
 ---
 

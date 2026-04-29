@@ -1,12 +1,12 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.8.0
+version: 0.9.0
 license: MIT
 mcp_tools_required: [list_projects, list_skills]
 mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
 fallback_when_mcp_absent: "warn user and suggest backend restart. Orchestrator can still surface decisions and route to specialists from skill descriptions, but session-open project enumeration and watch-list cross-references degrade to filesystem reads."
-summary: Master coordination skill — routes user input + holds workflow gates. Auto-loads on planning-bureau context; never bypassed. Watch-list logic delegated to `watch-list` skill (post-v0.5 split per design-review S3).
+summary: Master coordination skill — routes user input + holds workflow gates. Auto-loads when in planning-bureau scope; specialists own their own invariants. Watch-list logic delegated to `watch-list` skill (post-v0.5 split per design-review S3).
 routing_mode: always_active
 triggers:
   - {phrase: "auto-loaded on planning-bureau context", lang: meta}
@@ -134,25 +134,32 @@ reference; the MCP tool is authoritative.
 
 ## What this skill is and is not
 
-- **Is:** the always-on operational framework for any session under
-  this plugin.
-- **Is:** workflow-and-judgment hybrid — phases with gates, plus
-  watch-list classification that surfaces decisions for the user.
+- **Is:** the auto-loaded coordination layer for sessions in
+  planning-bureau scope.
+- **Is:** workflow-and-judgment hybrid — phases with gates,
+  routing to specialists, delegating watch-list infrastructure
+  to the `watch-list` skill.
 - **Is not:** a drafting skill. Delegate to a specialist or perform
-  inline; never bypass the framework.
+  inline; specialists own their own invariants.
 - **Is not:** project-specific. Every project goes through the same
   framework with project-specific details loaded from per-project
   state.
 - **Is not:** office-specific. The framework is identical across
   deployments; office values come from `office-config.yaml`.
 
-## When to bypass
+## When in scope
 
-Never. Loaded means active. If a request is plainly unrelated to
-planning-bureau work (e.g., user asks an unrelated coding question
-with no domain context), this skill does not apply and `PROCEDURE.md`
-need not be consulted. Detect non-domain context from the absence of
-trigger phrases and project paths.
+Auto-loads when the session has planning-bureau context — project
+under `office_config.roots.projects` or
+`office_config.roots.local_repos`, or German planning terminology
+in user input.
+
+When in scope: orchestrator's PROCEDURE applies; specialists are
+invoked per their trigger phrases + this orchestrator's routing.
+
+When NOT in scope (user asks an unrelated coding question with no
+domain context): this skill does not apply. Other skills in the
+session compose normally.
 
 ## When office-config is missing
 

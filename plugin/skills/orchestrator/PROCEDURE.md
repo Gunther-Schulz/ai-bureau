@@ -5,6 +5,32 @@ flow throughout every session. Self-imposed — the user does not need
 to invoke any of this; recognition and surfacing is the
 orchestrator's job.
 
+## Three-phase workflow model
+
+Document workflow runs in three phases. Each phase has a canonical
+entry skill (see `phase_role` in skill frontmatter):
+
+- **Phase A — Drafting**: produce the document from project sources.
+  Entry skills: `draft-textteil-b` (Begründung), `draft-textteil-c`
+  (Festsetzungen). Future doctypes (Umweltbericht, Gutachten) gain
+  their own Phase A entry when they land.
+- **Phase B — Review**: layered review of the produced draft.
+  Entry skill: `review-draft` (delegates to `validate-checklist`
+  Layer 1, `verify-citations` Layer 2, `validate-latex-style`
+  Layer 3).
+- **Phase C — Finalize / Send**: send-gate, snapshot, lifecycle
+  transition. Owned by orchestrator (Checkpoint 4.3, 4.4) +
+  `draft-cover-mail` for transmittal.
+
+Per-project `_ai/state.md.lifecycle` tracks where the project is
+in this model: `draft` (Phase A) → `internal-review` (Phase B) →
+`sent-to-authority` / `finalized` (Phase C).
+
+Specialists self-identify their phase via `phase_role:` in
+frontmatter (`phase_a_entry`, `phase_b_entry`, `layer_1` /
+`layer_2` / `layer_3`). The orchestrator's routing tables can be
+machine-derived from `list_skills()` responses.
+
 ---
 
 ## 1. Session open — before responding to first domain-context message
@@ -273,46 +299,23 @@ practice + GIS practice working on the same job).
 
 ---
 
-## 9. MCP tool surface
+## 9. MCP tool surface (delegated to specialist skills' frontmatter)
 
-The backend (`<repo>/backend/`) is not yet built. When MCP tools are available, route as below. When not available, fall back as noted; never block work because the backend is missing.
+Every specialist skill declares its own MCP-tool dependencies +
+fallback behavior in its `SKILL.md` frontmatter (per meta-rule 4 +
+`docs/plugin-conventions.md` §1). The orchestrator reads these via
+`list_skills()` MCP tool; tables enumerating per-tool fallbacks
+have been removed from this PROCEDURE (single source of truth =
+specialist's own frontmatter).
 
-### 9.1 Corpus and references
+To inspect available tools + their fallback semantics: call
+`list_skills()` (returns each skill's `mcp_tools_required[]`,
+`mcp_tools_optional[]`, and `fallback_when_mcp_absent`). This
+replaces the v0.4 inline tool-tables.
 
-| Tool | Use for | Fallback |
-|---|---|---|
-| `search_corpus(query, k, filter)` | Semantic search over corpus + references with optional `source_type=corpus|reference` filter | `Grep` over the office's `paths.local_repos_root` and `paths.projects_root` (less recall but works) |
-| `read_corpus_file(path)` | Direct read of a known corpus path | `Read` tool |
-
-### 9.2 Per-project ingestion
-
-| Tool | Use for | Fallback |
-|---|---|---|
-| `ingest_project_inputs(project, paths)` | Index a new project's source docs into a project-namespaced LanceDB index | `Read` each input directly into context (limited to small input sets) |
-| `search_inputs(query, project, k)` | Semantic search over a project's ingested inputs only | `Grep` over the project's input folders |
-
-### 9.3 Memory
-
-| Tool | Use for | Fallback |
-|---|---|---|
-| `list_bausteine(scope?, scope_key?, project_root?)` | Scope-aware enumeration: universal/domain/state/project per orthogonality | `Glob` over `<repo>/memory/bausteine/{universal,domain/<X>,state/<X>}/` |
-| `get_baustein(name, scope?, scope_key?)` | Read a specific baustein by name | `Read` the corresponding markdown file |
-| `save_baustein(scope, scope_key?, project_root?, name, type, title, body, references, tags)` | Write with full validation per meta-rule 4 | `Write` directly only as degraded fallback; warn user |
-| `flag_baustein(name, reason)` | Mark stale / drifted (used by record-feedback rejections, research-references citation drift) | `Edit` the frontmatter directly |
-| `archive_baustein(name, superseded_by?)` | Lifecycle close-out (used by promote-to-skill) | `Edit` the frontmatter directly |
-| `find_bausteine_by_reference(law?, paragraph?, ruling?, leitfaden?)` | Cross-reference dependents (used by research-references on diff) | `Grep` over baustein files |
-
-### 9.4 Build and project ops
-
-| Tool | Use for | Fallback |
-|---|---|---|
-| `compile_latex(project_path)` | Run latexmk, return PDF + log | `Bash` running `latexmk -pdf` in the project dir |
-| `scaffold_project(name, doctype, template)` | Create a new project from a template | `Bash` copying the canonical template tree |
-| `list_projects()` | Enumerate registered projects | `Read` `<state_root>/projects-index.md` |
-| `bind_project(name, root_path)` | Register a project + path mapping | Write the entry to `projects-index.md` directly |
-| `survey_project(root_path)` | Cluster project files, propose file-map | `Glob` recursive + `Read` README/key files; build `_ai/file-map.md` interactively |
-
-When falling back, note the fallback in the response so the user knows the tool surface is degraded.
+When the orchestrator itself needs an MCP tool not yet listed in
+its frontmatter, fall back as appropriate and log a T6 capability-
+gap trigger via the watch-list skill.
 
 ---
 
@@ -344,83 +347,70 @@ When performing inline what would be a specialist's job, hold the same checkpoin
 
 ---
 
-## 11. Project binding — first-bind flow for existing projects
+## 11. Project binding — delegated to survey-project skill
 
-When a user references a project that has no `_ai/` or `.ai/` folder, run binding before any other operation.
+When a user references a project that has no `_ai/` or `.ai/`
+folder, run the **`survey-project`** skill before any other
+operation. That skill owns binding logic (file clustering, ownership
+mode proposal, state.md scaffolding) — see
+`plugin/skills/survey-project/SKILL.md`.
 
-1. Determine project root. Resolve from name → path via `projects-index.md` if registered; else ask the user for the absolute path.
+Orchestrator's role here: detect the unbound condition (project
+referenced but no `_ai/` or `.ai/` exists), invoke survey-project,
+optionally append the resulting binding to `<roots.state>/projects-index.md`
+afterwards.
 
-2. Detect practices. Glob the project root:
-   - `scripts/` + `workflow.yaml` present → `hendrik` involvement
-   - LaTeX (`*.tex`) or Word (`*.doc*`) document folders present → `schulz` involvement
-   - Both → `joint`
-
-3. Survey files. Run `survey-project` (or fall back: glob recursively to depth 4, ignore aux files). Cluster:
-   - Doctype-relevant artifacts (`B-Plan/`, `Umweltbericht/`, `Externe Gutachten/`)
-   - Inputs (`Grundlagen/`, `Inputs/`, briefings, surveys, drone scans)
-   - Correspondence (`Schriftverkehr/`, `*.eml`)
-   - Resources to leave alone (`Fotos/`, `GIS/`, `Bilder/`, `Karten/`)
-   - Cruft (`*.aux`, `*.fdb_latexmk`, `*.fls`, `~$*`, `*.tmp`)
-
-4. Propose a file map. Present clusters with current latest-modified dates and ask the user to confirm/correct interpretation per cluster. Do not guess silently.
-
-5. Propose ownership mode. Default `new-work-only`. If only `.doc`/`.docx` exists in doctype folders → propose `migrate` as alternative. If user is unsure → `quarantine`.
-
-6. Write the binding artifacts:
-   - `_ai/state.md` with current state (default `draft` unless evidence indicates otherwise — sent .pdf with date in correspondence implies `awaiting-response` or later), `practices`, `ownership_mode`, project name, root path.
-   - `_ai/file-map.md` with the confirmed clusters.
-   - `_ai/decisions.md` empty.
-   - `_ai/correspondence-log.md` with one row per `.eml` found in `Schriftverkehr/`.
-
-7. Append entry to `<state_root>/projects-index.md`.
-
-Binding is a one-time per project event. Subsequent bindings load the existing artifacts and re-survey only if file-map mtimes are stale.
+Binding is a one-time per project event. Subsequent invocations
+load the existing artifacts and re-survey only if file-map mtimes
+are stale.
 
 ---
 
-## 12. New-project creation
+## 12. New-project creation — delegated to setup_project MCP tool
 
-When the user requests a new project ("neues Projekt", "new project", "scaffold ..."):
+When the user requests a new project ("neues Projekt", "new
+project", "scaffold ..."):
 
-1. Solicit core metadata: project number (auto-suggested from `office_config.conventions.project_numbering` if `auto_increment: true`, else asked), client, location, doctype focus, practice (defaults to the first internal actor — `office_config.default_internal_actor()`). Resolve the folder name from `office_config.conventions.project_naming` template.
+1. **Solicit core metadata**: project number (auto-suggested from
+   `office_config.conventions.project_numbering`), client, location,
+   doctype focus, practice (defaults to
+   `office_config.default_internal_actor()`).
+2. **Call `setup_project` MCP tool** with the gathered metadata.
+   The tool's contract owns: path resolution (`office_config.roots.projects`),
+   three-mode detection (absent → create+scaffold; empty → scaffold-in-place;
+   populated → route to survey+bind), `.ai/` vs `_ai/` selection per
+   ownership mode, scaffolding of canonical layout +
+   per-doctype skeletons + `Projektdaten.tex` instantiation,
+   `projects-index.md` append.
+3. **Output a one-paragraph orientation** with name + folder layout
+   + doctypes scaffolded + suggested next step.
 
-2. Call the `setup_project` MCP tool with the gathered metadata. The tool resolves target path under `office_config.roots.projects` and handles three modes by detecting the target folder state:
-   - **absent** → creates folder + scaffolds layout
-   - **empty** → scaffolds inside the existing folder
-   - **populated** → routes to survey + bind flow (Checkpoint 11)
+For new projects, never propose an ownership mode — full AI
+ownership is the only mode.
 
-3. The tool seeds `.ai/` (hidden — full AI ownership) for fresh creation, `_ai/` (visible) for adoption of an existing folder:
-   - `state.md` with `lifecycle: draft`, `practices: [<chosen-practice-id>]`, `ownership_mode: full` (new) or detected mode (existing), today's date.
-   - `decisions.md` empty.
-   - `module-decisions.md` empty.
-   - `file-map.md` with the scaffolded structure.
-
-4. The tool scaffolds the canonical project layout per `office_config.conventions.project_folder_layout` (inputs/, sent_versions/, correspondence/, toeb/) plus a doctype subfolder for each chosen doctype.
-
-5. For each chosen doctype, the tool copies the app's shipped skeleton from `<repo>/plugin/templates/skeletons/<doctype>/` (or `office_config.templates.doctype_overrides[<doctype>]` if set) into the doctype subfolder, and instantiates `Projektdaten.tex` with the gathered metadata.
-
-6. The tool appends an entry to `<state_root>/projects-index.md`.
-
-7. Output a one-paragraph orientation: "Projekt \<name\> angelegt. Layout: \<list-of-subfolders\>. Doctypes scaffolded: \<list\>. Projektdaten ausgefüllt mit \<...\>. Nächster Schritt: \<...\>?"
-
-For new projects, never propose an ownership mode — full AI ownership is the only mode.
+(Detail of `setup_project`'s three-mode behavior + scaffolding
+contract lives in the tool's Pydantic schema +
+`backend/.../tools/projects.py`. Per meta-rule 4, the tool is the
+single source of truth for the lifecycle work; orchestrator
+collects metadata + dispatches.)
 
 ---
 
 ## 13. Conversational style
 
-Match the user's language per turn. If the user writes German, respond German. If English, respond English. Mixed is fine. Artifact content (Checkpoint 6.1) is always German regardless.
+(Cross-skill conventions live in `docs/plugin-conventions.md` §12.
+This section retained as a thin pointer + orchestrator-specific
+emphasis.)
 
-Be terse. The framework is dense; the conversational surface is light. Avoid:
+Match the user's language per turn (mixed is fine). Be terse;
+surface findings inline as one-liners (Checkpoint 3 menu format).
+When uncertain about a decision the user must make, state the
+orchestrator's recommendation alongside the question — do not
+present open-ended choices.
 
-- Bureaucratic acknowledgments ("Verstanden, ich werde nun...")
-- Restatements of what the user just said
-- Emoji unless the user uses them first
-- Multi-paragraph confirmations when one sentence suffices
-
-Surface findings inline as one-liners (Checkpoint 3 menu format). Save longer prose for actual document content or the rare moment where complex reasoning needs to be explained.
-
-When uncertain about a decision the user must make, state the orchestrator's recommendation alongside the question. Do not present open-ended choices; commit to a position the user can react to.
+For details (no-emoji, no bureaucratic-acknowledgments,
+language-matching, body-language conventions), see
+`docs/plugin-conventions.md` §12.
 
 ---
 
