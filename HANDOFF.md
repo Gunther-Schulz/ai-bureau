@@ -295,24 +295,22 @@ VISION fresh-eyes review still pending.
 
 ## ⏳ Pending — next-session tasks
 
-### First action: trigger v2 → v3 office-config migration
+### ✅ v2 → v3 office-config migration (done session 6 open)
 
-The user's existing `~/.config/pbs-bureau/office.yaml` is at v2.
-Backend forward-migrates transparently in memory on every load,
-but the file on disk is permanently v2 (and now drifts from the
-in-memory shape — `practices: []` + `paths.X_root` etc. on disk
-vs. `actors: []` + `roots.X` in code).
+PBS office-config persisted to v3 via in-process
+`apply_migrations(v2, target=3)` + Pydantic round-trip validation.
+v2 backup at `~/.config/pbs-bureau/office.yaml.v2-backup`. Migration
+logic exercised end-to-end with zero defects: 1 internal + 1 external
+actor (was practices + partners), 0 integrations (all v2 had
+`adapter: none`, dropped per migration), roots block intact, scope
+unchanged, signature_block preserved as block-literal.
 
-**Action**: run `setup-office` in **reconcile mode** to persist
-v3 to disk. Cleaner state + tests the v2_to_v3 migration we just
-shipped (which has only been exercised by the loader's in-memory
-forward-migration so far; reconcile mode is the persistence path).
-
-This is a **good test opportunity**: the migration is bounded,
-the user has a real v2 file, and reconcile mode exercises both
-the migration framework AND setup-office's "reshape detected;
-walk newly-required fields" flow. Catches any v2_to_v3 bugs
-before they're encountered post-launch.
+Cosmetic note (not a migration bug): `yaml.safe_dump` emits multi-line
+strings as quoted-with-blank-lines by default rather than block-literal
+`|`. Worked around with a custom representer in the one-shot script.
+Worth knowing if setup-office ever gains a programmatic reconcile
+path in code (today it's all Claude-driven Write, which doesn't hit
+this path).
 
 ### Phase 0 item 4 — Feature-survey skill design (NEW)
 
