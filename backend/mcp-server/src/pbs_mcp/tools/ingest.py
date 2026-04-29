@@ -10,7 +10,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from pbs_mcp import config
+from pbs_mcp import config, office_config
 from pbs_mcp.chunkers import select_chunker
 from pbs_mcp.db import get_db
 from pbs_mcp.embedder import get_embedder
@@ -179,20 +179,43 @@ def _read_file(p: Path) -> str:
         return p.read_text(encoding="latin-1")
 
 
+def _classify_by_config(p_lower: str, rules: dict[str, list[str]]) -> str | None:
+    """Try each subtype's substring patterns in declared order; return the
+    first matching subtype name, or None if no pattern matched."""
+    for subtype, patterns in rules.items():
+        if any(pat.lower() in p_lower for pat in patterns):
+            return subtype
+    return None
+
+
 def _infer_source_subtype(path: str, source_type: str) -> str:
     """Classify a source path by which root + sub-area it falls under.
 
-    Roots come from office-config; classification is by path containment
-    rather than substring matching, so it works on any office layout.
+    Two-stage classification per office-config meta-rule 4 (placement
+    correctness): root membership (deterministic via office_config.roots)
+    decides scope; subtype within scope comes first from the office's
+    optional `conventions.path_classification` config block, then falls
+    back to hardcoded patterns for the canonical folder layout.
+
+    Offices with non-default folder names override via the config block;
+    partial override is supported (only declared subtypes use config; the
+    rest fall through to hardcoded). See office_config.PathClassification
+    for the schema + ordering rules.
     """
+    cfg = office_config.load()
+    rules = cfg.conventions.path_classification
+
     p_resolved = Path(path).resolve()
     p_lower = path.lower()
+
     if source_type == "corpus":
         local_repos = config.local_repos_root()
         projects = config.projects_root()
         if local_repos and _is_relative_to(p_resolved, local_repos.resolve()):
             return "local-repo"
         if projects and _is_relative_to(p_resolved, projects.resolve()):
+            if (hit := _classify_by_config(p_lower, rules.corpus)) is not None:
+                return hit
             if "/_ai/snapshots/" in p_lower:
                 return "snapshot"
             if "/correspondence/" in p_lower or "schriftverkehr" in p_lower:
@@ -200,6 +223,8 @@ def _infer_source_subtype(path: str, source_type: str) -> str:
             return "project-folder"
         return "external"
     if source_type == "reference":
+        if (hit := _classify_by_config(p_lower, rules.reference)) is not None:
+            return hit
         if "/gesetze/bund/" in p_lower:
             return "gesetz-bund"
         if "/gesetze/eu/" in p_lower:
@@ -214,6 +239,8 @@ def _infer_source_subtype(path: str, source_type: str) -> str:
             return "beispiel"
         return "reference"
     if source_type == "baustein":
+        if (hit := _classify_by_config(p_lower, rules.baustein)) is not None:
+            return hit
         if "/bausteine/universal/" in p_lower:
             return "universal"
         if "/bausteine/domain/" in p_lower:

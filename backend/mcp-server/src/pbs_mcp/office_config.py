@@ -165,10 +165,40 @@ class ProjectNumbering(BaseModel):
     auto_increment: bool = True
 
 
+class PathClassification(BaseModel):
+    """Optional per-source-type substring patterns that classify a path
+    into a subtype.
+
+    Schema: `{<source_type>: {<subtype>: [<substring-pattern>, ...]}}`.
+    Source-types: `corpus`, `reference`, `baustein`. Subtype keys are
+    free-form (consumers in `tools/ingest.py:_infer_source_subtype`
+    expect known values per source-type, but the classifier accepts any
+    declared subtype). Patterns are checked case-insensitively as
+    substrings of the lowercased path.
+
+    When absent (default), `_infer_source_subtype` falls back to
+    hardcoded patterns for the canonical folder layout
+    (`_ai/snapshots/`, `gesetze/bund/`, `bausteine/universal/`, etc.).
+    Override here for offices whose folder names differ — partial
+    override is supported (config rules tried first, hardcoded
+    fallback applies for unmatched paths).
+
+    Within each source-type, subtypes are tried in YAML-declared
+    order (Python dicts preserve insertion order); first matching
+    pattern wins. Order matters when one subtype's pattern is a
+    superset of another's (e.g., `gesetz-state: [/gesetze/]` would
+    swallow `gesetz-bund: [/gesetze/bund/]` if listed first).
+    """
+    corpus: dict[str, list[str]] = Field(default_factory=dict)
+    reference: dict[str, list[str]] = Field(default_factory=dict)
+    baustein: dict[str, list[str]] = Field(default_factory=dict)
+
+
 class Conventions(BaseModel):
     project_naming: str = "{year_2}-{nr} {client} - {location}"
     project_numbering: ProjectNumbering = Field(default_factory=ProjectNumbering)
     project_folder_layout: FolderLayout = Field(default_factory=FolderLayout)
+    path_classification: PathClassification = Field(default_factory=PathClassification)
 
 
 # === Top-level OfficeConfig ==============================================

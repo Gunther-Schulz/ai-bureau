@@ -1,6 +1,6 @@
 # Drift surfaces + slice library
 
-## The 10 drift-surface categories
+## The 11 drift-surface categories
 
 Every finding falls into one of these. Slices target one or more
 categories; rounds combine slices to cover the surface space.
@@ -11,10 +11,14 @@ coverage, security, performance) — added in v0.2 of the audit
 skill per design-review session-5 follow-up. **10 is *placement*
 drift** — operations on the wrong side of the LLM/Python boundary,
 added in v0.4 alongside meta-rule 4's session-6 sharpening.
+**11 is *invalidation-contract* drift** — entities that don't
+declare (or don't honor) their staleness contract per meta-rule 3,
+added in v0.5 alongside design-review target 8's coupling review.
 
 Audit's scope is broader than just structural-correctness;
-implementation rigor and architectural placement are both part of
-compliance with the system's own claims.
+implementation rigor, architectural placement, and contract-
+enforcement are all part of compliance with the system's own
+claims.
 
 ### 1. Documentation drift
 
@@ -170,6 +174,41 @@ launch, every callsite is a migration cost.
 Pydantic model + loader owns its shape. Loose markdown (HANDOFF,
 prose memory, READMEs) is skill-direct. See ARCHITECTURE.md
 meta-rule 4 for the full rule including reuse direction.
+
+### 11. Invalidation-contract drift
+
+Entities that don't declare their staleness contract per
+meta-rule 3 ("every entity declares its invalidation contract"),
+declare it incorrectly, or whose declaration isn't actually read
+by the cross-cutting refresh handler (`research-references`).
+
+Distinct from schema drift: schema drift is "the type definition
+disagrees with usage." Invalidation-contract drift is "the rule
+says this entity must declare *when it goes stale*, and either
+it doesn't, or nothing reads it when refresh fires."
+
+**Examples**: a memory-prose `.md` file that cites BauGB §35 in
+the body but has no `references_used:` frontmatter (so
+`research-references` won't flag it when BauGB updates); a
+manifest entry without `checksum_sha256` (so the loader can't
+detect remote-content drift); a baustein with `status: active`
+and `references[]` but no `verified_against_version` on the
+entries (so it never gets re-validated when the cited law moves);
+a Pydantic schema that allows the contract field as `Optional`
+when the rule says it's required.
+
+**Why dangerous**: invalidation contracts are the system's
+defense against silent staleness. Without them, citations rot,
+bausteine become orphaned from updated laws, manifests claim
+fresh data they don't have. The defensibility test in VISION
+("can the user defend this six months later?") fails when
+invalidation gaps mean the user *can't know* what's stale.
+
+**The cross-cutting handler test**: not enough that the contract
+is declared — `research-references` (or its peer refresh tools)
+must actually read the declaration. A declared-but-unread
+invalidation hook is worse than none, because it gives false
+assurance.
 
 ---
 
@@ -648,6 +687,102 @@ not *audited*. Plus a focused check on dependency / build files
 
 ---
 
+### Slice 15 — invalidation-contract coverage
+
+**Drift surfaces**: 11 (invalidation-contract)
+
+**Scope**:
+- All `plugin/skills/*/SKILL.md` (verify `version:` field present;
+  tracked but already partly covered by slice 2)
+- All `memory/universal/**/*.md` — prose memory; check
+  `references_used: []` frontmatter on docs that cite laws
+- All `memory/bausteine/**/*.md` — record memory; check
+  `status`, `last_validated`, `review_due`, and per-entry
+  `verified_against_version` in `references[]`
+- All `extensions/{universal,domain,state}/**/*.yaml` — manifests;
+  check top-level `last_updated` + per-entry `last_fetched` +
+  `checksum_sha256`
+- `office-config.yaml` — check `schema_version` present + matches
+  loader's expected version
+- `backend/mcp-server/src/pbs_mcp/schemas.py` +
+  `office_config.py` + memory-related Pydantic models — verify
+  contract fields are required (not silently `Optional`) where
+  the rule says they're required
+- `plugin/skills/research-references/` body + backend handler —
+  verify the cross-cutting refresh actually reads each declared
+  invalidation hook
+
+**Brief template**:
+
+> You are running Slice 15 — invalidation-contract coverage per
+> ARCHITECTURE.md meta-rule 3. Every entity must declare its
+> invalidation contract. This slice verifies that:
+> (a) entities actually declare what the rule says they should,
+> (b) the declarations have correct shape,
+> (c) the cross-cutting handler (`research-references`) actually
+> reads them, and (d) sources of truth for the contract agree
+> across ARCHITECTURE.md, Pydantic schemas, and skill bodies.
+>
+> The contract per entity type (per ARCHITECTURE.md meta-rule 3
+> table):
+>
+> - **Skill Bundle**: `version:` field in SKILL.md frontmatter
+>   bumped on behavior change.
+> - **Memory (prose)**: `references_used: []` frontmatter declares
+>   dependent law refs. Required when the doc cites laws/rulings/
+>   leitfäden.
+> - **Memory (records, bausteine)**: `status: active|flagged|
+>   archived|superseded`, `last_validated`, `review_due`,
+>   `references[].verified_against_version`.
+> - **Configuration (office-config)**: `schema_version` + sequential
+>   migration framework.
+> - **Configuration (manifests)**: `last_updated` at top-level +
+>   per-entry `last_fetched` + `checksum_sha256`.
+> - **External data**: per-project `_ai/state.md.lifecycle` +
+>   corpus `roots.references/changelog.md`.
+> - **Backend**: no declarative hook required (Pydantic schemas
+>   + MCP server restart serve as invalidation).
+>
+> Audit for FOUR violation patterns:
+>
+> 1. **Missing-contract entities**: entity exists but doesn't
+>    declare its invalidation contract. Detect: walk each entity
+>    type per scope; flag instances lacking required fields per
+>    the rule.
+>
+> 2. **Incorrect-contract shape**: contract declared but with
+>    wrong shape (e.g., `references_used: "..."` as string instead
+>    of list-of-dicts; `verified_against_version` missing on a
+>    `references[]` entry; `status: "live"` instead of one of the
+>    rule's enum values).
+>
+> 3. **Unread-contract**: contract declared but the refresh
+>    handler doesn't read it. Specifically check that
+>    `research-references` (skill body + any backend `find_*`
+>    tools it calls) actually consults each declared field. A
+>    declared-but-unread hook gives false assurance.
+>
+> 4. **Three-source-of-truth disagreement**: ARCHITECTURE.md's
+>    table says X; Pydantic schema in `pbs_mcp/schemas.py` (or
+>    `office_config.py` etc.) says Y; SKILL.md body or PROCEDURE.md
+>    references Z. The three sources should agree on what's
+>    required, what's optional, what enum values are allowed.
+>
+> For each finding: classify pattern (1-4), name file paths +
+> line ranges, propose fix (add field / fix shape / wire handler /
+> align schema-doc-skill).
+>
+> Pre-launch state: bausteine directory is currently empty per
+> HANDOFF — pattern 2 for bausteine yields no findings until
+> records exist. Manifests + memory-prose are populated; pattern
+> 1 + 4 should be checked there carefully. Pattern 3 is the
+> most subtle — verify the handler-reads-declaration flow even
+> when no actual refresh has fired yet.
+>
+> Output structured findings. Cap at 1500 words.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |
@@ -658,14 +793,16 @@ not *audited*. Plus a focused check on dependency / build files
 | 4 | 10 | Final-pass cross-cutting + stopping decision |
 | **Optional** | **11, 12, 13** | **Implementation quality** (test coverage, security, performance) — run before phase boundaries that increase exposure (first ingest, deployment, multi-user) |
 | **Optional** | **14** | **Boundary adherence** (LLM/Python placement) — run after major refactors that may have moved logic across the boundary, or when surfacing a coverage gap audit didn't catch |
+| **Optional** | **15** | **Invalidation-contract coverage** (meta-rule 3 enforcement) — run after adding new entity instances (manifests, prose docs, bausteine), after schema changes, or before a refresh cycle to verify handlers will actually read what's declared |
 
-Slices 11-14 are **not part of the default round sequence** —
+Slices 11-15 are **not part of the default round sequence** —
 they're correctness-orthogonal. Run them when a phase boundary
 increases exposure on that axis (e.g., before Phase 1 corpus
 download = run slice 11 to confirm test coverage; before any
 multi-user deployment = run slice 12 for security; after a
 boundary-affecting refactor or before locking placement = run
-slice 14).
+slice 14; after schema changes that touch invalidation contracts
+or before a `research-references` refresh = run slice 15).
 
 If a round catches BLOCKERS, immediately run a verification pass
 (scope = changed files only) before declaring round complete.

@@ -217,12 +217,25 @@ list):
 | Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
 | External data | Per-project `_ai/state.md.lifecycle` declares phase + status; `roots.references_root` corpus carries `changelog.md`. |
 
-**Cross-cutting concern handler.** `research-references` is the
-canonical refresh skill: after fetching an updated reference, it
-scans both bausteine (`references[]`) and memory docs
-(`references_used[]`) for matches. Bausteine matching → flagged.
-Memory docs matching → logged to `memory/product-backlog.md` with
-affected paths.
+**Cross-cutting concern handler.** Contract reading is layered
+across two skills:
+
+- `research-references` is the *trigger*: after fetching an
+  updated reference, it scans both bausteine (`references[]`) and
+  memory docs (`references_used[]`) for matches. Bausteine
+  matching → flagged. Memory docs matching → logged to
+  `memory/product-backlog.md` with affected paths.
+- `validate-bausteine` is the *comparator*: it reads the
+  `references[].verified_against_version` field on flagged
+  bausteine and compares it against the current
+  `current_amendment_form` from the manifest, surfacing drift
+  for the user.
+
+The split is intentional — research-references detects *which*
+entities cite updated laws; validate-bausteine determines
+*whether each entity's cited form is still current*. Both flows
+are required to close the invalidation loop; neither alone
+suffices.
 
 **Frontmatter declares invalidation hooks.** Cross-cutting docs
 that name laws declare them in frontmatter:

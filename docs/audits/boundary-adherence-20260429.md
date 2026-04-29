@@ -168,7 +168,7 @@ schema + migration for office-config). None are 30-minute fixes.
 | Finding | Proposed canonical home | Trigger to build |
 |---|---|---|
 | 1a save-baustein dedupe | `dedupe_bausteine` MCP tool | When matching algorithm grows beyond title+tag (planned: HyDE paraphrase search via search_corpus over indexed bausteine) |
-| 2a `_infer_source_subtype` | `office-config.conventions.path_classification` block + config-driven classifier | Before first multi-deployment install OR before any deployment with non-default folder names |
+| 2a `_infer_source_subtype` | `office-config.conventions.path_classification` block + config-driven classifier | **RESOLVED in-session 2026-04-29.** Landed as purely-additive optional block in v3 (no schema bump). PathClassification Pydantic model + classifier consults config first, falls back to hardcoded patterns. |
 | 3a record-feedback frontmatter Edit | `record_baustein_use` MCP tool | When baustein frontmatter gains cross-reference structure (e.g., feedback_id linking) |
 
 ---

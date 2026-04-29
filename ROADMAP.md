@@ -95,12 +95,15 @@ a baustein. Until then, no baustein exists to migrate.
 deterministic logic that should move from skills into MCP tools,
 or from hardcoded Python into office-config. None are BLOCKERS;
 all are honestly defer-worthy (each requires schema + handler +
-tests for a new tool, or a config schema bump). Captured here
-rather than batched into a same-session fix to keep diff scope
-sane. See full audit at
+tests for a new tool). Captured here rather than batched into a
+same-session fix to keep diff scope sane. See full audit at
 `docs/audits/boundary-adherence-20260429.md`.
 
-**Sketch — three independent items**:
+The middle item (path_classification) was the highest-priority
+of the three and was landed in-session as a purely-additive v3
+optional block (no schema bump). Two remaining items below.
+
+**Sketch — two independent items**:
 
 - **`dedupe_bausteine` MCP tool**: dedupe procedure currently
   described in `save-baustein/SKILL.md` lines 65-75 (title + tag
@@ -109,18 +112,6 @@ sane. See full audit at
   trigger: when matching grows beyond title+tag (HyDE paraphrase
   search via search_corpus over indexed bausteine is already
   flagged as the next iteration).
-
-- **`office-config.conventions.path_classification`**: ingest.py
-  `_infer_source_subtype` (lines 182-226) hardcodes substring
-  patterns like `/_ai/snapshots/`, `/gesetze/bund/`,
-  `/bausteine/universal/`. Convention-correct per default layout
-  but not invariant across deployments (`.ai/` instead of `_ai/`,
-  flat `Gesetze-Bund/` instead of nested, etc.). Move classification
-  rules into office-config schema as a tunable block; bump v3 → v4.
-  Pull-forward trigger: before first multi-deployment install OR
-  before any deployment with non-default folder names. **Highest
-  priority of the three** because misclassification lands as silent
-  metadata in LanceDB (re-indexing cost post-ingest).
 
 - **`record_baustein_use` MCP tool**: `record-feedback/SKILL.md`
   lines 117-120 directs direct `Edit` of baustein frontmatter
@@ -131,6 +122,110 @@ sane. See full audit at
   owns frontmatter mutation with validation. Pull-forward trigger:
   when frontmatter gains cross-reference structure (e.g., feedback_id
   linking).
+
+### Manifest Pydantic models (from slice 15, 2026-04-29)
+
+**Why**: Audit slice 15's first run found that manifest YAMLs
+(references-manifest.yaml, doctypes.yaml) carry their meta-rule-3
+invalidation contracts (top-level `last_updated`, per-entry
+`last_fetched`, `checksum_sha256`) by author discipline only —
+no Pydantic model validates the structure at parse time. All 8
+currently-populated manifests honor the contract (verified by
+spot-check), but a future malformed manifest would slip through
+without a parse-time error.
+
+See full analysis at
+`docs/audits/invalidation-contract-20260429.md` finding F1.
+
+**Sketch**:
+
+- New `pbs_mcp/manifest_schema.py` (or fold into `schemas.py`):
+  - `ReferencesManifest` — top-level: required `version`, `scope`,
+    `scope_key`, `last_updated`, `maintainer`; optional
+    `categories` block.
+  - `ReferenceEntry` — per-entry: required `id`, `title`,
+    `source_url`, `fetch_method`, `canonical_path`; optional
+    `last_fetched`, `checksum_sha256`, `current_amendment_form`,
+    `notes`.
+  - `DoctypesManifest` — analogous shape for doctypes manifests.
+- Loader path: `config.py:all_references_manifests()` (or peer)
+  validates each manifest via Pydantic on load; raises descriptive
+  error if shape violates contract.
+- New MCP tool `validate_manifest(path) → list[Finding]` exposed
+  for explicit validation calls (used by `author-manifest` skill
+  and slice 15 re-runs).
+- Discovery tool's `ManifestInfo` response schema stays Optional
+  on contract fields — that's correct shape for graceful failure
+  reporting; validation is the loader's responsibility, not the
+  discovery tool's.
+
+**Pull-forward trigger**: before first multi-author manifest
+contribution OR before manifest-population grows past ~15 files
+where author-discipline visual checking stops scaling. PBS today
+has 8 manifests authored by one person; the visual check is
+trivial. Post-second-deployment, this becomes load-bearing.
+
+### Axis-2 (sparring) structural promotion (from target 8, 2026-04-29)
+
+**Why**: Design-review target 8's first run found that all 7
+VISION axis-2 (sparring) mechanisms are behavioral-only —
+counter-argument, confidence calibration, anti-sycophancy guard,
+asymmetric knowledge respect, etc. Only meta-rule 4's selective-
+friction calibration provides structural enforcement. This is
+exactly the LLM-inference surface area that
+`feedback_llm_instruction_tightness.md` warns about: brittle,
+drifts silently, high overhead each session. VISION names "answer
+machine" (axis-2 collapse) as one of three category-collapse
+risks; axis 2 today has zero structural defense against it.
+
+See full analysis at
+`docs/design-reviews/vision-arch-coupling-20260429.md` finding F1.
+
+**Sketch**:
+
+- New `sparring-output` MCP tool that validates output schemas
+  carry counter-argument + confidence + reasoning fields where
+  declared.
+- Skill Bundle convention: `validates_via: <tool-name>`
+  frontmatter declaration; `list_skills` returns it; orchestrator
+  wires the validation per skill phase.
+- Anti-sycophancy guard as deterministic check (heuristic — e.g.,
+  "did this response soften vs. the prior response on the same
+  question without new evidence?").
+- Confidence-metadata schema in skill outputs (high/medium/low
+  with required-when rules).
+- Goal: move 2-3 of the 7 axis-2 mechanisms from behavioral to
+  structural; the rest stay behavioral but with clearer skill-
+  body assertion-language.
+
+**Pull-forward trigger**: before any frontend that funnels through
+non-text UX (axis-2 collapse risk amplifies in button-driven
+interfaces per VISION's text-first reasoning); OR before
+multi-user / multi-deployment (each new consumer multiplies the
+LLM-inference cost of behavioral enforcement). Pre-launch is also
+defensible — design while the patterns are still cheap to evolve.
+
+### Unified audit trail — promotion decision pending
+
+**Why**: VISION's defensibility test ("user defends six months
+later") is an axis-3 load-bearer. Today the audit trail spans 6
+locations (decisions.md, snapshots/, changelog.md, git, manifests,
+module-decisions.md) with no query layer. User reconstructs
+manually.
+
+Audit trail unified tracking is already on ROADMAP further down
+under "Audit trail — unified change/decision/version tracking" —
+but with no pull-forward trigger. **Target 8 finding F2 is a
+v1-scope-decision call**: keep deferred (defensibility relies on
+manual assembly until ROADMAP lands), or pull forward to v1
+(unified Memory record subkind + query layer + integrate the 6
+existing scattered sources).
+
+See full analysis at
+`docs/design-reviews/vision-arch-coupling-20260429.md` finding F2.
+
+**Decision needed**: defer (status quo) vs. pull-forward to v1.
+If pull-forward, scope = multi-day. Awaiting user judgment.
 
 ### Pioneer-instance validation strategy
 

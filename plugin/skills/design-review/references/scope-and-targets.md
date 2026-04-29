@@ -6,7 +6,7 @@ Which subsystems get reviewed, and what files belong to each.
 
 ## Load-bearing first-run targets
 
-For full first-principles review, default scope is the **7
+For full first-principles review, default scope is the **8
 foundations** below. These are the subsystems from which
 everything else inherits shape. Wrong-shape there ripples through
 the system; wrong-shape in a leaf is local.
@@ -165,6 +165,77 @@ This target is **placement-soundness**, not declaration-correctness.
 Audit slice 14 catches mechanical violations of the rule as it
 stands; this target asks whether the rule itself is the right
 shape.
+
+### Target 8 — VISION ↔ ARCHITECTURE coupling (traceability)
+
+**Files**: `VISION.md` (whole file) + `ARCHITECTURE.md` (meta-rules
++ decision rules + maintenance discipline) + sample 3-4 ROADMAP
+items (test how vision principles translate to deferred work).
+
+**Why this matters most for the markdown layer**: most architectural
+enforcement happens through skill instructions (markdown), not
+deterministic Python. LLMs are smart enough to paper over weak
+instructions by inference — but that's brittle, expensive, and
+drifts silently as instructions evolve. Tight VISION→ARCHITECTURE
+→skill-body coupling is what turns the LLM layer from "guesses
+at intent" into "follows enforced contract." Pre-launch is the
+unique window to verify this coupling before behavioral debt
+accumulates.
+
+**Greenfield questions**:
+
+- For each VISION axis (intertwining, sparring, authorship
+  preservation), which architectural mechanisms in ARCHITECTURE.md
+  enforce it? Is the enforcement *structural* (meta-rule + entity
+  placement constrains it) or only *behavioral* (skill body says
+  "do X")? Behavioral-only enforcement is brittle — LLM has to
+  re-derive the constraint each session.
+- For each meta-rule, which VISION axis does it serve? Is the
+  service load-bearing and articulable, or does the meta-rule
+  float free of the vision (overhead candidate)?
+- Where VISION names a requirement (e.g., "anti-sycophancy guard,"
+  "counter-argument as first-class output," "selective friction
+  calibration"), is there an architectural mechanism that
+  operationalizes it, or is it a behavioral aspiration without
+  enforcement?
+- Are there VISION principles with no architectural enforcement?
+  Many axis-2 (sparring) requirements may be in this category —
+  sparring is partly behavioral, partly architectural. Greenfield:
+  which parts NEED architecture vs. which can stay as skill-body
+  conventions?
+- Are there meta-rules with no clear VISION coupling? If yes —
+  either the vision is incomplete OR the meta-rule is overhead
+  that snuck in for tidiness.
+- The "category-collapse risk" VISION names — does the architecture
+  have a structural defense against it, or only a vigilance-based
+  one (audit/design-review running periodically)?
+- The "trust + sparring + authorship" three-layer protection
+  framing in VISION — does ARCHITECTURE explicitly partition
+  mechanisms by which layer they protect, or is the partition
+  invisible?
+
+**Output expectation**:
+
+A bidirectional map:
+
+1. **VISION → ARCH**: each VISION-named mechanism (axis 1's six
+   intertwining requirements, axis 2's seven sparring requirements,
+   axis 3's five authorship requirements) listed with its
+   architectural enforcement: meta-rule, entity type, MCP tool,
+   or skill convention. Mark each as `structural` (architecture
+   constrains) or `behavioral` (skill body asserts) or `unenforced`
+   (no current backing).
+2. **ARCH → VISION**: each meta-rule + named convention listed
+   with the VISION axes it serves. Mark each as `load-bearing`
+   (axis would be unenforced without it), `supporting` (one of
+   several enforcers), or `floating` (no clear coupling — overhead
+   candidate).
+
+Findings are at the **placement-soundness** level: does the
+architecture actually deliver on the vision? Soundness, not
+compliance. Mirror of audit slice 14's relationship to design-
+review target 7 — but at the higher coupling tier (vision-
+architecture, not architecture-implementation).
 
 ---
 

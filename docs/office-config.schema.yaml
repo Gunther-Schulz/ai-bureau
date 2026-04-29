@@ -189,3 +189,38 @@ conventions:
     sent_versions: "Auslieferung/"
     correspondence: "Schriftverkehr/"
     toeb: "TöB/"
+
+  # OPTIONAL — substring-pattern classifiers for ingest source paths.
+  # Used by tools/ingest.py:_infer_source_subtype to assign metadata when
+  # writing to LanceDB. Override only if the office uses non-default folder
+  # names (e.g., `.ai/snapshots/` instead of `_ai/snapshots/`, or flat
+  # `Gesetze-Bund/` instead of nested `gesetze/bund/`). Partial override is
+  # supported — declared subtypes use config; the rest fall back to
+  # hardcoded patterns for the canonical layout.
+  #
+  # Within each source-type, subtypes are checked in YAML-declared order;
+  # first matching pattern wins. Order matters when one subtype's pattern
+  # is a superset of another's (e.g., `gesetz-state: [/gesetze/]` listed
+  # before `gesetz-bund: [/gesetze/bund/]` would swallow the latter).
+  #
+  # Per ARCHITECTURE.md meta-rule 4 + audit slice 14 finding 2a: this
+  # block lifts deployment-tunable classification logic out of hardcoded
+  # Python into deployment-overridable office config. Pre-launch addition
+  # in session 6; safe to omit entirely (purely additive — defaults match
+  # prior behavior).
+  path_classification:                          # optional; entire block
+    corpus:                                     # optional sub-block
+      # snapshot: ["/_ai/snapshots/", "/.ai/snapshots/"]
+      # correspondence: ["/correspondence/", "schriftverkehr"]
+    reference:                                  # optional sub-block
+      # gesetz-bund: ["/gesetze/bund/"]
+      # gesetz-eu: ["/gesetze/eu/"]
+      # gesetz-state: ["/gesetze/"]            # MUST come after bund/eu
+      # leitfaden: ["/leitfaeden/"]
+      # urteil: ["/urteile/"]
+      # beispiel: ["/beispiele/"]
+    baustein:                                   # optional sub-block
+      # universal: ["/bausteine/universal/"]
+      # domain: ["/bausteine/domain/"]
+      # state: ["/bausteine/state/"]
+      # project: ["/bausteine/projects/", "/_ai/bausteine/", "/.ai/bausteine/"]
