@@ -758,27 +758,50 @@ migration path" + commitment #10's HTTP MCP decision.
   (after data accumulates in one specific mode's shape) is
   expensive; designing it pre-RAG is cheap.
 
-- **The flexibility commitment**:
-  Three deployment modes the architecture must support without
-  refactoring:
-  - **Local** (current): stdio MCP, all persistence in local
-    files, no auth, single user. Gunther's daily PBS use; some
-    consulting clients who want their data on their own laptop.
-  - **Cloud-hosted**: HTTP MCP, all persistence in cloud
-    storage, auth required, multi-user-per-office. Consulting
-    clients who want a managed service. Cloud provider chosen
-    per client (Cloud Run / Fly.io / Render / managed K8s /
-    on-prem K8s).
-  - **Hybrid**: HTTP MCP with persistence split — some local
-    (per-user cache, sensitive working state), some cloud
-    (shared bausteine, audit trail, manifests). For clients
-    with strict compliance requirements where some data can't
-    leave premises but other data can.
+- **The flexibility commitment** (Tiers 1-2 of the deployment
+  ladder; Tier 3 is archetype change, documented separately):
 
-  All three run the same backend code. The transport layer
-  (stdio vs HTTP), persistence layer (local files vs cloud
-  storage vs hybrid), and auth layer (off vs API key vs OAuth
-  vs A2A signed agent cards) are pluggable.
+  This commitment prepares the architecture to support both
+  **Tier 1 (Local)** and **Tier 2 (Cloud-hosted)** without
+  refactoring — the two tiers that share the same archetype
+  (single-big-model orchestration). Tier 3 (Gemini Enterprise,
+  multi-agent A2A archetype) is a separate refactor documented
+  in ROADMAP v2 "Gemini Enterprise migration path."
+
+  Three deployment modes within Tiers 1-2:
+
+  - **Tier 1 — Local** (baseline): stdio MCP, all persistence
+    in local files, no auth, single user. Gunther's daily PBS
+    use; consulting clients who want their data on their own
+    machine.
+  - **Tier 2 — Cloud-hosted**: HTTP MCP, all persistence in
+    cloud storage, auth required, multi-user-per-office.
+    Typical consulting deployment — managed service,
+    cross-device, EU-region for German clients, cloud-managed
+    backups. Cloud provider chosen per client (Cloud Run /
+    Fly.io / Render / managed K8s / on-prem K8s — case-by-case).
+  - **Tier 2.5 — Hybrid**: HTTP MCP with persistence split —
+    some local (per-user cache, sensitive working state), some
+    cloud (shared bausteine, audit trail, manifests). For
+    compliance-strict clients where some data can't leave
+    premises.
+
+  All three modes run the **same backend code** — same single-
+  big-model archetype. Only the transport, persistence, and
+  auth layers differ. Pluggable interfaces:
+
+  - Transport: stdio vs HTTP
+  - Persistence: local files vs cloud storage vs per-entity
+    hybrid routing
+  - Auth: none vs API key vs OAuth vs A2A signed agent cards
+
+  **Tier 3 (Gemini Enterprise) is intentionally NOT in this
+  commitment's scope** — it requires orchestrator decomposition,
+  A2A message-passing as PRIMARY (not internal-shape-only),
+  Memory Bank as state service, Agent Identity infrastructure.
+  Substantial refactor (3-6 months estimated). Triggered by
+  enterprise-scale need (1000+ users, federated authority,
+  regulatory governance) — see v2 entry for trigger conditions.
 
 - **What "local Claude install + flexible backend" enables**:
   - Local backend: Gunther's offline-capable, free, fast
@@ -2081,18 +2104,37 @@ others to copy"). That pivot is acceptable — the underlying
 discipline (meta-rules, fail-closed, three-axis VISION, etc.) was
 worth doing for PBS-the-instance regardless.
 
-### Gemini Enterprise migration path (multi-agent A2A archetype)
+### Gemini Enterprise migration path (multi-agent A2A archetype) — Tier 3 of deployment ladder
 
 **Why this is in the roadmap**: persistence of the option, not
-commitment to use it. PBS today is built on a **single-big-model
-orchestration archetype** (one Opus session orchestrates all
-departments via skill delegation; shared state in `state.md`;
-local Python MCP backend; meta-rules + fail-closed for governance).
-This archetype is the right fit for solo-practitioner / small-team
-scale. **If scalability or federation needs ever arise, a
-migration path to Gemini Enterprise's multi-agent A2A archetype
-exists** — and the load-bearing IP (domain content + architectural
-discipline) ports over.
+commitment to use it. **This is Tier 3** of the three-tier
+deployment ladder; Tiers 1-2 are covered by pre-RAG commitment
+#13 (deployment-mode flexibility within our archetype).
+
+**The three-tier deployment ladder**:
+
+| Tier | Archetype | Deployment shape | Triggered by |
+|---|---|---|---|
+| **1 — Local** | Single-big-model orchestration | stdio MCP, local files, no auth, single user | Default for solo / small clients wanting data on their machine |
+| **2 — Cloud-hosted container** | **Same archetype** as Tier 1 | HTTP MCP, cloud storage, auth, multi-user per office | Most consulting clients — managed service, cross-device |
+| **3 — Gemini Enterprise** | **Different archetype** (multi-agent A2A) | N agents communicating via A2A, Memory Bank, Agent Identity, Agent Gateway | Enterprise scale (1000+ users, federated authority, regulatory governance, cross-org workflows) |
+
+**Tier 1 ↔ Tier 2** = same archetype, different deployment.
+Pluggable transport/persistence/auth layers. Same codebase.
+Commitment #13 prepares this — pre-RAG.
+
+**Tier 2 → Tier 3** = **archetype change**. Orchestrator
+decomposes into N agents. A2A becomes PRIMARY (not
+internal-shape-only). Memory Bank replaces state.md. Agent
+Identity becomes governance layer. **Substantial refactor**
+(3-6 months estimated). This entry is the documented option for
+when that need arises.
+
+PBS today is built on the single-big-model archetype (Tiers 1-2).
+**If scalability or federation needs ever arise, a migration path
+to Gemini Enterprise's multi-agent A2A archetype exists** — and
+the load-bearing IP (domain content + architectural discipline)
+ports over.
 
 **When this might pull forward** (probably never, possibly
 someday):

@@ -227,14 +227,23 @@ Session 16+:  #6 → #7 → #9 → #8                               per existing
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus
 ```
 
-**Note on commitment #13**: the architectural commitment is
-**deployment-mode flexibility**, not picking a specific mode.
-Three modes supported without refactoring: local (stdio,
-local files, no auth — Gunther's offline-capable use), cloud-
-hosted (HTTP MCP, cloud storage, auth, multi-user — typical
-consulting deployment), hybrid (per-entity persistence routing —
-compliance-strict clients). Per-deployment choice is case-by-case.
-Pre-RAG output: pluggable persistence + auth + transport
+**Note on commitment #13** — three-tier deployment ladder:
+
+| Tier | Archetype | When | Pre-RAG #13 prepares? |
+|---|---|---|---|
+| 1 — Local | Single-big-model | Solo / on-laptop clients | ✅ |
+| 2 — Cloud-hosted container | **Same archetype** | Most consulting deployments | ✅ |
+| 3 — Gemini Enterprise | **Different archetype** (multi-agent A2A) | Enterprise scale (1000+ users, federated, regulatory) | ❌ — separate ROADMAP v2 entry; activates if need arises |
+
+**Tier 1 ↔ Tier 2** = same archetype, only transport/persistence/
+auth layers differ. Same backend code. Pluggable layers.
+
+**Tier 2 → Tier 3** = archetype change (orchestrator
+decomposition, A2A as primary, Memory Bank, Agent Identity).
+Substantial refactor (3-6 months). Documented in ROADMAP v2
+"Gemini Enterprise migration path."
+
+Pre-RAG output of #13: pluggable persistence + auth + transport
 abstractions, decision record, Dockerfile/HTTP skeleton.
 Implementation of full cloud / hybrid backends is post-RAG.
 
