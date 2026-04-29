@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.10 (post-session-8 + A2A-shape compatibility + actor_kind discrimination)**.
+Status: **v0.11 (post-session-9 + office-vs-department modularization resolved)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -83,6 +83,26 @@ Status: **v0.10 (post-session-8 + A2A-shape compatibility + actor_kind discrimin
   receives a load-bearing constraint: must be event-shaped, not
   call-shaped — preserves transport-swap-to-A2A path for #12. See
   `docs/decisions/a2a-and-gemini-pattern-emulation.md`.
+- **v0.10 → v0.11**: **Office-vs-department modularization resolved**
+  (open question from v0.9). Office is the container; departments
+  are capability areas (PBS = office with one department today,
+  planning-document-work; future Schulz adds PM + invoicing).
+  Skills declare `department:` frontmatter (REQUIRED, no default —
+  matches `actor_kind` strict-validation discipline); office-level
+  skills declare `department: office`. Memory taxonomy gains a 4th
+  orthogonal axis (department), opt-in per entry. Cross-department
+  coordination via AuditEvent + extended watch-list with per-
+  department `event_subscriptions:` (no new event mechanism —
+  subsumes via existing audit infrastructure). ProjectState gains
+  `departments_active: list[str]` field for routing + audit-filter
+  purposes. Skills are singleton-department; multi-department
+  coordination via office-level orchestrating skills. Offices have
+  0..N departments (zero-department = single-skill-utility shape;
+  PBS-today = single-department; future Schulz = multi-department).
+  Per-department phase/lifecycle on ProjectState deferred to #9
+  (Pattern-vs-instance split, still pre-RAG); office-config schema
+  bump + skill frontmatter sweep deferred to #11. See
+  `docs/decisions/office-vs-department.md`.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -283,11 +303,16 @@ the reasoning pass + best-effort split implementation + PBS
 regression validation are bundled as one work stream, scheduled
 before Phase 1 corpus download.
 
-### Office-vs-department distinction (open architectural question)
+### Office-vs-department distinction (resolved session 9 per #12)
 
 **Problem surfaced session 7 (after partner-built plugin
-comparison)**: the term "office" in PBS-bureau is used for
-two distinct things that should be separated:
+comparison)**, **resolved session 9** per
+`docs/decisions/office-vs-department.md`. This section captures the
+architectural distinction; the decision record carries the full
+per-question reasoning + downstream constraints + defers.
+
+The term "office" in PBS-bureau was used for two distinct things
+that needed separation:
 
 - **Department**: a single capability area with its own
   workflow, doctypes, memory, and external authorities. Examples:
@@ -317,31 +342,62 @@ invoicing. Other PBS-shaped offices would have similar shapes.
   research lab office contains {research, grant-management,
   lab-operations}.
 - Office-config.yaml gains `departments.<name>` sections.
-- Skills gain a `department:` frontmatter field; orchestrator
-  routes via department + skill specialization.
-- Memory taxonomy: scope-orthogonality (universal × domain ×
-  state × project) may gain a department axis, OR the domain
-  axis forks per department. Open question.
-- Cross-department workflows: lifecycle events trigger reactions
-  across departments (e.g., "Begründung sent to UNB" triggers
-  invoicing department to ask "should we invoice this milestone?").
-- AI-office-builder (v2) generates *multi-department* offices,
-  not single-department plugins. The builder's domain spec input
-  includes department composition + per-department config +
-  integration spec.
+- Skills gain a `department:` frontmatter field (REQUIRED, no
+  silent default per strict-validation discipline); office-level
+  skills declare `department: office`.
+- Memory taxonomy gains a 4th orthogonal axis: scope-orthogonality
+  becomes (universal × domain × state × department), opt-in per
+  entry. Most existing entries stay in the original 3 cells;
+  department-specific entries declare the 4th.
+- Cross-department workflows are **event-shaped, not call-shaped**
+  (per Row 4 of `a2a-and-gemini-pattern-emulation.md`). Each
+  department declares `event_subscriptions:` in
+  `extensions/department/<dept>/department.yaml`; orchestrator's
+  watch-list extends to filter by subscription + exclude self-
+  emitted events. No new event mechanism — reuses AuditEvent
+  infrastructure.
+- ProjectState gains `departments_active: list[str]` field for
+  routing + audit-filter purposes. Gate-mediated update via
+  `record_audit_event` (logic deferred to #6 retrofit).
+- Skills are **singleton-department**; multi-department coordination
+  via office-level orchestrating skills.
+- Offices have **0..N departments** — zero (single-skill utility),
+  one (PBS today, brand-voice partner-built plugin), or many
+  (Schulz future, hypothetical legal/research/medical offices).
+- AI-office-builder (v2) generates offices with whatever department
+  composition the domain spec declares. Per-domain spec input
+  includes department list + per-department config + integration
+  spec.
 
-**Why this matters now (pre-RAG)**: same logic as commitments
-#9 (pattern-vs-instance split) and #10 (A2A schema gate).
-Schemas designed pre-RAG without department-awareness will need
-expensive refactor once data accumulates. Pre-RAG is the unique
-cost-cheap window. The actual structural design is its own
-discussion (pre-RAG commitment #12 in `ROADMAP.md`); this
-section captures the open question so it isn't lost.
+**Pattern-vs-instance limitation surfaced**: project-as-long-running-
+entity is PBS-instance, not pattern-universal. Some offices
+(brand-voice, single-skill utilities) have no project entity.
+Architecture supports both project-having and project-less offices.
+Constraint passed to #9 (Pattern-vs-instance split): ProjectState
+core/extension split should make the project entity itself an
+opt-in extension, not a pattern-level mandatory.
+
+**What's deferred and where** (per `office-vs-department.md`):
+- Per-department phase tracking (`phases: dict[str, str]`) and
+  per-department lifecycle (`lifecycle: dict[str, Lifecycle]`) →
+  #9 (Pattern-vs-instance split, still pre-RAG).
+- Office-config `departments.<name>` schema bump + migration → #11
+  (Cowork integration, co-located with `pbs.local.md` migration).
+- Skill frontmatter `department:` sweep across all 19+ skills → #11.
+- `extensions/department/<dept>/department.yaml` event_subscriptions
+  file format implementation → #11.
+- `integrate-department <slug>` skill creation → #11.
+- `record_audit_event` gate-side `departments_active` update logic
+  + `query_audit_trail` `department:` filter → #6 (audit-trail v2
+  retrofit).
+- `search_corpus` `department_filter:` arg → Phase 1 corpus work.
 
 **Connection to brand-voice comparison**: brand-voice is a
-single-department plugin. PBS today is one-department-with-
-office-scaffolding. Neither is a multi-department office.
-Articulating the gap is the prerequisite for closing it.
+single-department plugin (in our framing: one department, all
+skills declare `department: brand-voice`, no cross-department
+coordination needed since N=1). PBS today is also a single-
+department office (planning-document-work). The pattern handles
+N=0/1/many uniformly.
 
 ---
 
@@ -475,7 +531,7 @@ list):
 | Memory (audit-log) | Append-only `<project>/_ai/audit-trail.jsonl` per docs/decisions/audit-trail-v2.md (single-write supersedes v1's dual-write). Each `AuditEvent` carries `id`, `timestamp`, `kind`, `actor`, `actor_kind` (human/skill/external_agent per a2a-and-gemini-pattern-emulation.md), `actor_card?`, `origin_agent_card?`, `sources[]`. Events never invalidate (immutable history); `causes[]` chain captures supersession. `query_audit_trail` is the canonical query layer; `render_audit_trail` produces prose views from queries. Skills call `record_audit_event` (or `record_decision` for legal-defense provenance via `decisions.md` mirror — gate-mediated). Per the strict-validation discipline, `actor_kind` is required; `external_agent` events MUST name `origin_agent_card`. |
 | Backend | Python imports + Pydantic schemas; restart MCP server after changes. No declarative invalidation hook. |
 | Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
-| External data | Per-project `_ai/state.md.lifecycle` declares phase + status; `roots.references_root` corpus carries `changelog.md`. |
+| External data | Per-project `_ai/state.md.lifecycle` declares phase + status (today single-valued — per-department `phases: dict` + `lifecycle: dict` deferred to #9 per `office-vs-department.md` D1+D2). `_ai/state.md.departments_active: list[str]` (added v0.11 per #12) declares which departments have engaged with this project; gate-mediated update via `record_audit_event` (logic deferred to #6). `roots.references_root` corpus carries `changelog.md`. |
 
 **Cross-cutting concern handler.** Contract reading is layered
 across two skills:
@@ -688,15 +744,16 @@ testability benefit at near-zero cost.
 
 ---
 
-# Layering convention: scope orthogonality (universal × domain × state)
+# Layering convention: scope orthogonality (universal × domain × state × department)
 
 (Demoted from meta-rule in v0.5 per design-review. It's a
 *layering pattern* applied to specific entity types, not a placement
 axis itself — it doesn't answer "where does this go?", it answers
-"once you know it's the kind of thing that layers, which subdirectory?".)
+"once you know it's the kind of thing that layers, which subdirectory?". Extended in v0.11 with the department axis per #12.)
 
-Reference content, doctype registries, skeletons, and bausteine all
-decompose along the same three orthogonal axes:
+Reference content, doctype registries, skeletons, bausteine, and
+department-specific configuration all decompose along **four**
+orthogonal axes:
 
 - **universal** — applies to every German Planungsbüro deploying
   this app, regardless of planning domain or Bundesland.
@@ -705,38 +762,52 @@ decompose along the same three orthogonal axes:
   Multiple domains can be active simultaneously.
 - **state** — applies to bureaus working in a specific Bundesland
   (BB, BW, BY, ..., TH). Multiple states can be active simultaneously.
+- **department** *(added v0.11 per #12)* — applies to a specific
+  capability area within an office (planning, project-management,
+  invoicing, brand-voice, legal-work, etc.). Opt-in per entry —
+  most existing entries stay in the original 3 axes; department-
+  specific entries declare the 4th. Multiple departments can be
+  active simultaneously per office.
 
-A bureau's effective content is its `(domains × states)` selection
-(set in `office-config.yaml > scope.{domains,states}`). Layered
-loaders merge the universal layer with each selected domain/state
-layer at runtime.
+A bureau's effective content is its `(domains × states × departments)`
+selection (set in `office-config.yaml > scope.{domains,states}` and
+`departments.<name>`). Layered loaders merge the universal layer
+with each selected domain/state/department layer at runtime.
 
 **Where this applies:**
 
-- **References manifests**: `extensions/{universal,domain/<X>,state/<X>}/references-manifest.yaml`
-- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>}/doctypes.yaml`
+- **References manifests**: `extensions/{universal,domain/<X>,state/<X>,department/<X>}/references-manifest.yaml`
+- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>,department/<X>}/doctypes.yaml`
 - **Skeletons**: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
-- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`
+- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>,department/<X>}/<name>.md`
 - **Office-style overlays**: `plugin/templates/office-style/office-style.{default,<DOMAIN>}.sty`
+- **Department config** *(added v0.11)*: `extensions/department/<X>/department.yaml` (event_subscriptions + per-department metadata; spec'd in `office-vs-department.md`, implementation deferred to #11)
 
 **Hard rules for placing layered content:**
 
 - Decide the scope BEFORE the path. Ask: does this apply to every
   German bureau (universal), every bureau in this domain (domain),
-  every bureau in this state (state)?
+  every bureau in this state (state), or only this department
+  (department)?
 - A baustein has exactly one scope. If a candidate baustein applies
   to multiple, either promote it up the layer (`universal` if truly
-  cross-domain) or split it.
+  cross-domain-cross-department) or split it.
 - An entry's home is independent of who created it.
+- Most universal/domain/state content is department-agnostic — it
+  applies across departments. Only declare a `department/<X>` cell
+  when content is genuinely department-specific (invoicing-billing-
+  templates, PM-deadline-conventions).
 
 **Out of scope (entity types this convention doesn't apply to):**
 Skill Bundles, Backend, External Data — none of these layer along
-(universal × domain × state). Configuration partially applies (its
-manifest tree under `extensions/` does; the office-config file
-itself doesn't).
+the scope axes. Configuration partially applies (its manifest tree
+under `extensions/` does; the office-config file itself doesn't).
+Skills declare `department:` in frontmatter (per #12) but skill
+*bundles* themselves don't layer along the 4 axes — they're
+discovered by their bundle path, not via layered loader merge.
 
-**The `author-manifest` skill** scaffolds new domain or state
-manifests for scopes that don't yet have content.
+**The `author-manifest` skill** scaffolds new domain, state, or
+department manifests for scopes that don't yet have content.
 
 ---
 

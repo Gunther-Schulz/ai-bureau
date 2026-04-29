@@ -598,54 +598,60 @@ context" section.
     Anthropic structures domain-specific vs domain-agnostic
     elements informs our split.
 
-**12. Office-vs-department modularization** (session 7, post-
-partner-built-comparison insight) — see `ARCHITECTURE.md`
-"Office-vs-department distinction" + companion to commitments
-#9 (pattern-vs-instance split) and #11 (Cowork runtime).
+**12. Office-vs-department modularization** — see
+`docs/decisions/office-vs-department.md`.
 
-- **The insight**: PBS-bureau today conflates "office" with
-  "single department" (planning-document-work). A real Schulz
-  Planungsbüro has at least three departments: planning-document-
-  work + project-management (PM) + invoicing. Other PBS-shaped
-  offices follow the same pattern. Anthropic's brand-voice plugin
-  is a single-department plugin; we're trying to be a
-  multi-department office.
-- **Why pre-RAG**: schemas + skill conventions designed without
-  department-awareness will need expensive refactor once data
-  accumulates. Same logic as #9 (pattern-vs-instance) and #10
-  (A2A schema gate). Pre-RAG is the unique cost-cheap window.
-- **Scope** — primarily a design + discussion session, not
-  heavy implementation. Outputs:
-  - **Decision record**: `docs/decisions/office-vs-department.md`
-    capturing the architectural distinction + chosen
-    implementation approach.
-  - **Skill frontmatter convention**: add `department: <slug>`
-    field; orchestrator routes via department + skill.
-  - **Office-config schema**: gain `departments.<name>` sections;
-    each department declares its scope, doctypes, actors, etc.
-  - **Memory taxonomy decision**: does scope-orthogonality gain
-    a department axis (universal × domain × state × project ×
-    department)? Or does the domain axis fork per department?
-    Open question; #12 produces the decision.
-  - **Cross-department workflow patterns**: lifecycle events
-    triggering reactions across departments (e.g., "Begründung
-    sent to UNB" → invoicing department asks "should we invoice
-    this milestone?"). Document the pattern; don't necessarily
-    implement multiple departments in this session.
-  - **Setup integration**: how a multi-department office gets
-    set up — extends `setup-office` to scaffold chosen
-    departments, OR a new `integrate-department` skill. Connects
-    to AI-office-builder (v2 vision).
-- **Method**: examine current PBS skills; classify each as
-  office-level scaffolding vs department-of-planning-work; design
-  the explicit boundary; specify how PM + invoicing departments
-  would slot in; produce decision record.
-- **Order**: execute SECOND in pre-RAG queue (after #10 A2A
-  decision; before #11 Cowork integration). #10 informs whether
-  departments should be A2A-shape agents internally; #11 needs
-  department-aware namespacing + frontmatter. Doing #11 first
-  means redoing slash command names + skill frontmatter once
-  #12 lands.
+- ✅ **Done session 9**: per-question decisions across skill
+  classification, memory 4th axis, cross-department coordination
+  shape, office-config schema additions, setup integration,
+  pattern-vs-instance check. ProjectState gains `departments_active:
+  list[str]` field (additive Pydantic addition, smoke-tested).
+  Skills are singleton-department; offices have 0..N departments;
+  cross-department coordination via AuditEvent + extended
+  watch-list with per-department `event_subscriptions:` (no new
+  event mechanism — reuses existing audit infrastructure).
+- ✅ **ARCHITECTURE.md** v0.10 → v0.11: office-vs-department
+  open-question section converted to resolved; meta-rule 3
+  invalidation table updated for ProjectState; scope-orthogonality
+  layering convention extended to 4 axes (department added).
+- **Constraints recorded for downstream commitments**:
+  - **#11 (Cowork integration)**: skill frontmatter `department:`
+    sweep across 19+ skills (REQUIRED, no default per strict-
+    validation discipline); slash commands namespaced
+    (`/<dept>:<skill>`); office-config `departments.<name>`
+    schema bump + migration co-located with `pbs.local.md`
+    migration; `extensions/department/<dept>/department.yaml`
+    file format implementation; `integrate-department` skill
+    creation.
+  - **#6 (audit-trail v2 retrofit)**: `record_audit_event`
+    gate-side `departments_active` update logic + skill→department
+    cached registry; `query_audit_trail` `department:` filter.
+    Skill retrofits set both `actor_kind` (per #10) AND pass
+    `department:` arg to memory tooling (per #12).
+  - **#9 (Pattern-vs-instance split)**: ProjectState core/extension
+    split MUST handle per-department phase tracking
+    (`phases: dict[str, str]`) and per-department lifecycle
+    (`lifecycle: dict[str, Lifecycle]`) — today's single-valued
+    `phase`/`lifecycle` are PBS-instance assumptions. Project-as-
+    long-running-entity itself is PBS-instance; ProjectState core/
+    extension split should make project entity an opt-in
+    extension (some offices have no project entity, e.g.
+    brand-voice).
+  - **#14 (Memory Bank)**: `search_memory` interface accepts
+    `department:` filter (defaults to calling-skill's department);
+    LanceDB memory index includes department metadata for filter
+    queries.
+  - **Phase 1 corpus work**: `search_corpus` gains optional
+    `department_filter:` (defaults to calling-skill's department;
+    overrideable for cross-department search).
+- **Deferred items** (with proper-home identification per
+  decision record):
+  - Per-department phase tracking on ProjectState → #9
+  - Per-department lifecycle on ProjectState → #9
+  - Migration of existing state.md to multi-dept-aware shape →
+    first-bind moment (academic today; zero projects bound)
+- **Scope**: ~1 session (as planned) — primarily design + decision
+  record + 1-line ProjectState schema addition.
 
 **13. Deployment-mode flexibility architecture** (session 7,
 post-Cowork-research insight) — see ROADMAP v2 "Gemini Enterprise
@@ -999,12 +1005,11 @@ Grounding architecture pattern).
   swap full-load for selective retrieval transparently when
   this commitment lands.
 
-**Recommended next-session order** (revised session-8
-post-followup — adds #14 alongside Phase 1):
+**Recommended next-session order** (revised post-session-9):
 
 ```
 Session 8:    #10 (A2A + Gemini emulation gate)          1 session   ✅ DONE
-Session 9:    #12 (department modularization design)     1 session
+Session 9:    #12 (department modularization design)     1 session   ✅ DONE
 Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
 Session 14-16: #13 (deployment flex + Coolify ref dep)   2-3 sessions
 Session 17+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)

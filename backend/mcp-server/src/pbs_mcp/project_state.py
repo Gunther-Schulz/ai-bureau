@@ -128,6 +128,14 @@ class ProjectState(StrictModel):
     deadlines: list[Deadline] = Field(default_factory=list)
     linked_projects: list[str] = Field(default_factory=list)
 
+    # === Department engagement ===
+    # Per docs/decisions/office-vs-department.md (#12): departments that have
+    # engaged with this project. Empty default = no department has engaged yet.
+    # Gate-mediated update via record_audit_event (deferred to #6 retrofit):
+    # when an event's actor_card is in skills_in_dept, gate atomically appends
+    # the department to this list if not present.
+    departments_active: list[str] = Field(default_factory=list)
+
     # === Plan content (optional) ===
     geltungsbereich_ha: float | None = None
     geltungsbereich_solar_ha: float | None = None
