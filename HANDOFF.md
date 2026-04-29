@@ -220,8 +220,8 @@ deployment added):
 Session 8:    #10 (A2A + Gemini emulation gate)               1 session
 Session 9:    #12 (department modularization design)          1 session
 Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 14-15: #13 (deployment-mode flexibility design)       1-2 sessions
-Session 16+:  #6 → #7 → #9 → #8                               per existing queue
+Session 14-16: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
+Session 17+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus
@@ -243,9 +243,26 @@ decomposition, A2A as primary, Memory Bank, Agent Identity).
 Substantial refactor (3-6 months). Documented in ROADMAP v2
 "Gemini Enterprise migration path."
 
-Pre-RAG output of #13: pluggable persistence + auth + transport
-abstractions, decision record, Dockerfile/HTTP skeleton.
-Implementation of full cloud / hybrid backends is post-RAG.
+**Pre-RAG output of #13** (expanded session-7 final to be
+deployment-ready, not just design-ready):
+- Pluggable persistence + auth + transport abstractions
+- Decision records: deployment-mode-flexibility +
+  user-identity-and-multi-user
+- Multi-user readiness: User Pydantic model, AuditEvent.user_id
+  field, optimistic locking on ProjectState.lock_version,
+  idempotency on save_baustein / bind_project, atomic
+  record_decision
+- **Reference Coolify deployment for Schulz Planungsbüro** —
+  Dockerfile + docker-compose / Coolify spec + auth setup +
+  end-to-end test with Gunther + colleague both connected,
+  both writing audit events, correct attribution, no race
+  conditions
+- Scope: 2-3 sessions (was 1-2; expanded for Coolify reference
+  deployment + working two-user end-to-end test)
+
+Implementation of additional cloud backends (CloudObject for
+non-Coolify clients), additional auth modes, migration tools,
+hardening — post-RAG.
 
 **Why #10 first**: smallest commitment (~half-day to 1 session,
 decision + minor schema additions). Informs every downstream

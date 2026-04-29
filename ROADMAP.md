@@ -813,7 +813,12 @@ migration path" + commitment #10's HTTP MCP decision.
     Cowork). The local install never carries the backend
     weight; it's always just the client.
 
-- **Concrete decisions for the gate** (1-2 sessions design):
+- **Concrete decisions for the gate** (2-3 sessions; pre-RAG
+  must be deployment-ready for Schulz Planungsbüro Tier-2 use
+  with Gunther + colleague on shared backend):
+
+  **Layer abstractions (must support all three deployment
+  modes):**
   - **Transport layer abstraction**: backend exposes both stdio
     (in-process) and HTTP (long-running service). Same handlers,
     different transports. Already adopted via #10's HTTP MCP
@@ -829,30 +834,82 @@ migration path" + commitment #10's HTTP MCP decision.
       separate
   - **Auth layer abstraction**: pluggable auth modes. None
     (local), API key, OAuth, A2A signed agent cards.
-  - **Compute infrastructure**: NOT decided pre-RAG (per-
-    deployment decision). The architecture supports
-    containerized deploy on any IaaS / PaaS. Initial
-    Dockerfile + HTTP MCP skeleton ships as proof-of-shape;
-    actual cloud deployment chosen per consulting engagement.
-  - **Migration tools**: between deployment modes (local ↔
-    cloud, cloud-A ↔ cloud-B, etc.). Bidirectional,
-    well-tested. So a client can start local, migrate to cloud
-    as they grow, migrate to a different cloud if needed.
-  - **Cost model for consulting deployments**: NOT decided
-    pre-RAG. Per-engagement decision based on client size +
-    compliance + budget. Architecture doesn't constrain the
-    pricing model.
-- **Output**: decision record `docs/decisions/deployment-mode-
-  flexibility.md` documenting the abstraction interfaces +
-  trade-offs per mode + decision tree for choosing modes per
-  engagement. Plus minimum-viable proof-of-shape: Dockerfile +
-  HTTP MCP skeleton + persistence-layer interface design.
+
+  **Multi-user readiness (pre-RAG required for Tier 2)**:
+  - **User identity + attribution scheme**: every audit event,
+    baustein use, decision-record entry, lifecycle transition
+    needs correct user attribution. Required:
+    - Authentication mechanism that identifies the user per
+      MCP request (likely API token per user via Coolify SSO,
+      OAuth, or signed agent cards from A2A pattern in #10)
+    - `User` Pydantic model with id + display name + role
+      (member of which practice)
+    - AuditEvent gains `user_id` field (additive; was generic
+      `actor` string before — now first-class)
+    - Bausteine `successful_uses[]` / `rejected_uses[]` entries
+      gain `user_id` per record
+    - decisions.md entries auto-attributed to invoking user
+  - **Concurrent access patterns**: when two users hit the same
+    backend simultaneously, schemas + handlers must avoid
+    races. Required:
+    - State.md updates: optimistic locking via `lock_version`
+      field on ProjectState (incremented per write; read-modify-
+      write checks expected version, retries on mismatch)
+    - Audit trail: append-only with monotonic event IDs (already
+      designed; just verify no race in `record_audit_event`)
+    - Bausteine dedup: idempotent save_baustein with content-
+      hash based identity (already partly designed; verify race
+      handling)
+    - `bind_project`: idempotent (already noted in code; verify)
+    - `record_decision` (audit-trail-v2): write decisions.md +
+      audit event in same transaction (atomic at backend; not
+      partial)
+
+  **Reference deployment platform**:
+  - **Coolify as Tier-2 reference deployment**: Schulz
+    Planungsbüro will run on Coolify (existing infrastructure;
+    Docker-native; HTTPS via Let's Encrypt; user is already
+    operator). Pre-RAG output includes:
+    - Dockerfile for pbs_mcp HTTP MCP server
+    - docker-compose / Coolify-deploy spec for the full stack
+      (HTTP MCP + vector store container + object store
+      container + embedding service container)
+    - Reference `pbs.local.md` config showing OAuth /
+      authentication setup against Coolify SSO
+    - End-to-end deployment guide (deploy on Coolify, configure
+      Cowork `.mcp.json`, smoke-test)
+    - **Working two-user deployment** with Gunther + colleague
+      both connected, both writing audit events, both using
+      bausteine, with correct attribution + no concurrent-write
+      drift.
+
+  **Deferred to post-RAG**:
+  - Compute infrastructure choice for OTHER consulting clients
+    (per-deployment decision; Coolify is just Schulz's
+    reference; clients may use Cloud Run / Fly.io / their own
+    K8s / etc.). Architecture supports any.
+  - Migration tools (between deployment modes / clouds).
+    Bidirectional, well-tested. Implement as needed.
+  - Cost model for consulting deployments (per-engagement).
+- **Output**:
+  - Decision record `docs/decisions/deployment-mode-
+    flexibility.md` — abstraction interfaces + per-mode
+    trade-offs + decision tree for per-engagement choices
+  - Decision record `docs/decisions/user-identity-and-multi-
+    user.md` — user identity scheme + concurrent access
+    patterns + auth mechanism choice
+  - Working Coolify deployment: Dockerfile + docker-compose +
+    Coolify-deploy spec
+  - End-to-end test: Schulz Planungsbüro on Coolify, two users
+    (Gunther + colleague), both connected, both writing audit
+    events, correct attribution, no race conditions
 - **Scope**:
-  - Pre-RAG: design + decision record + abstraction interfaces +
-    Dockerfile/HTTP skeleton (1-2 sessions)
-  - Post-RAG: full implementations of each backend (CloudObject,
-    Hybrid), auth modes, migration tools, end-to-end testing
-    of each mode (3-5 sessions, post-launch)
+  - Pre-RAG: 2-3 sessions (was 1-2; expanded for multi-user
+    readiness + Coolify reference deployment + working
+    end-to-end test)
+  - Post-RAG: additional cloud backends (CloudObject for
+    non-Coolify clients), additional auth modes, migration
+    tools, hardening (3-5 sessions, post-launch as needed)
 - **Order note**: execute FOURTH in pre-RAG queue (after
   #10/#12/#11). Reason: needs #11's plugin shape decisions
   (Cowork integration) settled, but the persistence-layer
@@ -927,8 +984,8 @@ late insight + A2A pull-forward + cloud deployment addition):
 Session 8:    #10 (A2A + Gemini emulation gate)          1 session
 Session 9:    #12 (department modularization design)     1 session
 Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
-Session 14-15: #13 (cloud deployment architecture)       1-2 sessions
-Session 16+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 14-16: #13 (deployment flex + Coolify ref dep)   2-3 sessions
+Session 17+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
 ```
 
 The reasoning:
