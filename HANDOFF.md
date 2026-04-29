@@ -204,19 +204,42 @@ Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
   first-write through loader).
 - `author-manifest` + `setup-office` skill retrofits.
 
-**#9 — Pattern-vs-instance best-effort split**:
-- ProjectState core/extension split.
-- **Per #12 constraint**: per-department phase tracking
-  (`phases: dict[str, str]`) and per-department lifecycle
-  (`lifecycle: dict[str, Lifecycle]`). Project-as-long-running-
-  entity becomes opt-in extension (some offices have no project
-  entity).
-- Office-config core/extension split; doctype-manifest schema
-  generalization.
-- Output: refactored Pydantic + skill retrofits + passing PBS
-  tests + `pattern-vs-instance-split-rationale.md`.
+**#9 — Department module contract + managed-entity concept**
+(reframed session-9 followup; was "Pattern-vs-instance best-
+effort split"):
+- **Mission**: design the department module contract +
+  managed-entity concept with two delivery modes (native +
+  adapter-delegated). The original "extract universal core"
+  framing was wrong — there is no universal entity-type core;
+  each department defines its own entity types completely.
+- **Per #12 constraints**:
+  - Per-department phase tracking (`phases: dict[str, str]`)
+  - Per-department lifecycle (`lifecycle: dict[str, Lifecycle]`)
+  - Project-as-long-running-entity becomes opt-in per department
+- **Managed-entity concept work**:
+  - Two delivery modes per entity (native + adapter), mixed-mode
+    within a department supported
+  - Adapter mode generalizes meta-rule 1's existing integration-
+    adapter pattern (same Pydantic Protocol + concrete adapter
+    contract; expanded consumer set from auxiliary integrations
+    to primary department system-of-record)
+  - ProjectState refactor: from
+    `backend/mcp-server/src/pbs_mcp/project_state.py` to
+    `extensions/department/planning/entities/project.py`
+    (planning department's primary native managed entity)
+  - Per-company customization mechanism design: choose between
+    Pydantic subclass / `extra_fields: dict[str, type]` /
+    `metadata: dict` escape hatch
+- Office-config schema: `departments.<name>.entities.<entity>.
+  {mode,adapter,config}` per-entity sub-sections
+- Doctype-manifest generalization (per-department contribution)
+- Output: refactored backend + skill retrofits + passing PBS
+  tests + `pattern-vs-instance-split-rationale.md` documenting
+  per-decision reasoning
 - **Order note**: AFTER #6 + #7 (so #9 examines stable post-v2
   schemas + bootstrap-write tool interfaces); BEFORE #8.
+- **Scope**: 2-3 sessions (was 1-2; expanded per session-9
+  followup reframe).
 
 **#8 — Pre-action framing skill**:
 - Design + scaffold meta-skill (`frame-task` or `scoping`).

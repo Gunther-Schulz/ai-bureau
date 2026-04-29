@@ -157,6 +157,129 @@ Reasons:
 
 Skill scaffolding (SKILL.md + PROCEDURE.md) implemented as part of **commitment #11** (when slash-command namespacing + skill-frontmatter sweep is done).
 
+### Department-managed entities + delivery modes (session-9 followup)
+
+**The deeper realization** (post-#12 first pass): each department defines its own entity types — completely. Planning's primary entity = Project; PM's = Timesheet/BillingPeriod; Invoicing's = Invoice/PaymentReceipt; legal-work's = Matter/Brief; brand-voice's = Asset/BrandGuideline. **There is no universal entity-type core.** Pattern-vs-instance check: each entity is fundamentally department-instance, not "extension of a universal entity."
+
+This refinement also surfaces a real-world constraint: companies have existing infrastructure (Lexware for invoicing, Harvest/MOCO for time tracking, BambooHR for employees). PBS doesn't replace those tools; **PBS coordinates around them via integration adapters**. So entity ownership splits into two delivery modes.
+
+**Terminology**: a **department-managed entity** (or just "managed entity" in context) is a domain object the department is responsible for, delivered in one of two modes.
+
+| Term | Meaning |
+|---|---|
+| **Managed entity** | A domain object a department manages (Project, Invoice, Asset, Matter, Timesheet) |
+| **Native delivery mode** | PBS owns system-of-record. Pydantic schema + native MCP tools + LanceDB/file persistence. Used when no mature external alternative exists OR for memory-shaped data (conventions, rules, preferences). |
+| **Adapter delivery mode** | External system owns system-of-record. PBS reads/writes via integration adapter (Pydantic Protocol + concrete adapter). Used when companies have existing tools. Generalizes meta-rule 1's existing integration-adapter pattern (auxiliary integrations: email, calendar) to primary department system-of-record. |
+
+**Mixed-mode is required, per-entity not per-department.** A single department typically mixes:
+- Invoicing department: Invoice → adapter (Lexware); BillingRule → native (per-client conventions, memory-shaped); PaymentReceipt → adapter (paired with Invoice).
+- PM department: Timesheet → adapter (Harvest/MOCO); Project deadlines → native (planning conventions live in PBS); BillableMilestone → adapter (paired with Timesheet).
+- Planning department (PBS today): Project → native (no external "B-Plan management tool" exists — PBS IS the system of record).
+
+**Where the boundary falls** (light + flexible, not heavy):
+- PBS owns **the contract for department modules** + native-mode entity infrastructure
+- PBS owns **entity types only for departments where it IS the natural system of record** (planning Project, brand-voice Asset, research Manuscript — domains without mature off-the-shelf alternatives)
+- PBS **delegates to external systems via adapters** for entities where mature tools exist (PM Timesheet, Invoicing Invoice, HR Employee)
+- **Architecture supports both modes** with a uniform contract (audit, memory, cross-department coordination work the same regardless of mode)
+
+#### Setup flow (`integrate-department <slug>`)
+
+The skill walks user through entities + asks mode per entity. The department module declares its managed entities (with descriptions + recommended-default modes); user picks per entity.
+
+```
+> Integrating invoicing department (PBS-bureau invoicing module v1.0).
+
+  This department manages 3 entities:
+
+  Invoice — issued invoices to clients
+  Mode? [a]dapter / [n]ative (default: a — recommended for ≥5 invoices/month)
+  > a
+  Adapter: [1] lexware  [2] fastbill  [3] sevdesk  [4] custom
+  > 1
+  Configuring lexware adapter (tenant ID, API key)…
+
+  BillingRule — per-client billing conventions
+  Mode? [a]dapter / [n]ative (default: n — convention-shaped, memory-friendly)
+  > n
+  Native schema registered.
+
+  PaymentReceipt — incoming payment tracking
+  Mode? [a]dapter / [n]ative (default: a — pairs with Invoice adapter)
+  > a
+  Auto-configured: lexware (matches Invoice adapter you set up above).
+
+> Invoicing department integrated. 3 entities configured.
+```
+
+#### Schema additions (spec'd here, implemented in #11)
+
+**1. `extensions/department/<dept>/department.yaml`** gains `managed_entities:` section:
+
+```yaml
+event_subscriptions: [send, lifecycle_transition]
+managed_entities:
+  invoice:
+    description: "issued invoices to clients"
+    default_mode: adapter
+    adapter_protocol: invoice-system
+  billing_rule:
+    description: "per-client billing conventions"
+    default_mode: native
+    native_schema: BillingRule
+  payment_receipt:
+    description: "incoming payment tracking"
+    default_mode: adapter
+    adapter_protocol: payment-system
+    pairs_with: invoice
+```
+
+**2. Office-config** records per-deployment choices:
+
+```yaml
+departments:
+  invoicing:
+    entities:
+      invoice:
+        mode: adapter
+        adapter: lexware
+        config: {tenant_id_ref: <env-var>, api_key_ref: <secret>}
+      billing_rule:
+        mode: native
+      payment_receipt:
+        mode: adapter
+        adapter: lexware  # auto-paired
+```
+
+**3. Adapter Protocols** at `extensions/department/<dept>/adapters/<entity>/protocol.py` (Pydantic `Protocol`); concrete adapters at `<entity>/<adapter-name>.py`. **Same pattern as existing meta-rule 1 integration adapters** — generalizes the existing concept from auxiliary integrations to primary department system-of-record.
+
+**4. Native-mode schemas** at `extensions/department/<dept>/entities/<entity>.py` (Pydantic), with matching MCP tools wrapping CRUD. Pattern same as today's ProjectState (which becomes planning department's `entities/project.py` post-#9 refactor).
+
+#### Project (PBS bauleitplanung) is the canonical native managed entity
+
+For clarity:
+
+- **Project** = planning department's primary managed entity, **native delivery mode**
+- **Schema location post-#9**: `extensions/department/planning/entities/project.py` (refactor — today the schema lives at `backend/mcp-server/src/pbs_mcp/project_state.py`)
+- **No "abstract Project" at architecture layer** — there is no universal Project-shaped concept being extended. The planning-department-module's Project IS the bauleitplanung-shaped schema.
+- **PBS-specific fields** (verfahren_type, bundesland, b_plan_nr, geltungsbereich_ha, etc.) are baked into the planning department's contribution. They're not "extensions of a universal Project."
+
+**Per-company customization within a department-module's managed entities** is a separate layer (e.g., a specific bureau wants a custom field in Project for internal review tracking). Designed in **#9** with at least three options on the table:
+- Pydantic subclass per deployment (heavy, type-safe)
+- Office-config-declared `extra_fields: dict[str, type]` per entity (lighter, less type-safe)
+- Free-form `metadata: dict` escape hatch on the base entity (loosest)
+
+**Constraint passed to #9**: design and choose between these per-company customization mechanisms.
+
+#### What this concept subsumes (target 9 subsumption check)
+
+Per session-7 design-review target 9: when adding a new mechanism, ask what it subsumes.
+
+- **Generalizes meta-rule 1 integration-adapter pattern**: previously scoped to auxiliary integrations (email, scanner, calendar); now also the implementation layer for adapter-mode managed entities. The Pydantic Protocol + concrete adapter contract is the same; the consumer set expands.
+- **Reframes the original "ProjectState core/extension split"** from #9: instead of "extract universal core from PBS-specific extension," #9 now reframes as "recognize ProjectState as planning department's native managed entity; refactor location; design per-company customization mechanism."
+- **Doctype-manifest generalization** (originally a separate #9 line item) fits naturally — each department contributes its own doctypes per its mode.
+
+No new mechanisms left in legacy. Subsumption check passes.
+
 ## Implementation scope (this commitment)
 
 **Schema additions** (ship now):
@@ -185,16 +308,23 @@ Skill scaffolding (SKILL.md + PROCEDURE.md) implemented as part of **commitment 
 - `record_audit_event` gate-side: atomically update `ProjectState.departments_active` when event's `actor_card ∈ skills_in_dept`. Skill→department cache lookup.
 - `query_audit_trail` gains optional `department:` filter; backend cached registry.
 
-**For #9 (Pattern-vs-instance best-effort split)**:
-- ProjectState core/extension split MUST handle per-department phase tracking (`phases: dict[str, str]`) and per-department lifecycle (`lifecycle: dict[str, Lifecycle]`). Today's single-valued `phase` and `lifecycle` are PBS-instance assumptions that don't generalize to multi-department offices. #12 documents the constraint; #9 implements the split.
-- Project-as-long-running-entity is itself a PBS-instance assumption. Some offices (brand-voice, single-skill utilities) have no project entity. ProjectState core/extension split should make the project entity itself an opt-in extension, not a pattern-level mandatory.
+**For #9 (Pattern-vs-instance best-effort split — REFRAMED MISSION per session-9 followup)**:
+- **Mission reframed** from "extract universal core from PBS-specific extension" to "**design the department module contract + managed-entity concept with two delivery modes**." The core/extension framing was wrong — there is no universal entity-type core; each department defines its own entity types completely (some native, some adapter-delegated).
+- Define **department module contract**: how a department contributes skills + managed entities + workflow phases + memory + manifests + audit subscriptions to an office.
+- Define **managed-entity concept** with two delivery modes (native + adapter), per-entity choice, mixed-mode within a department supported.
+- Refactor `ProjectState` location: from `backend/mcp-server/src/pbs_mcp/project_state.py` to `extensions/department/planning/entities/project.py` (planning department's primary native managed entity).
+- Per-department phase tracking (`phases: dict[str, str]`) and per-department lifecycle (`lifecycle: dict[str, Lifecycle]`) on ProjectState — today's single-valued fields are PBS-instance assumptions.
+- **Project-as-long-running-entity is itself opt-in per department** — some departments (PM tracking via Timesheets-only-no-Project, single-skill utilities) don't have a Project-shaped entity. The pattern supports project-having and project-less departments uniformly via the managed-entity concept.
+- **Per-company customization mechanism**: design how a specific deployment customizes a department-module's managed-entity schema. Three options on the table: Pydantic subclass per deployment, office-config-declared `extra_fields: dict[str, type]`, or free-form `metadata: dict` escape hatch. Choose with rationale.
+- Doctype-manifest generalization: each department contributes its own doctypes; fits naturally into the managed-entity / department-module contract.
+- Output: `pattern-vs-instance-split-rationale.md` documenting per-decision reasoning, including chosen per-company customization mechanism.
 
 **For #11 (deep Cowork integration)**:
 - All skills get `department:` frontmatter field added (REQUIRED, no default). Sweep covers all 19+ skills.
 - Slash commands namespaced: `/<department-slug>:<skill-name>` → `/planning:draft-begruendung`, `/office:setup-office`, `/office:integrate-department`, etc.
-- Office-config schema bump for `departments.<name>` sections; co-located with `pbs.local.md` migration.
-- `extensions/department/<dept>/department.yaml` file format implementation (event_subscriptions).
-- `integrate-department` skill scaffolding (new skill bundle).
+- Office-config schema bump for `departments.<name>` sections + per-entity `entities.<entity>.{mode,adapter,config}` sub-sections; co-located with `pbs.local.md` migration.
+- `extensions/department/<dept>/department.yaml` file format implementation (event_subscriptions + managed_entities declarations).
+- `integrate-department` skill scaffolding (new skill bundle) — walks the per-entity-mode setup flow described above.
 
 **For #14 (Memory Bank)**:
 - `search_memory` interface accepts `department:` filter (defaults to calling-skill's department); same shape as `search_corpus`'s eventual `department_filter:`.

@@ -382,60 +382,85 @@ preparation questions.
   The skill is preventive of design errors that compound after
   launch — better in place before real project work begins.
 
-**9. Pattern-vs-instance best-effort split** (session 7) — see
-`ARCHITECTURE.md` "Pattern-vs-instance discipline" + ROADMAP v2
-"AI-office builder" entry. The discipline says all architectural
-commitments must work pattern-level; the best-effort split is
-the immediate concrete realization for the schemas that exist
-today.
+**9. Department module contract + managed-entity concept**
+(session 7 originally as "Pattern-vs-instance best-effort split";
+**reframed session 9** post-#12 followup) — see
+`ARCHITECTURE.md` "Pattern-vs-instance discipline" +
+`docs/decisions/office-vs-department.md` (managed-entity concept) +
+ROADMAP v2 "AI-office builder" entry.
 
+- **Mission reframed (session-9 followup)**: the original
+  "extract universal core from PBS-specific extension" framing
+  was wrong. There is no universal entity-type core — each
+  department defines its own entity types completely. Some are
+  PBS-native (Project for planning, Asset for brand-voice); some
+  are adapter-delegated (Invoice for invoicing → Lexware/etc.,
+  Timesheet for PM → Harvest/etc.). The new mission: **design
+  the department module contract + managed-entity concept with
+  two delivery modes**. See `office-vs-department.md` "Department-
+  managed entities + delivery modes" subsection for the full
+  design.
 - **Why this scope (reasoning + implementation, not just
   reasoning)**: per the single-domain-pioneer constraint, we
   can't validate the split via second-domain implementations we
   won't actually do. Two distinct validation signals: signal #1
-  (split doesn't break PBS — implementable now via PBS regression
+  (refactor doesn't break PBS — implementable now via PBS regression
   tests) is the maximum validation extractable pre-RAG; signal
-  #2 (split chose the right boundary) waits for a real
-  second-domain implementation that may never come. **Doing the
-  split later is more painful** — post-data-accumulation refactor
+  #2 (right boundary across domains) waits for a real second-
+  domain implementation that may never come. **Doing the
+  refactor later is more painful** — post-data-accumulation work
   vs. clean refactor today. Pre-RAG is the unique cost-cheap
   window.
-- **Method**: methodically examine each schema and architectural
-  commitment against the 3-5 hypothetical-domain thought
-  experiment (legal-practice, research-paper, engineering-doc,
-  medical-records, regulatory-filing). For each commitment:
-  decide pattern-level / instance-level / hybrid (core +
-  extension). Implement the split. Run PBS regression to confirm
-  signal #1.
-- **Targets**:
-  - `ProjectState` Pydantic — split into `ProjectStateCore`
-    (project, lifecycle, phase, dates, identity, ownership,
-    practices, doctype_status shape) + PBS-specific extension
-    (verfahren_type, b_plan_nr, b_plan_name, geltungsbereich_*,
-    bundesland-as-PBS-config). Migration script.
-  - `office-config` schema — split core (paths, scope.domains,
-    actors, roots) from PBS-specific (verfahren_type values,
-    doctype-list specifics, korrektur-rules path).
-  - Doctype manifest format — generic shape (filename heuristics,
-    required sections, manifest entries) vs PBS content (the
-    actual doctype list).
+- **Targets** (post-session-9 reframe):
+  - **Department module contract**: how a department contributes
+    skills + managed entities + workflow phases + memory + manifests
+    + audit subscriptions to an office. Pattern-level; domain-agnostic.
+  - **Managed-entity concept** with two delivery modes (native +
+    adapter), per-entity choice, mixed-mode within a department
+    supported. Generalizes meta-rule 1's existing integration-
+    adapter pattern (auxiliary integrations → primary department
+    system-of-record).
+  - `ProjectState` refactor: move from
+    `backend/mcp-server/src/pbs_mcp/project_state.py` to
+    `extensions/department/planning/entities/project.py`. Reframe
+    as planning department's primary native managed entity. NOT
+    "extract a core" — entire schema is planning department's
+    contribution.
+  - Per-department phase tracking on Project (`phases: dict[str,
+    str]` instead of single `phase`) + per-department lifecycle
+    (`lifecycle: dict[str, Lifecycle]`). Today's single-valued
+    fields are PBS-instance assumptions (per #12 D1 + D2).
+  - **Per-company customization mechanism**: design how a specific
+    deployment customizes a department-module's managed-entity
+    schema. Three options on the table — Pydantic subclass per
+    deployment (heavy, type-safe), office-config-declared
+    `extra_fields: dict[str, type]` per entity (lighter), or
+    free-form `metadata: dict` escape hatch. Choose with rationale.
+  - Doctype-manifest generalization: each department contributes
+    its own doctypes per its mode. Already partially supported
+    via #12's 4th memory axis; #9 finalizes the contract.
+  - `office-config` schema additions: `departments.<name>.entities.
+    <entity>.{mode,adapter,config}` per-entity sub-sections (per
+    #12 schema). Schema bump + migration.
   - MCP tool interfaces — verify none embed domain knowledge in
-    names (e.g., `validate_doctype(slug)` is generic;
-    `validate_b_plan_begruendung` would be wrong — already
-    correct today).
+    names (`validate_doctype(slug)` is generic; would be wrong
+    if hardcoded `validate_b_plan_begruendung` — already correct
+    today).
   - Decision records — review each for PBS-specific assumptions
     leaking into pattern-level prose.
-- **Output**: refactored schemas + skill retrofits + passing PBS
-  tests + a `pattern-vs-instance-split-rationale.md` document
-  per the "documented split rationale per commitment so a future
-  second domain can validate the reasoning, not redo it."
-- **Scope**: 1-2 sessions of dedicated work, not a quick sprint.
-  The PBS regression validation is non-negotiable; the
-  refactor must leave PBS working before commit.
+- **Output**: refactored backend + skill retrofits + passing
+  PBS regression tests + `pattern-vs-instance-split-rationale.md`
+  documenting per-decision reasoning (department module contract
+  shape, managed-entity concept rationale, per-company
+  customization choice + rationale, ProjectState refactor
+  rationale).
+- **Scope**: 2-3 sessions of dedicated work (was 1-2 — expanded
+  per session-9 reframe to include managed-entity design + per-
+  company customization mechanism design).
 - **Connection to commitment #8 (framing skill)**: framing skill
   builds on this work — the reasoning produced here becomes the
   pattern-vs-instance reasoning the framing skill codifies for
-  repeatable use. Order: #9 first (produces reasoning + split),
+  repeatable use. Order: #9 first (produces contract + reasoning),
   then #8 (codifies into repeatable skill).
 - **Dependencies**: depends on #6 (audit-trail v2 retrofit) being
   far enough along that the schema is stable; doesn't depend on

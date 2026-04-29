@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.11 (post-session-9 + office-vs-department modularization resolved)**.
+Status: **v0.12 (post-session-9 followup + managed-entity concept + integration-adapter pattern generalized)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,30 @@ Status: **v0.11 (post-session-9 + office-vs-department modularization resolved)*
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.11 → v0.12**: **Managed-entity concept introduced + meta-rule
+  1 integration-adapter pattern generalized** (session-9 followup).
+  The post-#12 first-pass realization: each department defines its
+  own entity types completely; **there is no universal entity-type
+  core**. Departments contribute "managed entities" (Project for
+  planning, Invoice for invoicing, Timesheet for PM, Asset for
+  brand-voice, Matter for legal-work) in one of two delivery modes:
+  **native** (PBS owns system-of-record; Pydantic schema +
+  native MCP tools) or **adapter-delegated** (external system owns
+  system-of-record; integration adapter contract). Mixed-mode is
+  required and supported per-entity (a department can have some
+  entities native + some adapter-delegated). The adapter mode
+  **generalizes meta-rule 1's existing integration-adapter pattern**
+  from auxiliary integrations (email, calendar, scanner) to primary
+  department system-of-record (Invoicing/PM/HR external systems);
+  same Pydantic Protocol + concrete adapter contract, expanded
+  consumer set. Project (PBS bauleitplanung) reframed as planning
+  department's primary native managed entity (not "extension of a
+  universal Project core"). #9's mission reframed from "extract
+  universal core from PBS-specific extension" to "design the
+  department module contract + managed-entity concept + per-
+  company customization mechanism." See
+  `docs/decisions/office-vs-department.md` "Department-managed
+  entities + delivery modes" subsection.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -470,6 +494,27 @@ The class set is open — any string is valid as long as a matching
 subpackage exists. (Per design-review: integration adapters are
 *backend-internal organizing pattern*, not a top-level meta-rule
 peer; they're a consequence of app-vs-office deployment portability.)
+
+**Generalization to department-managed entities (v0.12 per session-9
+followup)**: the same Pydantic Protocol + concrete adapter pattern
+also serves as the **adapter delivery mode for department-managed
+entities** (per `docs/decisions/office-vs-department.md`). Two
+delivery modes per entity: **native** (PBS owns the Pydantic schema
++ MCP CRUD tools — used when no external alternative exists, e.g.,
+planning's Project entity for B-Plan workflows; brand-voice's Asset
+entity), or **adapter-delegated** (external system owns system-of-
+record — used for departments where mature tools exist, e.g.,
+Invoicing's Invoice → Lexware/FastBill/sevDesk; PM's Timesheet →
+Harvest/MOCO; HR's Employee → BambooHR/Personio). Mixed-mode is
+required and supported per-entity within a single department. The
+adapter implementation pattern is identical to auxiliary integrations
+above; the **consumer set expands** from email/calendar/scanner to
+primary department system-of-record. Department-managed-entity
+adapters live at `extensions/department/<dept>/adapters/<entity>/`
+(per the office-vs-department decision record schema additions).
+Office-config selects per-entity mode + adapter via the
+`departments.<name>.entities.<entity>.{mode, adapter, config}`
+section.
 
 **Schema versioning + migrations.** Adding fields to office-config
 schema requires bumping `CURRENT_SCHEMA_VERSION` in
