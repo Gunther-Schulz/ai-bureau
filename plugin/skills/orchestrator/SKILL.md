@@ -1,16 +1,16 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.7.0
+version: 0.8.0
 license: MIT
 mcp_tools_required: [list_projects, list_skills]
 mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
 fallback_when_mcp_absent: "warn user and suggest backend restart. Orchestrator can still surface decisions and route to specialists from skill descriptions, but session-open project enumeration and watch-list cross-references degrade to filesystem reads."
-summary: Master coordination skill — routes user input + holds workflow gates + watch lists. Auto-loads on planning-bureau context; never bypassed.
+summary: Master coordination skill — routes user input + holds workflow gates. Auto-loads on planning-bureau context; never bypassed. Watch-list logic delegated to `watch-list` skill (post-v0.5 split per design-review S3).
 routing_mode: always_active
 triggers:
   - {phrase: "auto-loaded on planning-bureau context", lang: meta}
-handoffs: [setup-office, draft-textteil-b, draft-textteil-c, review-draft, save-baustein, validate-bausteine, record-feedback, promote-to-skill, validate-latex-style, validate-checklist, verify-citations, draft-cover-mail, research-references, author-manifest, survey-project, audit, design-review]
+handoffs: [setup-office, draft-textteil-b, draft-textteil-c, review-draft, save-baustein, validate-bausteine, record-feedback, promote-to-skill, validate-latex-style, validate-checklist, verify-citations, draft-cover-mail, research-references, author-manifest, survey-project, audit, design-review, watch-list]
 phase_role: routing
 ---
 
@@ -127,6 +127,10 @@ reference; the MCP tool is authoritative.
   the design itself, not its compliance. Triggered by phrases
   like "design review", "is this design right", "would we build
   this from scratch", "rough cut review"
+- `watch-list` — continuous T1-T6 watch-list infrastructure
+  (queue + TTL + dedup + decision menu + decay). Mostly delegated
+  from this orchestrator during workflow; admin phrases like
+  "show watch queue", "watch list status" route directly
 
 ## What this skill is and is not
 

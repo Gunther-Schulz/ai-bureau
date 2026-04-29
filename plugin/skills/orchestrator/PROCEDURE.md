@@ -39,50 +39,29 @@ If a referenced project has no `_ai/` or `.ai/` folder, treat the next user requ
 
 ## 2. Continuous watch list — runs throughout work
 
-Six triggers fire whenever they match in conversation or in produced
-output. Each trigger surfaces a four-way decision menu (Checkpoint 3).
+Six triggers (T1 reusable-pattern / T2 citation-drift / T3 promotion / T4 style-deviation / T5 standing-rule / T6 capability-gap) fire whenever they match in conversation or in produced output.
 
-| Trigger | Fires when |
-|---|---|
-| **T1. Reusable pattern** | A drafted argument, justification, or section reads as something that could apply across projects in the same domain. |
-| **T2. Citation drift** | A legal citation in memory or in the document differs from what the RAG returns for the same reference today. |
-| **T3. Promotion** | A baustein has been referenced ≥ 3 times across the last 30 days of session history (use_count from `list_bausteine` / per-baustein frontmatter). |
-| **T4. Style deviation** | The current document violates `style-spec.md` (different class, different package set, different geometry, missing required macros). |
-| **T5. Standing rule** | The user says "always X", "remember Y", "never Z", "from now on", or any phrasing that prescribes future behavior across sessions. |
-| **T6. Capability gap** | A tool, skill, or template that would have helped does not exist. The orchestrator notices this when it has to perform a workaround. |
+**Detection happens here in orchestrator** as part of normal workflow parsing. **Queue management, dedup, decay, surfacing, and four-way decision dispatch live in the `watch-list` skill** (extracted in v0.5 per design-review S3 — see `plugin/skills/watch-list/PROCEDURE.md` for the full data model + decay rules + per-trigger TTL/caps).
 
-Surface immediately when a trigger fires. Do not batch silently across multiple turns. At natural pauses (compile success, awaiting user input, before announcing "draft ready") run a one-pass sweep: surface only if **two or more** candidates are queued AND have not been surfaced yet.
+When the orchestrator detects a candidate, hand off to `watch-list`. T6 is special-cased — auto-backlog with no menu (see `watch-list/PROCEDURE.md` §6).
 
-The watch list does not block. It surfaces decisions; the user decides.
+The watch list does not block. It surfaces decisions; the user decides. Per-session caps + per-trigger TTL prevent spam-the-user mode.
+
+For the trigger taxonomy + detection criteria + per-trigger side-effects, see `plugin/skills/watch-list/references/triggers.md`.
 
 ---
 
-## 3. The four-way decision menu — every surfaced item
+## 3. The four-way decision menu (delegated to watch-list)
 
-When any watch trigger fires, output exactly one line of the form:
+The decision menu protocol (`Noticed: <thing>. → capture-now / handle-now / backlog / drop?`) and reply parsing live in `plugin/skills/watch-list/PROCEDURE.md` §5. Orchestrator delegates surfacing + dispatch to the watch-list skill.
 
-> Noticed: \<thing\>. → capture-now / handle-now / backlog / drop?
+Dispatched actions hand off to specialist skills:
+- **capture-now** → `save-baustein` (T1, T5) or `promote-to-skill` (T3)
+- **handle-now** → `verify-citations` (T2), `validate-latex-style` (T4)
+- **backlog** → append to `<repo>/memory/product-backlog.md`
+- **drop** → no-op acknowledgment
 
-Do not surround with prose. Do not explain unless asked. The menu is the surfacing.
-
-Parse the user's reply against this decision table. Mechanical match first; ambiguous → ask one clarifying question.
-
-| Reply matches | Decision |
-|---|---|
-| "save", "speichern", "capture", "ja capture", "jetzt speichern" | **capture-now** |
-| "fix", "do it", "machen", "handle", "jetzt machen", "now" | **handle-now** |
-| "later", "park", "park it", "backlog", "merken", "erstmal nicht" | **backlog** |
-| "no", "nein", "drop", "skip", "egal", "nicht relevant" | **drop** |
-| Anything else, or contradictory tokens | **ASK** one clarifying question |
-
-Then act:
-
-- **capture-now:** invoke `save-baustein` (or perform inline) — write to the right scope (Checkpoint 7), confirm in one line, return to operating flow.
-- **handle-now:** perform the implied action (apply the fix, edit the skill, update the spec). Hand back to flow when done.
-- **backlog:** append to `<repo>/memory/product-backlog.md` with date (today), project context (project name and lifecycle state), and proposed action. Return.
-- **drop:** acknowledge in one word and return.
-
-Never do silent capture. Every memory-write or backlog-append corresponds to an explicit four-way decision the user authorized.
+Never silent capture. Every memory-write or backlog-append corresponds to an explicit four-way decision the user authorized (T6 exempted — internal observation, auto-backlogged).
 
 ---
 
