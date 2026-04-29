@@ -18,15 +18,20 @@ conflates "office" with "single department." Plus a corrective
 overselling check that produced an honest market-context section
 in the v2 builder ROADMAP entry.
 
-**Critical session-end pivot**: commitment #11 (Cowork
-integration) revised from 1-2 sessions to 3-5 sessions under
-"deep + complete integration, no sunk costs" directive — full
-adoption of Anthropic's plugin shape including slash commands as
-primary user surface, plugin agents formalized (lifted from
-deferred-to-v1+), `pbs.local.md` migration from `office-
-config.yaml`, etc. Recommended next-session order: **#12 first
-(department modularization design), then #11 (deep Cowork
-integration)**, then resume #6/#7/#9/#10/#8/C/D queue.
+**Critical session-end pivots**:
+- Commitment #11 (Cowork integration) revised from 1-2 sessions
+  to 3-5 sessions under "deep + complete integration, no sunk
+  costs" directive — full adoption of Anthropic's plugin shape
+  including slash commands as primary user surface, plugin agents
+  formalized (lifted from deferred-to-v1+), `pbs.local.md`
+  migration from `office-config.yaml`, etc.
+- Commitment #10 (A2A schema gate) pulled to **position 1** in
+  the pre-RAG queue — smallest commitment, informs every
+  downstream schema decision.
+
+**Recommended next-session order**: **#10 (A2A) first → #12
+(department modularization) → #11 (deep Cowork integration)**,
+then resume #6/#7/#9/#8/C/D queue.
 
 **Phase 1 — task A retrofit (state.md gate)**:
 - 8 skills (orchestrator, survey-project, draft-cover-mail,
@@ -208,30 +213,43 @@ hardening BEFORE first project bind, not a delay of RAG.
 
 The 12 v1 commitments enumerated in ROADMAP.md "v1 commitments"
 section. **Revised recommended execution order** (session-7
-late-insight pivot):
+late-insight pivot, with A2A pulled to position 1):
 
 ```
-Session 8:    #12 (department modularization design)         1 session
-Session 9-12: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 13+:  #6 → #7 → #9 → #10 → #8                        per existing queue
+Session 8:    #10 (A2A schema gate decision)                  1 session
+Session 9:    #12 (department modularization design)          1 session
+Session 10-13: #11 (deep Cowork integration refactor)         3-5 sessions
+Session 14+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus
 ```
 
-**Why #12 + #11 first**: department-aware namespacing affects
-slash commands (#11 work) AND skill frontmatter conventions.
-Doing #11 without #12 means redoing slash command names + skill
-fields once departments land. Doing #6/#7/#9/#10 before #11
-means building audit-trail v2 + bootstrap-write tools on the
-old shape, then refactoring under deep Cowork integration. Cost-
-cheaper to land the new shape first.
+**Why #10 first**: smallest commitment (~half-day to 1 session,
+decision + minor schema additions). Informs every downstream
+schema decision — #6 audit-trail v2 (AuditEvent shape), #7
+bootstrap-write tools (interface shape), #9 pattern-vs-instance
+split (which schemas need A2A-friendly identity), #12 department
+identity (departments may communicate via A2A internally). Doing
+A2A last means risk of schema refactor on every prior item.
 
-**Why #11 is now 3-5 sessions** (was 1-2): "deep + complete
-integration, no consideration for sunk costs" directive
-(session 7). Adopt Anthropic's plugin shape wholesale where it
-differs — slash commands as primary surface, plugin agents
-formalized, `pbs.local.md` migration, etc.
+**Why #12 second**: department-aware namespacing affects slash
+commands (#11 work) AND skill frontmatter conventions. Doing
+#11 without #12 means redoing slash command names + skill fields
+once departments land. #12 also wants to know A2A decisions
+(whether departments are A2A-shape agents internally), so #10 → #12
+order makes sense.
+
+**Why #11 third (3-5 sessions)**: "deep + complete integration,
+no consideration for sunk costs" directive (session 7). Adopt
+Anthropic's plugin shape wholesale where it differs — slash
+commands as primary surface, plugin agents formalized,
+`pbs.local.md` migration, etc.
+
+**Why #6/#7/#9 after**: building audit-trail v2 + bootstrap-write
+tools + pattern-vs-instance refactor on the old shape, then
+refactoring under deep Cowork integration, would be cost-heavier
+than landing the new shape first.
 
 ### Already shipped session 6 + 7 (architectural backstops only)
 
@@ -316,18 +334,24 @@ formalized, `pbs.local.md` migration, etc.
      best-effort split per single-domain-pioneer constraint.
 
 10. **A2A schema compatibility decision gate** (per ROADMAP
-    commitment #10):
+    commitment #10) — **POSITION 1** (pulled forward, session 7
+    late insight):
     - Decide whether AuditEvent / ProjectState / MCP server
       get A2A-shape-compatibility additions now (cheap pre-RAG)
       vs deferred (expensive once data accumulates).
     - Output: `docs/decisions/a2a-compatibility.md` documenting
       schema additions accepted vs deferred.
-    - Scope: ~half-day analysis + minor schema additions.
-    - Order note: bundle with #9 (same schema-touching session).
+    - Scope: ~half-day to 1 session (analysis + minor schema
+      additions).
+    - Order rationale: smallest commitment, informs every
+      downstream schema decision (#6 AuditEvent, #7 bootstrap-
+      write tool interfaces, #9 pattern-vs-instance split, #12
+      department identity, #11 Cowork agent identity). First in
+      pre-RAG queue.
 
 11. **Cowork as primary end-user runtime — DEEP integration**
     (per ROADMAP commitment #11, revised session-7 late under
-    "no sunk costs" directive):
+    "no sunk costs" directive) — **POSITION 3**:
     - Cowork natively supports MCP + Skills + Plugins. Anthropic
       ships open-source `knowledge-work-plugins` repo (cloned
       to `~/dev/reference/knowledge-work-plugins/`) with 11
@@ -356,7 +380,7 @@ formalized, `pbs.local.md` migration, etc.
       write + pattern-vs-instance land in the new shape).
 
 12. **Office-vs-department modularization design** (per ROADMAP
-    commitment #12, session-7 late insight):
+    commitment #12, session-7 late insight) — **POSITION 2**:
     - **The architectural insight**: PBS today conflates "office"
       with "single department" (planning-document-work). Real
       offices contain multiple departments (planning + PM +
@@ -561,7 +585,8 @@ current backend surface. New backend tools planned for session 8:
 | 3 | `24ac10c` | ROADMAP: add v2 long-horizon vision — AI-office builder |
 | 4 | `ecc1b8c` | session 7 final: pattern-vs-instance discipline (v0.7→v0.8) + commitment #9 + design-review target 10 + audit slice 19 + VISION pioneer-instance extension + plugin/CLAUDE.md discipline summary + HANDOFF refresh |
 | 5 | `bfd0313` | session 7 epilogue: market context + commitments #10 (A2A) and #11 (Cowork runtime) |
-| 6 | (this commit) | session 7 closing: deep-Cowork-integration directive (no sunk costs) + commitment #12 (office-vs-department modularization) + ARCHITECTURE v0.8→v0.9 + revised execution order (#12 → #11 → rest) |
+| 6 | `0bb0253` | session 7 closing: deep-Cowork-integration directive (no sunk costs) + commitment #12 (office-vs-department modularization) + ARCHITECTURE v0.8→v0.9 + revised execution order (#12 → #11 → rest) |
+| 7 | (this commit) | session 7 final-final: A2A pulled to position 1; revised execution order #10 → #12 → #11 → rest. ROADMAP + HANDOFF order notes updated. |
 
 All pushed to origin/main.
 

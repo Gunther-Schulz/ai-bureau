@@ -474,11 +474,16 @@ context" section.
 - **Output**: a short decision record `docs/decisions/
   a2a-compatibility.md` documenting which schemas got A2A-
   shape-compatibility additions, which deferred, and why.
-- **Scope**: 1 short session (~half day) — analysis +
-  schema additions. Implementation of an actual A2A endpoint
+- **Scope**: 1 short session (~half day to 1 session) — analysis
+  + schema additions. Implementation of an actual A2A endpoint
   (if decided) is a separate follow-on.
-- **Order note**: schedule alongside #9 (pattern-vs-instance
-  split) since both touch schema shapes; same session efficient.
+- **Order note**: **execute FIRST in pre-RAG queue** (session 7
+  late insight, user-directed pull-forward). Smallest commitment,
+  informs every downstream schema decision (#6 AuditEvent shape,
+  #7 bootstrap-write tool interfaces, #9 pattern-vs-instance
+  split, #12 department identity, #11 Cowork integration agent
+  identity). Doing it last means risk of schema refactor on
+  every prior item.
 
 **11. Cowork as primary end-user runtime** (session 7, market
 context) — see ROADMAP v2 "AI-office builder" entry's "Market
@@ -566,11 +571,13 @@ context" section.
 - **Scope**: **3-5 sessions** (was 1-2; revised under deep-
   integration directive). Substantial work touching every
   user-facing surface.
-- **Order note**: execute AFTER #12 (department modularization)
-  so slash command namespacing + skill frontmatter use the right
-  shape. Before D (plugin version bump). Before #6/#7/#9 if
-  possible (so audit-trail v2 + bootstrap-write tools land in
-  the new shape, not the old).
+- **Order note**: execute THIRD in pre-RAG queue (after #10
+  A2A decision + #12 department modularization). Slash command
+  namespacing + skill frontmatter use the post-#12 shape. A2A
+  decisions inform whether agent-card identity matters for
+  Cowork-deployed offices. Before D (plugin version bump).
+  Before #6/#7/#9 if possible (so audit-trail v2 + bootstrap-
+  write tools land in the new shape, not the old).
 - **Studying anthropics/knowledge-work-plugins repo**: planned
   as a discovery activity that informs this commitment. Multiple
   plugins are relevant to our work — not just for "how to
@@ -640,24 +647,35 @@ partner-built-comparison insight) — see `ARCHITECTURE.md`
   office-level scaffolding vs department-of-planning-work; design
   the explicit boundary; specify how PM + invoicing departments
   would slot in; produce decision record.
-- **Order**: schedule as commitment #12 but execute FIRST
-  (before #11) because #11 (Cowork integration) needs department-
-  aware namespacing and frontmatter. Doing #11 first means
-  redoing slash command names + skill frontmatter once #12 lands.
+- **Order**: execute SECOND in pre-RAG queue (after #10 A2A
+  decision; before #11 Cowork integration). #10 informs whether
+  departments should be A2A-shape agents internally; #11 needs
+  department-aware namespacing + frontmatter. Doing #11 first
+  means redoing slash command names + skill frontmatter once
+  #12 lands.
 
 **Recommended next-session order** (revised under session-7
-late insight):
+late insight + A2A pull-forward):
 
 ```
-Session 8:  #12 (department modularization design)        1 session
-Session 9:  #11 (Cowork integration refactor)             1-2 sessions
-Session 10+: #6 → #7 → #9 → #10 → #8 → C → D              (per existing queue)
+Session 8:    #10 (A2A schema gate decision)             1 session
+Session 9:    #12 (department modularization design)     1 session
+Session 10-13: #11 (Cowork integration refactor)         3-5 sessions
+Session 14+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
 ```
 
-The original "next-immediate-session" sequence (#6 → #7 → #9 → #10
-→ #11 → #8) shifts: #12 + #11 land first because they affect the
-*shape* of the schemas + skill conventions that #6/#7/#9 modify.
-Doing them after would cause redo work.
+The reasoning:
+- **A2A first** (smallest, fastest, informs everything
+  downstream — every schema decision needs to know whether
+  A2A-friendly identity is a constraint).
+- **Department modularization second** (informs Cowork
+  integration's slash-command namespacing + skill frontmatter
+  shape).
+- **Cowork integration third** (deep + complete refactor under
+  no-sunk-costs directive; runs on the new department-aware
+  shape).
+- **Audit-trail v2 + bootstrap-write + pattern-vs-instance
+  fourth** (build on the new shape, not refactor the old).
 
 All twelve items: pre-RAG architectural commitments. Phase 1
 corpus download unblocks pending sections B (audit-trail
