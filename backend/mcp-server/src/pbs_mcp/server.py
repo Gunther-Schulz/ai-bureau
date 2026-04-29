@@ -26,7 +26,11 @@ from pbs_mcp.schemas import (
     IngestPathsInput,
     IngestProjectInputsInput,
     ListBausteineInput,
+    ListDoctypesManifestsInput,
     ListProjectsInput,
+    ListReferenceManifestsInput,
+    ListSkeletonsInput,
+    ListSkillsInput,
     ReadCorpusFileInput,
     SaveBausteinInput,
     ScaffoldProjectInput,
@@ -36,7 +40,7 @@ from pbs_mcp.schemas import (
     SurveyProjectInput,
     UnbindProjectInput,
 )
-from pbs_mcp.tools import build, corpus, ingest, memory, projects
+from pbs_mcp.tools import build, corpus, discovery, ingest, memory, projects
 
 logger = logging.getLogger("pbs_mcp")
 
@@ -69,6 +73,11 @@ TOOL_HANDLERS: dict[str, tuple[type, Any]] = {
     # Build
     "compile_latex": (CompileLatexInput, build.compile_latex),
     "scaffold_project": (ScaffoldProjectInput, build.scaffold_project),
+    # Discovery (Tier 1, pre-RAG; per ROADMAP "Backend MCP discovery layer")
+    "list_reference_manifests": (ListReferenceManifestsInput, discovery.list_reference_manifests),
+    "list_doctypes_manifests": (ListDoctypesManifestsInput, discovery.list_doctypes_manifests),
+    "list_skills": (ListSkillsInput, discovery.list_skills),
+    "list_skeletons": (ListSkeletonsInput, discovery.list_skeletons),
 }
 
 
@@ -93,6 +102,10 @@ TOOL_DESCRIPTIONS: dict[str, str] = {
     "setup_project": "Create / initialize / bind a project — single entry point for new project work. Mode auto-detected from target_root state. Generates folder name from conventions.project_naming, scaffolds layout per conventions.project_folder_layout, copies skeletons for chosen doctypes, seeds .ai/state.md, adds to projects-index.",
     "compile_latex": "Run latexmk (or pdflatex) on a LaTeX project. Returns PDF path, log excerpt, warnings, errors, page count.",
     "scaffold_project": "Copy a template tree to a new project root. Patches Projektdaten.tex with provided values. git inits for Overleaf.",
+    "list_reference_manifests": "List references-manifests in scope (default: only those active per office's scope.{domains,states}; pass scope_filter=false for full union). Returns layer/scope_key/path/entry_count/last_updated per manifest.",
+    "list_doctypes_manifests": "List doctypes-manifests in scope (same shape as list_reference_manifests). Default scope-filtered.",
+    "list_skills": "Enumerate plugin/skills/*/SKILL.md, returning name/version/description/path + frontmatter dependency declarations (mcp_tools_required, mcp_tools_optional, fallback_when_mcp_absent).",
+    "list_skeletons": "For a given doctype, return the layered skeleton dir set: universal layer + per-active-domain overlays. Used by setup_project for layered scaffold composition.",
 }
 
 

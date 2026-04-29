@@ -59,29 +59,42 @@ def compose_baustein(frontmatter: dict, body: str) -> str:
     return f"---\n{yml}---\n\n{body}"
 
 
-# === Path resolution ===
+# === Path resolution (post-orthogonality refactor) ===
+# Layout under memory/bausteine/ per ARCHITECTURE.md scope-orthogonality
+# meta-rule:
+#   universal       → memory/bausteine/universal/<name>.md
+#   domain/<X>      → memory/bausteine/domain/<X>/<name>.md
+#   state/<X>       → memory/bausteine/state/<X>/<name>.md
+#   project         → <project_root>/_ai/bausteine/<name>.md
+#                     (or memory/bausteine/projects/<key>/<name>.md as fallback
+#                      when project_root not provided)
 
-def baustein_path(scope: str, name: str, domain: str | None = None,
-                  project: str | None = None, project_root: str | None = None) -> Path:
-    """Resolve baustein file path per scope rules."""
-    if scope == "global":
-        return config.memory_dir() / "global" / f"{name}.md"
+
+def baustein_path(scope: str, name: str, scope_key: str | None = None,
+                  project_root: str | None = None) -> Path:
+    """Resolve baustein file path per scope rules (post-orthogonality)."""
+    if scope == "universal":
+        return config.memory_dir() / "bausteine" / "universal" / f"{name}.md"
     if scope == "domain":
-        if not domain:
-            raise ValueError("domain scope requires domain= argument")
-        return config.memory_dir() / domain / f"{name}.md"
+        if not scope_key:
+            raise ValueError("domain scope requires scope_key= (e.g. 'Naturschutz')")
+        return config.memory_dir() / "bausteine" / "domain" / scope_key / f"{name}.md"
+    if scope == "state":
+        if not scope_key:
+            raise ValueError("state scope requires scope_key= (e.g. 'MV')")
+        return config.memory_dir() / "bausteine" / "state" / scope_key / f"{name}.md"
     if scope == "project":
         if project_root:
             return Path(project_root) / "_ai" / "bausteine" / f"{name}.md"
-        if project:
-            return config.memory_dir() / "projects" / project / f"{name}.md"
-        raise ValueError("project scope requires project= or project_root= argument")
+        if scope_key:
+            return config.memory_dir() / "bausteine" / "projects" / scope_key / f"{name}.md"
+        raise ValueError("project scope requires project_root= or scope_key= argument")
     raise ValueError(f"Unknown scope: {scope}")
 
 
-def _enumerate_paths(scope: str | None, domain: str | None,
-                     project: str | None) -> list[Path]:
-    """Enumerate candidate baustein paths for a list query."""
+def _enumerate_paths(scope: str | None, scope_key: str | None,
+                     project_root: str | None) -> list[Path]:
+    """Enumerate candidate baustein paths for a list query (post-orthogonality)."""
     paths: list[Path] = []
 
     def _scan(d: Path) -> None:
@@ -93,30 +106,45 @@ def _enumerate_paths(scope: str | None, domain: str | None,
                 continue
             paths.append(p)
 
-    base = config.memory_dir()
-    if not base.is_dir():
+    bausteine_root = config.memory_dir() / "bausteine"
+    if not bausteine_root.is_dir():
         return paths
 
-    if scope is None or scope == "global":
-        _scan(base / "global")
+    if scope is None or scope == "universal":
+        _scan(bausteine_root / "universal")
+
     if scope is None or scope == "domain":
-        if domain:
-            _scan(base / domain)
-        else:
-            for d in base.iterdir():
-                if d.is_dir() and d.name not in ("global", "office", "projects"):
-                    # NOTE: domain folder is e.g. memory/artenschutz/, but
-                    # currently memory/universal/ wraps domains. Adjust:
-                    pass
-            # Currently structure: memory/universal/<domain>/. Iterate.
-            domain_root = base / "domain"
-            if domain_root.is_dir():
-                for d in domain_root.iterdir():
+        domain_root = bausteine_root / "domain"
+        if scope_key:
+            _scan(domain_root / scope_key)
+        elif domain_root.is_dir():
+            for d in domain_root.iterdir():
+                if d.is_dir():
+                    _scan(d)
+
+    if scope is None or scope == "state":
+        state_root = bausteine_root / "state"
+        if scope_key:
+            _scan(state_root / scope_key)
+        elif state_root.is_dir():
+            for d in state_root.iterdir():
+                if d.is_dir():
+                    _scan(d)
+
+    if scope is None or scope == "project":
+        if project_root:
+            _scan(Path(project_root) / "_ai" / "bausteine")
+        elif scope_key:
+            _scan(bausteine_root / "projects" / scope_key)
+        # When scope is None and no key/root supplied, scan all per-name
+        # `memory/bausteine/projects/<X>/` dirs as fallback (no per-project
+        # _ai/ folders are visible from the office root).
+        elif scope is None:
+            projects_root = bausteine_root / "projects"
+            if projects_root.is_dir():
+                for d in projects_root.iterdir():
                     if d.is_dir():
                         _scan(d)
-    if scope is None or scope == "project":
-        if project:
-            _scan(base / "projects" / project)
 
     return paths
 
@@ -124,7 +152,7 @@ def _enumerate_paths(scope: str | None, domain: str | None,
 # === Tools ===
 
 def list_bausteine(input: ListBausteineInput) -> ListBausteineOutput:
-    paths = _enumerate_paths(input.scope, input.domain, input.project)
+    paths = _enumerate_paths(input.scope, input.scope_key, input.project_root)
     summaries: list[BausteinSummary] = []
     for p in paths:
         try:
@@ -142,7 +170,7 @@ def list_bausteine(input: ListBausteineInput) -> ListBausteineOutput:
 
 def get_baustein(input: GetBausteinInput) -> GetBausteinOutput:
     if input.scope:
-        p = baustein_path(input.scope, input.name, input.domain, input.project)
+        p = baustein_path(input.scope, input.name, input.scope_key, input.project_root)
     else:
         # Search across all scopes by name
         candidates = [
@@ -168,7 +196,7 @@ def get_baustein(input: GetBausteinInput) -> GetBausteinOutput:
 
 
 def save_baustein(input: SaveBausteinInput) -> SaveBausteinOutput:
-    p = baustein_path(input.scope, input.name, input.domain, input.project)
+    p = baustein_path(input.scope, input.name, input.scope_key, input.project_root)
     if p.is_file() and not input.overwrite:
         raise FileExistsError(f"baustein already exists at {p}; use overwrite=true")
 
@@ -178,8 +206,7 @@ def save_baustein(input: SaveBausteinInput) -> SaveBausteinOutput:
     frontmatter = {
         "name": input.name,
         "scope": input.scope,
-        "domain": input.domain,
-        "project": input.project,
+        "scope_key": input.scope_key,
         "type": input.type,
         "title": input.title,
         "language": "de",
@@ -198,8 +225,12 @@ def save_baustein(input: SaveBausteinInput) -> SaveBausteinOutput:
         "references": input.references,
         "tags": input.tags,
     }
-    # Drop None-valued optional fields for clarity
-    frontmatter = {k: v for k, v in frontmatter.items() if v is not None or k in ("flagged_reason", "superseded_by", "last_used", "domain", "project", "source_project")}
+    # Drop None-valued optional fields for clarity (preserve a few that have
+    # semantic meaning when null).
+    keep_when_null = {"flagged_reason", "superseded_by", "last_used",
+                      "scope_key", "source_project"}
+    frontmatter = {k: v for k, v in frontmatter.items()
+                   if v is not None or k in keep_when_null}
 
     p.parent.mkdir(parents=True, exist_ok=True)
     created = not p.is_file()
@@ -272,11 +303,13 @@ def find_bausteine_by_reference(input: FindBausteineByReferenceInput) -> FindBau
 
 
 def _summarize(fm: dict, path: Path) -> BausteinSummary:
+    # Backward-compat: derive scope_key from old domain/project fields if
+    # present. Old saved bausteine (none yet at v0.4) won't break this way.
+    scope_key = fm.get("scope_key") or fm.get("domain") or fm.get("project")
     return BausteinSummary(
         name=fm.get("name", path.stem),
         scope=fm.get("scope", "unknown"),
-        domain=fm.get("domain"),
-        project=fm.get("project"),
+        scope_key=scope_key,
         type=fm.get("type", "unknown"),
         title=fm.get("title", path.stem),
         status=fm.get("status", "active"),

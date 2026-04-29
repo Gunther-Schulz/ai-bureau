@@ -21,8 +21,14 @@ SourceSubtype = Literal[
     "gesetz-bund", "gesetz-eu", "gesetz-state", "leitfaden",
     "urteil", "beispiel", "methodik",
     # baustein
-    "global", "domain", "project",
+    "universal", "domain", "state", "project",
 ]
+
+# Scope orthogonality (per ARCHITECTURE.md meta-rule "scope orthogonality"):
+# universal/domain/state for bureau-shareable; project for per-project records.
+BausteinScope = Literal["universal", "domain", "state", "project"]
+ManifestLayer = Literal["universal", "domain", "state"]
+SkeletonLayer = Literal["universal", "domain"]
 
 
 class CorpusHit(BaseModel):
@@ -114,17 +120,23 @@ class SearchInputsOutput(BaseModel):
 # === Memory tools ===
 
 class ListBausteineInput(BaseModel):
-    scope: Literal["global", "domain", "project"] | None = None
-    domain: str | None = None
-    project: str | None = None
+    """List bausteine with scope-aware filtering (post-orthogonality refactor).
+
+    scope: universal | domain | state | project (None = all)
+    scope_key: required for domain (e.g. "Naturschutz") and state (e.g. "MV").
+               For project: project name (uses memory/projects/<name>/) OR
+               supply project_root for the per-project _ai/bausteine/ folder.
+    """
+    scope: BausteinScope | None = None
+    scope_key: str | None = None
+    project_root: str | None = None
     status: Literal["active", "flagged", "archived", "superseded"] | None = "active"
 
 
 class BausteinSummary(BaseModel):
     name: str
     scope: str
-    domain: str | None
-    project: str | None
+    scope_key: str | None = None
     type: str
     title: str
     status: str
@@ -145,9 +157,9 @@ class ListBausteineOutput(BaseModel):
 
 class GetBausteinInput(BaseModel):
     name: str
-    scope: Literal["global", "domain", "project"] | None = None
-    domain: str | None = None
-    project: str | None = None
+    scope: BausteinScope | None = None
+    scope_key: str | None = None
+    project_root: str | None = None
 
 
 class GetBausteinOutput(BaseModel):
@@ -159,9 +171,9 @@ class GetBausteinOutput(BaseModel):
 
 class SaveBausteinInput(BaseModel):
     name: str
-    scope: Literal["global", "domain", "project"]
-    domain: str | None = None
-    project: str | None = None
+    scope: BausteinScope
+    scope_key: str | None = None
+    project_root: str | None = None
     type: str
     title: str
     body: str
@@ -338,3 +350,73 @@ class SetupProjectOutput(BaseModel):
     state_path: str
     index_entry_added: bool
     next_steps: list[str]
+
+
+# === Discovery tools (Tier 1, pre-RAG) ===
+# Per ROADMAP "Backend MCP discovery layer (Tier 1 — pre-RAG)" + ARCHITECTURE.md
+# meta-rule 5: thin MCP wrappers over the layered manifest API in office_config /
+# config. Skills declare these in `mcp_tools_required[]` instead of falling back
+# to filesystem Glob.
+
+class ManifestInfo(BaseModel):
+    path: str
+    layer: ManifestLayer
+    scope_key: str | None = None  # null for universal layer
+    exists: bool
+    entry_count: int | None = None
+    last_updated: str | None = None
+
+
+class ListReferenceManifestsInput(BaseModel):
+    scope_filter: bool = True  # True (default): only manifests in active scope; False: full union
+
+
+class ListReferenceManifestsOutput(BaseModel):
+    manifests: list[ManifestInfo]
+    total: int
+    scope_filtered: bool
+
+
+class ListDoctypesManifestsInput(BaseModel):
+    scope_filter: bool = True
+
+
+class ListDoctypesManifestsOutput(BaseModel):
+    manifests: list[ManifestInfo]
+    total: int
+    scope_filtered: bool
+
+
+class SkillInfo(BaseModel):
+    name: str
+    version: str | None = None
+    description: str
+    path: str
+    mcp_tools_required: list[str] = Field(default_factory=list)
+    mcp_tools_optional: list[str] = Field(default_factory=list)
+    fallback_when_mcp_absent: str | None = None
+
+
+class ListSkillsInput(BaseModel):
+    pass  # no filters at v1; potentially trigger-phrase / capability filter later
+
+
+class ListSkillsOutput(BaseModel):
+    skills: list[SkillInfo]
+    total: int
+
+
+class SkeletonInfo(BaseModel):
+    layer: SkeletonLayer
+    scope_key: str | None = None  # null for universal
+    path: str
+
+
+class ListSkeletonsInput(BaseModel):
+    doctype: str
+
+
+class ListSkeletonsOutput(BaseModel):
+    doctype: str
+    skeletons: list[SkeletonInfo]
+    total: int
