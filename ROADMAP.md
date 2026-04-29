@@ -879,6 +879,65 @@ migration path" + commitment #10's HTTP MCP decision.
   abstraction must influence #6/#7/#9 schema work. So #13
   design before #6/#7/#9 implementation.
 
+- **Hardware-spec research note** (session 8 followup, persisted
+  for use when #13 lands): Schulz Planungsbüro Coolify reference
+  deployment hardware sizing, with **ingestion-vs-serving split**
+  + scaling ladder. Verify all Hetzner pricing at order time.
+
+  **Architectural pattern: ingestion node vs serving node**.
+  Heavy compute (RAG corpus embedding via bge-m3) runs **locally
+  on Gunther's RTX 5090** during corpus updates; LanceDB indices
+  produced locally are **rsync'd to the cloud serving node**
+  which only needs the embedding + reranker models loaded for
+  query-time inference. Pattern works because LanceDB stores
+  indices as plain Apache Arrow / Lance files — no service
+  migration, just `rsync -av --delete <index-dir>
+  coolify:/path/to/pbs/indices/`. Memory indices (#14) build
+  on the serving node directly (continuous low-rate writes;
+  small corpus; CPU embedding fine for the write rate). Net
+  effect: serving node sized for query-time latency only, not
+  ingestion throughput.
+
+  **Tier ladder** (start cheap; trigger-driven upgrade):
+
+  | Tier | Hardware | Approx €/month | Query latency | When to use |
+  |---|---|---|---|---|
+  | **Test (start here)** | CCX23 Hetzner Cloud (4 dedicated vCPU, 16 GB RAM, 160 GB SSD) | ~€30 | 500-750 ms (CPU int8-ONNX) | Initial deployment, 2 users, light testing — confirms workload fits + Coolify ops shape |
+  | **Working bureau (CPU)** | CCX33 Hetzner Cloud (8 dedicated vCPU, 32 GB RAM, 240 GB SSD) | ~€50-60 | 500-750 ms | Steady 2-user production if CPU latency tolerable; comfortable RAM headroom |
+  | **Speed-priority (GPU)** | GEX44 Hetzner dedicated (RTX 4000 Ada 20 GB, i5-13500, 64 GB RAM) | ~€184 | 100-150 ms | When CPU latency frustrates real drafting flow; ~5-7× speedup; forces dedicated (no Cloud snapshot/resize) |
+  | **Heavy / multi-tenant** | GEX131 Hetzner dedicated (RTX 6000 Pro Blackwell 96 GB, Xeon 24-core, 256 GB RAM) | ~€1000+ | <100 ms | Consulting client offices, multi-tenant builder-generated offices, multimodal RAG ingest serving (ColPali page-image retrieval), or workloads that need fp16 / fp32 precision instead of int8 quantization |
+
+  **Quantization choice**: int8-ONNX on CPU tiers (CCX23/CCX33);
+  fp16 on GPU tiers. Int8 loses ~1-2 % retrieval quality vs fp16
+  per published bge-m3 benchmarks — acceptable for our recall
+  targets. Switch to fp16 only when GPU is available.
+
+  **Upgrade triggers (trigger-driven, not preemptive)**:
+  - **CCX23 → CCX33**: 16 GB RAM hits OOM or thrash under both
+    models loaded + LanceDB cache + Python sessions. Resize is
+    a power-cycle on Hetzner Cloud, no migration.
+  - **CCX33 → GEX44**: real-use latency frustrates drafting
+    flow (subjective; agentic-retrieval per-claim queries
+    compound the perception). Migration: snapshot CCX33,
+    redeploy backend on GEX44 dedicated (no in-place upgrade
+    Cloud↔Dedicated; ~half-day of ops work).
+  - **GEX44 → GEX131**: serving consulting clients alongside
+    Schulz, OR multimodal RAG ingest serving from same node,
+    OR concurrency >10 users.
+
+  **Ingest re-sync workflow** (when corpus updates):
+  1. Local RTX 5090: `pbs-mcp ingest --refresh` rebuilds
+     affected index slice (research-references full refresh
+     trigger).
+  2. Local: `rsync -av --delete <index-dir>
+     <coolify-host>:/path/to/pbs/indices/`.
+  3. Serving node: `pbs-mcp` reads updated index automatically
+     (LanceDB handles versioning).
+
+  Memory indices (#14) build on serving node directly — not
+  part of the rsync flow. Different write rate + size
+  characteristics make local-build a wrong choice for memory.
+
 **14. Memory Bank — selective retrieval over the memory layer**
 (session 8, post-#10 followup) — see also Row 8 of
 `docs/decisions/a2a-and-gemini-pattern-emulation.md` (RAG /
