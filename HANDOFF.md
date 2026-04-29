@@ -439,7 +439,14 @@ deferred to #6.
    store with stable references, not Oracle. Demoted Approval from
    proposed managed entity to event-kinds on AuditEvent (folded
    into #6's scope). Future audit/design-review check (target 11)
-   should scan for over-modeled entities.
+   should scan for over-modeled entities. **Broader-review pass
+   (session-9 followup #3)** confirmed zero major gaps in capturing
+   common business workflows: 7 candidate concerns (document
+   versioning, notifications, role-based actors, reports, conflicts,
+   business calendar, knowledge depreciation) all resolved via
+   existing infrastructure / scope expansion of existing commitments
+   / defer-to-concrete-need / out-of-scope-per-pattern-vs-instance.
+   No new commitment numbers added.
 
 7. **Memory captures**: existing 6 feedback memories carry
    forward. The "leave legacy behind" + "judgment-not-menus" +

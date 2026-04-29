@@ -347,7 +347,7 @@ If all three: managed entity. If any missing: prefer **event kinds + nested fiel
 | "All invoices for client X" | `SELECT ... JOIN ...` | Adapter API: `lexware.invoices(client_id=X)`. Or audit-trail filter: `kind=invoice_issued AND details.client_id=X`. |
 | "All projects with overdue deadlines" | `SELECT ... WHERE deadline < NOW()` | Native query on Project entity store filtered by `deadlines[].date < today`. |
 | "Audit history of decisions made by colleague Y" | Multi-table join | Audit-trail filter: `actor=Y AND kind=decision`. |
-| "Which bauseine cite §44 BNatSchG?" | Full-text + reference table | Memory query (per #14): `search_memory(query="§44 BNatSchG", kinds=["baustein"])`. |
+| "Which bausteine cite §44 BNatSchG?" | Full-text + reference table | Memory query (per #14): `search_memory(query="§44 BNatSchG", kinds=["baustein"])`. |
 
 Everything's a filtered query over a small set of stores: native entities, audit trail, memory, adapter APIs. **No join planner needed.**
 
@@ -369,6 +369,24 @@ Application of the three-test discipline. Real businesses have hierarchical appr
 - No new managed entity. No schema migration for approval state. Light, correct.
 
 Folds into commitment #6 (audit-trail v2 retrofit) — that retrofit is already adding event kinds; approval kinds added there.
+
+#### Broader review — companies as they actually work
+
+Critical-eye pass against real-world business operations to check for systemic gaps. Each item run through the entity-elevation discipline + pattern-vs-instance check. **Net result: zero new commitment numbers.** All resolved via existing infrastructure, scope expansions of existing commitments, defer to concrete need, or out-of-scope per pattern-vs-instance.
+
+| Concern | Disposition | Why |
+|---|---|---|
+| **Document versioning** | Already handled (audit trail send events + snapshots/ + `causes[]` chains for explicit supersession) | Snapshots are immutable bytes (no lifecycle); send events capture moment of creation (3-test fails for entity) |
+| **Notifications / proactive nudges** | Fold into #13 multi-user scope: `notification-channel` adapter class + `notification_sent` audit event kind | Receiving system (email/Slack inbox) IS state-of-record; PBS handles trigger + delivery + log. No new entity. |
+| **Role-based actors** | Already in #15 scope: `Actor.roles: list[str]` field (open-ended; auth integration in #13 maps roles to permissions) | Actor is the entity; roles are nested-fields data |
+| **Reports / metrics / dashboards** | Defer post-RAG: generalize `render_audit_trail` to `render_report` when concrete need arises | Reports are projections (fail 3-test), not entities. UX concern, not architectural. |
+| **Conflicts-of-interest tracking** | NOT pattern-level. Domain-specific to legal-practice department; AI-office-builder-generated legal offices contribute their own `Conflict` managed entity | PBS planning doesn't have this concept; pattern-vs-instance pushes to per-department |
+| **Business calendar (Werktage-aware deadlines)** | Defer to concrete need: office-config field + helper function (~half-session) | Reference data with no lifecycle (fails 3-test); fits as config + library, not entity |
+| **Knowledge depreciation beyond legal references** | Already handled by `review_due` on memory records (works for any record type, not just legal-citation drift) | Convention reminder for non-legal records to set `review_due` |
+
+**The discipline pays off**: the 3-test correctly identified Notifications, Reports, and BusinessCalendar as NOT entities (despite each having entity-feeling intuition). Mapping to adapter / render-artifact / config keeps the architecture light. Conflict correctly pushed to per-department-per-domain.
+
+**What this confirms**: the architecture as it stands captures common business workflows without major gaps. New business primitives (when they arise) should run through the 3-test before being elevated. Most will fail and resolve to event-kinds + nested fields + memory entries. The few that pass are genuinely entities.
 
 ## Implementation scope (this commitment)
 

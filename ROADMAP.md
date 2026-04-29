@@ -815,6 +815,15 @@ migration path" + commitment #10's HTTP MCP decision.
       both connected, both writing audit events, both using
       bausteine, with correct attribution + no concurrent-write
       drift.
+    - **Notification adapter contract** (per session-9 followup #2
+      broader review): introduce `notification-channel` adapter
+      class (per meta-rule 1 pattern) + concrete adapters (email,
+      Slack, push) + `notification_sent` audit event kind. Trigger
+      conditions live in skill logic (extension of watch-list);
+      delivery via adapter; delivery log via audit event. PBS does
+      NOT track read/unread state — receiving channel (inbox) is
+      state-of-record. Async cross-user notifications become load-
+      bearing once Gunther + colleague work concurrently.
 
   **Deferred to post-RAG**:
   - Compute infrastructure choice for OTHER consulting clients
@@ -1088,6 +1097,13 @@ discipline.
   identity primitive for #13's multi-user auth. Gunther + colleague
   are two Actor entries; auth maps to Actor.id; AuditEvent.actor
   references Actor.id.
+- **Role-based actors** (per session-9 followup #2 broader review):
+  Actor entity gains `roles: list[str]` field (open-ended;
+  deployment-configurable values like "principal", "practice-lead",
+  "admin", "junior", "contractor", "regulator", "client-contact").
+  Auth integration in #13 maps roles to permissions; cross-
+  department workflow rules can reference roles ("Invoice >€10K
+  needs role=principal approval").
 - **Order note**: schedule **AFTER #13** (multi-user readiness
   needed for Actor's auth integration) **BEFORE #6** (audit-trail
   v2 retrofit references Actor; approval event kinds also
