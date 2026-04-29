@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.14 (post-session-9 followup #4 + infrastructure-primitive review + 9/9 process-expressibility coverage)**.
+Status: **v0.15 (post-session-9 followup #6 + glue-not-replacement principle as architectural commitment)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,22 @@ Status: **v0.14 (post-session-9 followup #4 + infrastructure-primitive review + 
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.14 → v0.15**: **Glue-not-replacement principle** added as
+  top-level architectural discipline (parallel to pattern-vs-
+  instance + entity-elevation). PBS is the **glue / coordination
+  layer** that brings cross-concern AI to existing infrastructure;
+  it does NOT replace existing systems (BPMN engines, accounting
+  tools, CRMs, time-tracking, calendars, etc.). The architecture
+  is integration-first: the integration-adapter pattern (meta-rule
+  1) + adapter-mode managed entities (#12) + adapter-emitted events
+  (#9 Gap B) all serve this principle. Where customers have
+  existing infrastructure, PBS connects to it; where they don't,
+  PBS provides native-mode managed entities + bundled MCP tools as
+  an alternative. Both modes work uniformly through the same
+  framework. Connects to the BPMN-empowerment positioning (v1.x-v2
+  ROADMAP entry) and the consulting-niche framing (`docs/strategic-
+  positioning.md`). See "Glue-not-replacement principle" section
+  below.
 - **v0.13 → v0.14**: **Infrastructure-primitive review pass**
   (session-9 followup #4) — stress-tests core primitives (skills,
   managed entities, audit events, memory, integration adapters,
@@ -591,6 +607,98 @@ defense in depth.
 See `docs/decisions/office-vs-department.md` "When to elevate to
 managed entity (the three-test discipline)" subsection for the
 full reasoning + examples.
+
+---
+
+## Glue-not-replacement principle
+
+PBS is **the glue layer** that brings cross-concern AI-mediated
+reasoning to existing infrastructure. It is **not** a replacement
+for the systems customers already have (BPMN engines, accounting
+tools, CRMs, time-tracking, calendars, ticketing systems, etc.).
+The architecture is integration-first by design.
+
+**Why this matters**: most enterprises have **decades of
+investment** in workflow / accounting / case-management
+infrastructure. Selling rip-and-replace is a losing pitch — both
+practically (the migration is too expensive) and politically (the
+internal champions of those systems block adoption). The
+addressable market for "AI office that augments your existing
+stack" is **substantially larger** than "AI office that replaces
+your existing stack."
+
+**The principle, stated**:
+
+> **PBS connects to existing infrastructure where it exists;
+> provides native alternatives where it doesn't. Both modes work
+> uniformly through the same framework. We never ask the customer
+> to choose between AI augmentation and their existing
+> investment.**
+
+**Concrete implications across the architecture**:
+
+| Principle expression | Architectural mechanism |
+|---|---|
+| Existing accounting tool? Use it. | Adapter-mode managed entity (`Invoice` via Lexware/FastBill/sevDesk adapter) per #12 |
+| Existing time-tracking? Use it. | Adapter-mode managed entity (`Timesheet` via Harvest/MOCO adapter) |
+| Existing BPMN/workflow engine? Augment it. | BPMN-engine adapter class (v1.x-v2 ROADMAP); service-task delegation + decision-automation + cross-process intelligence layered ON TOP |
+| Existing calendar? Connect to it. | Adapter-mode (CalDAV / Google / Microsoft) |
+| Existing CRM? Connect to it. | Adapter-mode managed entity (`Client` via Salesforce/HubSpot adapter) |
+| No existing tool? Use built-in. | Native-mode managed entity (`Project` for B-Plan workflows; PBS IS the SoR — no external alternative exists) |
+| Existing audit / compliance system? Augment with AI-mediated reasoning. | Cross-process events flow as `actor_kind=external_agent`; PBS adds judgment-mediated layer to existing audit infrastructure |
+
+**The architectural mechanism the principle relies on**:
+
+- **Meta-rule 1's integration-adapter pattern** (`Pydantic Protocol` + concrete adapter implementations selected per office-config) — already established
+- **Adapter-mode managed entities** (per #12, `office-vs-department.md`) — generalizes the pattern from auxiliary integrations to primary department system-of-record
+- **Adapter-emitted events** (per #9 Gap B, `office-vs-department.md` infrastructure-primitive review) — bidirectional flow; external state changes emit `actor_kind=external_agent` audit events
+- **Mixed-mode per-entity** (per #12) — a single department can have some entities in adapter mode, some in native mode. Real-world deployments mix.
+
+**For consulting positioning** (see `docs/strategic-positioning.md`
+for full treatment):
+
+> **"Your BPMN engine handles the workflow. Your accounting tool
+> handles invoicing. Your CRM handles clients. Your calendar
+> handles scheduling. We add the cross-concern judgment +
+> drafting + audit-defensibility layer that sits on top —
+> without replacing any of your existing investment. The cognitive-
+> load reduction comes from the glue, not from rip-and-replace."**
+
+This is **a fundamentally different sale** than "buy our AI tool to
+replace [vertical SaaS]." Different addressable market; different
+political dynamics within enterprise prospects; different
+implementation timelines; different risk profile.
+
+**Connection to other disciplines**:
+
+- **Pattern-vs-instance**: the glue principle is itself pattern-
+  level (every AI office, regardless of domain, integrates with
+  domain-relevant existing infrastructure). Instance content =
+  which specific adapters exist for the deployment.
+- **Entity-elevation discipline**: helps decide which managed
+  entities should be native vs adapter-mode. Strong default toward
+  adapter-mode when external system is the natural state-of-record.
+- **Meta-rule 1 (app-vs-office)**: the integration-adapter pattern
+  is the implementation mechanism; this principle states the
+  WHY (connect, don't replace).
+- **Meta-rule 4 (execution determinism)**: deterministic gates
+  delegate to deterministic external systems where they exist;
+  judgment lives in the AI layer.
+
+**When this principle pulls against pure native-mode preference**:
+
+If two viable paths exist (native or adapter), default toward
+adapter when the customer has the external system. Only choose
+native when:
+- No external alternative exists (PBS-bureau planning Project)
+- The customer is solo / small enough that running an external
+  system is overhead (small deployments per #13's CCX23 tier)
+- Native gives demonstrable value the adapter can't (e.g., custom
+  domain-specific reasoning that pre-exists in PBS's skills)
+
+The architecture supports both modes uniformly (#12); the
+principle expresses the strong preference toward integration when
+viable.
 
 ---
 

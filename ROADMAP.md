@@ -1769,6 +1769,43 @@ machine state, so the human review step has something to look at.
 - Storage: renders alongside source in snapshots/, or a separate
   renders/ tree?
 
+### BPMN / workflow engine integration adapter class
+
+**Why**: enterprises typically have **decades of investment** in BPMN engines (Camunda, Pega, jBPM, Bonita, Flowable) or workflow platforms (ServiceNow Workflow, SAP Workflow, Salesforce Lightning Flow). Selling rip-and-replace is a losing pitch. Per the **glue-not-replacement principle** (`ARCHITECTURE.md`), PBS positions as an **augmentation layer ON TOP** of these systems — adding judgment-mediated reasoning + drafting + audit-defensibility to existing automated processes without displacing the customer's investment.
+
+This is a **position-of-strength entry** for enterprise consulting market. Activation trigger: first prospect with existing BPMN investment.
+
+**Three integration patterns** (lightest to deepest):
+
+1. **Service-task delegation** (lightest): BPMN service task ("draft cover letter", "summarize feedback", "check compliance") → calls PBS-bureau via HTTP MCP → relevant skill (`draft-cover-mail`, `review-draft`, `verify-citations`) produces output → returns to BPMN. BPMN tracks workflow state; PBS produces the unstructured artifact. AuditEvent in PBS includes `bpmn_process_id` + `bpmn_task_id` for cross-system traceability.
+
+2. **Decision automation with sparring** (medium): BPMN has a "decide" task → PBS receives context → surfaces decision to user with sparring (per `sparring-output-v1.md` — challenge + alternatives + reasoning) → returns user-approved decision → BPMN records the outcome with AI-attributed reasoning chain. **The defensibility upgrade**: BPMN engines record "user X clicked approve" — PBS adds "user X approved with reasoning Y, after sparring on counter-arguments Z, considering alternatives W." That's auditor-grade.
+
+3. **Cross-process intelligence layer** (deepest): PBS sits ABOVE multiple BPMN processes, watching their event streams via webhooks (per #9 Gap B adapter-emitted events), applying cross-process reasoning. "Process A (invoice approval) just completed → Process B (project archival) should evaluate readiness." Single-engine BPMN can't do this; cross-engine federation is exactly A2A territory (#10's defensive shape pays off here).
+
+**Architectural fit (already supported)**:
+- **BPMN-engine adapter class** per meta-rule 1: `bpmn-workflow-engine` adapter class with concrete adapters per vendor (`camunda-adapter.py`, `pega-adapter.py`, `servicenow-workflow-adapter.py`, `flowable-adapter.py`)
+- **HTTP MCP transport** per #10 + #13: BPMN engine calls PBS via HTTP MCP; same transport as Cowork uses
+- **Adapter-emitted events** per #9 Gap B: BPMN process state changes flow into PBS audit trail as `actor_kind=external_agent` events with `origin_agent_card=<bpmn-engine-url>`
+- **Event subscriptions** per #12: departments subscribe to BPMN-emitted event kinds; cross-process intelligence emerges via the watch-list mechanism
+
+**No new architectural primitives needed.** The infrastructure already supports BPMN integration as a special case of the integration-adapter pattern.
+
+**Consulting positioning**:
+
+> "Your BPMN engine handles the workflow. We handle the judgment, drafting, and audit-defensibility on top — without replacing your existing investment. Your process compliance documentation gets stronger; your tasks get smarter; your audit trail captures not just what happened but why."
+
+This is **a much easier sell** to enterprise prospects than "replace your Pega" or "replace your Camunda." Positions PBS as enabling-existing-investment, opens partnership possibilities with BPMN vendors.
+
+**Activation trigger**: first consulting prospect with substantial BPMN/workflow-engine investment (typically: enterprise legal practice, regulated industry, government). Not pre-RAG critical; activates when concrete demand materializes.
+
+**Output (when activated)**:
+- Decision record `docs/decisions/bpmn-integration.md` — adapter class design + concrete vendor adapter selection rationale
+- BPMN-engine adapter Protocol at `extensions/department/<dept>/adapters/bpmn-workflow-engine/protocol.py`
+- Concrete adapter for the prospect's specific engine (Camunda first, likely)
+- Cross-system traceability convention (`bpmn_process_id` + `bpmn_task_id` in AuditEvent details)
+- Reference deployment with the prospect's engine + PBS office; end-to-end test
+
 ### Integration registry — unified discovery of MCPs + adapters + skills
 
 **Why**: PBS will accumulate many "things the orchestrator can call":
@@ -2414,6 +2451,126 @@ expert planning work, with optional patterns documented for
 others to copy"). That pivot is acceptable — the underlying
 discipline (meta-rules, fail-closed, three-axis VISION, etc.) was
 worth doing for PBS-the-instance regardless.
+
+#### Marketplace as v3 horizon (concept; deferred decision)
+
+Long-horizon possibility, post-v2 builder. Captured here as
+**concept only** — actual marketplace decision deferred to
+when the v2 builder ships and ecosystem dynamics are visible.
+
+**Two-layer marketplace strategy** (the user's framing,
+session-9 followup):
+
+- **Layer 1 — main app distribution**: PBS-bureau itself
+  (the framework + open demonstration content) lives in
+  **Anthropic's marketplace** (today: `knowledge-work-plugins`
+  repo + Cowork plugin distribution; tomorrow: whatever Anthropic
+  ships as the canonical Cowork-plugin marketplace). We don't
+  run our own marketplace for the main app — we participate in
+  Anthropic's. Easier distribution, broader reach, no
+  marketplace operations overhead for us.
+- **Layer 2 — specialized blueprint marketplace** (open
+  question): a niche marketplace for **department-module
+  blueprints + refined domain-instance content** (planning
+  bauseine libraries, legal-practice department modules, medical
+  department modules, etc.) MIGHT be ours to operate. OR it
+  might also live on Anthropic's marketplace as "premium tier
+  plugins." OR a third party might run it. **Decision deferred**;
+  too early to know.
+
+**Three evolutionary models** (whichever marketplace strategy
+emerges):
+
+| Stage | Model | When |
+|---|---|---|
+| **Stage 1** (v1.x — today) | You-as-sole-seller | You publish refined blueprints; buyers buy directly. No marketplace tooling. Direct consulting + asset licensing. |
+| **Stage 2** (post-v2) | Curated marketplace (yours OR Anthropic's premium tier) | Vetted contributors; quality control; marketplace tooling exists. Curation premium reflects quality signal. |
+| **Stage 3** (mature) | Open marketplace | Anyone publishes; community moderates; operator takes a cut. Anthropic-plugin-marketplace shape. Highest scale; lowest control. |
+
+**Critical constraint on v2 builder design (load-bearing today)**:
+the v2 AI-office-builder's OUTPUT format must be **marketplace-
+compatible from the start**, regardless of which marketplace
+strategy ultimately wins. Concretely:
+
+- **Standardized blueprint manifest format**: each generated
+  office is a self-contained blueprint with manifest declaring
+  what's contributed (skills, managed entities, adapters,
+  doctype manifests, references manifests, memory bauseine,
+  workflow phases, integration adapter requirements)
+- **Dependency declaration**: blueprint manifest declares
+  framework version dependency, integration adapter classes
+  required, MCP tool dependencies
+- **Version compatibility annotations**: which framework
+  versions this blueprint is tested against
+- **Quality / completeness metadata**: declared completeness
+  (skills only / skills + bauseine seed / fully refined practice
+  library / etc.)
+- **License declaration per blueprint** (some open, some closed)
+
+If v2 ships with proprietary or per-deployment-only blueprint
+formats, retrofitting marketplace standards later is painful.
+**Design v2's output format with marketplace standards in mind,
+even though the marketplace itself is v3+ horizon and the
+operator may not be us.** This is the load-bearing piece for
+TODAY'S v2 design work.
+
+**Strategic value of running a Layer-2 niche marketplace**
+(if we do):
+- **Specialization positioning**: Anthropic's marketplace is
+  general-purpose; ours could be the canonical place for "deep
+  domain-specialist multi-department-office blueprints" with
+  audit-defensibility + practice-content depth. Different
+  niche.
+- **Network effects**: marketplace operator captures both
+  supply + demand once established
+- **Standards-setting**: defines what a "good blueprint" looks
+  like at the deep-domain level
+- **Data moat**: market intelligence on what's selling, what's
+  missing, what's working
+- **Compounding brand**: "blueprints from THE pbs-bureau
+  marketplace" beats "blueprints from N independent sellers"
+
+**Risks if we DO run a Layer-2 marketplace**:
+- Distracts from consulting growth (running a two-sided market
+  is a different business)
+- Anthropic's marketplace might absorb the niche (positioning
+  around specialization is the mitigation)
+- Quality fragmentation damages framework reputation —
+  curation discipline must be tight
+- We'd compete with our own sellers (resolution: at stage 2/3,
+  retire from selling within own marketplace; switch revenue
+  to marketplace fees + framework consulting)
+
+**Strategic value of NOT running a Layer-2 marketplace**:
+- Less operational overhead
+- More focus on consulting
+- Anthropic's existing marketplace (or whoever wins) handles
+  distribution; we focus on architecture + delivery
+
+**When the marketplace decision becomes timely**:
+- v2 AI-office-builder has shipped + multiple instance offices
+  exist
+- External developers ask "where do I publish my legal-practice
+  blueprint?"
+- Anthropic's marketplace either embraces deep-domain blueprints
+  (we participate) or doesn't (gap exists for us to fill)
+
+**Strategic arc for consulting** (defensible long-arc pitch):
+
+> "Today: open-source framework + my consulting expertise.
+> Year 2: AI-office-builder generates new offices from domain
+> spec. Year 3+: marketplace where the ecosystem of AI-office-
+> architects publishes refined blueprints — possibly Anthropic's
+> general marketplace, possibly a specialized one. PBS-bureau is
+> the proof-of-concept; the builder is the meta-skill; the
+> marketplace is the ecosystem. By engaging me now, you're
+> getting first-mover positioning on architecture that scales
+> into a larger ecosystem."
+
+Captured as concept; **no commitment to build a marketplace**.
+The v2 builder design constraint (marketplace-compatible
+blueprint format) is the only load-bearing implication for
+current work.
 
 ### Gemini Enterprise migration path (multi-agent A2A archetype) — Tier 3 of deployment ladder
 

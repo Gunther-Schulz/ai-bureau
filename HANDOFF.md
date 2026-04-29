@@ -462,6 +462,23 @@ deferred to #6.
    "defer-instinct" + "entity-elevation discipline" principles all
    paid off in this conversation cycle.
 
+8. **Glue-not-replacement principle (session-9 followup #6)**: PBS
+   is the glue/coordination layer that brings AI to existing
+   infrastructure; not a replacement for BPMN engines / accounting
+   tools / CRMs / calendars / etc. Generalizes meta-rule 1's
+   integration-adapter pattern as the canonical mechanism. Different
+   addressable market than vertical-SaaS-replacement plays. ARCH
+   v0.14 → v0.15 codifies as top-level discipline. ROADMAP v1.x-v2
+   gains BPMN-empowerment entry as concrete positioning. ROADMAP v2
+   AI-office-builder gains marketplace-as-v3 subsection (concept
+   only; decision deferred; v2 builder output format must be
+   marketplace-compatible from start). New `docs/strategic-
+   positioning.md` captures the full strategic framing for
+   consulting positioning (open-source-as-edge / three-tier content
+   strategy / glue-not-replacement / cognitive-load-reduction
+   framing / three risks / revenue model / marketplace arc /
+   competitive landscape).
+
 ---
 
 ## Session 9 commits (chronological)
