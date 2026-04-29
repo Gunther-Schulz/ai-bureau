@@ -82,18 +82,35 @@ bytes for clarity.
 ### A.4 Token-budget protocol for image content blocks
 
 Each image content block consumes context tokens proportional to
-image dimensions. Need budget control:
+image dimensions. Need budget control.
 
-- **Cap 5 images per response** by default (configurable per
-  call). Surface warning if a query would exceed.
-- **Deduplicate images per turn** — if multiple hits point at the
-  same page, return once.
-- **Image dimensions**: render page images at 2048-px max
-  dimension; sufficient for Claude vision; bounds token cost.
+**Verdict**: cap 5 images per response by default (configurable
+per call); deduplicate images per turn; render at 2048-px max
+dimension.
+
+**Alternatives considered**:
+
+- **Cap 3 images** (more conservative): chosen against because 3
+  often forces premature truncation when an authority Stellungnahme
+  spans multiple pages or a Karte requires multiple reference views;
+  user friction outweighs token saving.
+- **Cap 10 images** (more permissive): chosen against because
+  context tokens balloon quickly (each 2048-px image ~1500 tokens);
+  10 per response approaches 15K image tokens before any text.
+- **Image dimension at 1024-px**: lower fidelity; insufficient
+  for German Bestandskarten + diagram detail (tested mentally
+  against KNE-Anlagengestaltung diagrams). 2048-px is the
+  reasonable floor.
+- **Image dimension at 4096-px**: better fidelity but doubles
+  token cost; marginal value for most Karten.
+
+Revisit triggers: real usage shows under-fetching (images needed
+but cap hit) or over-fetching (token budget consistently strained).
 
 ### A.5 Hybrid retrieval (text + image)
 
-`search_corpus` default behavior returns hybrid candidates:
+**Verdict**: `search_corpus` default behavior returns hybrid
+candidates:
 
 1. Text-vector retrieval (bge-m3) returns top-K text chunks.
 2. Image-vector retrieval (ColPali) returns top-K image pages.
@@ -103,6 +120,29 @@ image dimensions. Need budget control:
 Skills consuming `search_corpus` results check `hit.modality` to
 dispatch (text → use as text; image → call
 `read_corpus_page_image`).
+
+**Alternatives considered**:
+
+- **Modality-specific search only** (no hybrid; caller must
+  request text or image separately): rejected because most
+  queries don't know in advance which modality has the answer
+  ("what does the KNE recommendation say about Modulreihen-
+  spacing?" might be best answered by the diagram OR by the
+  prose; let the reranker decide).
+- **Text-first, image-fallback** (only fetch images if text
+  recall is poor): rejected because the recall-poor signal is
+  unreliable; better to score both kinds and let reranker
+  choose.
+- **Image-first, text-context** (always fetch the page image
+  AND the page's text chunks): considered for diagram-heavy
+  content but rejected as default — too token-expensive for
+  text-answerable queries; can be added as an explicit
+  `search_corpus(filter={include_page_context: true})` flag
+  later if a use case surfaces.
+
+Revisit trigger: hybrid reranking shows poor quality on real
+queries (e.g. text consistently outranks an obviously-better
+image hit, or vice versa).
 
 ### A.6 Implementation order
 

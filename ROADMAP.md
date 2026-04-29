@@ -1237,6 +1237,34 @@ from training memory. Never invent citations.
 Per orchestrator Validation 7.3: `Edit` tool with surrounding context,
 not `Write` of the entire file. Especially during Phase B review.
 
+### Decision recording preserves alternatives
+
+When recording an architectural / design / verdict decision in
+docs (ARCHITECTURE.md, ROADMAP.md, VISION.md, decision docs like
+`docs/rag-pipeline-decisions.md`, project `_ai/decisions.md`,
+etc.), always preserve the alternatives that were considered and
+rejected — not just the chosen path. Capture per item:
+
+- **The verdict** (chosen path)
+- **Alternatives considered** (named explicitly with their
+  reasoning + why-rejected)
+- **Revisit trigger** (when would we revisit this decision? what
+  signal would force re-evaluation?)
+
+Why: decisions made today look obviously correct in their context
+but reveal as defensible-or-not when the context shifts. A
+verdict-only record reads as "this is how it is" — making the
+revisit conversation harder than necessary because the original
+alternatives have to be re-derived. A verdict + alternatives +
+trigger record reads as "here was the option space and our
+choice within it" — making revisit a refinement rather than a
+re-investigation.
+
+Applies to: architectural decisions, model/library choices,
+schema choices, naming conventions, scope boundaries, deferred-
+vs-urgent prioritization, anything where the next session might
+reasonably ask "why this and not the other thing?"
+
 ### "Used by skill X" cross-refs are noise
 
 In memory content (C type), don't include "loaded by skill Y at
