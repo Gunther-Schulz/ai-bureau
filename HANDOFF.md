@@ -1,211 +1,151 @@
 # Session handoff — pbs-bureau
 
-End of session 2026-04-29 (fifth major session). Previous session
-closed with the **pre-RAG audit gate** as the only blocker. This
-session **executed the audit** (Slice A cross-doc / B 16-skill
-drift / C backend), shipped the resulting **F1–F9 fix-now drift
-batch**, the **U1 decision-recording backfill** in
-`rag-pipeline-decisions.md`, and the **U2 backend conventions
-doc** (resolves audit deferred items D1/D2/D3).
+End of session 2026-04-29 (fifth major session). Earlier in this
+session: pre-RAG architectural audit (3 parallel slice agents → 12
+findings → conditional pass) + F1–F9 fix-now drift batch + U1
+decision-recording backfill + U2 backend conventions doc + first
+HANDOFF rewrite.
 
-**The pre-RAG audit gate is now closed.** RAG kickoff is
-unblocked and is the first task next session.
+**Then the gate-closed claim turned out premature.** Three
+follow-up audit rounds (meta-audit + rounds 3 + 4) surfaced 3
+**BLOCKERS** in backend docs + live ingest code, plus 18
+documentation drift items. All resolved in commit `488cfc7`.
+Plus `docs/plugin-conventions.md` landed (commit `c67c73a`).
 
-The audit deferred fresh-eyes review of VISION.md and
-ARCHITECTURE.md wording (U3) to **post-RAG** per user decision —
-not blocking, but on the watch list.
+**Audit work is now genuinely complete.** Round 4's verdict was
+explicit: "no new unaudited territory left." RAG-kickoff
+preparation moves forward.
+
+**Phase 0 (pre-RAG plumbing) is partially done**: items 1
+(meta-audit) and 2 (plugin-conventions) per the restructured
+plan are closed. Items 3 (integration registry design+impl)
+and 4 (testing-methodology decisions + harness) are the
+**next-session task** — discussion-first per user directive.
 
 **Read order for next session**:
 
 1. **This file (HANDOFF.md)** — current state
-2. **`docs/rag-pipeline-decisions.md`** — now **ACCEPTED**
-   (previously PROPOSED). Implementation order at bottom is the
-   next-session work plan.
-3. **`docs/backend-conventions.md`** — NEW. Test layout, logging,
-   MCP error format. Apply when RAG-pipeline code starts landing.
-4. **`docs/audit-pre-rag.md`** — audit findings as of session 5.
-   Permanent record; useful template for future audits.
-5. **`VISION.md`** — three-axis thesis (still load-bearing)
-6. **`ARCHITECTURE.md`** — 5 meta-rules + 9 entity types + 6
-   decision rules (verified clean by audit; small additions
-   for baustein extensions D+E pointer + RAG-decisions cross-ref)
-7. **`ROADMAP.md`** — Tier 1 entry removed (landed); Tier 2
-   split (find_bausteine_by_reference landed); Backend
-   conventions doc removed (landed via U2)
-8. **`plugin/skills/orchestrator/SKILL.md` + `PROCEDURE.md`**
-9. Whichever skill the user invokes
+2. **`docs/rag-pipeline-decisions.md`** — ACCEPTED post-audit;
+   Phase 0/1/2a/2b/3a/3b/4 phasing at the bottom
+3. **`docs/plugin-conventions.md`** — NEW (Type A/B idioms;
+   sibling to backend-conventions.md)
+4. **`docs/backend-conventions.md`** — Type E idioms
+5. **`docs/audit-pre-rag.md`** — frozen session-5 snapshot
+   (closure banner at top; HANDOFF carries current state)
+6. **`VISION.md`** — three-axis thesis
+7. **`ARCHITECTURE.md`** — 5 meta-rules + 9 entity types + 6
+   decision rules; Maintenance discipline back-refs to plugin/
+   backend conventions docs
+8. **`ROADMAP.md`** — Tier 1 + backend-conventions-doc removed
+   (landed); Tier 2 split (find_bausteine_by_reference landed)
 
 ---
 
 ## Status snapshot — what landed this session
 
-### ✅ Pre-RAG architectural audit (Task #21, closed)
+### ✅ Audit work — 4 rounds, 12 + 12 + 6 + 14 findings, all closed
 
-Three parallel audit slices (A cross-doc, B 16-skill drift, C
-backend). 12 findings total: 9 fix-now drift, 3 user-decision,
-plus 5 expected-gap items deferred-with-reasoning.
+| Round | Slices | Findings | Closed in |
+|---|---|---|---|
+| 1 — pre-RAG audit | A cross-doc / B 16-skill / C backend | 12 (9 fix-now drift, 3 user-decision, 5 deferred) | `ad01b18` (F-batch) + `d0f3f91` (U1) + `501eaa1` (U2) |
+| 2 — meta-audit | E plugin-side / F memory+manifests / G self-audit+adapters | 12 (5 fix-now drift, 5 user-decision, defer-rest) | `488cfc7` |
+| 3 — backend deep + cross-refs + READMEs | H backend / I PROCEDURE+handoffs / J READMEs+per-project-memory | 6 fix-now drift (incl 2 BLOCKERS in backend docs) | `488cfc7` |
+| 4 — final pass | unified | 14 (incl 1 LIVE CODE BLOCKER in ingest.py + 6 drift + version-rebump confirmation) | `488cfc7` |
 
-**Verdict**: conditional pass. All three conditions closed
-this session.
+**Three BLOCKERS** (specifically dangerous):
+- `backend/mcp-server/docs/vector-metadata-schema.md`: legacy `global | domain | project` baustein scope vocab → would have written wrong metadata to LanceDB on first ingest. Fixed.
+- `backend/mcp-server/docs/chunking-strategy.md`: same legacy vocab in baustein chunker spec. Fixed.
+- `backend/mcp-server/src/pbs_mcp/tools/ingest.py:217`: LIVE CODE — baustein source_subtype dispatcher returned `"global"` / `"domain"` for legacy paths; rewritten to detect orthogonal `/bausteine/{universal,domain,state}/` + project `_ai/` paths.
 
-Permanent record at `docs/audit-pre-rag.md`.
+Audit-pattern confirmed valuable: 4 rounds caught progressively different drift surfaces (top-level docs → plugin-side → backend code → cross-cutting doc consistency). Each round needed a different scope frame.
 
-### ✅ F1–F9 fix-now drift batch (commit `ad01b18`)
+### ✅ Skill version semver retroactively corrected (audit verdict applied)
 
-The HANDOFF claim "all 16 skills aligned" was partially false at
-session-4 boundary — 12/16 fully aligned, 4 had meta-rule-5
-frontmatter gaps. F-batch closed all 9 mechanical drift items:
+Six skills bumped from patch-where-it-should-have-been-minor to minor (rule was already in plugin/CLAUDE.md but F-batch initially missed it; audit caught + user authorized retroactive correction):
 
-- **F1 — research-references** (BLOCKER): added all three
-  frontmatter fields; migrated body from
-  `office_config.load().all_references_manifests()` to Tier 1
-  `list_reference_manifests(scope_filter=true)`. Version 0.2.0 → 0.2.1.
-- **F2 — author-manifest** (BLOCKER): empty positive-declaration
-  frontmatter (`mcp_tools_required: []` + optional + fallback).
-  Version 0.1.0 → 0.1.1.
-- **F3 — setup-office, validate-latex-style, draft-cover-mail**:
-  positive-declaration frontmatter completion. All bumped to
-  0.2.1.
-- **F4 — orchestrator**: added `bind_project` + `setup_project`
-  to `mcp_tools_optional`.
-- **F5 — server.py:92**: `list_bausteine` description string
-  refreshed (was stale: "domain/project" → now
-  "scope_key/project_root").
-- **F6 — ROADMAP**: Tier 1 MCP discovery section removed
-  (landed); Tier 2 split (`find_bausteine_by_reference` landed).
-- **F7 — ARCHITECTURE.md**: entity-type-D notes the baustein
-  extensions D+E (`verified_against_version`,
-  `cross_project_visible`) reserved schema slots; pointer to
-  `plugin/skills/save-baustein/references/format.md` for full spec.
-- **F8 — ARCHITECTURE.md**: "Designed extensions" section
-  cross-refs `docs/rag-pipeline-decisions.md` for RAG-related
-  items.
-- **F9 — ROADMAP**: integration-registry callable count refreshed
-  (~30 → ~44; 16 skills + 5 adapters + 22 MCP tools + 1 external).
+| Skill | Was | Now |
+|---|---|---|
+| research-references | 0.2.1 | 0.3.0 |
+| author-manifest | 0.1.1 | 0.2.0 |
+| setup-office | 0.2.1 | 0.3.0 |
+| validate-latex-style | 0.2.1 | 0.3.0 |
+| draft-cover-mail | 0.2.1 | 0.3.0 |
+| orchestrator | 0.2.0 | 0.3.0 |
+| validate-checklist | 0.2.0 | 0.3.0 |
 
-### ✅ U1 — decision-recording convention backfill (commit `d0f3f91`)
+Discipline now codified in `docs/plugin-conventions.md` §3 — "if the orchestrator or any other tool/skill reads the field for planning, changing it = behavior change = minor bump."
 
-`docs/rag-pipeline-decisions.md` had only 2 of ~13 sections
-conforming to the new convention (preserve alternatives + revisit
-triggers). Backfilled across A.1, A.2, A.3, B.1, B.2, B.4, C
-(unified at C.4), D, and pipeline choices 1/2/3. Sections A.4
-+ A.5 were already conforming (authoring template).
-Schema-spec subsections (B.3, B.5) and pure sequencing (A.6)
-intentionally left as-is — not decision points.
+### ✅ docs/plugin-conventions.md (commit `c67c73a`)
 
-Status field on the doc moved **PROPOSED → ACCEPTED** post-audit.
+Sibling to `docs/backend-conventions.md`. Codifies Type A/B idioms:
+frontmatter contract + version semver + body structure + references
+organization + PROCEDURE.md gating + routing handoffs + path
+conventions + domain+state capitalization + MCP tool naming +
+trigger-phrase discipline (top-level vs. delegated) + anti-patterns.
+Both conventions docs carry the same scope-boundary header pointing
+back at ARCHITECTURE.md.
 
-### ✅ U2 — backend conventions doc (commit `501eaa1`)
+### ✅ Restructured RAG phasing in `docs/rag-pipeline-decisions.md`
 
-NEW: `docs/backend-conventions.md`. Resolves audit deferred items
-D1/D2/D3.
+Previous flat "Backend pipeline additions" lumped 7 distinct
+concerns into one PR (too coarse). New phasing splits text vs
+image side and downloads the corpus early so chunker design
+iterates against real data:
 
-- **Tests**: pytest, `tests/{unit,integration}/` at backend root,
-  real in-memory DBs over mocks (LanceDB and SQLite are local;
-  fixtures land in `conftest.py`).
-- **Logging**: standard `logger = logging.getLogger(__name__)`
-  per module; `basicConfig` once in `server.main`; INFO default
-  with `PBS_LOG_LEVEL` override; %-format in log calls (not
-  f-strings) via ruff `G` rule; structured logs deferred until
-  multi-user.
-- **Errors**: JSON envelope with `_error` sentinel in
-  `TextContent`; named string error codes (`input_validation`,
-  `config_missing`, `not_found`, `not_in_scope`,
-  `corpus_unavailable`, `tool_runtime`, `external_api`,
-  `not_implemented`); `ToolError` exception class wraps domain
-  exceptions; rejected `mcp.McpError` because Claude-Code MCP
-  client surfaces those as generic "tool failed."
+- **Phase 0** (pre-RAG plumbing) — meta-audit, plugin-conventions,
+  registry design+impl, testing-methodology design (~70%
+  complete; items 3+4 outstanding)
+- **Phase 1** — corpus download only (no embeddings)
+- **Phase 2a** — text-side smoke (5 entries)
+- **Phase 2b** — full text ingestion
+- **Phase 3a** — image-side smoke (3 image-heavy + 1 scanned + 1 DRM)
+- **Phase 3b** — full image ingestion + verified hybrid
+- **Phase 4** — first project bind + real workflow
 
-Each section preserves alternatives + revisit triggers per
-decision-recording convention.
-
-**Migration order** (in U2 doc): create `tests/` + conftest.py,
-add `G` to ruff selection + sweep log calls, add `ToolError`
-class + update `server.call_tool` wrapper. Land in same PR as
-RAG-pipeline ingest additions (first real consumers).
-
-ROADMAP "Backend conventions doc" item removed per Tracking
-conventions.
+Each phase has explicit gates. Coverage-gap tracking + ground-truth
+set + determinism harness will land as part of Phase 0 item 4.
 
 ### ⏸️ U3 — fresh-eyes review of VISION + ARCHITECTURE wording
 
-**Deferred to post-RAG by user decision.** Not blocking.
-
-The audit flagged this from the previous-session HANDOFF: user
-flagged at vision-doc landing time "tired, not full focus";
-wanted to revisit later with fresh attention. Specifically wants
-**user fresh eyes**, not Claude's, since Claude authored most of
-both docs.
-
-Re-pick-up trigger: after the first RAG kickoff lands and the
-operating reality of using the system can inform a fresh
-read-through. The framing risks at that point are visible only
-after using it.
+Still deferred to post-RAG by user decision. Surface again after
+Phase 1 (corpus download) lands.
 
 ---
 
-## ⏳ Pending — first task next session
+## ⏳ Pending — next-session tasks
 
-### RAG kickoff (per `docs/rag-pipeline-decisions.md` § Implementation order)
+### Phase 0 item 3 — Integration registry design + implementation
 
-The audit gate is closed; the implementation plan in the
-RAG-decisions doc moves from "verdict" to "build."
+**Discussion-first**: don't write code until decisions land.
 
-**Phase 1 — Backend pipeline additions** (single PR; lands the
-U2 conventions migration in the same PR):
+Open design questions to resolve:
 
-a. Set up `tests/` + `conftest.py` per `backend-conventions.md`
-   §1; add `G` to ruff selection; add pytest config to
-   `pyproject.toml`. Mechanical.
-b. Add `ToolError` exception class to `pbs_mcp/`; update
-   `server.call_tool` wrapper to emit error envelopes; convert
-   existing handlers to raise `ToolError`. Mechanical.
-c. **OCR + DRM-removal modules** in ingest pipeline. Per A.1.
-   Branches on text-availability heuristic — skip OCR for PDFs
-   that already carry extractable text.
-d. **ColPali embedder** alongside bge-m3 (lazy-load on first
-   image-query). Page-render pipeline → PNGs at 2048-px max.
-e. **LanceDB schema migration**: add `modality`, `image_path`,
-   `page_number` columns. Per A.2.
-f. **SQLite `legal-graph.sqlite`** initialization + extraction
-   hooks in chunkers. Per B.4 — regex extraction at chunk-time.
-g. **Hybrid retrieval** in `search_corpus` (reranker scores
-   text + image candidates). Per A.5.
-h. **New MCP tools**: `read_corpus_page_image`,
-   `query_legal_graph`. Per A.3 + B.5.
-i. **New chunking strategy**: `per-section-with-paragraph-subchunks`.
-   Per C.2.
+- **Capability vocabulary**: controlled enum, free-form tags, or hybrid (small enum + open tags)?
+- **Manifest structure**: 4th layered type (`integrations-manifest.yaml` per universal/domain/state), or single registry file at repo root?
+- **Discovery flow**: does orchestrator query `find_callables(capability=X)` or `list_registry_entries(filter=...)` — or both?
+- **Layering vs replacement**: does the registry **replace** `list_skills` / `list_reference_manifests` / `list_doctypes_manifests`, or **layer above** them as a unified front?
+- **MCP query API shape**: signature + return shape for the registry query tool(s).
+- **Cross-deployment propagation**: how does a registry entry from PBS deployment flow to a hypothetical second office's registry without coupling?
 
-**Phase 2 — Smoke-test on 3–5 entries** (text-only,
-diagram-heavy, scanned, DRM-encumbered).
+Implementation cost estimate: ~half a day after design. Bundle with U2 conventions migration (tests/, ToolError, ruff `G` rule sweep) in the same PR.
 
-**Phase 3 — Full first ingest** (all 57 entries via
-`research-references` refresh-all). Tracked in
-`<references_root>/changelog.md`.
+### Phase 0 item 4 — Testing methodology + harness
 
-**Phase 4 — Sample search** to verify retrieval quality. If
-poor → revisit assessment choices per the revisit triggers in
-`rag-pipeline-decisions.md` (e.g. swap to ColBERT-v2; add HyDE).
+**Discussion-first**.
 
-### Then — first project bind
+Per user's specific concern: "if we have a limited RAG at first with no vision how do we track what we need to ingest at a later time (the pieces we will be missing)?"
 
-After RAG works:
+Three layered concerns to design:
 
-- Bind first project (any existing hidrive project — orchestrator
-  routes through survey-project → bind_project).
-- Optional: wire `\OfficeLogoPath`, `\OfficeSpecializations` into
-  `office-style.sty` letterhead.
+- **Coverage-gap tracking**: per-manifest-entry `coverage:` field schema (text/images/tables/graph + last_indexed + coverage_score). Chunkers self-report at ingest time. Rolls up to `<references_root>/coverage-report.md`.
+- **Ground-truth set**: `tests/ground_truth/legal-queries.yaml` with 15-25 hand-curated query/expected-doc pairs. **User curates** these (Claude can scaffold candidates from existing memory references). Pytest test asserts top-5 reranked hits include expected doc.
+- **Determinism + regression detection**: embedding seed pinned; reranker tie-break by ID. Baseline retrieval-quality scores stored; diff on chunker/model changes.
 
-### Watch list (not blocking; surface at session open if relevant)
+Output: `docs/rag-testing-strategy.md` documenting the three layers + acceptance criteria for each phase gate (e.g. "Phase 2b passes when ground-truth set top-5 ≥ 70% relevance").
 
-- **U3 — fresh-eyes review of VISION + ARCHITECTURE wording** —
-  deferred to post-RAG. Surface again once Phase 1 lands.
-- **D5 — legacy backward-compat shim in `_summarize`**
-  (`memory.py:308`) — drop once first migration sweep confirms no
-  v0.3-shape bausteine remain (none can exist today; revisit at
-  first baustein save).
-- **D7 — Plugin/deployment shipping bundle** — defer until second
-  deployment.
+### Then — Phase 1 corpus download
+
+After items 3+4 close. Fetch all 57 entries via `research-references` full refresh. **No embeddings yet** — raw fetch + checksum + manifest population only. Surfaces real corpus shape (DRM/scanned/manual-discovery) before chunker code commits.
 
 ---
 
@@ -215,47 +155,36 @@ After RAG works:
 |---|---|
 | `/home/g/dev/Gunther-Schulz/pbs-bureau/` | This repo |
 | `VISION.md` | Three-axis thesis + pioneer instance |
-| `ARCHITECTURE.md` | v0.4: 5 meta-rules + 9 entity types + 6 decision rules; updated this session for entity-type-D extensions D+E pointer + designed-extensions cross-ref |
-| `ROADMAP.md` | Tier 1 + Backend-conventions-doc items removed (landed); Tier 2 split |
-| `docs/rag-pipeline-decisions.md` | **ACCEPTED** post-audit; status updated |
-| `docs/backend-conventions.md` | **NEW** — test layout, logging, MCP error format |
-| `docs/audit-pre-rag.md` | Audit findings (permanent record) |
-| `docs/office-config.schema.yaml` | schema v2 reference |
-| `plugin/skills/` | 16 skills, all aligned (16/16 — *now* truly) |
-| `extensions/{universal,domain/<X>,state/<X>}/` | 5 ref + 2 doctype manifests in scope (57 entries) |
-| `memory/universal/` | Universal cross-bureau knowledge |
-| `memory/bausteine/{universal,domain/<X>,state/<X>}/` | Bausteine landing site (still empty; populated post-RAG) |
-| `backend/mcp-server/src/pbs_mcp/tools/discovery.py` | Tier 1 MCP discovery tool handlers |
-| `backend/mcp-server/src/pbs_mcp/tools/memory.py` | Layered orthogonality (scope_key + project_root) |
-| `backend/mcp-server/tests/` | Will be created in Phase 1a |
-| `~/.config/pbs-bureau/office.yaml` | PBS office config (schema v2) |
-| `/mnt/data2t/hidrive/.../_ai-references/` | RAG corpus (still empty; first ingest fills it) |
+| `ARCHITECTURE.md` | v0.4: 5 meta-rules + 9 entity types + 6 decision rules; Maintenance-discipline back-refs to plugin/backend conventions |
+| `ROADMAP.md` | Tier 1 + backend-conventions-doc + integration-registry callable count refreshed/removed (landed) |
+| `docs/rag-pipeline-decisions.md` | **ACCEPTED**; restructured Phase 0/1/2a/2b/3a/3b/4 phasing |
+| `docs/plugin-conventions.md` | **NEW** — Type A/B idioms |
+| `docs/backend-conventions.md` | Type E idioms (sibling to plugin-conventions) |
+| `docs/audit-pre-rag.md` | Frozen session-5 audit snapshot (closure banner at top) |
+| `docs/office-config.schema.yaml` | schema v2 |
+| `plugin/skills/` | 16 skills, all aligned + retroactively rebumped to minor where appropriate |
+| `plugin/templates/office-style/` | default + PV-FFA + Wind + **Naturschutz** (NEW stub) |
+| `extensions/{universal,domain/<X>,state/<X>}/` | 5 populated + 1 skeleton (Innenentwicklung) ref manifests; 2 doctype manifests; 57 ref entries total |
+| `memory/universal/per-project-memory/*.md` | Now carries `references_used: []` frontmatter per Type C |
+| `memory/bausteine/{universal,domain/<X>,state/<X>}/` | Bausteine landing site (still empty until Phase 4) |
+| `backend/mcp-server/src/pbs_mcp/tools/{discovery,memory,ingest}.py` | All three updated this session for orthogonality + ingest BLOCKER fix |
+| `backend/mcp-server/docs/{vector-metadata-schema,chunking-strategy}.md` | Both fixed for orthogonal scope vocab |
+| `~/.config/pbs-bureau/office.yaml` | PBS office config |
+| `/mnt/data2t/hidrive/.../_ai-references/` | RAG corpus root (still empty; Phase 1 fills it) |
 | `/mnt/data2t/hidrive/.../Projekte/` | All client projects |
 
 ---
 
 ## Working-style notes (carried + new)
 
-1. **Commit between batches** — 4 commits this session (audit doc
-   + F-batch combined; then U1; then U2; then this HANDOFF). One
-   per coherent change.
-2. **Decision-recording convention** — preserve alternatives +
-   revisit triggers in every decision doc. Backfilled in U1 across
-   `rag-pipeline-decisions.md`; applied throughout
-   `backend-conventions.md`. Now well-established.
-3. **`pbs_core` / `pbs_mcp` discipline** — handlers stay
-   thin-Python (Pydantic in / out); MCP framework types only in
-   `server.py`. Physical split deferred to first non-MCP frontend.
-4. **Frontmatter dependency declarations on every skill** —
-   meta-rule 5; F-batch closed the last gaps.
-5. **MCP tool naming**: snake_case matching `pbs_core` Python
-   function name (forward-compat with future integration registry).
-6. **Apply ARCHITECTURE.md rules rigorously** — when in doubt
-   about where new content belongs, walk Rules 1–6.
-7. **Audit pattern**: three parallel slice agents (cross-doc /
-   skill-drift / backend) was efficient — total ~6 minutes
-   wall-clock, surfaced 12 findings cleanly. Use again for the
-   next major audit cycle.
+1. **Audit pattern (3 parallel slice agents per round)** — proven valuable across 4 rounds. Each round caught a different drift surface; the cost (~5–10 min wall-clock per round) is small relative to the cost of mistagged data hitting LanceDB.
+2. **Decision-recording convention** — every decision doc preserves alternatives + revisit triggers (ROADMAP "Working-style improvements"). Applied throughout this session.
+3. **Commit between batches** — 4 + 4 commits this session (audit + F-batch / U1 / U2 / mid-session HANDOFF / meta-audit-fix-batch / plugin-conventions / final HANDOFF).
+4. **Frontmatter changes are behavior changes** — minor bump per `docs/plugin-conventions.md` §3. Don't repeat the F-batch's patch-bump miss.
+5. **Scope-boundary headers** on conventions docs to mitigate overlap with ARCHITECTURE.md placement rules.
+6. **`pbs_core` / `pbs_mcp` discipline** — handlers stay thin-Python (Pydantic in/out); MCP framework types only in `server.py`. Physical split deferred to first non-MCP frontend.
+7. **MCP tool naming**: snake_case matching `pbs_core` Python function name. Codified in plugin-conventions §10.
+8. **Apply ARCHITECTURE.md rules rigorously** — when in doubt about where new content belongs, walk Rules 1–6.
 
 ---
 
@@ -265,11 +194,8 @@ After RAG works:
 - **User's plugins active**: bildhauer, clippy, skill-craft,
   experiment-lab, gis-utils, plugin-dev, pbs (this one).
 - **Plugin cache symlink**: re-run `bash dev-link.sh` if
-  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` is a regular
-  dir. This session bumped 5 skill versions (research-references,
-  author-manifest, setup-office, validate-latex-style,
-  draft-cover-mail to 0.2.1 / 0.1.1); plugin version itself
-  unchanged at 0.1.0.
+  `~/.claude/plugins/cache/pbs-bureau/pbs/0.1.0` is a regular dir.
+  This session bumped 7 skill versions; plugin version still 0.1.0.
 - **Hooks active**: `restrict-bash-paths.py`,
   `restrict-file-paths.py` in dotfiles. Hidrive path whitelisted.
 - **Settings symlink**: verify
@@ -290,6 +216,9 @@ After RAG works:
 | 1 | `ad01b18` | audit: pre-RAG architectural audit + F1–F9 fix-now drift batch |
 | 2 | `d0f3f91` | docs/rag-pipeline-decisions: backfill alternatives + revisit triggers (U1) |
 | 3 | `501eaa1` | docs/backend-conventions: test layout + logging + MCP error format (U2) |
-| 4 | (this commit) | HANDOFF: rewrite for session-5 → session-6 boundary |
+| 4 | `ec143fd` | HANDOFF: session 5 → 6 boundary (premature — superseded below) |
+| 5 | `488cfc7` | audit: meta-audit + rounds 3/4 fix-now batch (3 BLOCKERS + 18 drift) |
+| 6 | `c67c73a` | docs/plugin-conventions: codify Type A/B idioms (skills + skill references) |
+| 7 | (this commit) | HANDOFF: session 5 final boundary |
 
-All pushed to origin/main.
+All pushed to origin/main once the user authorizes a push.
