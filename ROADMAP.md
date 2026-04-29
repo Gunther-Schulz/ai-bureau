@@ -1833,6 +1833,106 @@ others to copy"). That pivot is acceptable — the underlying
 discipline (meta-rules, fail-closed, three-axis VISION, etc.) was
 worth doing for PBS-the-instance regardless.
 
+### Gemini Enterprise migration path (multi-agent A2A archetype)
+
+**Why this is in the roadmap**: persistence of the option, not
+commitment to use it. PBS today is built on a **single-big-model
+orchestration archetype** (one Opus session orchestrates all
+departments via skill delegation; shared state in `state.md`;
+local Python MCP backend; meta-rules + fail-closed for governance).
+This archetype is the right fit for solo-practitioner / small-team
+scale. **If scalability or federation needs ever arise, a
+migration path to Gemini Enterprise's multi-agent A2A archetype
+exists** — and the load-bearing IP (domain content + architectural
+discipline) ports over.
+
+**When this might pull forward** (probably never, possibly
+someday):
+- Consulting engagement with an enterprise scale (1000+ users,
+  parallel tasks, federated authority)
+- Cross-organization federation requirement (e.g., PBS-bureau ↔
+  legal-practice office ↔ client-CRM agent across orgs)
+- Multi-bureau deployment (one PBS-style office multiplied across
+  100 planning bureaus, each with own data, governed centrally)
+- Government / regulator deployment requiring formal Agent
+  Identity / Agent Gateway / Model Armor governance
+
+**What survives the migration unchanged** (the load-bearing IP):
+- Domain knowledge: skill bodies, manifests, korrektur-rules,
+  doctype templates, decision records
+- Architectural discipline: meta-rules, fail-closed corollary,
+  pattern-vs-instance discipline, three-axis VISION
+- Validation contracts: Pydantic models port to per-agent
+  contracts
+- Memory taxonomy: layered scopes (universal × domain × state ×
+  project × department) port to Memory Bank scopes
+- Office vs department distinction: maps cleanly to
+  agents-per-department in A2A archetype
+
+**What gets refactored** (runtime mechanics, not content):
+
+| Element | Today (our archetype) | Future on Gemini Enterprise |
+|---|---|---|
+| Orchestrator | Single Opus session with skill delegation | N agents (one per skill or per department) communicating via A2A |
+| Backend | Local Python MCP server (stdio) | Apigee-bridged managed MCP servers (HTTP, distributed) |
+| Persistent state | `state.md` per project (markdown + Pydantic) | Memory Bank (Google's persistent context service) |
+| Cross-department workflow | In-session skill orchestration | A2A protocol message-passing |
+| Audit trail | Custom `audit-trail.jsonl` + `record_audit_event` MCP tool | Agent Identity (cryptographic signed agent cards) + A2A trace |
+| Governance | Pattern-vs-instance discipline + fail-closed corollary + meta-rules | Agent Gateway + Model Armor + Agent Simulation |
+| Model | Anthropic Claude (one model, single session) | Anthropic Claude (Model Garden — same model, different runtime) |
+
+**Migration cost estimate**: substantial (3-6 months realistic
+work) but conceptually clean — content + discipline port; runtime
+changes. **Anthropic Claude is in Gemini Enterprise's Model Garden
+as Claude Opus 4.7 + Sonnet + Haiku**, so the model layer doesn't
+change. Apigee provides MCP-to-agent bridging so our existing MCP
+tools have a translation path. A2A protocol is Linux Foundation
+governed (stable v1.0) and supported by Anthropic + Microsoft +
+AWS + Salesforce + SAP + ServiceNow.
+
+**Pre-existing groundwork** (already in pre-RAG queue):
+- Commitment #10 (A2A schema gate) — designs schemas to be
+  A2A-shape-compatible. **This commitment is directly load-bearing
+  for this migration path**: AuditEvent + ProjectState shaped to
+  be A2A-friendly today means migration-day work is reduced.
+
+**Why this is consulting-marketing-relevant**:
+
+The migration path is itself a **positioning advantage** vs both
+commercial vertical AI (Harvey, Filevine, Spellbook) and
+enterprise platform-first builds (Gemini Enterprise from day one):
+
+> "Start with our archetype — single-Opus orchestration, MCP-
+> based, deployable as Cowork plugin. Right for one bureau or
+> small practice (low cost, fast deploy, no platform lock-in).
+> When you scale to 100 offices or need cross-organization
+> federation, there's a known migration path to Gemini Enterprise
+> that preserves your domain content and architectural discipline.
+> The IP isn't tied to our runtime — the methodology and patterns
+> travel."
+
+Compared to:
+- **Harvey/Filevine/Spellbook**: "Buy our SaaS, give us your
+  data, no portability."
+- **Build directly on Gemini Enterprise from day one**: "Pay
+  enterprise platform overhead before you have one client;
+  vendor-locked from the start."
+
+**Open questions** (deferred until trigger arises):
+- Does the v2 AI-office-builder generate Cowork-deployable
+  offices AND Gemini-Enterprise-deployable offices from the same
+  domain spec? Or are these two different builders (one per
+  archetype)?
+- How does state-bank persistence map cleanly between archetypes?
+  Memory Bank's API + ours need a translation layer; design when
+  needed.
+- A2A endpoint design (when to expose an actual endpoint vs
+  schema-only awareness) — informed by commitment #10.
+
+**Status**: persistence of the option only. Not committed to
+implement. Trigger conditions named explicitly so future-you
+recognizes when the migration is justified.
+
 ### Reference versioning
 
 **Why**: Laws amend. Currently `archive_versions: true` in manifest
