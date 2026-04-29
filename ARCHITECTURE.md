@@ -835,7 +835,7 @@ have `bundesland`, `verfahren_type`, `lifecycle`, `phase`,
 `departments_active`, etc. (today's ProjectState fields, relocated).
 
 **Body conventions** (per entity type, documented at
-`docs/conventions/entity-body-specs.md`, audit-enforced not
+`docs/conventions/entity-md-spec.md`, audit-enforced not
 gate-enforced):
 
 | Entity type | Conventional body sections |

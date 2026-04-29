@@ -130,7 +130,7 @@ Why recommended-not-enforced: hard requirement creates rigidity; entities that d
 | `actor` | `## Role + responsibilities` / `## Working preferences` / `## Capabilities + limits` |
 | `baustein` | (per existing memory body conventions; out of scope) |
 
-Body specs live at `docs/conventions/entity-body-specs.md` (one section per entity type). Created during #9 implementation alongside the Pydantic schemas.
+Body specs live at `docs/conventions/entity-md-spec.md` (one section per entity type). Created during #9 implementation alongside the Pydantic schemas.
 
 ### Where conditional rules live (the "Umweltbericht required when §13a doesn't apply" question)
 
@@ -420,7 +420,7 @@ Each defer names a specific home + a specific cost being avoided. Per `feedback_
 
 - The hybrid-shape principle is **central design lens** for #9's managed-entity concept work.
 - **Generic entity gate** (`read_entity` / `write_entity` with type-dispatch) lands here. Replaces sprawl of per-entity tools.
-- **Body specs document** (`docs/conventions/entity-body-specs.md`) authored alongside Pydantic Layer-2 subclasses.
+- **Body specs document** (`docs/conventions/entity-md-spec.md`) authored alongside Pydantic Layer-2 subclasses.
 - ProjectState refactor: when relocated to `extensions/department/planning/entities/project.py`, also publish corresponding body-spec section.
 - **Migration of doctypes.yaml** (D3) executes here.
 - **Per-deployment customization mechanism** (D1) decided here.

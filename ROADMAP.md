@@ -494,7 +494,7 @@ ROADMAP v2 "AI-office builder" entry.
     — three options on the table (Pydantic subclass / declared
     `extra_fields` / `metadata: dict` escape hatch). Pick with
     rationale.
-  - **Body specs document** (`docs/conventions/entity-body-specs.md`)
+  - **Body specs document** (`docs/conventions/entity-md-spec.md`)
     authored alongside Layer-2 Pydantic subclasses (one section
     per entity type).
   - **ProjectState refactor**: when relocated to
@@ -1230,7 +1230,7 @@ ARCHITECTURE.md "AI-as-runtime hybrid-shape principle" section.
   - **Layer 3 (per-deployment extension fields)**: deferred to #9.
 - **Body conventions** (recommended-not-enforced; warned by audit
   + design-review skills, NEVER blocked by gate). Per-entity-type
-  body specs at `docs/conventions/entity-body-specs.md`
+  body specs at `docs/conventions/entity-md-spec.md`
   (authored alongside Layer-2 schemas in #9).
 - **Where conditional rules live**: rules about *when* something
   applies belong with the *process*, NOT the entity. Process-as-md
@@ -1253,6 +1253,42 @@ ARCHITECTURE.md "AI-as-runtime hybrid-shape principle" section.
   against the appropriate Pydantic subclass + suggests missing
   recommended sections. Coordinates with target 11
   (entity-elevation discipline). Implementation bundled with #9.
+- **Design-review targets 13 + 14** (session 10 followup —
+  review-mechanism gap addressed): user noted that prior audit +
+  design-review passes never surfaced the hybrid-shape gap.
+  Hypothesis (codified): existing modes catch deviations from
+  *named* disciplines; neither catches *missing* disciplines
+  themselves. Two new targets close the gap structurally:
+  - **Target 13 (pattern emergence / unnamed convergence)**:
+    bottom-up scan for ≥2 surfaces converging on an unnamed
+    pattern; flag for elevation. Catches "silent convergence"
+    failure mode.
+  - **Target 14 (discipline-gap detection)**: top-down scan of
+    failure-mode catalog vs named disciplines; flag uncovered
+    modes. Catches failure modes not yet visible as code-level
+    convergence.
+  - Load-bearing reference:
+    `plugin/skills/design-review/references/failure-mode-catalog.md`
+    (new) — living catalog seeded with session-10 postmortem +
+    literature-derived modes (silent convergence, prose-in-
+    block-scalars, encoded-rules-when-AI-was-available,
+    SQL-DB-trap, source-of-truth ambiguity, config-vs-code
+    drift, hardcoded-instance-content, vendor-lock, cargo-cult,
+    monolithic skill, implicit contracts, hidden global state,
+    workflow-as-data, premature elevation, distributed-systems
+    failures).
+  - **First-runs scheduled sessions 11-12** (light cadence;
+    independent of #11). Annual cadence thereafter, plus after
+    every architectural surprise.
+- **Entity-md spec doc**
+  (`docs/conventions/entity-md-spec.md`): single source of truth
+  for the hybrid-shape contract implementation — file layout +
+  Layer 1 frontmatter (every entity, snake_case, ISO 8601 dates,
+  kebab-case ids) + Layer 2 scaffold per entity type (grows in
+  during #9) + body section conventions per type (h2 top-level,
+  h3 sub, no h1) + cross-ref syntax (no wikilinks) + validation
+  expectations. Audit slice 21 + target 12 validate against
+  THIS doc, not against ARCHITECTURE prose.
 - **Pattern-vs-instance check**: principle generalizes. Legal
   practice (cases get state.md-shape, precedents become reference
   entities), research-paper review (manuscripts get state.md-shape,

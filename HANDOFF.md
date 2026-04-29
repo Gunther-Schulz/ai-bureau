@@ -69,6 +69,73 @@ ROADMAP slot + downstream constraints.
   layers (even in prose) because that's the SQL-DB trap in
   disguise.
 
+**What also shipped session 10 (followup — review-mechanism gap
+addressed)**:
+
+User question: "multiple audit + review passes have run — why
+didn't this core gap surface?" Honest answer: existing audit +
+design-review modes catch *deviations from named disciplines*;
+neither catches *missing disciplines themselves*. Two new
+design-review targets added to address this gap structurally.
+
+- **Design-review target 12 (entity-md authoring conformance)** —
+  named in #16 DR; full description added to
+  `plugin/skills/design-review/references/scope-and-targets.md`.
+  Validates Layer 1 + Layer 2 frontmatter + body-section presence
+  per the entity-md spec. Implementation bundled with #9.
+- **Design-review target 13 (pattern emergence / unnamed
+  convergence)** — NEW. Discovery-mode lens: scan code for
+  ≥2 surfaces converging on an unnamed pattern; flag for
+  elevation to discipline. Catches "silent convergence" failure
+  mode. First-run scheduled session 11+ (after #11 starts; light
+  cadence).
+- **Design-review target 14 (discipline-gap detection)** — NEW.
+  Top-down lens: scan named disciplines vs failure-mode catalog;
+  flag uncovered modes. Catches failure modes that haven't yet
+  manifested as code-visible convergence. Reads
+  `plugin/skills/design-review/references/failure-mode-catalog.md`
+  (new — seeded with session-10 postmortem + literature-derived
+  modes).
+- **Failure-mode catalog**
+  (`plugin/skills/design-review/references/failure-mode-catalog.md`):
+  living document. Initial entries: silent convergence (covered),
+  prose-in-block-scalars (covered), encoded-rules-when-AI-was-
+  available (covered), SQL-DB-trap (covered), source-of-truth
+  ambiguity (covered), config-vs-code drift (partial), hardcoded-
+  instance-content (covered), vendor-lock (covered), cargo-cult
+  (partial), monolithic skill (partial — evaluate), implicit
+  contracts between skills (partial — evaluate), hidden global
+  state (partial — re-evaluate post-#13), workflow-as-data
+  (covered), premature entity elevation (covered), distributed-
+  systems failures (n/a today; re-evaluate post-#13).
+- **Entity-md spec doc** — `docs/conventions/entity-md-spec.md`
+  authored as scaffold. Single source of truth for hybrid-shape
+  contract implementation: file layout, Layer 1 frontmatter
+  fields (every entity, snake_case + ISO 8601 dates +
+  kebab-case ids), Layer 2 type frontmatter (scaffold per
+  entity type, grows in during #9), body section conventions
+  per type (h2 top-level, h3 sub, no h1), cross-ref syntax (no
+  wikilinks), validation expectations. Replaces the placeholder
+  `docs/conventions/entity-body-specs.md` referenced earlier
+  in #16 DR.
+- **Design-review skill version bump**: 0.8.0 → 0.9.0 (3 new
+  targets named + new reference file added). SKILL.md description
+  updated.
+
+**Why this followup matters (review-mechanism gap analysis)**:
+
+Hypothesis (now codified into target 13): three independent
+surfaces (memory + skills + state.md) had been using
+hybrid-shape for 6+ months without anyone naming it as
+discipline. Audit checks against named disciplines; greenfield-
+reframe asks "would we keep existing?"; neither asks "what
+unnamed pattern is this codebase converging on?" The gap is
+*architectural*, not a methodological mistake.
+
+Target 13 (pattern emergence) + target 14 (discipline gap) are
+the structural patch. First-runs scheduled in early sessions
+post-#11 to validate the lenses on real codebase state.
+
 **Migration timing per #16 (no urgent migration this session)**:
 
 - `extensions/universal/doctypes.yaml` + per-domain `doctypes.yaml`
@@ -206,9 +273,10 @@ defers, not YAGNI.
 13. **`plugin/CLAUDE.md`** — meta-rule 4 summary
 14. **`plugin/skills/audit/`** — **0.9.0** (slice 20 added; slice
     21 entity-md conformance scheduled with #9)
-15. **`plugin/skills/design-review/`** — **0.8.0** (target 11
-    added; target 12 entity authoring conformance scheduled with
-    #9)
+15. **`plugin/skills/design-review/`** — **0.9.0** (targets
+    12 + 13 + 14 added session 10 followup; target 12 first-run
+    bundled with #9; targets 13 + 14 first-runs scheduled
+    sessions 11-12 to validate lenses on current codebase)
 16. **`plugin/skills/orchestrator/`** — **0.10.0**
 17. **`backend/mcp-server/src/pbs_mcp/audit_trail.py`** —
     session 8 schema with ActorKind + new fields + cross-ref
@@ -451,8 +519,10 @@ directly (continuous low-rate writes).
 | `docs/design-reviews/foundations-20260429.md` | Session-5 design-review |
 | `backend/mcp-server/src/pbs_mcp/audit_trail.py` | Session 8 — ActorKind + 3 new fields + cross-ref validator |
 | `backend/mcp-server/src/pbs_mcp/project_state.py` | **Session 9** — `departments_active: list[str]` field |
-| `plugin/skills/audit/` | **0.8.0** — slices 1-16 + 18 + 19 |
-| `plugin/skills/design-review/` | **0.7.0** — targets 1-10 |
+| `plugin/skills/audit/` | **0.9.0** — slices 1-16 + 18 + 19 + 20 (slice 21 entity-md scheduled with #9) |
+| `plugin/skills/design-review/` | **0.9.0** — targets 1-11 + 12 (entity-md authoring) + 13 (pattern emergence) + 14 (discipline gap); failure-mode-catalog.md added |
+| `docs/conventions/entity-md-spec.md` | **Session 10 followup** — single source of truth for hybrid-shape contract: file layout + Layer 1 fields + Layer 2 scaffold + body conventions + cross-ref syntax |
+| `plugin/skills/design-review/references/failure-mode-catalog.md` | **Session 10 followup** — living catalog of architectural failure modes + their named-discipline coverage status |
 | `plugin/skills/orchestrator/` | **0.10.0** |
 | `plugin/CLAUDE.md` | Updated meta-rule 4 summary |
 | `docs/plugin-conventions.md` | §11 (triggers) + §11b (fallback policy) |
@@ -460,19 +530,19 @@ directly (continuous low-rate writes).
 
 ---
 
-## Skill versions snapshot (post-session 9 — unchanged from session 7)
+## Skill versions snapshot (post-session 10 followup)
 
-No skill versions changed sessions 8 or 9. Both were backend-
-schema + decision-record work; no skill bodies touched. The
-session-7 versions snapshot remains current. Will change
-significantly in session 10+ when #11 introduces `department:`
-frontmatter sweep + slash command namespacing.
+Session 10 followup bumped design-review 0.8.0 → 0.9.0 (targets
+12 + 13 + 14 added; failure-mode-catalog.md added). All other
+skills unchanged. Will change significantly in session 11+ when
+#11 introduces `department:` frontmatter sweep + slash command
+namespacing.
 
 | Skill | Version |
 |---|---|
-| audit | **0.9.0** (slice 20 — entity-elevation drift scan, session-9 followup) |
+| audit | **0.9.0** (slice 20 — entity-elevation drift scan, session-9 followup; slice 21 entity-md conformance scheduled with #9) |
 | author-manifest | 0.4.0 |
-| design-review | **0.8.0** (target 11 — entity-elevation check, session-9 followup) |
+| design-review | **0.9.0** (targets 12 + 13 + 14 added session 10 followup) |
 | draft-cover-mail | 0.6.0 |
 | draft-textteil-b | 0.5.0 |
 | draft-textteil-c | 0.5.0 |

@@ -1,12 +1,12 @@
 ---
 name: design-review
-description: This skill should be used when the user requests a first-principles review of the system's architecture / plugin / backend / docs to surface design soundness issues — phrases like "design review", "is this design right", "first-principles review", "would we build this from scratch", "rough cut review", "review the architecture for soundness", "Designprüfung", "Grundüberprüfung". Distinct from `audit` (which checks compliance with the system's own claims) — this skill challenges the claims themselves with explicit anti-status-quo bias mechanism. Triggered before building atop existing infrastructure, when foundations look soft, or as a periodic deep-review during pre-launch / pre-distribution windows where radical rewrites are still cheap.
-version: 0.8.0
+description: This skill should be used when the user requests a first-principles review of the system's architecture / plugin / backend / docs to surface design soundness issues — phrases like "design review", "is this design right", "first-principles review", "would we build this from scratch", "rough cut review", "review the architecture for soundness", "Designprüfung", "Grundüberprüfung". Distinct from `audit` (which checks compliance with the system's own claims) — this skill challenges the claims themselves with explicit anti-status-quo bias mechanism. Targets 9-11 catch legacy-retirement, PBS-coupling, and entity-over-modeling gaps at design time. Targets 12-14 (session 10) extend with entity-md authoring conformance, pattern-emergence detection (catches unnamed convergence across surfaces), and discipline-gap detection (scans named disciplines vs failure-mode catalog). Triggered before building atop existing infrastructure, when foundations look soft, or as a periodic deep-review during pre-launch / pre-distribution windows where radical rewrites are still cheap.
+version: 0.9.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_skills]
 fallback_when_mcp_absent: "skill is filesystem-only and operates on contract-free files (SKILL.md, ARCHITECTURE.md, prose docs). list_skills is convenience for enumeration; without it, dispatched subagents glob plugin/skills/*/SKILL.md directly. No contract-bearing reads — no fail-closed concern."
-summary: First-principles soundness review with anti-status-quo bias (greenfield reframe). Challenges the design itself, not its compliance. Target 9 (Subsumption check) + target 10 (Pattern-vs-instance check) catch legacy-retirement and PBS-coupling gaps at design time.
+summary: First-principles soundness review with anti-status-quo bias (greenfield reframe). Challenges the design itself, not its compliance. Target 9 (Subsumption check) + target 10 (Pattern-vs-instance check) + target 11 (Entity-elevation check) catch legacy-retirement, PBS-coupling, and entity-over-modeling gaps. Targets 12-14 (session 10) add entity-md authoring conformance, pattern-emergence detection (unnamed convergence across surfaces), and discipline-gap detection (failure-mode-catalog scan).
 routing_mode: direct
 triggers:
   - design review
@@ -39,18 +39,25 @@ hypothetical, not against the existing form's incumbent advantage.
 
 ## Load this now
 
-Read the three reference files (in this order):
+Read the four reference files (in this order):
 
 1. `references/anti-bias-mechanism.md` — the greenfield reframe,
    bias-explicit briefs to subagents, the 5-category refinement
    framing, the manufactured-restraint pattern to watch for.
-2. `references/scope-and-targets.md` — load-bearing first-run
+2. `references/scope-and-targets.md` — 14 load-bearing first-run
    targets (meta-rules, entity types, decision rules, orchestrator,
-   skill contract, office-config schema), focused-mode scoping,
-   out-of-scope-finding handling.
+   skill contract, office-config schema, plus targets 9-14 for
+   subsumption / pattern-vs-instance / entity-elevation / entity-md
+   conformance / pattern emergence / discipline gap), focused-mode
+   scoping, out-of-scope-finding handling.
 3. `references/output-conventions.md` — subsystem verdict types,
    recommendation buckets, greenfield-grounding requirement,
    cross-cutting recommendations section, artifact lifecycle.
+4. `references/failure-mode-catalog.md` — load-bearing reference
+   for target 14 (discipline-gap detection). Living catalog of
+   architectural failure modes + their named-discipline coverage
+   status. Updated by every postmortem + every new discipline
+   that ships.
 
 PROCEDURE.md walks the multi-checkpoint logic.
 

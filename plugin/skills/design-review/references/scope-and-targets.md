@@ -6,10 +6,13 @@ Which subsystems get reviewed, and what files belong to each.
 
 ## Load-bearing first-run targets
 
-For full first-principles review, default scope is the **8
-foundations** below. These are the subsystems from which
-everything else inherits shape. Wrong-shape there ripples through
-the system; wrong-shape in a leaf is local.
+For full first-principles review, default scope is the **14
+foundations** below (targets 1-11 from sessions 5-9; target 12
+added session 10 for entity-md authoring conformance; targets
+13-14 added session-10 followup as discipline-discovery and
+discipline-gap-detection lenses). These are the subsystems from
+which everything else inherits shape. Wrong-shape there ripples
+through the system; wrong-shape in a leaf is local.
 
 Reviewing these covers the maximum-leverage anti-bias review with
 bounded scope. Other subsystems get focused-mode reviews when
@@ -576,6 +579,343 @@ Target 9 asks "what does this *replace*?" Target 10 asks "is this
 at the right *level* (pattern vs instance)?" Target 11 asks "is
 this *entity-shaped at all* (vs event/nested/memory/config)?"
 All three apply at design time; all three belong.
+
+### Target 12 — Entity-md authoring conformance (hybrid-shape contract)
+
+**Files**: any new or modified entity-md file under
+`extensions/**/*.md` (doctype, reference, project, client, actor,
+process, baustein-elevated-to-entity, etc.). Also any decision
+record or refactor proposing a new managed-entity type.
+
+**Why this matters**: per `ARCHITECTURE.md` "AI-as-runtime
+hybrid-shape principle" (v0.16+) and
+`docs/decisions/ai-as-runtime-hybrid-shape.md`, every managed
+entity follows a three-layer frontmatter contract (Layer 1
+universal Pydantic base + Layer 2 per-entity-type subclass +
+Layer 3 per-deployment extension) plus recommended body
+conventions per type. This target enforces conformance at
+authoring time before drift accumulates across `extensions/`.
+
+This target is the prospective-check companion to audit slice 21
+(retrospective sweep). Same prep-vs-review pairing as target 11 +
+slice 20.
+
+**The conformance checks**:
+
+For each entity-md being authored or modified:
+
+1. **Layer 1 frontmatter** — required fields present (`id`,
+   `label`, `type`, `scope`, `scope_key`, `status`,
+   `last_updated`); values match expected enums; `id` is
+   kebab-case + unique-in-scope.
+2. **Layer 2 frontmatter** — fields match the Pydantic subclass
+   for the declared `type:`; required fields present; types
+   match.
+3. **Body section conformance** — recommended sections per the
+   entity type's body-spec (per
+   `docs/conventions/entity-md-spec.md`) are present. Empty
+   sections warned, not failed. Missing sections suggested with
+   a draft prompt.
+4. **Cross-references** — `<entity>_id:` fields point to existing
+   entities (gate validates at write time; this target catches
+   typos before write).
+5. **Hybrid-shape principle adherence** — body contains prose-
+   shaped content (process flow, conditional rules, domain
+   knowledge); structured-only content stays in frontmatter.
+   Catches "writing a YAML file with a markdown body that's just
+   filler" — both halves should carry real content per their
+   layer.
+
+**Anti-patterns the target catches**:
+
+- ❌ Frontmatter-only entity-md (empty body) when the type's
+  body conventions call for ≥1 substantive section.
+- ❌ Body-only entity-md (no frontmatter) — gate would fail
+  read; catch at authoring.
+- ❌ Prose stuffed into Layer 2 fields (`description: > ...`
+  with multi-paragraph content). Move to body.
+- ❌ Structured data in body (tables that should be Layer 2
+  fields, e.g., `paired_with` declared in body prose instead of
+  frontmatter).
+- ❌ Section names that drift from the body-spec (e.g.,
+  `## Application Notes` instead of `## When this applies`).
+- ❌ Missing entity-elevation 3-test verdict (when the entity is
+  newly proposed) — coordinates with target 11.
+
+**Output expectation**:
+
+For each entity-md reviewed:
+
+1. **Layer 1 conformance**: ✅ pass / ❌ list missing fields /
+   ⚠ enum values to fix
+2. **Layer 2 conformance**: ✅ pass / ❌ list missing or wrong-
+   typed fields
+3. **Body sections**: list of present + missing recommended
+   sections; quality assessment per present section (substantive
+   vs filler)
+4. **Cross-refs**: any unresolved `<entity>_id:` references
+5. **Recommendations**: specific edits to bring conformance
+
+**When to invoke**:
+
+- At authoring time for any new entity-md
+- Before promoting a baustein/memory entry to entity status
+- During refactor that touches multiple entity-mds at once
+- Periodically as `extensions/**/*.md` grows large
+
+**Relationship to other targets + slices**:
+
+- **Target 11** (entity-elevation): runs FIRST — confirms the
+  thing should be an entity at all. Target 12 then validates the
+  entity-md shape. Target 11 = "is this entity-shaped?"; target
+  12 = "is this entity-md correctly written?"
+- **Audit slice 21** (retrospective entity-md scan): catches
+  drift across `extensions/**/*.md` over time. Target 12 is
+  prospective; slice 21 is retrospective.
+- **Implementation note**: this target is **scheduled for
+  first-run alongside #9** (when the generic entity gate +
+  Layer-2 Pydantic subclasses land). Body-spec reference at
+  `docs/conventions/entity-md-spec.md` carries the per-type
+  conventions this target validates against.
+
+### Target 13 — Pattern emergence / unnamed convergence
+
+**Files**: cross-cutting scan across the whole repo. Specifically:
+
+- `ARCHITECTURE.md` — named disciplines (the index of what's
+  *known*)
+- `plugin/skills/**/SKILL.md` — implementation surfaces
+- `backend/mcp-server/src/pbs_mcp/**/*.py` — implementation
+  surfaces
+- `extensions/**/*.{yaml,md}` — content surfaces
+- `memory/**/*.md` — content surfaces
+- `docs/decisions/*.md` — historical decisions (sometimes
+  contain unnamed pattern observations)
+
+**Why this matters**: existing audit + design-review modes catch
+**deviations from named disciplines**. Neither catches **missing
+disciplines themselves** — patterns that have emerged across ≥2
+surfaces independently without being named, then drift apart
+because the convergence isn't enforced. Session-10 case:
+hybrid-shape (frontmatter + md body) was independently present in
+memory + skills + state.md for 6+ months without being named as
+discipline. Department.yaml was on track to drift into pure-YAML,
+breaking the unnamed convergence.
+
+This target adds the **discovery-mode** lens: scan structurally
+similar implementations across surfaces; flag those that *should*
+be a named discipline but aren't.
+
+**Methodology** (the agent's reasoning steps):
+
+1. **Identify candidate convergent patterns** — scan structurally
+   across surfaces. Look for:
+   - Repeated frontmatter shapes (same fields appearing in 3+
+     unrelated files)
+   - Repeated workflow shapes (skills with similar phase
+     structure)
+   - Repeated error-handling patterns
+   - Repeated cross-cutting metadata (e.g., `last_updated:` in
+     multiple manifest types)
+   - Repeated body/section conventions used informally
+2. **Filter for unnamed-but-convergent**: cross-reference against
+   `ARCHITECTURE.md` named disciplines + `docs/decisions/*.md`
+   committed records. If the convergent pattern doesn't appear
+   in either, it's a candidate for elevation.
+3. **Rank by surface count + impact**:
+   - Surface count: ≥3 surfaces strong; 2 surfaces weak
+   - Impact: would naming it influence ≥1 pre-RAG commitment?
+     (cross-cutting impact)
+4. **Recommend elevation** for high-rank candidates: propose
+   discipline name + scope + decision-record draft outline +
+   ARCHITECTURE bump shape.
+
+**Anti-patterns the target catches**:
+
+- ❌ Three skills implementing the same retry pattern without it
+  being a named discipline; future skills will reinvent.
+- ❌ Two manifest types using the same scope-axis layering
+  without it being named; third manifest type drifts into a
+  different shape.
+- ❌ Hybrid-shape (the session-10 case): three surfaces using
+  frontmatter + md body without it being principled; new
+  surface (department.yaml) was on track to break it.
+- ❌ Repeated cross-reference syntaxes (some skills use
+  `[[wikilink]]`, some `[md](link)`, some `<id>` plain) — should
+  be unified as convention.
+
+**What this target does NOT catch** (acknowledged limitations):
+
+- Patterns present in only ONE surface (no convergence yet —
+  pattern emergence requires ≥2)
+- Patterns convergent but **correctly named** (target 13 is for
+  *unnamed* convergence — named convergent disciplines are out
+  of scope; that's audit's job)
+- Failure modes uncovered by any pattern at all (that's target
+  14's job — discipline gap detection)
+
+**Output expectation**:
+
+For each candidate convergent pattern:
+
+1. **Pattern description**: the structural shape that's recurring
+2. **Surfaces where present**: list of files/modules + how each
+   instantiates it
+3. **Drift risk**: which planned surfaces (commitments not yet
+   shipped) might drift away from the pattern if it stays unnamed
+4. **Recommendation**: elevate (with draft discipline name +
+   scope + DR outline) / dismiss (with reasoning, e.g., "two
+   surfaces is coincidence, not convergence") / monitor (≥3
+   surfaces but cross-cutting impact uncertain — re-scan in 1
+   session)
+
+**When to invoke**:
+
+- Annually as a planned discipline-discovery cadence
+- Before major architectural shifts (pre-#11 would have caught
+  hybrid-shape)
+- After session-postmortem of any architectural surprise (when
+  the user catches a gap spontaneously, run this target to scan
+  for related gaps)
+- After session 10's hybrid-shape codification — first-run
+  recommended
+
+**Relationship to other targets + slices**:
+
+- **Target 14 (discipline gap)**: complementary. Target 13 starts
+  from existing surfaces and asks "is there a name for this?"
+  Target 14 starts from a failure-mode catalog and asks "is
+  there a discipline preventing this?" Both can catch the same
+  thing (session 10's hybrid-shape was both); having both is
+  robustness.
+- **No specific audit slice pairing**: target 13 is fundamentally
+  prospective + discovery-mode; the corresponding "retrospective"
+  is hard to define (you can't audit what you haven't named).
+  Re-running target 13 itself plays both roles.
+
+### Target 14 — Discipline-gap detection
+
+**Files**: `ARCHITECTURE.md` (named disciplines + meta-rules) +
+`plugin/skills/design-review/references/failure-mode-catalog.md`
+(the catalog itself) + cross-reference against
+`plugin/skills/audit/references/drift-surfaces-and-slices.md` (to
+identify which failure modes have audit coverage already).
+
+**Why this matters**: target 13 starts from existing-surfaces
+convergence and asks "is there a name for this?" Target 14 starts
+from **architectural failure modes** and asks "is there a named
+discipline that prevents this failure?" Different evidence base,
+different coverage. Some failure modes are not visible as
+convergence yet (no surface has implemented them poorly enough
+for the pattern to emerge) but could still bite — proactive
+catalog scan catches these.
+
+This target's **load-bearing reference** is
+`plugin/skills/design-review/references/failure-mode-catalog.md`
+— a living catalog of architectural failure modes with their
+named protections (or "uncovered" status). Target 14 maintains
+this catalog (adds new modes from postmortems; updates coverage
+status as new disciplines land).
+
+**Methodology** (the agent's reasoning steps):
+
+1. **Read `failure-mode-catalog.md`** — the canonical list of
+   architectural failure modes seen in this and adjacent
+   architectures.
+2. **For each failure mode**: identify which named discipline (in
+   ARCHITECTURE.md) protects against it, OR mark as "uncovered."
+3. **For uncovered modes**:
+   - Assess applicability to PBS today (does this failure mode
+     have any plausible vector here?)
+   - Assess severity (catastrophic / serious / minor)
+   - Assess proximity (immediate-risk / theoretical)
+4. **Recommend**: codify-now (high applicability + serious +
+   immediate) / codify-on-trigger (theoretical-but-plausible) /
+   acknowledge-and-skip (not applicable to PBS shape, e.g.,
+   distributed-systems failures don't apply to single-process
+   PBS today).
+
+**Catalog seeding** (initial entries from session 10
+postmortem):
+
+- **Silent convergence** — multiple surfaces implementing same
+  pattern unnamed → drift over time. **Now covered**: target 13
+  (pattern emergence). ✅
+- **Prose-in-block-scalars** — prose-shaped content squeezed
+  into structured fields (YAML `description: >`, `notes: |`)
+  that suppress its natural form. **Now covered**: AI-as-runtime
+  hybrid-shape principle. ✅
+- **Encoded-rules-when-AI-as-runtime-was-available** — rules
+  expressed in code or prose-as-encoded-procedure when AI-read-
+  prose would have served. **Now covered**: AI-as-runtime
+  hybrid-shape principle. ✅
+
+Additional catalog entries (literature-derived, status =
+"covered" / "uncovered" / "n/a"):
+
+- **SQL-DB trap** (Oracle-shape architecture for LLM-mediated
+  systems) → covered by entity-elevation discipline + AI-as-
+  runtime hybrid-shape. ✅
+- **Source-of-truth ambiguity** (data exists in 2+ places, no
+  invalidation contract) → covered by meta-rule 3 (source-of-
+  truth & invalidation). ✅
+- **Configuration-vs-code drift** (config and code expressing
+  same rule, drifting over time) → partially covered by meta-
+  rule 4 (execution determinism); evaluate after #9.
+- **Hidden-global-state** (state read/mutated outside
+  declared dependencies) → partially covered by strict-validation
+  + fail-closed corollary; full coverage TBD.
+- **Cargo-cult patterns** (pattern adopted from another codebase
+  without understanding why) → uncovered. Low-priority; hard to
+  catch structurally.
+- **Hardcoded-instance-content-in-pattern-layer** → covered by
+  pattern-vs-instance discipline. ✅
+- **Vendor-lock at architecture layer** → covered by glue-not-
+  replacement principle. ✅
+- **Monolithic-skill-bundle** (one skill doing too much) →
+  uncovered as named discipline; partially handled by
+  skill-conventions §X. Evaluate.
+- **Implicit-contract-between-skills** (skills coordinate via
+  conventions not declared in frontmatter) → partially covered
+  by `mcp_tools_required[]` + handoffs. Evaluate.
+
+The catalog is a **living document**: every postmortem, every
+new architectural discipline, every novel failure mode discovered
+in production updates it.
+
+**Output expectation**:
+
+1. **Catalog status table**: each failure mode with current
+   coverage status
+2. **Newly uncovered modes** (high applicability + serious +
+   immediate): recommended discipline name + scope + DR outline
+3. **Newly added modes** (from session postmortems since last
+   target-14 run): catalog entry text
+4. **Coverage transitions** (modes whose status changed since
+   last run, e.g., "covered" after a new discipline shipped)
+
+**When to invoke**:
+
+- Annually as planned cadence
+- After every architectural surprise (postmortem feeds catalog)
+- Before major architectural shifts (catch uncovered modes
+  before commitments lock)
+- After ARCHITECTURE.md major version bumps (re-evaluate
+  coverage)
+
+**Relationship to other targets**:
+
+- **Target 13 (pattern emergence)**: complementary. 13 looks
+  bottom-up from code; 14 looks top-down from failure-mode
+  catalog. Some failures show up in both lenses (hybrid-shape);
+  some only in one.
+- **Target 9 (subsumption)**: orthogonal. Target 9 asks "what
+  does this new thing replace?"; target 14 asks "what failure
+  mode does this new thing prevent?"
+- **Implementation note**: catalog seeded with session-10
+  postmortem + literature-derived modes; first-run scheduled
+  immediately (no dependencies — operates on existing
+  ARCHITECTURE + catalog).
 
 ---
 
