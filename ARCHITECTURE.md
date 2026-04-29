@@ -654,20 +654,57 @@ your existing stack."
 - **Adapter-emitted events** (per #9 Gap B, `office-vs-department.md` infrastructure-primitive review) — bidirectional flow; external state changes emit `actor_kind=external_agent` audit events
 - **Mixed-mode per-entity** (per #12) — a single department can have some entities in adapter mode, some in native mode. Real-world deployments mix.
 
+### Role-shift framing — what changes for the worker (per VISION axes)
+
+The principle has a sharper worker-facing implication, grounded in `VISION.md` axes 1-3 + Vivienne Ming's research on AI-human hybrid teams (oracle / validator / sparring partner modes).
+
+Specialized tools historically did **two jobs in one bundle**:
+1. **Authoring** — creating and modifying the underlying data
+2. **Presentation / review / output** — rendering, exporting, reviewing the result
+
+The role-shift: **specialized tools' authoring role moves; presentation/review role stays.** But the shift isn't uniform — it splits along VISION axis 2's mode distinction:
+
+**Mechanical authoring** (drawing geometry, formatting LaTeX, computing fields, routine drafting, file-format conversions, cross-reference lookups):
+- **Full automation** — AI takes over completely via specialized API layers (gis_utils for GIS, latex/PDF skills for documents, integration adapters for accounting/calendar)
+- The worker's cognitive load on this layer → 0
+- The specialized GUI tool (QGIS, AutoCAD, etc.) reduces to its **presentation/review surface**
+
+**Substantive authoring** (judgment-bearing decisions: which argumentation type, which legal interpretation, which scope, which classification scheme):
+- **Sparring mode** (NOT full automation; per VISION axis 2 — Ming's productive mode)
+- AI generates options + counter-arguments + alternatives; human pushes back, interrogates, commits
+- Cognitive ENGAGEMENT preserved (per VISION axis 3 defensibility test)
+- Time + friction substantially down vs solo work (options presented; counter-arguments surfaced; references at hand; mechanical layer freed time returns to substantive engagement)
+
+**Net result for the worker**: less time + less friction + better accuracy + preserved cognitive engagement. **All four, simultaneously.** The substantive thinking remains theirs; the supporting infrastructure carries weight that used to cost time + friction without adding value. The thinking gets *better-supported*, not *easier in the dishonest "AI did it" sense*.
+
+**The trap to avoid** (per Ming's research warning):
+- **Oracle mode** (humans submit AI's answer; performance same as AI alone) — destroys human contribution
+- **Validator mode** (humans seek AI confirmation; sycophancy loop; performance worse than AI alone) — actively degrades
+
+**The architecture's job is to keep the worker in sparring mode for substantive work.** VISION axis 2's sparring requirements (counter-argument-as-first-class, anti-sycophancy guard, commit-to-recommendations, asymmetric knowledge respect, visible reasoning, selective friction calibration) make this enforceable rather than aspirational. Per the **Information-Exploration Paradox** (VISION §229-247): without these protections, the AI consumes the worker's exploration capacity; with them, the AI augments it.
+
 **For consulting positioning** (see `docs/strategic-positioning.md`
-for full treatment):
+for full treatment + lived-experience credibility framing):
 
 > **"Your BPMN engine handles the workflow. Your accounting tool
 > handles invoicing. Your CRM handles clients. Your calendar
-> handles scheduling. We add the cross-concern judgment +
-> drafting + audit-defensibility layer that sits on top —
-> without replacing any of your existing investment. The cognitive-
-> load reduction comes from the glue, not from rip-and-replace."**
+> handles scheduling. Your specialized GUI tools (QGIS, AutoCAD,
+> domain-specific apps) become presentation/review surfaces. We
+> add the cross-concern AI office layer on top — handling the
+> mechanical authoring + cross-tool integration + cross-department
+> coordination automatically, while keeping the worker in sparring
+> mode (not oracle mode) for substantive decisions. Less time +
+> less friction + better accuracy + preserved cognitive
+> engagement. The friction in substantive work is the feature,
+> not the bug."**
 
 This is **a fundamentally different sale** than "buy our AI tool to
 replace [vertical SaaS]." Different addressable market; different
 political dynamics within enterprise prospects; different
-implementation timelines; different risk profile.
+implementation timelines; different risk profile. Also a
+fundamentally different sale than the typical AI-tool pitch
+("faster answers" — Ming's validator-mode trap; "AI handles
+decisions" — Ming's oracle-mode trap).
 
 **Connection to other disciplines**:
 

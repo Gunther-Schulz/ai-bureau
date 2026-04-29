@@ -94,9 +94,11 @@ This is **a fundamentally different sale** than vertical-SaaS replacement. Activ
 
 ---
 
-## Cognitive-load-reduction framing
+## Cognitive-load + sparring-mode framing
 
-The honest positioning of what AI offices add (vs overselling):
+The honest positioning, grounded in `VISION.md` axes 1-3 + Vivienne Ming's research on AI-human hybrid teams (oracle / validator / sparring partner modes — see VISION §200-235).
+
+### The era progression
 
 **Pre-AI**: knowledge workers held cross-concern context in their heads. **Cognitive load was the bottleneck.**
 
@@ -106,12 +108,101 @@ The honest positioning of what AI offices add (vs overselling):
 
 **AI office era** (us): cross-concern coordination + judgment-mediated reasoning + audit defensibility, **together**. Worker keeps authorship; system carries coordination.
 
-**The line to walk**: automation that **increases human capacity** vs automation that **displaces humans**. The first is a good thing for clients (their team gets better); the second is a layoffs pitch (riskier sale). **Lead with the first.**
+### Two modes, not one boundary
 
-**What the discipline catches**:
-- "AI offices replace junior staff" — wrong (lead-to-disappointment messaging). Real outcome: junior staff are more effective; senior staff have more capacity.
-- "AI offices automate decision-making" — wrong. Real: automate coordination so humans can decide better.
-- "AI offices eliminate cognitive load" — wrong. Real: shift cognitive load FROM coordination TO judgment, where it should be.
+The naïve framing "AI does operation, human does judgment" is **wrong** — and dangerously so. It's the **oracle-mode failure** Ming's research identifies as the trap that destroys the human's contribution. Per Ming: hybrid teams in oracle mode (humans submit AI's answer as their own) perform **same as AI alone**; in validator mode (humans ask AI to confirm preconceptions) perform **worse**. Only sparring mode (humans push back, demand evidence, interrogate; AI generates counter-arguments + names doubt + resists easy answers) outperforms — by margins neither alone could reach.
+
+The architecture handles two modes differently:
+
+**Mechanical mode** (full automation):
+- Operating specialized tools (drawing geometry, formatting, computing fields)
+- Cross-tool integration (data flowing between tools)
+- Cross-department coordination (handoffs)
+- Routine drafting (boilerplate, references, lookups)
+- Compile / format / structural validation
+
+→ AI takes over completely. Cognitive load → 0.
+
+**Substantive mode** (sparring):
+- Decision-making (which argumentation? which legal interpretation? which scope?)
+- Research synthesis (what's relevant? what's missing? what conflicts?)
+- Substantive authoring (judgment-bearing argumentation choices)
+- Review (does this reflect my judgment? where would adversary push back?)
+
+→ AI generates options + counter-arguments + alternatives. Human pushes back, interrogates, commits. Cognitive ENGAGEMENT preserved (per VISION axis 3 — defensibility test demands it). Per VISION axis 2 sparring requirements: counter-argument as first-class output, anti-sycophancy guard, commit-to-recommendations, asymmetric knowledge respect.
+
+### What actually changes in substantive mode
+
+Cognitive engagement is preserved (you still think hard). **But time + friction are substantially down.** Why?
+
+- Options are presented (you don't scavenge for them)
+- Counter-arguments are surfaced (you don't have to remember to consider)
+- Reference content is at hand (no separate lookup phase)
+- Cross-cutting context is loaded (don't have to hold mentally)
+- Mechanical layer is gone (time freed to spend on substance)
+
+Net result: **less time + less friction + better accuracy + preserved engagement.** All four, simultaneously.
+
+The substantive work transforms — same depth of engagement, dramatically lower time + friction, dramatically higher accuracy. **The thinking remains yours; the supporting infrastructure carries the weight that used to cost you time + friction without adding value.**
+
+### The line to walk
+
+Automation that **increases human capacity** vs automation that **displaces humans + atrophies their judgment**. The first is a good thing for clients (their team gets better at the substantive work); the second is Ming's Information-Exploration Paradox (humans optimize themselves out of the loop; capacity collapses; work gets shallower while feeling faster).
+
+**Lead with the first.** Ming's research is the load-bearing reference for why the architecture insists on sparring infrastructure (visible reasoning, counter-argument-as-first-class, anti-sycophancy guard, selective friction). These aren't process overhead — they're the protection against capacity-atrophy.
+
+### What the discipline catches (consulting framing)
+
+- **"AI offices replace junior staff"** — wrong. Lead-to-disappointment messaging. Real: junior staff are more effective; senior staff have more capacity. Both gain.
+- **"AI offices automate decision-making"** — wrong (oracle-mode pitch — Ming's research warns specifically against this). Real: AI generates options + counter-arguments; humans decide. Both engaged.
+- **"AI offices give you faster answers"** — wrong (validator-mode pitch — sycophancy loop). Real: AI gives you better-explored questions + tested challenges; humans commit to answers.
+- **"AI offices eliminate cognitive load"** — incomplete. Real: mechanical load → 0; substantive load preserved but redirected (less time scavenging for options; more time evaluating them critically).
+
+### The sharper consulting positioning
+
+> **"Mechanical work disappears (full automation; cognitive load → 0). Substantive work transforms (same depth of engagement; dramatically lower time + friction; dramatically higher accuracy). The thinking remains yours; the supporting infrastructure carries what used to cost you time + friction without adding value. AI is the colleague that pushes back — not the oracle that gives easy answers, not the validator that confirms what you already think. The friction is the feature."**
+
+This positions explicitly against the two failure-mode pitches competitors make (oracle / validator) — both of which produce, per Ming's research, dependency + capacity decline + worse outcomes than the human + AI alone. **PBS pitch is the third mode: AI as sparring partner.** Vendor-neutral framing; cited research foundation; demonstrably true under prospect scrutiny.
+
+---
+
+## Lived experience as credibility signal
+
+**The architect personally lives the experience he architects for.** This is the strongest credibility evidence — stronger than the open-source repo itself.
+
+### The pattern, demonstrated in the architect's own work
+
+- **GIS work**: 18+ months ago, drove QGIS by hand for geometry creation + modification. Now: AI + `gis_utils` Python tools handle the mechanical authoring; QGIS is reduced to a presentation/review surface. Substantive decisions (which buffer, which classification, which boundary) shifted to sparring mode rather than disappearing. **Result: faster, more accurate, more defensible.**
+- **AutoCAD work**: same pattern. AI orchestrates via specialized Python tools; AutoCAD is the rendering surface. Authoring shifted from manual operation to AI-orchestrated specialized APIs.
+- **PBS-bureau itself**: the architecture was built in this mode. Multi-month conversations with AI as sparring partner. Architect caught AI's drift toward easy answers (oracle-mode); AI surfaced blind spots + alternatives the architect wouldn't have considered alone. Decision records capture the back-and-forth. The output (12+ commits per session of architectural sharpening) is **strictly better than the union of what either could have produced alone** — exactly Ming's productive-sparring marker.
+
+### The architect's lived testimony
+
+> **"My personal accuracy + client service level have increased manifold while time + friction have decreased. I've been working in sparring mode for 18+ months across GIS, CAD, and document drafting. The architecture I sell isn't theoretical — it's the formalization of how I've actually been working. I can demonstrate this in real time on demand."**
+
+### Why this is unique credibility moat
+
+- **Theory-only consultants** can be challenged ("how do you know it works?") — they can't answer with lived experience
+- **Patterns** can be independently arrived at by other consultants (entity-elevation discipline, glue-not-replacement principle, etc. are good ideas, not unique inventions)
+- **Lived 18+ months of working in this mode** is harder to manufacture. Other consultants in the AI-office space have NOT been doing this for that long; can't credibly claim the personal proof point
+- **The session itself is a proof point**: any prospect can watch a real architectural conversation happen and see sparring-mode-in-action
+
+### The consulting demonstration
+
+For sophisticated prospects, a **live sparring demonstration** beats any pitch deck:
+- Pose a real architectural question from the prospect's domain
+- Walk through it in sparring mode in real time
+- Prospect sees: AI generating options + counter-arguments; architect interrogating + committing; back-and-forth producing a result neither would have alone
+- ~30-60 minutes; produces actual deliverable for the prospect's question
+- **The demonstration IS the deliverable** of the early-engagement phase
+
+This converts skeptics far more effectively than open-source-repo-citation alone. Combine: the open-source repo establishes the architectural baseline + demonstrated discipline; the live sparring session shows the methodology in action.
+
+### Risks to manage
+
+- **Selling the architect's personal time at scale doesn't work** — the methodology has to transfer. The framework + open-source proof + decision records + audit trail discipline are the transferable IP. Lived experience proves it works; the methodology lets clients work this way themselves.
+- **Living the methodology is a precondition for selling it credibly** — if the architect ever slips back into oracle-mode AI usage (taking AI answers without sparring), the personal proof point dissolves. Maintenance discipline.
+- **Avoid bragging-tone**. Lived testimony works only when delivered with calibrated confidence + concrete demonstration. "I've been doing this for 18 months and here's what I've produced" works; "I'm uniquely qualified" doesn't.
 
 ---
 
