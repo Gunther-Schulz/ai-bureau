@@ -1,17 +1,20 @@
 # Drift surfaces + slice library
 
-## The 9 drift-surface categories
+## The 10 drift-surface categories
 
 Every finding falls into one of these. Slices target one or more
 categories; rounds combine slices to cover the surface space.
 
 The first 6 are *correctness* drift (claims vs. reality, schemas
-vs. usage, etc.). The last 3 are *implementation quality* drift
-(test coverage, security, performance) — added in v0.2 of the
-audit skill per design-review session-5 follow-up. Audit's scope
-is broader than just structural-correctness; implementation rigor
-is part of compliance with the system's own claims (e.g., "we
-have a test suite" implies the test suite covers things).
+vs. usage, etc.). 7-9 are *implementation quality* drift (test
+coverage, security, performance) — added in v0.2 of the audit
+skill per design-review session-5 follow-up. **10 is *placement*
+drift** — operations on the wrong side of the LLM/Python boundary,
+added in v0.4 alongside meta-rule 4's session-6 sharpening.
+
+Audit's scope is broader than just structural-correctness;
+implementation rigor and architectural placement are both part of
+compliance with the system's own claims.
 
 ### 1. Documentation drift
 
@@ -138,6 +141,35 @@ calls in tight loops without batching.
 **Why dangerous**: corpus is small now (57 entries). Post-RAG,
 hot-path inefficiencies become user-visible latency or cost
 spikes.
+
+### 10. Boundary placement drift
+
+Operations on the wrong side of meta-rule 4 (the LLM/Python
+boundary). Distinct from code drift: the code itself may be
+correct, but it lives in the wrong tier — deterministic logic
+re-implemented in skills, or interpretive logic hardcoded in
+Python, or schema-bearing state accessed outside MCP, or shared
+logic copy-pasted instead of factored to a single home.
+
+**Examples**: skill PROCEDURE contains step-by-step dedup logic
+that an MCP `dedupe_*` tool should own; backend code does
+`if "collegiate" in text: ...` for what's an interpretive call;
+skill writes baustein YAML directly via `Write` instead of through
+`save_baustein`; two skills carry identical 30-line procedural
+blocks that should live as one Skill Bundle reference.
+
+**Why dangerous**: contract enforcement leaks. Skill-side
+re-implementation of MCP logic drifts from the canonical version
+(now two implementations to keep in sync). Python-side
+hardcoded interpretation locks out future refinement. Both
+accumulate silently — nothing fails until a real consumer hits
+the gap. Pre-launch is the unique window to fix placement; post-
+launch, every callsite is a migration cost.
+
+**The contract-enforcement test**: a file is in scope of MCP if a
+Pydantic model + loader owns its shape. Loose markdown (HANDOFF,
+prose memory, READMEs) is skill-direct. See ARCHITECTURE.md
+meta-rule 4 for the full rule including reuse direction.
 
 ---
 
@@ -535,6 +567,87 @@ not *audited*. Plus a focused check on dependency / build files
 
 ---
 
+### Slice 14 — boundary-adherence
+
+**Drift surfaces**: 10 (boundary placement)
+
+**Scope**:
+- All `plugin/skills/*/SKILL.md` + `plugin/skills/*/PROCEDURE.md`
+  — look for inverted-determinism (re-implemented MCP logic) +
+  inverted-persistence (direct write of schema-bearing files)
+- `backend/mcp-server/src/pbs_mcp/**/*.py` — look for
+  inverted-judgment (hardcoded interpretive verdicts)
+- Cross-skill: pairs of skills with near-identical procedural
+  blocks that should be one Skill Bundle reference
+- Cross-tool: pairs of MCP tools with duplicated determinism that
+  should be one shared `pbs_core` function
+
+**Brief template**:
+
+> You are running Slice 14 — boundary-adherence per
+> ARCHITECTURE.md meta-rule 4 (post-v0.6 sharpening). The
+> boundary places deterministic operations on the MCP/Python side
+> and judgment/conversation on the skill side, with two
+> refinements:
+>
+> **(A) Persistence-layer rule applies to *typed-contract*
+> durable state** (Pydantic + loader + cross-reference
+> invariants), NOT to all files. Skill-direct `Read`/`Write` of
+> HANDOFF.md, prose memory, READMEs, top-level docs — fine. MCP
+> only enforces files with schema/migration/cross-ref contracts.
+> The test is contract enforcement, not file extension.
+>
+> **(B) Reuse direction**: shared deterministic → one MCP tool
+> (or one `pbs_core` function used by multiple tools). Shared
+> interpretive → one Skill Bundle reference loaded by multiple
+> skill consumers.
+>
+> Audit for FOUR violation patterns:
+>
+> 1. **Inverted-determinism in skills**: skill body or
+>    PROCEDURE.md contains procedural text that two
+>    implementations would agree byte-for-byte on (validation,
+>    dedup, schema-checking, enumeration, exact-string match)
+>    AND that procedure isn't already factored as an MCP tool
+>    call. Detect: the skill is *describing how to do* something
+>    deterministic instead of *calling a tool* that does it.
+>
+> 2. **Inverted-judgment in Python**: backend code makes an
+>    "is X true of Y?" decision via hardcoded string-match,
+>    pattern-check, or threshold where reasonable interpreters
+>    could disagree. Detect: code attempts to embed a verdict
+>    that the byte-for-byte test fails — should surface to
+>    skill, not decide silently.
+>
+> 3. **Persistence-boundary leak**: skill writes (or non-trivially
+>    reads-then-mutates) a schema-bearing file directly, bypassing
+>    MCP. Detect: skill body shows `Write` or `Edit` of
+>    office-config.yaml, baustein YAML, manifests, schema-bearing
+>    state files. Counter-example (NOT a violation): skill
+>    `Read`s HANDOFF.md, prose memory `.md`, READMEs — no
+>    schema, no migration, fine.
+>
+> 4. **Reuse-direction violation**: two or more skills carry
+>    near-identical procedural-text blocks that should live as
+>    one Skill Bundle reference. OR: two or more MCP tools
+>    duplicate determinism that should be one shared `pbs_core`
+>    function. Detect: textual similarity ≥ ~70% across two
+>    consumers on a non-trivial block (≥ ~10 lines).
+>
+> For each finding: classify which violation pattern (1-4),
+> name the file paths + line ranges, propose the canonical home
+> (which MCP tool / Skill Bundle reference / `pbs_core` function
+> should own it). If the canonical home doesn't yet exist,
+> propose its name.
+>
+> Pre-launch state: every violation is cheap to fix now. Post-
+> launch, each callsite becomes a migration. Surface even
+> small-blast-radius findings.
+>
+> Output structured findings. Cap at 1500 words.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |
@@ -543,13 +656,16 @@ not *audited*. Plus a focused check on dependency / build files
 | 2 | 4, 5, 9 | Adjacent correctness surfaces (plugin scaffolding, content, self-audit) |
 | 3 | 6, 7, 8 | Deep cuts (code, cross-refs, READMEs) |
 | 4 | 10 | Final-pass cross-cutting + stopping decision |
-| **5+ (optional)** | **11, 12, 13** | **Implementation quality** (test coverage, security, performance) — typically run before phase boundaries that increase exposure (first ingest, deployment, multi-user) |
+| **Optional** | **11, 12, 13** | **Implementation quality** (test coverage, security, performance) — run before phase boundaries that increase exposure (first ingest, deployment, multi-user) |
+| **Optional** | **14** | **Boundary adherence** (LLM/Python placement) — run after major refactors that may have moved logic across the boundary, or when surfacing a coverage gap audit didn't catch |
 
-Slices 11-13 are **not part of the default round sequence** —
+Slices 11-14 are **not part of the default round sequence** —
 they're correctness-orthogonal. Run them when a phase boundary
 increases exposure on that axis (e.g., before Phase 1 corpus
 download = run slice 11 to confirm test coverage; before any
-multi-user deployment = run slice 12 for security).
+multi-user deployment = run slice 12 for security; after a
+boundary-affecting refactor or before locking placement = run
+slice 14).
 
 If a round catches BLOCKERS, immediately run a verification pass
 (scope = changed files only) before declaring round complete.

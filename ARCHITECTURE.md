@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.5 (post-design-review session 5 simplification)**.
+Status: **v0.6 (post-session-6 boundary refinement)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -25,7 +25,7 @@ Status: **v0.5 (post-design-review session 5 simplification)**.
 - v0.3 → v0.4: execution-locality meta-rule (skills declare
   `mcp_tools_required[]`; `settings.json` permissions; hooks
   deferred).
-- **v0.4 → v0.5**: design-review-driven simplification. **5 meta-rules
+- v0.4 → v0.5: design-review-driven simplification. **5 meta-rules
   → 4 + 1 named convention**: integration-adapter demoted to corollary
   of app-vs-office; scope-orthogonality demoted to layering convention;
   execution-locality renamed to execution-determinism; new
@@ -34,6 +34,14 @@ Status: **v0.5 (post-design-review session 5 simplification)**.
   I demoted (it's an internal pattern of E, not a peer). A-I letter
   scheme dropped — names speak for themselves. **6 decision rules
   → 3** audience-first.
+- **v0.5 → v0.6**: meta-rule 4 sharpening. **(A) Persistence-layer
+  boundary refined**: the rule applies to durable state with a *typed
+  contract* (Pydantic model + loader + cross-reference invariants),
+  not to all files indiscriminately; loose markdown is skill-direct.
+  **(B) Reuse direction made explicit**: shared deterministic logic →
+  MCP tool; shared interpretive logic → Skill Bundle reference. The
+  audit's slice 14 + design-review's target 7 land on this sharpened
+  boundary.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -250,10 +258,25 @@ calls, never reimplement what those tools do.
 answer vs. judgment.)
 
 **The persistence-layer boundary.** Cleanest line: *anything that
-touches durable state goes through MCP; session-ephemeral state
-stays in skills.* Watch list, in-conversation findings, surfacings
-queued during a turn — all skill. Writes to bausteine, manifests,
-state.md, office-config — all MCP.
+touches durable state with a **typed contract** (Pydantic model +
+loader + cross-reference invariants) goes through MCP; session-
+ephemeral state and loose unstructured files stay skill-direct.*
+Watch list, in-conversation findings, surfacings queued during a
+turn — all skill (ephemeral). Writes to office-config, baustein
+YAML, manifests, schema-bearing state files — all MCP (the loader
+owns the shape; bypassing MCP bypasses forward-migration and
+invariants).
+
+**The line is contract enforcement, not file type.** A file is in
+scope of MCP if a Pydantic model + loader owns its shape. If the
+file is parsed only by the LLM at read time, direct
+`Read`/`Write` is fine. HANDOFF.md, prose memory `.md` files
+under `memory/universal/`, top-level docs, READMEs — all
+skill-direct, no schema, no migration, no transactional risk. A
+markdown file *can* become schema-bearing later (e.g., `state.md`
+once typed parsing lands) — at which point its access path
+moves to MCP. Audit slice 14 reads each access via this test,
+not by extension.
 
 **Deterministic vs interpretive verdicts.** Validation with a
 single right answer (frontmatter shape, ISO state code, schema
@@ -268,6 +291,27 @@ for-byte on the verdict? If yes, MCP. If no, skill.
 deterministic, scope-aware → MCP (`list_bausteine`,
 `list_reference_manifests`). "Pick the right one for this drafting
 context" is judgment → skill.
+
+**Reuse direction.** When two consumers share logic, where does the
+shared code live? The rule has a positive form, not just the
+negative "skills compose, never reimplement":
+
+- **Shared deterministic logic → MCP tool.** Two skills that need
+  to dedupe, validate frontmatter, or look up a manifest entry call
+  the *same* MCP tool. Don't reimplement; don't copy-paste prompt
+  text describing the deterministic procedure into each consumer.
+- **Shared interpretive logic → Skill Bundle reference.** Two skills
+  that need to reason about korrektur-rules, layered review
+  mechanics, or doctype conventions load the *same*
+  `references/<topic>.md` file. The Skill Bundle convention exists
+  for exactly this — judgment scaffolding shared across skill-side
+  consumers without each skill re-stating it.
+
+The negative form ("don't reimplement") tells you what's wrong; the
+reuse direction tells you where the right home is. Audit slice 14
+flags both directions: re-implemented determinism in skills *and*
+re-implemented interpretive scaffolding when a Skill Bundle
+reference would have served.
 
 **Skill frontmatter declares MCP-tool dependencies.** Every skill's
 `SKILL.md` frontmatter declares which MCP tools it relies on

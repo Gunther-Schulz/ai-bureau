@@ -6,7 +6,7 @@ Which subsystems get reviewed, and what files belong to each.
 
 ## Load-bearing first-run targets
 
-For full first-principles review, default scope is the **6
+For full first-principles review, default scope is the **7
 foundations** below. These are the subsystems from which
 everything else inherits shape. Wrong-shape there ripples through
 the system; wrong-shape in a leaf is local.
@@ -17,33 +17,35 @@ reached in workflow phases.
 
 ### Target 1 — Architecture meta-rules
 
-**Files**: `ARCHITECTURE.md` (whole file), specifically the 5
-meta-rule sections.
+**Files**: `ARCHITECTURE.md` (whole file), specifically the 4
+meta-rule sections + the named layering convention.
 
 **Greenfield questions for the agent's reasoning**:
 
 - If we were starting today, what placement rules would we want
   for "where does new content belong"?
-- Are 5 meta-rules the right count? Could it be 3? 7?
-- Are these the right 5 axes (app vs office; scope orthogonality;
-  memory vs RAG; source-of-truth & invalidation; execution determinism)?
-  Greenfield might cut a different decomposition.
+- Are 4 meta-rules + 1 named convention the right count? Could it
+  be 3? 6?
+- Are these the right axes (app vs office; memory vs RAG; source-
+  of-truth & invalidation; execution determinism; scope-orthogonality
+  layering convention)? Greenfield might cut a different decomposition.
 - Each meta-rule: is this a fundamental axis, or a derived
   consequence of another rule?
 
 ### Target 2 — Entity types + decision rules
 
-**Files**: `ARCHITECTURE.md` § "The nine entity types" + § "The
+**Files**: `ARCHITECTURE.md` § "The 5 entity types" + § "The
 decision rules".
 
 **Greenfield questions**:
 
 - If decomposing the system into entity types from scratch, would
-  we still get 9?
-- Are the boundaries between A/B/C/D/E/F/G/H/I clean, or do they
-  blur at the edges?
-- Are 3 decision rules the right scaffolding? Could placement
-  decisions be made simpler / clearer?
+  we still get 5 (Skill Bundle, Memory, Backend, Configuration,
+  External Data)?
+- Are the boundaries between the 5 types clean, or do they blur
+  at the edges?
+- Are 3 audience-first decision rules the right scaffolding? Could
+  placement decisions be made simpler / clearer?
 - Are any entity types accumulating "miscellaneous" content — a
   smell that the decomposition is wrong?
 
@@ -110,13 +112,59 @@ SKILL.md + `setup-office/references/wizard-flow.md`.
 **Greenfield questions**:
 
 - The 3 decision rules form a placement scaffold. Are they the
-  right 6? Could placement be simpler / more deterministic?
+  right 3? Could placement be simpler / more deterministic?
 - Are the conventions docs (plugin-conventions, backend-
   conventions) at the right level of abstraction? Greenfield
   might fold them into ARCHITECTURE or split further.
 - The audit + design-review pair — is the boundary between them
   clean? Greenfield might propose a unified review framework or
   push them further apart.
+
+### Target 7 — LLM/Python boundary (placement-soundness)
+
+**Files**: `ARCHITECTURE.md` meta-rule 4 (whole subsection
+including refinements A + B) + 4-5 representative artifacts on
+each side of the boundary:
+
+- skill side: orchestrator/PROCEDURE.md, save-baustein/SKILL.md,
+  validate-checklist/SKILL.md, draft-textteil-b/SKILL.md
+- Python side: `pbs_mcp/tools/discovery.py`,
+  `pbs_mcp/office_config.py`,
+  `pbs_mcp/chunkers/__init__.py` (when populated),
+  `pbs_mcp/integrations/__init__.py`
+
+**Greenfield questions**:
+
+- If designing the LLM/Python placement from scratch, would each
+  current operation land where it currently does? Walk 5-8
+  concrete operations (validate frontmatter, dedup bausteine,
+  pick a baustein for a draft, route a trigger to a skill,
+  forward-migrate office-config) and ask the byte-for-byte test
+  freshly for each.
+- Is meta-rule 4 the right *primary* axis (deterministic vs
+  interpretive)? Or is the deeper axis something else —
+  *contract-bearing vs free-form*? *Repeatable vs one-shot*?
+  Greenfield might propose a different cut.
+- The persistence-layer refinement (A) draws the line at *typed
+  contract*. Is that the right operationalization, or could it
+  be sharper (e.g., "Pydantic-validated" vs "loader-owned")?
+- The reuse-direction rule (B) puts shared interpretive logic in
+  Skill Bundle references. Is the Skill Bundle the right
+  abstraction, or should there be a top-level shared-references
+  tier (cross-skill, not skill-internal)?
+- The pbs_core / pbs_mcp split is described as "consequence of
+  meta-rule 4." Is that consequence load-bearing now, or
+  premature? Should it be deferred until the second consumer
+  emerges?
+- The "static path-based access control belongs in settings.json"
+  line — is this on the LLM/Python boundary, or is it a
+  *different* axis (harness vs application code) that's been
+  smuggled into meta-rule 4? Greenfield might split it out.
+
+This target is **placement-soundness**, not declaration-correctness.
+Audit slice 14 catches mechanical violations of the rule as it
+stands; this target asks whether the rule itself is the right
+shape.
 
 ---
 

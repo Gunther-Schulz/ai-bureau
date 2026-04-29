@@ -89,6 +89,49 @@ addition still needs migration support.
 **Pull-forward trigger**: first user-visible session that saves
 a baustein. Until then, no baustein exists to migrate.
 
+### Boundary placement refinements (from slice 14, 2026-04-29)
+
+**Why**: Audit slice 14's first run flagged 3 placement findings —
+deterministic logic that should move from skills into MCP tools,
+or from hardcoded Python into office-config. None are BLOCKERS;
+all are honestly defer-worthy (each requires schema + handler +
+tests for a new tool, or a config schema bump). Captured here
+rather than batched into a same-session fix to keep diff scope
+sane. See full audit at
+`docs/audits/boundary-adherence-20260429.md`.
+
+**Sketch — three independent items**:
+
+- **`dedupe_bausteine` MCP tool**: dedupe procedure currently
+  described in `save-baustein/SKILL.md` lines 65-75 (title + tag
+  overlap matching). Move algorithm into MCP tool with reproducible
+  scoring rule + Pydantic candidate output schema. Pull-forward
+  trigger: when matching grows beyond title+tag (HyDE paraphrase
+  search via search_corpus over indexed bausteine is already
+  flagged as the next iteration).
+
+- **`office-config.conventions.path_classification`**: ingest.py
+  `_infer_source_subtype` (lines 182-226) hardcodes substring
+  patterns like `/_ai/snapshots/`, `/gesetze/bund/`,
+  `/bausteine/universal/`. Convention-correct per default layout
+  but not invariant across deployments (`.ai/` instead of `_ai/`,
+  flat `Gesetze-Bund/` instead of nested, etc.). Move classification
+  rules into office-config schema as a tunable block; bump v3 → v4.
+  Pull-forward trigger: before first multi-deployment install OR
+  before any deployment with non-default folder names. **Highest
+  priority of the three** because misclassification lands as silent
+  metadata in LanceDB (re-indexing cost post-ingest).
+
+- **`record_baustein_use` MCP tool**: `record-feedback/SKILL.md`
+  lines 117-120 directs direct `Edit` of baustein frontmatter
+  fields `rejected_uses[]` / `successful_uses[]`. Skill itself
+  flags this as known debt ("future MCP tool record_baustein_use
+  could atomicize"). Build the tool: takes baustein name +
+  scope/key + kind ∈ {rejected, successful} + project/date/feedback_path,
+  owns frontmatter mutation with validation. Pull-forward trigger:
+  when frontmatter gains cross-reference structure (e.g., feedback_id
+  linking).
+
 ### Pioneer-instance validation strategy
 
 **Why**: Per VISION.md "PBS as pioneer instance" — a one-user
