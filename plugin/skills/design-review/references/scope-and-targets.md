@@ -328,6 +328,133 @@ Both, not either.
 
 ---
 
+### Target 10 — Pattern-vs-instance check
+
+**Files**: the new mechanism's design proposal/decision-record AND
+the architectural placement question (does this go in pattern
+layer or instance layer? is the proposed shape domain-agnostic
+or PBS-coupled?).
+
+**Why this matters**: per `ARCHITECTURE.md` "Pattern-vs-instance
+discipline" (v0.8+), every architectural commitment in this repo
+must work at pattern level, not just for PBS. PBS is the pioneer
+instance; the architecture is the pattern. The long-arc end-state
+is an AI-office builder (`ROADMAP.md` v2) that scaffolds new
+domain offices from accumulated patterns. Every commitment that
+doesn't generalize is a future migration cost; every commitment
+that does generalize *is* the builder's foundation. Catching
+PBS-coupling at design time is much cheaper than retrofitting
+later.
+
+This target is the prospective-check companion to audit slice 19
+(retrospective sweep). Same prep-vs-review pairing as target 9 +
+slice 18.
+
+**Greenfield questions** (mandatory when proposing any new
+meta-rule, entity type, persistence structure, MCP tool, or
+decision-record-grade commitment):
+
+- **Would this work for a hypothetical legal-practice office?**
+  (Workflow: intake / discovery / filing / argument. Authorities:
+  courts / opposing-counsel / regulators. Memory taxonomy:
+  precedents / citations / templates.)
+- **Would this work for a hypothetical research-paper-review
+  office?** (Workflow: draft / review / revision / publication.
+  Authorities: journals / co-authors / reviewers. Memory taxonomy:
+  citations / prior-work / templates.)
+- **Would this work for a hypothetical engineering-doc / medical-
+  records / regulatory-filing office?** (At least one more
+  structurally-distinct domain.)
+- **If yes for at least 2 of 3**: pattern-level. Lock in.
+- **If no for most**: too PBS-coupled. Push to instance layer
+  (skill bodies, manifests, office-config values) instead of
+  pattern layer (meta-rules, schema shapes, MCP interfaces).
+
+**Per-element placement test**:
+
+- Does the rule/schema/interface name PBS-specific terminology
+  (B-Plan, Begründung, Festsetzungen, gesetze, UNB) in its
+  *body* or *contract*? If yes → instance content leaking into
+  pattern. If only in *examples*, that's allowed (legibility).
+- Does it assume German legal taxonomy or planning workflow at
+  the schema level? If yes → too coupled.
+- Does the *shape* generalize even if the *vocabulary* is
+  PBS-flavored? If yes → fine, just ensure the shape is what
+  the architecture commits to, not the vocabulary.
+
+**Anti-patterns** the target catches:
+
+- ❌ A meta-rule whose body names "B-Plan" / "Begründung" /
+  "Festsetzungen" as load-bearing concepts. Pattern is the *shape*
+  (e.g., "doctypes have required + optional sections per their
+  manifest entry"); instance is the doctype list.
+- ❌ A persistence structure assuming German legal taxonomy
+  (gesetze / urteile / leitfäden) at the architectural layer.
+  Pattern is "layered references manifest with invalidation
+  contract"; instance is the German-law taxonomy.
+- ❌ An MCP tool whose interface embeds domain knowledge in the
+  signature (e.g., `validate_b_plan_begruendung`). Pattern is
+  `validate_doctype(slug)`; instance is the doctype list.
+- ❌ A Pydantic model whose required fields are PBS-specific
+  (e.g., `b_plan_nr: str`). Pattern is core-with-extension shape
+  (`ProjectStateCore + PBSProjectStateExtension`); instance is the
+  PBS-extension fields.
+- ❌ A decision record whose "Decision" section frames the
+  commitment in PBS-only terms even when the underlying rule
+  generalizes. Reformulate the commitment at pattern level; cite
+  PBS as the example.
+
+**Exceptions** (where domain-coupling at architecture layer is
+allowed):
+
+- Vocabulary in *examples*: "PBS bausteine" in an example to
+  illustrate a generic rule is fine. The rule itself must stay
+  generic.
+- The instance directory itself (`extensions/`, `memory/`,
+  populated `office-config.yaml` values) is unconditionally
+  PBS-instance content. Pattern is the *schema*; PBS is the
+  *content*.
+
+**Output expectation**:
+
+For each new mechanism reviewed:
+
+1. **Pattern-level claim**: would it work for 3-5 hypothetical
+   domains? List which ones it fits and which it would need
+   adaptation for.
+2. **Coupling findings**: any PBS-specific terminology, taxonomy,
+   or assumptions baked into the proposed pattern layer.
+3. **Refactor proposal** for any coupling found: how to push the
+   PBS-specific part to instance layer (skill bodies, manifests,
+   config values) while keeping the pattern at architecture layer.
+4. **Validation signal note**: under the single-domain-pioneer
+   constraint (`ARCHITECTURE.md`), only signal #1 is checkable
+   immediately (does it work for PBS post-refactor?). Signal #2
+   (does it work for other domains?) waits for real implementation
+   in those domains and may never arrive. The reviewer must
+   acknowledge this — pattern-level claims are best-effort, not
+   empirically validated, until/unless second-domain implementation
+   happens.
+
+**When to invoke**: at design time for any new commitment
+(decision record-worthy proposal, meta-rule addition, new entity
+type, new persistence structure, new Pydantic model, new MCP tool
+interface). NOT for incremental skill-level changes — those rarely
+add architectural commitments.
+
+**Relationship to slice 19**: target 10 is the prospective check
+(at design time, cheap to fix). Slice 19 is the retrospective
+sweep (catches what target 10 missed across the whole stack —
+e.g., decision records written before this discipline existed).
+Both, not either.
+
+**Relationship to target 9 (Subsumption check)**: different
+question. Target 9 asks "what does this *replace*?" Target 10
+asks "is this at the right *level* (pattern vs instance)?"
+Both apply at design time; both belong.
+
+---
+
 ## Focused-mode targets
 
 For "design review the chunkers" / "is X sound" / etc., review one

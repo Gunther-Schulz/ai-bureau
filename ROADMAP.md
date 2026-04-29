@@ -382,7 +382,66 @@ preparation questions.
   The skill is preventive of design errors that compound after
   launch — better in place before real project work begins.
 
-All eight items: pre-RAG architectural commitments. Phase 1 corpus
+**9. Pattern-vs-instance best-effort split** (session 7) — see
+`ARCHITECTURE.md` "Pattern-vs-instance discipline" + ROADMAP v2
+"AI-office builder" entry. The discipline says all architectural
+commitments must work pattern-level; the best-effort split is
+the immediate concrete realization for the schemas that exist
+today.
+
+- **Why this scope (reasoning + implementation, not just
+  reasoning)**: per the single-domain-pioneer constraint, we
+  can't validate the split via second-domain implementations we
+  won't actually do. Two distinct validation signals: signal #1
+  (split doesn't break PBS — implementable now via PBS regression
+  tests) is the maximum validation extractable pre-RAG; signal
+  #2 (split chose the right boundary) waits for a real
+  second-domain implementation that may never come. **Doing the
+  split later is more painful** — post-data-accumulation refactor
+  vs. clean refactor today. Pre-RAG is the unique cost-cheap
+  window.
+- **Method**: methodically examine each schema and architectural
+  commitment against the 3-5 hypothetical-domain thought
+  experiment (legal-practice, research-paper, engineering-doc,
+  medical-records, regulatory-filing). For each commitment:
+  decide pattern-level / instance-level / hybrid (core +
+  extension). Implement the split. Run PBS regression to confirm
+  signal #1.
+- **Targets**:
+  - `ProjectState` Pydantic — split into `ProjectStateCore`
+    (project, lifecycle, phase, dates, identity, ownership,
+    practices, doctype_status shape) + PBS-specific extension
+    (verfahren_type, b_plan_nr, b_plan_name, geltungsbereich_*,
+    bundesland-as-PBS-config). Migration script.
+  - `office-config` schema — split core (paths, scope.domains,
+    actors, roots) from PBS-specific (verfahren_type values,
+    doctype-list specifics, korrektur-rules path).
+  - Doctype manifest format — generic shape (filename heuristics,
+    required sections, manifest entries) vs PBS content (the
+    actual doctype list).
+  - MCP tool interfaces — verify none embed domain knowledge in
+    names (e.g., `validate_doctype(slug)` is generic;
+    `validate_b_plan_begruendung` would be wrong — already
+    correct today).
+  - Decision records — review each for PBS-specific assumptions
+    leaking into pattern-level prose.
+- **Output**: refactored schemas + skill retrofits + passing PBS
+  tests + a `pattern-vs-instance-split-rationale.md` document
+  per the "documented split rationale per commitment so a future
+  second domain can validate the reasoning, not redo it."
+- **Scope**: 1-2 sessions of dedicated work, not a quick sprint.
+  The PBS regression validation is non-negotiable; the
+  refactor must leave PBS working before commit.
+- **Connection to commitment #8 (framing skill)**: framing skill
+  builds on this work — the reasoning produced here becomes the
+  pattern-vs-instance reasoning the framing skill codifies for
+  repeatable use. Order: #9 first (produces reasoning + split),
+  then #8 (codifies into repeatable skill).
+- **Dependencies**: depends on #6 (audit-trail v2 retrofit) being
+  far enough along that the schema is stable; doesn't depend on
+  #7 (bootstrap-write tools) — those can run in parallel.
+
+All nine items: pre-RAG architectural commitments. Phase 1 corpus
 download unblocks pending sections B (audit-trail single-write
 integration per v2), C (sparring-output integration), D (plugin
 version bump), and the Phase 0 items 4 (feature-survey skill) + 5
@@ -1384,28 +1443,50 @@ Without these commitments, the builder would scaffold weak
 defaults; with them, it scaffolds correct-by-construction
 offices.
 
-**Pull-forward trigger** (multi-stage):
+**Pull-forward trigger** (multi-stage, revised under single-
+domain-pioneer constraint):
 
-1. **Validation stage**: at least 2-3 manually-built domain
-   instances exist (PBS + e.g. a legal-practice office + a
-   research-paper-review office, hand-built on top of the
-   extracted audit/design-review base). This empirically reveals
-   which parts of PBS are pattern vs instance.
-2. **Spec format design stage**: domain-spec format proposed,
-   tested against the 2-3 instances retroactively (could the
-   spec describe each existing office? if not, what's missing?).
-3. **First-build stage**: build the first new office *via the
-   builder* rather than by hand. Compare the generated scaffold
-   against what would have been hand-written. Measure delta;
-   refine.
+The user is a planning-domain expert and won't authentically
+hand-build offices in domains they don't practice. The textbook
+"build 2-3 hand-instances and measure overlap" trigger is wrong
+for this constraint — see `ARCHITECTURE.md` "Validation under
+the single-domain-pioneer constraint" for the analysis. Two
+distinct validation signals replace it:
 
-Each stage is a real gate. Don't skip ahead to step 3.
+1. **Best-effort split stage** (immediate, pre-RAG): per ROADMAP
+   v1 commitment #9, implement a best-effort pattern-vs-instance
+   split of all current schemas + commitments using the 3-5
+   hypothetical-domain thought experiment. Validate **signal #1**
+   (split doesn't break PBS) via PBS regression tests. This
+   doesn't validate the split's *correctness across domains* —
+   only that it's *implementable and PBS-functional*. Mandatory
+   pre-RAG; the cost of doing it later is much higher.
+2. **Spec format design stage** (post-launch, when first natural
+   second-domain opportunity arises — consulting engagement,
+   second deployment, or a researcher contact): propose domain-
+   spec format. Test against PBS retroactively (could the spec
+   regenerate approximately PBS?). If yes, the format captures
+   the pattern; if no, what's missing reveals where the split
+   was too PBS-shaped (signal #2 starts arriving).
+3. **First-build stage** (when a real second-domain user is
+   committed): build that user's office *via the builder*.
+   Compare the generated scaffold against what would have been
+   hand-written. Measure delta; refine. **Signal #2 fully
+   arrives** with this stage — the right-boundary validation
+   the single-domain pioneer cannot self-supply.
 
-**Distance from current state**: probably 18-36 months of
-sustained PBS work + at least one second domain instance to
-get to the validation stage. Long-horizon. But every session's
-architectural decisions either move toward this future or away
-from it; framing it explicitly here makes that legible.
+Each stage is a real gate. Stage 1 is mandatory pre-RAG (it's
+ROADMAP commitment #9). Stages 2-3 wait for natural triggers;
+they may never arrive — and that's acceptable, as long as
+stage 1 produces a solid best-effort split that future work can
+build on.
+
+**Distance from current state**: stage 1 is 1-2 sessions away
+(pre-RAG commitment #9). Stages 2-3 depend on second-domain
+opportunity that's external to the user — could be 6 months
+(if consulting interest emerges) or never. The architecture
+should be ready *if* it happens, and useful *whether or not* it
+does.
 
 **Open questions** (defer until validation stage):
 - Should the builder be a plugin itself (Claude-Code-mediated

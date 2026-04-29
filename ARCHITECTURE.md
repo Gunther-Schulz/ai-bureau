@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.7 (post-session-7 fail-closed corollary)**.
+Status: **v0.8 (post-session-7 + pattern-vs-instance discipline)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -51,6 +51,16 @@ Status: **v0.7 (post-session-7 fail-closed corollary)**.
   See `docs/decisions/mcp-fallback-policy.md`. Audit slice 14 brief
   extended to scan `fallback_when_mcp_absent` strings for declared
   future violations.
+- **v0.7 → v0.8**: **Pattern-vs-instance discipline** added as
+  meta-discipline before the meta-rules. Every architectural
+  commitment must work at pattern level (the test: would this work
+  for a hypothetical legal-practice / research-paper-review /
+  engineering-doc office?), not just for PBS. PBS is the pioneer
+  instance per VISION.md; the architecture is the pattern. Long-arc
+  end-state is the AI-office builder (ROADMAP v2). Connects the
+  Skill Bundle convention, meta-rules 1-4, fail-closed corollary,
+  target 9 subsumption check — all pattern-level by construction —
+  into a coherent discipline that constrains future commitments.
 
 > **Scope boundary.** This doc covers placement (which entity type /
 > where). For *within-tier idioms* (how to write the thing once
@@ -92,6 +102,164 @@ skill, etc.):
 Pre-launch / pre-distribution: deprecation is essentially
 free — change in place. After first user-facing release the
 procedure tightens.
+
+---
+
+## Pattern-vs-instance discipline
+
+Every architectural commitment in this repo must work at the
+**pattern level**, not just for PBS. PBS is the pioneer instance
+(per VISION.md "PBS as pioneer instance"); the architecture is
+the pattern. The long-arc end-state is an AI-office builder that
+scaffolds new domain offices from a domain spec + the
+accumulated patterns (see ROADMAP v2 "AI-office builder"). Every
+commitment that doesn't generalize is a future migration cost
+the builder will pay; every commitment that does generalize
+*is* the builder's foundation.
+
+**The test** when proposing any new meta-rule, entity type,
+persistence structure, MCP tool, or decision-record-grade
+commitment:
+
+- Would this work for a hypothetical **legal-practice office**
+  (intake / discovery / filing / argument phases; courts /
+  opposing-counsel / regulators as authorities; precedents +
+  citations + templates as memory taxonomy)?
+- Would this work for a hypothetical **research-paper-review
+  office** (manuscript / review / revision / publication phases;
+  journals / co-authors / reviewers as authorities; citations +
+  prior-work + templates as memory taxonomy)?
+- Would this work for a hypothetical **engineering-doc office**,
+  **medical-records-workflow office**, **regulatory-filing
+  office**?
+
+If yes for at least 2 of these 3-5 hypothetical domains: the
+commitment is pattern-level. Lock it in.
+
+If no for most: the commitment is too PBS-coupled. Push it to
+the **instance layer** — skill bodies (drafting drafts plug in
+domain-specific doctype templates), manifests (domain-specific
+references + actors), office-config (domain-specific scope
+fields), korrektur-rules and similar prose memory.
+
+**Where the line typically falls:**
+
+| Layer | Pattern (stays in architecture) | Instance (lives in PBS or its successors) |
+|---|---|---|
+| Meta-rules 1-4 | All four | (none — they're patterns by construction) |
+| Entity types (Skill / Memory / Configuration / etc.) | The taxonomy itself | What entities exist (which skills, which memory records) |
+| MCP tool *patterns* | strict-validation discipline; fail-closed corollary; CRUD-style memory tools | Tool *names + bodies* (which gates exist; what they do) |
+| office-config *schema shape* | layered manifests, scope.domains, paths.* discipline | Specific fields (verfahren_type values, doctype list, korrektur-rules path) |
+| VISION axes | Three-axis framing (intertwining / sparring / authorship preservation) | Per-axis *content* — what counts as authorship in the domain |
+| Decision-record format | The structure itself (Context / Decision / Why / Alternatives / Revisit) | Specific decisions — which mechanisms are committed |
+
+**Anti-patterns the discipline catches:**
+
+- ❌ A meta-rule that names "B-Plan" / "Begründung" /
+  "Festsetzungen" in its body. Those are PBS instance content;
+  the rule should describe the *shape* (e.g., "doctypes have
+  required + optional sections per their manifest entry") and
+  let PBS provide instance content for that shape.
+- ❌ A persistence structure assuming German legal taxonomy
+  (gesetze / urteile / leitfäden) at architectural layer.
+  Pattern is "layered references manifest with invalidation
+  contract"; instance is the German-law taxonomy.
+- ❌ An MCP tool whose *interface* embeds domain knowledge
+  (e.g., `validate_b_plan_begruendung` as a tool name). Pattern
+  is `validate_doctype(doctype: <slug>)`; instance is what
+  doctypes exist.
+- ❌ A skill body that hardcodes domain-specific values rather
+  than reading from office-config or manifests. Already covered
+  by plugin-conventions §13 anti-pattern; now also a
+  pattern-vs-instance violation.
+
+**Coupling exceptions** (where domain-coupling at architecture
+level is allowed):
+
+- The *vocabulary* used in examples (decision records, ARCH
+  body) can use PBS terminology for legibility, as long as the
+  underlying rule generalizes. "PBS bausteine" in an example is
+  fine; a rule that *only* makes sense for PBS bausteine is not.
+- The instance directory itself (`extensions/`, `memory/`,
+  `office-config.yaml` populated values) is unconditionally
+  PBS-instance. The pattern is the *schema*; PBS is the
+  *content*.
+
+**Discipline check at audit/design-review time:**
+
+- Audit slice 14 (boundary adherence) extends naturally to this:
+  "is this commitment pattern-level or instance-level?" applies
+  to placement of decisions across the architecture/instance
+  boundary, same way it applies across the LLM/Python boundary.
+- Design-review target 9 (Subsumption check) implicitly tests
+  this: a new mechanism that subsumes a PBS-specific legacy
+  mechanism *and* generalizes is correct; one that subsumes
+  PBS-specific in a PBS-specific way perpetuates the coupling.
+
+**Connection to current work**: every session-7 commitment
+(meta-rule 4 fail-closed corollary, target 9 subsumption check,
+audit slice 18 legacy retirement scan, framing skill, audit-trail
+v2 single-write architecture, Skill Bundle frontmatter
+convention) is pattern-level by construction. The discipline
+makes that property explicit and load-bearing for future work.
+
+### Validation under the single-domain-pioneer constraint
+
+PBS is operated by a single planning-domain expert. Realistically
+**we will not implement second-domain instances ourselves** —
+legal practice, research, engineering, etc. are domains the user
+doesn't work in. Hand-building a "second instance" in a domain
+the user doesn't actually practice would produce evidence of
+*the user's idea of that domain*, not of the actual domain —
+worse than no evidence, because misleading.
+
+This constraint shapes the validation strategy: we **cannot** use
+"build 2-3 hand-instances and measure overlap" as the validation
+path. Waiting for empirical evidence from a real second-domain
+deployment that may never come (consulting engagement; second
+office adoption) becomes manufactured restraint disguised as
+rigor — a way to defer architectural decisions indefinitely.
+
+**Working method instead — best-effort split + immediate PBS
+validation:**
+
+The split is implemented now (pre-RAG), against PBS, with two
+distinct validation signals:
+
+| Signal | What it tells us | Source |
+|---|---|---|
+| **#1 — split doesn't break PBS** | The proposed split is implementable; refactor is executable; tests pass; skills route correctly; project state round-trips. Catches mechanics-level issues that pure reasoning misses. | Implementing the split now against PBS — **immediate** feedback. |
+| **#2 — split chose the *right* boundary** | The pattern/instance line generalizes to other domains. Catches the split being too PBS-shaped (overfit). | Only known when a real second-domain implementation lands — **deferred, possibly indefinite**. |
+
+Signal #1 is necessary-but-not-sufficient: confirms no regression
+but can't confirm correct boundary. Signal #2 confirms boundary
+but requires implementation that may never happen here. **Doing
+the split now is the maximum validation we can extract before
+signal #2 arrives — and crucially, doing it later is more
+painful** (post-data-accumulation refactor + skill retrofits +
+migration scripts vs. clean refactor today). The 3-5 hypothetical-
+domain thought experiment (legal-practice, research-paper,
+engineering-doc, medical-records, regulatory-filing) is the
+*reasoning input* to the split; signal #1 is the *immediate
+empirical check*; signal #2 waits for real second-domain.
+
+**The thought experiment as legitimate epistemic basis**: it
+doesn't require working in those domains, just thinking carefully
+about them as architectural-imagination targets. Signal #1
+catches what the thought experiment missed at implementation
+level; signal #2 (when/if it arrives) catches what both missed
+at boundary level.
+
+This explicitly is a **best-effort** discipline, not a proven
+one. The split *will* be wrong somewhere; the question is
+whether it's *less wrong than no split* and *less expensive to
+correct than no-split-then-painful-migration*. Pre-RAG is the
+unique window where the cost answer is "yes."
+
+Pre-RAG commitment #9 (`ROADMAP.md`) is the concrete realization:
+the reasoning pass + best-effort split implementation + PBS
+regression validation are bundled as one work stream, scheduled
+before Phase 1 corpus download.
 
 ---
 

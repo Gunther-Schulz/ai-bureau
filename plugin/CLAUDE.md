@@ -82,6 +82,22 @@ conventions.md` §11b for the full policy + writing rules for
 
 See ARCHITECTURE.md meta-rule 4 for the full rule.
 
+## Pattern-vs-instance discipline (post-v0.8)
+
+PBS-bureau is the pioneer instance of a pattern; the architecture
+is the pattern. Every architectural commitment must work pattern-
+level (test: would this work for a hypothetical legal-practice /
+research-paper-review / engineering-doc office?). The long-arc
+end-state is an AI-office builder (`ROADMAP.md` v2) that scaffolds
+new domain offices from a domain spec + accumulated patterns.
+PBS-specific content (doctypes, manifests, korrektur-rules,
+office-config values) lives in the **instance layer**; the
+pattern layer (meta-rules, entity types, schema shapes, MCP tool
+interfaces, decision-record format) stays domain-agnostic. See
+`ARCHITECTURE.md` "Pattern-vs-instance discipline" for the full
+rule + validation strategy under the single-domain-pioneer
+constraint.
+
 ## Versioning
 
 Two semver tracks, separately maintained:

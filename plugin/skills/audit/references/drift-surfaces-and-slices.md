@@ -1015,6 +1015,113 @@ load-bearing in light of newer commitments?")
 
 ---
 
+### Slice 19 — Pattern-vs-instance scan
+
+**Drift surfaces**: cross-cutting (overlaps 1, 4, 6, 8 — but with
+a distinct question: not "does X comply with claims?" but
+"is X at the right *architectural level* — pattern or instance?")
+
+**Scope**:
+- `ARCHITECTURE.md` — every meta-rule, entity-type table, named
+  convention, prose section. Do they describe shape (pattern) or
+  PBS content (instance content leaked)?
+- `backend/mcp-server/src/pbs_mcp/**/*.py` — Pydantic models, MCP
+  tool interfaces. Do field names + tool names embed PBS-domain
+  knowledge?
+- `docs/decisions/*.md` — every decision record. Does the "Decision"
+  section frame the commitment at pattern level, or in PBS-only
+  terms?
+- `plugin/CLAUDE.md`, `docs/plugin-conventions.md`,
+  `docs/backend-conventions.md` — convention docs. Do they
+  describe generic discipline or PBS-specific patterns?
+- Skill body conventions — when a skill body cites architectural
+  rules, does it cite the pattern or its PBS-instantiation?
+
+**Brief template**:
+
+> You are running Slice 19 — pattern-vs-instance scan per
+> `ARCHITECTURE.md` "Pattern-vs-instance discipline" + design-
+> review target 10 (the retrospective companion to that
+> prospective check).
+>
+> Per the discipline: every architectural commitment must work at
+> pattern level (works for hypothetical legal-practice / research-
+> paper-review / engineering-doc office, not just PBS). PBS is the
+> pioneer instance; the architecture is the pattern. The long-arc
+> end-state is an AI-office builder (`ROADMAP.md` v2) that
+> scaffolds new domain offices from accumulated patterns.
+>
+> Walk every architectural commitment in scope and ask:
+>
+> 1. **Is the commitment at the pattern layer or instance layer?**
+>    - Pattern layer: meta-rules, entity-type taxonomies, schema
+>      *shapes*, MCP tool *interfaces*, decision-record format,
+>      validation discipline.
+>    - Instance layer: skill bodies (orchestrating PBS work),
+>      manifests (PBS reference content), `office-config.yaml`
+>      values (PBS configuration), korrektur-rules (PBS style),
+>      doctype skeletons (PBS doctypes).
+> 2. **Does the pattern-layer commitment reference PBS-specific
+>    terminology, taxonomy, or assumptions in its body or
+>    contract?** Examples → fine (legibility). Body / contract →
+>    coupling violation.
+> 3. **Would the commitment generalize?** Test against legal-
+>    practice, research-paper-review, engineering-doc, medical-
+>    records, regulatory-filing offices. If 2-of-3 fit naturally,
+>    it's pattern-level. If 1-or-fewer fit, it's too coupled.
+>
+> Audit for THREE finding patterns:
+>
+> 1. **Pattern-layer commitment with PBS-specific body**: a
+>    meta-rule, schema, or MCP interface placed in pattern layer
+>    but whose body or contract references PBS-specific concepts
+>    in a load-bearing way (not just as example). Detect: rule
+>    text names "B-Plan" / "Begründung" / "Festsetzungen" / "UNB"
+>    / "gesetze" / "Bauleitplanung" as required terminology;
+>    Pydantic model has required field that only makes sense for
+>    PBS; MCP tool name embeds PBS-specific concept.
+>
+> 2. **Decision record with instance-layer commitment in
+>    pattern-layer prose**: a decision record's "Decision" section
+>    is framed in PBS-only terms even though the underlying rule
+>    generalizes. The rule itself is fine; the framing is too
+>    coupled. Detect: decision record's commitment language
+>    assumes German planning-bureau workflow without flagging
+>    that as instance-illustration.
+>
+> 3. **Generic commitment in instance layer**: opposite direction
+>    — a commitment that should be in pattern layer (so the
+>    builder picks it up automatically) but currently lives in
+>    instance content. Detect: a skill body contains a generic
+>    discipline (e.g., "always validate before write") that
+>    should be in `ARCHITECTURE.md` or `plugin-conventions.md`,
+>    not buried in PBS-instance prose.
+>
+> For each finding: classify pattern (1/2/3), name file paths +
+> line ranges, propose the refactor (move to pattern layer with
+> generic phrasing / move to instance layer / restructure as
+> core+extension Pydantic split / etc.). For Pydantic / MCP
+> findings, sketch the proposed signature change.
+>
+> **Agent-discipline note**: this slice surfaces *coupling
+> candidates* — actual refactor decisions are the user's. Per the
+> single-domain-pioneer constraint (`ARCHITECTURE.md`),
+> validation of coupling-vs-generic-shape is best-effort
+> reasoning, not empirical truth — only signal #1 (does it work
+> for PBS) is immediately checkable. Findings should be framed as
+> "this looks PBS-coupled; consider rephrasing/refactoring" not
+> "this is definitively wrong." Reserve BLOCKER for cases where
+> coupling actively prevents pattern-level reuse (e.g., a
+> Pydantic required field that *only* makes sense for PBS,
+> blocking even a hand-built second instance).
+>
+> Output structured findings. Cap at 1500 words. Group findings
+> by layer (ARCHITECTURE / backend Pydantic / decision records /
+> conventions docs / skill bodies) so the user can scope refactor
+> work appropriately.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |

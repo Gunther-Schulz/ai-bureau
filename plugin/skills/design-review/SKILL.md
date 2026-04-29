@@ -1,12 +1,12 @@
 ---
 name: design-review
 description: This skill should be used when the user requests a first-principles review of the system's architecture / plugin / backend / docs to surface design soundness issues — phrases like "design review", "is this design right", "first-principles review", "would we build this from scratch", "rough cut review", "review the architecture for soundness", "Designprüfung", "Grundüberprüfung". Distinct from `audit` (which checks compliance with the system's own claims) — this skill challenges the claims themselves with explicit anti-status-quo bias mechanism. Triggered before building atop existing infrastructure, when foundations look soft, or as a periodic deep-review during pre-launch / pre-distribution windows where radical rewrites are still cheap.
-version: 0.6.0
+version: 0.7.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_skills]
 fallback_when_mcp_absent: "skill is filesystem-only and operates on contract-free files (SKILL.md, ARCHITECTURE.md, prose docs). list_skills is convenience for enumeration; without it, dispatched subagents glob plugin/skills/*/SKILL.md directly. No contract-bearing reads — no fail-closed concern."
-summary: First-principles soundness review with anti-status-quo bias (greenfield reframe). Challenges the design itself, not its compliance. Target 9 (Subsumption check) catches legacy-retirement gaps at design time.
+summary: First-principles soundness review with anti-status-quo bias (greenfield reframe). Challenges the design itself, not its compliance. Target 9 (Subsumption check) + target 10 (Pattern-vs-instance check) catch legacy-retirement and PBS-coupling gaps at design time.
 routing_mode: direct
 triggers:
   - design review
