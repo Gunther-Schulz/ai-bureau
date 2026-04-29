@@ -13,72 +13,85 @@ For taxonomy + decision rules, see `ARCHITECTURE.md`.
 
 ### Generalize + publish domain-agnostic skills as separate plugin(s)
 
-**Why**: Several skills in this plugin are battle-tested infrastructure
-patterns that aren't PBS-domain-specific — the architectural
-discipline (meta-rule 4 boundary, mcp_tools_required, fail-closed
-fallback policy, trigger-convention) and the cross-cutting skills
-(audit, design-review, watch-list, memory-record patterns,
-orchestrator routing infrastructure, promote-to-skill) generalize
-to any knowledge-work plugin domain. Once the PBS use-case has
-exercised them through real project work, the generic core can be
-extracted and published as standalone reusable plugin(s) for other
-domains (legal practice management, research-paper review,
-engineering-doc workflows, etc.).
+**Confirmed scope (primary)**: `audit` + `design-review` skills.
+These two are the most clearly domain-agnostic in the plugin —
+they review architecture / code / docs / decision records, not
+planning law or B-Plan content. Both are battle-tested as the
+session-by-session quality framework here; they generalize
+unchanged to any knowledge-work plugin domain (legal practice,
+research-paper review, engineering-doc workflows, etc.).
 
-**Generalization candidates** (high value, low PBS-coupling):
+- `audit` — drift detection framework with slice-based
+  composition. Today's slices reference some PBS-specific
+  surfaces (manifests, bausteine) but the frame is generic; the
+  domain-specific slices can stay here while the generic ones
+  extract.
+- `design-review` — first-principles soundness review with
+  anti-bias mechanism. Targets 1-9 are domain-flavored in
+  examples but the method (greenfield reframe, anti-status-quo
+  bias, subsumption check) is generic.
 
-- `audit` skill — drift detection framework with slice-based
-  composition. Today's slices reference PBS-specific surfaces
-  (manifests, bausteine) but the frame is generic.
-- `design-review` skill — first-principles soundness review with
-  anti-bias mechanism. Targets are domain-flavored but the method
-  is generic.
-- `watch-list` skill — six-trigger continuous-watch infrastructure
-  + four-way decision menu. Generic pattern.
+**Under consideration (secondary, not committed)**: several other
+skills + infrastructure could plausibly extract too — but the
+priority needs empirical battle-test before committing to the
+split. Listed for future evaluation, not for the first
+extraction:
+
+- `watch-list` — six-trigger continuous-watch infrastructure
+  + four-way decision menu. Pattern looks generic; needs
+  validation across domains before claiming it.
 - Memory-record pattern (`save-baustein` / `record-feedback` /
-  `validate-bausteine`) — generic memory-as-content with
-  invalidation contracts; "baustein" maps to "snippet" / "pattern"
-  / "case" in other domains.
-- `orchestrator` infrastructure — meta-rule-4 enforcement,
-  list_skills introspection, phase-routing framework. Generic.
-- `promote-to-skill` — graduation-from-memory pattern. Generic.
+  `validate-bausteine`) — "baustein" maps to "snippet" / "pattern"
+  / "case" in other domains, but the invalidation-contract shape
+  may differ enough to make a generic core leak abstractions.
+- `orchestrator` infrastructure (meta-rule-4 enforcement,
+  list_skills introspection, phase-routing) — likely generic, but
+  the orchestrator currently encodes PBS-specific phase model
+  (Phase A drafting / Phase B review / Phase C send). The
+  *framework* extracts; the *phase model* doesn't.
+- `promote-to-skill` — graduation-from-memory pattern. Tightly
+  coupled to the memory-record pattern; extract together or
+  not at all.
 - Backend infrastructure — `pbs_core/`-style plain-Python +
   `pbs_mcp/`-style thin MCP wrappers; StrictModel + fail-closed
-  discipline. Generic.
+  discipline. Likely PyPI-package material once the API stabilizes.
 
-**PBS-specific (stays here)**: `draft-textteil-b/c`,
+**Domain-coupled (stays here unconditionally)**: `draft-textteil-b/c`,
 `draft-cover-mail`, `validate-checklist`, `validate-latex-style`,
 `verify-citations`, `research-references`, `survey-project`,
 `setup-office`, `author-manifest`. These encode planning-bureau
 domain knowledge.
 
-**Sketch of the split**:
+**Sketch of the primary extraction (audit + design-review only)**:
 
-- A new repo (working name: `knowledge-work-plugin` or similar)
-  hosting the generalizable skills + backend infrastructure.
-- pbs-bureau becomes a *consumer* of that base plugin, adding only
-  PBS-specific skills and PBS-specific extensions (manifests,
-  doctype scaffolds, office-style, korrektur-rules).
+- A new repo (working name TBD — `claude-plugin-meta-review` or
+  similar) hosting just these two skills + their references
+  + minimal backend dependencies (StrictModel, list_skills tool).
+- pbs-bureau becomes a *consumer* of that base plugin via plugin
+  install/dependency, adding only PBS-specific slices/targets
+  on top of the generic frame.
 - Versioning: the generic plugin evolves on its own track; PBS
-  declares a version dependency. Other domains (e.g. a
-  legal-practice plugin) consume the generic core with their own
-  domain-specific top layer.
+  declares a version dependency.
 
 **Pull-forward trigger**: after first ~3-5 real PBS projects have
-exercised the cross-cutting skills enough that the generic /
-domain-specific split is empirically clear. Today's split is
-proposed by structure-reading; the empirical split may differ.
+exercised audit + design-review on real review cycles enough to
+empirically validate that the generic / PBS-specific split holds.
 Don't extract prematurely — extracting before battle-test risks
 splitting in the wrong place.
 
-**Open questions**:
-- Naming + scope of the generic plugin
-- Backend infrastructure split: does `pbs_core/` become its own
-  PyPI package, or does each plugin vendor its own copy? PyPI
-  package is cleaner; vendoring is more flexible early on.
-- Test surface: how does the generic plugin test domain-agnostic
-  skills without a domain to test against? Likely with a synthetic
-  reference domain (e.g., a "demo" domain with stub manifests).
+**Decision needed before extraction**:
+
+- Whether the secondary candidates extract together with audit +
+  design-review, or in a later separate pass, or not at all.
+  Today's instinct: separate later pass once empirical evidence
+  accumulates. But interesting enough to keep the option open.
+
+**Open questions** (defer until extraction window opens):
+
+- Naming + scope of the extracted plugin(s).
+- Backend infrastructure split: PyPI package vs vendoring?
+- Test surface: how does a meta-review plugin test itself without
+  a domain to review? Likely with a stub reference domain.
 
 ### Tier 2 MCP cross-reference tools (during first project work) — partial
 
