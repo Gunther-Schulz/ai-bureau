@@ -146,6 +146,97 @@ inconsistent error UX and untested code paths.
 land — that's when the conventions get applied for the first
 time. Don't pre-build before there's code to apply them to.
 
+### Pioneer-instance validation strategy
+
+**Why**: Per VISION.md "PBS as pioneer instance" — a one-user
+prototype generates thin validation. Risks (survivorship bias,
+architectural over-fitting, sparse evidence sample, confirmation
+bias) are real. Without explicit validation strategy, the
+pioneer claim relies on "Gunther uses it and it seems to work"
+— too thin to support proving-ground or research-lab purposes.
+Compounded by current market reality: project density may be
+sparse for a while; validation can't wait for projects to pile
+up.
+
+The question to answer: **what counts as valid evidence for an
+early-mover prototype with sparse real-world tests?**
+
+**Sketch — four complementary evidence types** (directly
+addresses risks named in VISION.md):
+
+- **Architectural validation** (cheap, immediate). Tests
+  whether the architecture works mechanically — skills
+  compose, layered manifest scope filtering operates,
+  source-grounding fires, audit trail records what's expected,
+  frontmatter dependency declarations resolve correctly.
+  Doesn't require real projects; build as backend test suite
+  with per-meta-rule invariants. Closest evidence type to
+  unit-test discipline applied at the architecture level.
+
+- **Failure-mode probing** (cheap, immediate). Stress-test
+  the trust + sparring infrastructure under deliberate
+  adversarial conditions — ambiguous citations, conflicting
+  Stellungnahmen, intentionally weak argumentations,
+  sycophancy bait ("don't you agree this looks fine?"),
+  source-grounding evasion attempts. Verify guardrails
+  actually fire under stress. Build as validation harness
+  with reusable adversarial scenarios; runnable on demand.
+
+- **Historical project replay** (medium effort, own data).
+  Run PBS on past projects (without the AI seeing the actual
+  sent versions); compare AI's drafts + reasoning chains
+  against what was historically shipped. Catches over-fitting
+  to user style; tests whether patterns reproduce expert
+  judgment over PBS's own track record. Confirmation-bias
+  risk: same person designed both architecture and originals,
+  so agreement isn't independent verification.
+
+- **Mock project + peer review** (medium effort, external
+  input — user's original suggestion). Construct realistic
+  synthetic project; another planning professional (Hendrik
+  first, possibly others later) reviews PBS outputs. Their
+  verdict: would they sign this? Would they have caught what
+  AI missed? What's wrong, structurally or fachlich?
+  Strongest external-validation path that doesn't depend on
+  real client work.
+
+Four distinct evidence types: **architecture / stress / own-
+baseline / external-professional**. None requires waiting for
+the next real project. Together they generate substantive
+evidence even during low-project-density periods.
+
+**Deferred (more ambitious, higher setup cost)**:
+
+- Compare against published professional standards
+  (Bauleitplanung leitfäden, BMI guidance, BBSR examples).
+- Hypothetical model cases (publicly discussed regional
+  planning challenges; PBS as if commissioned).
+- Replay published BVerwG case law (simulate PBS at the time
+  of a real dispute; compare against actual court outcome).
+- External presentation as IP-transferability test (paper,
+  conference, demo with feedback collection).
+
+**Pull-forward triggers**:
+
+- PBS becomes operational (Tier 1 MCP + alignment sweep + RAG
+  kickoff complete). Validation should start at first
+  operational use, not at first crisis.
+- Project density stays low for >1 month — evidence
+  accumulation via real work too slow to be sole strategy.
+- First consulting / second-deployment conversation surfaces —
+  need transferable evidence to share.
+
+**Open questions** (refine and prioritize at task #21
+pre-RAG audit; by then operational reality will inform
+trade-offs):
+
+- Effort budget per session: validation vs. real work split?
+- Where does evidence land — per-type log files? new
+  `evidence/` tree alongside `memory/`? Within the audit-trail
+  ROADMAP item?
+- Decision criteria: when does accumulated evidence justify
+  productization, scope expansion, or external publishing?
+
 ### SKILL.md version-bump reminder hook
 
 **Why**: Per meta-rule 5, hooks earn their keep on out-of-band

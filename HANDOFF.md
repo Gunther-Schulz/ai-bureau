@@ -161,13 +161,26 @@ New order:
    items A, B, C with framing.
 4. **Full pre-RAG architectural audit** (NEW final gate) —
    coherence pass across ARCHITECTURE.md / ROADMAP.md /
-   HANDOFF.md / all 16 skills. Catch: cross-doc inconsistencies,
-   schema gaps (memory data records still have no migration
-   framework), missing test / logging / error-handling
-   conventions for backend, deployment shipping bundle for
-   second-office, and any drift introduced by the alignment
-   sweep itself. Surface findings; resolve or explicitly
-   defer-with-reasoning before RAG kickoff.
+   HANDOFF.md / VISION.md / all 16 skills. Catch: cross-doc
+   inconsistencies, schema gaps (memory data records still
+   have no migration framework), missing test / logging /
+   error-handling conventions for backend, deployment shipping
+   bundle for second-office, and any drift introduced by the
+   alignment sweep itself.
+
+   **PLUS — fresh-eyes review of VISION.md + ARCHITECTURE.md
+   wording for finalization.** The foundational vision work
+   landed across multiple commits this session was extensive
+   and may not be in final form (flagged at landing time as
+   "tired, not full focus"). Re-read VISION.md (three axes;
+   foundations citing Ming; pioneer instance; sparring / trust
+   / authorship sections; checklists) and ARCHITECTURE.md
+   (vision anchor; meta-rule 5; backend organization) for
+   clarity, accuracy, completeness, and whether the framing
+   still feels right after living with it through the sweep.
+
+   Surface findings; resolve or explicitly defer-with-reasoning
+   before RAG kickoff.
 5. **RAG kickoff** (unchanged).
 
 Reasoning for the reorder: skills written during the sweep should
