@@ -6,6 +6,25 @@ ROADMAP item traces back to one thesis. When in doubt about
 whether a proposed feature belongs, check it against this
 thesis first.
 
+## What this is, in one line
+
+**An AI office pools and leverages domain and company knowledge to
+automate and support interactive workflows in a coherent manner.**
+
+Target users: solo professionals and small companies in
+expert-practitioner domains (planners, lawyers, researchers,
+accountants, consultants, boutique firms). Not enterprise
+federated deployments — that's a different archetype with a
+documented migration path (see `ROADMAP.md` v2 "Gemini Enterprise
+migration path"). Single-big-model orchestration's strengths
+(domain coherence, low operational overhead, vendor-neutral, big-
+context cross-department reasoning) land precisely in the solo-
+to-small expert-practitioner segment.
+
+PBS-bureau is the pioneer instance of this AI-office abstraction —
+specifically a Planungsbüro (German planning bureau). The patterns
+generalize to any expert-practitioner domain.
+
 ## The thesis
 
 PBS is built on three interlocking principles. None alone is
