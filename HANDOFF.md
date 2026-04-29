@@ -302,7 +302,8 @@ Actor) added session-9 followup #2** — pre-RAG, scheduled between
 Session 11-14: #11 (deep Cowork integration refactor)         3-5 sessions
 Session 15-17: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
 Session 18-19: #15 (Client + Actor as office entities)         1-2 sessions
-Session 20+:  #6 → #7 → #9 → #8                               per existing queue
+Session 20:   #17 (MCP gate coverage comprehensiveness review) 1 session
+Session 21+:  #6 → #7 → #9 → #8                               per existing queue
               C (sparring-output integration)
               D (plugin version bump)
 Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)

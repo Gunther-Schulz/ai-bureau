@@ -220,6 +220,39 @@ broad-scope; the line between "appropriately-broad" and
 **Notes**: orchestrator at 0.10.0 has multiple trigger phrases +
 broad scope; intentional but worth periodic check.
 
+### Incomplete-gate-coverage
+
+**Description**: meta-rule 4's "contract-bearing reads + writes go
+through MCP gate" applies in principle, but in practice not every
+contract-bearing surface has a gate today. New entity types or new
+contract-bearing files may go through direct filesystem `Read` /
+`Write` for an extended period before someone notices the missing
+gate. Slice 16 (validation-gate coverage) checks per-Pydantic-model
+strictness of EXISTING gates; doesn't enumerate surfaces that
+SHOULD be gated but aren't. Different scan.
+
+**Applicability**: yes (immediate). Today: bausteine
+(`memory/bausteine/`) have YAML frontmatter contracts but no
+gate. Per-project memory (`<project>/_ai/file-map.md`,
+`decisions.md`, `snapshots/`) — partial coverage. Post-#9 +
+#11 + #15: many new entity-md surfaces will need gating; risk of
+some being missed.
+
+**Severity**: serious — a missing gate breaks fail-closed
+discipline (skill bypasses contract via direct Read), makes
+schema migrations harder, and silently degrades the "everything
+contract-bearing goes through MCP" promise.
+
+**Coverage status**: ⚠ **partial / uncovered as discipline-shaped scan.** Slice 16 covers strictness of existing gates;
+the comprehensiveness scan ("which surfaces lack gates that
+should have them?") is **scheduled as pre-RAG task #17 (MCP
+gate coverage comprehensiveness review)** — see ROADMAP. Until
+that task runs and any gaps close, status is "partial."
+
+**Notes**: candidate for slice 22 (a comprehensive-coverage
+sweep paired with slice 16's strictness check); decision deferred
+to task #17 — slice form vs one-off review.
+
 ### Implicit-contract-between-skills
 
 **Description**: skills coordinate via conventions not declared in

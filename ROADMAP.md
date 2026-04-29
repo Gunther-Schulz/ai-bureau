@@ -1311,6 +1311,52 @@ ARCHITECTURE.md "AI-as-runtime hybrid-shape principle" section.
   needed; downstream migration work happens during the commitments
   it constrains.
 
+**17. MCP gate coverage comprehensiveness review** (session 10
+followup-3 — scoped from user-flagged concern post-hybrid-shape
+work).
+
+- **Why**: meta-rule 4 promises that contract-bearing reads +
+  writes go through MCP gates. Slice 16 (validation-gate
+  coverage) checks per-Pydantic-model **strictness** of
+  EXISTING gates. **Comprehensiveness** — "which surfaces lack
+  gates that should have them?" — is a different scan,
+  currently uncovered as discipline-shaped check. User flagged
+  during session 10 followup; codified as failure-mode-catalog
+  entry (`incomplete-gate-coverage`).
+- **What this commitment produces**:
+  - Comprehensive sweep of all contract-bearing files / file
+    types in the repo (today: `state.md`, `office-config.yaml`,
+    `audit_trail/*.json`, manifests, bausteine, project-`_ai/`
+    files; post-#9 + #11 + #15: new entity-md surfaces).
+  - For each: gate present? Strict enough? If absent, propose
+    gate name + sketch.
+  - Decision: scaffold as **slice 22** (comprehensiveness scan,
+    parallel + paired with slice 16's strictness scan) OR
+    one-off review session output. Lean toward slice 22 — gives
+    re-run cadence as new entities land.
+  - Failure-mode-catalog entry `incomplete-gate-coverage`
+    coverage status updated from `partial` to `covered` once
+    delivered.
+- **Order note**: opportunistic — could fold into #11's
+  user-facing-surface sweep (every skill checks gate usage as
+  it gets touched), OR run as standalone session before Phase
+  0 completes. Position 4 in pre-RAG queue (between #15 and
+  #6) is reasonable; could pull forward if #11 surfaces
+  coverage gaps directly.
+- **Dependencies**: benefits from #9 entity gate generalization
+  having landed (so post-#9 entity-mds are evaluated against
+  the new generic gate, not the per-entity tools); but doesn't
+  strictly block on it — could survey current state and re-run
+  after #9.
+- **Scope**: 1 session for the survey + slice 22 scaffolding.
+  Implementation of any new gates uncovered: per-gate
+  sub-tasks, scoped per finding.
+- **Per #16 constraint (session 10)**: surveys the new
+  `read_entity` / `write_entity` generic gate (post-#9) AND any
+  new manifest or office-level entity gates introduced by
+  #11/#15. Confirms hybrid-shape entity files all flow through
+  the generic gate, not direct filesystem Read.
+
 **6 (expanded)**: per session-9 followup #2, commitment #6's
 scope gains **approval event kinds** (`approval_requested`,
 `approval_granted`, `approval_rejected`) on AuditEvent. Approval
@@ -1331,7 +1377,8 @@ Session 10:   #16 (AI-as-runtime hybrid-shape contract)  1 session   ✅ DONE
 Session 11-14: #11 (Cowork integration refactor)         3-5 sessions
 Session 15-17: #13 (deployment flex + Coolify ref dep)   2-3 sessions
 Session 18-19: #15 (Client + Actor as office entities)   1-2 sessions
-Session 20+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 20:   #17 (MCP gate coverage comprehensiveness)  1 session
+Session 21+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
               + #14 (Memory Bank) bundled with Phase 1   2 sessions
 ```
 
