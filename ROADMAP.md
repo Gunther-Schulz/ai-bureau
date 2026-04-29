@@ -913,6 +913,88 @@ single-write integration per v2), C (sparring-output integration),
 D (plugin version bump), and the Phase 0 items 4 (feature-survey
 skill) + 5 (testing methodology) per HANDOFF.md.
 
+### Strategic milestone — Schulz Planungsbüro as exit / "AI-augmented business" sale (session 7, user-articulated)
+
+**The framing**: Gunther's father (co-founder of Schulz
+Planungsbüro) is approaching retirement. PBS-bureau's natural
+strategic endpoint is positioning the bureau for sale as an
+**AI-augmented planning business** — i.e., the buyer acquires
+the bureau (clients, contracts, reputation) PLUS the AI office
+that has captured institutional knowledge (bausteine = how the
+bureau argues §45 cases, state.md per project = lifecycle
+history, audit trail = decision provenance, manifests = current
+legal references, korrektur-rules = style discipline). The
+buyer gets faster ramp + lower headcount requirement than
+traditional bureau acquisition.
+
+**This is a strategic context note, not a commitment.** It
+exists in the roadmap to make the **timeline pressure explicit**:
+PBS's pre-RAG completion + first real-project track record need
+to land before father's retirement window for the "AI-augmented
+business" sale story to be credible. **Slipping pre-RAG closing
+puts this strategic exit at risk.**
+
+**What's strong about this exit story**:
+- Captures expertise that traditional bureau sales lose
+  (retiring planner's tacit knowledge)
+- Audit trail + bausteine + decision records ARE transferable
+  IP in a way "tribal knowledge" isn't
+- Coolify deployment makes technical handover concrete (clone,
+  change auth, done)
+- Differentiated story for buyers: "you're acquiring decades of
+  planning expertise, encoded"
+
+**What's harder than it looks (honest read)**:
+- Knowledge transfer is **partial, not total** — bausteine +
+  audit capture explicit reasoning; relationships with UNB
+  Sachbearbeiter, negotiating instincts, "feel" for context-fit
+  do NOT fully transfer. Realistic buyer is **another planner +
+  AI-augmentation**, not a non-planner running the AI alone.
+- "AI business" framing might oversell — today's PBS is
+  augmentation, not autonomous operation. Buyers may discount.
+  "AI-augmented planning bureau" is more honest framing for
+  pricing discussions.
+- Valuation premium requires **case study evidence** (headcount
+  reduction, ramp acceleration shown in real numbers); without
+  it, premium argument is theoretical and won't land in
+  negotiation. The next 1-2 years of real PBS operation
+  generate this evidence.
+- Buyer pool is narrow: another planning bureau consolidating;
+  construction/dev company acquiring planning capacity in-house;
+  PE-style "AI rollup" play. Niche resale.
+- **Timeline pressure is real and asymmetric**: father's
+  retirement timeline (assume 1-3 years) vs PBS maturation
+  realistic timeline (12-24 months from session 7 close). Cuts
+  it close.
+
+**Implications for the rest of the roadmap**:
+- Pre-RAG completion timeline becomes **load-bearing for the
+  exit story**, not just for PBS itself
+- First real project work needs to start as soon as Phase 1
+  corpus + first project bind are possible (post-RAG)
+- Generate explicit case-study evidence (project counts, error
+  catches, time savings, decision-trail completeness) during
+  real operation
+- Documentation discipline (decisions.md, audit trail, etc.)
+  pays back at sale time — they're the buyer-facing evidence
+  of "the AI captured the knowledge"
+
+**Connection to AI-office-builder vision (v2)** and the
+consulting offering:
+- Selling Schulz Planungsbüro as the **first proven AI-augmented
+  business** is the single best validation event for the
+  AI-office-builder v2 vision and for the consulting business
+- Validates the "AI office captures transferable expertise" thesis
+- Generates the case study that makes consulting credible
+- Establishes "AI-augmented business" as a recognized category
+  (precondition for marketplace platform — see v2 entry)
+
+**Status**: strategic context, not a commitment. No work item
+attached. Re-evaluate annually + before any major roadmap
+re-prioritization. The most concrete consequence right now is
+**urgency on pre-RAG completion** — every commitment slip
+shortens the window for the exit story to be credible.
+
 ### Pioneer-instance validation strategy
 
 **Why**: Per VISION.md "PBS as pioneer instance" — a one-user
@@ -2251,6 +2333,125 @@ credible to consulting prospects.
 **Status**: persistence of the option only. Not committed to
 implement. Trigger conditions named explicitly so future-you
 recognizes when the migration is justified.
+
+### AI-business marketplace platform (long-horizon watch position) — speculative
+
+**Why this is in the roadmap**: persistence of the option only,
+explicitly **speculative** — the underlying market category may
+or may not form. Building infrastructure for a category that
+hasn't materialized is a bet, not a plan. This entry documents
+the idea + trigger conditions so future-you can re-evaluate
+when (if) market signals shift.
+
+**The idea**: a web platform for buying, selling, and
+provisioning **AI-augmented businesses** — where seller is a
+retiring practitioner (planner, lawyer, accountant, consultant,
+researcher) whose practice has been encoded into an AI office,
+and buyer is another practitioner (or non-practitioner +
+practitioner team) acquiring practice + AI office together.
+Platform provides:
+- Marketplace listings (akin to BizBuySell / MicroAcquire /
+  Flippa, but AI-business-specific)
+- Valuation models (tooling for pricing AI-encoded knowledge as
+  transferable IP)
+- Provisioning automation (cloning AI office between owners,
+  re-attribution, migration tooling, escrow)
+- Trust layer (verification of captured knowledge depth, buyer
+  due diligence on the AI office's operational history)
+
+**Connection to broader strategy**:
+- Schulz Planungsbüro sale (strategic milestone above) is the
+  proof event — selling the first AI-augmented business
+  validates that the category exists and that buyers will pay
+  for it
+- AI-office-builder v2 vision feeds the marketplace by making
+  AI offices more replicable + more numerous (more potential
+  inventory)
+- Consulting offering generates the operating-experience
+  evidence that informs valuation models
+
+**Honest critical assessment** (session 7, user-articulated):
+
+**What's potentially strong**:
+- First-mover in a category that *could* emerge
+- Network effects + brand + tooling become moat over time IF
+  category materializes
+- Adjacent existing markets exist (BizBuySell, Flippa,
+  MicroAcquire) — proof that small-business resale is a real
+  market; "AI-augmented" is the differentiator
+- The provisioning-automation piece is a credible technical
+  service even if the marketplace piece doesn't reach scale
+
+**What's hard / risky**:
+- **The category doesn't exist yet.** Today: zero AI businesses
+  to buy/sell. Schulz Planungsbüro might be among the first.
+  Building marketplace before category forms = building for a
+  market that may never materialize.
+- **Marketplace dynamics are brutal.** Two-sided: need supply +
+  demand simultaneously. Trust takes years (Flippa/BizBuySell
+  decade+ to dominance). High-value low-frequency transactions
+  = fewer trust-building data points per dollar than typical
+  marketplaces.
+- **First-mover advantage is real but unprotective.** Network
+  effects develop slowly with low frequency. Reputation moat
+  takes years.
+- **Capital + team requirements are large.** Marketplace
+  operator (GTM/community), full SaaS platform, legal/compliance
+  for business sales (jurisdictional), trust/escrow
+  infrastructure. **Solo-founder execution unrealistic.**
+  Co-founders or substantial hires needed. Different skill set
+  than building PBS or consulting.
+- **Opportunity cost is enormous.** Every hour on marketplace
+  = hour not on PBS / consulting / case studies. Marketplace
+  pays off only if it dwarfs opportunity cost — far from
+  guaranteed.
+- **Risk of being too early.** If category takes 5-10 years to
+  materialize, marketplace burns capital for years before
+  liquidity. Many marketplaces die before reaching critical
+  mass.
+
+**Trigger conditions** (re-evaluate when these emerge):
+
+1. **Multiple AI businesses transacted** (5+ visible cases of
+   AI-augmented businesses sold, ideally with public valuations)
+2. **Demand-side signals**: PE plays for "AI rollups" of small
+   businesses; strategic acquirer interest in AI-augmented
+   acquisitions; explicit buyer demand for AI-encoded
+   businesses
+3. **Supply-side signals**: practitioners explicitly asking to
+   sell their AI-augmented businesses (waiting list of
+   sellers); retirement-driven exits with "AI augmentation"
+   framing common
+4. **Category recognition**: "AI business" or "AI-augmented
+   business" as a recognized term in business-broker / M&A
+   discourse
+5. **Capital + team availability**: co-founder with
+   marketplace / GTM expertise; capital runway for 3-5 years
+   pre-revenue marketplace building
+
+**If triggers don't fire** (likely outcome): the marketplace
+remains a documented option that doesn't get built. The
+provisioning-automation piece can still exist as part of the
+consulting offering (technical service, not platform).
+
+**If triggers fire** (best case): the consulting business
+becomes the springboard. PBS + consulting clients + AI-office-
+builder v2 generate the supply side; marketplace emerges as a
+natural extension after category-validation evidence
+accumulates. **Schulz Planungsbüro's sale is the first
+transaction the marketplace would have facilitated** — it's
+the proof point that gives the marketplace credibility from
+day one.
+
+**Strategic stance** — do NOT optimize toward this prematurely.
+Let it earn the right to exist via Part A's demonstrated
+success + consulting traction + observed category emergence.
+**Sequence not parallel**: Part A (Schulz sale) → consulting
+business → AI-office-builder v2 → THEN evaluate marketplace.
+
+**Status**: long-horizon speculative watch position. No
+commitment to build. Re-evaluate annually against trigger
+conditions.
 
 ### Reference versioning
 
