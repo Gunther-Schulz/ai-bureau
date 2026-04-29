@@ -9,41 +9,46 @@ during drafting.
 
 ```
 memory/bausteine/
-├── universal/<name>.md       # applies regardless of domain or state (rare)
-├── domain/<X>/<name>.md      # naturschutz, pv-ffa, wind, ...
-└── state/<X>/<name>.md       # state-specific (e.g. M-V Verfahrensvermerk variants)
+├── universal/<name>.md        # applies regardless of domain or state (rare)
+├── domain/<X>/<name>.md       # X ∈ {Naturschutz, PV-FFA, Wind, Innenentwicklung, ...}
+└── state/<X>/<name>.md        # X ∈ ISO Bundesland code: MV, BB, SH, ...
+
+# Project-scope bausteine live with the project, not here:
+<project_root>/_ai/bausteine/<name>.md
 ```
 
-A baustein declares its scope in frontmatter:
+Domain + state keys are case-sensitive and match the directory names
+under `extensions/{domain,state}/`.
+
+## Frontmatter schema
+
+The canonical schema lives in
+`plugin/skills/save-baustein/references/format.md` — read that file
+for the authoritative spec. At a glance:
 
 ```yaml
 ---
-name: <baustein-name>
-scope:
-  layer: universal | domain | state
-  key: <Naturschutz | MV | ...>     # null when layer == universal
-type: text-block | argumentation | spec | citation
-references:
-  - {law: BNatSchG, paragraph: §44 Abs.1}
-  - {ruling: BVerwG-9-A-22-13}
-  - {leitfaden: KNE-Anlagengestaltung}
-status: active | flagged | retired
-flagged_reason: ""
-last_reviewed: 2026-04-28
-review_due: 2027-04-28
-use_count: 0
+name: <stem-matching-filename>
+scope: universal | domain | state | project    # flat string discriminator
+scope_key: Naturschutz                          # required for domain/state; project name for project scope; null/omitted for universal
+type: argumentation | technical-spec | citation | checklist | textbaustein | template
+title: <human-readable>
+language: de | en | mixed
+# ... plus provenance, lifecycle (status: active | flagged | archived | superseded),
+# use tracking, cross_project_visible flag, references[] with verified_against_version
 ---
 ```
 
-Path matches the scope: `domain/Naturschutz/...` for
-`scope.layer: domain, scope.key: Naturschutz`. The
-`save-baustein` skill enforces this.
+The `scope` + `scope_key` orthogonality is the post-v0.4 schema —
+older nested-object shapes (`scope: {layer: ..., key: ...}`) are not
+valid. `save-baustein` enforces path-matches-frontmatter.
 
 ## Single-scope rule
 
 A baustein has exactly one scope. If a candidate baustein appears
 to fit multiple scopes (e.g. both `domain/PV-FFA` and `domain/Wind`),
 either:
+
 - Promote it up the layer (`universal` if truly cross-domain), or
 - Split it into two specialized bausteine.
 
@@ -52,6 +57,8 @@ a single reusable unit.
 
 ## Loader behavior
 
-Tools (`find_bausteine_by_reference`) walk the tree, filter by the
-office's active `scope.domains[]` + `scope.states[]` from
-`office-config.yaml`. Universal bausteine always match.
+The Tier 1 MCP tool `list_bausteine(scope?, scope_key?, project_root?)`
+and the Tier 2 `find_bausteine_by_reference(law=, paragraph=, ...)`
+walk this tree (plus per-project `_ai/bausteine/`), filter by the
+office's active `scope.{domains,states}` from `office-config.yaml`.
+Universal bausteine always match.

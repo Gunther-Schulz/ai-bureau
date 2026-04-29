@@ -1,5 +1,13 @@
 # Backend conventions
 
+> **Scope boundary.** This doc covers idioms within Type E (backend
+> Python). For "where does X belong?" questions, see
+> `ARCHITECTURE.md`. Specifically, meta-rule 5 (execution locality)
+> decides what is a tool vs. skill behavior; this doc decides
+> *how* a tool is written once that's settled. Plugin-side
+> idioms (Type A/B — skills + skill references) live in
+> `docs/plugin-conventions.md`.
+
 Conventions for `backend/mcp-server/` Python code. Resolves audit
 deferred items D1 (test layout), D2 (logging), D3 (MCP error
 format) — see `docs/audit-pre-rag.md`.

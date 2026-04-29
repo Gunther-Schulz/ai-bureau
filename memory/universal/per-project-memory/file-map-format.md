@@ -1,3 +1,7 @@
+---
+references_used: []
+---
+
 # `file-map.md` format
 
 Per-project AI's interpretation of project folder contents. Lives at

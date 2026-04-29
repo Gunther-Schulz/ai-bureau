@@ -44,6 +44,19 @@ Periodically (definitely after any meta-rule addition or refactor),
 sweep all skills against the current meta-rules to catch drift.
 That sweep is currently the next-session priority — see HANDOFF.md.
 
+**Scope boundary**: this doc covers placement (which tier / which
+entity type / where does it belong). For *within-tier idioms* —
+how to write the thing once you've decided where it goes — see:
+
+- `docs/plugin-conventions.md` — Type A (skills) + Type B (skill
+  references) idioms: frontmatter contract, version semver, body
+  patterns, references organization, routing handoff conventions.
+- `docs/backend-conventions.md` — Type E (backend code) idioms:
+  test layout, logging, MCP error format.
+
+Conventions docs trace decisions back here (especially meta-rule 5
+execution locality) but never re-litigate placement.
+
 ## Meta-rule: app vs office (deployment portability)
 
 The repository is **a generic German planning-bureau workflow app**
@@ -559,11 +572,10 @@ them. Full design lives in `ROADMAP.md`.
 
 > **RAG-related items** (multimodal ingest, structural retrieval,
 > query rewriting, agentic retrieval, late-interaction text
-> retrieval) are further resolved (PROPOSED) in
-> `docs/rag-pipeline-decisions.md`; final confirmation pending the
-> pre-RAG audit (which is itself the gating activity for RAG
-> kickoff). When that doc moves from PROPOSED to ACCEPTED, the
-> bullets below will reflect ACCEPTED verdicts inline.
+> retrieval) are resolved (ACCEPTED in session 5 post-audit) in
+> `docs/rag-pipeline-decisions.md`. The bullets below list the
+> ROADMAP framings; that doc carries the verdicts + alternatives
+> + revisit triggers.
 
 - **Audit trail** — unified change/decision/version log across
   artifacts, references, manifests, configs, integrations,

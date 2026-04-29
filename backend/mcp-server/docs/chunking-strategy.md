@@ -186,8 +186,8 @@ If body >1000 tokens (rare), split at `##` headings.
 
 Metadata:
 - `source_type`: `baustein`
-- `source_subtype`: scope (`global` | `domain` | `project`)
-- `baustein_name`, `baustein_scope`, `baustein_status`: from frontmatter
+- `source_subtype`: scope (`universal` | `domain` | `state` | `project`)
+- `baustein_name`, `baustein_scope`, `baustein_scope_key`, `baustein_status`: from frontmatter
 - `tags`: from frontmatter
 
 Frontmatter NOT embedded (metadata only). Body content is what the

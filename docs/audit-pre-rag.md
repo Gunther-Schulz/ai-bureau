@@ -1,5 +1,12 @@
 # Pre-RAG architectural audit
 
+> **Closure status (post-session-5):** Conditional pass. F1–F9 + U1
+> + U2 closed in commits `ad01b18` / `d0f3f91` / `501eaa1`. The
+> meta-audit (slices E/F/G) and rounds 3+4 surfaced additional drift
+> beyond the original 12 findings; those are tracked in `HANDOFF.md`
+> and resolved in subsequent commits. This doc is a frozen
+> session-5 snapshot — read alongside HANDOFF for current state.
+
 **Date:** 2026-04-29 (session 5).
 **Trigger:** HANDOFF Task #21 — gate before RAG kickoff.
 **Method:** three parallel slice audits — cross-doc consistency (A), skill drift across the 16 plugin skills (B), backend & convention gaps (C). Each slice followed the brief in HANDOFF "audit covers".

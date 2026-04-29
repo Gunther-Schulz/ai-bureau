@@ -1,3 +1,7 @@
+---
+references_used: []
+---
+
 # `decisions.md` format
 
 Chronological per-project decision log. Append-only. Lives at

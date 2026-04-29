@@ -1,3 +1,7 @@
+---
+references_used: []
+---
+
 # Snapshot convention
 
 Per-project AI snapshots live at `<project_root>/_ai/snapshots/`.

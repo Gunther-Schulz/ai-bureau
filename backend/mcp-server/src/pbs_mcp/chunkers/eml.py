@@ -51,9 +51,9 @@ def chunk_eml(path: str, content: str, manifest_entry: dict | None = None) -> li
 
     tags = []
     fname_lower = path.lower()
-    if "out" in fname_lower or "ausgehend" in fname_lower:
+    if "_out" in fname_lower or "ausgehend" in fname_lower or fname_lower.endswith("_out.eml"):
         tags.append("mail-out")
-    elif "in" in fname_lower:
+    elif "_in" in fname_lower or "eingehend" in fname_lower or fname_lower.endswith("_in.eml"):
         tags.append("mail-in")
     if has_attachment:
         tags.append("has-attachment")

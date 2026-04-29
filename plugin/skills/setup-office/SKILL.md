@@ -1,7 +1,7 @@
 ---
 name: setup-office
 description: This skill should be used the first time the plugin is deployed to a new planning bureau, when the office-config.yaml is missing, or when the user asks to "set up office", "first-time setup", "bootstrap office", "deploy to a new office", "Kanzlei einrichten", or "configure office". The orchestrator auto-routes here when office_config.load() raises OfficeConfigNotFoundError. Walks the user interactively through every required field, writes office-config.yaml at the resolved location, bootstraps the office state directory tree, validates the result.
-version: 0.2.1
+version: 0.3.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []

@@ -1,0 +1,47 @@
+% office-style.Naturschutz.sty
+% Domain-specific office-style overlay for offices working primarily on
+% Naturschutz / Artenschutz / FFH-Vorprüfung projects.
+%
+% Layered after office-style.default.sty when the office's
+% scope.domains[] includes Naturschutz. Adds Artenschutz-conventional
+% macros, species-list formatting hints, and Helgoländer-Papier
+% citation conventions on top of the base aesthetic.
+%
+% setup-office offers this as a starter overlay. Offices customize
+% their own copy at <office_state_root>/templates/office-style.sty
+% (or as a separate office-style-Naturschutz.sty addon, if they want
+% multiple domains active with separate aesthetics).
+%
+% Layer 2 (domain overlay) of the 3-layer template stack.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{office-style-Naturschutz}[2026/04/29 v0.1 Naturschutz domain overlay]
+
+% ---- Artenschutz / species citation macros --------------------------
+% Standard wording for relevante Arten + species citation form.
+% Italicize species names at first mention by convention.
+
+\providecommand{\Art}[1]{\textit{#1}}
+\providecommand{\RoteListe}[1]{Rote Liste #1}
+\providecommand{\FFHAnhang}[1]{FFH-Anhang #1}
+
+% ---- Helgoländer-Papier reference convention ------------------------
+% Distance + signal-effect notation typeset consistently.
+\providecommand{\HelgolaenderAbstand}[2]{#1\,m (Helgoländer Papier #2)}
+
+% ---- Hyphenation hints (Naturschutz-specific compounds) -------------
+\hyphenation{%
+  Arten-schutz-recht-li-cher%
+  Be-ein-traech-ti-gungs-pro-gno-se%
+  Aus-gleichs-ma\ss-nah-me%
+  Er-satz-ma\ss-nah-me%
+  Ar-ten-schutz-pruef-ung%
+  FFH-Vor-pruef-ung%
+  Re-pro-duk-tions-er-folg%
+  Schlag-ri-si-ko%
+  Stoer-wir-kung%
+  Ver-meid-ungs-ma\ss-nah-me%
+  Bio-to-pe-quel-le%
+}
+
+\endinput

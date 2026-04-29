@@ -73,9 +73,6 @@ def _chunk_enumerate_block(text: str, section_prefix: str) -> list[dict]:
         item = item.strip()
         if not item:
             continue
-        # Pull a short label from the first line
-        first_line = item.split("\n", 1)[0].strip()
-        label = re.sub(r"\\(textbf|emph|textit)\{([^}]*)\}", r"\2", first_line)[:80]
         chunks.append({
             "content": "\\item " + item,
             "section": f"{section_prefix} #{i}",

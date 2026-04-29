@@ -214,11 +214,15 @@ def _infer_source_subtype(path: str, source_type: str) -> str:
             return "beispiel"
         return "reference"
     if source_type == "baustein":
-        if "/global/" in p_lower:
-            return "global"
-        if "/projects/" in p_lower:
+        if "/bausteine/universal/" in p_lower:
+            return "universal"
+        if "/bausteine/domain/" in p_lower:
+            return "domain"
+        if "/bausteine/state/" in p_lower:
+            return "state"
+        if "/bausteine/projects/" in p_lower or "/_ai/bausteine/" in p_lower or "/.ai/bausteine/" in p_lower:
             return "project"
-        return "domain"
+        return "baustein"
     return source_type
 
 

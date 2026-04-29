@@ -199,15 +199,11 @@ image hit, or vice versa).
 
 ### A.6 Implementation order
 
-1. OCR + DRM-removal in ingest pipeline (no schema change beyond
-   new chunker module)
-2. ColPali embedder loaded alongside bge-m3 (lazy-load on first
-   image-query)
-3. LanceDB schema migration: add `modality`, `image_path`,
-   `page_number` columns
-4. `read_corpus_page_image` MCP tool
-5. Hybrid retrieval in `search_corpus` (reranker scores both
-   modalities)
+Sequencing for verdict A's sub-pieces is now part of the unified
+phased plan — see "Implementation order" section near the bottom
+of this doc. Phase 3a covers all five A-sub-pieces (OCR, DRM,
+ColPali, schema migration, hybrid). This section retained as a
+back-pointer.
 
 ---
 
@@ -577,53 +573,128 @@ materially better benchmarks.
 
 ## Implementation order (post-decisions; pre-RAG kickoff)
 
-Once these verdicts are confirmed at task #21 audit, implementation
-falls into three steps:
+**Phasing revised in session 5** based on the following reasoning:
+the previous flat "Backend pipeline additions" lumped 7 distinct
+concerns (OCR/DRM, ColPali, LanceDB schema, §-graph, hybrid
+retrieval, 2 new tools, new chunking) into one PR — too coarse.
+Real corpus shape (which entries are scanned/DRM/manual-discovery)
+should inform chunker decisions rather than be discovered after
+implementation. Phases below split text and image sides; download
+the corpus early so design iterates against real data.
 
-1. **Backend pipeline additions** (per A + B + C):
-   - OCR + DRM-removal modules in ingest
-   - ColPali embedder + image-render pipeline
-   - LanceDB schema migration: `modality`, `image_path`,
-     `page_number` columns
-   - SQLite `legal-graph.sqlite` initialization + extraction
-     hooks in chunkers
-   - Hybrid retrieval in `search_corpus`
-   - New MCP tools: `read_corpus_page_image`, `query_legal_graph`
-   - New chunking strategy: `per-section-with-paragraph-subchunks`
+### Phase 0 — Pre-RAG plumbing (current)
 
-2. **Smoke-test on a few entries** (3–5 entries spanning text-only,
-   diagram-heavy, scanned, DRM-encumbered):
-   - Verify OCR works on scanned PDF
-   - Verify DRM-removal works on DRM-encumbered PDF
-   - Verify ColPali image embeddings + filesystem refs
-   - Verify §-graph extraction populates SQLite as expected
-   - Verify hybrid retrieval returns mixed candidates
+Discussion + small implementation. No corpus contact.
 
-3. **Full first ingest** (all 57 entries via `research-references`
-   refresh-all):
-   - Tracked in changelog
-   - Bausteine flagged downstream via `find_bausteine_by_reference`
-     (none yet exist; this becomes relevant on second run)
+- Meta-audit slice (close remaining drift not caught in
+  audit-pre-rag.md)
+- `docs/plugin-conventions.md` (Type A/B idioms — sibling to
+  backend-conventions.md)
+- Integration registry design + implementation (4th layered
+  manifest type? capability vocabulary? query API shape?)
+- Testing-methodology design (`docs/rag-testing-strategy.md`):
+  coverage-gap schema, ground-truth set scope, determinism
+  harness, regression detection
+- U2 conventions migration (tests/, ToolError, ruff `G` rule) —
+  bundled with registry impl
+
+**Gate**: Phase 0 closes when registry is queryable + harness
+shape is documented + ground-truth set scoped (curation deferred
+to Phase 1).
+
+### Phase 1 — Corpus download (no embeddings)
+
+Fetch all 57 entries via `research-references` full refresh.
+Raw fetch + checksum + manifest population only. No chunking,
+no embedding, no LanceDB writes.
+
+**Why early**: surfaces real data shape before design commits.
+Discovers DRM/scanned/manual-discovery surprises now, not after
+the chunker/embedder code already assumes a shape.
+
+**Output**: `<references_root>/` populated with raw text/PDFs
++ `changelog.md` populated + per-entry coverage scaffold (see
+Phase 0 testing-strategy doc).
+
+**Gate**: all 57 manifest entries either fetched-successfully
+or flagged-with-reason. Coverage scaffold reflects reality.
+
+### Phase 2a — Text-side ingestion (smoke)
+
+Implement: bge-m3 embedder + reranker (already pinned), new
+chunking strategy `per-section-with-paragraph-subchunks`,
+SQLite `legal-graph.sqlite` initialization + regex extraction
+hooks, hybrid retrieval in `search_corpus` (text-only —
+image-modality not yet present).
+
+Smoke-test on **5 text-heavy entries** (e.g. BNatSchG,
+BauGB, KNE-Anlagengestaltung-text-only-section, a Leitfaden,
+a court ruling).
+
+**Gate**: ground-truth set sample search ≥ threshold
+(threshold defined in Phase 0 testing-strategy); coverage
+report shows text+graph indexed for the 5 entries.
+
+### Phase 2b — Full text ingestion of corpus
+
+Run full text ingestion across all 57 entries.
+
+**Gate**: coverage dashboard shows text+graph indexed for
+all eligible entries; ground-truth-set queries pass against
+the full text-only corpus.
+
+### Phase 3a — Image-side ingestion (smoke)
+
+Implement: OCR (`ocrmypdf`) + DRM-removal (`qpdf`/`pikepdf`)
+modules in ingest, ColPali embedder + page-render pipeline,
+LanceDB schema migration (`modality`, `image_path`,
+`page_number`), `read_corpus_page_image` MCP tool, full
+hybrid retrieval (text + image candidates merged by
+reranker).
+
+Smoke-test on **3 image-heavy + 1 scanned + 1 DRM-encumbered
+entry**.
+
+**Gate**: image retrieval verified; hybrid reranker correctly
+mixes text + image candidates on test queries; coverage
+dashboard shows images+text indexed for the 5 entries.
+
+### Phase 3b — Full image ingestion + verified hybrid
+
+Run full image ingestion (re-process the corpus to add image
+modality). Coverage delta visible: which entries now have
+images indexed vs. text-only.
+
+**Gate**: full hybrid retrieval verified against ground-truth
+set (now including image-required queries).
+
+### Phase 4 — First project bind + real workflow
+
+Bind first hidrive project. Run survey-project →
+draft-textteil-b/c → review-draft → save-baustein →
+verify-citations → record-feedback. End-to-end exercise.
+
+**Gate**: workflow produces defensible output; bausteine begin
+to populate; orchestrator's watch-list semantics tested.
 
 ---
 
 ## Open work captured for follow-up
 
-These are NOT pre-RAG decisions but surfaced during this design
-pass; tracked here for traceability.
+Items not resolvable at design-time; surface in implementation
+phases.
 
-- **§-graph maintenance on reference updates**: documented in
-  B.6; standard re-ingest pattern.
-- **Image render dimensions**: 2048-px max chosen for first
-  ingest; revisit if Claude vision struggles on detail-heavy
-  diagrams.
-- **Token-budget cap**: 5 images per response default; revisit
-  if real usage shows under- or over-shooting.
-- **Hybrid retrieval ranking**: reranker scores text + image
-  candidates against same query; quality assumption to be
-  validated empirically.
-- **Schema for query_legal_graph results**: GraphHit shape not
-  yet defined; lands when the MCP tool is implemented.
+- **Schema for `query_legal_graph` results**: `GraphHit` Pydantic
+  shape lands when the MCP tool is implemented in Phase 2a (text
+  + §-graph). Until then, the tool surface in B.5 is a sketch.
+- **§-graph maintenance on reference updates** is documented in
+  B.6 (standard re-ingest pattern). Listed here to keep the
+  traceability link visible — no separate work.
+
+(Earlier per-decision items — image render dimensions, token-budget
+cap, hybrid retrieval ranking — are now captured as **Revisit
+trigger** entries in their respective sections per the
+decision-recording convention.)
 
 ---
 

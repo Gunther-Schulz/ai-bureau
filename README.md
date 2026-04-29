@@ -46,7 +46,7 @@ pbs-bureau/
 
 ## Architectural meta-rules
 
-This codebase enforces three meta-rules. New content goes through
+This codebase enforces five meta-rules. New content goes through
 them before placement:
 
 1. **App vs office** — no PBS-specific values in repo content. All
@@ -59,8 +59,26 @@ them before placement:
    doctypes, skeletons, bausteine all decompose along the same three
    axes. Bureaus pick their `(domains × states)` selection in
    `office-config.yaml > scope`; layered loaders merge accordingly.
+4. **Integration adapter pattern** — capability-swappability for
+   external systems (email/calendar/scanner/phone/accounting)
+   via a Protocol-typed adapter contract.
+5. **Execution locality** — deterministic logic lives in MCP tools
+   (gates), not skill behavior. Skills declare their MCP-tool
+   dependencies in YAML frontmatter (`mcp_tools_required[]`,
+   `_optional[]`, `fallback_when_mcp_absent`).
 
-See `ARCHITECTURE.md` for full specification.
+See `ARCHITECTURE.md` for the full taxonomy + 9 entity types + 6
+decision rules. See also:
+
+- `VISION.md` — three-axis thesis (intertwined-AI-workflow /
+  sparring partner / authorship preservation) + pioneer-instance
+  framing
+- `ROADMAP.md` — deferred work + pull-forward triggers + decision-
+  recording convention
+- `HANDOFF.md` — current-session state, what's done, what's next
+- `docs/rag-pipeline-decisions.md` — pre-RAG architectural
+  decisions (ACCEPTED post-audit)
+- `docs/{plugin,backend}-conventions.md` — within-tier idioms
 
 ## Development workflow
 

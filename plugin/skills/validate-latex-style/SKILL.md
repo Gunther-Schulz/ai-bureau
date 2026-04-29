@@ -1,7 +1,7 @@
 ---
 name: validate-latex-style
 description: This skill should be used during the formal review layer of any layered review (orchestrator Checkpoint 4.2, layer 3) — diffs a LaTeX document's preamble and structural choices against the canonical style-spec.md plus any per-active-domain office-style overlays. Triggered by user phrases like "style check", "spec-Abweichung", "validate style", "stilprüfung", or as part of pre-send formal review.
-version: 0.2.1
+version: 0.3.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: []

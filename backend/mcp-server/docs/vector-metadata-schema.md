@@ -40,7 +40,8 @@ class CorpusChunk:
 
     # Bausteine-specific (source_type=baustein)
     baustein_name: str | None              # if this chunk is from a baustein body
-    baustein_scope: str | None             # global | domain | project
+    baustein_scope: str | None             # universal | domain | state | project
+    baustein_scope_key: str | None         # null for universal/project; domain key (Naturschutz/PV-FFA/Wind) or state key (MV) otherwise
     baustein_status: str | None            # mirror of frontmatter status
 
     # Timing
@@ -59,7 +60,7 @@ class CorpusChunk:
 |---|---|
 | `corpus` | `local-repo` (`~/dev/Planungsbüro-Schulz/`), `hidrive-project` (`<hidrive>/Projekte/<YY-NN>/`), `snapshot` (immutable snapshot inside `_ai/`), `correspondence` (`Schriftverkehr/eml/` etc.) |
 | `reference` | `gesetz-bund`, `gesetz-eu`, `gesetz-mv`, `leitfaden`, `urteil`, `beispiel`, `methodik` |
-| `baustein` | `global`, `domain`, `project` |
+| `baustein` | `universal`, `domain`, `state`, `project` |
 
 ## Filter patterns
 

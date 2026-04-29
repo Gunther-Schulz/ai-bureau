@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 
-RANDNR_RE = re.compile(r"^Rn\.?\s*(\d+)\s*$|\b(\d+)\b\s*$", re.MULTILINE)
+RANDNR_RE = re.compile(r"^Rn\.?\s*(\d+)\s*$", re.MULTILINE)
 LEITSATZ_RE = re.compile(r"(?im)^(Leitsatz|Leitsätze|Tenor|Sachverhalt|Tatbestand|Entscheidungsgründe|Gründe)\s*[:.]?\s*$")
 
 

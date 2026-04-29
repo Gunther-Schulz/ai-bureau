@@ -1,7 +1,7 @@
 ---
 name: research-references
 description: This skill should be used to fetch, update, or check freshness of legal references (gesetze, leitfäden, urteile) tracked across the office's layered references manifests. Triggered by user phrases like "update references", "neue Fassung holen", "BauGB current?", "research new law", "are our laws current?", "refresh references", "gesetze aktualisieren", "fetch BVerwG ruling", or scheduled refresh checks.
-version: 0.2.1
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_reference_manifests, ingest_paths]
 mcp_tools_optional: [find_bausteine_by_reference]

@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: This skill should be used when the user works on Planungsbüro (German planning bureau) documents — any path under the office's configured projects_root or local LaTeX repos directory, mentions of B-Plan, Bebauungsplan, Begründung, Festsetzungen, Umweltbericht, Artenschutz, FFH-Vorprüfung, Stellungnahme, Abwägung, Gutachten, TöB, ZAV, or related German planning terminology, project work matching the office's project-naming convention (e.g. "YY-NN <Client> - <Location>"), or any reference to the office's configured project folders. Auto-loads at session start when planning-bureau context is detected. Coordinates the entire conversational flow for all office document work.
-version: 0.2.0
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_projects, list_skills]
 mcp_tools_optional: [list_reference_manifests, list_doctypes_manifests, list_skeletons, list_bausteine, search_corpus, read_corpus_file, find_bausteine_by_reference, bind_project, setup_project]
@@ -51,7 +51,7 @@ Four layers:
 |---|---|---|
 | Plugin | `<repo>/plugin/` | Skills (this one + specialists), agents, hooks |
 | Backend | `<repo>/backend/` | MCP server (Python, stdio) — embedded LanceDB + in-process embedder + reranker |
-| Cross-cutting memory | `<repo>/memory/` | global / domain bausteine, specs, registry |
+| Cross-cutting memory | `<repo>/memory/` | layered bausteine (universal / domain / state) + specs + reference content |
 | Per-project memory | `<project-root>/_ai/` or `.ai/` | state, file-map, decisions, snapshots |
 
 Project artifacts and office state live under user-owned roots

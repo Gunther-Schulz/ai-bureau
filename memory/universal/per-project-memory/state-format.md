@@ -1,3 +1,7 @@
+---
+references_used: []
+---
+
 # `state.md` format
 
 Per-project AI state file. One per project, lives at

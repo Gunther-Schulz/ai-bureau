@@ -160,7 +160,7 @@ class CorpusDB:
     def delete_by_path(self, source_path: str) -> int:
         """Delete all chunks belonging to a given source file."""
         before = self.table.count_rows()
-        self.table.delete(f"source_path = '{source_path}'")
+        self.table.delete(f"source_path = '{_sql_escape(source_path)}'")
         after = self.table.count_rows()
         return before - after
 

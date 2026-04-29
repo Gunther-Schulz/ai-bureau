@@ -32,18 +32,38 @@ variables (mainly for tests):
 ```
 src/pbs_mcp/
 ├── __init__.py
-├── server.py            stdio entry point, tool registration
-├── config.py            path resolution
-├── embedder.py          fastembed wrapper (TBD)
-├── db.py                lancedb wrapper (TBD)
+├── server.py                        stdio entry point + 22-tool registration
+├── config.py                        path resolution + layered manifest API
+├── office_config.py                 office.yaml loader + Pydantic schema
+├── office_config_migrations/        v1→v2 forward migrations (in-memory at load)
+├── schemas.py                       Pydantic input/output models for all tools
+├── embedder.py                      fastembed bge-m3 + bge-reranker-v2-m3
+├── db.py                            LanceDB wrapper + filter language
+├── chunkers/                        per-strategy chunker modules (text-window,
+│                                    gesetz-paragraph, urteil-randnr, leitfaden-
+│                                    section, latex-enumerate, latex-textbaustein,
+│                                    pdf-heading, eml, baustein-body)
+├── integrations/                    Type I adapters (email/calendar/scanner/
+│                                    phone/accounting; protocol.py + none.py
+│                                    each — concrete adapters land per demand)
 └── tools/
-    ├── corpus.py        search_corpus, read_corpus_file (TBD)
-    ├── ingest.py        ingest_paths, search_inputs (TBD)
-    ├── memory.py        list/get/save_baustein (TBD)
-    ├── projects.py      list/bind/survey_project (TBD)
-    └── build.py         compile_latex, scaffold_project (TBD)
+    ├── corpus.py                    search_corpus, read_corpus_file, ingest_paths
+    ├── ingest.py                    ingest_project_inputs, search_inputs
+    ├── memory.py                    list/get/save/flag/archive_baustein,
+    │                                find_bausteine_by_reference
+    ├── projects.py                  list/bind/setup_project, scaffold_project
+    ├── build.py                     compile_latex
+    ├── survey.py                    survey_project (file clustering)
+    └── discovery.py                 Tier 1: list_skills, list_*_manifests,
+                                     list_skeletons, list_bausteine
 ```
 
 ## Status
 
-v0.1 — scaffolding only. Tool implementations to follow.
+22 MCP tools registered + handlers wired. Pre-RAG state: corpus
+search/ingest/embedding works for text. Multimodal (OCR, ColPali,
+image retrieval) + legal-§-graph + new chunking strategy
+(`per-section-with-paragraph-subchunks`) are Phase 2a/3a per
+`docs/rag-pipeline-decisions.md`. Conventions for backend Python
+(test layout, logging, MCP error format) at
+`docs/backend-conventions.md`.

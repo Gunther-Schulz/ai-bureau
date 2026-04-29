@@ -237,7 +237,7 @@ A whole-document `Write` for a multi-section change is a protocol violation. Sec
 
 ### 7.4 Required sections
 
-Per doctype, `doctypes.yaml` lists `sections_canonical`. Compare the document's section list against the canonical superset. Surface missing-required as findings; surface extras as informational (project-specific extensions are allowed, but flagged).
+Per doctype, the layered `doctypes.yaml` manifests (call `list_doctypes_manifests()` — Tier 1 MCP tool) list `sections_canonical`. Compare the document's section list against the canonical superset. Surface missing-required as findings; surface extras as informational (project-specific extensions are allowed, but flagged).
 
 ---
 

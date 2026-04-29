@@ -1,7 +1,7 @@
 ---
 name: validate-checklist
-description: This skill should be used during the structural review layer of any layered review (orchestrator Checkpoint 4.2, layer 1) — checks a document against its doctype-specific required sections, project-data macros, and end-blocks. Triggered when the user asks to "review", "prüfen", "structural check", "strukturell prüfen", "validate structure", "check Festsetzungen", or as part of pre-send validation.
-version: 0.2.0
+description: This skill should be used during the structural review layer of any layered review (orchestrator Checkpoint 4.2, layer 1) — checks a document against its doctype-specific required sections, project-data macros, and end-blocks. Triggered when the user asks "structural check", "strukturell prüfen", "validate structure", "Strukturprüfung", "check Festsetzungen", "check required sections", or as part of pre-send validation. NOTE — generic phrases like "review" / "prüfen" route to review-draft (the orchestrator-level review entry), which then delegates here for Layer 1.
+version: 0.3.0
 license: MIT
 mcp_tools_required: [list_doctypes_manifests]
 mcp_tools_optional: [search_corpus, read_corpus_file, list_reference_manifests]

@@ -456,7 +456,7 @@ Behörde). They duplicate some content with `Aufstellungsverfahren/2b`
 and `5b` but serve a different organizing principle (per-Behörde
 vs per-Phase).
 
-**Open question for v0.2:** is one organization preferable, or should
+**Open question:** is one organization preferable, or should
 both views coexist? Some offices organize by §-paragraph at the TöB-
 axis level (e.g. `TöB-Verfahren/§ 4 (1)/`), which aligns with our
 `TöB/4_1-...` proposal.

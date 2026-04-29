@@ -1,10 +1,11 @@
 # references-manifest.yaml schema
 
 Each `references-manifest.yaml` file uses the same schema regardless
-of which layer (universal / domain / state) it lives in. The layered
-loader (`office_config.all_references_manifests()`) walks the union
-in scope order; entries in any manifest can reference entries in any
-other manifest by ID.
+of which layer (universal / domain / state) it lives in. Skills
+enumerate the in-scope set via the Tier 1 MCP tool
+`list_reference_manifests(scope_filter=true)`; the loader walks the
+union in scope order; entries in any manifest can reference entries
+in any other manifest by ID.
 
 ## Manifest layers (where each file lives)
 
@@ -190,7 +191,7 @@ the user claims.
 ```
 research-references run
   │
-  ├─ Resolve manifest set via office_config.all_references_manifests()
+  ├─ Resolve manifest set via list_reference_manifests(scope_filter=true)
   ├─ For each manifest, for each entry:
   │    fetch → checksum → if changed:
   │       archive old (if archive_versions)
