@@ -144,6 +144,48 @@ class AuditEvent(StrictModel):
 
 Anthropic Claude in both archetypes (Tier 3 via Gemini Enterprise's Model Garden as Claude Opus 4.7 / Sonnet / Haiku). No decision needed.
 
+### Row 8 — RAG / Grounding architecture (Vertex AI Search vs our LanceDB + bge-m3 + agentic retrieval)
+
+**Verdict: stay with our pipeline (per `docs/rag-pipeline-decisions.md`). Add a constraint: abstract the retrieval interface so LanceDB-specific assumptions don't leak through skill bodies.**
+
+**Why**: Vertex AI Search + Discovery Engine offer managed corpus retrieval with native citation surfacing and grounding-as-service. Our pipeline is local: bge-m3 embeddings + LanceDB + agentic retrieval (per-claim search) + conditional ColBERT-v2 late-interaction. Both produce "documents retrieved per claim" — the *contract* is portable; the *implementation* differs. Pre-RAG, before skills start calling `search_corpus(...)` with LanceDB-specific result shapes, is the cheap window to lock the interface.
+
+**Pattern-vs-instance check**: the retrieval *contract* (query → ranked passages with metadata) is pattern-level. The retrieval *implementation* (LanceDB / Vertex AI Search / hybrid) is instance-level — per-deployment choice. PBS itself stays on the local pipeline (Tier 1-2 deployment doesn't justify managed-RAG cost); enterprise consulting client offices may swap to Vertex AI Search; cross-tenant builder-generated offices may pick per-domain.
+
+**What #10 commits**: a **constraint for Phase 1 corpus work** — when implementing `search_corpus` / `read_corpus_file` / agentic retrieval, design the MCP tool interface to be retrieval-backend-agnostic. Tool inputs are query + filters; outputs are ranked passages with stable metadata schema. No leak of LanceDB-specific field names, no embedding-model-specific scoring assumptions in skill-side code.
+
+**What #10 does NOT commit**: actual retrieval-backend comparison or hybrid implementation. Phase 1 makes the LanceDB choice; future Tier-2-cloud-deployed clients may want the Vertex option; that's revisited when triggered.
+
+**Revisit triggers**:
+- First consulting client deployment requires managed-RAG (Vertex AI Search or equivalent) — implement backend swap behind the existing interface.
+- AI-office-builder generates an office whose domain has off-the-shelf managed corpora (legal: Westlaw, LexisNexis APIs; medical: PubMed) — backend swap for that office.
+- Latency / scale pressure on local LanceDB at PBS (unlikely pre-Phase-1 but not impossible) — hybrid (local for hot corpus, managed for cold).
+
+### Row 9 — Evaluation / Simulation Service (Vertex AI Evals + Agent Simulation vs our audit + design-review + planned testing harness)
+
+**Verdict: confirm role split. `audit` + `design-review` are static-analysis quality framework (architectural soundness, drift detection). The future testing harness (Phase 0 item 5) is the runtime-eval framework analogue. Different tools, complementary, not competing.**
+
+**Why**: Vertex AI Evals + Agent Simulation cover **runtime stress testing**: scenario suites + adversarial inputs + structured eval-result reports + regression on every release. Our `audit` (drift detection across skill bundles, manifests, decision records) and `design-review` (first-principles soundness review on architectural commitments) are **static** — they review artifacts and discipline, not agent behavior on inputs. The split is correct: same as architecture-review vs unit-tests in software engineering. Both are needed; neither replaces the other.
+
+**Pre-Phase-0-#5 commitment**: when designing the testing harness (Phase 0 item 5), structure eval-result schema as Pydantic-typed contracts:
+- `EvalRun` — one batch execution against a scenario suite
+- `Scenario` — input + expected outcome / pass criteria
+- `EvalResult` — per-scenario: pass/fail, captured trace, failure mode classification
+- `RegressionSuite` — versioned scenario set; runs gated on plugin version bump
+
+Same shape as Vertex Evals' eval results. Means future port to a managed eval service (or hybrid: local harness for solo, managed for client offices) is feasible without redesign.
+
+**Pattern-vs-instance check**: the eval *framework* (scenario suites + structured results + regression discipline) is pattern-level. The eval *content* (which scenarios, which inputs, which pass criteria) is instance-level — per-domain. PBS scenarios test draft-textteil-b on B-Plan inputs; legal-practice scenarios test brief-drafting on case briefs; both share the harness shape.
+
+**What #10 commits**: a **constraint for Phase 0 item 5** — design eval-result schema as typed Pydantic contracts, structured to port to managed eval services later. Specifically: `EvalRun`, `Scenario`, `EvalResult`, `RegressionSuite` Pydantic models when the testing harness is built.
+
+**What #10 does NOT commit**: building the testing harness itself, defining initial scenarios for PBS, or selecting an eval-runner implementation. Phase 0 #5 owns those.
+
+**Revisit triggers**:
+- First enterprise consulting engagement asking "show me your eval framework" — accelerate Phase 0 #5 if scheduled later than the engagement timeline.
+- AI-office-builder generates first office — confirm the scenario format generalizes; if PBS-specific, refactor.
+- Vertex AI Evals or Anthropic-equivalent service ships a maturity that materially exceeds our local harness — consider port for cloud-deployed offices.
+
 ## Summary table
 
 | Row | Verdict | Where it lands |
@@ -157,6 +199,8 @@ Anthropic Claude in both archetypes (Tier 3 via Gemini Enterprise's Model Garden
 | 6b. Model Armor analogue | Defer | Documented; revisits at #13 HTTP MCP |
 | 6c. Agent Simulation analogue | Defer to v2 | ROADMAP v2 |
 | 7. Model | Skip | (no archetype difference) |
+| 8. RAG / Grounding architecture | Stay with our pipeline; abstract retrieval interface | Constraint for Phase 1 corpus work |
+| 9. Evaluation / Simulation Service | Role split confirmed; design eval-result schema as Pydantic contracts | Constraint for Phase 0 item 5 testing harness |
 
 ## Implementation scope (this commitment)
 
@@ -193,6 +237,17 @@ Anthropic Claude in both archetypes (Tier 3 via Gemini Enterprise's Model Garden
 - Pluggable transport abstraction: stdio (current) and HTTP (new) implement the same contract. Decision recorded here; design+impl in #13.
 - Data classification annotations land here (Row 6a deferred to #13).
 - AuditEvent.user_id field (per #13 multi-user readiness) is additive; semantics: the human user attributed to a skill-emitted event. Distinct from `actor_kind` (which categorizes the event's emitter). When `actor_kind="human"`, `user_id == actor`. When `actor_kind="skill"`, `user_id` is the human under whose session the skill emitted. When `actor_kind="external_agent"`, `user_id` is None or the upstream peer's principal.
+
+**For Phase 1 corpus work** (Row 8) — when implementing retrieval-side MCP tools:
+- `search_corpus` / `read_corpus_file` / agentic-retrieval tool inputs accept query + filters; outputs are ranked passages with stable, retrieval-backend-agnostic metadata schema.
+- No leak of LanceDB-specific field names or embedding-model-specific scoring assumptions through the MCP tool contract or into skill bodies.
+- Result: future swap to managed RAG (Vertex AI Search, AWS Kendra, Azure Cognitive Search, hybrid local+managed) is a backend implementation change, not a multi-skill refactor.
+
+**For Phase 0 item 5 testing harness** (Row 9) — when designing the eval framework:
+- Eval-result schema as typed Pydantic contracts: `EvalRun`, `Scenario`, `EvalResult`, `RegressionSuite` (or equivalent names — the *shape* is load-bearing, not the names).
+- Per-scenario captures: input, expected outcome, captured trace, pass/fail, failure-mode classification.
+- Versioned scenario sets; regression runs gated on plugin version bumps.
+- Result: future port to managed eval services (Vertex AI Evals, equivalent Anthropic offering, hybrid) is feasible without harness redesign.
 
 ## Why pre-RAG (timing)
 
