@@ -107,23 +107,10 @@ markers = [
 ]
 ```
 
-**Alternatives considered**:
-
-- **`tests/` co-located with `src/` modules** (every source dir
-  has its own `tests/` subdir): rejected — duplicates structure
-  and pytest discovery is happier with a top-level `tests/`.
-- **unittest** instead of pytest: rejected — pytest is already in
-  dev-dependencies; pytest fixtures + parametrize are noticeably
-  ergonomic.
-- **Mock-heavy unit tests** (mock LanceDB, SQLite, filesystem):
-  rejected — local backend with embedded DBs makes real-instance
-  tests cheap; mocks would diverge from runtime behavior and
-  mask integration issues.
-
-**Revisit trigger**: test suite runtime exceeds ~30s on CI and
-slows the dev loop (suggests aggressive integration-marking or
-selective mocking); OR a full external dependency (e.g. a paid
-API) enters the stack and mock-based tests become unavoidable.
+> Alternatives considered + revisit trigger live in
+> `docs/decisions/backend-test-layout.md` (extracted in v0.5 per
+> design-review S6 — conventions docs document idioms; decision
+> records document the reasoning).
 
 ---
 
@@ -197,21 +184,8 @@ The `G` rule flags f-strings inside `logger.*` calls.
 - Exceptions silently swallowed (always either re-raise or
   `logger.exception` + return error envelope).
 
-**Alternatives considered**:
-
-- **structlog / structured JSON logs**: rejected for now — local
-  single-user backend; JSON logs add ceremony without analytics
-  consumption.
-- **Custom logger setup per module**: rejected — `logging.getLogger(__name__)`
-  + single basicConfig in `main` is the standard Python pattern;
-  no reason to deviate.
-- **f-strings everywhere** (in log calls): rejected — see above;
-  consistency + linter alignment + lazy-eval.
-
-**Revisit trigger**: backend graduates to multi-user / hosted
-deployment (structured logs become useful for log aggregation);
-OR debugging needs cross-tool correlation (suggests adding a
-session-id correlation field to log records).
+> Alternatives considered + revisit trigger live in
+> `docs/decisions/backend-logging.md`.
 
 ---
 
@@ -348,27 +322,8 @@ better:
   `TextContent`) — single parse contract for skills.
 - Errors carry structured `details` that protocol errors can't.
 
-**Alternatives considered**:
-
-- **`raise mcp.McpError(...)` for all errors**: rejected — see
-  above; client-side fidelity insufficient for skill branching.
-- **Plain string `TextContent` for errors** (current state):
-  rejected — strings can't carry structured `details`; skills can
-  only regex-match on message text, which couples skill code to
-  error wording.
-- **HTTP-style status codes** (200/400/500): rejected — codes are
-  meant for protocol layer, not application semantics. Named
-  string codes are more self-documenting.
-- **Result type with `is_ok: bool`** (Pydantic discriminated
-  union): considered — would be cleaner type-wise but breaks
-  backward compatibility with the bare-payload success path. The
-  `_error` sentinel preserves bare-payload success and only adds
-  shape on the error path.
-
-**Revisit trigger**: skills accumulate enough branching on error
-codes that a discriminated-union result type would simplify the
-parsing contract; OR a non-Claude-Code MCP client adopts pbs-mcp
-and its error-handling contract conflicts with the envelope.
+> Alternatives considered + revisit trigger live in
+> `docs/decisions/backend-mcp-error-format.md`.
 
 ---
 
