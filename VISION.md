@@ -281,6 +281,43 @@ diluting Ming):
   innovation surface) — strategic-empirical confirmation that
   practitioner-amplification is fundable in EU/DACH context
 
+### Practitioner vs Specialist — vocabulary clarification (added v0.32 session 14; canonical reference)
+
+Two distinct primitives that get conflated easily. This table is canonical (per ARCH Maintenance discipline rule 3 — same-commit sync with related sections):
+
+| Dimension | **Practitioner** | **Specialist** |
+|---|---|---|
+| Nature | Human being (biological, mortal) | Code + markdown bundle (digital, versionable) |
+| Conceptual layer | VISION primitive (the expert author archetype) | ARCHITECTURE primitive (composable expertise unit) |
+| Examples | Gunther Schulz (planner); Hendrik (planner); hypothetical lawyer / researcher / accountant | `planning-document-work`, `citation-verification`, `brand-voice`, `eu-ai-compliance` |
+| Identity | Real person + name + credentials + Berufshaftpflicht | `specialist_id` (kebab) + Pydantic Layer 2 schema + bundled markdown + version |
+| Relationship to workspace | Typically 1 per workspace (the practitioner whose practice the workspace serves) | N per workspace (workspace EMPLOYS many specialists) |
+| Role in workflow | **Authors + judges + signs + bears accountability** | **Executes + drafts + retrieves + sparrs + records** |
+| Knowledge type (per axis 2 asymmetric knowledge respect) | **Tacit + current + causal** (this Bürgermeister; last week's Gemeinderat; recent shift; political moment) | **Codified + historical + statistical** (every prior project; captured bausteine; corpus citations; pattern recognition) |
+| Distribution | N/A — practitioners are people | **Distributable** via specialist marketplace (v3) |
+| Composability | Practitioners author + employ specialists; don't compose | **Composes**: skills + entities + memory + references + adapters; bundle is the composability unit |
+| Liability | **Bears legal + professional liability** (Berufsrecht; Berufshaftpflicht; AI Act practitioner-as-deployer) | None — specialist is a tool; liability stays with practitioner |
+| Authority (Option B floor) | **Provides the human authority somewhere in accountability chain** | Subject to specialist conformity manifest gate; cannot autonomously shift intended purpose |
+| Per VISION axis | The "user" who remains the AUTHOR (axis 3) | The "AI" that becomes co-worker (axis 1) + sparring partner (axis 2) |
+| Per shape (per #25 shape extension) | Practitioner-shape: human practitioner. Autonomous-business-shape: operator/board (not practitioner — supervises). Personal-OS-shape: individual (lighter-weight). KG-shape: curator | Same architectural primitive across all shapes; configured per shape needs |
+
+**The third term — "Expert"** (per session-11 `skill-expert-agent-and-domain-knowledge.md`):
+- Optional per-deployment UX vocabulary via `display_label` field on skill OR specialist frontmatter
+- PBS-Schulz UX may call planning-document-work specialist "Begründungs-Schreiber Expert"
+- Other deployments may use "Specialist" / "Co-author" / "Counselor" / domain-specific names
+- UX-only; NOT architectural primitive
+
+**Why both Practitioner + Specialist exist as distinct primitives** (anti-conflation):
+1. Different layers: practitioner = VISION-level human archetype; specialist = ARCHITECTURE-level composable primitive
+2. Different lifecycles: practitioners have careers; specialists have versions
+3. Different distribution: practitioners aren't distributable; specialists ARE (marketplace v3)
+4. Different liability: practitioner bears it; specialist doesn't
+5. Different knowledge types: tacit + current vs codified + historical (asymmetric knowledge respect axis)
+6. **Anti-conflation under EU AI Act**: practitioner = deployer; specialist = component within system — clean Art. 25 categorization requires the distinction
+7. **Anti-conflation under Berufsrecht**: planner remains liable regardless of AI assistance — practitioner CANNOT be a specialist (would shift liability inappropriately)
+
+The distinction enforces clarity about **who is responsible** (practitioner) vs **what does the work** (specialists).
+
 The contrast that makes axis 1 concrete:
 
 | Tacked-on AI | Intertwined AI |

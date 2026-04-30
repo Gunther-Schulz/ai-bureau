@@ -772,6 +772,60 @@ Status: **v0.32 (session 14 — shape-extension framework + Option B architectur
 > Conventions docs trace decisions back here but never re-litigate
 > placement.
 
+## Framework architecture overview (added v0.32 session 14; canonical mental model)
+
+Four-layer framework architecture (workspace-shape-neutral; per `docs/decisions/shape-extension-and-architectural-floor.md`). This is the canonical mental model for the whole framework.
+
+```
+LAYER 1 — Substrate (decided #18/#21 — session 12)
+├── Claude Agent SDK (primary; Cowork integration via #11)
+└── Microsoft Agent Framework (second backend; Path B frontend deferred)
+   ↓ both abstract via Substrate Protocol (R3a/R3b/R3c/R3d primitives)
+
+LAYER 2 — Framework primitives (shape-NEUTRAL core; sessions 13 + 14)
+├── Workspace (deployment scope; identity + state + employed specialists)
+├── Specialist (composable codified expertise bundle)
+├── Skill (work logic unit)
+├── Coordination Protocol (event/call shape per shape config)
+├── Sparring Protocol (always-on/optional/none per shape config)
+├── Audit Protocol (claim-level baseline + action-level overlay)
+├── Trust Protocol (practitioner-judgment / budget-policy / none)
+└── Time Protocol (turn-based / long-running)
+   ↓ all bound by Option B floor (3 structural axioms — anti-Art-25-trap +
+     claim-level audit + human authority chain — cannot be disabled
+     regardless of shape)
+
+LAYER 3 — Workspace shapes (extensions; framework-supported)
+├── practitioner-shape (PBS pioneer reference; PBS-marketed; default-ships)
+├── autonomous-business-shape (Paperclip-style; community-buildable)
+├── personal-OS-shape (PAI-style; community-buildable)
+├── knowledge-graph-shape (corpus-only; community-buildable)
+├── federation-shape (cross-node; community-buildable)
+└── hybrid-shape (combinations; community-buildable)
+   ↓ each declares default configs + shape-specific primitives + Pydantic
+     schemas; subject to Option B floor
+
+LAYER 4 — Concrete instances (per deployment)
+├── PBS-Schulz (planning bureau; practitioner-shape; pioneer)
+├── Hypothetical legal practice (practitioner-shape; future)
+├── Hypothetical research lab (practitioner-shape; future)
+└── Hypothetical other-shape deployments (community-built; future)
+```
+
+**Layer interpretation rules**:
+- LAYER 1 = WHERE the framework runs (substrate Protocol abstracts)
+- LAYER 2 = WHAT the framework provides (shape-neutral primitives + Protocol pluggability)
+- LAYER 3 = HOW workspace deployments are configured (shape extensions plug in)
+- LAYER 4 = WHO is deployed (concrete workspace instances)
+
+**Layered approach (locked session 14)**:
+- **Open source framework** = Layers 1-3; workspace-shape-neutral; community can build for any shape via shape-extension contract
+- **Marketed product** = practitioner-shape (Layer 3) + PBS-Schulz reference (Layer 4); Cherry Ventures thesis-aligned; EU AI Act tailwind-aligned
+
+**Tom Sawyer dynamic**: Layer 3 + Layer 4 grow organically via community shape extensions + community workspace deployments without PBS-marketed effort.
+
+See `docs/decisions/shape-extension-and-architectural-floor.md` for full rationale + Option B floor specification.
+
 ## Data + boundary reference card
 
 **Use this first** when a "where does X go?" question arises
@@ -825,13 +879,11 @@ A 6-step checklist:
 2. After meta-rule additions / refactor sweeps, run `audit` (drift
    detection) and `design-review` (soundness review) — see
    `plugin/skills/{audit,design-review}/`.
-3. **Reference card + detailed section sync**: when changing a
+3. **Visual representations + canonical section sync** (extended v0.32 session 14): when changing a
    discipline (wording, scope, discriminator), update BOTH the
-   "Data + boundary reference card" row AND the detailed
-   discipline section in the same commit. The card is the
-   navigation; detailed sections carry the authoritative wording
-   + reasoning. Same-commit update prevents drift between the
-   two.
+   visual representation (reference card row, comparison table, layered architecture overview, diagram) AND the detailed
+   canonical section in the same commit. Visual representations
+   are navigation/orientation; detailed sections carry the authoritative wording + reasoning. Same-commit update prevents drift across representations. Applies to: "Data + boundary reference card" rows; "Framework architecture overview" 4-layer diagram (added v0.32); VISION "Practitioner vs Specialist comparison" table (added v0.32); any future visual references added.
 4. Sunset deprecated concepts via the deprecation procedure (below).
 5. **Validation-gating inventory sync**: when adding a new gate /
    audit slice / design-review target / runtime convention, update
