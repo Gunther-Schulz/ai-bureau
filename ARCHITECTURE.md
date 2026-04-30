@@ -16,10 +16,66 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.27 (session 11 — ARCH disciplines greenfield review under max-effort: all 8 disciplines + 4 meta-rules + reference card + validation-gating-overview + maintenance rules survive clean-slate. Skill-granularity discipline elevated to ARCH-level as sub-section under entity-elevation discipline ("Elevation analogue for skills") — parallel structure to entity-elevation 3-test, distinct criteria (distinct workflow + distinct output + reuse). Was previously only in plugin-conventions §14 + skill-expert-agent decision record)**.
+Status: **v0.28 (session 11 — architectural-gap detection sweep across 4 lenses (failure-mode catalog / VISION-axis coverage / greenfield-derived / user-surfaced patterns). 3 real gaps applied: monolithic-skill-bundle entry updated to COVERED via v0.27 skill-granularity discipline; implicit-contract-between-skills entry tightened (sub-shape 2 — orchestrator handoff shapes — remaining gap; mitigation candidates named); cargo-cult patterns updated to COVERED via three-layer protection including new maintenance discipline rule 6 (periodic greenfield review at major version boundaries))**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.27 → v0.28**: **Architectural-gap detection sweep
+  (max-effort session 11)**. User asked: "btw, has your review
+  also checked for architectural gaps? You know like the stuff I
+  have pointed out and we discussed earlier in this session."
+  Honest answer: prior reviews focused on whether existing
+  decisions hold; gap detection was peripheral. Ran deliberate
+  gap-detection sweep across four lenses:
+
+  **Lens A — failure-mode catalog**: walked all entries against
+  current discipline coverage. Three updates:
+  - `monolithic-skill-bundle`: PARTIAL → COVERED via v0.27
+    skill-granularity discipline (same 3-test catches both
+    over-elevation AND under-elevation/should-split).
+  - `implicit-contract-between-skills`: PARTIAL → narrowing.
+    Three sub-shapes named: file-location-based (covered by
+    fail-closed); audit-event-driven (covered by #6+#12);
+    skill-to-skill handoffs via orchestrator (REMAINING GAP —
+    context format, side-effect ordering, post-conditions
+    implicit in orchestrator routing). Candidate fix: extend
+    `handoffs:` frontmatter field to declare SHAPE; audit slice
+    24 candidate (defer until #11 completes).
+  - `cargo-cult patterns`: PARTIAL → COVERED via three-layer
+    protection (greenfield review at major version boundaries +
+    target 9 subsumption + sharp defer rule + #18/#19 substrate-
+    eval disqualifying criteria).
+
+  **Lens B — VISION-axis coverage**: walked architectural
+  requirements per axis. All 19+ requirements addressed by current
+  commitments. No gaps.
+
+  **Lens C — greenfield-derived**: walked through hypothetical
+  fresh-designer questions. Trust calibration / confidence /
+  trust-over-time / frontend / multi-user / transition path /
+  category-collapse all covered. No greenfield-derived gaps that
+  map to architectural commitments.
+
+  **Lens D — user-surfaced-pattern reflection**: pattern is
+  emergent (user-as-detector + AI-as-executor); has produced
+  reference card + validation-gating-overview + several disciplines
+  via this exact mechanism. Diminishing returns on proactive
+  detection beyond what's already done.
+
+  **Maintenance discipline rule 6 added**: periodic greenfield
+  review at major version boundaries. Formalizes the cargo-cult-
+  prevention mechanism that was emergent; structurally catches
+  drift over time. Discipline-bloat watch position notes that
+  this is a process-level rule, not a content-level discipline —
+  doesn't add a new naming, just a maintenance rule.
+
+  Real gap remaining: implicit-contract-between-skills sub-shape 2
+  (orchestrator handoff shapes). Mitigation deferred per its own
+  chronological timing (#11 reshapes handoffs).
+
+  No real-revise items beyond these three catalog/discipline
+  updates. The architecture is sound; gap detection found the
+  refinements already implicit.
 - **v0.26 → v0.27**: **ARCH disciplines greenfield review under
   max-effort (session 11)**. After VISION greenfield review (v0.26)
   showed VISION holds, applied max-effort + greenfield lens to
@@ -676,7 +732,7 @@ detection).
 
 ## Maintenance discipline
 
-A 5-step checklist:
+A 6-step checklist:
 
 1. Every meta-rule change, schema bump, or significant refactor
    lands in the same commit as the ARCHITECTURE.md update.
@@ -699,6 +755,19 @@ A 5-step checklist:
    target description / convention md). Inventory rows point at
    source of truth; same-commit update prevents drift between the
    layered systems-view and the detailed authoring sites.
+6. **Periodic greenfield review at major version boundaries**:
+   at significant ARCH version increments (0.x → 0.x+5 or per
+   major-commitment milestones — e.g., #9 ships, #11 ships, Phase
+   1 ships, v1.0 ships), run a greenfield-with-VISION-as-anchor
+   review per `docs/decisions/greenfield-architecture-review.md`
+   methodology. Walk architecture asking "would we build this from
+   scratch?" Verifies disciplines remain VISION-anchored;
+   structurally catches cargo-cult drift (per failure-mode-catalog
+   "cargo-cult patterns" entry — closes its PARTIAL → COVERED
+   coverage status). Exercise produces fresh decision record
+   capturing alternatives considered + verdict. Added v0.28 after
+   session-11 architectural-gap detection sweep surfaced cargo-cult
+   PARTIAL coverage.
 
 ### Deprecation procedure
 

@@ -267,14 +267,24 @@ context. Manifests as architectural debt that nobody can defend
 when challenged.
 
 **Applicability**: yes (especially when adopting external
-patterns like Cowork plugin shape).
+patterns like Cowork plugin shape, agentic frameworks per #18).
 **Severity**: minor-to-serious depending on what's adopted.
-**Coverage status**: ⚠ **partial** — design-review's greenfield
-reframe asks "would we build this from scratch?" which catches
-some cases. Subsumption check (target 9) catches "what does this
-replace?" Combined coverage is good but not airtight.
-**Notes**: low-priority; hard to catch structurally. Most caught
-through user instinct + sparring conversation.
+**Coverage status**: ✅ **covered** — three-layer protection:
+1. **Greenfield review at major version boundaries** (per ARCH
+   maintenance discipline rule 6, added v0.28). Periodic walk
+   through architecture asking "would we build this from
+   scratch?" catches accumulated cargo-cult drift.
+2. **Design-review subsumption check (target 9)** catches "what
+   does this replace?" — prevents new mechanism from coexisting
+   with the legacy it should retire.
+3. **Sharp defer rule (v0.20) + greenfield-disqualifying-criteria
+   for substrate evaluations (#18, #19)** — substrate adoption
+   evaluated against VISION + load-bearing disciplines, not
+   adopted by ecosystem-fit alone.
+**Notes**: session-11 ARCH disciplines greenfield review (v0.27)
++ greenfield-architecture-review.md (v0.25) demonstrate the
+mechanism — 15+ radical alternatives considered + rejected on
+VISION grounds rather than inertia.
 
 ---
 
@@ -289,13 +299,21 @@ skills, hard to test.
 
 **Applicability**: yes.
 **Severity**: serious (maintenance burden, composability loss).
-**Coverage status**: ⚠ **partial** — skill-conventions discusses
-single-responsibility informally but no named discipline. Several
-PBS skills (orchestrator, design-review) are intentionally
-broad-scope; the line between "appropriately-broad" and
-"monolithic" isn't sharp. **Evaluate** for explicit discipline.
-**Notes**: orchestrator at 0.10.0 has multiple trigger phrases +
-broad scope; intentional but worth periodic check.
+**Coverage status**: ✅ **covered** — skill-granularity discipline
+(ARCH v0.27, elevated to ARCH-level under "Elevation analogue for
+skills" sub-section of entity-elevation discipline). Same
+restraint-in-elevation criteria apply in REVERSE direction: a
+skill is too monolithic when it contains MULTIPLE concepts that
+each pass the 3-test (distinct workflow + distinct output +
+reuse across projects) — those should be SPLIT into separate
+skills. The 3-test's same criteria catch both over-elevation
+(don't create new skill for a topic that fails) AND under-
+elevation (split a skill containing multiple topics that each
+pass).
+**Notes**: orchestrator + design-review intentionally broad-scope
+because their workflow IS coordination/review across multiple
+sub-concerns — single workflow per the 3-test. Different from
+"monolithic": split would lose the coordination function.
 
 ### Incomplete-gate-coverage
 
@@ -344,17 +362,44 @@ design time.
 **Description**: skills coordinate via conventions not declared in
 frontmatter — skill A writes a file at known location, skill B
 reads from same location, no declared dependency. Refactor
-breaks contract silently.
+breaks contract silently. Three sub-shapes:
+1. **File-location-based** (e.g., "skill A writes
+   `<project>/_ai/X.md`; skill B reads it") — addressed by MCP
+   gate adoption per fail-closed corollary.
+2. **Skill-to-skill handoffs via orchestrator** — context format,
+   side-effect ordering, expected post-conditions implicit in
+   orchestrator routing logic. NOT covered by frontmatter
+   declarations beyond `handoffs:` field; the SHAPE of the
+   handoff is implicit.
+3. **Inter-skill state coordination** (e.g., skill A's audit event
+   triggers skill B's behavior) — covered by AuditEvent shape
+   per #6 audit-trail-v2.
 
 **Applicability**: yes.
 **Severity**: serious (silent breakage on refactor).
-**Coverage status**: ⚠ **partial** — `mcp_tools_required[]` +
-`handoffs` declarations cover MCP-mediated + handoff-mediated
-flows. File-location-based implicit contracts (e.g., "the
-state.md format" before MCP gate) are NOT covered by frontmatter
-declarations. **Evaluate** for explicit discipline.
-**Notes**: state.md MCP gate (session 6) closed one such case;
-others may exist.
+**Coverage status**: ⚠ **partial — narrowing**.
+- Sub-shape 1 (file-location-based): ✅ covered by fail-closed
+  corollary (mcp-fallback-policy.md) + #17 MCP gate coverage
+  comprehensiveness review (slice 23 scaffolded).
+- Sub-shape 3 (audit-event-driven coordination): ✅ covered by
+  AuditEvent + watch-list + event_subscriptions per #6 + #12.
+- Sub-shape 2 (skill-to-skill handoffs via orchestrator): ⚠
+  **REMAINING GAP** — context format, side-effect ordering,
+  post-conditions of handoffs are implicit in orchestrator
+  routing logic + skill body discipline. Not structurally
+  enforced. Candidate fix: extend `handoffs:` frontmatter field
+  to declare SHAPE (expected context fields, post-conditions,
+  side-effects); audit slice candidate that walks declared
+  handoffs vs actual orchestrator routing.
+
+**Notes**: gap surfaced in session-11 architectural-gap detection
+sweep. Mitigation candidates:
+- Tighten plugin-conventions §7 (Routing handoff conventions) with
+  explicit handoff-shape declaration.
+- New audit slice 24 candidate: scan orchestrator PROCEDURE.md +
+  skill `handoffs:` declarations for shape consistency. Defer
+  scaffolding until #11 Cowork integration completes (handoff
+  shapes likely shift then).
 
 ### Hidden-global-state
 
