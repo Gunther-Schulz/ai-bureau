@@ -624,6 +624,41 @@ commitment, scaffolded.
   cargo-cult anchor for future sessions); confirms current terminology is
   pattern-level after stress-test.
 
+**23. Pre-decision-sharpening skill — local now + future global plugin elevation**
+(NOT BLOCKING; meta-architectural skill scaffolded session 12) — captures the
+two-phase sharpening pattern (decision-design + pre-implementation) discovered
+during session 12 #21 SDK deep-read multi-round sharpening work.
+
+- **Mission**: codify the two-phase pre-decision sharpening pattern as
+  invocable skill. Local skill exists at `plugin/skills/pre-decision-sharpening/`
+  (created session 12); future elevation to global plugin marketplace when
+  PBS framework distribution shape settles.
+- **Method**: SKILL.md per plugin conventions; comprehensive body covering
+  five-mechanism justification + two-phase pattern + decomposition trigger +
+  layered coverage observation + expansion-vs-revision distinction +
+  user-triggered round discipline.
+- **Empirical validation**: pattern discovered + validated session 12 across
+  R3a/R3b/R3c/R3d sharpening rounds + Substrate Protocol synthesis. Yielded
+  18+ substantive architectural refinements across 12+ sharpening rounds;
+  decomposition + 2-3 rounds per sub-decision pattern confirmed.
+- **Composition**: composes with `audit` + `design-review` skills (which serve
+  drift-detection role POST-decision); pre-decision-sharpening operates
+  UPSTREAM at decision-formation moment.
+- **Local scope (DONE session 12)**:
+  - `plugin/skills/pre-decision-sharpening/SKILL.md` (NEW v0.1.0)
+  - References `memory/feedback_pre_decision_sharpening.md` for theoretical
+    grounding + mechanism documentation
+- **Future global plugin elevation (DEFERRED)**:
+  - Triggered by: PBS framework distribution shape settled (post-#22
+    terminology re-eval; post-marketplace decision per ROADMAP v3)
+  - Generalizes beyond PBS terminology to any architectural-discipline
+    workflow
+  - Marketplace-asset shape per ROADMAP v3 framing
+- **Order**: skill exists now (local); elevation to global plugin = future
+  work post-marketplace decision.
+- **Constraints flowing**: NONE substantive; this is a meta-architectural
+  skill that supports OTHER architectural decisions across all commitments.
+
 ---
 
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)
