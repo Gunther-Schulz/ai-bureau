@@ -14,9 +14,16 @@ inside `logger.*` calls.
 
 ## Alternatives considered
 
-- **structlog / structured JSON logs**: rejected for now — local
-  single-user backend; JSON logs add ceremony without analytics
-  consumption.
+- **structlog / structured JSON logs**: rejected for now — the
+  log-format choice depends on the consuming aggregation system
+  (CloudWatch / Datadog / Loki / Grafana / etc.), which is a
+  per-deployment decision per #13 deployment flexibility.
+  Designing a specific JSON shape now without knowing the
+  consumer would lock the wrong format. Note: stdlib
+  `logger.info("msg", extra={"k": "v"})` already supports
+  structured key-value pairs without committing to a specific
+  serialization; any code can use that today without changing
+  this decision.
 - **Custom logger setup per module**: rejected — `logging.getLogger(__name__)`
   + single basicConfig in `main` is the standard Python pattern;
   no reason to deviate.
@@ -27,7 +34,13 @@ inside `logger.*` calls.
 
 ## Revisit trigger
 
-Backend graduates to multi-user / hosted deployment (structured
-logs become useful for log aggregation); OR debugging needs
-cross-tool correlation (suggests adding a session-id correlation
-field to log records).
+First Tier-2 cloud deployment activates (per #13) and a specific
+aggregation system is chosen (structured JSON shape gets a
+real consumer); OR debugging needs cross-tool correlation
+(suggests adding a session-id correlation field to log records).
+
+**Note (session-11 retroactive review)**: prior framing "backend
+graduates to multi-user / hosted deployment" was instance-anchored;
+multi-user / cloud deployment IS the framework target per #13. The
+real defer reason is chronological (aggregation system not chosen),
+not "PBS doesn't need it yet."

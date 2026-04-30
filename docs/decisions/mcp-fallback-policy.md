@@ -155,3 +155,19 @@ with different correctness guarantees. The whole point of meta-rule
 - `plugin/skills/audit/references/drift-surfaces-and-slices.md` —
   slice 14 brief extension
 - `docs/plugin-conventions.md` — fallback policy section
+
+---
+
+## Session-11 retroactive review note (v0.21 — make wrong shapes impossible discipline)
+
+This decision is the canonical worked example of the
+make-wrong-shapes-impossible discipline avant la lettre:
+fail-closed for contract-bearing reads makes silent contract
+bypass IMPOSSIBLE structurally rather than rejected by skill-body
+discipline. The gate-dispatch discriminator named in v0.21 directly
+endorses this shape — every contract-bearing read is gate-touched,
+so structural enforcement is required, not skill-side discipline.
+
+When v0.21 was named (session 11), this decision was already in
+place; the discipline gives it a name + invocability for future
+similar choices.

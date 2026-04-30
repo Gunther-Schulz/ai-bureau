@@ -46,6 +46,19 @@ When absent, falls back to skill `name` (current behavior). Slash commands surfa
 
 **Why**: per "Informed defaults: ship best-shape, not empty" — best-shape default for a high-variance choice is **a question with concrete options**, not a pre-pick.
 
+**Refinement under retroactive review (max-effort session 11)**:
+the v0.18 informed-defaults principle's prior framing leaned
+toward pre-chosen templates ("ship best-shape templates derived
+from pioneer instance"). For high-variance choices where the right
+answer differs sharply per deployment (PM tool: Asana vs Jira vs
+none vs custom), pre-chosen templates would lock the wrong shape
+for most deployments. Guided questions with concrete options are
+the right form of "informed default" for high-variance choices —
+they deliver the principle's spirit (no empty canvas; user gets
+concrete options) without forcing instance-content. Worth a
+clarifying note in v0.18 ARCH section: informed defaults can be
+TEMPLATES (low-variance) OR GUIDED QUESTIONS (high-variance).
+
 Concrete flow: when scaffolding a department with adapter-eligible managed entities, setup-office asks:
 
 ```
@@ -64,9 +77,15 @@ PBS-Schulz answers "no PM tool" → native PM scaffold (or no PM department at a
 
 **Skills and agents are NOT a hierarchy or strict orthogonal axes.** The accurate model:
 
-- **Bodies** (the actual work logic) have inherent shape
-- **Invocation patterns** wrap bodies — "skill" (user-driven) or "agent" (autonomous) or "both"
-- Some bodies fit only ONE wrapper; some fit BOTH
+- **Bodies** (the actual work logic) are **typed by their interaction shape**:
+  - `interactive-sparring` — drafting, layered review, citation verification with user collaboration. Required: human-in-the-loop sparring per VISION axis 2.
+  - `monitoring-or-batch` — corpus refresh, audit slice runner, design-review target runner. Optional human invocation; runs over a scope.
+  - `scheduled-only` — notification dispatch, time-driven triggers per Gap A. No human-meaningful per-turn invocation.
+- **Invocation patterns** are wrappers compatible with body types:
+  - `interactive-sparring` bodies → **skill-only** (autonomous mode breaks sparring requirement)
+  - `monitoring-or-batch` bodies → **agent + skill** (agent for autonomous; skill for manual override)
+  - `scheduled-only` bodies → **agent-only** (no human-meaningful invocation surface)
+- Some bodies fit only ONE wrapper; some fit BOTH. The body's interaction-shape type determines which wrappers are compatible.
 
 **Skill invocation pattern** = user-driven, conversational, per-turn. State in MCP-gated entities. AI orchestrates per user input.
 
@@ -108,12 +127,40 @@ The Begründungs-writer expert (= `draft-textteil-b` skill), when handling a §1
 
 **Why NOT separate skills for fine-grained topics**:
 
-Per entity-elevation 3-test (analogous for skills):
-- §13a-Verfahren passes **stable identity** (it's a stable concept).
-- §13a-Verfahren fails **state-of-record** (the Verfahren TYPE is a concept, not a stateful entity; state lives on the project that USES §13a).
-- §13a-Verfahren fails **lifecycle** (the concept itself doesn't have a lifecycle; the project does).
+**Skill-granularity criteria** (distinct from entity-elevation 3-test
+— skills are not entities; the question is "should this be its own
+skill" not "should this be its own entity"):
 
-Fails 3-test → does NOT elevate to separate skill.
+A topic warrants its own skill when ALL THREE apply:
+1. **Distinct workflow**: the topic has its own multi-step interaction
+   shape that doesn't fit inside a broader skill's workflow.
+2. **Distinct output**: the topic produces a distinct artifact / output
+   the user receives, not a section/variant of a broader skill's output.
+3. **Reuse across projects**: the topic's workflow + output recurs
+   across multiple projects (single-project niche topics stay as
+   in-skill content).
+
+§13a-Verfahren evaluation:
+- **Distinct workflow?** No — drafting under §13a uses the SAME
+  Begründungs-writing workflow as Regelverfahren, with §13a-specific
+  modifications (drop Umweltbericht section, add §13a-citation
+  template). The workflow is the SAME skill, parameterized by
+  Verfahren type.
+- **Distinct output?** No — output is still a Begründung, not a
+  separate artifact.
+- **Reuse across projects?** Yes (any project under §13a) — but
+  that doesn't satisfy criterion 1+2.
+
+Fails skill-granularity criteria 1+2 → does NOT elevate to separate
+skill. Lives as distributed content fueling the broader Begründungs-
+writer skill.
+
+**Note (max-effort retroactive review session 11)**: prior framing
+applied entity-elevation 3-test (stable identity / state of record /
+lifecycle) "by analogy" to skill granularity. That was misleading —
+skills aren't entities; the criteria differ. Tightened to skill-
+specific criteria above. Conclusion (don't elevate fine-grained
+topics) unchanged; reasoning sharper.
 
 **Generalization**: **expert ≠ topic.** Experts are SKILLS (broad workflow specialists with pattern-level scope). Narrow expertise is CONTENT (process entities + references + skill references + memory bausteine + corpus) the skill reads at runtime. AI-as-runtime hybrid-shape principle in action — markdown bodies as runtime fuel for the skill's workflow.
 

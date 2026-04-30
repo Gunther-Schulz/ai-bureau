@@ -120,17 +120,41 @@ class AuditEvent(StrictModel):
 
 **Verdict: defer to commitment #13.**
 
-**Why**: data classification (PII / business-sensitive / public field annotations) is load-bearing at Tier 2 (multi-user-per-office, where one user must not see another user's PII fields) and Tier 3 (cross-org governance). Solo Tier 1 has one user with access to everything; classification metadata has no consumer.
+**Why** (chronological reason — session-11 retroactive reframe per
+v0.20 sharp defer rule): data classification annotations need
+their CONSUMER (the auth gates that enforce field-level access
+control) to be meaningful. The auth layer ships in #13 (multi-user
+readiness). Designing annotation taxonomy now WITHOUT the auth
+gates would lock the wrong shape — classifications optimized
+without their enforcement consumer rarely match the gates' actual
+needs. Per glue-not-replacement: each consulting client may have
+specific compliance regimes (GDPR, HIPAA, etc.) that shape the
+classification taxonomy; pre-empting without that input creates
+PBS-only annotations that don't generalize.
 
 #13 owns multi-user readiness — User Pydantic model, AuditEvent.user_id, optimistic locking. Data classification is the same workstream: it's the field-level governance complement to user-level access. Doing it in #13 means the classifications and their consumers (auth gates) ship together.
 
-**What if Tier 1 wants it anyway**: even solo Gunther benefits from classification annotations as documentation (which fields contain client-confidential content?). But: Pydantic Field annotations are documentation in any case; the gating consumer is #13's auth layer. Adding annotations now without consumer is decoration without contract.
+**Pydantic Field annotations as documentation today**: even
+without classification's full enforcement, Field annotations
+serve as inline documentation. Adding informal "client-confidential"
+notes to existing Field descriptions is reversible and documentation-
+shaped, not structural. Real classification taxonomy lands with #13.
 
 ### Row 6b — Model Armor analogue (input validation against prompt injection)
 
 **Verdict: defer; document path.**
 
-**Why**: solo Tier 1 with trusted input has minimal prompt-injection surface. Tier 2/3 with untrusted user inputs (cloud clients, cross-org) need MCP-gate-level input validation. Pre-RAG: not load-bearing. Path: when #13 adds HTTP MCP transport, every gate gains an input-validation step before contract validation.
+**Why** (chronological reason — session-11 retroactive reframe per
+v0.20): MCP-gate-level input validation against prompt injection
+needs the threat model that lands when external untrusted input
+becomes possible (Tier 2 cloud + multi-user, where one user's
+input could attempt to manipulate another's session). Pre-#13
+HTTP MCP, untrusted-input pathway doesn't exist, so the
+validation layer's exact shape (which patterns to filter, how
+to detect injection attempts, what's the failure response) lacks
+informing data. Path: when #13 adds HTTP MCP transport, every gate
+gains an input-validation step before contract validation;
+threat model + validation taxonomy designed together.
 
 ### Row 6c — Agent Simulation analogue (cross-agent stress test)
 

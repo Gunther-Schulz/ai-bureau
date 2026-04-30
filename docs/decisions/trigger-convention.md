@@ -147,3 +147,25 @@ LLM-routing consumer.
 
 - `plugin/skills/*/SKILL.md` — all 19 `triggers:` lists
 - `docs/plugin-conventions.md` — new triggers section
+
+---
+
+## Session-11 retroactive review note (v0.21 — make wrong shapes impossible discipline)
+
+This decision is a worked example of the discriminator working
+in the **opposite direction** from typical applications: triggers
+are AI-applied (LLM-mediated routing decisions), NOT
+gate-dispatched. Per the discriminator: prose convention is
+correct; structural enforcement (the prior `{phrase, lang}` form)
+would be SQL-DB-trap-style over-structuring for an AI-applied
+concern.
+
+When v0.21 was named (session 11), this decision was already
+in place; the discipline retroactively validates the concept-
+labels-as-prose direction.
+
+This pairs with `mcp-fallback-policy.md` (same-day session-7
+decision) which goes the OTHER direction — fail-closed structural
+enforcement for gate-dispatched concerns. Together they cover
+both halves of the discriminator: prose convention where AI
+applies; structural enforcement where gate dispatches.

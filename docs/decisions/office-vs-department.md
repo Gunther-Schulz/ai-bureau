@@ -504,7 +504,16 @@ Three honest defers, each with specific home + cost being avoided:
 
 **D3. Migration of existing state.md files to multi-department-aware shape.**
 - **Home**: first-bind moment (when first project is bound after #12+#11+#13 ship).
-- **Cost being avoided**: writing migration logic against a hypothetical that may never run. Today: zero projects bound. When first-bind happens, the actual current state.md shape is known; migration is straightforward (likely `departments_active: ["planning"]` injection + nothing else).
+- **Cost being avoided** (chronological — session-11 retroactive
+  reframe per v0.20): migration logic shape depends on the
+  finalized state.md schema, which is designed in #9 (managed-
+  entity concept) and reshaped under #11's multi-department
+  schema. Writing migration logic before those commitments lock
+  the target shape would lock the wrong target. **Note**:
+  original framing "academic today; zero projects bound" was
+  instance-anchored per v0.20; the chronological reason
+  (target-schema-not-yet-locked) is what actually justifies
+  the defer.
 - **#12 commits**: documents migration steps for future implementation.
 
 Per "Defer-instinct produces manufactured restraint" check: each defer names a specific cost being avoided + a specific home. Not generic "YAGNI." Honest defers.

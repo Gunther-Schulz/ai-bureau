@@ -16,10 +16,79 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.23 (session 11 — ultrathink-review pass: discipline categorization (5 design + 3 operational + 4 meta-rules); Bundle A package layout reframed as recommended convention; L5 external-boundary validation added to overview; failure-mode catalog gains navigational-consolidation-drift + discipline-bloat entries; #20 demoted from BLOCKING; #18 heaviness sub-axes + framework bucketing; UniversalEntity surfaced explicitly)**.
+Status: **v0.24 (session 11 — max-effort retroactive review pass across 9 decision records sessions 5-11: framing refinements (instance-anchored defer rationales reframed as chronological); cross-refs to v0.21 discipline added to mcp-fallback-policy + trigger-convention + audit-trail-v1 + audit-trail-v2 as worked examples; sparring-output split refined (acknowledges partial structural enforcement of mechanisms 4+7); skill-expert-agent decision record self-reviewed with tighter skill-granularity criteria + body-type model; informed-defaults principle clarified (templates vs guided-questions for high-variance choices))**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.23 → v0.24**: **Max-effort retroactive review pass across 9
+  decision records (sessions 5-11)**. User raised the question
+  whether the prior ultrathink-review pass (xhigh effort) caught
+  all drift; rerun under max effort across decision records that
+  pre-dated current disciplines OR were authored under xhigh.
+  Findings: NO real-revise items; all decisions hold structurally;
+  refinements are framing + cross-ref tightening.
+
+  Specific refinements applied:
+  - **Instance-anchored defer rationales reframed as chronological**:
+    backend-logging.md ("local single-user backend" → aggregation
+    system not yet chosen per #13);
+    a2a-and-gemini Row 6a + 6b ("Solo Tier 1 has one user / trusted
+    input" → consumer/threat-model lands in #13);
+    office-vs-department D3 ("academic today; zero projects bound"
+    → target-schema-not-yet-locked).
+  - **Worked-examples cross-refs added**: mcp-fallback-policy.md +
+    trigger-convention.md + audit-trail-v1.md (v1→v2 reversal) all
+    note their relationship to "make wrong shapes impossible"
+    discipline (v0.21) which they exemplified avant la lettre.
+    `mcp-fallback-policy` is the canonical structural-direction
+    example; `trigger-convention` is the canonical
+    convention-direction (opposite-direction discriminator)
+    example; `audit-trail-v1→v2 reversal` is the canonical
+    real-time-discipline-application example.
+  - **sparring-output split refined**: acknowledged that
+    mechanisms 4 ("what's missing") and 7 ("commit to
+    recommendations") are PARTIALLY structural via specific schema
+    fields (`whats_missing`, `recommendation`) for specific skills,
+    not purely behavioral as original text claimed. "Pareto pick:
+    30% of build cost" framing reframed as info-gap (genuine
+    chronological reason: schema-validating those mechanisms
+    without false-positive rates is unclear pre-empirically).
+  - **`_error` sentinel structural enforcement candidate**: noted
+    in backend-mcp-error-format.md — `_error` is gate-dispatched
+    every MCP response, so per v0.21 discriminator the convention
+    could be elevated to a Pydantic base-class model_validator.
+    Currently catches violations via slice 16 retrospectively;
+    worth elevating when next touching `pbs_mcp/schemas.py`.
+  - **skill-expert-agent decision record self-review** (under max
+    effort the same turn as it was written under xhigh):
+    - Decision 2 (informed defaults for high-variance choices):
+      tightened to acknowledge guided-questions are valid form
+      of "informed default" for high-variance choices;
+      see informed-defaults principle clarification below.
+    - Decision 3 (skill vs agent): tighter framing — bodies are
+      TYPED by interaction shape (`interactive-sparring` /
+      `monitoring-or-batch` / `scheduled-only`); invocation
+      patterns are wrappers COMPATIBLE with body type. Replaces
+      looser "orthogonal axes" framing.
+    - Decision 4 (fine-grained expertise): replaced misleading
+      "entity-elevation 3-test analogue" with skill-specific
+      criteria (distinct workflow + distinct output + reuse
+      across projects). Skills aren't entities; the criteria
+      differ.
+  - **Informed-defaults principle clarification (v0.18 sub-rule)**:
+    informed defaults can take TWO forms — (a) pre-chosen TEMPLATES
+    derived from pioneer instance (low-variance choices, e.g.,
+    skill body conventions, doctype-md scaffolds) OR (b) GUIDED
+    QUESTIONS with concrete options (high-variance choices, e.g.,
+    "PM tool: Asana / Jira / none / custom?"). Both deliver the
+    principle's spirit (no empty canvas; user gets concrete
+    starting points); pre-chosen vs guided picks per the choice's
+    variance across deployments. Earlier framing leaned toward
+    templates-only; this addition makes the guided-question form
+    explicit. See the discipline section for the updated text.
+
+  No real-revise items. All decisions hold; refinements are
+  documentation hygiene + cross-ref tightening.
 - **v0.22 → v0.23**: **Ultrathink-review pass refinements**.
   Session-11 cumulative commitments (6 ARCH bumps, Bundle A
   locked, sharp-defer audit pulling 9 items forward, reference
@@ -1586,6 +1655,26 @@ schema without a migration script).
 > scratch. Defaults reduce the violation rate, accelerate
 > time-to-useful, and propagate accumulated lessons from the
 > pioneer instance forward.**
+
+### Two forms of informed default (added v0.24 retroactive review)
+
+Informed defaults take TWO forms; pick the form per the choice's
+variance across deployments:
+
+| Form | When to use | Example |
+|---|---|---|
+| **(a) Pre-chosen template** | Low-variance choice — the right answer is similar across deployments; pioneer instance's shape generalizes | Skill body conventions; doctype-md scaffolds; entity-md spec body section catalog; failure-mode-catalog seed entries; reference-corpus seed |
+| **(b) Guided question with concrete options** | High-variance choice — the right answer differs sharply per deployment; pre-choosing locks the wrong shape for most | "Does this office use an external PM tool? — Asana / Jira / Linear / none / custom"; "Auth provider: Google Workspace / Coolify SSO / OAuth / other"; "Embeddings model: bge-m3 / OpenAI / cohere / custom" |
+
+Both forms deliver the principle's spirit — bureaus get concrete
+starting points, never an empty canvas. The pre-chosen-vs-guided
+distinction is about whether the variance across deployments is
+low enough to commit to a default OR high enough that a question
+is the better default-shape.
+
+The skill-expert-agent decision record's PM-default decision (no
+pre-pick; setup-office prompts at scaffold) is form (b). The
+research-references corpus seed is form (a).
 
 ### Why this matters
 

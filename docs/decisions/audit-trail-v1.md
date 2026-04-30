@@ -5,6 +5,20 @@
 single-write architecture with gate-mediated atomic mirror to
 `decisions.md`. Most prose sources retired entirely; see v2 for
 current architecture.
+
+**Session-11 retroactive review note (v0.21 — make wrong shapes
+impossible discipline)**: the v1→v2 reversal is the canonical
+worked example of the discipline applied avant la lettre. v1's
+dual-write discipline was a CONVENTION-DRIVEN solution (skill
+body says "remember to call record_audit_event AND write prose
+source"). v2's single-write architecture is STRUCTURAL (gate
+atomically mirrors event → decisions.md; skills can't bypass).
+Per the discriminator: dual-write is gate-dispatched (every event
+is gate-touched), so structural enforcement is required. Real-time
+application of the discipline (target 9 + slice 18 codified the
+question into the audit / design-review skills in the same
+session). v2 is current architecture; v1 retained for historical
+reference + this discipline-application example.
 **Original status**: ACCEPTED (pulled forward from ROADMAP defer per
 target 8 first-run finding F2, 2026-04-29 session 6)
 **Owner**: per-session HANDOFF; full build spans 1-2 sessions

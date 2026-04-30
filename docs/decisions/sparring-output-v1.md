@@ -212,14 +212,39 @@ have to undo session-by-session.
 - 3 promoted are *production-output* mechanisms (counter-arg,
   confidence, reasoning) — they're what the user reads and
   defends downstream. Brittleness here is highest-impact.
-- 4 staying behavioral are *interaction-pattern* mechanisms
+- 4 staying primarily-behavioral are *interaction-pattern* mechanisms
   (what's missing, anti-sycophancy, asymmetric respect,
-  recommendation-commit) — harder to schema-validate without
-  false-positive fail rates.
+  recommendation-commit). The chronological-valid defer reason:
+  schema-validating these mechanisms without false-positive fail
+  rates is genuinely unclear pre-empirically (anti-sycophancy
+  detection requires comparing to prior turn; asymmetric respect is
+  too discretionary; recommendation-commit is contextually dependent
+  on whether a question IS the right move). The info-gap is real.
 
-This is the Pareto pick: 80% of the structural-enforcement
-benefit at 30% of the build cost. The other 4 can be promoted
-later if behavioral drift surfaces in real project use.
+The other 4 can be promoted further if behavioral drift surfaces
+in real project use.
+
+**Session-11 retroactive review note (v0.21 — make wrong shapes
+impossible discipline; v0.20 — sharp defer rule)**:
+
+- Original framing "Pareto pick: 80% benefit at 30% build cost" was
+  up-front-cost defer framing per v0.20 sharp defer rule. The
+  honest defer reason is the chronological/info-gap one named
+  above.
+- The "structural vs behavioral" split is partially leakage. Two
+  of the 4 "behavioral" mechanisms ARE partially structural via
+  specific schema fields:
+  - **Mechanism 4 (what's missing)**: ReviewOutput schema has
+    `whats_missing: str = Field(..., min_length=20)` — gate-
+    enforced for review-draft. Stays behavioral for OTHER skills.
+  - **Mechanism 7 (commit to recommendations)**: RecommendationOutput
+    schema has required `recommendation: str` — gate-enforced for
+    orchestrator's recommendation context. Stays behavioral for
+    other skills' recommendation-shaped output.
+- This is a worked example of the make-wrong-shapes-impossible
+  discriminator (v0.21) applied avant la lettre: per-context, the
+  decision picks structural where gate-dispatched and behavioral
+  where AI-applies-judgment.
 
 ## Revisit triggers
 

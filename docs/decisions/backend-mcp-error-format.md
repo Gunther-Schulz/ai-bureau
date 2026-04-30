@@ -12,6 +12,18 @@ path: bare result payload (Pydantic `model_dump`). Error path:
 The sentinel `_error` is reserved across all Pydantic output
 models; never use as a field name.
 
+**Session-11 retroactive review note (v0.21 — make wrong shapes
+impossible discipline)**: per the discriminator, the gate
+dispatches on `_error` every MCP response (envelope wrapper
+checks for `_error` key to classify error vs success). That's a
+gate-dispatched concern, so structural enforcement is preferred
+over convention. Candidate: a Pydantic base class
+(`StrictMcpOutput`) with a `model_validator(mode="before")`
+rejecting field names matching `^_error`. Currently
+convention-driven; audit slice 16 (validation-gate coverage)
+catches violations retrospectively. Worth elevating to structural
+when next touching `pbs_mcp/schemas.py` for an unrelated reason.
+
 Error codes: stable named strings (`input_validation`,
 `config_missing`, `config_invalid`, `not_found`, `not_in_scope`,
 `corpus_unavailable`, `tool_runtime`, `external_api`,
