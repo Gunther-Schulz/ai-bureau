@@ -573,6 +573,36 @@ commitment, scaffolded.
   - What more abstract framing exists that could subsume current + extend?
   - Where do current concepts compose vs friction with edge cases?
   - What's the pattern-vs-instance verdict on the terminology itself?
+- **Candidate generalization to evaluate (session-12 user direction)** — needs
+  full deliberation when #22 runs; surfaced here as input:
+  - **AI Office** = blueprint pattern (meta-shape, the abstraction itself)
+  - **Domain-defined Office** = AI Office applied to a specific domain
+    (Planungsbüro für Bauleitplanung is ONE instance; Legal Practice is
+    another; Research Lab is another)
+  - **Expert** = first-class composable abstract capability that can be
+    **employed** by any office
+  - Experts NOT bound to "employee" identity — relationship is COMPOSITION
+    (an office employs experts), not IDENTITY (an expert IS an employee)
+  - Experts can exist standalone (no office wrapper); can be employed in
+    multiple offices; can be domain-anchored OR cross-domain
+  - Stress-test the candidate against:
+    - Solo expert (no office wrapper) — does architecture support it natively?
+    - Cross-domain expert (one expert employed in multiple domain-offices) —
+      does composition work cleanly?
+    - Federated office (employs experts from multiple domain origins) — does
+      aggregation work?
+    - Solo skill-utility (brand-voice as single expert, no office) — natural
+      shape?
+    - Marketplace shape (blueprints per ROADMAP v3) — do experts pluralize
+      cleanly?
+    - Knowledge graph use case (expert without workflow binding) — fits?
+  - Compose with current "department" concept: do departments dissolve into
+    "collections of experts," do they remain as a sub-grouping primitive, or
+    do they become a deployment-instance choice (some offices use departments,
+    others don't)?
+  - Migration cost analysis if adopted: substantial cascade through VISION
+    + ARCH + multiple decision records + ROADMAP language. Pre-RAG
+    deprecation is essentially free per ARCH "Maintenance discipline".
 - **Output**: `docs/decisions/terminology-and-level-boundaries.md` — analysis +
   generalization candidates + recommendation + migration plan if change adopted.
 - **Scope**: 1-2 sessions (similar shape to other meta-architectural sessions:
