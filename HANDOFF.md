@@ -39,7 +39,7 @@ it" reasoning in the queue.
 
 1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
 2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
-3. **`ARCHITECTURE.md`** — **v0.20**. Framework-foundation framing elevated to top anchor; pattern-vs-instance discipline tightened with sharp defer rule (v0.20). Seven durable disciplines (pattern-vs-instance + sharp defer rule, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement, **AI-as-runtime hybrid-shape**) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns, violate established discipline, or reproduce pioneer-instance-anchored defer rationales.**
+3. **`ARCHITECTURE.md`** — **v0.21**. **Read the "Data + boundary reference card" near the top first** — it consolidates the "where does X go?" rules across all disciplines into one table. New session-11 disciplines: framework-foundation framing (v0.20 top anchor), sharp defer rule (v0.20), **"Make wrong shapes impossible, not solvable"** (v0.21). Eight durable disciplines (pattern-vs-instance + sharp defer rule, **wrong-shapes-impossible**, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement, **AI-as-runtime hybrid-shape**) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns, violate established discipline, reproduce pioneer-instance-anchored defer rationales, or chase six sections to apply a placement rule that the reference card answers in one row.**
 
 **Read conditionally** (when context calls for it):
 - `docs/strategic-positioning.md` — consulting positioning, marketplace decisions, brand questions, sparring-mode pitch
@@ -523,57 +523,57 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   if `metadata` use stays light. Just flag explicitly so the
   decision is informed.
 
-- **Bundle A — current entry point**: in-progress in session 11.
-  Discussion centered on: where path/location declarations live
-  (department.md vs Pydantic class vs spec doc). Leading position:
-  `department.md` (Layer 2 frontmatter for `type: department`)
-  declares `path_pattern` per managed entity + Pydantic class refs.
-  Schema (`project.py`) carries fields only, not location.
+- **Bundle A — LOCKED (session 11)**: shape stress-tested against
+  three-test verification (cross-industry / office-level entity
+  consistency / prose-rules-fit) and locked. Decisions:
 
-- **Bundle A — entry method when work resumes** (per session-11
-  framing-pass discussion): apply two refinements explicitly,
-  with an expanded three-test verification:
+  | Question | Decision |
+  |---|---|
+  | `department.md` Layer 2 frontmatter | `managed_entities`: keyed map of `dict[str, ManagedEntityRegistration]`. Each registration carries `pydantic_class: str` (dotted path) + `instances_at: str \| None` (path pattern, native mode) + `adapter: str \| None` (adapter id, adapter mode). At-least-one-of `{instances_at, adapter}` validator. |
+  | Discriminator native vs adapter | Presence of `adapter:` field. No separate `mode:` field (avoids redundancy + Pydantic discriminated-union by field-presence). |
+  | Type-name namespacing | **`type: <scope-id>.<short-name>`** (e.g., `planning.project`, `office.actor`, `universal.reference`). Per "Make wrong shapes impossible" discipline (ARCH v0.21) — collision impossible by construction across departments. Registration files use SHORT form as key; gate composes full namespaced form. See entity-md-spec §3.2. |
+  | Package layout | `extensions/department/<dept>/`: `department.md` (registration + prose body), `entities/<type>.py` (Python module per Pydantic class, singular), `<types>/<id>.md` (md instance dirs, plural per non-project-axis types). NO per-department `projects/` dir — project entities live at `<project-root>/state.md` (project axis). |
+  | Discovery | Gate startup: read office-config `departments_active` → load each `extensions/department/<dept>/department.md` → load `extensions/office/office.md` (always) → load `extensions/universal/universal.md` (always) → unified `type:` dispatch table built. No glob auto-discovery; `departments_active` is source of truth. Activation flow is conversational (skill orchestrates load+validate+append+audit). |
+  | Body sections (`type: department`) | Recommended: `## What this department does` / `## Conventions` / `## Cross-department coordination` (when applicable). Same shape for `type: office` / `type: universal` registration files. |
+  | Office registration filename | `extensions/office/office.md` (symmetric with `department.md`). Distinct from deployment-specific `office-config.md` / `pbs.local.md` (per #11 migration). |
+  | Universal registration filename | `extensions/universal/universal.md` (symmetric). |
+  | `type: department` Pydantic class | `DepartmentEntity` extending `EntityBase` (Layer 2). Fields: `managed_entities: dict[str, ManagedEntityRegistration]`. Pydantic class definition lands with #9 implementation. |
+  | `type: office` Pydantic class | `OfficeEntity` extending `EntityBase` (Layer 2). Fields: `managed_entities: dict[str, ManagedEntityRegistration]`. Same shape. |
+  | Activation skill (`activate-department`) | In #9 implementation phase. Validates candidate `department.md` against `DepartmentEntity` Pydantic; conflict-checks managed-entity type names against active departments (collision impossible per namespacing — but adapter id collision still a real check); appends to `departments_active`; emits `department_activated` AuditEvent with `convention_applied` field per governance-and-identity-sourcing decision 4. Session-open sub-skill globs `extensions/department/*/` vs `departments_active`, surfaces candidates. |
 
-  1. **Push hard against complexity in the structured layer.**
-     Every field added to `department.md` frontmatter is a
-     structured commitment that's hard to remove. Default to
-     "less in frontmatter, more in body" unless a structured
-     field has a concrete machine consumer (gate startup needs it,
-     audit slice needs it). Resist YAML-encoded rules. The bias
-     comes from #16 (AI-as-runtime) — when AI can read prose at
-     runtime, encoding rules in declarative config is the
-     SQL-DB-trap in disguise.
-  2. **Cross-industry stress-test on every shape proposal.** Run
-     pattern-vs-instance check: does the shape work for
-     legal-practice (matters + filings), research-lab (manuscripts
-     + grants), brand-voice (assets + guidelines)? Failure on
-     any → back to PBS-only.
+  **Worked example** — `extensions/department/planning/department.md` Layer 2 frontmatter:
 
-  **Bundle A test list (expanded session 11)**:
+  ```yaml
+  managed_entities:
+    project:
+      pydantic_class: extensions.department.planning.entities.project.ProjectEntity
+      instances_at: "<project-root>/state.md"
+    doctype:
+      pydantic_class: extensions.department.planning.entities.doctype.DoctypeEntity
+      instances_at: "extensions/department/planning/doctypes/{id}.md"
+    process:
+      pydantic_class: extensions.department.planning.entities.process.ProcessEntity
+      instances_at: "extensions/department/planning/processes/{id}.md"
+  ```
 
-  - **Cross-industry test**: legal-practice / research-lab /
-    brand-voice pattern-vs-instance check (above).
-  - **Office-level entity consistency test** (added session 11):
-    does the same `department.md` registration shape accommodate
-    office-level entities (Actor-via-adapter for Personio
-    integration, Client-as-native)? Per
-    `docs/decisions/governance-and-identity-sourcing.md` decision
-    5: managed entities at office and department levels follow
-    the SAME registration shape. If Bundle A's proposed shape
-    can't carry Actor adapter-mode declaration, redesign.
-  - **Prose-rules-fit test** (added session 11): does the
-    proposed shape leave room for office conventions in body?
-    Per same decision record, decision 4: deployment-specific
-    rules (identifier conventions, naming policies, archival
-    rules) live in markdown prose alongside data. Bundle A must
-    not foreclose this by stuffing every convention into
-    frontmatter.
+  Adapter-mode example (e.g., `extensions/department/invoicing/department.md`):
 
-  **Entry method**: propose a minimal `department.md` shape (Layer
-  2 frontmatter for `type: department`), then stress-test against
-  all three tests before locking. Iterate until shape survives.
-  ONLY THEN move on to Bundle A's other questions (package layout,
-  discovery mechanism, body conventions).
+  ```yaml
+  managed_entities:
+    invoice:
+      pydantic_class: extensions.department.invoicing.entities.invoice.InvoiceEntity
+      adapter: lexware
+  ```
+
+- **Bundle A → Bundle B handoff**: shape locked; package layout
+  + discovery + body conventions all decided. Move directly into
+  Bundle B (entity gate + Layer 3 mechanism). Bundle B test list:
+  - Layer 3 mechanism options (A: Pydantic subclass / B: declared
+    `extra_fields` / C: `metadata: dict`) — including the
+    metadata-rename-gap consideration captured below.
+  - Cross-ref validation tightness at `read_entity` / `write_entity`.
+  - Body-preservation across read/write cycles.
+  - Error model for gate failures.
 
 - **Session-11 unresolved threads** (now resolved + persisted):
   - **Governance scaling + identity sourcing + prose-rules**: all

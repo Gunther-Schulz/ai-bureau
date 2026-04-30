@@ -16,10 +16,42 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.20 (session 11 — pattern-vs-instance discipline tightened: defer rule made sharp, framework-foundation framing made load-bearing)**.
+Status: **v0.21 (session 11 — "Make wrong shapes impossible, not solvable" discipline named; Bundle A type-namespacing locked as concrete application; "Data + boundary reference card" added near top of doc consolidating where-does-X-go rules)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.20 → v0.21**: **"Make wrong shapes impossible, not
+  solvable" discipline named** as a top-level architectural
+  principle (parallel to pattern-vs-instance / glue-not-
+  replacement / AI-as-runtime / entity-elevation). Surfaced
+  session 11 during Bundle A type-name uniqueness discussion:
+  "convention-driven uniqueness" was the leading position until
+  the discriminator emerged — *every "we'll document the
+  convention; deployments handle correctness" answer is the
+  framework offloading work to deployment time*. Each consulting
+  client hits the same problem; each must solve it independently;
+  some solve inconsistently. The principle: prefer **structural
+  constraints** (type system, Pydantic, gate enforcement) that
+  make wrong shapes impossible by construction over
+  **conventional solutions** that make them solvable at
+  deployment time. Composes with AI-as-runtime hybrid-shape
+  (which assigns the boundary: structured for machine contracts,
+  prose for semantics) by clarifying WITHIN the structured layer
+  that collision-prone or correctness-critical concerns get
+  impossibility-by-construction, not validation-by-discipline.
+  Concrete first application: type-name uniqueness across
+  departments resolved via Bundle A namespacing
+  (`<scope-id>.<short-name>`) — collision impossible by
+  construction — rather than via deployment-documented
+  uniqueness convention. Memory
+  `feedback_wrong_shapes_impossible.md` captures for future
+  sessions. **Plus**: "Data + boundary reference card" added
+  near top of ARCHITECTURE (after "where does X go?" placement
+  rules became scattered across 4-6 sections + 2 decision
+  records over sessions 7-11). Single consolidated table — no
+  new rules, just navigational aid that replaces the chase-six-
+  sections pain when applying existing disciplines mid-session.
+  HANDOFF essential framing points to it.
 - **v0.19 → v0.20**: **Pattern-vs-instance discipline tightened**.
   Surfaced session 11 mid-Bundle-A design when a defer rationale
   reproduced PBS-instance-anchored framing ("today no department
@@ -322,15 +354,62 @@ Status: **v0.20 (session 11 — pattern-vs-instance discipline tightened: defer 
 > Conventions docs trace decisions back here but never re-litigate
 > placement.
 
+## Data + boundary reference card
+
+**Use this first** when a "where does X go?" question arises
+mid-design. Each row links to the detailed section that owns the
+rule. Pure consolidation — no new rules; this card replaces the
+chase-six-sections pain when applying existing disciplines.
+
+| When you're asking… | Look here | One-line rule |
+|---|---|---|
+| Where does X live across scope axes (universal vs domain vs state vs department vs office vs project)? | Meta-rule 3 + scope-orthogonality layering convention | 6 axes, orthogonal; place at the **most-specific axis that doesn't lie** about the data |
+| Should X be a Pydantic structured field or a markdown body section? | AI-as-runtime hybrid-shape principle | **Structured** for interfaces / identity / persistence / machine contracts; **prose** for semantics / rules / domain knowledge / process |
+| Should X be enforced structurally or by deployment-time convention? | Make wrong shapes impossible, not solvable | If gate / Pydantic / dispatch touches X on every read/write → **structural**. If AI applies X at mint-time / decision-time → **prose convention with audit** |
+| Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply |
+| Should X be Pydantic-validated or LLM-judged? | Validation layering (v0.18) | Deterministic primary (Pydantic / type / threshold) where the answer is determinate; LLM secondary for genuine judgment (prose precision, fit-to-shape) |
+| Should X be in v1 framework now, or deferred? | Pattern-vs-instance + sharp defer rule (v0.20) | Defer ONLY for chronological reason (info doesn't exist yet). Up-front costs ("more sessions", "premature", "PBS doesn't need it yet") are NEVER valid defer reasons |
+| When does X mutate, append, or stay forward-only? | Three evolution patterns (v0.19) | **Mutable** (migration framework, e.g., office-config) / **append-only** (additive backward-compat, e.g., AuditEvent) / **forward-only prose** (no migration; historical anchoring via `git_sha` / `convention_applied`) |
+| Does X go through MCP gate or direct file Read/Write? | Meta-rule 4 + fail-closed corollary | Contract-bearing files (typed Pydantic + cross-ref invariants) go through gate; loose markdown is skill-direct. Fail-closed on MCP unreachable — never bypass |
+| Where does X get its source-of-truth + invalidation contract? | Meta-rule 3 | Each piece of state has exactly ONE canonical source; invalidation contract names what changes when source changes |
+| When does X integrate via adapter vs native? | Meta-rule 1 + Glue-not-replacement | If external system already owns the data → **adapter** (Lexware, Personio, Harvest); if PBS owns it → **native** Pydantic + native MCP tool. Mixed-mode within a department supported |
+| Where does deployment-specific knowledge for X live? | Governance-and-identity-sourcing decision 4 (prose conventions) | Bureau-specific rules (actor-id minting, archive policy, naming conventions) live in markdown prose alongside the data; AI applies at runtime; AuditEvent records `convention_applied: {file, section, git_sha}` |
+| What's the entity-md frontmatter contract? | entity-md-spec §3-§5 | **Layer 1 universal** (every entity, Pydantic base, strict-locked) + **Layer 2 type-specific** (Pydantic subclass per type, strict-locked) + **Layer 3 per-deployment** (deferred to #9 implementation) |
+| What's the type-name namespacing? | entity-md-spec §3.2 | `type: <scope-id>.<short-name>` always (e.g., `planning.project`, `office.actor`, `universal.reference`). Department namespacing makes collisions impossible by construction |
+| Should X have informed defaults shipped or empty canvas? | Informed defaults (v0.18) | Ship best-shape templates derived from PBS pioneer instance, NOT empty canvases. Bureaus inherit working starting points; refine from a base, not bootstrap |
+| Should X fail-loud or fail-soft? | Strict-validation discipline (meta-rule 4 corollary) | Required = fail-loud, no silent defaults; optional = explicit null. No silent fallback for contract-bearing concerns |
+
+### How to use this card
+
+When a design question surfaces mid-session, walk the table top
+to bottom; the first row that fits is usually the answer. If two
+rows seem to apply, the more-specific one wins (e.g.,
+"namespacing the type field" is governed by §3.2 first, then by
+"Make wrong shapes impossible" — they agree, but §3.2 is the
+specific case).
+
+If the question doesn't fit any row → it's a candidate for a new
+discipline; flag for design-review target 14 (discipline-gap
+detection).
+
+---
+
 ## Maintenance discipline
 
-A 3-line checklist:
+A 4-line checklist:
 
 1. Every meta-rule change, schema bump, or significant refactor
    lands in the same commit as the ARCHITECTURE.md update.
 2. After meta-rule additions / refactor sweeps, run `audit` (drift
    detection) and `design-review` (soundness review) — see
    `plugin/skills/{audit,design-review}/`.
+3. **Reference card + detailed section sync**: when changing a
+   discipline (wording, scope, discriminator), update BOTH the
+   "Data + boundary reference card" row AND the detailed
+   discipline section in the same commit. The card is the
+   navigation; detailed sections carry the authoritative wording
+   + reasoning. Same-commit update prevents drift between the
+   two.
 3. Sunset deprecated concepts via the deprecation procedure (below).
 
 ### Deprecation procedure
@@ -928,6 +1007,94 @@ native when:
 The architecture supports both modes uniformly (#12); the
 principle expresses the strong preference toward integration when
 viable.
+
+---
+
+## Make wrong shapes impossible, not solvable
+
+> **Prefer structural constraints (type system, Pydantic, gate
+> enforcement) that make wrong shapes impossible by construction
+> over conventional solutions that make wrong shapes solvable at
+> deployment time. Convention-driven solutions for framework-
+> level correctness offload work to every deployment — each
+> consulting client hits the same problem, each must solve it
+> independently, some solve inconsistently. Make it impossible
+> once for everyone.**
+
+This principle composes with AI-as-runtime hybrid-shape (which
+assigns the boundary: structured for machine contracts, prose for
+semantics) by sharpening the discriminator WITHIN the structured
+layer.
+
+### The discriminator
+
+The boundary between "structural constraint" and "prose
+convention" is sharp:
+
+| Concern touched by | Layer | Mechanism |
+|---|---|---|
+| Gate / Pydantic / dispatch code on every read/write | **Structural** — impossible by construction | Type system, Pydantic validators, gate enforcement, namespace separation |
+| AI at mint-time / decision-time / reasoning-time (governance check, naming, archival policy) | **Prose convention** with audit trail | Prose rule in `office-config.md` / `department.md` / `conventions.md`; AI applies; AuditEvent records `convention_applied: {file, section, git_sha}` |
+
+If the gate dispatches on it every read/write, design a
+structural constraint that makes wrong shapes impossible. If AI
+applies it at mint-time or judgment-time, prose convention is
+correct — the impossibility-by-construction approach would be
+SQL-DB-trap rigidity (per AI-as-runtime hybrid-shape).
+
+### Examples — applied across the codebase
+
+| Concern | Wrong (solvable via convention) | Right (impossible by construction) |
+|---|---|---|
+| **Type-name uniqueness across departments** | "Bureau documents `type:` namespacing convention; AI validates at activation" | Department-namespaced `type: <scope-id>.<short-name>` (Bundle A lock, session 11). Gate dispatches on full namespaced form — collision impossible |
+| **Required AuditEvent fields** | "Skill bodies remember to set `actor_kind` on every event" | Pydantic `actor_kind` field required, fail-loud on missing — impossible to omit |
+| **State.md write through gate** | "Skills know to use `update_project_state` rather than direct Edit" | MCP gate is the only write path; direct file Edit lacks the validation contract — impossible to bypass without explicit `fallback_when_mcp_absent` declaration |
+| **Manifest contract integrity** | "Author discipline keeps `last_updated` + `last_fetched` + `checksum_sha256` consistent" | Pydantic models validate at parse time (slice 15 → v1 pull-forward); gate rejects malformed manifests — impossible to write invalid shape |
+| **Department / Office entity registration** | "Convention: each department lists managed entities somewhere" | `department.md` `managed_entities` Pydantic-validated keyed map; gate's startup discovery enforces shape — registration impossible to malform |
+
+### Examples — where prose convention is the right answer
+
+| Concern | Why prose (not structural) |
+|---|---|
+| **Actor-id minting convention** (`firstname-lastname` from email) | AI applies at mint-time; deployment-specific; varies per bureau (small bureau ≠ adapter-mode bureau). Gate dispatches on `id` (string), not on its derivation rule — gate never touches the convention |
+| **Archive policy** (when projects move to `archived/`, retention windows) | AI applies at archive-decision-time; deployment-specific |
+| **Cross-department coordination triggers** ("when planning sends to UNB, notify invoicing") | AI applies at workflow-event-time; deployment-specific; varies per office structure |
+| **Doctype filename convention** (`B-Plan Begründung.tex` vs `<project-id>-begruendung.tex`) | AI applies at file-create-time; deployment-specific aesthetic |
+
+### Anti-patterns the discipline catches
+
+- ❌ "Deployment documents the rule; AI validates at activation"
+  for a concern the gate dispatches on every operation. The
+  gate's hot path can't depend on prose validation; structural
+  constraint is required.
+- ❌ "Pydantic class with optional field + comment 'should always
+  be set when X'." If always-set is a contract, make it
+  required. If conditionally-required, encode the condition
+  with a discriminated union or `model_validator`.
+- ❌ "Future audit slice catches drift." Audit catches drift
+  retroactively; the framework should make drift impossible
+  prospectively where the constraint is structural.
+- ❌ Pure-prose "best practices" docs for things the gate / type
+  system / dispatch could enforce. Best-practices docs are for
+  AI-applied judgment; framework correctness gets structural
+  enforcement.
+
+### Composition with existing disciplines
+
+| Discipline | Connection |
+|---|---|
+| **Strict-validation (meta-rule 4 corollary)** | Same impulse, narrower scope. Strict-validation says "no silent defaults, fail loud on required fields"; this principle generalizes from validation to all structural design choices, with the gate-dispatch discriminator. |
+| **AI-as-runtime hybrid-shape** | Assigns the structured / prose boundary at the top level. This principle sharpens WITHIN the structured layer: don't let convention creep in where structural constraint is possible. |
+| **Pattern-vs-instance + sharp defer rule (v0.20)** | "We'll add it later when needed" defers structural work to deployment time; same offloading anti-pattern this principle catches. The two together push toward: design framework-correct shapes now, structurally, for everyone. |
+| **Glue-not-replacement** | Adapter Protocol shape is structural (Pydantic Protocol interface) — adapters can't fail by being shape-incompatible. Adapter behavior conventions live in adapter-md prose body. |
+
+### Promotion path (manual now; design-review target if proven valuable)
+
+Apply manually at design-time; track applications and
+counter-examples for 3-5 sessions; if the discipline proves
+load-bearing, evaluate for elevation to a design-review target
+(retroactive scanning) — same staged-elevation pattern that
+AI-as-runtime conformance check followed.
 
 ---
 

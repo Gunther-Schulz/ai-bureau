@@ -61,7 +61,7 @@ base `EntityBase`. Fail-loud validation at gate.
 |---|---|---|---|---|
 | `id` | str | ✅ | kebab-case (`[a-z0-9-]+`); unique within scope | The stable identifier. Matches file basename. |
 | `label` | str | ✅ | non-empty | Human-readable display name. |
-| `type` | enum | ✅ | `doctype` / `reference` / `project` / `client` / `actor` / `process` / `baustein` / `entity_definition` / ... | Routes to Layer-2 Pydantic subclass at gate. Living enum extended per #9. |
+| `type` | str (namespaced) | ✅ | `<scope-id>.<short-name>` (e.g., `universal.doctype`, `planning.project`, `office.actor`, `litigation.matter`). See §3.2 for namespacing convention. | Routes to Layer-2 Pydantic subclass at gate. Living set extended per #9. |
 | `scope` | enum | ✅ | `universal` / `domain` / `state` / `department` / `office` / `project` | 4-axis position per ARCHITECTURE meta-rule 3 + #12. |
 | `scope_key` | str \| null | ✅ | `null` for universal; `"Naturschutz"` / `"PV-FFA"` / `"Wind"` for domain; `"MV"` / `"BB"` for state; `"planning"` / `"invoicing"` for department; `null` for office | Identifies WHICH entry within the scope axis. |
 | `status` | enum | ✅ | `active` / `deferred` / `stub` / `archived` | Canonical lifecycle marker. |
@@ -76,6 +76,49 @@ base `EntityBase`. Fail-loud validation at gate.
 - Lists: YAML block style (`- item`) preferred over flow (`[item, item]`) for readability
 - Quoting: prefer unquoted scalars; quote only when YAML would mis-parse (colons, brackets, leading hyphens)
 - Dates: ISO 8601 (`2026-04-30`) — NO `Date(...)`, NO `2026/04/30`
+
+### 3.2 Type namespacing convention (locked session 11, Bundle A)
+
+The `type:` field is **always namespaced** as `<scope-id>.<short-name>`:
+
+- `<scope-id>` = the registering scope's identifier:
+  - `universal` for universal-scope entities
+  - `office` for office-level entities (registered in `extensions/office/office.md`)
+  - `<department-id>` for department-scoped entities (registered in `extensions/department/<id>/department.md`)
+- `<short-name>` = the registration key under the scope's `managed_entities` map
+
+Examples:
+
+| Entity | Type field | Registered in |
+|---|---|---|
+| Actor at office level | `office.actor` | `extensions/office/office.md` `managed_entities.actor` |
+| Client at office level | `office.client` | `extensions/office/office.md` `managed_entities.client` |
+| Project in planning dept | `planning.project` | `extensions/department/planning/department.md` `managed_entities.project` |
+| Doctype in planning dept | `planning.doctype` | `extensions/department/planning/department.md` `managed_entities.doctype` |
+| Reference at universal scope | `universal.reference` | `extensions/universal/universal.md` `managed_entities.reference` |
+| Matter in legal-practice dept (hypothetical) | `litigation.matter` | `extensions/department/litigation/department.md` |
+
+In **registration files** (`department.md` / `office.md` / `universal.md`), the `managed_entities` map uses the SHORT form as the key:
+
+```yaml
+# extensions/department/planning/department.md frontmatter
+managed_entities:
+  project:                                    # SHORT form (key)
+    pydantic_class: extensions.department.planning.entities.project.ProjectEntity
+    instances_at: "<project-root>/state.md"
+  doctype:
+    pydantic_class: extensions.department.planning.entities.doctype.DoctypeEntity
+    instances_at: "extensions/department/planning/doctypes/{id}.md"
+```
+
+The gate composes the FULL namespaced form (`planning.project`, `planning.doctype`) from the registration scope's identifier. Entity-md files (instances) use the FULL form in their `type:` field — unambiguous, machine-readable, no implicit context required.
+
+**Why namespaced** (vs globally unique names or convention-driven uniqueness):
+
+- Prevents type-name collisions across departments without requiring deployment-specific conventions. Multi-department deployments where two departments naturally reuse common type names (`doctype`, `record`, `entity`) work by construction.
+- Makes blueprint sharing across deployments collision-safe. A planning blueprint and a litigation blueprint can coexist in the same office without renaming.
+- Aligns with how every other department-shaped system handles namespacing (Python modules, SQL schemas, Kubernetes namespaces, plugin slash-command namespacing per #11).
+- Audit-trail filtering becomes natural: `query_audit_trail(type_prefix="litigation.")` returns all litigation-department entity events; cross-department analysis is easy.
 
 ### 3.1 Identifier uniqueness conventions
 
