@@ -44,6 +44,32 @@ implementation of every downstream pre-RAG commitment**; doing the
 evaluations after locking implementation choices means retrofitting
 under sunk-cost pressure.
 
+**REQUIRED READING before #18 substrate eval starts**:
+`docs/decisions/greenfield-architecture-review.md` §3 — establishes
+the **disqualifying criteria** for #18 (composes with MCP / supports
+hybrid-shape / Pydantic-compatible / no SQL-DB shapes / sparring
+composable / audit-trail compatible / pluggable transport / heaviness
+scales / vendor-neutral). Substrates failing any structural criterion
+are rejected without deep-eval. Eval transforms from "comprehensive
+comparison of 8 frameworks" to "reject obvious mismatches first;
+deep-eval the 2-4 survivors." Same DR also establishes #19 RAG
+pluggable boundary (parsers/chunkers/retrieval pluggable; per-ref
+Pydantic metadata + citation traceability + per-#13 ingestion split
+stay custom).
+
+**Future-roadmap items #18 MUST consider** (per ROADMAP #18 entry):
+- **Time-driven triggers (Gap A)**: framework must compose with
+  server-side scheduler firing "tick" events on schedule (per #13's
+  `register_scheduled_trigger` MCP tool). Substrate candidates that
+  impose competing scheduler abstraction → friction or rejection.
+- **Event-driven adapter callbacks (Gap B)**: framework must support
+  adapter Protocol's `subscribe_to_changes(callback)` (push) OR
+  `poll_for_changes() -> list[Event]` (pull) per #9 Bundle E
+  (restored from #11 deferral). External state changes translate to
+  AuditEvents with `actor_kind=external_agent`. Substrate candidates
+  that can't compose with adapter callback pattern → friction or
+  rejection.
+
 **What can proceed in parallel** (substrate-agnostic): Bundles B + C
 + D + E design work (entity gate signatures, Pydantic schema shapes,
 body-preservation contracts, Layer 3 mechanism options,
