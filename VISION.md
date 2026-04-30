@@ -247,6 +247,10 @@ diluting Ming):
   innovation surface) — strategic-empirical confirmation that
   practitioner-amplification is fundable in EU/DACH context
 
+### Counter-VISION engagement — see `docs/decisions/counter-vision-engagement.md`
+
+The dominant 2026 opposing thesis is **service-as-software** (Sequoia/a16z replace-the-practitioner; Susskind father+son intellectual roots; Frey+Osborne empirical projections). PBS rejects this thesis specifically for **high-stakes regulated practitioner work** where accountability cannot be delegated. Substantive intellectual engagement — multi-disciplinary thinkers (Autor + Brynjolfsson + Mindell + Dreyfus + Schön + Suchman + Pasquale + Russell + Toyama + Ming) + empirical record per industry (medicine + law + finance + aviation + customer service + Stanford workslop) + PBS positioning analysis (3 sharp claims) + the 4 argument bullets — lives in `docs/decisions/counter-vision-engagement.md`. Companion `docs/strategic-positioning.md` covers the fundraising-risk angle separately.
+
 ### Practitioner vs Specialist — vocabulary
 
 Practitioner = the HUMAN expert author (this VISION's central archetype). Specialist = the codified expertise BUNDLE (architectural primitive employed by practitioner). Distinct primitives — practitioner authors + signs + bears accountability; specialist executes + drafts + sparrs.
