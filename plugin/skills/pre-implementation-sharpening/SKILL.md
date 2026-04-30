@@ -1,12 +1,14 @@
 ---
 name: pre-implementation-sharpening
-description: Use at implementation-start moment for major architectural commitment (e.g., #9 entity gate begins; #11 Cowork integration begins). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via "let's start implementing X" / "before we implement, what details haven't we surfaced" / "implementation-readiness check" prompts. Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). Output is implementation-readiness checklist + DR amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use audit/design-review).
-when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in DRs; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check before #9". Do NOT use for decision-formation moments — that's decision-design-sharpening.
+description: Use at implementation-start moment for major architectural commitment (e.g., #9 entity gate begins; #11 Cowork integration begins). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including "let's start implementing X" / "before we implement, what details haven't we surfaced" / "implementation-readiness check" / "solidify before implement" / "lock down implementation details" / "challenge/review/refine before we ship" / "verify implementation readiness" / "what implementation details are we missing". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge/review/refine to solidify cycle applied at implementation-start moment. Output is implementation-readiness checklist + DR amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use audit/design-review).
+when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in DRs; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check" / "solidify before implement" / "challenge/review/refine implementation readiness" / "lock down implementation details" / "before we ship X". Do NOT use for decision-formation moments — that's decision-design-sharpening.
 department: office
 version: 0.1.0
 ---
 
 # Pre-implementation sharpening (Phase 2)
+
+**AKA the challenge/review/refine to solidify cycle applied at implementation-start moment** — this skill IS that operation, formalized as 2-3 disciplined rounds. The original framing (challenge → review → refine → solidify) describes what each round actually does; "sharpening" is the collapsed shorthand. Both terminologies map to this skill.
 
 Disciplined sharpening protocol applied at implementation-start moment, AFTER architectural decisions are LOCKED in DRs but BEFORE implementation code is written. Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred.
 

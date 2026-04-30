@@ -1,12 +1,14 @@
 ---
 name: decision-design-sharpening
-description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, ARCHITECTURE.md, VISION.md, ROADMAP.md, or other load-bearing artifact). Triggers via "do another round" / "sharpen again" / "review/refine" / "challenge this" / "what did we miss" prompts after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (VISION axis 2) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
-when_to_use: After AI proposes architectural decision (decision-record-grade); user wants disciplined sharpening pass before commit. Fires AT DECISION-FORMATION MOMENT. Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
+description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, ARCHITECTURE.md, VISION.md, ROADMAP.md, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/review/refine to solidify" / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge/review/refine to solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (VISION axis 2) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
+when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-and-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
 department: office
 version: 0.1.0
 ---
 
 # Decision-design sharpening (Phase 1)
+
+**AKA the challenge/review/refine to solidify cycle** — this skill IS that operation, formalized as 2-3 disciplined rounds. The original framing (challenge → review → refine → solidify) describes what each round actually does; "sharpening" is the collapsed shorthand. Both terminologies map to this skill.
 
 Disciplined sharpening protocol applied at decision-formation moment, BEFORE commit to file. Operates UPSTREAM of `audit` + `design-review` skills (which serve drift-detection role post-decision).
 
