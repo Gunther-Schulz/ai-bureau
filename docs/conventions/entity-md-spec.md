@@ -77,6 +77,49 @@ base `EntityBase`. Fail-loud validation at gate.
 - Quoting: prefer unquoted scalars; quote only when YAML would mis-parse (colons, brackets, leading hyphens)
 - Dates: ISO 8601 (`2026-04-30`) — NO `Date(...)`, NO `2026/04/30`
 
+### 3.1 Identifier uniqueness conventions
+
+`id` MUST be unique within scope. The strategy for ensuring
+uniqueness is **per-deployment** and should be documented in
+office-config or `department.md` body — typically as a prose
+convention rule (see `governance-and-identity-sourcing.md`
+"Office conventions as prose-rules").
+
+Common strategies:
+
+| Strategy | Form | Use case |
+|---|---|---|
+| Firstname-lastname | `alice-mueller.md` | Native mode; small bureau; low collision risk |
+| Email-prefix derived | `alice-mueller-schulz-de.md` | Native mode; email-based namespacing; ugly but unique |
+| HR-system internal ID | `actor-12345.md` (filename) + `Alice Müller` (label in body) | Adapter mode (Personio, BambooHR); humans rarely see filename |
+| Domain-natural ID | `b-plan-begruendung.md` for doctypes; `BauGB.md` for references | Type has obvious natural identifier; collision-free by definition |
+| Project-prefixed | `<project-slug>-<entity>` | Per-project sub-entities where collision across projects is possible |
+
+**For high-collision-risk scopes** (actors, clients with common
+names; sub-entities across projects), the deployment SHOULD
+document the convention explicitly:
+
+```markdown
+# In office-config.md body or extensions/office/conventions.md
+
+## Actor identifier convention
+
+Actor IDs follow `<firstname>-<lastname>` derived from
+`<firstname>.<lastname>@schulz-planung.de` company email.
+On collision, append middle initial: `alice-m-mueller`.
+Adapter-mode deployments use the HR system's internal ID;
+this convention does not apply to those.
+```
+
+AI applies the convention at mint-time per the prose-rule pattern
+(per `governance-and-identity-sourcing.md` decision 4). Audit
+event records both the convention reference and the produced ID.
+
+**For low-collision-risk scopes** (universal/domain doctypes,
+references with natural names), the natural identifier IS the ID
+and no convention is needed. The Layer-1 `id` constraint
+(kebab-case, unique within scope) is sufficient.
+
 ---
 
 ## 4. Layer 2 — Type frontmatter (per-entity-type, strict-locked)
@@ -494,6 +537,9 @@ compute, valuable for monitoring.
 
 ---
 
-**Last meaningful edit**: 2026-04-30 (session 10 followup —
-scaffold authored alongside #16 decision record + ARCHITECTURE
-v0.16 bump; §16 D2 mitigations added in same followup).
+**Last meaningful edit**: 2026-04-30 (session 11 — §3.1
+identifier uniqueness conventions added per
+`governance-and-identity-sourcing.md` decisions; previous edit
+session 10 followup — scaffold authored alongside #16 decision
+record + ARCHITECTURE v0.16 bump; §16 D2 mitigations added in
+same followup).

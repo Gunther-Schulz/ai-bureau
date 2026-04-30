@@ -1020,6 +1020,43 @@ migration path" + commitment #10's HTTP MCP decision.
   #13 still needs #11's plugin shape settled (original logic
   preserved). Multi-user auth in #13 binds to Actor entity from
   #15 (already produced earlier in the queue).
+
+- **Governance scaling architectural arc** (session-11 decision —
+  see `docs/decisions/governance-and-identity-sourcing.md`):
+  governance scales naturally without inventing a separate
+  governance system; existing primitives compose along the
+  org-size spectrum:
+
+  | Org size | Primary mechanism |
+  |---|---|
+  | Solo → 5 people | File-system access; informal coordination |
+  | 5-20 people | Git PRs + code-owners + audit trail |
+  | 20-100 people | Git + gate-level role enforcement (Actor.roles from #15 + approval events from #6 + AuditEvent) |
+  | 100-1000 people | Git + gate + department isolation (per #12) + cross-department approvals |
+  | 1000+ / regulated | Tier 3 / Gemini Enterprise federated authority (separate archetype) |
+
+  Implementation under #13's pre-RAG scope: tier-conditional
+  enforcement at the gate (build once, activate at Tier 2). The
+  enforcement code is dormant in Tier 1 (single-user); fires when
+  Tier 2 (cloud HTTP, multi-user) deploys. Layered defense-in-depth:
+  git (file changes) + gate (Python, deterministic) + skill
+  workflow (LLM, surface UX). Critically, the LLM is NOT the
+  enforcer — gate is. Defense-in-depth principle.
+
+  Identity sourcing also lands here (per same decision record):
+  two distinct adapters at play (auth provider + actor-data
+  adapter); native vs adapter mode per deployment; same adapter
+  pattern (meta-rule 1) as Lexware/Harvest/etc.
+
+- **Office conventions as prose-rules** (session-11 decision —
+  same record): deployment-specific rules (identifier conventions,
+  naming, archival policies) live in markdown prose alongside the
+  data, applied by AI at runtime. Strongest application of #16
+  (AI-as-runtime) surfaced so far. NOT new infrastructure —
+  natural use of the prose layer the hybrid-shape principle
+  already provides. Documented for awareness; consumers across
+  #9/#15/#13.
+
 - **The constraint and the fix**: today's pbs_mcp is stdio-based,
   spawned per-session, runs on user's machine. For consulting
   deployments at other companies, cloud is better — clients

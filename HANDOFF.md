@@ -437,7 +437,8 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   Schema (`project.py`) carries fields only, not location.
 
 - **Bundle A — entry method when work resumes** (per session-11
-  framing-pass discussion): apply two refinements explicitly:
+  framing-pass discussion): apply two refinements explicitly,
+  with an expanded three-test verification:
 
   1. **Push hard against complexity in the structured layer.**
      Every field added to `department.md` frontmatter is a
@@ -448,39 +449,47 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
      comes from #16 (AI-as-runtime) — when AI can read prose at
      runtime, encoding rules in declarative config is the
      SQL-DB-trap in disguise.
-  2. **Cross-industry stress-test on every shape proposal.** When
-     proposing `department.md` shape, run it through the
-     pattern-vs-instance check explicitly: does this shape work
-     for legal-practice (matters + filings), research-lab
-     (manuscripts + grants), brand-voice (assets + guidelines)?
-     If our `department.md` shape fails for one of those,
-     we're back to PBS-only — pattern-vs-instance discipline
-     violated.
+  2. **Cross-industry stress-test on every shape proposal.** Run
+     pattern-vs-instance check: does the shape work for
+     legal-practice (matters + filings), research-lab (manuscripts
+     + grants), brand-voice (assets + guidelines)? Failure on
+     any → back to PBS-only.
+
+  **Bundle A test list (expanded session 11)**:
+
+  - **Cross-industry test**: legal-practice / research-lab /
+    brand-voice pattern-vs-instance check (above).
+  - **Office-level entity consistency test** (added session 11):
+    does the same `department.md` registration shape accommodate
+    office-level entities (Actor-via-adapter for Personio
+    integration, Client-as-native)? Per
+    `docs/decisions/governance-and-identity-sourcing.md` decision
+    5: managed entities at office and department levels follow
+    the SAME registration shape. If Bundle A's proposed shape
+    can't carry Actor adapter-mode declaration, redesign.
+  - **Prose-rules-fit test** (added session 11): does the
+    proposed shape leave room for office conventions in body?
+    Per same decision record, decision 4: deployment-specific
+    rules (identifier conventions, naming policies, archival
+    rules) live in markdown prose alongside data. Bundle A must
+    not foreclose this by stuffing every convention into
+    frontmatter.
 
   **Entry method**: propose a minimal `department.md` shape (Layer
   2 frontmatter for `type: department`), then stress-test against
-  3 hypothetical domains before locking. Iterate until shape
-  survives the cross-industry test. ONLY THEN move on to Bundle A's
-  other questions (package layout, discovery mechanism, body
-  conventions).
+  all three tests before locking. Iterate until shape survives.
+  ONLY THEN move on to Bundle A's other questions (package layout,
+  discovery mechanism, body conventions).
 
-- **Session-11 unresolved threads** (capture so not lost):
-  - **Governance scaling architectural arc**: governance gap is
-    real beyond ~20 people; existing primitives compose into
-    governance scaling without needing Tier 3 / Gemini Enterprise.
-    Spectrum: solo (no governance) → small (informal + git) →
-    medium (git PRs + code-owners, ~20 people) → larger
-    (Actor.roles + approval events at gate, ~20-100) → large
-    (department isolation + cross-dept approvals, 100-1000) →
-    very large/regulated (Tier 3 / Gemini Enterprise). Most of
-    spectrum addressed by primitives already on the roadmap (#15
-    Actor.roles + #6 approval events + #12 department isolation).
-    Worth capturing as ROADMAP note (likely under #13 or as
-    v1.x-v2 entry "Governance scaling — existing primitives
-    compose"). NOT blocking #9; surfaced session 11 as spontaneous
-    insight during product-vision conversation. Decision deferred:
-    add ROADMAP note while fresh, OR hold until current discussion
-    finishes.
+- **Session-11 unresolved threads** (now resolved + persisted):
+  - **Governance scaling + identity sourcing + prose-rules**: all
+    three architectural directions captured in
+    `docs/decisions/governance-and-identity-sourcing.md` (session
+    11). ROADMAP commitment #13 references the record; entity-md-
+    spec §3.1 added for identifier uniqueness conventions.
+    Implementation lives across #9 (Bundle A consistency), #15
+    (Actor adapter Protocol), #6 (approval events for governance),
+    #13 (tier-conditional gate enforcement).
   - **`docs/what-this-is.md` shipped session 11** (commit
     `0bbd07f`): outsider-shareable framing doc for friend / potential
     consulting collaborator. Iterated through honest-framing pass.
