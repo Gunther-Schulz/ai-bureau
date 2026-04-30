@@ -16,8 +16,32 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.19 (session 11 — three evolution patterns named: structured+mutable / structured+append-only / prose+forward-only)**.
+Status: **v0.20 (session 11 — pattern-vs-instance discipline tightened: defer rule made sharp, framework-foundation framing made load-bearing)**.
 
+> **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
+
+- **v0.19 → v0.20**: **Pattern-vs-instance discipline tightened**.
+  Surfaced session 11 mid-Bundle-A design when a defer rationale
+  reproduced PBS-instance-anchored framing ("today no department
+  needs activating") despite pattern-vs-instance discipline being
+  named since v0.8. The recurrence signaled the discipline wasn't
+  loud enough or operationally sharp. Two changes: (1)
+  framework-foundation framing elevated to a top-of-document
+  anchor — PBS is the framework foundation for the consulting
+  business, validated by the planning bureau, never the product.
+  At every architectural step, do the full scalable foundational
+  work. (2) **Sharp defer rule** added as a subsection of
+  pattern-vs-instance discipline: defer ONLY for chronological
+  reason (information genuinely doesn't exist yet — downstream
+  shape unlocked, second-domain feedback needed, upstream
+  precedent unresolved). Up-front costs (time, complexity,
+  "premature", "YAGNI", "PBS doesn't need it yet") are NEVER
+  valid defer reasons. The rule composes with `feedback_defer_
+  instinct.md`'s specific-cost-naming requirement: the named cost
+  must be a future-information cost, not an up-front cost. New
+  anti-pattern bullet added to the section's catalog. Memory
+  `feedback_pattern_not_instance_defers.md` captures the bias for
+  future sessions.
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
   repo, integration adapter scaffolding deployed, schema migration
@@ -330,15 +354,26 @@ procedure tightens.
 
 ## Pattern-vs-instance discipline
 
+**The framing**: PBS is **the framework foundation for the
+consulting business**, validated by the Schulz planning bureau.
+PBS is the pioneer instance, never the product. Every
+architectural commitment, every defer rationale, every design
+decision serves the framework. The framework must work at
+**first bind** for any expert-practitioner deployment
+(legal-practice, research-lab, brand-voice, consulting-client)
+— not minimum-viable-PBS today with infrastructure added later
+when consulting demand surfaces. "Adding it later" means clients
+hit gaps at first bind; that's the failure mode this discipline
+prevents.
+
 Every architectural commitment in this repo must work at the
-**pattern level**, not just for PBS. PBS is the pioneer instance
-(per VISION.md "PBS as pioneer instance"); the architecture is
-the pattern. The long-arc end-state is an AI-office builder that
-scaffolds new domain offices from a domain spec + the
-accumulated patterns (see ROADMAP v2 "AI-office builder"). Every
-commitment that doesn't generalize is a future migration cost
-the builder will pay; every commitment that does generalize
-*is* the builder's foundation.
+**pattern level**, not just for PBS. The architecture is the
+pattern; PBS is the proving instance. The long-arc end-state is
+an AI-office builder that scaffolds new domain offices from a
+domain spec + the accumulated patterns (see ROADMAP v2
+"AI-office builder"). Every commitment that doesn't generalize
+is a future migration cost the builder will pay; every
+commitment that does generalize *is* the builder's foundation.
 
 **The test** when proposing any new meta-rule, entity type,
 persistence structure, MCP tool, or decision-record-grade
@@ -395,6 +430,73 @@ fields), korrektur-rules and similar prose memory.
   than reading from office-config or manifests. Already covered
   by plugin-conventions §13 anti-pattern; now also a
   pattern-vs-instance violation.
+- ❌ A defer rationale anchored in PBS-instance state ("today no
+  department needs activating," "only planning exists right now,"
+  "no consumer in PBS until #11"). Pioneer-instance defenses
+  silently optimize for PBS instead of the framework. The
+  framework's consumers include hypothetical legal-practice /
+  research-lab / consulting-client deployments opening tomorrow
+  — and most of them will need the deferred infrastructure at
+  first bind. See "Defer rule" subsection below.
+
+### Defer rule: chronological reason only
+
+The discipline's operational rule for deferring any
+infrastructure-shaped commitment (a skill, a gate, a Pydantic
+class, a registration mechanism, an audit slice, a body
+convention, a Layer-2 schema field):
+
+**Defer ONLY for chronological reason** — i.e., the design
+genuinely depends on information that doesn't exist yet:
+
+- Downstream consumer's shape isn't locked → designing now would
+  lock the wrong abstraction
+- Second-domain deployment is required to validate the
+  abstraction → without it the design over-fits PBS
+- Upstream decision is unresolved → depends-on chain is real
+- Genuine ordering constraint that the design's correctness
+  depends on
+
+**Up-front costs are NEVER valid defer reasons:**
+
+- ❌ "It would take more sessions" — irrelevant; do the full work
+- ❌ "We might design it wrong" — only relevant if a NAMED future
+  signal would change the design; otherwise design now
+- ❌ "Premature abstraction" — without a specific information gap,
+  this is manufactured restraint
+- ❌ "YAGNI" — the canonical form of manufactured restraint;
+  rejected
+- ❌ "PBS doesn't need it yet" / "only planning exists today" /
+  "no consumer in PBS until #11" — pioneer-instance bias; the
+  consulting framework's consumers include hypothetical
+  deployments opening tomorrow
+- ❌ "We can add it later when needed" — adding later means
+  consulting clients hit the gap at first bind
+
+**Two tests in order, both must pass for a defer to be honest:**
+
+1. **Chronological test**: "Is there a specific piece of
+   information that would change this design, and that
+   information will exist later but not now?" If yes, name it
+   explicitly. If no, the defer is invalid — design now.
+2. **Framework-cost test**: "Would a hypothetical legal-practice
+   / research-lab / consulting-client deployment opening tomorrow
+   need this?" If yes, it's framework infrastructure — design
+   now regardless of PBS state.
+
+The rule composes with the existing "honest defers name a
+specific cost" guidance (see `feedback_defer_instinct.md`
+memory): the named cost must be a **future-information cost**
+(the chronological test passes), not an up-front cost.
+
+This rule was added v0.20 after a session-11 design loop where
+the AI repeatedly produced PBS-instance-anchored defer
+rationales despite the discipline being named since v0.8.
+Sharpening was required because the discipline as previously
+written caught content-coupling at architectural-rule level but
+not pioneer-instance bias at defer-rationale level. The bias is
+particularly insidious because it *looks like* sober "wait for
+pressure" reasoning.
 
 **Coupling exceptions** (where domain-coupling at architecture
 level is allowed):

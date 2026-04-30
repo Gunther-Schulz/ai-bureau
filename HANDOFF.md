@@ -1,12 +1,45 @@
 # Session handoff — pbs-bureau
 
+## 🧭 CORE OPERATING FRAME (read first, every session)
+
+**PBS is the framework foundation for the consulting business**,
+validated by the Schulz planning bureau. PBS is the pioneer
+instance, never the product. At every architectural step, do
+the **full scalable foundational work** — designed for any
+expert-practitioner deployment (legal-practice / research-lab /
+brand-voice / consulting-client) at first bind, not
+minimum-viable-PBS today with infrastructure added later.
+
+**Defer rule (sharp)**: defer ONLY for chronological reason
+(downstream shape unlocked, second-domain feedback needed,
+upstream precedent unresolved). **Up-front costs are NEVER
+valid defer reasons** — not "more sessions," not "premature,"
+not "YAGNI," not "PBS doesn't need it yet." See
+ARCHITECTURE.md "Pattern-vs-instance discipline" → "Defer rule"
+subsection (v0.20) and `memory/feedback_pattern_not_instance_
+defers.md`.
+
+The two tests that must pass for any defer to be honest:
+
+1. **Chronological**: is there specific information that would
+   change the design, and that information will exist later but
+   not now? Name it.
+2. **Framework-cost**: would a hypothetical legal-practice /
+   consulting-client deployment opening tomorrow need this? If
+   yes, design now.
+
+This frame supersedes any prior "we'll add it when PBS needs
+it" reasoning in the queue.
+
+---
+
 ## ⚡ For next session — essential framing
 
 **Read these three before substantive work, in this order:**
 
 1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
 2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
-3. **`ARCHITECTURE.md`** — **v0.16**. Seven durable disciplines (pattern-vs-instance, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement, **AI-as-runtime hybrid-shape**) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns or violate established discipline.**
+3. **`ARCHITECTURE.md`** — **v0.20**. Framework-foundation framing elevated to top anchor; pattern-vs-instance discipline tightened with sharp defer rule (v0.20). Seven durable disciplines (pattern-vs-instance + sharp defer rule, archetype-portability, office-vs-department, managed-entity concept, entity-elevation 3-test, glue-not-replacement, **AI-as-runtime hybrid-shape**) + four meta-rules + entity types + scope orthogonality. **Without this, architectural proposals re-suggest already-discarded patterns, violate established discipline, or reproduce pioneer-instance-anchored defer rationales.**
 
 **Read conditionally** (when context calls for it):
 - `docs/strategic-positioning.md` — consulting positioning, marketplace decisions, brand questions, sparring-mode pitch
