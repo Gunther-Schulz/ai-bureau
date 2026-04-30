@@ -16,10 +16,67 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.24 (session 11 — max-effort retroactive review pass across 9 decision records sessions 5-11: framing refinements (instance-anchored defer rationales reframed as chronological); cross-refs to v0.21 discipline added to mcp-fallback-policy + trigger-convention + audit-trail-v1 + audit-trail-v2 as worked examples; sparring-output split refined (acknowledges partial structural enforcement of mechanisms 4+7); skill-expert-agent decision record self-reviewed with tighter skill-granularity criteria + body-type model; informed-defaults principle clarified (templates vs guided-questions for high-variance choices))**.
+Status: **v0.25 (session 11 — greenfield architecture review under VISION lens; 15+ radical alternatives considered, most failing on VISION grounds. Architecture survives clean-slate review. Genuine open questions (#18 substrate, #19 RAG, sparring mechanisms 4-7 empirical) named as load-bearing for future evals. Disqualifying criteria for #18 + #19 derived. See `docs/decisions/greenfield-architecture-review.md`)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.24 → v0.25**: **Greenfield architecture review under VISION
+  lens (max-effort session 11)**. User triggered with: "so it all
+  holds even if we considered throwing it all away and starting
+  fresh? Should align with VISION.md and be radical. Like greenfield
+  lens in context of VISION." Different from retroactive review
+  (which checks "do current decisions hold under current
+  discipline?"). Greenfield asks: "would we make the same decisions
+  starting from scratch with VISION as anchor?"
+
+  **Findings**: 15+ radical alternatives considered. Most failed on
+  VISION grounds (not inertia): AI-only, backend-only, single agent,
+  structured-everywhere, multi-agent A2A from day 1, LLM-as-database,
+  drop sparring schemas, sparring across all skills, drop pattern/
+  instance separation, ECS, imperative orchestration, different
+  framing entirely, conflate memory/references/bausteine, no plugin
+  separation, AI-as-oracle-only. Each fails specific VISION axes.
+
+  **Convergences**: hybrid-shape, multi-layer validation gating,
+  pattern-vs-instance discipline, make-wrong-shapes-impossible,
+  single-big-model archetype, pluggable transport, office→department
+  abstraction, audit-trail v2 single-write, scope orthogonality,
+  all eight disciplines + four meta-rules. Greenfield re-derives
+  these from VISION + foundational constraints.
+
+  **Genuine open questions** (where greenfield WOULD diverge):
+
+  1. **Substrate choice (#18)** — hand-rolled vs agentic framework.
+     Greenfield-derived disqualifying criteria for #18 eval:
+     composes with MCP natively / supports hybrid-shape / Pydantic-
+     compatible / no SQL-DB shapes / sparring composable / audit-
+     trail compatible / pluggable transport / heaviness scales /
+     vendor-neutral. Substrates failing any structural criterion
+     are rejected without deep-eval. Eval transforms from
+     "comprehensive comparison" to "reject obvious mismatches
+     first; deep-eval the 2-4 survivors."
+
+  2. **RAG implementation (#19)** — hand-rolled vs LlamaIndex
+     pluggable. Greenfield-derived pluggable boundary: parsers,
+     chunkers, hybrid retrieval, citation primitives = pluggable
+     candidates; per-reference Pydantic metadata + citation
+     traceability + per-#13 ingestion split = keep custom.
+     Performance comparison on our use case (German legal text,
+     multilingual, per-paragraph chunking).
+
+  3. **Sparring mechanisms 4-7 elevation to structural** — genuine
+     info-gap (NOT manufactured restraint). Anti-sycophancy
+     detection requires false-positive heuristic; asymmetric-
+     respect requires context-sensitivity rules; recommendation-
+     commit requires workflow-stage-dependency rules. Empirical
+     pattern data missing pre-real-sparring-sessions. Defer until
+     5-10 real sparring sessions accumulate; evaluate per mechanism
+     for structural elevation. Anti-pattern guard against premature
+     elevation. Captured for future-session reminder per user
+     direction.
+
+  See `docs/decisions/greenfield-architecture-review.md` for
+  exercise + disqualifying criteria + lifecycle.
 - **v0.23 → v0.24**: **Max-effort retroactive review pass across 9
   decision records (sessions 5-11)**. User raised the question
   whether the prior ultrathink-review pass (xhigh effort) caught

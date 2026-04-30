@@ -371,6 +371,31 @@ adopted.
   - **Community + churn risk** (LangGraph wider community but
     LangChain churn; MS AF Microsoft-maintained; CrewAI smaller;
     etc.)
+- **Future-roadmap items the eval MUST consider** (added session 11):
+  - **Time-driven triggers (Gap A from #12 infrastructure-primitive
+    review)**: framework must compose with server-side scheduler
+    firing "tick" events on schedule. Per #13 deployment flexibility:
+    `register_scheduled_trigger(condition, event_kind, cadence)` MCP
+    tool extends event sources from "skill-emitted only" to "skill-
+    emitted + time-emitted." Load-bearing for proactive deadline
+    warnings, scheduled report generation, automatic Fristverlängerung
+    filing. Tier 2 cloud naturally hosts the scheduler. Substrate
+    candidates that don't compose with scheduled-trigger pattern OR
+    impose a competing scheduler abstraction → friction or rejection.
+  - **Event-driven adapter callbacks (Gap B from #12 infrastructure-
+    primitive review)**: framework must support adapter Protocol's
+    `subscribe_to_changes(callback)` (push) OR `poll_for_changes() ->
+    list[Event]` (pull) per #9 Bundle E (restored from #11 deferral
+    per session-11 sharp-defer audit). External state changes
+    (Lexware webhook on invoice paid; Harvest external timesheet
+    edit; calendar adapter on new meeting) translate to native
+    AuditEvents with `actor_kind=external_agent` +
+    `origin_agent_card=<adapter URL>` per #10's existing design.
+    Substrate candidates that can't compose with adapter callback
+    pattern → friction or rejection.
+  - **Both items together** define the framework's future-event-
+    handling surface. Substrate evaluated for both today + future
+    fits, not just current synchronous request-response patterns.
 - **Output**: `docs/decisions/substrate-agentic-framework.md` —
   multi-framework comparative table + per-candidate gap
   analysis + heaviness scaling assessment + adoption cost
