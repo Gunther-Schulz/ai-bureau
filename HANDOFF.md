@@ -244,6 +244,34 @@ End of session 14 (2026-04-30). Six major work products shipped in batch commit.
 6. **Compliance specialist = strategic asset**: ISO 42001 SoA scaffold cuts cert cost dramatically (€35-90k saved per deployment); marketplace v3 commercial asset.
 7. **Phase0 DACH dominance**: PBS does NOT compete with Phase0 on HOAI/AVA mechanics; positions ABOVE on expertise + audit + multi-actor + sparring.
 
+### Session 14 follow-up commits (2026-04-30 + 2026-05-01)
+
+After main session-14 batch (`c0a97e0`), 5 follow-up commits sharpened + relocated content:
+
+- **`c8f4171`** — pre-RAG queue reorder: locked **#25 → #20 → Bundles → #11 → #24 → #19** order. Preserves #20-informs-Bundle-B-Layer-3 dependency naturally (no provisional annotation). ROADMAP "BLOCKING SUBSTRATE EVALUATIONS" section restructured with explicit pre-RAG queue table at top + historical context below.
+
+- **`1f1095b`** — load-bearing visual references persisted: NEW `ARCHITECTURE.md` "Framework architecture overview" section (4-layer canonical mental model: Substrate / Framework primitives shape-neutral core / Workspace shapes extensions / Concrete instances) + NEW `VISION.md` "Practitioner vs Specialist — vocabulary clarification" subsection (full comparison table). Plus Maintenance discipline rule 3 EXTENDED to cover visual representations.
+
+- **`23517ca`** — VISION scope refactor: VISION had grown to 1181 lines + drifted into ARCH/strategic-positioning territory. Refactored to restore "deepest WHY" focus. REMOVED counter-VISION engagement subsection (~30 lines); MOVED Practitioner vs Specialist comparison to ARCH (full preservation); COMPRESSED VISION ≠ ARCHITECTURE boundary section + VISION lifecycle. Net VISION 1181 → 1065 lines (-116). Tighter scope discipline.
+
+- **`5c24d99`** — VISION-axis → ARCH-implementation mapping table relocation: per scope-refactor audit, the 6-row mapping table was REMOVED with full content (only brief paragraph cross-ref left in VISION). Audit identified as genuinely valuable concrete reference. RELOCATED to `ARCHITECTURE.md` "How ARCH serves VISION — axis-to-implementation mapping" section (immediately after Framework architecture overview).
+
+- **`2431926`** — counter-vision-engagement DR: NEW `docs/decisions/counter-vision-engagement.md` (~3500 words). Substantive intellectual engagement with the dominant 2026 opposing thesis (service-as-software). Multi-disciplinary thinkers covered — Susskind father+son + Frey/Osborne + Harari + Schwab + Bek/a16z (charitable case for) vs Autor + Brynjolfsson (Turing Trap) + Mindell (myth of full autonomy) + Dreyfus + Schön + Suchman + Kahneman + Sunstein/Hastie + Pasquale + Russell + Toyama + O'Reilly + Ming (anti-replacement / amplify case). Empirical record per industry (medicine + law + finance + aviation + customer service + Stanford workslop). Three sharp positioning claims. The 4 argument bullets (relocated from removed VISION counter-VISION subsection) live here as PBS's spine. Reference list: 17 foundational works. VISION cross-ref added in Foundations section. Strategic-positioning.md keeps fundraising-risk angle separately (different concern; complementary).
+
+**Net session 14 + follow-up output**:
+- 4 NEW DRs: `closest-neighbors-deep-read.md`, `shape-extension-and-architectural-floor.md`, `vision-realignment-session14.md`, `counter-vision-engagement.md`
+- VISION + ARCH + ROADMAP + strategic-positioning + failure-mode catalog + HANDOFF substantial updates
+- 4 cloned reference repos at `~/dev/reference/` (letta, opensail, pai, paperclip) for future session use
+- Pre-RAG queue order locked: #25 → #20 → Bundles → #11 → #24 → #19
+- 6 commits total to origin/main (`c0a97e0`, `c8f4171`, `1f1095b`, `23517ca`, `5c24d99`, `2431926`)
+
+**Memory feedbacks applied + tested session 14**:
+- `feedback_propose_before_commit.md` (refined session 13) — decision-phase approval; markdown content phase no per-content approval. Held throughout 14 + follow-ups.
+- `feedback_judgment_and_automate.md` — committed positions throughout; minimal menu-presenting.
+- `feedback_pre_decision_sharpening.md` — Round 1 + Round 2 USER-TRIGGERED rounds applied to VISION re-alignment; decomposition trigger respected (no Round 4).
+- `feedback_full_monty_upfront.md` — comprehensive proposals in initial chat; iterative refinements via user-triggered rounds.
+- `feedback_refine_pareto.md` — applied to scope-refactor audit (force "why?" challenge).
+
 ---
 
 ## Session 13 — #22 terminology + level-boundary re-evaluation shipped (Office → Workspace; Specialist NEW pattern primitive; Department demoted to optional grouping; three-tier framing; marketplace = of specialists)
