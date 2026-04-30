@@ -85,11 +85,22 @@ The shift, concretely:
 - **The texture of how YOUR office actually works — rules,
   exceptions, conventions, the things that make you different —
   lives in prose alongside the data.** Domain experts edit it
-  directly. Engineers aren't gatekeepers for every customization.
+  directly; AI follows the new rule from then on. No code
+  deployment, no engineer round-trip. Adopters inherit working
+  defaults from the pioneer instance — refining from a base, not
+  starting from scratch.
 - **AI participates in actual work production** — drafts,
   reviews, decisions, with audit trail for accountability —
   rather than as discrete bolt-on features ("summarize this
   email," "generate that section").
+- **Scales without enterprise lock-in.** Architecture starts
+  simple (small bureau, single user) and grows naturally with the
+  org: git for change control at small scale, role-based gating
+  when multi-user, department isolation when needed. Same
+  architecture from solo to ~1000 people, without an "enterprise
+  tier" upgrade path. Truly large or regulated deployments have a
+  separate migration path (multi-agent federated infrastructure) —
+  but that's not the default growth curve.
 
 Different addressable space than vertical-SaaS plays. Not "switch
 to our system." Coordination layer, with AI as connective tissue
