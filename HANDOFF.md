@@ -61,36 +61,70 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
-## Session 11 — pre-RAG queue re-ordering (runtime-fabric-first)
+## Session 11 — pre-RAG queue re-ordering + sharp-defer audit
 
-Before substantive #9 work begins, session 11 re-ordered the
-pre-RAG queue. **#9 + #15 + #6 + #7 + #17 pulled forward of
-#11 + #13.** Reasoning:
+Session 11 re-ordered the pre-RAG queue and audited the v1.x
+backlog under the sharp defer rule (see CORE OPERATING FRAME
+above). Order is purely chronological now; instance-anchored
+rationales removed.
+
+**Chronological dependencies driving the queue:**
 
 - **#9's generic entity gate is load-bearing for every later
   commitment** per #16's hybrid-shape principle. Building #11
   (`department.yaml`) or #15 (Client/Actor) before #9 forces
-  per-loader hacks (creating exactly the silent-convergence
-  failure mode #16 is meant to prevent) or one-off gates that
-  #9 has to refactor away.
-- **#11 + #13 are preparation work** for runtimes the user isn't
-  using yet (Cowork end-user mode + Tier-2 cloud) — Gunther is
-  in Claude Code build-phase, no projects bound, no consulting
-  client engaged. Running them in positions 1-2 is 5-8 sessions
-  of refactor with no operational validation feedback.
-- **Skill double-touch tax avoided**: with #6 + #7 retrofits
-  before #11, the Cowork integration sweep works on already-final-
-  shape skills. Single-touch reshape instead of double-touch.
+  per-loader hacks (the silent-convergence failure mode #16 is
+  meant to prevent) or one-off gates that #9 has to refactor.
+- **#15 (Client + Actor) needs #9's entity gate available** to
+  land office-level entities through the canonical write path.
+- **#6 (audit-trail v2 retrofit) references Actor.id** (per #15
+  constraint); needs #15 first.
+- **#11 (Cowork integration) is single-touch only after #6 + #7
+  retrofits**: skills get touched once for retrofit + namespacing
+  + plugin shape, not twice. Running #11 before retrofits = every
+  skill touched twice.
+- **#13 (deployment flexibility) needs #11's plugin shape settled**
+  (pbs.local.md migration in #11) and **#15's Actor entity** for
+  multi-user auth. Both produced earlier in the queue.
+- **#8 (framing skill) codifies pattern-vs-instance reasoning
+  produced by #9** — must follow #9.
 
 The "examine stable schemas" rationale for #9-last predates the
 session-9 reframe — #9 no longer extracts a universal core, it
-designs the contract from scratch. See ROADMAP.md "Recommended
-next-session order" block + per-commitment Order notes for full
-rationale.
+designs the contract from scratch. See ROADMAP.md per-commitment
+Order notes for full chronological rationale.
 
-**Updated pre-RAG queue**:
+**Pre-RAG queue**:
 **#9 → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C → D → Phase 0
 → Phase 1+#14**.
+
+**Sharp-defer audit results (session 11)** — six v1.x backlog
+items pulled forward to v1 pre-launch as framework infrastructure
+required at first-bind for any consulting deployment:
+
+- Tier 2 MCP cross-reference tools (`find_memory_docs_by_reference`,
+  `find_manifest_entry`) → bundles with #7 scope
+- Tier 3 MCP introspection tools (schema introspection helpers +
+  per-project state queries) → bundles with #7 scope
+- Schema migration framework for memory data records → bundles
+  with #9 scope (entity gate IS the migration boundary)
+- Boundary placement refinements from slice 14 (`dedupe_bausteine`,
+  `record_baustein_use` MCP tools) → bundles with #6 scope
+- Manifest Pydantic models from slice 15 → bundles with #9 scope
+  (entity gate generalizes to manifests post-#16 hybrid-shape)
+- #13 cross-tier migration tools (between deployment modes) →
+  stays in #13, removed from "deferred to post-RAG"
+
+**One scope reversal** — Bundle E (adapter Protocol shape) moves
+back from "DEFERRED to #11" to **in #9 implementation**. The
+Protocol interface is framework infrastructure; doesn't depend
+on a concrete adapter consumer. Concrete adapters in #11
+implement against the #9-produced Protocol.
+
+**Activation skill** (`activate-department` + session-open
+detection) lands in #9 implementation phase, not deferred to
+#11. Framework infrastructure for any consulting deployment
+with multiple departments at first bind.
 
 ---
 
@@ -368,31 +402,36 @@ defers, not YAGNI.
 **#14 (Memory Bank) added session-8 followup.** **#15 (Client +
 Actor) added session-9 followup #2.**
 
-**Recommended execution order revised session 11** —
-runtime-fabric-first re-ordering. #9 + #15 + #6 + #7 + #17 pulled
-forward of #11 + #13 because the generic entity gate (#9) is
-load-bearing for every later commitment, and #11 + #13 are
-preparation work for runtimes the user isn't using yet (Cowork
-end-user mode + Tier-2 cloud) so they don't unlock current
-capability. See ROADMAP.md "Recommended next-session order"
-block + per-commitment Order notes for full rationale.
+**Recommended execution order (session 11, sharp-defer amended)** —
+chronological dependency chain. #9 + #15 + #6 + #7 + #17 sequence
+the queue ahead of #11 + #13 because (1) the generic entity gate
+(#9) is load-bearing for every later commitment, (2) #11 touches
+every user-facing skill once-only after #6/#7 retrofits land
+(single-touch refactor — running #11 first means double-touching
+every skill), and (3) #13 binds to #11's plugin shape and #15's
+Actor entity for multi-user auth. See ROADMAP.md per-commitment
+Order notes for full chronological rationale.
 
 ```
-Session 11-15: #9  (Department contract + managed-entity + generic entity gate) 4.5-5.5 sessions
+Session 11-16: #9  (Department contract + managed-entity + generic entity gate
+                   + Bundle E + activation skill + schema migration framework
+                   + manifest Pydantic models) 5-6 sessions
                    - Bundle A: dept module + location/registration   (~1 session)
                    - Bundle B: entity gate + Layer 3                  (~1 session)
                    - Bundle C: ProjectEntity migration + phase/lifecycle  (~1 session)
                    - Bundle D: office-config schema additions         (~0.5 session)
-                   - Implementation (Pydantic + gate + migrations)    (1-2 sessions)
-                   Bundle E (adapter Protocol) deferred to #11.
-Session 16-17: #15 (Client + Actor as office-level managed entities)              1-2 sessions
-Session 18-20: #6  (audit-trail v2 retrofit)                                      2-3 sessions
-Session 21:    #7  (bootstrap-write MCP tools)                                    1 session
-Session 22:    #17 (MCP gate coverage comprehensiveness review)                   1 session
-Session 23-27: #11 (Cowork integration refactor + adapter Protocol)               3-5 sessions
-Session 28-30: #13 (deployment flex + Coolify reference deployment)               2-3 sessions
-Session 31-32: #8  (pre-action framing skill)                                     1-2 sessions
-Session 33+:   C (sparring-output integration) → D (plugin version bump)
+                   - Bundle E: adapter Protocol shape (restored)      (~0.5 session)
+                   - Implementation (Pydantic + gate + migrations
+                     + activation skill + schema-migration framework
+                     + manifest Pydantic) 2 sessions
+Session 17-18: #15 (Client + Actor as office-level managed entities)              1-2 sessions
+Session 19-22: #6  (audit-trail v2 retrofit + dedupe_bausteine + record_baustein_use) 3-4 sessions
+Session 23:    #7  (bootstrap-write MCP tools + Tier 2/3 cross-ref + introspection) 1-2 sessions
+Session 24:    #17 (MCP gate coverage comprehensiveness review)                   1 session
+Session 25-29: #11 (Cowork integration refactor + concrete adapter implementations) 3-5 sessions
+Session 30-32: #13 (deployment flex + Coolify reference + cross-tier migration tools) 2-3 sessions
+Session 33-34: #8  (pre-action framing skill)                                     1-2 sessions
+Session 35+:   C (sparring-output integration) → D (plugin version bump)
 Then:          Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 ```
 
@@ -440,10 +479,12 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   (creating exactly the silent-convergence failure mode #16
   prevents) or one-off gates #9 has to refactor.
 
-- **Bundle structure (session-11 reorganization)**: scope expanded
-  from 2-3 sessions to **4.5-5.5 sessions** to handle 7 coupled
-  open decisions properly. Restructured as 5 design bundles +
-  implementation. Bundle E deferred to #11.
+- **Bundle structure (session-11 reorganization, sharp-defer
+  amendment)**: scope expanded from 2-3 sessions to **5-6
+  sessions** to handle 7 coupled open decisions properly + Bundle
+  E (adapter Protocol shape, restored) + activation skill +
+  schema migration framework + manifest Pydantic models.
+  Restructured as 5 design bundles + implementation.
 
   | Bundle | Decisions | Status |
   |---|---|---|
@@ -451,7 +492,7 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   | **B** — Entity gate + Layer 3 | `read_entity`/`write_entity`/`list_entities` signatures, error model, body-preservation, cross-ref validation tightness; Layer 3 mechanism (Option C `metadata: dict` is leading position — but see "metadata rename gap" consideration below) | Pending |
   | **C** — ProjectEntity migration + phase/lifecycle | ProjectState → ProjectEntity field-by-field plan; `phase: str` → `phases: dict[str, str]`; `lifecycle: Lifecycle` → `lifecycle: dict[str, Lifecycle]` | Pending |
   | **D** — Office-config schema additions | `departments.<name>.entities.<entity>.{mode,adapter,config}` shape; override-layer pattern with department.md | Pending |
-  | **E** — Adapter Protocol shape (Gap B) | subscribe vs poll vs both; Pydantic Protocol interface | **DEFERRED to #11** (no consumer until first adapter-mode entity ships) |
+  | **E** — Adapter Protocol shape (Gap B) | subscribe vs poll vs both; Pydantic Protocol interface | **In #9** (Protocol design is framework infrastructure; concrete adapters in #11 implement against it) |
 
 - **Per #12 constraints** (lands in Bundle C): per-department phase
   tracking (`phases: dict[str, str]`), per-department lifecycle
@@ -626,12 +667,13 @@ session 11)**:
   `integrate-department` skill creation.
 - **Per #10 constraint**: plugin agents emit events as
   `actor_kind="skill", actor_card=<agent-name>`.
-- **Why moved from position 1 to position 6**: #11 is preparation
-  work for Cowork as end-user runtime — Gunther is in Claude Code
-  build-phase today, not Cowork operate-phase. Running #11 here
-  means the skill refactor pass works on already-final-shape
-  skills (post-#6/#7 retrofits), single-touch instead of
-  double-touch.
+- **Why position 6 (chronological)**: #11 touches every
+  user-facing skill (namespacing, `<example>` blocks, plugin
+  shape conformance). Running it before #6 + #7 retrofits =
+  double-touching every skill (first for plugin shape, then for
+  audit-trail v2 + bootstrap-write retrofits). Position 6 is
+  single-touch — every skill gets one combined refactor pass
+  using the already-final post-retrofit shape.
 - 3-5 sessions; substantial refactor touching every user-facing
   surface.
 

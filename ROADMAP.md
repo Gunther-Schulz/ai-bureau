@@ -93,17 +93,19 @@ splitting in the wrong place.
 - Test surface: how does a meta-review plugin test itself without
   a domain to review? Likely with a stub reference domain.
 
-### Tier 2 MCP cross-reference tools (during first project work) — partial
+### Tier 2 MCP cross-reference tools — pulled forward to v1 (session 11)
 
 **Status**: `find_bausteine_by_reference` landed in session 4 (see
-`backend/mcp-server/src/pbs_mcp/tools/memory.py`). The remaining
-two tools below are deferred until the first reference refresh
-fires and the manual fallback proves friction.
+`backend/mcp-server/src/pbs_mcp/tools/memory.py`). Remaining two
+tools below pulled forward from v1.x to v1 pre-launch under
+sharp-defer audit (session 11) — framework cross-reference
+infrastructure for any consulting deployment at first bind. Bundle
+with **#7 (bootstrap-write MCP tools)** since both extend the
+MCP tool surface for contract-bearing files.
 
 **Why**: When `research-references` updates a law and needs to
 find every dependent baustein and memory doc, the cross-reference
-graph is partial — bausteine lookup landed but memory-docs and
-manifest-entry single-lookup are still planned.
+graph must be complete — partial coverage produces silent gaps.
 
 **Sketch (remaining)**:
 
@@ -112,9 +114,6 @@ manifest-entry single-lookup are still planned.
 - `find_manifest_entry(id)` — single-entry lookup across the
   union of in-scope manifests.
 
-Build when the first reference refresh fires and the manual
-fallback proves friction.
-
 > **Tier 1 MCP discovery layer** (`list_reference_manifests`,
 > `list_doctypes_manifests`, `list_skills`, `list_skeletons`,
 > `list_bausteine`) landed in session 4 — see
@@ -122,12 +121,16 @@ fallback proves friction.
 > `tools/memory.py`. Removed from this ROADMAP per "Tracking
 > conventions" rule.
 
-### Tier 3 MCP introspection tools (deferred)
+### Tier 3 MCP introspection tools — pulled forward to v1 (session 11)
 
 **Why**: Skills currently know office-config schema field paths
 (`office_config.office.signature_block` etc.); changes to schema
 ripple through every skill. Same for per-project state queries
-that today are file-grep.
+that today are file-grep. Schema introspection is framework
+infrastructure for any deployment — pulled forward from v1.x to
+v1 pre-launch under sharp-defer audit (session 11). Bundle with
+**#7 (bootstrap-write MCP tools)** since both are MCP-tool-layer
+work.
 
 **Sketch**:
 
@@ -139,113 +142,103 @@ that today are file-grep.
 - `list_office_style_overlays()` — returns the active `.sty`
   stack per active domains.
 
-Don't pre-build. Add when first redundant string-matching is
-observed in real skill code.
-
-### Schema migration framework for memory data records
+### Schema migration framework for memory data records — pulled forward to v1 (session 11)
 
 **Why**: Office-config has migrations
 (`office_config_migrations/v<N>_to_v<N+1>.py`) that forward-migrate
-on load. Memory (record) entities (bausteine, manifests'
-entries, state.md, feedback entries) have no equivalent. Today
-that's fine because PBS has zero saved bausteine — but the moment
-first ingest writes any, the next schema change becomes painful
-(touch every file by hand). The new `verified_against_version`
-field added to `references[]` during the alignment sweep is a
-schema reservation precisely to avoid this pain; the next
-addition still needs migration support.
+on load. Memory (record) entities (bausteine, manifests' entries,
+state.md, feedback entries) have no equivalent. Consulting clients
+save bausteine from day one; framework needs migration support
+ready at first bind. Pulled forward from v1.x to v1 pre-launch
+under sharp-defer audit (session 11). Bundle with **#9 (entity
+gate)** — the entity gate IS the migration boundary (every
+read/write through `read_entity`/`write_entity` is a natural
+migration application point).
 
 **Sketch**:
 - Mirror the office-config pattern: `pbs_core/memory_migrations/`
   per-record-kind (bausteine, manifests, state, feedback) with
   `migrate_v<N>_to_v<N+1>(data: dict) -> dict` exporters.
-- Each record type carries `schema_version: <N>` in frontmatter.
-- The MCP tool that writes (e.g., `save_baustein`,
-  `update_project_state`) checks the schema version on read and
-  applies migrations in-memory; writes back with updated version.
+- Each record type carries `schema_version: <N>` in frontmatter
+  (Layer 1 universal field per #16 hybrid-shape contract).
+- The generic entity gate from #9 (`read_entity`) checks
+  `schema_version` on read and applies migrations in-memory;
+  `write_entity` writes back with updated version.
 - `setup-office` reconcile mode triggers a sweep migration of
   all in-scope records.
 - Decision-rule update in ARCHITECTURE.md: Memory (record) edits
-  go through MCP tools that handle migration, never direct Edit.
+  go through the generic entity gate which handles migration;
+  never direct Edit.
 
-**Pull-forward trigger**: first user-visible session that saves
-a baustein. Until then, no baustein exists to migrate.
-
-### Boundary placement refinements (from slice 14, 2026-04-29)
+### Boundary placement refinements (from slice 14, 2026-04-29) — pulled forward to v1 (session 11)
 
 **Why**: Audit slice 14's first run flagged 3 placement findings —
 deterministic logic that should move from skills into MCP tools,
-or from hardcoded Python into office-config. None are BLOCKERS;
-all are honestly defer-worthy (each requires schema + handler +
-tests for a new tool). Captured here rather than batched into a
-same-session fix to keep diff scope sane. See full audit at
+or from hardcoded Python into office-config. Pulled forward from
+v1.x to v1 pre-launch under sharp-defer audit (session 11): each
+gap is real framework infrastructure for any consulting deployment;
+the prior "honestly defer-worthy (requires schema + handler +
+tests)" rationale was up-front-cost framing, not a chronological
+defer. Bundle with **#6 (audit-trail v2 retrofit)** — both items
+touch baustein frontmatter, single retrofit pass over save-baustein
++ record-feedback skills. See full audit at
 `docs/audits/boundary-adherence-20260429.md`.
 
-The middle item (path_classification) was the highest-priority
-of the three and was landed in-session as a purely-additive v3
-optional block (no schema bump). Two remaining items below.
+The middle item (path_classification) was landed in-session as a
+purely-additive v3 optional block (no schema bump). Two remaining
+items below pulled forward.
 
 **Sketch — two independent items**:
 
 - **`dedupe_bausteine` MCP tool**: dedupe procedure currently
   described in `save-baustein/SKILL.md` lines 65-75 (title + tag
   overlap matching). Move algorithm into MCP tool with reproducible
-  scoring rule + Pydantic candidate output schema. Pull-forward
-  trigger: when matching grows beyond title+tag (HyDE paraphrase
-  search via search_corpus over indexed bausteine is already
-  flagged as the next iteration).
+  scoring rule + Pydantic candidate output schema. Phase-2 (HyDE
+  paraphrase search via search_corpus over indexed bausteine)
+  becomes its own iteration when corpus indexing lands.
 
 - **`record_baustein_use` MCP tool**: `record-feedback/SKILL.md`
   lines 117-120 directs direct `Edit` of baustein frontmatter
   fields `rejected_uses[]` / `successful_uses[]`. Skill itself
-  flags this as known debt ("future MCP tool record_baustein_use
-  could atomicize"). Build the tool: takes baustein name +
-  scope/key + kind ∈ {rejected, successful} + project/date/feedback_path,
-  owns frontmatter mutation with validation. Pull-forward trigger:
-  when frontmatter gains cross-reference structure (e.g., feedback_id
-  linking).
+  flags this as known debt. Build the tool: takes baustein name +
+  scope/key + kind ∈ {rejected, successful} +
+  project/date/feedback_path, owns frontmatter mutation with
+  validation.
 
-### Manifest Pydantic models (from slice 15, 2026-04-29)
+### Manifest Pydantic models (from slice 15, 2026-04-29) — pulled forward to v1 (session 11)
 
 **Why**: Audit slice 15's first run found that manifest YAMLs
 (references-manifest.yaml, doctypes.yaml) carry their meta-rule-3
 invalidation contracts (top-level `last_updated`, per-entry
 `last_fetched`, `checksum_sha256`) by author discipline only —
-no Pydantic model validates the structure at parse time. All 8
-currently-populated manifests honor the contract (verified by
-spot-check), but a future malformed manifest would slip through
-without a parse-time error.
+no Pydantic model validates the structure at parse time. Manifest
+validation is framework infrastructure for any consulting
+deployment; pulled forward from v1.x to v1 pre-launch under
+sharp-defer audit (session 11). Bundle with **#9 (entity gate)** —
+post-#16 hybrid-shape, manifests migrate to per-entity md files
+and the generic entity gate IS the manifest validator (Layer 1 +
+Layer 2 frontmatter Pydantic dispatch).
 
 See full analysis at
 `docs/audits/invalidation-contract-20260429.md` finding F1.
 
 **Sketch**:
 
-- New `pbs_mcp/manifest_schema.py` (or fold into `schemas.py`):
-  - `ReferencesManifest` — top-level: required `version`, `scope`,
-    `scope_key`, `last_updated`, `maintainer`; optional
-    `categories` block.
-  - `ReferenceEntry` — per-entry: required `id`, `title`,
-    `source_url`, `fetch_method`, `canonical_path`; optional
-    `last_fetched`, `checksum_sha256`, `current_amendment_form`,
-    `notes`.
-  - `DoctypesManifest` — analogous shape for doctypes manifests.
-- Loader path: `config.py:all_references_manifests()` (or peer)
-  validates each manifest via Pydantic on load; raises descriptive
-  error if shape violates contract.
-- New MCP tool `validate_manifest(path) → list[Finding]` exposed
-  for explicit validation calls (used by `author-manifest` skill
-  and slice 15 re-runs).
+- Per #16 hybrid-shape contract, manifest entries become per-entity
+  md files (e.g., `extensions/universal/references/<id>.md`) with
+  Layer 2 type-specific Pydantic subclass (`ReferenceEntity`,
+  `DoctypeEntity`). The entity gate from #9 validates at every
+  read/write.
+- Top-level manifest fields (`version`, `scope`, `scope_key`,
+  `last_updated`, `maintainer`) become frontmatter fields on a
+  per-scope `manifest.md` registration file (parallel to
+  `department.md` from #9 Bundle A) OR fold into existing
+  registration files.
+- `validate_manifest(path) → list[Finding]` MCP tool layered on
+  the entity gate for explicit validation calls.
 - Discovery tool's `ManifestInfo` response schema stays Optional
-  on contract fields — that's correct shape for graceful failure
-  reporting; validation is the loader's responsibility, not the
-  discovery tool's.
-
-**Pull-forward trigger**: before first multi-author manifest
-contribution OR before manifest-population grows past ~15 files
-where author-discipline visual checking stops scaling. PBS today
-has 8 manifests authored by one person; the visual check is
-trivial. Post-second-deployment, this becomes load-bearing.
+  on contract fields — graceful failure reporting; validation is
+  the gate's responsibility.
 
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)
 
@@ -524,21 +517,38 @@ ROADMAP v2 "AI-office builder" entry.
     {mode, adapter, config}` + interaction with `department.md`
     declarations (override layer pattern). **Why fourth**: mostly
     mechanical once A is settled.
-  - **Bundle E — Adapter Protocol shape (Gap B)**: **DEFERRED to
-    #11** per session-11 decision. `subscribe_to_changes(callback)`
-    vs `poll_for_changes()` vs both — zero adapter-mode entities
-    today; designing the Protocol without a concrete consumer =
-    under-specified. First adapter-mode entity ships with #11
-    (Cowork integration's invoicing/PM scaffolding); Bundle E lands
-    in #11's scope at that point.
+  - **Bundle E — Adapter Protocol shape (Gap B)** (~0.5 session,
+    restored to #9 per session-11 sharp-defer audit). Pydantic
+    Protocol interface: `subscribe_to_changes(callback)` (push) vs
+    `poll_for_changes() -> list[Event]` (pull) vs both. Adapter-
+    emitted events translate to AuditEvents with
+    `actor_kind=external_agent` + `origin_agent_card=<adapter URL>`
+    per #10's existing design. **Why in #9** (not deferred to #11):
+    Protocol interface is framework infrastructure — the
+    abstraction shape (subscribe vs poll, signature, error model,
+    Pydantic interface) doesn't depend on a specific concrete
+    adapter consumer. Concrete adapters (Lexware, Harvest, Personio)
+    in #11 + #13 + #15 implement against the #9-produced Protocol.
+    Original "no consumer until first adapter-mode entity ships"
+    rationale was up-front-cost framing rejected under v0.20 sharp
+    defer rule.
 
-- **Scope (revised session 11)**: ~3.5 design sessions
-  (A + B + C + half of D) + 1-2 implementation sessions
-  = **4.5-5.5 sessions total** (was 2-3). Expansion warranted —
-  per #16's failure-mode catalog, rushed architectural decisions
-  produce silent-convergence + SQL-DB-trap failure modes; spending
-  the time matches discipline. User explicitly accepted scope
-  trade in session 11.
+- **Scope (revised session 11, sharp-defer amended)**: ~4 design
+  sessions (A + B + C + half of D + E) + 2 implementation sessions
+  = **5-6 sessions total** (was 4.5-5.5; further expanded under
+  sharp-defer audit to absorb Bundle E + activation skill + schema
+  migration framework + manifest Pydantic models). Expansion
+  warranted — per #16's failure-mode catalog, rushed architectural
+  decisions produce silent-convergence + SQL-DB-trap failure modes;
+  spending the time matches discipline. Items absorbed under
+  sharp-defer audit: (1) **Bundle E adapter Protocol shape**
+  (restored from #11 deferral); (2) **`activate-department` skill
+  + session-open detection sub-skill** (framework infrastructure
+  for any consulting deployment with multiple departments at
+  first bind); (3) **Schema migration framework for memory data
+  records** (entity gate IS the migration boundary); (4) **Manifest
+  Pydantic models** (post-#16 hybrid-shape, manifests migrate to
+  per-entity md files validated by the generic entity gate).
 - **Connection to commitment #8 (framing skill)**: framing skill
   builds on this work — the reasoning produced here becomes the
   pattern-vs-instance reasoning the framing skill codifies for
@@ -585,6 +595,31 @@ ROADMAP v2 "AI-office builder" entry.
     scan) implementation, parallel to slice 20.
   - **Design-review target 12** (entity authoring conformance)
     implementation, parallel to target 11.
+
+- **Per session-11 sharp-defer audit (additional v1 absorptions)**:
+  the following items, previously v1.x, are absorbed into #9
+  scope as framework infrastructure for first-bind consulting
+  deployments:
+  - **`activate-department` skill + session-open detection
+    sub-skill**: validates candidate `department.md` against
+    `DepartmentEntity` Pydantic; conflict-checks managed-entity
+    type names against active departments; appends to
+    `departments_active`; emits `department_activated` AuditEvent
+    with `convention_applied` field per governance-and-identity-
+    sourcing decision 4. Session-open sub-skill globs
+    `extensions/department/*/` vs `departments_active`, surfaces
+    candidates.
+  - **Schema migration framework for memory data records**:
+    `pbs_core/memory_migrations/` per-record-kind exporters;
+    Layer 1 `schema_version` field; entity gate applies migrations
+    on read; `setup-office` reconcile mode triggers sweep
+    migration. See "Schema migration framework" v1.x entry
+    (pulled forward).
+  - **Manifest Pydantic models**: post-#16 hybrid-shape, manifests
+    migrate to per-entity md files; entity gate's Layer 2 Pydantic
+    dispatch IS the manifest validator. `validate_manifest(path)`
+    MCP tool layered on the gate. See "Manifest Pydantic models"
+    v1.x entry (pulled forward).
 
 **10. A2A schema compatibility + Gemini Enterprise pattern
 emulation decision gate** — see
@@ -709,20 +744,21 @@ context" section.
 - **Scope**: **3-5 sessions** (was 1-2; revised under deep-
   integration directive). Substantial work touching every
   user-facing surface.
-- **Order note (revised session 11)**: execute SIXTH in pre-RAG
-  queue (after #9 entity gate + #15 Client/Actor + #6 audit-trail
-  v2 + #7 bootstrap-write + #17 gate coverage review). Reason for
-  the move from position 1 to position 6: #11 is preparation work
-  for Cowork as the end-user runtime — Gunther is in Claude Code
-  build-phase today, not Cowork operate-phase, so #11 doesn't
-  unlock current capability. The 3-5 session refactor pass runs
-  on **already-final-shape skills** when it lands here (every
-  skill has been touched by #6/#7 retrofits + uses the generic
-  entity gate from #9), so it's a single-touch reshaping pass
-  rather than the first-of-two-passes the original ordering
-  produced. `department.yaml` adopts hybrid-shape from inception
-  per #16; the generic `read_entity` / `write_entity` gate from
-  #9 is the canonical loader (no per-loader hack). A2A decisions
+- **Order note (revised session 11, sharp-defer amended)**:
+  execute SIXTH in pre-RAG queue (after #9 entity gate + #15
+  Client/Actor + #6 audit-trail v2 + #7 bootstrap-write + #17 gate
+  coverage review). Chronological reason: #11 touches every
+  user-facing skill (namespacing, `<example>` blocks, plugin shape
+  conformance). Running it before #6 + #7 retrofits = double-
+  touching every skill (first for plugin shape, then for
+  audit-trail v2 + bootstrap-write retrofits). Position 6 is
+  single-touch — every skill gets one combined refactor pass on
+  the already-final post-retrofit shape. `department.yaml` adopts
+  hybrid-shape from inception per #16; the generic `read_entity`
+  / `write_entity` gate from #9 is the canonical loader (no
+  per-loader hack). Adapter Protocol shape (Gap B) lands in #9
+  Bundle E (restored from #11 deferral); concrete adapters
+  implement against the #9-produced Protocol here. A2A decisions
   inform whether agent-card identity matters for Cowork-deployed
   offices. Before D (plugin version bump). Before #13 (deployment
   flexibility — needs Cowork plugin shape settled).
@@ -736,19 +772,12 @@ context" section.
   See `docs/decisions/ai-as-runtime-hybrid-shape.md` for full
   Layer-1 + Layer-2 + body-conventions spec.
 
-- **Bundle E from #9 absorbed (session-11 decision)** — adapter
-  Protocol shape (Gap B from #12 infrastructure-primitive review)
-  lands in #11's scope, not #9. Specifically: `subscribe_to_changes
-  (callback)` (push) vs `poll_for_changes() -> list[Event]` (pull)
-  vs both. Adapter-emitted events translate to AuditEvents with
-  `actor_kind=external_agent` + `origin_agent_card=<adapter URL>`
-  per #10's existing design. **Why #11**: first adapter-mode
-  managed entity ships with #11 (Cowork integration's
-  invoicing/PM scaffolding). Protocol design without a concrete
-  consumer = under-specified; folding into #11 means the design
-  has the first real adapter to test against. Adapter Protocol
-  Pydantic interface is decided here; concrete adapters (Lexware,
-  Harvest) follow per-deployment.
+- **Adapter Protocol consumers (restored to #9 per session-11
+  sharp-defer audit)**: the Protocol interface itself is designed
+  in #9 Bundle E. #11 implements concrete adapters against it as
+  Cowork integration scaffolds first invoicing/PM adapter-mode
+  entities. Concrete adapter implementations (Lexware, Harvest,
+  etc.) follow per-deployment.
 - **Studying anthropics/knowledge-work-plugins repo**: planned
   as a discovery activity that informs this commitment. Multiple
   plugins are relevant to our work — not just for "how to
@@ -991,14 +1020,23 @@ migration path" + commitment #10's HTTP MCP decision.
       Tier 1 local deployment can run it as a backend service or
       skip it (interactive-only mode).
 
-  **Deferred to post-RAG**:
+  **In #13 pre-launch scope (sharp-defer amended session 11)**:
+  - **Migration tools (between deployment modes / clouds)** —
+    pulled forward from "deferred to post-RAG" per session-11
+    sharp-defer audit. Cross-tier migration (Tier 1 ↔ Tier 2;
+    cloud A → cloud B) is framework infrastructure for any
+    consulting deployment that may change tier (most do over
+    time). Bidirectional, well-tested. Implementation in #13's
+    pre-RAG scope.
+
+  **Stays per-deployment / per-engagement (NOT framework-level)**:
   - Compute infrastructure choice for OTHER consulting clients
-    (per-deployment decision; Coolify is just Schulz's
-    reference; clients may use Cloud Run / Fly.io / their own
-    K8s / etc.). Architecture supports any.
-  - Migration tools (between deployment modes / clouds).
-    Bidirectional, well-tested. Implement as needed.
-  - Cost model for consulting deployments (per-engagement).
+    (per-deployment decision; Coolify is Schulz's reference;
+    clients may use Cloud Run / Fly.io / their own K8s / etc.).
+    Architecture supports any; specific selection is a per-engagement
+    decision, not framework infrastructure.
+  - Cost model for consulting deployments — per-engagement
+    pricing, not framework code.
 - **Output**:
   - Decision record `docs/decisions/deployment-mode-
     flexibility.md` — abstraction interfaces + per-mode
@@ -1018,21 +1056,22 @@ migration path" + commitment #10's HTTP MCP decision.
   - Post-RAG: additional cloud backends (CloudObject for
     non-Coolify clients), additional auth modes, migration
     tools, hardening (3-5 sessions, post-launch as needed)
-- **Order note (revised session 11)**: execute SEVENTH in pre-RAG
-  queue (after #9 + #15 + #6 + #7 + #17 + #11). Reason for the
-  move from position 4 to position 7: #13 is preparation work for
-  Tier-2 cloud deployment with multi-user readiness — Gunther
-  uses local stdio today, no consulting client engaged yet, so
-  multi-user + Coolify deployment doesn't unlock current
-  capability. The original "must influence #6/#7/#9 schema work"
-  argument no longer holds: persistence-layer abstraction is
-  surfaced via the Pydantic model boundary (which #9 is designing
-  from scratch via the generic entity gate); transport
-  abstraction is already decided (#10's HTTP MCP commitment); #6
-  + #7 retrofits don't depend on the persistence backend choice.
-  #13 still needs #11's plugin shape settled (original logic
-  preserved). Multi-user auth in #13 binds to Actor entity from
-  #15 (already produced earlier in the queue).
+- **Order note (revised session 11, sharp-defer amended)**:
+  execute SEVENTH in pre-RAG queue (after #9 + #15 + #6 + #7 +
+  #17 + #11). Chronological dependencies: persistence-layer
+  abstraction surfaces via the Pydantic model boundary which #9
+  designs via the generic entity gate; transport abstraction
+  already decided (#10's HTTP MCP commitment); #6 + #7 retrofits
+  don't depend on persistence backend. **#13 needs #11's plugin
+  shape settled** (pbs.local.md migration in #11 produces the
+  config surface #13 deploys against). **Multi-user auth in #13
+  binds to Actor entity from #15** (Actor.id + Actor.roles are
+  the auth primitives). All upstream dependencies produced
+  earlier in the queue. Original instance-anchored framing
+  ("Gunther uses local stdio today, no consulting client engaged
+  yet") removed under v0.20 sharp defer rule — #13 is framework
+  infrastructure for every consulting deployment at first bind,
+  regardless of PBS-Schulz's current local-only state.
 
 - **Governance scaling architectural arc** (session-11 decision —
   see `docs/decisions/governance-and-identity-sourcing.md`):
