@@ -16,10 +16,49 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.26 (session 11 — VISION.md greenfield review under max-effort: three axes hold, foundations correct, architectural requirements load-bearing. 6+ alternative axis-frames considered + rejected. Sharpenings applied: sparring mechanisms structural/behavioral split table added; framework-foundation framing foregrounded in pioneer-instance section)**.
+Status: **v0.27 (session 11 — ARCH disciplines greenfield review under max-effort: all 8 disciplines + 4 meta-rules + reference card + validation-gating-overview + maintenance rules survive clean-slate. Skill-granularity discipline elevated to ARCH-level as sub-section under entity-elevation discipline ("Elevation analogue for skills") — parallel structure to entity-elevation 3-test, distinct criteria (distinct workflow + distinct output + reuse). Was previously only in plugin-conventions §14 + skill-expert-agent decision record)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.26 → v0.27**: **ARCH disciplines greenfield review under
+  max-effort (session 11)**. After VISION greenfield review (v0.26)
+  showed VISION holds, applied max-effort + greenfield lens to
+  ARCH disciplines themselves: would we name these starting fresh,
+  or different ones?
+
+  **Findings**: All 8 design disciplines / operational principles +
+  4 meta-rules + reference card + validation-gating-overview +
+  maintenance rules survive clean-slate. Each addresses a distinct
+  failure mode the architecture must defend against; greenfield
+  would re-derive each from VISION + foundational constraints.
+
+  Mergers / retirements considered + rejected:
+  - Pattern-vs-instance + sharp defer rule combined — already
+    grouped; works.
+  - Glue-not-replacement folded into meta-rule 1 — different
+    concerns (deployment portability vs strategic boundary).
+  - Sharp defer rule + framework-foundation framing combined —
+    tightly composed but address different aspects (when to defer
+    vs which scope to optimize for).
+  - Validation-layering + make-wrong-shapes combined — different
+    abstraction levels.
+  - Meta-rules 2+3 combined — same hierarchy as pattern-vs-instance
+    / meta-rule 1; keep both at respective levels.
+
+  **One refinement applied**: skill-granularity discipline
+  elevated to ARCH-level. Previously lived only in
+  plugin-conventions §14 + skill-expert-agent decision record.
+  Greenfield: parallel concepts deserve parallel placement. Entity-
+  elevation discipline has its own ARCH section; skill-granularity
+  is its parallel concept (when to elevate to its own skill,
+  analogous to when to elevate to its own entity). Added as
+  sub-section "Elevation analogue for skills" under entity-
+  elevation discipline. Same restraint-in-elevation principle;
+  distinct criteria (workflow + output + reuse vs identity +
+  state + lifecycle).
+
+  No real-revise items. Discipline framework is sound; one
+  parallel-concept elevation applied for consistency.
 - **v0.25 → v0.26**: **VISION.md greenfield review under max-
   effort (session 11)**. After greenfield architecture review
   (v0.25) showed architecture survives clean-slate, the user
@@ -1127,6 +1166,84 @@ defense in depth.
 See `docs/decisions/office-vs-department.md` "When to elevate to
 managed entity (the three-test discipline)" subsection for the
 full reasoning + examples.
+
+### Elevation analogue for skills (added v0.27 — skill-granularity criteria)
+
+The same restraint-in-elevation discipline applies to skills, but
+with different criteria. Where entity-elevation asks "is this
+concept entity-shaped (vs event / nested / memory / config)?",
+**skill-elevation** asks "is this concept skill-shaped (vs
+in-skill content distributed across body + references + memory +
+process entities)?"
+
+**The skill-granularity principle**:
+
+> **Prefer distributed in-skill content (body prose + skill
+> references + memory bausteine + process entities + RAG corpus)
+> over new specialist skills. Elevate a topic to its own skill
+> only when distinct workflow + distinct output + reuse across
+> projects ALL apply.**
+
+**The 3-test for skills** (parallel structure to entity-elevation
+3-test, distinct criteria):
+
+| Test | Question | Why it matters |
+|---|---|---|
+| **Distinct workflow** | Does the topic have its own multi-step interaction shape that doesn't fit inside a broader skill's workflow? | A topic that uses an existing skill's workflow with parameter modifications is in-skill content, not a new skill. |
+| **Distinct output** | Does the topic produce a distinct artifact / output the user receives, not a section/variant of a broader skill's output? | A topic producing a section of an existing skill's output is in-skill content. |
+| **Reuse across projects** | Does the topic's workflow + output recur across multiple projects? | Single-project niche topics stay as in-skill content (or per-project memory). |
+
+**Worked example — §13a-Verfahren**:
+- Distinct workflow? **No** — drafting under §13a uses the SAME
+  Begründungs-writing workflow as Regelverfahren, with §13a-
+  specific modifications (drop Umweltbericht section, add §13a-
+  citation template). The workflow is the SAME skill, parameterized.
+- Distinct output? **No** — output is still a Begründung.
+- Reuse across projects? Yes (any project under §13a) — but
+  doesn't satisfy 1+2.
+
+→ **Fails skill-granularity criteria. Lives as distributed
+content fueling the broader Begründungs-writer skill** (per
+`docs/decisions/skill-expert-agent-and-domain-knowledge.md`
+Decision 4).
+
+**Why this matters** (parallel to entity-elevation reasoning):
+pre-emptively elevating fine-grained topics to separate skills
+creates skill sprawl, fragmented routing, harder maintenance, and
+loses the AI-as-runtime-composes advantage. Per
+AI-as-runtime hybrid-shape principle: AI composes per-context
+behavior at runtime from distributed sources (process entity +
+references + skill body + memory). Topic-shaped content fueling a
+broader skill is the canonical AI-as-runtime application.
+
+**Anti-patterns the skill-granularity discipline catches**:
+
+- ❌ Creating `§13a-Verfahren-expert` skill that duplicates
+  Begründungs-writer's workflow with §13a tweaks. Should be
+  in-skill content (process entity + references + skill body
+  knows-when-to-read).
+- ❌ Creating per-doctype-section skills (`section-1-introduction-
+  expert`). Each section is a sub-step within doctype-drafting,
+  not a distinct workflow.
+- ❌ Creating per-edge-case skills (`late-Stellungnahme-handler`).
+  Edge cases are conditions within process entities + skill
+  body branching, not distinct skills.
+
+**When elevation IS warranted**: when a concept genuinely has
+distinct workflow + output + reuse — like `verify-citations`
+(distinct workflow: walk every citation, fetch source, verify
+quote; distinct output: citation-verification report; reuse:
+every drafting cycle). That passes all 3 tests.
+
+**Composition with entity-elevation**: a topic might fail
+skill-elevation but PASS entity-elevation (e.g., a Process entity
+that's stateful with phases + lifecycle is an entity, not a
+skill). The two analogues compose — every concept gets evaluated
+against its appropriate elevation criteria.
+
+**Source of truth**: `docs/decisions/skill-expert-agent-and-
+domain-knowledge.md` Decision 4 + `docs/plugin-conventions.md`
+§14 (skill granularity guidance).
 
 ---
 
