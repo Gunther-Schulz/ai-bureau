@@ -268,6 +268,11 @@ Skills/orchestrator code uses Protocol-typed Substrate; substrate-specific primi
 
 ## Recommendations
 
+**Detailed decision records (session 12 — 2-round sharpening per recommendation; first-class peers + S1-S4 + T1-T8 refinements incorporated)**:
+- **R3a → `docs/decisions/in-process-mcp-server.md`** — `TransportMode` enum (IN_PROCESS + SUBPROCESS as first-class peers); `Substrate.register_mcp_server()` Protocol method
+- **R3b → `docs/decisions/eval-framework-adoption.md`** — hybrid MS AF eval primitives adoption + PBS-specific evaluators + scenarios as entities (S1-S4 schema field refinements: scope_dimension, applicable_substrates, applicable_tiers, result reporting shape)
+- **R3c → `docs/decisions/permission-abstraction.md`** — unified `Substrate.request_permission()` Protocol method + `PermissionDecisionKind` enum (7 kinds) + Permission gates vs Quality gates architectural distinction (T1-T8 refinements: per-kind context schemas, PermissionRequest as entity at Tier 2+, revocation, dev-mode escape hatch, scheduled/autonomous flow handling, expires_at, delegated_from, PermissionUIPayload)
+
 ### R1: Adopt PRIMITIVES-ONLY from BOTH substrates regardless of primary choice
 
 Per the SDK deep-read, BOTH substrates have value-adds worth adopting selectively:
