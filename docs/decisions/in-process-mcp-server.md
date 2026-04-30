@@ -1,6 +1,6 @@
 # Decision record: In-process MCP server adoption (R3a from #21 SDK deep-read)
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + first-class peers reframing)
+**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + first-class peers reframing + M1-M11 refinements)
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3a); composes with #18 substrate decision; lands at #11 Cowork integration
 **Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol where this method lives), `sdk-deep-read.md` (#21 — origin findings), `mcp-fallback-policy.md` (fail-closed corollary applies), `permission-abstraction.md` (R3c — permission flow fires before tool dispatch), `eval-framework-adoption.md` (R3b — `mcp_gate_parity` scenario type validates both transport modes)
 
@@ -16,12 +16,38 @@ The R3a question: do we adopt in-process pattern as PRIMARY for Claude Agent SDK
 
 **Adopt in-process MCP via Claude Agent SDK for PBS-native gates as PRIMARY. Both `IN_PROCESS` + `SUBPROCESS` are first-class architectural peer choices via `TransportMode` enum.**
 
-### Substrate Protocol method
+### Substrate Protocol method + supporting types (M1, M2, M7 from round 2 sharpening)
 
 ```python
 class TransportMode(Enum):
     IN_PROCESS = "in_process"
     SUBPROCESS = "subprocess"
+
+class MCPServerLifecycle(Enum):
+    REGISTERED = "registered"
+    ACTIVE = "active"
+    STOPPING = "stopping"
+    STOPPED = "stopped"
+
+class MCPTool(BaseModel):  # M7: explicit MCPTool shape
+    name: str
+    description: str
+    parameters_schema: dict  # JSON Schema OR Pydantic model dict
+    function: Callable
+    transport_hint: TransportMode | None = None  # optional per-tool override
+
+class MCPServerHandle(BaseModel):  # M1: concrete shape
+    name: str
+    transport: TransportMode  # actual transport used (may differ from requested if fallback per M3)
+    tool_names: list[str]
+    lifecycle: MCPServerLifecycle
+    fallback_occurred: bool  # true if requested != actual
+    registered_at: datetime
+    metadata: dict[str, Any] = Field(default_factory=dict)  # M8: extension for description/version/owner
+    
+    async def stop(self) -> None: ...  # graceful shutdown
+    async def restart(self) -> None: ...  # for dev workflow
+    def get_tool_schema(self, tool_name: str) -> dict: ...  # introspection
 
 class Substrate(Protocol):
     def register_mcp_server(
@@ -30,6 +56,11 @@ class Substrate(Protocol):
         tools: list[MCPTool],
         transport: TransportMode,  # explicit; both modes equally valid; no default
     ) -> MCPServerHandle: ...
+    
+    # M2: Discovery methods (server/tool registry exposed to caller)
+    def list_mcp_servers(self) -> list[MCPServerHandle]: ...
+    def get_mcp_server(self, name: str) -> MCPServerHandle | None: ...
+    def list_available_tools(self) -> dict[str, list[str]]: ...  # {server_name: [tool_names]}
 ```
 
 Per-substrate impl:
@@ -39,6 +70,55 @@ Per-substrate impl:
 | Claude Agent SDK | ✅ Native (`create_sdk_mcp_server`) | ✅ Native (subprocess MCP) |
 | MS AF | ❌ Not supported (graceful fallback to SUBPROCESS + audit-trail emit) | ✅ Native (`MCPStdioTool`/`MCPStreamableHTTPTool`/`MCPWebsocketTool`) |
 | Hand-rolled (Tier 1 fallback) | Direct registration | Subprocess via stdio MCP |
+
+### Transport fallback audit detail (M3)
+
+When MS AF substrate gracefully falls back from `IN_PROCESS` to `SUBPROCESS`, AuditEvent emitted:
+
+```python
+event_kind = "mcp_server_registration_fallback"
+details = {
+    "server_name": str,
+    "requested_transport": "in_process",
+    "actual_transport": "subprocess",
+    "substrate": "ms_agent_framework",
+    "reason": "substrate_does_not_support_in_process",
+}
+```
+
+`MCPServerHandle.fallback_occurred = True` reflects this state. Composes with audit-trail-as-canonical-source for substrate-divergence visibility.
+
+### Tool registration conflict handling (M4)
+
+What if two registrations claim same server name?
+
+**Decision: fail-loud on registration conflict** (per `meta-rule 4` strict-validation discipline + "Make wrong shapes impossible"). No silent override; no first-wins. Caller resolves explicitly via:
+- Renaming one of the conflicting servers
+- Explicit `replace=True` flag on `register_mcp_server` (with audit-trail emission of replacement; only allowed at Tier 1 dev workflows; Tier 2+ requires governance permission per M5)
+
+Tool name collisions WITHIN a server: caller's responsibility to ensure uniqueness; fail-loud at registration time.
+
+Tool name collisions ACROSS servers: impossible by construction per Claude Agent SDK convention `mcp__{server_name}__{tool_name}` namespacing. Server name uniqueness = sufficient.
+
+### Governance for MCP server registration (M5; Tier 2+)
+
+Threat scenario: malicious or careless skill registers a server exposing destructive tools without governance review.
+
+**Decision**: at Tier 2+, MCP server registration requires `GOVERNANCE_WRITE` permission decision (per R3c) with `entity_type: "mcp_server"` + `requested_action: "register"` sub-context. At Tier 1 (single-user trusted), registration auto-allowed + audit-trail emission.
+
+For marketplace gates (per ROADMAP v3): always require explicit user approval to register, regardless of tier.
+
+Composes with R3c `permission-abstraction.md` `GovernanceWriteContext` schema (entity_type field accepts `mcp_server` value).
+
+### Observability across transport boundaries (M6)
+
+OpenTelemetry traces should span across:
+- IN_PROCESS tool calls (single-process spans; trivially captured)
+- SUBPROCESS MCP tool calls (cross-process spans; need OTel propagation through stdio MCP)
+
+Substrate impl responsibility: ensure OTel context propagates through MCP transport. Documented in #13 deployment flexibility (observability story).
+
+For Phase 0 / Tier 1: OTel optional; logging-only sufficient. For Tier 2+: OTel required; substrate impl validates propagation.
 
 ### Decision principle for caller (documented convention; NOT enforced)
 
@@ -99,6 +179,12 @@ Implemented as scenario type `mcp_gate_parity` in R3b eval framework (per cross-
 | `mcp-fallback-policy.md` (fail-closed corollary) | Both transport modes apply fail-closed; substrate unreachable = surface + stop |
 | `audit-trail-v2.md` | In-process gates emit AuditEvents directly to same Python state |
 
+### Smaller refinements (M9-M11)
+
+- **M9 (registration timing)**: substrate startup (substrate boots → loads office-config → registers configured MCP servers). Lazy registration possible via direct API call but discouraged; documented.
+- **M10 (TransportMode discrimination at runtime)**: code that needs to know "am I running in-process or subprocess?" gets answer via `MCPServerHandle.transport` field access. No explicit `is_in_process()` helper needed.
+- **M11 (Tool deregistration)**: `MCPServerHandle.stop()` is the path. Lifecycle state transitions to STOPPING → STOPPED. Audit-trail emission on deregistration (`mcp_server_deregistered` event kind).
+
 ## Defers (chronological-valid)
 
 | Defer | Home | Reason |
@@ -106,6 +192,10 @@ Implemented as scenario type `mcp_gate_parity` in R3b eval framework (per cross-
 | **D1**: Detailed `pbs_mcp` module reorganization | #11 implementation phase | Reorganization needs concrete consumer (Cowork integration) to test against |
 | **D2**: Substrate-specific extension Protocols (Claude-Agent-SDK-only primitives like `create_sdk_mcp_server`) | #9 Substrate Protocol design | Substrate-specific extensions designed alongside common Protocol |
 | **D3**: Tool function signature compatibility verification | Implementation time | Verifies at code-write moment; not architectural |
+| **D4**: Hot-reload during development | Substrate-specific dev convenience | Not architectural; defer to dev tooling work |
+| **D5**: Concurrent tool calls handling | Sequential orchestrator architecture | Irrelevant for current PBS shape |
+| **D6**: Tool versioning per evolution patterns | Per-tool schema versioning at implementation | Already covered by ARCH v0.19 evolution patterns |
+| **D7**: User-contributed code trust model | Marketplace work (ROADMAP v3) | Marketplace shape determines trust model |
 
 ## Constraints flowing to downstream commitments
 

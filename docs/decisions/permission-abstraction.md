@@ -1,6 +1,6 @@
 # Decision record: Unified PBS permission abstraction (R3c from #21 SDK deep-read)
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + T1-T8 schema/lifecycle refinements)
+**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + T1-T8 schema/lifecycle refinements + M5 from R3a round 2 — MCP server registration governance)
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3c); architectural foundation for all human-authority gates
 **Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol where this method lives), `sdk-deep-read.md` (#21 — origin findings), `governance-and-identity-sourcing.md` (governance gate composes here), `sparring-output-v1.md` (sparring backstop composes here), `audit-trail-v2.md` (permission events emit AuditEvents), `office-level-managed-entities.md` (#15 — Actor.roles for routing; PermissionRequest entity at Tier 2+), `mcp-fallback-policy.md` (fail-closed corollary applies), `in-process-mcp-server.md` (R3a — `ToolExecutionContext.transport_mode` field references TransportMode), `eval-framework-adoption.md` (R3b — eval validates permission flow AuditEvents)
 
@@ -63,11 +63,12 @@ class Substrate(Protocol):
 
 ```python
 class GovernanceWriteContext(BaseModel):
-    entity_type: str  # e.g., "planning.project"
+    entity_type: str  # e.g., "planning.project", "mcp_server" (per R3a M5)
     entity_id: str
-    requested_action: Literal["create", "update", "delete"]
+    requested_action: Literal["create", "update", "delete", "register"]  # "register" added per R3a M5 for MCP server governance
     current_actor: ActorId
     field_changes: dict[str, Any] | None  # for update operations
+    # When entity_type="mcp_server", context includes: server_name, transport, tool_names, source (skill/marketplace)
 
 class SparringBypassContext(BaseModel):
     skill_name: str

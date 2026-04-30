@@ -1,6 +1,6 @@
 # Decision record: MS AF eval framework adoption (R3b from #21 SDK deep-read)
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + S1-S4 schema field refinements)
+**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + S1-S4 schema field refinements + minor cross-ref note from R3a round 2 — discovery API usage)
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3b); replaces Phase 0 item 5 design-from-scratch plan
 **Related**: `substrate-agentic-framework.md` (#18); `sdk-deep-read.md` (#21 — origin findings); `ai-as-runtime-hybrid-shape.md` (#16 — entity-md spec used for scenarios); `office-vs-department.md` (#12 — entity convention); `audit-trail-v2.md` (eval emits AuditEvents); `sparring-output-v1.md` (composes with sparring schema validation); `in-process-mcp-server.md` (R3a — `mcp_gate_parity` scenario type); `permission-abstraction.md` (R3c — permission flows generate AuditEvents R3b validates)
 
@@ -35,6 +35,8 @@ In `backend/eval/pbs_checks/`:
 - `convention_applied_check`
 - `decision_reconstructibility_check` (building block for DefensibilityEvaluator)
 - `mcp_gate_parity_check` (for R3a CI parity testing)
+
+**Tool/server discovery for scenarios** (per R3a M2): scenarios use `Substrate.list_mcp_servers()` + `Substrate.list_available_tools()` to discover gates being tested. Scenario authors can declaratively reference tools via these discovery methods rather than hardcoding tool names.
 
 ## Scenarios as entities (per entity-md spec)
 
