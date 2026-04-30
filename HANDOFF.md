@@ -415,7 +415,7 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   | Bundle | Decisions | Status |
   |---|---|---|
   | **A** — Department module + location/registration | `extensions/department/<dept>/` package layout; `department.md` registration file shape; `path_pattern` declarations; gate's department-discovery mechanism | **In progress (session 11)** |
-  | **B** — Entity gate + Layer 3 | `read_entity`/`write_entity`/`list_entities` signatures, error model, body-preservation, cross-ref validation tightness; Layer 3 mechanism (Option C `metadata: dict` is leading position) | Pending |
+  | **B** — Entity gate + Layer 3 | `read_entity`/`write_entity`/`list_entities` signatures, error model, body-preservation, cross-ref validation tightness; Layer 3 mechanism (Option C `metadata: dict` is leading position — but see "metadata rename gap" consideration below) | Pending |
   | **C** — ProjectEntity migration + phase/lifecycle | ProjectState → ProjectEntity field-by-field plan; `phase: str` → `phases: dict[str, str]`; `lifecycle: Lifecycle` → `lifecycle: dict[str, Lifecycle]` | Pending |
   | **D** — Office-config schema additions | `departments.<name>.entities.<entity>.{mode,adapter,config}` shape; override-layer pattern with department.md | Pending |
   | **E** — Adapter Protocol shape (Gap B) | subscribe vs poll vs both; Pydantic Protocol interface | **DEFERRED to #11** (no consumer until first adapter-mode entity ships) |
@@ -429,6 +429,26 @@ remaining queue (revised session 11)** — **CURRENT WORK**:
   (Bundle C) + `docs/conventions/entity-md-spec.md` updates + audit
   slice 21 + design-review target 12 implementation + migration of
   `extensions/universal/doctypes.yaml` (implementation phase).
+- **Bundle B — metadata rename gap consideration** (session-11
+  sanity-check finding, persist for Bundle B's deliberation):
+  Layer 3 Option C (`metadata: dict[str, Any]` escape hatch) has
+  a real cost beyond "no type safety" — there's also **no
+  rename/migration support for custom fields**. If a deployment
+  uses `metadata` heavily and wants to rename a key (e.g.,
+  `metadata.review_status` → `metadata.internal_review_status`),
+  no automatic mechanism updates existing entities. Pydantic
+  doesn't validate `metadata` contents, so cross-ref validation
+  doesn't catch orphans. This is a real cost of Option C to weigh
+  against Options A (Pydantic subclass — typed + migratable but
+  requires Python) and B (declared `extra_fields` — typed +
+  migratable + no Python, at the cost of a YAML type DSL).
+  Audit slice 21 could detect orphaned-key telemetry post-#9, but
+  no in-architecture migration mitigation. Bundle B should weigh
+  this when locking Layer 3 mechanism. NOT an automatic
+  disqualifier for Option C — the rename cost may be acceptable
+  if `metadata` use stays light. Just flag explicitly so the
+  decision is informed.
+
 - **Bundle A — current entry point**: in-progress in session 11.
   Discussion centered on: where path/location declarations live
   (department.md vs Pydantic class vs spec doc). Leading position:

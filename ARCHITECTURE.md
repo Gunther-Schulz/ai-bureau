@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.18 (session 11 — validation-layering principle + informed-defaults principle named as architectural disciplines)**.
+Status: **v0.19 (session 11 — three evolution patterns named: structured+mutable / structured+append-only / prose+forward-only)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,19 @@ Status: **v0.18 (session 11 — validation-layering principle + informed-default
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.18 → v0.19**: **Three evolution patterns named** as
+  pattern recognition (not new disciplines — names the three
+  mechanisms already in use): (1) structured + mutable
+  (migration framework, e.g., office-config); (2) structured +
+  append-only (additive backward-compat, e.g., AuditEvent —
+  never rewrite historical records); (3) prose + forward-only
+  (no migration; historical anchoring via structured fields like
+  `convention_applied: {git_sha}`). Surfaced during session-11
+  sanity-check of the migration distinction; the three-pattern
+  framing replaces the simpler structured/prose dichotomy
+  because append-only structured (AuditEvent) follows neither
+  the migration mechanism nor the forward-only mechanism. Each
+  pattern has a different code path and discipline check.
 - **v0.17 → v0.18**: **Two recurring patterns elevated to named
   architectural principles** (session 11 — surfaced during
   prose-rules-as-conventions discussion under the AI-as-runtime
@@ -1167,6 +1180,56 @@ When designing any new validation point or enforcement gate:
 
 Skipping this analysis tends to produce wrong-tool-for-job choices
 that surface as flaky audits or expensive simple checks.
+
+---
+
+## Evolution patterns: how data shapes change over time
+
+Pattern recognition (not a new discipline — names the three
+mechanisms already in use across the architecture). When data
+shapes need to evolve, the right mechanism depends on **what
+kind of data** is changing:
+
+| Pattern | Used for | Evolution mechanism |
+|---|---|---|
+| **Structured + mutable** | `office-config.yaml`, `ProjectState` (post-#9 → ProjectEntity), entity Layer 1 + Layer 2 frontmatter, Pydantic schemas | Versioned migration framework (`office_config_migrations/` style); migration scripts run on load when `CURRENT_SCHEMA_VERSION` mismatches |
+| **Structured + append-only** | `AuditEvent`, `decisions.md` entries, `snapshots/` artifact bytes | Additive backward-compat: new fields default to `None` for old records; readers handle missing fields gracefully; **NEVER rewrite historical records** (would erase audit truth) |
+| **Prose + forward-only** | All entity body content, `conventions.md`, doctype/reference/process bodies, decision records | No migration. New rule applies forward; existing entities stay as-minted under the prior rule. Historical reconstruction via structured anchoring (e.g., `convention_applied: {git_sha}` on entity-mint AuditEvents) |
+
+### Why three, not two
+
+It would be tempting to say "structured = migrate, prose =
+forward-only" and call it a day. The append-only structured case
+breaks that simplification — AuditEvents are structured, but
+**rewriting them is wrong**. Old events stay in their old shape;
+new code reads them via additive backward-compat (optional
+fields, defaults). The mechanism is structurally different from
+office-config migration even though both are "structured."
+
+Naming all three makes the design choice explicit per surface:
+"is this surface mutable (migrate), append-only (backward-compat
+at read), or prose (forward-only)?" Different answer = different
+mechanism = different code paths.
+
+### Discipline check
+
+When designing a new persistence point or evolving an existing
+schema:
+
+1. **Mutable or append-only?** Mutable supports rewrites;
+   append-only doesn't. AuditEvent is the canonical append-only
+   example.
+2. **If mutable: structured or prose?** Structured uses migration
+   framework; prose uses forward-only with historical anchoring.
+3. **What anchors history?** For mutable structures, version
+   number + migration. For append-only, the original write itself.
+   For prose, the structured anchor field on the related event
+   (e.g., `convention_applied: {file, section, git_sha}`).
+
+Skipping this analysis tends to produce surfaces that try to
+migrate things that shouldn't be migrated (overwriting historical
+audit events) or fail to migrate things that need it (bumping a
+schema without a migration script).
 
 ---
 
