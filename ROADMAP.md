@@ -624,40 +624,56 @@ commitment, scaffolded.
   cargo-cult anchor for future sessions); confirms current terminology is
   pattern-level after stress-test.
 
-**23. Pre-decision-sharpening skill — local now + future global plugin elevation**
-(NOT BLOCKING; meta-architectural skill scaffolded session 12) — captures the
-two-phase sharpening pattern (decision-design + pre-implementation) discovered
-during session 12 #21 SDK deep-read multi-round sharpening work.
+**23. Sharpening skills (decision-design + pre-implementation) — local now + future global plugin elevation**
+(NOT BLOCKING; meta-architectural skills scaffolded session 12) — captures the
+two-phase sharpening pattern discovered during session 12 #21 SDK deep-read
+multi-round sharpening work.
 
-- **Mission**: codify the two-phase pre-decision sharpening pattern as
-  invocable skill. Local skill exists at `plugin/skills/pre-decision-sharpening/`
-  (created session 12); future elevation to global plugin marketplace when
-  PBS framework distribution shape settles.
-- **Method**: SKILL.md per plugin conventions; comprehensive body covering
-  five-mechanism justification + two-phase pattern + decomposition trigger +
-  layered coverage observation + expansion-vs-revision distinction +
-  user-triggered round discipline.
+- **Mission**: codify the two-phase sharpening pattern as TWO invocable skills
+  (one per phase, sharing methodology). Local skills exist; future elevation
+  to global plugin marketplace when PBS framework distribution shape settles.
+- **Two skills (DONE session 12, replacing initial single-skill scaffold)**:
+  - `plugin/skills/decision-design-sharpening/SKILL.md` (NEW v0.1.0) — Phase 1;
+    fires AT DECISION-FORMATION MOMENT before commit to file. Triggers via
+    "do another round" / "sharpen again" / "review/refine" / "challenge this"
+    after AI proposes architectural decision. 2-3 round sweet spot;
+    decomposition trigger if >3 rounds.
+  - `plugin/skills/pre-implementation-sharpening/SKILL.md` (NEW v0.1.0) —
+    Phase 2; fires AT IMPLEMENTATION-START MOMENT for major commitment after
+    DRs locked. Triggers via "let's start implementing X" /
+    "implementation-readiness check". Surfaces operational/runtime/deployment
+    details; ~10-20% architectural finding flow-back to upstream DRs.
+- **Why two skills (not one with mode parameter)**:
+  - Different triggers (decision-formation vs implementation-start)
+  - Different deliverables (refinements + DR persistence vs implementation-
+    readiness checklist + DR amendments)
+  - Different audiences (decision-maker vs implementer)
+  - Per "Make wrong shapes impossible" — clear invocation surface per phase
+    prevents calling decision-design skill at implementation moment
+  - Shared methodology lives in `memory/feedback_pre_decision_sharpening.md`
+    (single source; both skills reference)
 - **Empirical validation**: pattern discovered + validated session 12 across
   R3a/R3b/R3c/R3d sharpening rounds + Substrate Protocol synthesis. Yielded
   18+ substantive architectural refinements across 12+ sharpening rounds;
   decomposition + 2-3 rounds per sub-decision pattern confirmed.
 - **Composition**: composes with `audit` + `design-review` skills (which serve
-  drift-detection role POST-decision); pre-decision-sharpening operates
-  UPSTREAM at decision-formation moment.
+  drift-detection role POST); these skills operate UPSTREAM at decision-
+  formation OR implementation-start moments.
 - **Local scope (DONE session 12)**:
-  - `plugin/skills/pre-decision-sharpening/SKILL.md` (NEW v0.1.0)
-  - References `memory/feedback_pre_decision_sharpening.md` for theoretical
-    grounding + mechanism documentation
+  - Two SKILL.md files per plugin conventions
+  - Shared theoretical grounding in `memory/feedback_pre_decision_sharpening.md`
 - **Future global plugin elevation (DEFERRED)**:
   - Triggered by: PBS framework distribution shape settled (post-#22
     terminology re-eval; post-marketplace decision per ROADMAP v3)
   - Generalizes beyond PBS terminology to any architectural-discipline
     workflow
   - Marketplace-asset shape per ROADMAP v3 framing
-- **Order**: skill exists now (local); elevation to global plugin = future
+  - When elevated: consider extracting shared methodology into `references/`
+    pattern within the global plugin
+- **Order**: skills exist now (local); elevation to global plugin = future
   work post-marketplace decision.
-- **Constraints flowing**: NONE substantive; this is a meta-architectural
-  skill that supports OTHER architectural decisions across all commitments.
+- **Constraints flowing**: NONE substantive; these are meta-architectural
+  skills that support OTHER architectural decisions across all commitments.
 
 ---
 
