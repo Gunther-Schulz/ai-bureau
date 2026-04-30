@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.17 (session 11 — AI-as-runtime conformance check (smoke + deep) added under the hybrid-shape discipline)**.
+Status: **v0.18 (session 11 — validation-layering principle + informed-defaults principle named as architectural disciplines)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,41 @@ Status: **v0.17 (session 11 — AI-as-runtime conformance check (smoke + deep) a
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.17 → v0.18**: **Two recurring patterns elevated to named
+  architectural principles** (session 11 — surfaced during
+  prose-rules-as-conventions discussion under the AI-as-runtime
+  conformance check):
+  - **Validation layering: deterministic primary, LLM secondary**.
+    For any check or enforcement point, use deterministic
+    validation (Pydantic, type checks, threshold comparisons) where
+    the question has a determinate answer; reserve LLM validation
+    for genuine judgment (precision of prose, accuracy of
+    cross-reference, fit-to-shape). The two compose:
+    deterministic catches binary failures cheaply; LLM catches
+    judgment failures expensively. Pattern was already implicit in
+    governance enforcement, audit slices, AI-as-runtime conformance
+    check — now named so it's invocable as a discipline at design
+    time. Cheapest-first ordering: free → cheap → medium →
+    expensive (LLM).
+  - **Informed defaults: ship best-shape, not empty**. When
+    providing architecture/templates/scaffolding to deployments,
+    ship with informed defaults derived from the pioneer instance
+    (PBS-Schulz), NOT empty canvases. Bureaus inherit working
+    starting points; they refine from a base, not bootstrap.
+    Already implicit in `research-references` corpus seed,
+    `design-review` failure-mode-catalog, skill `<example>`
+    blocks. Critical pattern-vs-instance constraint: defaults are
+    *shapes* you can adapt, not *instance content* you inherit
+    verbatim. PBS-Begründung-content as legal-practice default =
+    wrong abstraction; doctype md *file shape* with PBS example
+    content = right abstraction.
+
+  Both principles were applied (implicitly) during this session's
+  prose-rules-as-conventions design (`docs/decisions/governance-
+  and-identity-sourcing.md` operational concerns section uses both
+  modes — proactive defaults + detection + how-to-fix). Naming
+  them in ARCHITECTURE makes them invocable for future design
+  decisions rather than re-derived each time.
 - **v0.16 → v0.17**: **AI-as-runtime conformance check (smoke + deep)**
   added under the AI-as-runtime hybrid-shape discipline. Two-level
   test: smoke test (3 yes/no questions, 30-60 seconds, applied per
@@ -1041,6 +1076,192 @@ The hybrid-shape principle locks in the latter.
 See `docs/decisions/ai-as-runtime-hybrid-shape.md` for the full
 decision record (worked examples, downstream constraints, defers,
 revisit triggers).
+
+---
+
+## Validation layering: deterministic primary, LLM secondary
+
+> **For any check or enforcement point in the architecture, use
+> deterministic validation (Pydantic, type checks, threshold
+> comparisons, hash verification, token counts) where the question
+> has a determinate answer. Reserve LLM validation for genuine
+> judgment (is this prose imperative? is the cited reference
+> accurate? does this match the convention shape?). The two layers
+> compose: deterministic catches binary failures cheaply; LLM
+> catches judgment failures expensively. Each plays to its
+> strength.**
+
+### Why this matters
+
+Checks and enforcement points come up everywhere — gate writes,
+audit slices, design-review targets, conformance tests, governance
+gates. Without an explicit principle, two failure modes recur:
+
+1. **Over-LLM-ifying**: using LLMs to check things that have a
+   determinate answer (does this YAML parse, is this field
+   required, does this token count exceed threshold). Slow,
+   expensive, non-deterministic — and wrong tool: the answer is
+   binary.
+2. **Under-LLM-ifying**: trying to encode genuine judgment
+   (precision of prose, accuracy of cross-reference, fit-to-shape)
+   in deterministic checks. Either fails to catch real
+   violations, or invents brittle pattern-matching that
+   approximates LLM judgment poorly.
+
+The principle catches both: deterministic for the deterministic;
+LLM for the judgmental; both layers compose.
+
+### Where this applies in the architecture
+
+| Surface | Deterministic layer | LLM layer |
+|---|---|---|
+| **Gate enforcement** (read_entity / write_entity) | Pydantic strict validation, cross-ref existence check, role check | (none — pure structured contract) |
+| **Authorization (role-gated writes)** | Actor.roles vs entity-type write requirements | Skill workflow surfaces approval UX |
+| **Audit slice 14** (boundary adherence) | Path-pattern check, file-existence check | Body content judgment for ambiguous boundary cases |
+| **Audit slice 16** (validation-gate coverage) | Pydantic `extra='forbid'` enumeration | (rarely needed — schema check is binary) |
+| **Audit slice 21** (entity-md conformance) | Frontmatter Pydantic validation, token-count thresholds | Body section presence, prose precision, content quality |
+| **AI-as-runtime conformance check** | Smoke test (3 binary questions) | Deep test (judgment-shaped checks 1-6) |
+| **Convention application** | Pattern match, schema validation of result | Edge-case judgment, "is this convention applied correctly?" |
+| **Identity sourcing** | Token validation, schema check on adapter response | Reference accuracy, content interpretation |
+| **Cross-reference validation** | Existence of referenced entity (gate) | Accuracy of reference (does the cited section actually contain the rule?) |
+
+### Pattern: cheapest-first ordering
+
+When multiple validation layers exist, they run in cost order:
+
+1. **Free** — type system / static analysis (compile time)
+2. **Cheap** — Pydantic validation, threshold comparisons (gate write time)
+3. **Medium** — git-state checks, cross-reference existence checks
+4. **Expensive** — LLM judgment (audit slices, design-review targets)
+
+A failure at any layer can short-circuit the rest. Run cheap
+checks before invoking LLM judgment; reserve LLM for what
+genuinely needs it.
+
+### Connection to existing disciplines
+
+- **Meta-rule 4 (strict-validation)** specifies the deterministic
+  layer's discipline (fail-loud, no silent defaults).
+  Validation-layering names what runs ON TOP of that layer for
+  judgment-shaped checks.
+- **AI-as-runtime hybrid-shape** specifies the boundary at runtime
+  (structured for contracts, prose for semantics, AI fuses).
+  Validation-layering specifies the same boundary at check time.
+- **Defense-in-depth** (governance enforcement, decision 1 of
+  `governance-and-identity-sourcing.md`) is one application of
+  this principle — gate enforces deterministically, skill workflow
+  adds LLM-orchestrated UX above.
+
+### Discipline check at design time
+
+When designing any new validation point or enforcement gate:
+
+1. What's the deterministic layer? (Pydantic, threshold, hash —
+   anything binary)
+2. What's the LLM layer? (judgment, content-quality, semantic
+   accuracy — anything requiring interpretation)
+3. Do they compose correctly? (LLM doesn't run on what
+   deterministic already caught; deterministic doesn't try to
+   pattern-match what LLM should judge)
+4. Is the cost-ordering right? (deterministic first, LLM after)
+
+Skipping this analysis tends to produce wrong-tool-for-job choices
+that surface as flaky audits or expensive simple checks.
+
+---
+
+## Informed defaults: ship best-shape, not empty
+
+> **When providing architecture, templates, or scaffolding to
+> deployments, ship with informed defaults derived from the
+> pioneer instance — not empty canvases. Bureaus inherit working
+> starting points; they refine from a base, not bootstrap from
+> scratch. Defaults reduce the violation rate, accelerate
+> time-to-useful, and propagate accumulated lessons from the
+> pioneer instance forward.**
+
+### Why this matters
+
+Empty-canvas defaults force every bureau to discover good shape
+through trial-and-error. The pioneer instance has already done
+that work — failing to propagate it forward is a wasted asset.
+
+Two failure modes the principle guards against:
+
+1. **Empty-start drift**: bureau populates conventions from
+   scratch, doesn't know what good shape looks like, ends up with
+   inconsistent or under-shaped content. AI applies inconsistently.
+2. **Late-discovered defaults**: bureau finds out months in that
+   "we should have had X from the start" — and now has to migrate
+   accumulated content into the better shape. Cost asymmetry:
+   shipping the right default is cheap; migrating a populated
+   deployment is expensive.
+
+The principle catches both: ship the lessons we've already
+learned; bureaus refine from a working base.
+
+### Where this applies in the architecture
+
+| Surface | Default shipped |
+|---|---|
+| `research-references` corpus seed | BauGB / BNatSchG / BauNVO / etc. (jurisdiction-relevant references) — bureaus inherit; can prune or extend |
+| `design-review` skill | Pre-seeded `failure-mode-catalog.md` with literature-derived + PBS-experienced failure patterns |
+| Skill bundles | `<example>` blocks per skill (per Anthropic plugin pattern) showing intended invocation shape |
+| `extensions/office/conventions/` (post-#11/#15) | Pre-populated convention templates (actor-id, archive policy, naming, notification, audit) |
+| `extensions/department/<dept>/processes/` (post-#9) | Pre-populated process md files for common verfahren (regelverfahren, beschleunigtes for planning) |
+| `extensions/universal/doctypes/` (post-#9 migration) | Common doctype shapes (B-Plan Begründung, Festsetzungen, Stellungnahme, etc.) |
+| Audit slices | Each ships with known violation patterns to scan for, not just empty rule-set |
+| `office-config.schema.yaml` | Defaults for non-required fields where pioneer-instance experience suggests the right value |
+| `entity-md-spec.md` body section catalog | Conventional sections per entity type (the table at §6 of entity-md-spec) — bureaus inherit |
+
+### Pattern-vs-instance constraint (critical)
+
+**Defaults must be at pattern level, not instance content.**
+
+Wrong: shipping PBS-Schulz's specific Begründung content as the
+default for legal practices. Mismatched abstraction; legal-practice
+prose isn't planning-prose.
+
+Right: shipping the doctype md file *shape* (frontmatter + body
+sections + conventions) with example PBS content; legal-practice
+adopts the shape, replaces the content with their own.
+
+Right: shipping the convention md file *form* (imperative rule +
+examples + edge cases) with PBS-derived example rules;
+legal-practice keeps the form, writes their own rules.
+
+The discipline: **defaults are shapes you can adapt; defaults are
+not instance content you inherit verbatim.**
+
+### Connection to existing disciplines
+
+- **Pattern-vs-instance** is the constraint that scopes what's
+  default-able. Pattern-level shapes ship as defaults;
+  instance-level content does not.
+- **Pioneer-instance commitment** (per VISION) provides the
+  source: defaults are derived from real PBS experience, then
+  abstracted to pattern level for shipping.
+- **AI-as-runtime hybrid-shape** is what makes informed defaults
+  effective — defaults SHIP as prose templates that AI applies +
+  bureaus refine; not as code that requires engineer modification.
+
+### Discipline check at design time
+
+When designing any template, scaffold, or initial-state ship:
+
+1. What's the empty-canvas alternative? (What would shipping
+   without this default require the bureau to do?)
+2. What's the pioneer-derived default? (What does PBS-Schulz
+   experience suggest is the right starting shape?)
+3. Is the default at pattern level? (Or is PBS-instance content
+   leaking into something other domains should write themselves?)
+4. Is the default override-able? (Can a bureau replace it
+   cleanly, or does the framework assume the default forever?)
+
+Skipping this analysis tends to produce either over-empty
+deployments (everything must be populated from scratch) or
+over-opinionated defaults (PBS-specific content baked in where
+it shouldn't be).
 
 ---
 
