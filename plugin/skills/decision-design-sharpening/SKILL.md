@@ -1,14 +1,23 @@
 ---
 name: decision-design-sharpening
-description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, ARCHITECTURE.md, VISION.md, ROADMAP.md, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/review/refine to solidify" / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge/review/refine to solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (VISION axis 2) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
-when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-and-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
+description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, ARCHITECTURE.md, VISION.md, ROADMAP.md, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/surface/refine to solidify" (or original "challenge/review/refine to solidify") / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "what are we surfacing" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (VISION axis 2) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
+when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
 department: office
 version: 0.1.0
 ---
 
 # Decision-design sharpening (Phase 1)
 
-**AKA the challenge/review/refine to solidify cycle** — this skill IS that operation, formalized as 2-3 disciplined rounds. The original framing (challenge → review → refine → solidify) describes what each round actually does; "sharpening" is the collapsed shorthand. Both terminologies map to this skill.
+**The cycle**: **challenge → surface → refine → solidify** (refined from original "challenge/review/refine to solidify"; "review" sharpened to "surface" to capture what each round ACTUALLY does — bringing up what's NOT visible, not just checking what's there). "Sharpening" is the collapsed shorthand for this 4-operation cycle. Original "review" terminology still routes here.
+
+### The cycle — per-term definitions (VISION-axis-aligned)
+
+| Term | Operation | VISION mapping |
+|---|---|---|
+| **Challenge** | Stress-test proposal: counter-arguments, weaknesses, edge cases, "what's the strongest argument against?" | Axis 2 (sparring partner mode — Vivienne Ming's productive mode) |
+| **Surface** | Bring up what's NOT visible: schema gaps, lifecycle distinctions, composition concerns, governance integration, observability hooks, missing architectural patterns, layered coverage check | Axis 1 (intertwining — continuous coverage across architectural layers) |
+| **Refine** | Improve specifics: tighten language, add missing fields, sharpen definitions; validate against existing decisions/VISION/ARCH disciplines | Improvement + implicit validation |
+| **Solidify** | Lock for commit: persist as DR, anchor for future reference, ensure 6-months-later-defensible | Axis 3 (authorship preservation — output user can defend) |
 
 Disciplined sharpening protocol applied at decision-formation moment, BEFORE commit to file. Operates UPSTREAM of `audit` + `design-review` skills (which serve drift-detection role post-decision).
 
