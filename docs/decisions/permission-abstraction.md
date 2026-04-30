@@ -1,6 +1,6 @@
 # Decision record: Unified PBS permission abstraction (R3c from #21 SDK deep-read)
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + T1-T8 schema/lifecycle refinements + M5 from R3a round 2 — MCP server registration governance)
+**Status**: ACCEPTED — session 12 (2026-04-30); 2-round sharpening (full monty + T1-T8 schema/lifecycle refinements) + M5 from R3a round 2 (MCP server registration governance) + P1 + P5 + P2 from R3d round 3 (subagent permission inheritance + identity routing + sparring bypass authority chain)
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3c); architectural foundation for all human-authority gates
 **Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol where this method lives), `sdk-deep-read.md` (#21 — origin findings), `governance-and-identity-sourcing.md` (governance gate composes here), `sparring-output-v1.md` (sparring backstop composes here), `audit-trail-v2.md` (permission events emit AuditEvents), `office-level-managed-entities.md` (#15 — Actor.roles for routing; PermissionRequest entity at Tier 2+), `mcp-fallback-policy.md` (fail-closed corollary applies), `in-process-mcp-server.md` (R3a — `ToolExecutionContext.transport_mode` field references TransportMode), `eval-framework-adoption.md` (R3b — eval validates permission flow AuditEvents)
 
@@ -50,6 +50,7 @@ class PermissionDecision(BaseModel):
     delegated_from: ActorId | None = None  # T7: Tier 2/3 delegation
     revoked_at: datetime | None = None  # T3: revocation timestamp
     revocation_reason: str | None = None  # T3: revocation justification
+    inherited_from_parent: bool = False  # P1: subagent inheriting from parent orchestrator (R3d)
 
 class Substrate(Protocol):
     async def request_permission(
@@ -108,7 +109,45 @@ class MultiUserApprovalContext(BaseModel):
     required_approvers: list[ActorRoleQuery]  # role-based routing
     deadline: datetime | None
     preliminary_context: dict
+
+# All context types may include:
+# originating_subagent_id: str | None  # P5: when subagent (acting on behalf of parent's actor) requests permission (R3d)
 ```
+
+### Subagent permission inheritance (P1 from R3d round 3)
+
+When subagent (spawned by orchestrator) requests permission, inheritance behavior depends on decision kind:
+
+| PermissionDecisionKind | Inheritance behavior in subagent context | Reason |
+|---|---|---|
+| `GOVERNANCE_WRITE` | RE-PERMISSION required in subagent | Potentially destructive; subagent context isolation |
+| `EXTERNAL_SEND` | RE-PERMISSION required in subagent | External transmission must be re-authorized |
+| `LIFECYCLE_TRANSITION` | RE-PERMISSION required in subagent | State machine advances cross subagent boundary |
+| `TOOL_EXECUTION` | INHERITED from parent (with `inherited_from_parent=True`) | Sandboxed within subagent's scope; parent already authorized tool universe |
+| `FOUR_WAY_DECISION` | INHERITED from parent | Decision menu items scoped to parent's task |
+| `SPARRING_BYPASS` | RE-PERMISSION required AT PARENT (not subagent — see P2) | Bypass authority lives with parent orchestrator |
+| `MULTI_USER_APPROVAL` | RE-PERMISSION required in subagent | Multi-user routing must re-evaluate per subagent action |
+
+`PermissionDecision.inherited_from_parent: bool` records inheritance status. Audit-trail records which decisions were inherited vs re-permission for defensibility.
+
+### Sparring bypass authority chain (P2 from R3d round 3)
+
+When subagent produces output failing sparring schema 3x:
+- Subagent emits `sparring_bypass_proposed` AuditEvent
+- Parent orchestrator receives proposal; surfaces to user via `SPARRING_BYPASS` permission flow
+- User approves at orchestrator scope (not subagent scope)
+- Subagent receives approval token; bypass authorized
+- Subagent CANNOT self-bypass (architectural integrity per VISION axis 2)
+
+Authority chain: subagent → parent orchestrator → user. Documented in R3d for full reasoning.
+
+### Subagent identity for multi-user permission routing (P5 from R3d round 3)
+
+When subagent requests permission requiring multi-user approval:
+- Subagent inherits parent orchestrator's actor identity (`current_actor` field)
+- Subagent does NOT have separate user identity
+- `PermissionRequestContext.originating_subagent_id` field records subagent that triggered request (audit clarity; routing unchanged)
+- Required-approvers routing per parent's actor's roles + action's required-approvers
 
 Pydantic discriminated union via `decision_kind` field on `PermissionRequestContext` wrapper.
 

@@ -268,10 +268,13 @@ Skills/orchestrator code uses Protocol-typed Substrate; substrate-specific primi
 
 ## Recommendations
 
-**Detailed decision records (session 12 — 2-round sharpening per recommendation; first-class peers + S1-S4 + T1-T8 refinements incorporated)**:
-- **R3a → `docs/decisions/in-process-mcp-server.md`** — `TransportMode` enum (IN_PROCESS + SUBPROCESS as first-class peers); `Substrate.register_mcp_server()` Protocol method
-- **R3b → `docs/decisions/eval-framework-adoption.md`** — hybrid MS AF eval primitives adoption + PBS-specific evaluators + scenarios as entities (S1-S4 schema field refinements: scope_dimension, applicable_substrates, applicable_tiers, result reporting shape)
-- **R3c → `docs/decisions/permission-abstraction.md`** — unified `Substrate.request_permission()` Protocol method + `PermissionDecisionKind` enum (7 kinds) + Permission gates vs Quality gates architectural distinction (T1-T8 refinements: per-kind context schemas, PermissionRequest as entity at Tier 2+, revocation, dev-mode escape hatch, scheduled/autonomous flow handling, expires_at, delegated_from, PermissionUIPayload)
+**Detailed decision records (session 12 — multi-round sharpening per recommendation)**:
+- **R3a → `docs/decisions/in-process-mcp-server.md`** — `TransportMode` enum (IN_PROCESS + SUBPROCESS as first-class peers); `Substrate.register_mcp_server()` Protocol method; M1-M11 refinements (MCPServerHandle shape, discovery API, transport fallback audit, conflict handling, governance for registration, observability)
+- **R3b → `docs/decisions/eval-framework-adoption.md`** — hybrid MS AF eval primitives adoption + PBS-specific evaluators + scenarios as entities (S1-S4 schema field refinements)
+- **R3c → `docs/decisions/permission-abstraction.md`** — unified `Substrate.request_permission()` Protocol method + `PermissionDecisionKind` enum (7 kinds) + Permission gates vs Quality gates distinction (T1-T8 + M5 + P1/P2/P5 refinements)
+- **R3d → `docs/decisions/subagent-primitives-adoption.md`** — case-by-case subagent adoption + per-substrate extension Protocols pattern (NEW architectural pattern) + common surface boundary criteria (P4 — guides #9 Substrate Protocol design)
+
+Each DR underwent multi-round sharpening (round 1 AI full monty + round 2+ user-triggered; pattern captured in `memory/feedback_pre_decision_sharpening.md`).
 
 ### R1: Adopt PRIMITIVES-ONLY from BOTH substrates regardless of primary choice
 
