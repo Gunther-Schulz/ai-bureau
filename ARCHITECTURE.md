@@ -16,10 +16,30 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.21 (session 11 — "Make wrong shapes impossible, not solvable" discipline named; Bundle A type-namespacing locked as concrete application; "Data + boundary reference card" added near top of doc consolidating where-does-X-go rules)**.
+Status: **v0.22 (session 11 — `docs/validation-gating-overview.md` added as systems-view consolidating the four validation layers L1-L4; maintenance discipline rule 5 added for inventory-update sync)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.21 → v0.22**: **`docs/validation-gating-overview.md` added**
+  as a systems-view of validation gating across the architecture.
+  Surfaced session 11 mid-Bundle-A — the question "do we have plans
+  for validation gating per our rules?" caught that the pieces are
+  spread across ARCH disciplines + meta-rules + entity-md-spec +
+  decision records + audit slices + design-review targets + ROADMAP
+  commitments, with no single place to scan "how is X validated
+  over its lifecycle?". The new doc consolidates as a navigational
+  + systems-view (no new content; every section cross-refs source-
+  of-truth detailed doc). Four layers named: L1 runtime structural
+  (Pydantic + gate, fail-loud) / L2 runtime conventional (AI-applied
+  prose + audit-trailed) / L3 retrospective scan (audit slices) /
+  L4 prospective design (design-review targets). Inventory enumerates
+  every load-bearing gate / convention / slice / target with status
+  + source-of-truth pointer. Companion to "Data + boundary reference
+  card" (which answers "where does X go?"); this doc answers "how is
+  X validated over its lifecycle?". HANDOFF essential framing
+  references it. Maintenance discipline rule 5 added: when adding a
+  new gate / slice / target / convention, inventory updates in same
+  commit as source-of-truth artifact.
 - **v0.20 → v0.21**: **"Make wrong shapes impossible, not
   solvable" discipline named** as a top-level architectural
   principle (parallel to pattern-vs-instance / glue-not-
@@ -397,7 +417,7 @@ detection).
 
 ## Maintenance discipline
 
-A 4-step checklist:
+A 5-step checklist:
 
 1. Every meta-rule change, schema bump, or significant refactor
    lands in the same commit as the ARCHITECTURE.md update.
@@ -412,6 +432,14 @@ A 4-step checklist:
    + reasoning. Same-commit update prevents drift between the
    two.
 4. Sunset deprecated concepts via the deprecation procedure (below).
+5. **Validation-gating inventory sync**: when adding a new gate /
+   audit slice / design-review target / runtime convention, update
+   the corresponding inventory row in
+   `docs/validation-gating-overview.md` §4 in the same commit as
+   the source-of-truth artifact (Pydantic file / slice description /
+   target description / convention md). Inventory rows point at
+   source of truth; same-commit update prevents drift between the
+   layered systems-view and the detailed authoring sites.
 
 ### Deprecation procedure
 
