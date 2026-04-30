@@ -365,8 +365,9 @@ chase-six-sections pain when applying existing disciplines.
 |---|---|---|
 | Where does X live across scope axes (universal vs domain vs state vs department vs office vs project)? | Meta-rule 3 + scope-orthogonality layering convention | 6 axes, orthogonal; place at the **most-specific axis that doesn't lie** about the data |
 | Should X be a Pydantic structured field or a markdown body section? | AI-as-runtime hybrid-shape principle | **Structured** for interfaces / identity / persistence / machine contracts; **prose** for semantics / rules / domain knowledge / process |
-| Should X be enforced structurally or by deployment-time convention? | Make wrong shapes impossible, not solvable | If gate / Pydantic / dispatch touches X on every read/write → **structural**. If AI applies X at mint-time / decision-time → **prose convention with audit** |
-| Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply |
+| Should X be enforced structurally or by deployment-time convention? | Make wrong shapes impossible, not solvable | If gate / Pydantic / dispatch touches X on every read/write → **structural**. If AI applies X at mint-time / decision-time → **prose convention with audit**. **Sub-rule**: if external system / scheduler / cron needs to dispatch on X (per Gap A proactive time-driven triggers from #12 infrastructure-primitive review) → structural, even if conceptually "feels like" a rule |
+| Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply. **Reference-style entities** (citations, regulations, sources) pass via "active vs amended/overturned" lifecycle. **When 3-test passes, choose NEW type only if Layer-2 schema differs structurally from existing types**; otherwise reuse existing type with `category` field or scope distinction (e.g., funding sources reuse `reference` type with `category: funding-source`, not a new `funding_source` type) |
+| Is X shared across multiple departments? | Office-vs-department (#12) + office-level managed entities (#15) | If shared (Client referenced by planning + invoicing; Actor referenced across departments) → **office-level managed entity** at `extensions/office/...`. Cross-department references via `<entity>_id: str` Layer-2 fields; gate validates references exist at write time. Department-only entities stay at department level |
 | Should X be Pydantic-validated or LLM-judged? | Validation layering (v0.18) | Deterministic primary (Pydantic / type / threshold) where the answer is determinate; LLM secondary for genuine judgment (prose precision, fit-to-shape) |
 | Should X be in v1 framework now, or deferred? | Pattern-vs-instance + sharp defer rule (v0.20) | Defer ONLY for chronological reason (info doesn't exist yet). Up-front costs ("more sessions", "premature", "PBS doesn't need it yet") are NEVER valid defer reasons |
 | When does X mutate, append, or stay forward-only? | Three evolution patterns (v0.19) | **Mutable** (migration framework, e.g., office-config) / **append-only** (additive backward-compat, e.g., AuditEvent) / **forward-only prose** (no migration; historical anchoring via `git_sha` / `convention_applied`) |
@@ -396,7 +397,7 @@ detection).
 
 ## Maintenance discipline
 
-A 4-line checklist:
+A 4-step checklist:
 
 1. Every meta-rule change, schema bump, or significant refactor
    lands in the same commit as the ARCHITECTURE.md update.
@@ -410,7 +411,7 @@ A 4-line checklist:
    navigation; detailed sections carry the authoritative wording
    + reasoning. Same-commit update prevents drift between the
    two.
-3. Sunset deprecated concepts via the deprecation procedure (below).
+4. Sunset deprecated concepts via the deprecation procedure (below).
 
 ### Deprecation procedure
 

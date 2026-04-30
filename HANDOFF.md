@@ -786,9 +786,9 @@ namespacing.
 
 | Skill | Version |
 |---|---|
-| audit | **0.10.0** (slice 21 — entity-md frontmatter + body conformance + body-size telemetry, session 10 followup-3; first-run scheduled with #9 entity-md migrations) |
+| audit | **0.11.0** (slice 22 — wrong-shapes-solvable scan added session 11; first-run scheduled session 12+ for skill-body + ARCH sweep) |
 | author-manifest | 0.4.0 |
-| design-review | **0.9.0** (targets 12 + 13 + 14 added session 10 followup) |
+| design-review | **0.10.0** (target 15 — prospective make-wrong-shapes-impossible check added session 11; first-run scheduled immediately on Bundle B Layer-3-mechanism decision) |
 | draft-cover-mail | 0.6.0 |
 | draft-textteil-b | 0.5.0 |
 | draft-textteil-c | 0.5.0 |

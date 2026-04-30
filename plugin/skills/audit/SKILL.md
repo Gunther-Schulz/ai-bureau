@@ -1,12 +1,12 @@
 ---
 name: audit
 description: This skill should be used when the user requests a system audit / drift sweep — phrases like "audit", "audit the system", "drift check", "drift sweep", "structural sweep", "pre-phase audit", "audit gate", "comprehensive audit", "Drift-Prüfung", "Systemaudit". Distinct from validate-checklist (document structural review) and validate-bausteine (baustein freshness sweep) — this audits the architecture, codebase, and documentation themselves for drift. Triggered before phase boundaries, after meta-rule additions / refactor sweeps, when stale claims are noticed, or as a periodic sweep.
-version: 0.10.0
+version: 0.11.0
 license: MIT
 mcp_tools_required: []
 mcp_tools_optional: [list_skills]
 fallback_when_mcp_absent: "skill is filesystem-only and operates on contract-free files (SKILL.md, ARCHITECTURE.md, prose docs). list_skills is convenience for enumeration; without it, dispatched subagents glob plugin/skills/*/SKILL.md directly. No contract-bearing reads — no fail-closed concern."
-summary: Drift audit for the system itself — architecture, plugin entities, backend code, documentation. Slices 1-10 cover compliance (does X match its claims?); slices 11-13 cover implementation quality; slice 14 boundary-placement; slice 15 invalidation-contract coverage; slice 16 validation-gate coverage; slice 18 legacy retirement (subsumed mechanisms); slice 19 pattern-vs-instance (PBS-coupling at pattern layer); slice 20 entity-elevation drift; slice 21 entity-md frontmatter + body conformance + body-size telemetry (D2 trigger detection).
+summary: Drift audit for the system itself — architecture, plugin entities, backend code, documentation. Slices 1-10 cover compliance (does X match its claims?); slices 11-13 cover implementation quality; slice 14 boundary-placement; slice 15 invalidation-contract coverage; slice 16 validation-gate coverage; slice 18 legacy retirement (subsumed mechanisms); slice 19 pattern-vs-instance (PBS-coupling at pattern layer); slice 20 entity-elevation drift; slice 21 entity-md frontmatter + body conformance + body-size telemetry (D2 trigger detection); slice 22 wrong-shapes-solvable scan (session 11 — convention-driven solutions for gate-dispatched concerns).
 routing_mode: direct
 triggers:
   - audit

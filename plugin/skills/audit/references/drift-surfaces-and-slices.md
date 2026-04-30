@@ -1393,6 +1393,105 @@ share the prospective-design + retrospective-sweep structure.
 
 ---
 
+### Slice 22 — Wrong-shapes-solvable scan
+
+**Drift surfaces**: 4 (convention drift) + 10 (boundary
+placement) + 12 (validation-gate drift)
+
+**Discipline**: Make wrong shapes impossible, not solvable
+(ARCH v0.21). Scans for cases where deployment-time conventions
+or skill-body imperatives handle concerns that the gate /
+Pydantic / dispatch code touches on every read/write —
+i.e., concerns that should be impossible-by-construction at the
+structured layer rather than solvable-by-discipline at the prose
+or skill layer.
+
+**Scope**:
+
+- **Skill bodies + procedures** (`plugin/skills/*/SKILL.md` +
+  `plugin/skills/*/PROCEDURE.md`): scan for imperatives like
+  "remember to set X", "always include Y", "be sure to pass Z",
+  "check that A is set before calling B" — flag when X/Y/Z/A is
+  a value the gate or Pydantic touches every read/write
+  (currently bypassed via skill-body discipline)
+- **Pydantic schemas** (`backend/mcp-server/src/pbs_mcp/**/*.py`,
+  including future `extensions/department/*/entities/*.py` +
+  `extensions/office/entities/*.py` post-#9): scan for `Optional`
+  fields with comments like "should always be set when X" /
+  "required when adapter-mode" / "set this for Y events" — flag
+  as candidates for discriminated union, `model_validator`, or
+  required-by-default
+- **ARCHITECTURE.md + decision records + entity-md-spec**: scan
+  for "deployment documents the X convention" / "office-config
+  carries the rule for Y" / "audit catches drift" / "best-practices
+  doc covers Z" claims; check whether X/Y/Z is gate-dispatched
+  (gate or Pydantic touches it on read/write); if yes → flag
+- **Cross-skill consistency**: scan for places where two
+  independent skills both have to "remember" the same convention
+  → strong signal it should be a structural constraint (the
+  convention has multiple consumers, drift between them is
+  guaranteed eventually)
+
+**Brief template**:
+
+- **F1 — convention-driven for gate-dispatched concern**:
+  location (file + line) + current shape (prose convention or
+  skill imperative) + proposed structural shape (Pydantic field /
+  validator / discriminated union)
+- **F2 — Optional-with-comment field**: location + current
+  Pydantic shape (`Optional[T]` + comment) + proposed shape
+  (discriminated union / required / `model_validator`)
+- **F3 — multi-consumer skill-body imperative**: location of
+  each consumer + the convention being repeated + proposed
+  structural enforcement point
+- **F4 — claimed audit-catches-drift for impossible-by-construction
+  shape**: location + concern + why the gate could prevent it
+  prospectively rather than catching it retrospectively
+
+**Severity**:
+
+- **Blocker** for new commitments — design-time gate against the
+  anti-pattern (also covered prospectively by design-review target 15)
+- **Heads-up** for existing — retrofitting may be substantial;
+  catalog findings, prioritize against bundling opportunities
+  (e.g., next time a skill is touched for retrofit, pick up its
+  flagged conventions)
+
+**Connection to existing slices**:
+
+- **Slice 14 (boundary-adherence)** — orthogonal but adjacent.
+  Slice 14 catches "code lives in wrong place" (LLM/Python
+  placement); slice 22 catches "constraint is enforced via wrong
+  mechanism" (convention vs structural). A single concern can
+  fail both (deterministic logic in skill body that ALSO should
+  be Pydantic-required) but the framings are different.
+- **Slice 16 (validation-gate coverage)** — adjacent. Slice 16
+  asks "is the gate strict enough where it exists?"; slice 22
+  asks "is there a structural gate at all where there should be?".
+  Slice 16 tightens existing gates; slice 22 surfaces missing
+  ones.
+- **Slice 19 (pattern-vs-instance scan)** — connected via the
+  sharp defer rule (v0.20). Pioneer-instance-anchored
+  "deployment handles it" rationales are also wrong-shapes-solvable
+  failures.
+
+**Connection to design-review targets**:
+
+- **Target 7 (LLM/Python boundary)** + **target 15 (make wrong
+  shapes impossible — prospective)** are the design-time
+  counterparts. Target 15 catches at design time; slice 22
+  catches retrospectively in the codebase.
+
+**Implementation timing**: scaffold scheduled session 12+ (after
+#9 entity gate + first entity-md migrations land — many
+candidate violations live in the skill bodies + entity-md spec
+that #9 will reshape). Pre-#9, slice can run on
+ARCHITECTURE.md + existing skill bodies + ROADMAP for the
+"deployment documents the X" claim sweep; defer the Pydantic
+schema scan until #9 produces the entity Pydantic classes.
+
+---
+
 ## Combining slices for full audits
 
 | Round | Default slices | Why |
@@ -1407,6 +1506,7 @@ share the prospective-design + retrospective-sweep structure.
 | **Optional** | **16** | **Validation-gate coverage** (strict-validation discipline) — run after adding new Pydantic models, after handler refactors, or when tightening contract-enforcement rigor (e.g., before any post-launch deployment where lax validation would compound) |
 | **Optional** | **18** | **Legacy retirement scan** — run after major refactors to confirm replaced concepts/files are gone (paired with design-review target 9) |
 | **Optional** | **19** | **Pattern-vs-instance scan** — run after architectural commitments to verify pattern/instance boundary holds (paired with design-review target 10) |
+| **Optional** | **22** | **Wrong-shapes-solvable scan** — run after architectural commitments adding new conventions, after skill-body retrofits, or before locking new Pydantic schemas to surface convention-driven solutions for gate-dispatched concerns (paired with design-review target 15) |
 | **Optional** | **20** | **Entity-elevation drift scan** — run after entity additions or when reviewing the managed-entity surface (paired with design-review target 11) |
 | **Optional** | **21** | **Entity-md frontmatter + body conformance scan** — run after entity-md migrations (#9 doctypes; Phase 1 references; #11 department.yaml; #15 Client+Actor) and periodically thereafter to catch drift + monitor body-size telemetry for D2 trigger (paired with design-review target 12) |
 

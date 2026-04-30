@@ -919,6 +919,117 @@ in production updates it.
 
 ---
 
+### Target 15 — Make wrong shapes impossible check (prospective)
+
+**Discipline**: Make wrong shapes impossible, not solvable (ARCH
+v0.21). At design time, validates that proposed framework-level
+solutions for gate-dispatched concerns are STRUCTURAL
+(impossible-by-construction at the Pydantic / type / dispatch
+layer) rather than CONVENTIONAL (solvable-by-discipline at the
+prose or skill layer).
+
+**Files**: `ARCHITECTURE.md` "Make wrong shapes impossible, not
+solvable" discipline (whole section) + 3-5 in-flight design
+proposals (current bundle questions, decision-record drafts,
+ROADMAP commitments under design):
+
+- Current Bundle B questions (Layer 3 mechanism options A/B/C;
+  cross-ref validation tightness; error model; body-preservation
+  contract)
+- Any decision-record draft in `docs/decisions/` flagged
+  "in-progress"
+- Any ROADMAP commitment whose Order note is pre-implementation
+  (especially #6 + #7 + #11 + #13 + #15 retrofits)
+
+**Greenfield questions**:
+
+For each proposed framework-level concern in the file scope:
+
+1. **Run the discriminator**: does the gate / Pydantic /
+   dispatch code touch this concern on every read/write? If yes,
+   is the proposed solution structural (Pydantic field +
+   validator, type system, namespace separation, gate enforcement)?
+2. **Framework-cost test**: does every consulting client
+   deploying tomorrow need a custom solution to this concern?
+   If yes → not a deployment-instance concern, structural is
+   required.
+3. **Cross-consumer test**: does more than one skill / tool /
+   adapter consume this concern? If yes, drift between consumers
+   is guaranteed eventually if the rule lives in prose; structural
+   prevents.
+4. **Scheduler / external dispatch test**: does an external
+   system (cron, scheduler, adapter, A2A peer) need to dispatch
+   on this concern? If yes → structural (per Gap A
+   infrastructure-primitive review from #12).
+
+**Anti-patterns to flag**:
+
+- ❌ "Best-practices doc covers it" / "skill body says to do X"
+  for things the gate / Pydantic / dispatch could enforce.
+  Best-practices docs are for AI-applied judgment; framework
+  correctness gets structural enforcement.
+- ❌ "Future audit slice catches drift" for things the gate
+  could prevent. Audit catches retroactively; framework should
+  prevent prospectively where the constraint is structural.
+- ❌ Pydantic `Optional[T]` + comment "should always be set when
+  X" — make required, or use discriminated union, or
+  `model_validator`. Comments are not contracts.
+- ❌ "Deployment documents the rule" for a concern the gate
+  dispatches on. Office-conventions are right for AI-applied
+  rules (mint-time, judgment-time); they're wrong for gate
+  hot-path concerns.
+- ❌ "We'll add it later when needed" defer for a structural
+  concern. The sharp defer rule (v0.20) rejects up-front-cost
+  defers — same offloading anti-pattern.
+
+**When prose convention IS correct** (don't false-flag):
+
+- AI applies the rule at mint-time / decision-time /
+  reasoning-time (governance check, naming convention, archival
+  policy, archive-decision-time, cross-department-coordination
+  triggers)
+- Per-deployment knowledge that varies bureau-to-bureau (specific
+  doctype filename style, archive retention windows, notification
+  preferences)
+- Audit-trailed via `convention_applied: {file, section, git_sha}`
+  per governance-and-identity-sourcing decision 4
+
+If the concern fits these criteria, prose convention is the
+correct shape; structural would be SQL-DB-trap rigidity.
+
+**Connection to other targets**:
+
+- **Target 7 (LLM/Python boundary)** — adjacent. Target 7 asks
+  "is this code in the right place?"; target 15 asks "is this
+  constraint enforced via the right mechanism?" A single concern
+  can require both targets (deterministic logic in wrong place
+  AND enforced via convention when structural is required).
+- **Target 9 (subsumption)** — adjacent. Target 9 asks "what
+  does this replace?"; target 15 asks "is the replacement shape
+  structural where it should be?"
+- **Target 14 (discipline-gap)** — orthogonal. Target 14 detects
+  uncovered failure modes; target 15 enforces a specific
+  discipline at design time.
+- **Slice 22 (wrong-shapes-solvable)** is the retrospective
+  counterpart — slice 22 scans the codebase for existing
+  violations; target 15 prevents new violations at design time.
+
+**Promotion path**: Apply manually at design-time for 3-5
+sessions; track applications + counter-examples; if discipline
+proves load-bearing in real design discussions, evaluate for
+formalization as a discipline-check skill (parallel to existing
+target structure). Same staged-elevation pattern that
+AI-as-runtime conformance check followed.
+
+**Implementation note**: first-run scheduled immediately (no
+dependencies — operates on ARCH + in-flight design proposals).
+Bundle B's Layer-3-mechanism decision is the natural first
+target — running target 15 on Options A/B/C surfaces whether
+each is structural or conventional, and whether the convention
+choice (Option C) survives the discriminator test.
+
+---
+
 ## Focused-mode targets
 
 For "design review the chunkers" / "is X sound" / etc., review one
