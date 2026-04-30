@@ -481,9 +481,24 @@ ROADMAP v2 "AI-office builder" entry.
   pattern-vs-instance reasoning the framing skill codifies for
   repeatable use. Order: #9 first (produces contract + reasoning),
   then #8 (codifies into repeatable skill).
-- **Dependencies**: depends on #6 (audit-trail v2 retrofit) being
-  far enough along that the schema is stable; doesn't depend on
-  #7 (bootstrap-write tools) — those can run in parallel.
+- **Dependencies (revised session 11)**: no longer depends on #6
+  audit-trail v2 retrofit. Original claim ("examine stable
+  post-v2 schemas") was from the old framing where #9 extracted
+  a universal core from existing schemas. Per session-9 reframe,
+  #9 designs the contract from scratch — the schemas don't
+  pre-exist for #9 to examine. AuditEvent schema is in
+  known-stable shape post-#10 (additive fields landed); the
+  retrofit (#6) is a downstream consumer of the entity gate, not
+  an upstream dependency. **Order revised**: #9 is now position 1
+  in remaining queue, #6 follows after #15.
+- **Order note (revised session 11)**: position 1 in remaining
+  pre-RAG queue. The generic entity gate produced here is
+  load-bearing for #15 (Client/Actor), #11 (`department.yaml`),
+  #6 (audit-retrofit references entities), #7 (bootstrap-write
+  references entities), #17 (gate coverage review surveys real
+  gates). Building any of those before #9 forces per-loader hacks
+  or one-off gates that #9 has to refactor — exactly the
+  silent-convergence failure mode #16 is meant to prevent.
 - **Per #16 constraint (session 10)**: hybrid-shape principle is
   the **central design lens** for #9's managed-entity concept
   work. Concrete deliverables that originate in #16 land here:
@@ -631,14 +646,23 @@ context" section.
 - **Scope**: **3-5 sessions** (was 1-2; revised under deep-
   integration directive). Substantial work touching every
   user-facing surface.
-- **Order note**: execute FOURTH in pre-RAG queue (after #10
-  A2A decision + #12 department modularization + #16 hybrid-shape
-  framing). Slash command namespacing + skill frontmatter use the
-  post-#12 shape. `department.yaml` adopts hybrid-shape from
-  inception per #16. A2A decisions inform whether agent-card
-  identity matters for Cowork-deployed offices. Before D (plugin
-  version bump). Before #6/#7/#9 if possible (so audit-trail v2 +
-  bootstrap-write tools land in the new shape, not the old).
+- **Order note (revised session 11)**: execute SIXTH in pre-RAG
+  queue (after #9 entity gate + #15 Client/Actor + #6 audit-trail
+  v2 + #7 bootstrap-write + #17 gate coverage review). Reason for
+  the move from position 1 to position 6: #11 is preparation work
+  for Cowork as the end-user runtime — Gunther is in Claude Code
+  build-phase today, not Cowork operate-phase, so #11 doesn't
+  unlock current capability. The 3-5 session refactor pass runs
+  on **already-final-shape skills** when it lands here (every
+  skill has been touched by #6/#7 retrofits + uses the generic
+  entity gate from #9), so it's a single-touch reshaping pass
+  rather than the first-of-two-passes the original ordering
+  produced. `department.yaml` adopts hybrid-shape from inception
+  per #16; the generic `read_entity` / `write_entity` gate from
+  #9 is the canonical loader (no per-loader hack). A2A decisions
+  inform whether agent-card identity matters for Cowork-deployed
+  offices. Before D (plugin version bump). Before #13 (deployment
+  flexibility — needs Cowork plugin shape settled).
 - **Per #16 constraint (session 10)**: `extensions/department/
   <dept>/department.yaml` file format **adopts hybrid-shape
   (md+frontmatter), NOT pure YAML**. Frontmatter declares
@@ -917,11 +941,21 @@ migration path" + commitment #10's HTTP MCP decision.
   - Post-RAG: additional cloud backends (CloudObject for
     non-Coolify clients), additional auth modes, migration
     tools, hardening (3-5 sessions, post-launch as needed)
-- **Order note**: execute FOURTH in pre-RAG queue (after
-  #10/#12/#11). Reason: needs #11's plugin shape decisions
-  (Cowork integration) settled, but the persistence-layer
-  abstraction must influence #6/#7/#9 schema work. So #13
-  design before #6/#7/#9 implementation.
+- **Order note (revised session 11)**: execute SEVENTH in pre-RAG
+  queue (after #9 + #15 + #6 + #7 + #17 + #11). Reason for the
+  move from position 4 to position 7: #13 is preparation work for
+  Tier-2 cloud deployment with multi-user readiness — Gunther
+  uses local stdio today, no consulting client engaged yet, so
+  multi-user + Coolify deployment doesn't unlock current
+  capability. The original "must influence #6/#7/#9 schema work"
+  argument no longer holds: persistence-layer abstraction is
+  surfaced via the Pydantic model boundary (which #9 is designing
+  from scratch via the generic entity gate); transport
+  abstraction is already decided (#10's HTTP MCP commitment); #6
+  + #7 retrofits don't depend on the persistence backend choice.
+  #13 still needs #11's plugin shape settled (original logic
+  preserved). Multi-user auth in #13 binds to Actor entity from
+  #15 (already produced earlier in the queue).
 - **The constraint and the fix**: today's pbs_mcp is stdio-based,
   spawned per-session, runs on user's machine. For consulting
   deployments at other companies, cloud is better — clients
@@ -978,11 +1012,12 @@ migration path" + commitment #10's HTTP MCP decision.
     layer abstractions, cloud deployment automation, tested
     end-to-end consulting deployment (3-5 sessions, post-launch
     when first consulting engagement is in sight)
-- **Order note**: execute FOURTH in pre-RAG queue (after
-  #10/#12/#11). Reason: needs #11's plugin shape decisions
-  (Cowork integration) settled, but the persistence-layer
-  abstraction must influence #6/#7/#9 schema work. So #13
-  design before #6/#7/#9 implementation.
+- **Order note (revised session 11)**: see prior order note above
+  — execute SEVENTH in pre-RAG queue (after #11). Persistence-
+  layer abstraction influences nothing in #6/#7/#9 schema work
+  under the runtime-fabric-first re-ordering — Pydantic boundary
+  is decoupled from storage backend; #6/#7 retrofits don't touch
+  storage layer; #9's generic entity gate is storage-agnostic.
 
 - **Hardware-spec research note** (session 8 followup, persisted
   for use when #13 lands): Schulz Planungsbüro Coolify reference
@@ -1169,10 +1204,15 @@ discipline.
   Auth integration in #13 maps roles to permissions; cross-
   department workflow rules can reference roles ("Invoice >€10K
   needs role=principal approval").
-- **Order note**: schedule **AFTER #13** (multi-user readiness
-  needed for Actor's auth integration) **BEFORE #6** (audit-trail
-  v2 retrofit references Actor; approval event kinds also
-  reference Actor for `approving_actor`).
+- **Order note (revised session 11)**: schedule **AFTER #9**
+  (generic entity gate available for Client + Actor implementation)
+  **BEFORE #6** (audit-trail v2 retrofit references Actor;
+  approval event kinds reference Actor for `approving_actor`).
+  The original "AFTER #13" rationale was multi-user-auth-binding;
+  under runtime-fabric-first re-ordering, the Actor data model
+  (Pydantic + MCP tools) lands first, and #13's auth binds to it
+  later. Net: #15 is now position 2 in remaining queue
+  (was position 3).
 - **Scope**: 1-2 sessions — Pydantic schemas + MCP tools +
   office-config migration + cross-department reference convention
   documentation.
@@ -1337,17 +1377,17 @@ work).
   - Failure-mode-catalog entry `incomplete-gate-coverage`
     coverage status updated from `partial` to `covered` once
     delivered.
-- **Order note**: opportunistic — could fold into #11's
-  user-facing-surface sweep (every skill checks gate usage as
-  it gets touched), OR run as standalone session before Phase
-  0 completes. Position 4 in pre-RAG queue (between #15 and
-  #6) is reasonable; could pull forward if #11 surfaces
-  coverage gaps directly.
-- **Dependencies**: benefits from #9 entity gate generalization
-  having landed (so post-#9 entity-mds are evaluated against
-  the new generic gate, not the per-entity tools); but doesn't
-  strictly block on it — could survey current state and re-run
-  after #9.
+- **Order note (revised session 11)**: position 5 in remaining
+  queue — execute AFTER #9 entity gate + #15 Client/Actor + #6
+  audit-trail v2 + #7 bootstrap-write have landed, BEFORE #11
+  Cowork integration. Reason: #17 surveys real gates produced by
+  the runtime-fabric-first wave; running #11 (Cowork integration)
+  on already-reviewed gates is the goal. The original "between
+  #15 and #6" position predates the runtime-fabric-first
+  re-ordering.
+- **Dependencies**: requires #9 entity gate generalization
+  having landed (post-#9 entity-mds are evaluated against the
+  new generic gate, not the per-entity tools).
 - **Scope**: 1 session for the survey + slice 22 scaffolding.
   Implementation of any new gates uncovered: per-gate
   sub-tasks, scoped per finding.
@@ -1368,36 +1408,63 @@ schema. Folds into #6 because it's already adding event kinds
 (`user_confirmation`); approval kinds add cleanly with no new
 infrastructure.
 
-**Recommended next-session order** (revised session 10):
+**Recommended next-session order** (revised session 11 —
+runtime-fabric-first re-ordering):
 
 ```
 Session 8:    #10 (A2A + Gemini emulation gate)          1 session   ✅ DONE
 Session 9:    #12 (department modularization design)     1 session   ✅ DONE
 Session 10:   #16 (AI-as-runtime hybrid-shape contract)  1 session   ✅ DONE
-Session 11-14: #11 (Cowork integration refactor)         3-5 sessions
-Session 15-17: #13 (deployment flex + Coolify ref dep)   2-3 sessions
-Session 18-19: #15 (Client + Actor as office entities)   1-2 sessions
-Session 20:   #17 (MCP gate coverage comprehensiveness)  1 session
-Session 21+:  #6 → #7 → #9 → #8 → C → D                  (per existing queue)
+Session 11-13: #9  (Department contract + managed-entity + generic entity gate)  2-3 sessions
+Session 14-15: #15 (Client + Actor as office-level managed entities)              1-2 sessions
+Session 16-18: #6  (audit-trail v2 retrofit)                                      2-3 sessions
+Session 19:    #7  (bootstrap-write MCP tools)                                    1 session
+Session 20:    #17 (MCP gate coverage comprehensiveness review)                   1 session
+Session 21-25: #11 (Cowork integration refactor)                                  3-5 sessions
+Session 26-28: #13 (deployment flex + Coolify reference deployment)               2-3 sessions
+Session 29-30: #8  (pre-action framing skill)                                     1-2 sessions
+Session 31+:   C → D
               + #14 (Memory Bank) bundled with Phase 1   2 sessions
 ```
 
-The reasoning:
-- **A2A first** (smallest, fastest, informs everything
-  downstream — every schema decision needs to know whether
-  A2A-friendly identity is a constraint).
-- **Department modularization second** (informs Cowork
-  integration's slash-command namespacing + skill frontmatter
-  shape).
-- **Cowork integration third** (deep + complete refactor under
-  no-sunk-costs directive; runs on the new department-aware
-  shape).
-- **Cloud deployment architecture fourth** (persistence-layer
-  abstraction + transport must influence #6/#7/#9 schema work;
-  benefits from #11's plugin shape being settled first).
-- **Audit-trail v2 + bootstrap-write + pattern-vs-instance
-  fifth** (build on the new shape — including cloud-aware
-  persistence — not refactor the old).
+The reasoning (revised session 11):
+- **A2A first, department modularization second, hybrid-shape
+  third** — already shipped sessions 8-10. Each was a single-
+  session decision-heavy slot that informed everything downstream.
+- **Runtime fabric next (#9 → #15 → #6 → #7)** — these unlock
+  real project work. #9 produces the generic entity gate
+  (`read_entity` / `write_entity` with type-field dispatch to
+  Layer-2 Pydantic subclass) — load-bearing for every later
+  consumer. #15 (Client + Actor) is the first downstream
+  consumer; #6 retrofits audit-trail v2 against the gate +
+  Actor refs; #7 closes the bootstrap-write meta-rule 4 gap.
+  Without these, no project can be bound + operated.
+- **#17 (gate coverage review) right after** — natural review
+  checkpoint once entity gate + new entity types have landed.
+  Surveys real gates, not yet-to-be-written ones.
+- **#11 (Cowork integration) sixth** — when skills get reshaped
+  to Cowork form (slash commands, `department:` frontmatter,
+  `pbs.local.md`), every skill is **already in final
+  backend-tools shape from #6/#7 retrofits**. Single skill-touch
+  pass instead of double-touch.
+- **#13 (deployment flex + Coolify) seventh** — needs Cowork
+  plugin shape settled (original logic preserved). Multi-user
+  auth binds to Actor entity (which #15 already produced).
+- **#8 (framing skill) last** — codifies the pattern-vs-instance
+  reasoning #9 produces into repeatable skill.
+
+**What changed vs the prior session-10 order**: #11 + #13 moved
+from positions 1-2 (preparation refactors for runtimes the user
+isn't using yet — Cowork end-user mode + Tier-2 cloud) to
+positions 6-7. #9 moved from position 7 to position 1 because
+#16's hybrid-shape principle made the generic entity gate
+load-bearing for every subsequent commitment — building #11/#15
+without it forces either per-loader hacks (creating exactly the
+silent-convergence failure mode #16 is meant to prevent) or
+one-off gates that #9 has to refactor away. The "examine stable
+schemas" rationale for #9-last predates the session-9 reframe;
+#9 no longer extracts a universal core, it designs the contract
+from scratch, and the downstream commitments are the consumers.
 
 All thirteen items: pre-RAG architectural commitments. Phase 1
 corpus download unblocks pending sections B (audit-trail

@@ -28,6 +28,39 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
+## Session 11 — pre-RAG queue re-ordering (runtime-fabric-first)
+
+Before substantive #9 work begins, session 11 re-ordered the
+pre-RAG queue. **#9 + #15 + #6 + #7 + #17 pulled forward of
+#11 + #13.** Reasoning:
+
+- **#9's generic entity gate is load-bearing for every later
+  commitment** per #16's hybrid-shape principle. Building #11
+  (`department.yaml`) or #15 (Client/Actor) before #9 forces
+  per-loader hacks (creating exactly the silent-convergence
+  failure mode #16 is meant to prevent) or one-off gates that
+  #9 has to refactor away.
+- **#11 + #13 are preparation work** for runtimes the user isn't
+  using yet (Cowork end-user mode + Tier-2 cloud) — Gunther is
+  in Claude Code build-phase, no projects bound, no consulting
+  client engaged. Running them in positions 1-2 is 5-8 sessions
+  of refactor with no operational validation feedback.
+- **Skill double-touch tax avoided**: with #6 + #7 retrofits
+  before #11, the Cowork integration sweep works on already-final-
+  shape skills. Single-touch reshape instead of double-touch.
+
+The "examine stable schemas" rationale for #9-last predates the
+session-9 reframe — #9 no longer extracts a universal core, it
+designs the contract from scratch. See ROADMAP.md "Recommended
+next-session order" block + per-commitment Order notes for full
+rationale.
+
+**Updated pre-RAG queue**:
+**#9 → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C → D → Phase 0
+→ Phase 1+#14**.
+
+---
+
 End of session 10 (2026-04-29). This session executed pre-RAG
 commitment **#16 (AI-as-runtime hybrid-shape contract)** —
 single-session framing-pass work resolving the structured-vs-
@@ -243,13 +276,13 @@ defers, not YAGNI.
    (v0.11); scope-orthogonality 4 axes; meta-rule 3 invalidation
    includes ProjectState.departments_active.
 3. **`docs/decisions/ai-as-runtime-hybrid-shape.md`** — session-10
-   load-bearing artifact. Read before tackling #11 (which adopts
-   the hybrid-shape principle for `department.yaml` from
-   inception). Three-layer frontmatter contract; body conventions
-   per entity type; process-as-md.
+   load-bearing artifact. **Read before tackling #9** (which
+   implements the generic entity gate + Layer-1/Layer-2 contract +
+   entity-md spec). Three-layer frontmatter contract; body
+   conventions per entity type; process-as-md.
 4. **`docs/decisions/office-vs-department.md`** — session-9
-   load-bearing artifact. Read before tackling #11 (which
-   implements much of the structural sweep).
+   load-bearing artifact. Read before tackling #9 (managed-entity
+   concept) and #11 (department modularization sweep).
 5. **`docs/decisions/a2a-and-gemini-pattern-emulation.md`** —
    session-8 artifact. Per-row decisions + constraints. Rows 8-9
    added in session-8 followup.
@@ -260,8 +293,13 @@ defers, not YAGNI.
    - `audit-trail-v1.md` (SUPERSEDED, header note)
    - `sparring-output-v1.md` (session 6)
    - `backend-{test-layout,logging,mcp-error-format}.md` (session 5)
-7. **`ROADMAP.md`** — commitments #10 + #12 + #16 shipped.
-   Remaining pre-RAG queue: **#11 → #13 → #15 → #6 → #7 → #9 →
+7. **`docs/conventions/entity-md-spec.md`** — session-10 followup
+   scaffold. Single source of truth for hybrid-shape contract
+   implementation. **Read before tackling #9** (which fills in
+   Layer-2 schemas + body specs per entity type).
+8. **`ROADMAP.md`** — commitments #10 + #12 + #16 shipped.
+   **Remaining pre-RAG queue (revised session 11 — runtime-fabric-
+   first re-ordering)**: **#9 → #15 → #6 → #7 → #17 → #11 → #13 →
    #8 → C → D → Phase 0 → Phase 1+#14**. Generalize-and-publish
    in v1.x. AI-office builder + Agent Simulation in v2.
 8. **`docs/plugin-conventions.md`** — §11 (triggers) + §11b
@@ -295,18 +333,28 @@ defers, not YAGNI.
 **#10 ✅ shipped session 8.** **#12 ✅ shipped session 9.**
 **#16 ✅ shipped session 10** (AI-as-runtime hybrid-shape contract).
 **#14 (Memory Bank) added session-8 followup.** **#15 (Client +
-Actor) added session-9 followup #2** — pre-RAG, scheduled between
-#13 and #6. Recommended execution order:
+Actor) added session-9 followup #2.**
+
+**Recommended execution order revised session 11** —
+runtime-fabric-first re-ordering. #9 + #15 + #6 + #7 + #17 pulled
+forward of #11 + #13 because the generic entity gate (#9) is
+load-bearing for every later commitment, and #11 + #13 are
+preparation work for runtimes the user isn't using yet (Cowork
+end-user mode + Tier-2 cloud) so they don't unlock current
+capability. See ROADMAP.md "Recommended next-session order"
+block + per-commitment Order notes for full rationale.
 
 ```
-Session 11-14: #11 (deep Cowork integration refactor)         3-5 sessions
-Session 15-17: #13 (deployment flexibility + Coolify ref dep)  2-3 sessions
-Session 18-19: #15 (Client + Actor as office entities)         1-2 sessions
-Session 20:   #17 (MCP gate coverage comprehensiveness review) 1 session
-Session 21+:  #6 → #7 → #9 → #8                               per existing queue
-              C (sparring-output integration)
-              D (plugin version bump)
-Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
+Session 11-13: #9  (Department contract + managed-entity + generic entity gate)  2-3 sessions
+Session 14-15: #15 (Client + Actor as office-level managed entities)              1-2 sessions
+Session 16-18: #6  (audit-trail v2 retrofit)                                      2-3 sessions
+Session 19:    #7  (bootstrap-write MCP tools)                                    1 session
+Session 20:    #17 (MCP gate coverage comprehensiveness review)                   1 session
+Session 21-25: #11 (Cowork integration refactor)                                  3-5 sessions
+Session 26-28: #13 (deployment flex + Coolify reference deployment)               2-3 sessions
+Session 29-30: #8  (pre-action framing skill)                                     1-2 sessions
+Session 31+:   C (sparring-output integration) → D (plugin version bump)
+Then:          Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 ```
 
 ### Already shipped (architectural backstops)
@@ -337,36 +385,36 @@ Then:         Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 
 ### Remaining for next-immediate-session-before-RAG
 
-**#11 — Cowork as primary end-user runtime, DEEP integration**
-(ROADMAP commitment #11) — **POSITION 1 in remaining queue**:
-- Deep + complete integration directive: adopt Anthropic's plugin
-  shape wholesale where it differs from ours.
-- **Per #12 constraint**: all 19+ skills get `department:`
-  frontmatter (REQUIRED, no default). Slash commands namespaced
-  (`/<dept>:<skill>` — `/planning:draft-begruendung`,
-  `/office:setup-office`, etc.). Office-config `departments.<name>`
-  schema bump + migration co-located with `pbs.local.md`.
-  `extensions/department/<dept>/department.yaml` file format
-  implementation. New `integrate-department` skill creation.
-- **Per #10 constraint**: plugin agents emit events as
-  `actor_kind="skill", actor_card=<agent-name>`.
-- 3-5 sessions; substantial refactor touching every user-facing
-  surface.
-
-**#13 — Deployment flexibility + Coolify reference deployment**
-(ROADMAP commitment #13) — **POSITION 2 in remaining queue**:
-- Pluggable persistence + auth + transport abstractions.
-- **Per #10 constraint**: HTTP MCP transport implementation lands
-  here. AuditEvent.user_id field for multi-user attribution. Data
-  classification annotations.
-- **Hardware spec persisted** (session-8 followup): start
-  CCX23/CCX33 Hetzner Cloud, ingestion-vs-serving split (heavy
-  compute on RTX 5090 local, rsync indices to cloud), upgrade-
-  triggered to GEX44/GEX131 if needed.
+**#9 — Department module contract + managed-entity concept +
+generic entity gate** (ROADMAP commitment #9) — **POSITION 1 in
+remaining queue (revised session 11)**:
+- **Mission**: design the department module contract +
+  managed-entity concept with two delivery modes (native +
+  adapter-delegated). Produces the generic
+  `read_entity` / `write_entity` MCP gate with `type:`-field
+  dispatch to Layer-2 Pydantic subclass — load-bearing for every
+  later pre-RAG commitment.
+- **Why position 1**: #16's hybrid-shape principle made the
+  generic entity gate load-bearing. Building #11 (`department.yaml`)
+  or #15 (Client/Actor) before #9 forces per-loader hacks
+  (creating exactly the silent-convergence failure mode #16
+  prevents) or one-off gates #9 has to refactor.
+- **Per #12 constraints**: per-department phase tracking
+  (`phases: dict[str, str]`), per-department lifecycle
+  (`lifecycle: dict[str, Lifecycle]`), Project-as-long-running-
+  entity opt-in per department.
+- **Per #16 constraints**: generic entity gate + Layer-1/Layer-2
+  Pydantic contract + `docs/conventions/entity-md-spec.md`
+  authored alongside Layer-2 schemas + ProjectState relocates to
+  `extensions/department/planning/entities/project.py` + audit
+  slice 21 + design-review target 12 implementation + migration of
+  `extensions/universal/doctypes.yaml` + per-domain `doctypes.yaml`
+  → per-entity md files.
 - 2-3 sessions.
 
-**#15 — Office-level managed entities (Client + Actor)** (added
-session-9 followup #2):
+**#15 — Office-level managed entities (Client + Actor)** (ROADMAP
+commitment #15) — **POSITION 2 in remaining queue (revised
+session 11)**:
 - Office-level managed entities concept introduced —
   `extensions/office/entities/<entity>.py` (parallel to
   `extensions/department/<dept>/entities/`).
@@ -374,15 +422,21 @@ session-9 followup #2):
   Project (planning), Invoice (invoicing), Timesheet (PM), etc.
 - **Actor** refactor — migrate from `office-config.actors[]`
   semi-typed config to first-class native managed entity. Identity
-  primitive for #13's multi-user auth.
+  primitive for #13's multi-user auth (which lands later in queue).
 - Cross-department reference convention: entities hold
   `<entity>_id: str` fields; gate validates references exist;
   no FK enforcement at storage layer.
-- 1-2 sessions; AFTER #13 (multi-user); BEFORE #6 (audit retrofit
-  references Actor).
+- **Per #16 constraint**: Client + Actor land as md files at
+  `extensions/office/entities/clients/<id>.md` and
+  `extensions/office/entities/actors/<id>.md`, following the
+  three-layer frontmatter contract (using #9's generic entity
+  gate).
+- 1-2 sessions; AFTER #9 (gate available); BEFORE #6 (audit
+  retrofit references Actor).
 
-**#6 — Audit-trail v2 retrofit** (per `audit-trail-v2.md`,
-**scope expanded session-9 followup #2**):
+**#6 — Audit-trail v2 retrofit** (ROADMAP commitment #6) —
+**POSITION 3 in remaining queue (revised session 11)** — per
+`audit-trail-v2.md`, **scope expanded session-9 followup #2**:
 - Backend: `record_decision` + `render_audit_trail` tools;
   `user_confirmation` event kind; `reasoning_full_text` in
   decision/module_decision details; drop `phase_history` from
@@ -399,60 +453,73 @@ session-9 followup #2):
 - **Per session-9 followup #2 (approval flows)**: add event kinds
   `approval_requested`, `approval_granted`, `approval_rejected`.
   Details payload: `approving_actor`, `policy_rule`, `subject_entity_id`.
-  Approval flows are event-driven, NOT entity-shaped (per the
-  3-test entity-elevation discipline). Authorization rules live in
-  skill logic, not entity schema.
 - Skills: orchestrator + save-baustein + record-feedback +
   draft-textteil-b/c + review-draft + research-references retrofits.
 - Migration: `backfill_audit_trail` walks legacy prose sources.
+- 2-3 sessions.
 
-**#7 — Bootstrap-write MCP tools**:
+**#7 — Bootstrap-write MCP tools** (ROADMAP commitment #7) —
+**POSITION 4 in remaining queue (revised session 11)**:
 - `create_manifest` + `create_office_config` (Pydantic-validated
   first-write through loader).
 - `author-manifest` + `setup-office` skill retrofits.
+- 1 session.
 
-**#9 — Department module contract + managed-entity concept**
-(reframed session-9 followup; was "Pattern-vs-instance best-
-effort split"):
-- **Mission**: design the department module contract +
-  managed-entity concept with two delivery modes (native +
-  adapter-delegated). The original "extract universal core"
-  framing was wrong — there is no universal entity-type core;
-  each department defines its own entity types completely.
-- **Per #12 constraints**:
-  - Per-department phase tracking (`phases: dict[str, str]`)
-  - Per-department lifecycle (`lifecycle: dict[str, Lifecycle]`)
-  - Project-as-long-running-entity becomes opt-in per department
-- **Managed-entity concept work**:
-  - Two delivery modes per entity (native + adapter), mixed-mode
-    within a department supported
-  - Adapter mode generalizes meta-rule 1's existing integration-
-    adapter pattern (same Pydantic Protocol + concrete adapter
-    contract; expanded consumer set from auxiliary integrations
-    to primary department system-of-record)
-  - ProjectState refactor: from
-    `backend/mcp-server/src/pbs_mcp/project_state.py` to
-    `extensions/department/planning/entities/project.py`
-    (planning department's primary native managed entity)
-  - Per-company customization mechanism design: choose between
-    Pydantic subclass / `extra_fields: dict[str, type]` /
-    `metadata: dict` escape hatch
-- Office-config schema: `departments.<name>.entities.<entity>.
-  {mode,adapter,config}` per-entity sub-sections
-- Doctype-manifest generalization (per-department contribution)
-- Output: refactored backend + skill retrofits + passing PBS
-  tests + `pattern-vs-instance-split-rationale.md` documenting
-  per-decision reasoning
-- **Order note**: AFTER #6 + #7 (so #9 examines stable post-v2
-  schemas + bootstrap-write tool interfaces); BEFORE #8.
-- **Scope**: 2-3 sessions (was 1-2; expanded per session-9
-  followup reframe).
+**#17 — MCP gate coverage comprehensiveness review** (ROADMAP
+commitment #17) — **POSITION 5 in remaining queue (revised
+session 11)**:
+- Comprehensive sweep of all contract-bearing files / file types
+  in the repo for gate presence + strictness. Slice 22 scaffolded
+  if discoveries warrant.
+- Surveys real gates produced by #9 + #15 + #6 + #7 (not
+  yet-to-be-written ones).
+- 1 session.
 
-**#8 — Pre-action framing skill**:
+**#11 — Cowork as primary end-user runtime, DEEP integration**
+(ROADMAP commitment #11) — **POSITION 6 in remaining queue
+(revised session 11)**:
+- Deep + complete integration directive: adopt Anthropic's plugin
+  shape wholesale where it differs from ours.
+- **Per #12 constraint**: all 19+ skills get `department:`
+  frontmatter (REQUIRED, no default). Slash commands namespaced
+  (`/<dept>:<skill>` — `/planning:draft-begruendung`,
+  `/office:setup-office`, etc.). Office-config `departments.<name>`
+  schema bump + migration co-located with `pbs.local.md`.
+  `extensions/department/<dept>/department.yaml` file format
+  implementation (using #9's generic entity gate). New
+  `integrate-department` skill creation.
+- **Per #10 constraint**: plugin agents emit events as
+  `actor_kind="skill", actor_card=<agent-name>`.
+- **Why moved from position 1 to position 6**: #11 is preparation
+  work for Cowork as end-user runtime — Gunther is in Claude Code
+  build-phase today, not Cowork operate-phase. Running #11 here
+  means the skill refactor pass works on already-final-shape
+  skills (post-#6/#7 retrofits), single-touch instead of
+  double-touch.
+- 3-5 sessions; substantial refactor touching every user-facing
+  surface.
+
+**#13 — Deployment flexibility + Coolify reference deployment**
+(ROADMAP commitment #13) — **POSITION 7 in remaining queue
+(revised session 11)**:
+- Pluggable persistence + auth + transport abstractions.
+- **Per #10 constraint**: HTTP MCP transport implementation lands
+  here. AuditEvent.user_id field for multi-user attribution. Data
+  classification annotations.
+- **Hardware spec persisted** (session-8 followup): start
+  CCX23/CCX33 Hetzner Cloud, ingestion-vs-serving split (heavy
+  compute on RTX 5090 local, rsync indices to cloud), upgrade-
+  triggered to GEX44/GEX131 if needed.
+- 2-3 sessions.
+
+**#8 — Pre-action framing skill** (ROADMAP commitment #8) —
+**POSITION 8 in remaining queue (revised session 11)**:
 - Design + scaffold meta-skill (`frame-task` or `scoping`).
 - Triggered on non-trivial task starts.
 - **Order note**: AFTER #9 — codifies pattern-vs-instance reasoning
-  produced by #9 into a repeatable check.
+  produced by #9 into a repeatable check. Last in pre-RAG queue
+  before C/D/Phase-0/Phase-1.
+- 1-2 sessions.
 
 **#14 — Memory Bank** (session-8 followup):
 - `search_memory` + `read_memory_entry` MCP tools; LanceDB index
