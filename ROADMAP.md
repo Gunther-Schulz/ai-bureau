@@ -240,38 +240,40 @@ See full analysis at
   on contract fields — graceful failure reporting; validation is
   the gate's responsibility.
 
-### 🚧 BLOCKING SUBSTRATE EVALUATIONS (added session 11)
+### 🚧 PRE-RAG QUEUE — current order (locked session 14)
 
-Three substrate-framework evaluations BLOCKING for #9 implementation
+**Locked order** (per session 14 reorder):
+
+| # | Step | Commitment | Why this position |
+|---|---|---|---|
+| 1 | DESIGN | **#25** Shape extension framework + Option B floor | Architectural foundation; locks shape extension contract + Option B 3-axiom structural floor; downstream Bundle design + #11 + #24 inherit |
+| 2 | EVAL | **#20** PydanticAI evaluation | Informs Bundle B Layer-3 mechanism choice (Option A: Pydantic subclass / Option B: declared extra_fields / Option C: metadata dict) — placed BEFORE Bundles to lock Layer-3 naturally without provisional annotation |
+| 3 | DESIGN | **Bundles B/C/D/E** (#9 design) | Inherits #25 shape model; Layer-3 mechanism locked by #20 result |
+| 4 | IMPLEMENT | **#11** Cowork integration | Implements #25 + #9 designs; specialist primitive operational in Cowork plugin shape; 19 skills frontmatter sweep; slash command namespacing |
+| 5 | IMPLEMENT | **#24** EU AI Act + DACH compliance specialist | HARD REQUIREMENT before Aug 2026 production B-Plan; needs #11 (specialist operational) + #25 (Option B floor active) |
+| 6 | EVAL | **#19** LlamaIndex pluggable RAG eval + memory adapters (Mem0/Zep/Graphiti/Cognee) | Last in pre-RAG queue; informs Phase 1 corpus + Memory Bank shape; can wait until corpus shape needs to lock |
+
+**After pre-RAG queue**: #15 (Client + Actor) → #6 (audit-trail v2 retrofit) → #7 (bootstrap-write) → #17 (MCP gate coverage) → #13 (deployment flexibility / Coolify) → #8 (pre-action framing skill) → C (sparring-output integration) → D (plugin version bump) → Phase 0 + Phase 1.
+
+### Historical context — BLOCKING SUBSTRATE EVALUATIONS (added session 11; reordered session 14)
+
+Three substrate-framework evaluations originally BLOCKING for #9 implementation
 phase + #11 + #13 + Phase 1 corpus + all downstream code work.
-Surfaced session 11 when the substrate question ("why don't we
-build on agentic frameworks?") + corrected counterfactual ("we
-started 2 days ago, so full refactor when it's a win is the
-explicit tenet") forced honest re-evaluation. Each is a focused
-1-2 session investigation producing a decision record.
+Surfaced session 11. **#18 + #21 SHIPPED session 12** (Claude Agent SDK + MS AF dual-substrate adopted). #19 + #20 reordered session 14 — see queue table above. Original ordering rationale below for historical reference.
 
-**Why blocking**: substrate choice (orchestration runtime + RAG
+**Why originally blocking**: substrate choice (orchestration runtime + RAG
 primitives + typed agent abstraction) influences the Python
 implementation of every downstream pre-RAG commitment. Doing the
 evaluations after locking implementation choices means
-retrofitting under sunk-cost pressure. Doing them now, at the
-2-days-in scale, is the cheap window — per "deep + complete
-integration, no consideration for sunk costs" (session-7 #11
-directive) + pre-launch deprecation discipline (essentially free
-per ARCH).
+retrofitting under sunk-cost pressure.
 
 **What can proceed in parallel** (substrate-agnostic): Bundles
 B + C + D + E design work (entity gate signatures, Pydantic
 schema shapes, body-preservation contracts, Layer 3 mechanism
 options, ProjectEntity migration plan). Pure design doesn't
-depend on substrate. Implementation phase WAITS for substrate
-decision.
+depend on substrate. **Per session-14 reorder: #20 happens BEFORE Bundle design to lock Layer-3 naturally.**
 
-**Order**: #18 (MS AF) first — highest leverage, affects
-orchestration + transport + agent runtime. #19 (LlamaIndex) second
-— RAG-specific, before Phase 1. #20 (PydanticAI) third — narrowest
-surface, but evaluating now lets us treat as future-ready if
-adopted.
+**Original order** (session 11; superseded session 14): #18 (MS AF) first; #19 (LlamaIndex) second; #20 (PydanticAI) third. **Session 14 reorder above is current.**
 
 **18. Agentic framework substrate evaluation (multi-framework)**
 (BLOCKING) — session 11 commitment.
@@ -461,9 +463,12 @@ corpus) — session 11 commitment.
   evaluation + pluggable boundary + adoption recommendations +
   performance read + decision.
 - **Scope**: 1-2 sessions.
-- **Order**: position 2 in pre-RAG queue (after #18). Before Phase 1
-  corpus download (corpus shape gets locked once entries are
-  processed).
+- **Order (updated session 14)**: **POSITION 6 (LAST) in pre-RAG queue**
+  — after #25 design + #20 + Bundles + #11 + #24 implementation. Scope
+  EXTENDED session 14 to also include memory adapter evaluation (Mem0 /
+  Zep / Graphiti / Cognee) — same architectural question (build vs
+  adopt vs pluggable). Before Phase 1 corpus download (corpus shape +
+  memory shape get locked once entries are processed).
 - **Constraints flowing if pluggable adoption**:
   - Phase 1 corpus pipeline uses LlamaIndex for parsers + chunkers +
     retrieval
@@ -501,10 +506,13 @@ over-weighted.
   analysis + win surface + decision (adopt now / adopt at v2 /
   reject).
 - **Scope**: 1 session.
-- **Order**: position 3 in pre-RAG queue (after #18 + #19). Earlier
-  than v2 because evaluating now lets us be future-ready if adopted
-  (per "full refactor at 2-days-in is cheap"). Could also surface
-  insights for Bundle B Layer-3-mechanism decision.
+- **Order (updated session 14)**: **POSITION 2 in pre-RAG queue** —
+  after #25 design (architectural foundation), BEFORE Bundles B/C/D/E
+  design. Promoted from session-11 "before Bundle B Layer-3 mechanism
+  decision specifically" to "before all Bundle design" — preserves
+  #20-informs-Bundle-B-Layer-3 dependency naturally without provisional
+  annotation. Earlier than v2 because evaluating now lets us be
+  future-ready if adopted.
 - **Constraints flowing if adopted**:
   - Skill output validation rebuilt on PydanticAI
   - Layer 3 mechanism may shift toward Option A (Pydantic subclass)
@@ -683,7 +691,7 @@ multi-round sharpening work.
   - DSGVO controller-posture clarity + RoPA
   - BRAK/BAK-aligned client disclosure clause
 - **Critical architectural constraint**: Art. 25(1)(b) substantial-modification trap — practitioner-author categorization must STRUCTURALLY prevent specialist authorship from shifting intended purpose (or practitioner becomes provider with full Art. 16 obligations: CE marking, conformity assessment, EU database registration). Make impossible by structural design (specialist conformity manifest as Pydantic gate); NOT solvable by convention.
-- **Order**: AFTER #11 (Cowork integration — specialist primitive operational); AFTER #25 (shape extension framework + Protocol pluggability — needed for substrate-level conformity gate); BEFORE first PBS-Schulz production B-Plan ships.
+- **Order (locked session 14 reorder)**: **POSITION 5 in pre-RAG queue** — DESIGN can happen anytime; IMPLEMENTATION needs #11 (Cowork integration — specialist primitive operational) + #25 (shape extension + Option B floor implementation). Sequence: #25 design → #20 → Bundles → #11 → **#24** → #19. BEFORE first PBS-Schulz production B-Plan ships (Aug 2026 hard deadline for Art. 50(4) AI-disclosure).
 - **Strategic asset**: ISO 42001 SoA scaffold publishable as marketplace asset — cuts cert cost dramatically for any EU practitioner workspace adopter; major commercial differentiator.
 - **Constraints flowing**:
   - **#9 Bundle B (entity gate + Layer 3)**: specialist conformity manifest is Pydantic Layer-2 schema; gate enforcement at write-time
@@ -711,7 +719,7 @@ multi-round sharpening work.
   - Long-running runtime substrate adapter (referenced from R3a in-process MCP work; needed for autonomous-business shape)
   - Practitioner-shape extension reference implementation (PBS pioneer = practitioner-shape) — validates contract end-to-end
   - Option B structural floor implementation: anti-Art-25-trap gate (specialist conformity manifest Pydantic gate) + claim-level audit baseline (always emitted) + human authority chain enforcement (configurable granularity)
-- **Order**: AFTER #11 (Cowork integration — specialist primitive operational); AFTER #9 (entity gate + Substrate Protocol implementation); BEFORE marketplace v3 (shape extension contract = marketplace listing schema for shape distribution); BEFORE #24 implementation (which needs Option B structural floor).
+- **Order (locked session 14 reorder)**: **POSITION 1 in pre-RAG queue** — DESIGN first as architectural foundation (locks shape extension contract + Option B floor specs; downstream Bundle design + #11 + #24 inherit). IMPLEMENTATION can wait for #11 substrate (specialist primitive operational in Cowork plugin shape) + #9 entity gate. Sequence: **#25 design** → #20 → Bundles → #11 → #25 implementation lands within #11 → #24 → #19. BEFORE marketplace v3 (shape extension contract = marketplace listing schema for shape distribution).
 - **Strategic asset**: enables Tom Sawyer dynamic — community can author shape extensions for shapes PBS doesn't market (autonomous-business / personal-OS / sovereign / federation / hybrid). Framework breadth grows organically without PBS effort. Marketplace v3 hosts shape extensions alongside specialists.
 - **Constraints flowing**:
   - **#9 implementation**: Substrate Protocol common surface gains shape-extension hooks; SpecialistDescriptor includes `shapes_supported` field
