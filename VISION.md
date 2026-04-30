@@ -130,40 +130,6 @@ A system can fail on any axis independently:
 PBS aims for all three: **intertwined sparring partnership in
 service of defensible authorship.**
 
-### Counter-VISION engagement — the strongest opposing thesis (added Round 2 sharpening session 14)
-
-The dominant 2026 opposing thesis is **service-as-software**
-(Sequoia / Bek's "Services: The New Software"; a16z reinforcing):
-AI rapidly becomes better than median practitioner; replacing the
-practitioner reduces cost AND improves output quality; market
-wants outcomes not assistance. Portfolio examples: Harvey, Rogo,
-Crosby, Anterior, Lawhive, Mercor.
-
-PBS rejects this thesis specifically for **high-stakes regulated
-work** (B-Plan drafting, legal pleading, medical diagnosis, audit,
-financial advisory, regulatory filing). The argument:
-
-- **Accountability cannot be delegated.** Practitioner remains
-  professionally + legally responsible regardless of who/what
-  generated the output. Service-as-software creates an
-  accountability gap.
-- **Sparring + authorship-preservation IS the alternative to
-  delegation.** Practitioner trades skill-substitution for
-  capacity-amplification — net welfare positive across the
-  practitioner's career.
-- **EU AI Act + DACH Berufsrecht structurally rewards
-  practitioner-as-deployer posture** — service-as-software muddies
-  provider/deployer classification.
-- **Stanford "workslop" research** (TechCrunch Sep 2025): 40% of
-  employees deal with AI-generated work that creates remediation
-  labor (~2hrs/instance, ~$9M/yr per 10K-person org). The thesis
-  may be empirically harder than VC consensus assumes.
-
-PBS positioning is structurally hostile to the service-as-software
-thesis. Cherry Ventures (Berlin) is the only published EU VC
-thesis match: *"AI supports and enhances human creativity… without
-replacing"*; chess-player-and-computer model.
-
 ### What VISION does NOT claim (added Round 2 sharpening session 14)
 
 Drawing the negative space sharpens the positive:
@@ -281,42 +247,11 @@ diluting Ming):
   innovation surface) — strategic-empirical confirmation that
   practitioner-amplification is fundable in EU/DACH context
 
-### Practitioner vs Specialist — vocabulary clarification (added v0.32 session 14; canonical reference)
+### Practitioner vs Specialist — vocabulary
 
-Two distinct primitives that get conflated easily. This table is canonical (per ARCH Maintenance discipline rule 3 — same-commit sync with related sections):
+Practitioner = the HUMAN expert author (this VISION's central archetype). Specialist = the codified expertise BUNDLE (architectural primitive employed by practitioner). Distinct primitives — practitioner authors + signs + bears accountability; specialist executes + drafts + sparrs.
 
-| Dimension | **Practitioner** | **Specialist** |
-|---|---|---|
-| Nature | Human being (biological, mortal) | Code + markdown bundle (digital, versionable) |
-| Conceptual layer | VISION primitive (the expert author archetype) | ARCHITECTURE primitive (composable expertise unit) |
-| Examples | Gunther Schulz (planner); Hendrik (planner); hypothetical lawyer / researcher / accountant | `planning-document-work`, `citation-verification`, `brand-voice`, `eu-ai-compliance` |
-| Identity | Real person + name + credentials + Berufshaftpflicht | `specialist_id` (kebab) + Pydantic Layer 2 schema + bundled markdown + version |
-| Relationship to workspace | Typically 1 per workspace (the practitioner whose practice the workspace serves) | N per workspace (workspace EMPLOYS many specialists) |
-| Role in workflow | **Authors + judges + signs + bears accountability** | **Executes + drafts + retrieves + sparrs + records** |
-| Knowledge type (per axis 2 asymmetric knowledge respect) | **Tacit + current + causal** (this Bürgermeister; last week's Gemeinderat; recent shift; political moment) | **Codified + historical + statistical** (every prior project; captured bausteine; corpus citations; pattern recognition) |
-| Distribution | N/A — practitioners are people | **Distributable** via specialist marketplace (v3) |
-| Composability | Practitioners author + employ specialists; don't compose | **Composes**: skills + entities + memory + references + adapters; bundle is the composability unit |
-| Liability | **Bears legal + professional liability** (Berufsrecht; Berufshaftpflicht; AI Act practitioner-as-deployer) | None — specialist is a tool; liability stays with practitioner |
-| Authority (Option B floor) | **Provides the human authority somewhere in accountability chain** | Subject to specialist conformity manifest gate; cannot autonomously shift intended purpose |
-| Per VISION axis | The "user" who remains the AUTHOR (axis 3) | The "AI" that becomes co-worker (axis 1) + sparring partner (axis 2) |
-| Per shape (per #25 shape extension) | Practitioner-shape: human practitioner. Autonomous-business-shape: operator/board (not practitioner — supervises). Personal-OS-shape: individual (lighter-weight). KG-shape: curator | Same architectural primitive across all shapes; configured per shape needs |
-
-**The third term — "Expert"** (per session-11 `skill-expert-agent-and-domain-knowledge.md`):
-- Optional per-deployment UX vocabulary via `display_label` field on skill OR specialist frontmatter
-- PBS-Schulz UX may call planning-document-work specialist "Begründungs-Schreiber Expert"
-- Other deployments may use "Specialist" / "Co-author" / "Counselor" / domain-specific names
-- UX-only; NOT architectural primitive
-
-**Why both Practitioner + Specialist exist as distinct primitives** (anti-conflation):
-1. Different layers: practitioner = VISION-level human archetype; specialist = ARCHITECTURE-level composable primitive
-2. Different lifecycles: practitioners have careers; specialists have versions
-3. Different distribution: practitioners aren't distributable; specialists ARE (marketplace v3)
-4. Different liability: practitioner bears it; specialist doesn't
-5. Different knowledge types: tacit + current vs codified + historical (asymmetric knowledge respect axis)
-6. **Anti-conflation under EU AI Act**: practitioner = deployer; specialist = component within system — clean Art. 25 categorization requires the distinction
-7. **Anti-conflation under Berufsrecht**: planner remains liable regardless of AI assistance — practitioner CANNOT be a specialist (would shift liability inappropriately)
-
-The distinction enforces clarity about **who is responsible** (practitioner) vs **what does the work** (specialists).
+For full comparison + anti-conflation reasoning + per-shape variation see `ARCHITECTURE.md` "Practitioner vs Specialist primitives" section. (Lives in ARCH because it's vocabulary about architectural primitives.)
 
 The contrast that makes axis 1 concrete:
 
@@ -1117,65 +1052,14 @@ This is the deepest anchor. ARCHITECTURE.md describes how the
 system is structured; this document describes why and against
 what failure modes.
 
-## VISION ≠ ARCHITECTURE — what lives where (added Round 2 sharpening session 14)
+## Where this fits — VISION vs ARCH vs strategic-positioning
 
-VISION = WHY claims (value claims; what PBS commits to deliver).
-ARCHITECTURE = HOW implementations (structural primitives;
-disciplines; meta-rules). Disciplines (8 design + 3 operational +
-4 meta-rules) are HOW serving WHY.
+VISION = WHY (value claims). `ARCHITECTURE.md` = HOW (structural primitives + disciplines). `docs/strategic-positioning.md` = MARKET (positioning + competitive landscape + funding). Cross-doc: VISION axes get IMPLEMENTED in ARCH; STRATEGIC POSITIONING engages with opposing market thesis (Sequoia/a16z service-as-software vs PBS practitioner-amplification).
 
-| VISION (WHY — value claims here) | ARCHITECTURE (HOW — implementation in `ARCHITECTURE.md`) |
-|---|---|
-| Sparring as load-bearing runtime mechanism | `counter_argument` Pydantic field + always-on emission per `sparring-output-v1.md` |
-| Authorship preservation | Audit-trail v2 single-write + practitioner-as-author primitive + claim → tool-result binding + Option B structural floor |
-| AI-as-continuous-co-worker | Specialist composition + Workspace + employed-specialists + event-shaped coordination |
-| Capacity preservation (per Ming IEP) | Sparring runtime + visible reasoning + commit-to-recommendations + selective friction |
-| Defensibility under challenge | Audit-by-construction + source-grounding contract + immutable snapshots |
-| Workspace identity / multi-actor framework support | Workspace primitive + `groupings` shape + multi-actor configurable per-deployment |
-
-When in doubt about WHERE a new commitment belongs:
-- Is it a value claim about what PBS delivers? → VISION (this doc)
-- Is it a structural primitive or implementation discipline? → `ARCHITECTURE.md`
-- Is it a strategic positioning choice? → `docs/strategic-positioning.md`
-
-## VISION lifecycle + update triggers (added Round 2 sharpening session 14)
-
-VISION is not static. Update triggers:
-
-- **Major AI capability shift** (frontier leap that materially
-  changes sparring economics or accountability classification)
-- **Major regulatory shift** (EU AI Act interpretation / DACH
-  Berufsrecht evolution that changes practitioner-as-deployer
-  posture)
-- **Real Phase 1+ corpus deployment data** showing axis-falsification
-  signal (per "Falsification criteria" above)
-- **Cross-deployment to second domain** providing per-axis
-  empirical validation
-- **Strategic positioning shift** (e.g., decision to expand from
-  practitioner-shape positioning to multi-shape positioning would
-  unscope this VISION accordingly + trigger per-shape VISIONs for
-  newly-marketed shapes)
-- **Major Ming-research evolution** (her future work might refine
-  sparring framing — re-anchor)
-- **Foundation thinker shift** (someone publishes work that
-  re-grounds an axis at deeper level)
-
-**Cadence**: VISION review fires alongside `ARCHITECTURE.md`
-greenfield review (per ARCH "Maintenance discipline" rule 6 —
-periodic greenfield review at major version boundaries — 0.x →
-0.x+5 OR per major-commitment milestones).
+Update triggers + lifecycle: VISION review fires alongside ARCH greenfield review per ARCH "Maintenance discipline" rule 6 (periodic greenfield review at major version boundaries). Specific triggers: major AI capability shift; major regulatory shift; real Phase 1+ deployment data showing axis-falsification signal; cross-deployment second-domain validation; strategic positioning shift (would unscope VISION + trigger per-shape VISIONs).
 
 **Document history**:
 - v0.1 (initial): three-axis thesis articulated
-- session 13 #22: AI workspace framing (was AI office); shape-
-  neutral framework + practitioner positioning layered approach;
-  thesis line + four deployment possibilities; expert-practitioner
-  unchanged as human archetype
-- session 14 (this update): Round 1 axis refinements (axis 2
-  framing as runtime mechanism; axis 3 scope-clarified to
-  practitioner shape); Round 2 sharpening (R1 counter-VISION
-  engagement; R2 negative space; R3 temporal robustness; R4
-  VISION≠ARCH boundary; R5 architectural inheritance / Option B;
-  R6 falsification criteria; R7 adjacent-thinker citations + EU
-  regulatory anchors; R8 lifecycle triggers); VISION scope section
-  added (practitioner-shape positioning + framework breadth)
+- session 13 #22: AI workspace framing (was AI office); shape-neutral framework + practitioner positioning layered approach; thesis line + four deployment possibilities; expert-practitioner unchanged as human archetype
+- session 14: Round 1 axis refinements + Round 2 sharpening (R1-R8); VISION scope section added (practitioner-shape positioning + framework breadth); architectural inheritance / Option B locked
+- session 14 follow-up: scope refactor — counter-VISION engagement moved to strategic-positioning; Practitioner vs Specialist comparison moved to ARCH; lifecycle compressed to brief note. VISION stays clear and tight (deepest WHY anchor + axes + foundations + pioneer-instance commitment + per-shape scope clarification + negative space + robustness + falsification)
