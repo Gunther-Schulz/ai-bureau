@@ -1,8 +1,30 @@
 # Decision record: office-vs-department modularization
 
-**Status**: ACCEPTED (session 9, 2026-04-29)
-**Owner**: per-session HANDOFF; ARCHITECTURE.md office-vs-department section; ROADMAP commitment #12
-**Related**: ROADMAP commitment #11 (Cowork integration — slash command namespacing depends on this), #14 (Memory Bank — uses 4th memory axis), #6 (audit-trail v2 retrofit — actor_kind + department-aware), #9 (Pattern-vs-instance split — handles per-department phase/lifecycle on ProjectState), `a2a-and-gemini-pattern-emulation.md` Row 4 (cross-department coordination must be event-shaped)
+> ## ⚠ NAMING SUPERSEDED session 13 per #22 (`docs/decisions/terminology-and-specialist-primitive.md`)
+>
+> This DR's **structural decisions** (office contains N departments;
+> cross-department coordination via events; skills singleton-department;
+> per-department phase/lifecycle on ProjectState; memory taxonomy 4th axis;
+> all 7 question resolutions; defers D1-D3) **REMAIN VALID** with renamed
+> primitives:
+>
+> | Old (this DR) | New (Sub-DR A) |
+> |---|---|
+> | Office | Workspace |
+> | Department | Specialist (pattern primitive) + Department (deployment-instance optional grouping) |
+> | `extensions/department/<dept>/department.md` | `extensions/specialists/<id>/specialist.md` |
+> | `office-config.yaml` | `workspace.md` (also adopts hybrid-shape per #16) |
+> | Skill `department:` frontmatter | Skill `specialist:` frontmatter |
+> | `departments_active: list[str]` | `specialists_active: list[str]` |
+> | `OfficeEntity` / `DepartmentEntity` | `WorkspaceEntity` / `SpecialistEntity` |
+>
+> **Use `terminology-and-specialist-primitive.md` (Sub-DR A) for current
+> primitive vocabulary.** This DR retained as historical record of the
+> structural reasoning (questions Q1-Q7; downstream constraints; defers).
+
+**Status**: ACCEPTED (session 9, 2026-04-29); **NAMING SUPERSEDED session 13 per #22 Sub-DR A**
+**Owner**: per-session HANDOFF; ARCHITECTURE.md "Workspace-vs-specialist distinction" section (renamed v0.31); ROADMAP commitment #12 (shipped) + #22 (shipped)
+**Related**: ROADMAP commitment #11 (Cowork integration — slash command namespacing depends on this), #14 (Memory Bank — uses 4th memory axis), #6 (audit-trail v2 retrofit — actor_kind + specialist-aware), #9 (Pattern-vs-instance split — handles per-specialist phase/lifecycle on ProjectState), `a2a-and-gemini-pattern-emulation.md` Row 4 (cross-specialist coordination must be event-shaped), `terminology-and-specialist-primitive.md` (Sub-DR A — supersedes naming)
 
 ## Context
 

@@ -550,79 +550,65 @@ over-weighted.
   Claude Agent SDK substrate.
 
 **22. Terminology + level-boundary re-evaluation — meta-architectural review**
-(NEAR-BLOCKING for #9 implementation phase; pre-RAG essential) — session 12
-commitment, scaffolded.
+✅ **SHIPPED session 13** (2026-04-30; commit batch with cascade).
 
-- **Mission**: evaluate whether "office / department / expert-practitioner"
-  terminology + level boundaries are at the right level of abstraction. Current
-  framing strongly aligns with "how does an office work" (department contains
-  capabilities; office contains departments; expert practitioner authors). May
-  be PBS-instance-anchored (planning bureau IS an office, naturally) rather
-  than pattern-level. Question: could a more abstract / flexible framing still
-  serve AI-office contexts well AND open broader applicability (solo expert
-  outside any office, federated multi-office, single-skill-utility, knowledge
-  graph without workflow binding)?
-- **Method**: cross-domain stress-test current terminology against multiple
-  archetypes (single expert practitioner with no office, federated multi-office,
-  solo-skill-utility brand-voice, knowledge-graph-only research lab, etc.);
-  evaluate generalization candidates; assess migration cost vs flexibility gain;
-  produce decision record.
-- **Critical questions**:
-  - Are "office" + "department" the right PRIMARY abstractions? Or do they leak
-    PBS-instance shape?
-  - What more abstract framing exists that could subsume current + extend?
-  - Where do current concepts compose vs friction with edge cases?
-  - What's the pattern-vs-instance verdict on the terminology itself?
-- **Candidate generalization to evaluate (session-12 user direction)** — needs
-  full deliberation when #22 runs; surfaced here as input:
-  - **AI Office** = blueprint pattern (meta-shape, the abstraction itself)
-  - **Domain-defined Office** = AI Office applied to a specific domain
-    (Planungsbüro für Bauleitplanung is ONE instance; Legal Practice is
-    another; Research Lab is another)
-  - **Expert** = first-class composable abstract capability that can be
-    **employed** by any office
-  - Experts NOT bound to "employee" identity — relationship is COMPOSITION
-    (an office employs experts), not IDENTITY (an expert IS an employee)
-  - Experts can exist standalone (no office wrapper); can be employed in
-    multiple offices; can be domain-anchored OR cross-domain
-  - Stress-test the candidate against:
-    - Solo expert (no office wrapper) — does architecture support it natively?
-    - Cross-domain expert (one expert employed in multiple domain-offices) —
-      does composition work cleanly?
-    - Federated office (employs experts from multiple domain origins) — does
-      aggregation work?
-    - Solo skill-utility (brand-voice as single expert, no office) — natural
-      shape?
-    - Marketplace shape (blueprints per ROADMAP v3) — do experts pluralize
-      cleanly?
-    - Knowledge graph use case (expert without workflow binding) — fits?
-  - Compose with current "department" concept: do departments dissolve into
-    "collections of experts," do they remain as a sub-grouping primitive, or
-    do they become a deployment-instance choice (some offices use departments,
-    others don't)?
-  - Migration cost analysis if adopted: substantial cascade through VISION
-    + ARCH + multiple decision records + ROADMAP language. Pre-RAG
-    deprecation is essentially free per ARCH "Maintenance discipline".
-- **Output**: `docs/decisions/terminology-and-level-boundaries.md` — analysis +
-  generalization candidates + recommendation + migration plan if change adopted.
-- **Scope**: 1-2 sessions (similar shape to other meta-architectural sessions:
-  framing → cross-domain stress-test → recommendation → decision record).
-- **Order**: AFTER #21 SDK deep-read (substrate-side); BEFORE Bundles B/C/D/E
-  + #9 implementation (implementation uses terminology-decision shape, not
-  legacy shape). Could run before or in parallel with #19/#20 (substrate evals,
-  different track from terminology).
-- **Why pre-RAG essential**: post-RAG = data accumulates under current
-  terminology = expensive migration. Pre-RAG = essentially free per pre-launch
-  deprecation discipline (per ARCH "Maintenance discipline").
-- **Constraints flowing if terminology shift adopted**: substantial cascade
-  through VISION (axes framing) + ARCHITECTURE (office-vs-department discipline
-  + scope orthogonality + reference card rows) + multiple decision records
-  (office-vs-department, office-level-managed-entities, ai-as-runtime-hybrid-
-  shape, etc.) + entity-md spec + ROADMAP commitment language. Pre-RAG
-  deprecation procedure handles this cleanly per ARCH "Maintenance discipline".
-- **Constraints flowing if no shift adopted**: explicit decision record (anti-
-  cargo-cult anchor for future sessions); confirms current terminology is
-  pattern-level after stress-test.
+- **Outcome**: three coupled changes locked together, decomposed into two sub-DRs:
+  1. **Sub-DR A** (`docs/decisions/terminology-and-specialist-primitive.md`):
+     Office → Workspace at pattern primitive level; Specialist NEW pattern primitive
+     between Skill and Workspace (composable codified expertise bundle; 5
+     composability axes; granularity 3-test); Department demoted from pattern
+     primitive to optional `groupings: dict[str, list[specialist_id]] | None` shape
+     (deployment-instance optional grouping convention).
+  2. **Sub-DR B** (`docs/decisions/positioning-three-tier-framework.md`):
+     Three-tier framing locked (Infrastructure / Workspace / Specialist); ICP
+     refinement (PBS narrow + framework broader); three deployment possibilities
+     → four (specialist authoring tier added); marketplace shape locked (of
+     specialists, not workspaces — architectural constraints locked, v3
+     mechanics deferred).
+- **Sharpening metadata**: 3-round decision-design-sharpening (full monty + 2
+  user-triggered). ~26 refinements surfaced; ~85% expansions, ~15% revisions.
+  Decomposed at Round 4 trigger per `decision-design-sharpening` skill rules.
+- **Migration cascade**: pre-RAG, pre-launch — essentially free per ARCH
+  "Maintenance discipline" deprecation rules. Cost: 2-3 sessions careful sed +
+  manual logical re-read.
+- **Files touched in this commitment**:
+  - NEW: Sub-DR A + Sub-DR B
+  - ARCHITECTURE.md (v0.30 → v0.31; reference card; office-vs-department
+    section rewrite; meta-rule 1 rename "app vs office" → "app vs workspace";
+    meta-rule 3 invalidation contract)
+  - VISION.md (thesis line; deployment possibilities 3→4; AI-office → AI-workspace;
+    office-vs-department section rewrite; architectural requirements section)
+  - docs/strategic-positioning.md (substantial rewrite per Sub-DR B)
+  - This file (#22 collapse + downstream constraints flowing)
+  - HANDOFF.md (session 13 entry)
+  - docs/decisions/office-vs-department.md (header note: superseded scope)
+  - Other DR cascading edits (s/department/specialist + s/office/workspace +
+    logical re-reads): bundled with #11 single-touch refactor for skills + remaining
+    DR sweep
+
+- **Constraints flowing to downstream commitments**:
+  - **#9 implementation**: uses Workspace + Specialist + Skill primitives;
+    `extensions/specialists/<id>/specialist.md` registration (was
+    `extensions/department/<dept>/department.md`); SpecialistDescriptor
+    Pydantic Protocol added to substrate-protocol-design.md common surface
+  - **#11 (Cowork integration)**: slash commands `/<specialist-id>:<skill>`;
+    `specialist:` frontmatter sweep across 19+ skills (REQUIRED, no silent
+    default); `extensions/workspace/` rename; `office-config.yaml` →
+    `workspace.md` migration (also adopts hybrid-shape per #16);
+    `setup-office` skill → `setup-workspace`; `integrate-department` skill
+    → `integrate-specialist`
+  - **#6 (audit-trail v2 retrofit)**: `specialist:` filter on `query_audit_trail`;
+    `specialist_id` field on AuditEvent; new event kinds
+    (`specialist_installed` / `_uninstalled` / `_event_subscription_matched`)
+  - **#14 (Memory Bank)**: `search_memory` accepts `specialist:` filter
+    (defaults to calling-skill's specialist); memory taxonomy 4th axis
+    `department` → `specialist`
+  - **Phase 1 corpus**: `search_corpus` `specialist_filter:` arg
+  - **v2 (was AI-office builder)**: AI-workspace generator; output format
+    must be marketplace-compatible per Sub-DR B
+  - **v3 (was Marketplace of department modules)**: Marketplace of specialists;
+    architectural constraints locked Sub-DR B; v3 mechanics (auth, pricing,
+    governance, deprecation) deferred
 
 **23. Sharpening skills (decision-design + pre-implementation) — local now + future global plugin elevation**
 (NOT BLOCKING; meta-architectural skills scaffolded session 12) — captures the
@@ -3150,26 +3136,28 @@ that trigger invoicing, status reports auto-generated from state.md
 
 ## v2 — extensions
 
-### AI-office builder (meta-skill) — long-horizon vision
+### AI-workspace generator (meta-skill) — long-horizon vision (renamed session 13 per #22 Sub-DR B; was AI-office builder)
 
-**Why**: PBS-bureau is one instance of a pattern: an AI office
+**Why**: PBS-bureau is one instance of a pattern: an AI workspace
 that coordinates document work for a specific domain (German
-planning law). The architectural commitments being made through
-sessions 5-7 — meta-rule 4 boundary discipline, fail-closed
-corollary, strict-validation, Skill Bundle frontmatter convention,
+planning law) using a specific workspace shape (office). The
+architectural commitments being made through sessions 5-13 —
+meta-rule 4 boundary discipline, fail-closed corollary,
+strict-validation, Skill Bundle frontmatter convention,
 five-entity-type taxonomy, prep → implementation → review cycle,
 three-axis VISION (intertwining / sparring / authorship
-preservation) — are *pattern-level*, not PBS-specific. They
-generalize to any knowledge-work domain: legal practice,
-research-paper review, engineering documentation, medical-records
-workflow, regulatory-filing, etc.
+preservation), Workspace + Specialist + Skill three-primitive model
+— are *pattern-level*, not PBS-specific. They generalize to any
+practitioner workspace: legal practice, research lab, creative
+studio, knowledge graph deployment, federation node, etc.
 
-The vision: a meta-skill (or meta-plugin) that **builds a new AI
-office** from a domain spec + the accumulated architectural
-patterns + infrastructure templates. Generative reuse, not just
-library reuse — the builder produces complete working plugin
-scaffolds for new domains, instantiating the pattern with
-domain-specific content.
+The vision: a meta-skill (or meta-plugin) that **generates a new AI
+workspace** from a domain spec + workspace shape + employed
+specialists + the accumulated architectural patterns +
+infrastructure templates. Generative reuse, not just
+library reuse — the generator produces complete working plugin
+scaffolds for new workspaces, instantiating the pattern with
+domain-specific specialists + workspace-specific configuration.
 
 **Distinct from "Generalize + publish domain-agnostic skills"**
 (v1.x ROADMAP entry above): that's library reuse — pull `audit`
@@ -3397,31 +3385,53 @@ others to copy"). That pivot is acceptable — the underlying
 discipline (meta-rules, fail-closed, three-axis VISION, etc.) was
 worth doing for PBS-the-instance regardless.
 
-#### Marketplace as v3 horizon (concept; deferred decision)
+#### Marketplace of specialists as v3 horizon (architectural lock + mechanics deferred per #22 Sub-DR B)
 
-Long-horizon possibility, post-v2 builder. Captured here as
-**concept only** — actual marketplace decision deferred to
-when the v2 builder ships and ecosystem dynamics are visible.
+Long-horizon possibility, post-v2 generator. Architectural
+constraints **locked session 13 per Sub-DR B**
+(`docs/decisions/positioning-three-tier-framework.md`); v3
+mechanics deferred until v2 generator ships and ecosystem
+dynamics are visible.
+
+**Marketplace shape locked**: marketplace is **of specialists**,
+not of workspaces or offices. Workspace generator (v2) scaffolds
+workspace shape per archetype; specialist marketplace (v3)
+populates workspaces with capabilities. Two distinct distribution
+surfaces, complementary.
 
 **Two-layer marketplace strategy** (the user's framing,
-session-9 followup):
+session-9 followup; sharpened session 13):
 
 - **Layer 1 — main app distribution**: PBS-bureau itself
   (the framework + open demonstration content) lives in
   **Anthropic's marketplace** (today: `knowledge-work-plugins`
   repo + Cowork plugin distribution; tomorrow: whatever Anthropic
   ships as the canonical Cowork-plugin marketplace). We don't
-  run our own marketplace for the main app — we participate in
+  run our own marketplace for the main framework — we participate in
   Anthropic's. Easier distribution, broader reach, no
   marketplace operations overhead for us.
-- **Layer 2 — specialized blueprint marketplace** (open
-  question): a niche marketplace for **department-module
-  blueprints + refined domain-instance content** (planning
-  bauseine libraries, legal-practice department modules, medical
-  department modules, etc.) MIGHT be ours to operate. OR it
-  might also live on Anthropic's marketplace as "premium tier
-  plugins." OR a third party might run it. **Decision deferred**;
-  too early to know.
+- **Layer 2 — specialist marketplace** (open
+  question; was "specialized blueprint marketplace"): a niche
+  marketplace for **specialists** (planning-document-work,
+  citation-verification, layered-review-framework, legal-research,
+  brand-voice — cross-archetype + domain-anchored) MIGHT be ours
+  to operate. OR might also live on Anthropic's marketplace as
+  "premium tier plugins." OR a third party might run it.
+  **Decision deferred**; too early to know.
+
+**Architectural constraints locked Sub-DR B** (so v3 mechanics
+don't redesign v1 specialist contract):
+
+Marketplace listing = one specialist version. Listing must include:
+specialist Pydantic shape (Layer 1 + Layer 2); skill definitions;
+entity Pydantic schemas (Layer 2 subclasses); process entities +
+references manifest; event subscriptions (compatibility check);
+substrate compatibility list; dependencies (other specialists, for
+composite specialists per Sub-DR A D5); version + changelog.
+
+**Marketplace-level concerns deferred** (per Sub-DR B D1-D4):
+authentication; pricing model; quality governance; deprecation
+lifecycle; specialist signing / provenance verification.
 
 **Three evolutionary models** (whichever marketplace strategy
 emerges):

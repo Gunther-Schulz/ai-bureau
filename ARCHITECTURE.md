@@ -16,7 +16,9 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.30 (session 12 — substrate-pluggability discipline added + Tier 3 reframing per pattern-vs-instance discipline; #18 substrate eval shipped: Claude Agent SDK adopted as primary substrate + MS Agent Framework adopted as second backend; Substrate Protocol NEW pattern; LangGraph/CrewAI/Smolagents/OpenAI Swarm/Semantic Kernel/AutoGen disqualified; Strands survives but not adopted. See `docs/decisions/substrate-agentic-framework.md` for full eval + recommendation + counter-considerations.)**.
+Status: **v0.31 (session 13 — terminology + level-boundary re-evaluation #22 shipped: Office → Workspace at pattern primitive level; Specialist NEW pattern primitive between Skill and Workspace; Department demoted from pattern primitive to optional `groupings:` shape (deployment-instance); three-tier framing locked (Infrastructure / Workspace / Specialist); marketplace = of specialists. Decomposed into Sub-DR A (`terminology-and-specialist-primitive.md`) + Sub-DR B (`positioning-three-tier-framework.md`).)**.
+
+- **v0.30 → v0.31**: **Terminology + level-boundary re-evaluation (#22) shipped (session 13)**. Three coupled changes locked together: (1) **Office → Workspace** at pattern primitive level (cross-archetype stress test: "office" metaphor fights ≥6/10 archetypes; PBS-instance-anchor signal); (2) **Specialist** introduced as NEW pattern primitive between Skill and Workspace — composable codified expertise bundle (skills + entities + process entities + references + memory + adapters); 5 composability axes (FROM/IN/WITH/ACROSS/OVER); 3-test (cohesive competence + distributable as unit + reusable across workspaces); two-tier classification (cross-archetype vs domain-anchored); (3) **Department demoted** from pattern primitive to optional `groupings: dict[str, list[specialist_id]] | None` shape on workspace.md (deployment-instance optional grouping convention; deployment names — PBS-Schulz uses "departments", legal practice may use "practice-areas"). Sub-DR A: `docs/decisions/terminology-and-specialist-primitive.md`. Sub-DR B (downstream strategic): `docs/decisions/positioning-three-tier-framework.md` — three-tier framing (Infrastructure / Workspace / Specialist); ICP refinement (PBS narrow + framework broader); four deployment possibilities (specialist authoring tier added); marketplace = of specialists (architectural constraints locked; v3 mechanics deferred). Cascade: file paths (`extensions/department/` → `extensions/specialists/`; `extensions/office/` → `extensions/workspace/`); Pydantic classes (`DepartmentEntity` → `SpecialistEntity`; `OfficeEntity` → `WorkspaceEntity`); skill frontmatter (`department:` → `specialist:` REQUIRED); slash commands (`/<specialist>:<skill>`); AuditEvent schema (`specialist_id` field); memory taxonomy axis 4 (`department` → `specialist`); ~12-15 DRs (s/department/specialist + s/office/workspace + logical re-reads); VISION rewrite (thesis line; deployment possibilities 3→4; AI-office → AI-workspace); ROADMAP v2 ("AI-office builder" → "AI-workspace generator") + v3 ("Marketplace of department modules" → "Marketplace of specialists"); strategic-positioning.md substantial rewrite. SpecialistDescriptor Pydantic Protocol added to substrate-protocol-design.md common surface. Pre-RAG, pre-launch, no projects bound — per ARCH "Maintenance discipline" deprecation rules: essentially free.
 
 - **v0.29 → v0.30**: **Substrate-pluggability discipline (Substrate Protocol pattern) added + Tier 3 reframing per pattern-vs-instance discipline (session 12 substrate eval — #18)**. Substrate Protocol pattern: explicit Pydantic Protocol defining substrate-coupled surface (agent loop primitives, sparring hook interface, user-runtime adapter); concrete implementations swap at composition root; substrate-coupling in core code is impossible-by-construction (per Make-wrong-shapes-impossible v0.21). PBS adopts dual-substrate architecture: **Claude Agent SDK** (full backend + frontend = Cowork plugin via #11 — primary deployment path) + **MS Agent Framework** (full backend; Path B frontend deferred to consulting signal). Tier 3 reframing: previously Gemini-Enterprise-specific; now "enterprise multi-agent A2A platform" with Gemini Enterprise / Azure AI Foundry / AWS Bedrock AgentCore as instances (Gemini = canonical exemplar). Decision record: `docs/decisions/substrate-agentic-framework.md`. Reframing applied to: ROADMAP three-tier table + "Tier 3 platform port" section; `docs/decisions/a2a-and-gemini-pattern-emulation.md` (note); `docs/strategic-positioning.md` "Multi-archetype credibility" section. Constraints flow to: #9 (Substrate Protocol lands as architectural foundation; entity gate built against it; both substrate impls validate the abstraction); #11 (Cowork integration on Claude Agent SDK substrate); #13 (substrate determines Tier 1-2 deployment shape; Tier 3 platform-pluggable); #10 (A2A schema patterns stay valid regardless of platform).
 
@@ -777,20 +779,20 @@ chase-six-sections pain when applying existing disciplines.
 
 | When you're asking… | Look here | One-line rule |
 |---|---|---|
-| Where does X live across scope axes (universal vs domain vs state vs department vs office vs project)? | Meta-rule 3 + scope-orthogonality layering convention | 6 axes, orthogonal; place at the **most-specific axis that doesn't lie** about the data |
+| Where does X live across scope axes (universal vs domain vs state vs specialist vs workspace vs project)? | Meta-rule 3 + scope-orthogonality layering convention | 6 axes, orthogonal; place at the **most-specific axis that doesn't lie** about the data |
 | Should X be a Pydantic structured field or a markdown body section? | AI-as-runtime hybrid-shape principle | **Structured** for interfaces / identity / persistence / machine contracts; **prose** for semantics / rules / domain knowledge / process |
 | Should X be enforced structurally or by deployment-time convention? | Make wrong shapes impossible, not solvable | If gate / Pydantic / dispatch touches X on every read/write → **structural**. If AI applies X at mint-time / decision-time → **prose convention with audit**. **Sub-rule**: if external system / scheduler / cron needs to dispatch on X (per Gap A proactive time-driven triggers from #12 infrastructure-primitive review) → structural, even if conceptually "feels like" a rule |
 | Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply. **Reference-style entities** (citations, regulations, sources) pass via "active vs amended/overturned" lifecycle. **When 3-test passes, choose NEW type only if Layer-2 schema differs structurally from existing types**; otherwise reuse existing type with `category` field or scope distinction (e.g., funding sources reuse `reference` type with `category: funding-source`, not a new `funding_source` type) |
-| Is X shared across multiple departments? | Office-vs-department (#12) + office-level managed entities (#15) | If shared (Client referenced by planning + invoicing; Actor referenced across departments) → **office-level managed entity** at `extensions/office/...`. Cross-department references via `<entity>_id: str` Layer-2 fields; gate validates references exist at write time. Department-only entities stay at department level |
+| Is X shared across multiple specialists? | Workspace-vs-specialist (#22 Sub-DR A) + workspace-scope managed entities (#15) | If shared (Client referenced by planning + invoicing; Actor referenced across specialists) → **workspace-scope managed entity** at `extensions/workspace/...`. Cross-specialist references via `<entity>_id: str` Layer-2 fields; gate validates references exist at write time. Specialist-only entities stay at specialist level |
 | Should X be Pydantic-validated or LLM-judged? | Validation layering (v0.18) | Deterministic primary (Pydantic / type / threshold) where the answer is determinate; LLM secondary for genuine judgment (prose precision, fit-to-shape) |
 | Should X be in v1 framework now, or deferred? | Pattern-vs-instance + sharp defer rule (v0.20) | Defer ONLY for chronological reason (info doesn't exist yet). Up-front costs ("more sessions", "premature", "PBS doesn't need it yet") are NEVER valid defer reasons |
-| When does X mutate, append, or stay forward-only? | Three evolution patterns (v0.19) | **Mutable** (migration framework, e.g., office-config) / **append-only** (additive backward-compat, e.g., AuditEvent) / **forward-only prose** (no migration; historical anchoring via `git_sha` / `convention_applied`) |
+| When does X mutate, append, or stay forward-only? | Three evolution patterns (v0.19) | **Mutable** (migration framework, e.g., workspace.md) / **append-only** (additive backward-compat, e.g., AuditEvent) / **forward-only prose** (no migration; historical anchoring via `git_sha` / `convention_applied`) |
 | Does X go through MCP gate or direct file Read/Write? | Meta-rule 4 + fail-closed corollary | Contract-bearing files (typed Pydantic + cross-ref invariants) go through gate; loose markdown is skill-direct. Fail-closed on MCP unreachable — never bypass |
 | Where does X get its source-of-truth + invalidation contract? | Meta-rule 3 | Each piece of state has exactly ONE canonical source; invalidation contract names what changes when source changes |
-| When does X integrate via adapter vs native? | Meta-rule 1 + Glue-not-replacement | If external system already owns the data → **adapter** (Lexware, Personio, Harvest); if PBS owns it → **native** Pydantic + native MCP tool. Mixed-mode within a department supported |
+| When does X integrate via adapter vs native? | Meta-rule 1 + Glue-not-replacement | If external system already owns the data → **adapter** (Lexware, Personio, Harvest); if PBS owns it → **native** Pydantic + native MCP tool. Mixed-mode within a specialist supported |
 | Where does deployment-specific knowledge for X live? | Governance-and-identity-sourcing decision 4 (prose conventions) | Bureau-specific rules (actor-id minting, archive policy, naming conventions) live in markdown prose alongside the data; AI applies at runtime; AuditEvent records `convention_applied: {file, section, git_sha}` |
 | What's the entity-md frontmatter contract? | entity-md-spec §3-§5 | **Layer 1 universal** (every entity, Pydantic base, strict-locked) + **Layer 2 type-specific** (Pydantic subclass per type, strict-locked) + **Layer 3 per-deployment** (deferred to #9 implementation) |
-| What's the type-name namespacing? | entity-md-spec §3.2 | `type: <scope-id>.<short-name>` always (e.g., `planning.project`, `office.actor`, `universal.reference`). Department namespacing makes collisions impossible by construction |
+| What's the type-name namespacing? | entity-md-spec §3.2 | `type: <scope-id>.<short-name>` always (e.g., `planning-document-work.project`, `workspace.actor`, `universal.reference`). Specialist namespacing makes collisions impossible by construction |
 | Should X have informed defaults shipped or empty canvas? | Informed defaults (v0.18) | Ship best-shape templates derived from PBS pioneer instance, NOT empty canvases. Bureaus inherit working starting points; refine from a base, not bootstrap |
 | Should X fail-loud or fail-soft? | Strict-validation discipline (meta-rule 4 corollary) | Required = fail-loud, no silent defaults; optional = explicit null. No silent fallback for contract-bearing concerns |
 
@@ -859,7 +861,7 @@ skill, etc.):
 | **MCP tool** | Alias old name → new for one minor version of pbs-mcp; remove after that. |
 | **Entity type** | Pre-launch (now): rewrite ARCHITECTURE.md + sed across repo in one commit. Post-launch: announce in HANDOFF, add to deprecated-concepts list, give 1 release deprecation window. |
 | **Meta-rule** | Reformulate in-place with explicit replaces-X note. Audit + design-review on next refactor verifies the replacement holds. |
-| **Office-config field** | Bump schema_version + write migration that drops the field; existing offices forward-migrate transparently. |
+| **Workspace.md field** (was office-config) | Bump schema_version + write migration that drops the field; existing workspaces forward-migrate transparently. |
 
 Pre-launch / pre-distribution: deprecation is essentially
 free — change in place. After first user-facing release the
@@ -884,27 +886,27 @@ prevents.
 Every architectural commitment in this repo must work at the
 **pattern level**, not just for PBS. The architecture is the
 pattern; PBS is the proving instance. The long-arc end-state is
-an AI-office builder that scaffolds new domain offices from a
+an AI-workspace generator that scaffolds new domain workspaces from a
 domain spec + the accumulated patterns (see ROADMAP v2
-"AI-office builder"). Every commitment that doesn't generalize
-is a future migration cost the builder will pay; every
-commitment that does generalize *is* the builder's foundation.
+"AI-workspace generator"). Every commitment that doesn't generalize
+is a future migration cost the generator will pay; every
+commitment that does generalize *is* the generator's foundation.
 
 **The test** when proposing any new meta-rule, entity type,
 persistence structure, MCP tool, or decision-record-grade
 commitment:
 
-- Would this work for a hypothetical **legal-practice office**
+- Would this work for a hypothetical **legal-practice workspace**
   (intake / discovery / filing / argument phases; courts /
   opposing-counsel / regulators as authorities; precedents +
   citations + templates as memory taxonomy)?
 - Would this work for a hypothetical **research-paper-review
-  office** (manuscript / review / revision / publication phases;
+  workspace** (manuscript / review / revision / publication phases;
   journals / co-authors / reviewers as authorities; citations +
   prior-work + templates as memory taxonomy)?
-- Would this work for a hypothetical **engineering-doc office**,
-  **medical-records-workflow office**, **regulatory-filing
-  office**?
+- Would this work for a hypothetical **engineering-doc workspace**,
+  **medical-records-workflow workspace**, **regulatory-filing
+  workspace**?
 
 If yes for at least 2 of these 3-5 hypothetical domains: the
 commitment is pattern-level. Lock it in.
@@ -912,7 +914,7 @@ commitment is pattern-level. Lock it in.
 If no for most: the commitment is too PBS-coupled. Push it to
 the **instance layer** — skill bodies (drafting drafts plug in
 domain-specific doctype templates), manifests (domain-specific
-references + actors), office-config (domain-specific scope
+references + actors), workspace.md (domain-specific scope
 fields), korrektur-rules and similar prose memory.
 
 **Where the line typically falls:**
@@ -922,7 +924,7 @@ fields), korrektur-rules and similar prose memory.
 | Meta-rules 1-4 | All four | (none — they're patterns by construction) |
 | Entity types (Skill / Memory / Configuration / etc.) | The taxonomy itself | What entities exist (which skills, which memory records) |
 | MCP tool *patterns* | strict-validation discipline; fail-closed corollary; CRUD-style memory tools | Tool *names + bodies* (which gates exist; what they do) |
-| office-config *schema shape* | layered manifests, scope.domains, paths.* discipline | Specific fields (verfahren_type values, doctype list, korrektur-rules path) |
+| workspace.md *schema shape* (was office-config) | layered manifests, scope.domains, paths.* discipline, specialists_employed, optional groupings | Specific fields (verfahren_type values, doctype list, korrektur-rules path; PBS-Schulz uses "departments" as grouping convention name) |
 | VISION axes | Three-axis framing (intertwining / sparring / authorship preservation) | Per-axis *content* — what counts as authorship in the domain |
 | Decision-record format | The structure itself (Context / Decision / Why / Alternatives / Revisit) | Specific decisions — which mechanisms are committed |
 
@@ -942,11 +944,11 @@ fields), korrektur-rules and similar prose memory.
   is `validate_doctype(doctype: <slug>)`; instance is what
   doctypes exist.
 - ❌ A skill body that hardcodes domain-specific values rather
-  than reading from office-config or manifests. Already covered
+  than reading from workspace.md or manifests. Already covered
   by plugin-conventions §13 anti-pattern; now also a
   pattern-vs-instance violation.
 - ❌ A defer rationale anchored in PBS-instance state ("today no
-  department needs activating," "only planning exists right now,"
+  specialist needs activating," "only planning exists right now,"
   "no consumer in PBS until #11"). Pioneer-instance defenses
   silently optimize for PBS instead of the framework. The
   framework's consumers include hypothetical legal-practice /
@@ -1021,7 +1023,7 @@ level is allowed):
   underlying rule generalizes. "PBS bausteine" in an example is
   fine; a rule that *only* makes sense for PBS bausteine is not.
 - The instance directory itself (`extensions/`, `memory/`,
-  `office-config.yaml` populated values) is unconditionally
+  `workspace.md` populated values) is unconditionally
   PBS-instance. The pattern is the *schema*; PBS is the
   *content*.
 
@@ -1057,7 +1059,7 @@ This constraint shapes the validation strategy: we **cannot** use
 "build 2-3 hand-instances and measure overlap" as the validation
 path. Waiting for empirical evidence from a real second-domain
 deployment that may never come (consulting engagement; second
-office adoption) becomes manufactured restraint disguised as
+workspace adoption) becomes manufactured restraint disguised as
 rigor — a way to defer architectural decisions indefinitely.
 
 **Working method instead — best-effort split + immediate PBS
@@ -1101,100 +1103,119 @@ the reasoning pass + best-effort split implementation + PBS
 regression validation are bundled as one work stream, scheduled
 before Phase 1 corpus download.
 
-### Office-vs-department distinction (resolved session 9 per #12)
+### Workspace-vs-specialist distinction (resolved session 13 per #22; supersedes session-9 office-vs-department naming)
 
 **Problem surfaced session 7 (after partner-built plugin
-comparison)**, **resolved session 9** per
-`docs/decisions/office-vs-department.md`. This section captures the
-architectural distinction; the decision record carries the full
-per-question reasoning + downstream constraints + defers.
+comparison)**, **first resolution session 9** per
+`docs/decisions/office-vs-department.md` (introduced "office" as
+container of N "departments"); **renamed + sharpened session 13**
+per `docs/decisions/terminology-and-specialist-primitive.md` (#22)
+to strip PBS-instance "office" metaphor + introduce Specialist as
+new pattern primitive between Skill and Workspace + demote Department
+to optional grouping shape. This section captures the current
+architectural distinction; both DRs carry full per-question
+reasoning + downstream constraints + defers (the session-9 DR remains
+historically valid for its structural decisions, with primitive
+naming superseded by session 13).
 
-The term "office" in PBS-bureau was used for two distinct things
-that needed separation:
+PBS framework primitives at the deployment layer:
 
-- **Department**: a single capability area with its own
-  workflow, doctypes, memory, and external authorities. Examples:
-  planning-document-work (what PBS implements today), project-
-  management, invoicing, HR, marketing, brand-voice, legal-work.
-  Anthropic's `partner-built/brand-voice` is a department-shaped
-  plugin (one capability, three skills, three commands).
-- **Office**: a container for *multiple departments*, coordinated
-  via shared office-level state (projects, clients, deadlines,
-  actors), natural abstractions (a "project" entity flows between
-  departments), ad-hoc context sharing (explicit data-passing for
-  non-obvious flows), and integration/setup configuration.
+- **Skill**: a unit of work logic. Sparring-shaped (interactive)
+  or batch/agent-shaped (autonomous). Singleton-specialist.
+- **Specialist**: a composable bundle of codified expertise
+  addressing a defined competence area. Bundles skills + entities
+  + process entities + references + memory + adapters. Examples:
+  planning-document-work, project-management, invoicing,
+  citation-verification, brand-voice, layered-review-framework,
+  legal-research. Distributable, identity-bearing, standalone-
+  capable, cross-workspace-employable. Anthropic's
+  `partner-built/brand-voice` is a specialist-shaped plugin.
+- **Workspace**: deployment scope. Assembles specialists +
+  workspace-scope entities (Client, Actor) + state + config +
+  optional groupings. PBS-Schulz, Anna's Writing, Smith Lab,
+  BNatSchG knowledge workspace are all workspace shapes.
 
-PBS-bureau today **conflates the two**: we have one department
-(planning-document-work) wrapped in office-level scaffolding
-(setup-office, office-config.yaml, projects-index, references-
-manifest, orchestrator). A real Schulz Planungsbüro has at least
-three departments: planning-document-work + project-management +
-invoicing. Other PBS-shaped offices would have similar shapes.
+Optional deployment-internal grouping convention:
+
+- **Grouping** (deployment-instance optional): workspace MAY
+  group employed specialists via `groupings: dict[str, list[specialist_id]] | None`.
+  Convention name (e.g., "departments" for PBS-Schulz; "practice-areas"
+  for legal practice; `{}` or `null` for solo / KG deployments)
+  is documentation-only — framework provides shape, deployment names.
+
+PBS-bureau today **needs to migrate** from the conflated office-as-single-department
+shape: 19 skills wrapped in office-level scaffolding (setup-office,
+office-config.yaml, projects-index, references-manifest, orchestrator).
+A real Schulz Planungsbüro has at least three specialists:
+planning-document-work + project-management + invoicing. Migration
+bundles with #11 single-touch skill refactor.
 
 **Implications under pattern-vs-instance discipline:**
 
-- Pattern: office structure containing N departments.
-- Instance: PBS office contains {planning-document-work, PM,
-  invoicing} (eventually); a hypothetical legal practice office
-  contains {legal-work, matter-management, invoicing}; a
-  research lab office contains {research, grant-management,
-  lab-operations}.
-- Office-config.yaml gains `departments.<name>` sections.
-- Skills gain a `department:` frontmatter field (REQUIRED, no
-  silent default per strict-validation discipline); office-level
-  skills declare `department: office`.
-- Memory taxonomy gains a 4th orthogonal axis: scope-orthogonality
-  becomes (universal × domain × state × department), opt-in per
-  entry. Most existing entries stay in the original 3 cells;
-  department-specific entries declare the 4th.
-- Cross-department workflows are **event-shaped, not call-shaped**
+- Pattern: workspace shape containing N specialists.
+- Instance: PBS workspace employs {planning-document-work, PM,
+  invoicing} (eventually); a hypothetical legal practice
+  workspace employs {legal-research, matter-management,
+  contracts}; a research lab workspace employs {methodology,
+  manuscript-prep, grant-writing}.
+- Workspace.md (was office-config.yaml) gains
+  `specialists_employed: list[str]` + optional `groupings: dict[str, list[str]] | None`.
+- Skills gain a `specialist:` frontmatter field (REQUIRED, no
+  silent default per strict-validation discipline); workspace-level
+  skills declare `specialist: workspace`.
+- Memory taxonomy 4th orthogonal axis: scope-orthogonality is
+  (universal × domain × state × specialist), opt-in per entry.
+  Most existing entries stay in the original 3 cells;
+  specialist-specific entries declare the 4th.
+- Cross-specialist workflows are **event-shaped, not call-shaped**
   (per Row 4 of `a2a-and-gemini-pattern-emulation.md`). Each
-  department declares `event_subscriptions:` in
-  `extensions/department/<dept>/department.yaml`; orchestrator's
+  specialist declares `event_subscriptions:` in
+  `extensions/specialists/<id>/specialist.md`; orchestrator's
   watch-list extends to filter by subscription + exclude self-
   emitted events. No new event mechanism — reuses AuditEvent
   infrastructure.
-- ProjectState gains `departments_active: list[str]` field for
-  routing + audit-filter purposes. Gate-mediated update via
-  `record_audit_event` (logic deferred to #6 retrofit).
-- Skills are **singleton-department**; multi-department coordination
-  via office-level orchestrating skills.
-- Offices have **0..N departments** — zero (single-skill utility),
-  one (PBS today, brand-voice partner-built plugin), or many
-  (Schulz future, hypothetical legal/research/medical offices).
-- AI-office-builder (v2) generates offices with whatever department
-  composition the domain spec declares. Per-domain spec input
-  includes department list + per-department config + integration
-  spec.
+- ProjectState gains `specialists_active: list[str]` field (was
+  `departments_active`) for routing + audit-filter purposes. Gate-mediated
+  update via `record_audit_event` (logic deferred to #6 retrofit).
+- Skills are **singleton-specialist**; cross-specialist coordination
+  via workspace-level orchestrating skills.
+- Workspaces have **0..N specialists** — zero (knowledge-graph
+  workspace with skills=[] in its single specialist), one (PBS today,
+  brand-voice partner-built plugin), or many (Schulz future,
+  hypothetical legal/research/medical workspaces).
+- AI-workspace-generator (v2; was AI-office-builder) generates
+  workspaces with whatever specialist composition the domain spec
+  declares. Per-domain spec input includes specialist list + per-specialist
+  config + integration spec + optional grouping convention.
 
 **Pattern-vs-instance limitation surfaced**: project-as-long-running-
-entity is PBS-instance, not pattern-universal. Some offices
+entity is PBS-instance, not pattern-universal. Some workspaces
 (brand-voice, single-skill utilities) have no project entity.
-Architecture supports both project-having and project-less offices.
+Architecture supports both project-having and project-less workspaces.
 Constraint passed to #9 (Pattern-vs-instance split): ProjectState
 core/extension split should make the project entity itself an
 opt-in extension, not a pattern-level mandatory.
 
-**What's deferred and where** (per `office-vs-department.md`):
-- Per-department phase tracking (`phases: dict[str, str]`) and
-  per-department lifecycle (`lifecycle: dict[str, Lifecycle]`) →
+**What's deferred and where** (per `terminology-and-specialist-primitive.md`):
+- Per-specialist phase tracking (`phases: dict[str, str]`) and
+  per-specialist lifecycle (`lifecycle: dict[str, Lifecycle]`) →
   #9 (Pattern-vs-instance split, still pre-RAG).
-- Office-config `departments.<name>` schema bump + migration → #11
+- Workspace.md `specialists_employed` schema bump + migration → #11
   (Cowork integration, co-located with `pbs.local.md` migration).
-- Skill frontmatter `department:` sweep across all 19+ skills → #11.
-- `extensions/department/<dept>/department.yaml` event_subscriptions
+- Skill frontmatter `specialist:` sweep across all 19+ skills → #11.
+- `extensions/specialists/<id>/specialist.md` event_subscriptions
   file format implementation → #11.
-- `integrate-department <slug>` skill creation → #11.
-- `record_audit_event` gate-side `departments_active` update logic
-  + `query_audit_trail` `department:` filter → #6 (audit-trail v2
+- `integrate-specialist <id>` skill creation (was `integrate-department`) → #11.
+- `record_audit_event` gate-side `specialists_active` update logic
+  + `query_audit_trail` `specialist:` filter → #6 (audit-trail v2
   retrofit).
-- `search_corpus` `department_filter:` arg → Phase 1 corpus work.
+- `search_corpus` `specialist_filter:` arg → Phase 1 corpus work.
 
 **Connection to brand-voice comparison**: brand-voice is a
-single-department plugin (in our framing: one department, all
-skills declare `department: brand-voice`, no cross-department
+single-specialist plugin (in our framing: one specialist, all
+skills declare `specialist: brand-voice`, no cross-specialist
 coordination needed since N=1). PBS today is also a single-
-department office (planning-document-work). The pattern handles
+specialist workspace (planning-document-work). The pattern handles
 N=0/1/many uniformly.
 
 ---
@@ -2138,28 +2159,40 @@ convention (scope-orthogonality) that applies *within* layered
 content. New content goes through the relevant meta-rule before
 placement.
 
-## Meta-rule 1: app vs office (deployment portability)
+## Meta-rule 1: app vs workspace (deployment portability)
 
-The repository is **a generic German planning-bureau workflow app**
-that any Planungsbüro can deploy. It is not a PBS-specific instance.
+> **Naming note (session 13 per #22)**: this meta-rule was titled
+> "app vs office" through v0.30. Per `docs/decisions/terminology-and-specialist-primitive.md`,
+> "office" is one workspace shape among many; the deployment-scope
+> primitive renames to **Workspace**. Rule body updated to use
+> workspace vocabulary; technical implementation (env var names,
+> file paths, skill names) renames during #11 single-touch refactor.
+
+The repository is **a generic AI workspace infrastructure** that
+any practitioner workspace (planning bureau, legal practice,
+research lab, brand-voice solo, knowledge graph, etc.) can deploy.
+It is not a PBS-specific instance.
 Per-deployment configuration — paths, identity, actors, styling,
-state-law extensions — lives **outside the repo** in an
-`office-config.yaml` resolved via:
+state-law extensions, employed specialists, optional groupings —
+lives **outside the repo** in a workspace.md (was office-config.yaml)
+resolved via (renames during #11):
 
-1. `$PBS_OFFICE_CONFIG` (env var, takes precedence)
-2. `${XDG_CONFIG_HOME}/pbs-bureau/office.yaml`
-3. `~/.config/pbs-bureau/office.yaml`
+1. `$PBS_WORKSPACE_CONFIG` / `$PBS_OFFICE_CONFIG` (env var; both
+   names accepted during transition)
+2. `${XDG_CONFIG_HOME}/pbs-bureau/workspace.md` / `office.yaml`
+3. `~/.config/pbs-bureau/workspace.md` / `office.yaml`
 
-Schema: `docs/office-config.schema.yaml`. Generated interactively by
-the `setup-office` skill on first run.
+Schema: `docs/workspace.schema.yaml` (was office-config.schema.yaml).
+Generated interactively by the `setup-workspace` skill (was
+`setup-office`) on first run.
 
 **Hard rules for app code (skills, backend, hooks, memory):**
 
 - Never hardcode hidrive/projects/state paths. Read them from
-  `roots.*` in the loaded office-config.
-- Never hardcode office identity (name, address, signature, phone,
-  email). Read them from `office.*` (post-v3 merge of identity into
-  office).
+  `roots.*` in the loaded workspace.md.
+- Never hardcode workspace identity (name, address, signature, phone,
+  email). Read them from `workspace.*` (post-v3 merge of identity into
+  workspace).
 - Never hardcode actor names. Read `actors[]` from config (kind=internal
   for practices, kind=external for partners).
 - Never hardcode client/project names. Use neutral examples in docs
@@ -2167,15 +2200,16 @@ the `setup-office` skill on first run.
   paths the user provides at runtime.
 - State-specific and domain-specific references are discovered by
   walking `<repo>/extensions/{universal,domain/<X>,state/<X>}/`
-  filtered by the office's `scope.{domains,states}` (loader walks
-  the union; manifests are NOT enumerated in office-config).
+  filtered by the workspace's `scope.{domains,states}` (loader walks
+  the union; manifests are NOT enumerated in workspace.md).
   Bundesland is a per-PROJECT property (`state.md.bundesland`), not
-  an office property.
-- LaTeX styling lives in the office's `office-style.sty`, NOT in
-  app skeletons or classes.
-- Office identity macros (`\OfficeName`, `\OfficeAddressLines`,
-  `\OfficeSigner`) are auto-generated by the backend from `office.*`
-  before each compile, NOT hand-written.
+  a workspace property.
+- LaTeX styling lives in the workspace's `workspace-style.sty` (was
+  `office-style.sty`), NOT in app skeletons or classes.
+- Workspace identity macros (`\WorkspaceName`, `\WorkspaceAddressLines`,
+  `\WorkspaceSigner`) — old `\OfficeName` etc. — are auto-generated
+  by the backend from `workspace.*` before each compile, NOT
+  hand-written.
 
 ### Mechanism: pluggable integration adapters
 
@@ -2199,33 +2233,34 @@ list).
 The class set is open — any string is valid as long as a matching
 subpackage exists. (Per design-review: integration adapters are
 *backend-internal organizing pattern*, not a top-level meta-rule
-peer; they're a consequence of app-vs-office deployment portability.)
+peer; they're a consequence of app-vs-workspace deployment portability.)
 
-**Generalization to department-managed entities (v0.12 per session-9
-followup)**: the same Pydantic Protocol + concrete adapter pattern
-also serves as the **adapter delivery mode for department-managed
-entities** (per `docs/decisions/office-vs-department.md`). Two
+**Generalization to specialist-managed entities (v0.12 per session-9
+followup; renamed session 13 per #22)**: the same Pydantic Protocol +
+concrete adapter pattern also serves as the **adapter delivery mode
+for specialist-managed entities** (per
+`docs/decisions/terminology-and-specialist-primitive.md`,
+supersedes session-9 `office-vs-department.md` naming). Two
 delivery modes per entity: **native** (PBS owns the Pydantic schema
 + MCP CRUD tools — used when no external alternative exists, e.g.,
-planning's Project entity for B-Plan workflows; brand-voice's Asset
-entity), or **adapter-delegated** (external system owns system-of-
-record — used for departments where mature tools exist, e.g.,
-Invoicing's Invoice → Lexware/FastBill/sevDesk; PM's Timesheet →
-Harvest/MOCO; HR's Employee → BambooHR/Personio). Mixed-mode is
-required and supported per-entity within a single department. The
-adapter implementation pattern is identical to auxiliary integrations
-above; the **consumer set expands** from email/calendar/scanner to
-primary department system-of-record. Department-managed-entity
-adapters live at `extensions/department/<dept>/adapters/<entity>/`
-(per the office-vs-department decision record schema additions).
-Office-config selects per-entity mode + adapter via the
-`departments.<name>.entities.<entity>.{mode, adapter, config}`
-section.
+planning-document-work's Project entity for B-Plan workflows;
+brand-voice's Asset entity), or **adapter-delegated** (external
+system owns system-of-record — used for specialists where mature tools
+exist, e.g., Invoicing's Invoice → Lexware/FastBill/sevDesk; PM's
+Timesheet → Harvest/MOCO; HR's Employee → BambooHR/Personio).
+Mixed-mode is required and supported per-entity within a single
+specialist. The adapter implementation pattern is identical to
+auxiliary integrations above; the **consumer set expands** from
+email/calendar/scanner to primary specialist system-of-record.
+Specialist-managed-entity adapters live at
+`extensions/specialists/<id>/adapters/<entity>/`. Workspace.md
+selects per-entity mode + adapter via the
+`specialists.<id>.entities.<entity>.{mode, adapter, config}` section.
 
-**Schema versioning + migrations.** Adding fields to office-config
+**Schema versioning + migrations.** Adding fields to workspace.md
 schema requires bumping `CURRENT_SCHEMA_VERSION` in
-`backend/.../office_config.py` and adding a migration at
-`backend/.../office_config_migrations/v<N>_to_v<N+1>.py`. The
+`backend/.../workspace.py` (was `office_config.py`) and adding a
+migration at `backend/.../workspace_migrations/v<N>_to_v<N+1>.py`. The
 dispatcher applies migrations sequentially in-memory on every load.
 
 ## Meta-rule 2: memory vs RAG (citation freshness)
@@ -2282,7 +2317,7 @@ list):
 | Memory (audit-log) | Append-only `<project>/_ai/audit-trail.jsonl` per docs/decisions/audit-trail-v2.md (single-write supersedes v1's dual-write). Each `AuditEvent` carries `id`, `timestamp`, `kind`, `actor`, `actor_kind` (human/skill/external_agent per a2a-and-gemini-pattern-emulation.md), `actor_card?`, `origin_agent_card?`, `sources[]`. Events never invalidate (immutable history); `causes[]` chain captures supersession. `query_audit_trail` is the canonical query layer; `render_audit_trail` produces prose views from queries. Skills call `record_audit_event` (or `record_decision` for legal-defense provenance via `decisions.md` mirror — gate-mediated). Per the strict-validation discipline, `actor_kind` is required; `external_agent` events MUST name `origin_agent_card`. |
 | Backend | Python imports + Pydantic schemas; restart MCP server after changes. No declarative invalidation hook. |
 | Configuration | `schema_version` + migration framework. Manifests carry `last_updated` + per-entry `last_fetched` + `checksum_sha256`; `research-references` re-fetches on schema/source change. |
-| External data | Per-project `_ai/state.md.lifecycle` declares phase + status (today single-valued — per-department `phases: dict` + `lifecycle: dict` deferred to #9 per `office-vs-department.md` D1+D2). `_ai/state.md.departments_active: list[str]` (added v0.11 per #12) declares which departments have engaged with this project; gate-mediated update via `record_audit_event` (logic deferred to #6). `roots.references_root` corpus carries `changelog.md`. |
+| External data | Per-project `_ai/state.md.lifecycle` declares phase + status (today single-valued — per-specialist `phases: dict` + `lifecycle: dict` deferred to #9 per session-9 `office-vs-department.md` D1+D2 — naming superseded session 13). `_ai/state.md.specialists_active: list[str]` (added v0.11 per #12 as `departments_active`; renamed v0.31 per #22) declares which specialists have engaged with this project; gate-mediated update via `record_audit_event` (logic deferred to #6). `roots.references_root` corpus carries `changelog.md`. |
 
 **Cross-cutting concern handler.** Contract reading is layered
 across two skills:

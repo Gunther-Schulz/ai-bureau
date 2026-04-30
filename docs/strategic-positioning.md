@@ -1,20 +1,29 @@
 # Strategic positioning — pbs-bureau as consulting IP
 
-**Status**: working document (session 9 followups, 2026-04-29). Strategic discussion captured for durability across sessions. Distinct from `ARCHITECTURE.md` (technical architecture) and `ROADMAP.md` (commitment queue) — this doc covers **how the work positions in the consulting market** and **what consulting offerings flow from it**.
+**Status**: working document (session 9 initial; substantial rewrite session 13 per #22 Sub-DR B `docs/decisions/positioning-three-tier-framework.md`). Strategic discussion captured for durability across sessions. Distinct from `ARCHITECTURE.md` (technical architecture) and `ROADMAP.md` (commitment queue) — this doc covers **how the work positions in the consulting market** and **what consulting offerings flow from it**.
 
 This is a living document. Update when strategy refines; review periodically for drift.
 
 ---
 
-## Core positioning
+## Core positioning (sharpened session 13 per #22 Sub-DR B)
 
-PBS-bureau is the **proof-of-concept for AI-office architecture** — a methodology + pattern set for building multi-department AI offices with audit defensibility, applicable across knowledge-work domains (planning bureaus today; legal practice / research / medical / regulatory / consulting tomorrow).
+PBS-bureau is the **proof-of-concept for composable AI work infrastructure** — a methodology + pattern set + framework for building practitioner AI workspaces with audit defensibility, applicable across knowledge-work domains and workspace shapes (planning bureaus today; legal practice / research lab / creative studio / knowledge graph deployment / federation node tomorrow).
+
+**Three-tier framing** (locked Sub-DR B):
+
+| Tier | Layer | Strategic claim |
+|---|---|---|
+| **Infrastructure** | Composable AI work runtime | "We build the infrastructure that powers practitioner workspaces" |
+| **Workspace** | Deployment shape | "Office is one workspace shape; practice / lab / studio / personal-base are equally valid" |
+| **Specialist** | Composable codified expertise | "Marketplace of specialists; install what your workspace needs" |
 
 **The IP that matters**:
 - ✅ **Architectural discipline** (patterns visible openly; expertise applying them is yours)
-- ✅ **Track record / proof points** (PBS-bureau + future builder-generated offices)
-- ✅ **Domain mapping ability** (taking patterns into a new domain)
+- ✅ **Track record / proof points** (PBS-bureau + future generator-produced workspaces)
+- ✅ **Domain mapping ability** (taking patterns into a new domain or workspace shape)
 - ✅ **Refined practice content** (years of accumulated bausteine / korrektur-rules / decision records — the closed IP)
+- ✅ **Specialist authoring** (cross-archetype specialists like citation-verification, layered-review-framework, brand-voice — distributable via marketplace per ROADMAP v3)
 - ✅ **Delivery quality** (the actual work product holds up under scrutiny)
 - ❌ NOT proprietary tooling (commodity in 6-12 months in this space)
 - ❌ NOT exclusive access to AI/LLM techniques (commodity)
@@ -22,7 +31,7 @@ PBS-bureau is the **proof-of-concept for AI-office architecture** — a methodol
 
 **The honest summary** (calibrated for sophisticated buyers):
 
-> "I architect AI offices — multi-department coordination with shared state + audit defensibility + architectural discipline — for knowledge-work domains. The methodology + patterns are vendor-neutral and scale-independent. PBS-bureau is the open-source proof-of-concept I built for German planning bureaus; the same patterns apply to your domain. **What this delivers**: 20-40% productivity uplift on document-heavy workflows + qualitative audit-defensibility that most AI consulting can't match. **What this isn't**: magic. The AI is genuinely useful where judgment + drafting matter; deterministic code does the work where accuracy matters; together they produce defensible work product. **What the IP is**: architectural methodology + practice-refined domain content, NOT proprietary tools. When you outgrow our archetype, the patterns port to whatever runtime fits your scale."
+> "I architect AI workspaces — composable practitioner infrastructure with shared state + audit defensibility + architectural discipline — for knowledge-work domains. The methodology + patterns + framework are vendor-neutral and scale-independent. PBS-bureau is the open-source proof-of-concept I built for German planning bureaus (one workspace shape); the same infrastructure powers legal practices, research labs, creative studios, and knowledge graph deployments. **What this delivers**: 20-40% productivity uplift on document-heavy workflows + qualitative audit-defensibility that most AI consulting can't match. **What this isn't**: magic. The AI is genuinely useful where judgment + drafting matter; deterministic code does the work where accuracy matters; together they produce defensible work product. **What the IP is**: architectural methodology + practice-refined specialist content, NOT proprietary tools. When you outgrow our archetype, the patterns port to whatever runtime fits your scale."
 
 ---
 
@@ -277,15 +286,21 @@ This converts skeptics far more effectively than open-source-repo-citation alone
 
 ---
 
-## Marketplace strategic arc (concept; deferred decision)
+## Marketplace strategic arc (sharpened session 13 per #22 Sub-DR B)
 
-See `ROADMAP.md` v2 "AI-office builder" → "Marketplace as v3 horizon" for full treatment. Summary:
+See `ROADMAP.md` v2 "AI-workspace generator" → v3 "Marketplace of specialists" + `docs/decisions/positioning-three-tier-framework.md` for full treatment. Summary:
+
+**Marketplace shape locked (Sub-DR B)**: marketplace is **of specialists**, NOT of workspaces or offices. This wasn't crisp pre-Sub-DR A. Now locked:
+
+- Workspace generator (v2) scaffolds workspace shape per archetype
+- Specialist marketplace (v3) populates workspaces with capabilities
+- Two distinct distribution surfaces; complementary
 
 **Two-layer marketplace strategy**:
-- **Layer 1 — main app distribution**: PBS-bureau lives in **Anthropic's marketplace** (knowledge-work-plugins / Cowork plugin distribution). We don't run our own marketplace for the main app.
-- **Layer 2 — specialized blueprint marketplace**: niche marketplace for refined domain blueprints might be ours — OR might also live on Anthropic's premium tier — OR might be third-party. Open question; decide post-v2.
+- **Layer 1 — main app distribution**: PBS-bureau lives in **Anthropic's marketplace** (knowledge-work-plugins / Cowork plugin distribution). We don't run our own marketplace for the main framework.
+- **Layer 2 — specialist marketplace** (v3): refined specialists distributed via marketplace. Might be ours, might live on Anthropic's premium tier, might be third-party. Open question; decide post-v2. Architectural constraints locked Sub-DR B (specialist Pydantic shape + skill definitions + entity schemas + process entities + references manifest + event subscriptions + substrate compatibility + dependencies + version + changelog).
 
-**Critical for v2 builder design TODAY**: v2's output format must be **marketplace-compatible from the start**. Standardized blueprint manifest, dependency declaration, version compatibility, quality metadata, license declaration — even though the marketplace is v3+ horizon.
+**Critical for v2 generator design TODAY**: v2's output format must be **marketplace-compatible from the start**. Specialists generated by v2 must conform to marketplace listing constraints from Sub-DR B (architectural shape locked; v3 mechanics like auth/pricing/governance deferred).
 
 ---
 
@@ -297,8 +312,8 @@ Different niches; positioning around specialization:
 |---|---|---|---|
 | Vertical SaaS replacement | Harvey, Filevine, Spellbook, EuclidHL | One workflow within one domain; rip-and-replace play | We complement existing tools (glue-not-replacement); broader addressable market |
 | Product-wrapper agents | Salesforce CRM agent, Workday HR agent, ServiceNow agent | One SaaS API exposed as agent | We orchestrate ABOVE these via integration adapters; coherent multi-department layer |
-| Capability-slice plugins | Anthropic's `legal`/`finance`/`hr`, brand-voice partner-built | Single-department, ~3 skills, no orchestrator | We're multi-department-office shape with cross-department coordination, audit, lifecycle |
-| Enterprise platforms | Gemini Enterprise + Apigee, MS Agent Framework, Vertex AI Agent Builder | Cross-SaaS automation via A2A | Different layer entirely — they automate; we coordinate domain-coherent multi-department offices on top |
+| Capability-slice plugins | Anthropic's `legal`/`finance`/`hr`, brand-voice partner-built | Single-specialist plugins, ~3 skills, no orchestrator | We're multi-specialist workspace shape with cross-specialist coordination, audit, lifecycle |
+| Enterprise platforms | Gemini Enterprise + Apigee, MS Agent Framework, Vertex AI Agent Builder | Cross-SaaS automation via A2A | Different layer entirely — they automate; we coordinate domain-coherent multi-specialist workspaces on top |
 | Methodology-only consultants | Generic AI consultants | Slides + advisory, no proof | We have the open-source proof + delivery track record |
 
 **Sharpest positioning** (per ROADMAP §2293+ analysis):

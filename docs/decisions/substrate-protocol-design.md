@@ -1,8 +1,15 @@
 # Decision record: Substrate Protocol design (synthesis from R3a-R3d + #18)
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 3-round sharpening (full monty + cross-cutting + pre-implementation early-surfacing); decision-design phase rounds 1+2 architecturally lock the design; round 3 marked clearly as pre-implementation surfacing (early)
+> **Amendment session 13 per #22 Sub-DR A (`docs/decisions/terminology-and-specialist-primitive.md`)**:
+> SpecialistDescriptor Pydantic Protocol added to common Substrate Protocol
+> surface (section: "Supporting Pydantic types"). Substrate
+> implementations materialize SpecialistDescriptor per substrate (Anthropic
+> plugin manifest in CASDK; module spec in MS AF). Substrate-coupling
+> impossible-by-construction per ARCH v0.21.
+
+**Status**: ACCEPTED — session 12 (2026-04-30); 3-round sharpening (full monty + cross-cutting + pre-implementation early-surfacing); decision-design phase rounds 1+2 architecturally lock the design; round 3 marked clearly as pre-implementation surfacing (early); **session 13 amendment adds SpecialistDescriptor per #22 Sub-DR A**
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3a-R3d synthesis); architectural foundation for #9 implementation
-**Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol pattern introduced); `sdk-deep-read.md` (#21 — origin findings); `in-process-mcp-server.md` (R3a — register_mcp_server method); `eval-framework-adoption.md` (R3b — substrate-agnostic eval); `permission-abstraction.md` (R3c — request_permission method); `subagent-primitives-adoption.md` (R3d — per-substrate extension Protocols pattern + common surface boundary criteria)
+**Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol pattern introduced); `sdk-deep-read.md` (#21 — origin findings); `in-process-mcp-server.md` (R3a — register_mcp_server method); `eval-framework-adoption.md` (R3b — substrate-agnostic eval); `permission-abstraction.md` (R3c — request_permission method); `subagent-primitives-adoption.md` (R3d — per-substrate extension Protocols pattern + common surface boundary criteria); `terminology-and-specialist-primitive.md` (#22 Sub-DR A — SpecialistDescriptor Protocol amendment)
 
 ## Context
 
@@ -156,6 +163,49 @@ class HookHandle(BaseModel):
     handle_id: str
     
     def deregister(self) -> None: ...
+```
+
+### SpecialistDescriptor (added session 13 per #22 Sub-DR A)
+
+```python
+class SpecialistDescriptor(Protocol):
+    """Substrate-neutral specialist description.
+    
+    Substrate implementations materialize this per-substrate:
+    - Claude Agent SDK substrate: SpecialistDescriptor → Anthropic plugin manifest
+    - MS Agent Framework substrate: SpecialistDescriptor → module spec
+    
+    Substrate-coupling impossible-by-construction per ARCH v0.21
+    (make-wrong-shapes-impossible). Per #22 Sub-DR A
+    `terminology-and-specialist-primitive.md`.
+    """
+    specialist_id: str
+    competence_area: str
+    skills: list[SkillDescriptor]
+    entities: dict[str, ManagedEntityDescriptor]
+    process_entities: list[ProcessEntityDescriptor]
+    references: list[ReferenceDescriptor]
+    event_subscriptions: list[str]
+    substrate_compat: list[SubstrateId]
+    classification: Literal["cross-archetype", "domain-anchored"]
+
+
+class SubstrateId(Enum):
+    CLAUDE_AGENT_SDK = "claude_agent_sdk"
+    MS_AGENT_FRAMEWORK = "ms_agent_framework"
+    HAND_ROLLED_TIER1 = "hand_rolled_tier1"  # fallback per #18 hybrid
+
+
+# Specialist registration via Substrate Protocol's register_specialist
+# (added to common surface; concrete substrates dispatch to native form)
+class Substrate(Protocol):  # extends earlier definition
+    def register_specialist(
+        self,
+        descriptor: SpecialistDescriptor,
+    ) -> SpecialistHandle: ...
+    
+    def list_specialists(self) -> list[SpecialistHandle]: ...
+    def get_specialist(self, specialist_id: str) -> SpecialistHandle | None: ...
 ```
 
 ### Typed exception hierarchy (round 2 Q2)

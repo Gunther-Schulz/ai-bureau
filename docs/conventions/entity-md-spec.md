@@ -1,10 +1,20 @@
 # Entity-md spec — formatting + terminology reference
 
-**Status**: scaffold authored session 10. Layer 1 + body section
-names + formatting conventions complete; Layer 2 per-entity-type
-schemas grow in during #9 alongside Pydantic implementation.
+> **NAMING SUPERSEDED session 13 per #22 Sub-DR A** (`docs/decisions/terminology-and-specialist-primitive.md`):
+> `department` → `specialist` (pattern primitive between Skill and Workspace);
+> `office` → `workspace` (top-level deployment scope). Structural conventions
+> (Layer 1 + Layer 2 + body sections; namespacing rules; cross-ref syntax)
+> REMAIN VALID with renamed primitives. File-paths + scope axis enum +
+> type-namespacing examples to be fully cascaded with #11 single-touch
+> refactor — partial rename applied here for the most-visible sections;
+> remaining instances clean up alongside skill frontmatter sweep.
+
+**Status**: scaffold authored session 10; **naming superseded session 13 per
+#22 Sub-DR A**. Layer 1 + body section names + formatting conventions
+complete; Layer 2 per-entity-type schemas grow in during #9 alongside
+Pydantic implementation.
 **Owner**: ARCHITECTURE.md "AI-as-runtime hybrid-shape principle"
-section + `docs/decisions/ai-as-runtime-hybrid-shape.md`.
+section + `docs/decisions/ai-as-runtime-hybrid-shape.md` + `docs/decisions/terminology-and-specialist-primitive.md`.
 **Validated by**: design-review target 12 (prospective) + audit
 slice 21 (retrospective).
 
@@ -61,9 +71,9 @@ base `EntityBase`. Fail-loud validation at gate.
 |---|---|---|---|---|
 | `id` | str | ✅ | kebab-case (`[a-z0-9-]+`); unique within scope | The stable identifier. Matches file basename. |
 | `label` | str | ✅ | non-empty | Human-readable display name. |
-| `type` | str (namespaced) | ✅ | `<scope-id>.<short-name>` (e.g., `universal.doctype`, `planning.project`, `office.actor`, `litigation.matter`). See §3.2 for namespacing convention. | Routes to Layer-2 Pydantic subclass at gate. Living set extended per #9. |
-| `scope` | enum | ✅ | `universal` / `domain` / `state` / `department` / `office` / `project` | 4-axis position per ARCHITECTURE meta-rule 3 + #12. |
-| `scope_key` | str \| null | ✅ | `null` for universal; `"Naturschutz"` / `"PV-FFA"` / `"Wind"` for domain; `"MV"` / `"BB"` for state; `"planning"` / `"invoicing"` for department; `null` for office | Identifies WHICH entry within the scope axis. |
+| `type` | str (namespaced) | ✅ | `<scope-id>.<short-name>` (e.g., `universal.doctype`, `planning-document-work.project`, `workspace.actor`, `litigation.matter`). See §3.2 for namespacing convention. | Routes to Layer-2 Pydantic subclass at gate. Living set extended per #9. |
+| `scope` | enum | ✅ | `universal` / `domain` / `state` / `specialist` / `workspace` / `project` (renamed from `department` / `office` session 13 per #22 Sub-DR A) | 6-axis position per ARCHITECTURE meta-rule 3 + #12 + #22. |
+| `scope_key` | str \| null | ✅ | `null` for universal; `"Naturschutz"` / `"PV-FFA"` / `"Wind"` for domain; `"MV"` / `"BB"` for state; `"planning-document-work"` / `"invoicing"` for specialist; `null` for workspace | Identifies WHICH entry within the scope axis. |
 | `status` | enum | ✅ | `active` / `deferred` / `stub` / `archived` | Canonical lifecycle marker. |
 | `last_updated` | date | ✅ | ISO 8601 (`YYYY-MM-DD`) | Freshness. Updated on every meaningful edit. |
 | `description` | str \| null | ⚠ optional | one-line | Used in listings (e.g., `list_entities` MCP output). Keep short — full description goes in body. |

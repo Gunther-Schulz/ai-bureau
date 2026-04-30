@@ -1,8 +1,27 @@
 # Decision record: Office-level managed entities — Client + Actor as new entity tier (commitment #15)
 
-**Status**: ACCEPTED (session 11, 2026-04-30; backfill DR for ROADMAP commitment #15 originally scoped session-9 followup #2)
+> ## ⚠ NAMING SUPERSEDED session 13 per #22 (`docs/decisions/terminology-and-specialist-primitive.md`)
+>
+> "Office-level managed entities" → **"Workspace-scope managed entities"**.
+> Structural decisions (Client + Actor as cross-cutting entity tier;
+> cross-department reference convention `<entity>_id: str`; native + adapter
+> delivery modes) **REMAIN VALID** with renamed primitives:
+>
+> | Old (this DR) | New (Sub-DR A) |
+> |---|---|
+> | Office-level managed entities | Workspace-scope managed entities |
+> | `OfficeEntity.managed_entities` | `WorkspaceEntity.workspace_scope_entities` |
+> | `extensions/office/entities/...` | `extensions/workspace/entities/...` |
+> | Cross-department references | Cross-specialist references |
+> | Department-level entities | Specialist-level entities |
+>
+> File rename to `workspace-scope-managed-entities.md` deferred (cross-refs
+> across multiple files). Use **`terminology-and-specialist-primitive.md`**
+> (Sub-DR A) for current primitive vocabulary.
+
+**Status**: ACCEPTED (session 11, 2026-04-30; backfill DR for ROADMAP commitment #15 originally scoped session-9 followup #2); **NAMING SUPERSEDED session 13 per #22 Sub-DR A**
 **Owner**: ROADMAP commitment #15; ARCHITECTURE.md entity-elevation discipline; entity-md-spec (Layer 2 schemas)
-**Related**: `office-vs-department.md` (#12 — office abstraction; managed-entity concept); `governance-and-identity-sourcing.md` (decision 5 — same registration shape office + department; decisions 1-3 — Actor as identity primitive); `ai-as-runtime-hybrid-shape.md` (#16 — entity-md hybrid-shape contract); `audit-trail-v2.md` (#6 — `actor_kind` references Actor.id)
+**Related**: `office-vs-department.md` (#12 — supersedes naming session 13); `governance-and-identity-sourcing.md` (decision 5 — same registration shape workspace + specialist; decisions 1-3 — Actor as identity primitive); `ai-as-runtime-hybrid-shape.md` (#16 — entity-md hybrid-shape contract); `audit-trail-v2.md` (#6 — `actor_kind` references Actor.id); `terminology-and-specialist-primitive.md` (Sub-DR A — supersedes naming)
 
 ## Context
 

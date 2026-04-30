@@ -154,6 +154,60 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
+## Session 13 — #22 terminology + level-boundary re-evaluation shipped (Office → Workspace; Specialist NEW pattern primitive; Department demoted to optional grouping; three-tier framing; marketplace = of specialists)
+
+End of session 13 (2026-04-30). Decision-design phase: 3-round sharpening (full monty + 2 user-triggered) on a broad architectural surface (terminology + level boundaries + workspace + specialist + grouping + strategic positioning + cross-cutting integration). ~26 refinements surfaced; ~85% expansions, ~15% revisions. Decomposition triggered at Round 4 per `decision-design-sharpening` skill rules → split into Sub-DR A (terminology + Specialist primitive) + Sub-DR B (three-tier framework + marketplace + positioning). Per-sub-DR sharpening rounds skipped per Pareto analysis (Round 3 covered integration surface; per-sub-DR rounds = manufactured criticism risk).
+
+**What shipped session 13** (commit batch with cascade):
+
+- **Sub-DR A** (`docs/decisions/terminology-and-specialist-primitive.md` NEW; status ACCEPTED): three coupled changes locked together:
+  1. **Office → Workspace** at pattern primitive level. Cross-archetype stress test ≥6/10 archetypes "office" metaphor fights (solo expert, research project, creative practice, knowledge graph, federation, etc.). Naming alternatives (Workspace / Practice / Studio / Hub / Deployment) evaluated; Workspace wins on cross-archetype fit + software-ecosystem alignment.
+  2. **Specialist** introduced as NEW pattern primitive between Skill and Workspace. Composable codified expertise bundle (skills + entities + process entities + references + memory + adapters). 5 composability axes (FROM/IN/WITH/ACROSS/OVER). Granularity 3-test (cohesive competence + distributable as unit + reusable across workspaces). Two-tier classification (cross-archetype vs domain-anchored). Edge cases (empty specialist for KG deployments; workspace-instance content; hyper-niche topics; composite specialist deferred D5).
+  3. **Department demoted** from pattern primitive to optional `groupings: dict[str, list[specialist_id]] | None` shape on workspace.md (deployment-instance optional grouping convention). Convention name documentation-only (PBS-Schulz uses "departments"; legal practice may use "practice-areas"; flat deployments use `{}`).
+- **Sub-DR B** (`docs/decisions/positioning-three-tier-framework.md` NEW; status ACCEPTED): downstream strategic implications:
+  1. **Three-tier framing locked** (Infrastructure / Workspace / Specialist).
+  2. **ICP refinement**: PBS narrow (consulting + workspace templates per archetype); framework broader (marketplace serves all archetypes including non-practitioner).
+  3. **Three deployment possibilities → four**: specialist authoring tier added between consulting (T1) and workspace template productization (T3).
+  4. **Marketplace shape locked**: of SPECIALISTS, not workspaces. Architectural constraints locked Sub-DR B (specialist Pydantic shape, skill defs, entity schemas, process entities, references, event subscriptions, substrate compat, deps, version); v3 mechanics (auth, pricing, governance, deprecation) deferred.
+  5. **Strategic positioning rewrite**: "AI office for expert practitioners" → "Composable AI work infrastructure for practitioner workspaces."
+
+- **ARCHITECTURE.md v0.30 → v0.31**: version log entry; reference card rows updated (specialist scope axis, workspace.md schema, namespacing); "Office-vs-department distinction" section rewritten to "Workspace-vs-specialist distinction"; meta-rule 1 renamed "app vs office" → "app vs workspace" with body update; meta-rule 3 invalidation contract updated (`departments_active` → `specialists_active`); pattern-vs-instance test examples (legal-practice / research-paper-review / engineering-doc / medical-records / regulatory-filing) renamed office → workspace.
+
+- **VISION.md substantial cascade**: thesis line ("AI office pools..." → "AI workspace pools and leverages codified expertise (bundled as specialists)..."); "Office vs department" section rewritten as "Workspace shapes" per Sub-DR A; "Three deployment possibilities" → "Four deployment possibilities" per Sub-DR B (specialist authoring tier added); "AI-office builder" references → "AI-workspace generator"; expert-practitioner survives unchanged (per Sub-DR A's Specialist naming choice; user clarified this is naming-only, not architectural).
+
+- **ROADMAP.md**: #22 collapsed to shipped-summary with full migration cascade list + downstream constraint flowing to #11/#9/#6/#14/Phase 1/v2/v3; v2 "AI-office builder" → "AI-workspace generator" with body rewrite; v3 "Marketplace as v3 horizon" sharpened to "Marketplace of specialists" with architectural constraints locked Sub-DR B.
+
+- **`docs/strategic-positioning.md` substantial rewrite**: core positioning section sharpened with three-tier framing + IP list expanded (Specialist authoring added); marketplace strategic arc section rewritten per Sub-DR B (marketplace = of specialists); competitive landscape multi-department-office references → multi-specialist workspace.
+
+- **DR cascade (header notes; full content sweep deferred to #11 single-touch refactor)**:
+  - `office-vs-department.md`: header note (NAMING SUPERSEDED) + per-primitive rename table; structural decisions remain valid.
+  - `office-level-managed-entities.md`: header note (NAMING SUPERSEDED — "Office-level" → "Workspace-scope"); file rename deferred (cross-refs across multiple files).
+  - `substrate-protocol-design.md`: SpecialistDescriptor Pydantic Protocol added to common Substrate Protocol surface (per Sub-DR A); session 13 amendment header note.
+
+- **`docs/conventions/entity-md-spec.md`**: header note (NAMING SUPERSEDED); type namespacing examples + scope axis enum updated (`department` → `specialist`; `office` → `workspace`); full sweep across remaining sections deferred to #11.
+
+- **Memory `feedback_propose_before_commit.md` REFINED** (session 13 user clarification): supersedes prior formulation. NEW rule: approval needed at DECISION phases (positions, framings, choices); markdown-content phase NOT requiring per-content approval. AI writes markdown directly post-decision-lock; user reviews diff in commit if desired.
+
+**Decomposition trigger empirically validated**: skill says >3 rounds at decision-design phase signals decomposition. Round 3 surfaced ~26 refinements integrating; Round 4 was offered as decomposition trigger; user accepted; 2-way decomposition (NOT 3-way; terminology + primitive are tightly coupled) chosen for Pareto reasons. Per-sub-DR sharpening rounds skipped post-decomposition (Round 3 covered the surface; per-sub-DR rounds = diminishing returns).
+
+**What's deferred to #11 single-touch refactor**:
+- Full DR cascade s/department/specialist + s/office/workspace across remaining ~10 DRs (ai-as-runtime-hybrid-shape worked examples; governance-and-identity-sourcing; skill-expert-agent-and-domain-knowledge clarification note; substrate-agentic-framework references)
+- All 19 skill `specialist:` frontmatter sweep
+- File path migrations (`extensions/department/<dept>/` → `extensions/specialists/<id>/`; `extensions/office/` → `extensions/workspace/`)
+- Backend Pydantic class renames (`DepartmentEntity` → `SpecialistEntity`; `OfficeEntity` → `WorkspaceEntity`)
+- AuditEvent schema field add (`specialist_id`)
+- `office-config.yaml` → `workspace.md` migration (also adopts hybrid-shape per #16)
+- env var renames (`PBS_OFFICE_CONFIG` → `PBS_WORKSPACE_CONFIG`)
+- skill renames (`setup-office` → `setup-workspace`; `integrate-department` → `integrate-specialist`)
+- plugin-conventions.md specialist concept section (deferred to #11 plugin-shape rework)
+
+**What's next (session 14+)**:
+- **#19 + #20** still pending (substrate evals — LlamaIndex pluggable RAG eval; PydanticAI eval). Both NEAR-BLOCKING for Bundles B/C/D/E design + Phase 1 corpus.
+- **Bundles B/C/D/E design** (substrate-agnostic per session-11 framing) can proceed in parallel with #19/#20.
+- **#9 implementation** waits for #19/#20 + Bundle design + #11 deferred cascade items.
+
+---
+
 ## Session 12 — #18 substrate eval shipped + Tier 3 reframing + #21 SDK deep-read scaffolded
 
 End of session 12 (2026-04-30). Max-effort session compressed 3-session scope (12-14) into single session: framing + 9 disqualifying criteria + screen against 10 candidates (8 original + 2 chronologically-valid additions: Claude Agent SDK + Strands) + verification pass + deep-eval + recommendation locked.
