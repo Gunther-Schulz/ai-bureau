@@ -1,6 +1,6 @@
 ---
 name: pre-implementation-sharpening
-description: Use at implementation-start moment for major architectural commitment (after architectural decisions are LOCKED in decision records; before implementation code is written). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including "let's start implementing X" / "before we implement, what details haven't we surfaced" / "implementation-readiness check" / "solidify before implement" / "lock down implementation details" / "challenge/surface/refine before we ship" (or original "challenge/review/refine before we ship") / "verify implementation readiness" / "what implementation details are we missing". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge → surface → refine → solidify cycle applied at implementation-start moment. Output is implementation-readiness checklist + decision-record amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use drift-detection skills).
+description: Use at implementation-start moment for major architectural commitment (after architectural decisions are LOCKED in decision records; before implementation code is written). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including "let's start implementing X" / "before we implement, what details haven't we surfaced" / "implementation-readiness check" / "solidify before implement" / "lock down implementation details" / "challenge/surface/refine before we ship" (or original "challenge/review/refine before we ship") / "verify implementation readiness" / "what implementation details are we missing". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge → surface → refine → solidify cycle applied at implementation-start moment. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Output is implementation-readiness checklist + decision-record amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use drift-detection skills).
 when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in decision records; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check" / "solidify before implement" / "challenge/surface/refine implementation readiness" / "lock down implementation details" / "before we ship X". Do NOT use for decision-formation moments — that's decision-design-sharpening.
 version: 0.2.0
 ---
@@ -63,6 +63,8 @@ Same user-trigger discipline as decision-design phase. AI does NOT auto-run roun
 USER-TRIGGERED rounds outperform AI-self-triggered rounds because external-perspective friction forces AI past its self-validation comfort threshold.
 
 ### Round 2: First implementation-detail sharpening (USER-TRIGGERED)
+
+Apply Pareto discipline: each surfaced refinement should be Pareto-improving (better in some dimension without being worse in others). If not Pareto-improving, force "why?" challenge — could be manufactured criticism past where evidence warrants.
 
 Stress-test what round 1 missed:
 - **Failure modes**: timeouts, crashes, cascading failures, rollback semantics
@@ -129,6 +131,8 @@ Pre-implementation phase rounds yield ratio:
 - ~10-20% genuine ARCHITECTURAL FINDINGS (flow back to decision records)
 
 Watch for the architectural findings; they're the high-signal moments worth deep attention.
+
+**Pareto calibration**: EXPANSIONS are Pareto-improving by nature (add operational coverage without breaking existing decisions). ARCHITECTURAL FINDINGS can be Pareto-improving OR worth-the-tradeoff — flowing changes back to upstream decision records might lose something to gain something; require explicit tradeoff justification.
 
 ## Composition with other skills
 
