@@ -661,6 +661,42 @@ emulation decision gate** — see
   - Session-spanning "office-memory" concept
   - Model Armor analogue (input validation at MCP gate)
   - Agent Simulation analogue (v2)
+- **Standards-conformance evaluations** (added session 11):
+  - **CloudEvents** (CNCF): event format standard for cross-system
+    interop. AuditEvent could optionally conform — additive
+    (CloudEvents core fields like `id`, `source`, `type`,
+    `specversion`, `time` map cleanly onto AuditEvent's existing
+    fields; conformance is a small Pydantic adjustment + emit-side
+    serialization). Low cost; future leverage if A2A federation or
+    Gemini-Enterprise interop needs cross-system event consumption.
+    **Action**: 0.5-session evaluation before #6 audit-trail v2
+    retrofit lands — decide whether to bake CloudEvents-conformant
+    serialization into v2 from inception (cheaper than retrofitting
+    later) or defer until concrete federation need surfaces.
+  - **JOSE / JWT / JWS / JWE** (token formats + signing for A2A
+    agent cards): folds into the existing "cryptographic signing
+    fields" deferral above. Tier 3 trigger.
+  - **PROV-O** (W3C Provenance Ontology, cross-system audit
+    provenance interop): low-priority watch position. Could fold
+    into AuditEvent shape if a regulated cross-org consulting
+    deployment surfaces the need. **Action**: revisit if a
+    regulated-industry consulting client engages.
+  - **OAuth 2.0 / OIDC / SAML / SCIM** (federated identity standards):
+    fold into #13 auth-layer abstraction (Tier 2/3). Already in
+    governance-and-identity-sourcing decision 2 scope.
+  - **Dublin Core / DCAT** (institutional metadata + data catalog):
+    situational only; relevant for enterprises with archive /
+    catalog mandates. **Action**: skip until a deployment surfaces
+    the requirement; per glue-not-replacement, we'd adapt to their
+    catalog infrastructure rather than build our own.
+  - **RDF / OWL** (semantic web / formal knowledge graph):
+    situational; high-cost machinery. ARCH already gestures via
+    entity-elevation ("closer to knowledge graph + document
+    store"). Real RDF/OWL adoption only if cross-org formal
+    knowledge federation is the genuine need — rare even at
+    enterprise scale. **Action**: skip until a deployment surfaces
+    the requirement; per glue-not-replacement, adapt to their
+    RDF infrastructure rather than build our own.
 
 **11. Cowork as primary end-user runtime** (session 7, market
 context) — see ROADMAP v2 "AI-office builder" entry's "Market
