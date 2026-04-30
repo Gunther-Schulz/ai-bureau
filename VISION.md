@@ -252,36 +252,62 @@ user's growing capacity.
 ### What this means architecturally (sparring requirements)
 
 Sparring-partner mode has its own architectural requirements,
-distinct from intertwining requirements:
+distinct from intertwining requirements. The list below names
+seven mechanisms that surface from VISION axis 2; **structural
+enforcement is staged — not all mechanisms can be schema-
+validated today, and premature structural elevation is itself
+an anti-pattern** (see notes per mechanism + `docs/decisions/
+greenfield-architecture-review.md` §3 for the chronological-defer
+reasoning):
 
-- **Counter-argument as first-class output.** Every significant
+- **Counter-argument as first-class output.** ✅ STRUCTURAL via
+  `ReviewOutput.counter_argument` Pydantic field (per
+  `docs/decisions/sparring-output-v1.md`). Every significant
   AI-generated argument or recommendation comes with the
   strongest case against it. User reviews both. Borrows Ming's
   specific recommendation: *"before you accept an AI's answer,
   ask it for the strongest argument against itself."*
-- **Confidence calibration.** When AI is high-confidence, name
-  it and explicitly invite challenge. When low-confidence, name
-  uncertainty rather than hide it. Resist false-confidence
-  sycophancy.
-- **"What's missing?" as an explicit checkpoint.** Layered
-  review currently asks "are required elements present?" The
-  sparring extension also asks "what's absent that should be
-  considered?" Different question, different mode.
-- **Anti-sycophancy guard.** The orchestrator does not
-  capitulate to user disagreement without reason. If a position
-  is defensible, it defends. If user disagreement reveals a
-  real flaw, it updates. But it does not soften because the
-  user pushed back.
-- **Selective friction calibration.** PBS is **frictionless
-  except where you need to be.** Mechanical work — compile,
-  format, citation lookup, scaffold, routine cross-references —
-  is automated seamlessly. Friction is reserved for accountability
-  moments (send, lifecycle transitions) and judgment moments
-  (which argumentation type, scope changes, module decisions —
-  places where the user's expertise must engage). The
-  architectural question for any new feature: "is this mechanical
-  or judgment-bearing?" Automate the first; surface the second.
-- **Asymmetric knowledge respect.** Sparring is not between
+- **Confidence calibration.** ✅ STRUCTURAL via
+  `ReviewOutput.confidence` + `confidence_basis` Pydantic fields.
+  When AI is high-confidence, name it and explicitly invite
+  challenge. When low-confidence, name uncertainty rather than
+  hide it. Resist false-confidence sycophancy.
+- **"What's missing?" as an explicit checkpoint.** ✅ PARTIALLY
+  STRUCTURAL via `ReviewOutput.whats_missing` Pydantic field for
+  review-draft skill (per session-11 retroactive review note in
+  `sparring-output-v1.md`). Layered review currently asks "are
+  required elements present?" The sparring extension also asks
+  "what's absent that should be considered?" Different question,
+  different mode. Structural for review-draft; behavioral for
+  other contexts where empirical pattern is unclear.
+- **Anti-sycophancy guard.** ⏳ BEHAVIORAL — chronological-valid
+  defer awaiting empirical pattern data. The orchestrator does
+  not capitulate to user disagreement without reason. If a
+  position is defensible, it defends. If user disagreement
+  reveals a real flaw, it updates. But it does not soften because
+  the user pushed back. **Why not structural yet**: detection
+  requires comparing skill output to PRIOR turn — did the skill
+  soften without new evidence? Heuristic detection has false-
+  positive risk; legitimate softening (user provided new context
+  that changes the answer) looks like sycophancy. Empirical
+  pattern of legitimate-update vs sycophantic-capitulation isn't
+  characterized. Structural elevation deferred until 5-10 real
+  sparring sessions accumulate for analysis. See
+  `greenfield-architecture-review.md` §3 for the full
+  chronological-defer reasoning.
+- **Selective friction calibration.** ✅ STRUCTURAL via meta-rule
+  4 placement boundary (mechanical → MCP gate / Python; judgment
+  → skill body / LLM). PBS is **frictionless except where you
+  need to be.** Mechanical work — compile, format, citation
+  lookup, scaffold, routine cross-references — is automated
+  seamlessly. Friction is reserved for accountability moments
+  (send, lifecycle transitions) and judgment moments (which
+  argumentation type, scope changes, module decisions — places
+  where the user's expertise must engage). The architectural
+  question for any new feature: "is this mechanical or judgment-
+  bearing?" Automate the first; surface the second.
+- **Asymmetric knowledge respect.** ⏳ BEHAVIORAL — chronological-
+  valid defer. Sparring is not between
   equals. AI's strength is **codified knowledge** — the legal
   corpus, prior projects, every captured baustein, statistical
   pattern recognition across the historical record. The user's
@@ -306,17 +332,58 @@ distinct from intertwining requirements:
   structural issue, it pushes back even when the user has better
   local context. The asymmetry is about *what kind* of knowledge,
   not *whose* knowledge wins.
-- **Commit to recommendations.** The orchestrator surfaces
+
+  **Why not structural yet**: tentatively naming "here's what I'm
+  drawing on; this might be a case where local context should
+  change the conclusion" requires the AI to identify when its
+  codified-knowledge advantage might be overruled by user's
+  tacit-current-causal advantage. The signal that the AI SHOULD
+  invite user input is contextual, not formulaic. Empirical
+  pattern of when asymmetric-respect-naming helps vs annoys
+  isn't characterized. Structural elevation deferred until
+  empirical data accumulates.
+- **Commit to recommendations.** ✅ PARTIALLY STRUCTURAL via
+  `RecommendationOutput.recommendation` Pydantic field for
+  orchestrator's Checkpoint 13 (per session-11 retroactive review
+  note in `sparring-output-v1.md`). The orchestrator surfaces
   decisions as recommendation + tradeoff, not as open menu.
   Discussion emerges from the position taken; non-commitment
   turns interaction into permission-seeking and breaks sparring
   (you can't argue with a question; you can argue with a
-  position). Already in PROCEDURE.md Checkpoint 13: "commit to
-  a position the user can react to." The sparring framing
-  elevates it from style note to architectural requirement.
-- **Visible reasoning.** AI outputs come with reasoning, not
-  just verdicts. The user can interrogate the reasoning, not
-  just accept the conclusion.
+  position). The sparring framing elevates it from style note to
+  architectural requirement. **Why not fully structural across all
+  contexts**: commit-vs-question is contextually dependent —
+  sometimes a question IS the right move (verification
+  checkpoints, applicability gates). Empirical workflow-stage-
+  dependency rules not yet characterized. Structural for
+  orchestrator Checkpoint 13; behavioral for other contexts.
+- **Visible reasoning.** ✅ STRUCTURAL via
+  `ReviewOutput.reasoning` + `RecommendationOutput.reasoning`
+  Pydantic fields with `min_length=100`. AI outputs come with
+  reasoning, not just verdicts. The user can interrogate the
+  reasoning, not just accept the conclusion.
+
+#### Sparring mechanisms — current structural / behavioral split summary
+
+| Mechanism | Status | Future |
+|---|---|---|
+| Counter-argument | ✅ Structural | — |
+| Confidence calibration | ✅ Structural | — |
+| Visible reasoning | ✅ Structural | — |
+| Selective friction | ✅ Structural (via meta-rule 4) | — |
+| What's missing? | ⚠ Partially structural | Evaluate broader contexts after empirical data |
+| Commit to recommendations | ⚠ Partially structural | Evaluate workflow-stage rules after empirical data |
+| Anti-sycophancy | ⏳ Behavioral | Empirical pattern data first; structural elevation candidate after 5-10 sessions |
+| Asymmetric knowledge respect | ⏳ Behavioral | Same — empirical context-sensitivity rules first |
+
+The chronological-defer reasoning for the 2 fully-behavioral and
+2 partially-behavioral mechanisms is captured in
+`docs/decisions/greenfield-architecture-review.md` §3 as a real
+info-gap (NOT manufactured restraint per ARCH v0.20 sharp defer
+rule). Premature structural elevation BEFORE empirical pattern
+data accumulates would produce false-positive heuristics; this is
+itself an anti-pattern under failure-mode catalog
+"discipline-bloat" entry.
 
 ### Why text-first matters here
 
@@ -637,6 +704,40 @@ repo. Captured formally in `ARCHITECTURE.md` "Pattern-vs-instance
 discipline": every commitment must work at pattern level (not
 just for PBS), tested against 3-5 hypothetical-domain thought
 experiments. The pattern is the IP; PBS is the proving instance.
+
+#### Framework-foundation framing — operational consequence (added v0.26 greenfield review)
+
+The pioneer-instance commitment composes with a sharp operational
+rule (per ARCH v0.20 + the framework-foundation top anchor):
+
+> **PBS is the framework foundation for the consulting business,
+> validated by the Schulz planning bureau. PBS is the pioneer
+> instance, never the product. At every architectural step, do the
+> full scalable foundational work — designed for any expert-
+> practitioner deployment (legal-practice / research-lab /
+> brand-voice / consulting-client) at first bind, not minimum-
+> viable-PBS today with infrastructure added later.**
+
+This framing has a sharp defer rule attached: defer ONLY for
+chronological reason (information genuinely doesn't exist yet —
+downstream shape unlocked, second-domain feedback needed,
+upstream precedent unresolved). **Up-front costs are NEVER
+valid defer reasons** — not "more sessions," not "premature,"
+not "YAGNI," not "PBS doesn't need it yet." See ARCH "Pattern-
+vs-instance discipline" → "Defer rule" subsection (v0.20) and
+`memory/feedback_pattern_not_instance_defers.md`.
+
+Two tests must pass for any defer to be honest:
+1. **Chronological**: is there specific information that would
+   change the design, that will exist later but not now?
+2. **Framework-cost**: would a hypothetical legal-practice /
+   consulting-client deployment opening tomorrow need this? If
+   yes, design now.
+
+This frame supersedes any "we'll add it when PBS needs it"
+reasoning. The framework's consumers are ALL future deployments
+of the AI-office abstraction; PBS validates them but doesn't
+constrain them.
 
 ### Office vs department (open architectural question, session 7)
 

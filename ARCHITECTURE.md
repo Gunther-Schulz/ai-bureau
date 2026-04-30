@@ -16,10 +16,58 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.25 (session 11 — greenfield architecture review under VISION lens; 15+ radical alternatives considered, most failing on VISION grounds. Architecture survives clean-slate review. Genuine open questions (#18 substrate, #19 RAG, sparring mechanisms 4-7 empirical) named as load-bearing for future evals. Disqualifying criteria for #18 + #19 derived. See `docs/decisions/greenfield-architecture-review.md`)**.
+Status: **v0.26 (session 11 — VISION.md greenfield review under max-effort: three axes hold, foundations correct, architectural requirements load-bearing. 6+ alternative axis-frames considered + rejected. Sharpenings applied: sparring mechanisms structural/behavioral split table added; framework-foundation framing foregrounded in pioneer-instance section)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.25 → v0.26**: **VISION.md greenfield review under max-
+  effort (session 11)**. After greenfield architecture review
+  (v0.25) showed architecture survives clean-slate, the user
+  triggered: "lets continue retroactive review with full framing"
+  — apply max-effort + greenfield lens to remaining surfaces
+  starting with VISION.
+
+  **Findings**: VISION holds. Three axes (intertwining + sparring
+  + authorship preservation) survive clean-slate review. 6+
+  alternative axis-frames considered + rejected:
+  - Two-axis (collapse intertwining + sparring) — fails because
+    they're orthogonal (intertwined-AI can be oracle-mode;
+    tacked-on AI can be sparring-shaped)
+  - Four-axis (add accountability) — fails because accountability
+    is downstream of authorship preservation
+  - Productivity vs craft — wrong abstraction layer
+  - Single-axis (just human-in-the-loop) — loses precision (all
+    three failure modes have humans-in-loop)
+  - Add multi-user as foundational — composes with existing axes,
+    not new axis
+  - Add privacy/sovereignty as foundational — instance-level
+    concern, not pattern-level
+
+  Foundations check: Vivienne Ming's research holds; Information-
+  Exploration Paradox holds; pioneer-instance positioning holds.
+
+  Architectural requirements check: all 14+ requirements derived
+  from axes survive clean-slate.
+
+  **Sharpenings applied to VISION.md**:
+  1. **Sparring mechanisms structural/behavioral split**: VISION's
+     "Sparring requirements" section now annotates each of the 7
+     mechanisms with current status (structural / partially
+     structural / behavioral) + chronological-defer reasoning
+     for the behavioral ones. Captures the genuine info-gap (per
+     greenfield-architecture-review §3) so future-session readers
+     don't propose premature structural elevation. Includes a
+     summary table.
+  2. **Framework-foundation framing foregrounded**: VISION's
+     pioneer-instance commitment section now explicitly cites the
+     framework-foundation framing + sharp defer rule (v0.20) +
+     two tests (chronological + framework-cost). Cross-refs to
+     ARCH and memory `feedback_pattern_not_instance_defers.md`.
+     The connection was implicit before; now load-bearing for
+     future-session readers.
+
+  No real-revise items. VISION's core thesis is sound; sharpenings
+  add precision without changing direction.
 - **v0.24 → v0.25**: **Greenfield architecture review under VISION
   lens (max-effort session 11)**. User triggered with: "so it all
   holds even if we considered throwing it all away and starting
