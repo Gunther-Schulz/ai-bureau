@@ -826,6 +826,24 @@ LAYER 4 — Concrete instances (per deployment)
 
 See `docs/decisions/shape-extension-and-architectural-floor.md` for full rationale + Option B floor specification.
 
+## How ARCH serves VISION — axis-to-implementation mapping (added v0.32 session-14 follow-up; relocated from VISION per scope refactor)
+
+Concrete mapping of VISION value-claims to ARCHITECTURE implementations. Reference for "how does ARCH serve VISION axis X?" Per Maintenance discipline rule 3 — same-commit sync with VISION axes.
+
+| VISION (WHY — value claim in `VISION.md`) | ARCHITECTURE (HOW — implementation here) |
+|---|---|
+| Axis 2: Sparring as load-bearing runtime mechanism | `counter_argument` Pydantic field + always-on emission per `docs/decisions/sparring-output-v1.md`; sparring-Protocol pluggability per shape (always-on practitioner default; configurable other shapes) |
+| Axis 3: Authorship preservation | Audit-trail v2 single-write + practitioner-as-author primitive + claim → tool-result binding + Option B structural floor (anti-Art-25-trap gate + claim-level audit + human authority chain) — see `docs/decisions/audit-trail-v2.md` + `docs/decisions/shape-extension-and-architectural-floor.md` |
+| Axis 1: AI-as-continuous-co-worker | Specialist composition + Workspace + employed-specialists + event-shaped coordination + AI-as-runtime hybrid-shape (markdown body fueled at runtime) |
+| Capacity preservation (per Ming IEP — supports axes 2+3) | Sparring runtime + visible reasoning + commit-to-recommendations + selective friction + meta-rule 4 placement boundary (mechanical → MCP gate; judgment → skill body) |
+| Defensibility under challenge (per axis 3 + per-deployment audience) | Audit-by-construction + source-grounding contract + immutable snapshots + reference invalidation contract (per Meta-rule 3) |
+| Workspace identity / multi-actor framework support | Workspace primitive + `groupings` shape + multi-actor configurable per-deployment + Substrate Protocol abstraction across substrates |
+
+When in doubt about WHERE a new commitment belongs:
+- Is it a value claim about what PBS delivers? → VISION (`VISION.md`)
+- Is it a structural primitive or implementation discipline? → ARCHITECTURE (this doc)
+- Is it a strategic positioning choice? → `docs/strategic-positioning.md`
+
 ## Data + boundary reference card
 
 **Use this first** when a "where does X go?" question arises
