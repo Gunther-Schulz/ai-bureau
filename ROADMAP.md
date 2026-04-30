@@ -549,6 +549,51 @@ over-weighted.
   potential primitives-only adoption recommendations from MS AF for use within
   Claude Agent SDK substrate.
 
+**22. Terminology + level-boundary re-evaluation — meta-architectural review**
+(NEAR-BLOCKING for #9 implementation phase; pre-RAG essential) — session 12
+commitment, scaffolded.
+
+- **Mission**: evaluate whether "office / department / expert-practitioner"
+  terminology + level boundaries are at the right level of abstraction. Current
+  framing strongly aligns with "how does an office work" (department contains
+  capabilities; office contains departments; expert practitioner authors). May
+  be PBS-instance-anchored (planning bureau IS an office, naturally) rather
+  than pattern-level. Question: could a more abstract / flexible framing still
+  serve AI-office contexts well AND open broader applicability (solo expert
+  outside any office, federated multi-office, single-skill-utility, knowledge
+  graph without workflow binding)?
+- **Method**: cross-domain stress-test current terminology against multiple
+  archetypes (single expert practitioner with no office, federated multi-office,
+  solo-skill-utility brand-voice, knowledge-graph-only research lab, etc.);
+  evaluate generalization candidates; assess migration cost vs flexibility gain;
+  produce decision record.
+- **Critical questions**:
+  - Are "office" + "department" the right PRIMARY abstractions? Or do they leak
+    PBS-instance shape?
+  - What more abstract framing exists that could subsume current + extend?
+  - Where do current concepts compose vs friction with edge cases?
+  - What's the pattern-vs-instance verdict on the terminology itself?
+- **Output**: `docs/decisions/terminology-and-level-boundaries.md` — analysis +
+  generalization candidates + recommendation + migration plan if change adopted.
+- **Scope**: 1-2 sessions (similar shape to other meta-architectural sessions:
+  framing → cross-domain stress-test → recommendation → decision record).
+- **Order**: AFTER #21 SDK deep-read (substrate-side); BEFORE Bundles B/C/D/E
+  + #9 implementation (implementation uses terminology-decision shape, not
+  legacy shape). Could run before or in parallel with #19/#20 (substrate evals,
+  different track from terminology).
+- **Why pre-RAG essential**: post-RAG = data accumulates under current
+  terminology = expensive migration. Pre-RAG = essentially free per pre-launch
+  deprecation discipline (per ARCH "Maintenance discipline").
+- **Constraints flowing if terminology shift adopted**: substantial cascade
+  through VISION (axes framing) + ARCHITECTURE (office-vs-department discipline
+  + scope orthogonality + reference card rows) + multiple decision records
+  (office-vs-department, office-level-managed-entities, ai-as-runtime-hybrid-
+  shape, etc.) + entity-md spec + ROADMAP commitment language. Pre-RAG
+  deprecation procedure handles this cleanly per ARCH "Maintenance discipline".
+- **Constraints flowing if no shift adopted**: explicit decision record (anti-
+  cargo-cult anchor for future sessions); confirms current terminology is
+  pattern-level after stress-test.
+
 ---
 
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)

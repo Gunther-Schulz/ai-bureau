@@ -213,8 +213,8 @@ session-9 reframe — #9 no longer extracts a universal core, it
 designs the contract from scratch. See ROADMAP.md per-commitment
 Order notes for full chronological rationale.
 
-**Pre-RAG queue (revised session 12 — #18 SHIPPED; #21 added; queue compressed)**:
-**~~#18~~ ✅ → #21 (SDK deep-read) → #19 → #20 → Bundles B/C/D/E (substrate-informed design) →
+**Pre-RAG queue (revised session 12 — #18 SHIPPED; #21 + #22 added; queue compressed)**:
+**~~#18~~ ✅ → #21 (SDK deep-read) → #22 (terminology + level boundaries re-eval) → #19 → #20 → Bundles B/C/D/E (substrate-informed design) →
 #9 implementation → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C →
 D → Phase 0 → Phase 1+#14**.
 
