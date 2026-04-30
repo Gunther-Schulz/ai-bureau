@@ -2,12 +2,24 @@
 name: decision-design-sharpening
 description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/surface/refine to solidify" (or original "challenge/review/refine to solidify") / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "what are we surfacing" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Decision-design sharpening (Phase 1)
 
 Disciplined sharpening protocol applied at decision-formation moment, BEFORE commit to file. Operates UPSTREAM of drift-detection / soundness-review skills (which serve POST-decision purposes).
+
+## Why this skill exists (vs relying on Claude's native sharpening behavior)
+
+Claude naturally sharpens proposals when prompted. This explicit skill adds:
+
+| Value-add | Why it matters |
+|---|---|
+| **Discipline structure** | Explicit 4-phase cycle + 2-3 round pattern + Pareto check + decomposition trigger — Claude's natural sharpening lacks this structure |
+| **Repeatability** | Same methodology applies across decisions; doesn't depend on Claude's mood/context |
+| **Composition** | Composes explicitly with framing/scoping + drift-detection + soundness-review + orchestrator skills; native sharpening doesn't compose |
+| **Audit-trail integration** | Skill emits AuditEvents (optional); native sharpening is invisible |
+| **Anti-bias mechanism** | Explicit user-trigger discipline + Pareto check counters self-validation bias; native sharpening doesn't have these mechanisms |
 
 ## The cycle: challenge → surface → refine → solidify
 
@@ -20,13 +32,21 @@ Refined from original "challenge/review/refine to solidify" framing; "review" sh
 | **Challenge** | Stress-test proposal: counter-arguments, weaknesses, edge cases, "what's the strongest argument against?" | Sparring mode (per Vivienne Ming research on AI-human hybrid teams — only sparring outperforms human-alone or AI-alone) |
 | **Surface** | Bring up what's NOT visible: schema gaps, lifecycle distinctions, composition concerns, governance integration, observability hooks, missing architectural patterns, layered coverage check | Coverage mode |
 | **Refine** | Improve specifics: tighten language, add missing fields, sharpen definitions; validate against existing decisions / vision / architectural disciplines | Improvement + implicit validation |
-| **Solidify** | Lock for commit: persist as decision record, anchor for future reference, ensure later-defensibility (will reviewer be able to defend this 6 months from now?) | Decision/output |
+| **Solidify** | Lock for commit: persist as decision record, anchor for future reference, ensure later-defensibility (will reviewer be able to defend this 6 months from now?) | Decision/output (commit moment AFTER all rounds; not per-round operation) |
+
+### Round-vs-phase relationship
+
+Rounds and phases are NOT 1:1. Each round runs the full cycle conceptually but emphasizes different phases:
+- **Round 1 (full monty)**: emphasizes challenge + initial surface + initial refine
+- **Round 2 (user-triggered)**: emphasizes deeper surface (cross-cutting + schema layers)
+- **Round 3 (when run)**: emphasizes additional surface (architectural patterns OR pre-implementation surfacing — see Phase 2)
+- **Solidify**: COMMIT moment after all rounds complete; not per-round
 
 ## When this skill fires
 
 - AI proposes architectural decision (decision-record-grade)
 - User signals "do another round" / "sharpen again" / "review/refine" / "challenge this" / "what did we miss" / "solidify"
-- BEFORE commit to file (decision record, ARCHITECTURE, VISION/strategy, ROADMAP, or other load-bearing artifact)
+- BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact)
 
 NOT for:
 - Trivial decisions or pure-implementation work
@@ -48,10 +68,17 @@ Five mechanisms:
 
 ### Round 1: AI full monty (initial proactive proposal)
 
-When AI proposes the architectural decision:
-- Comprehensive proposal with stress-tests, refinements, edge cases, framing sharpening, counter-arguments engaged
-- Do FULL refinement upfront in initial proposal; don't fragment into multiple rounds with the user prompting each time
-- Cover: architectural decision + main refinements + counter-arguments
+When AI proposes the architectural decision, the proposal includes:
+
+- **Adoption options** (where multiple paths exist; e.g., "4 options considered")
+- **Position committed** with reasoning
+- **Refinements stress-tested upfront** (typically 5-15 refinements per round 1 for substantive decisions)
+- **Edge cases + counter-arguments engaged** (each major counter-argument addressed)
+- **Composition with existing architecture** (how this decision interacts with prior decisions)
+- **Defers** (chronological-valid; what's deferred + why)
+- **Decision shape** (final structure + persistence target)
+
+Do FULL refinement upfront in initial proposal; don't fragment into multiple rounds where user prompts each refinement separately.
 
 ### WAIT for user signal to run further rounds
 
@@ -84,11 +111,28 @@ Run when broader architectural surface warrants:
 
 Surfaces additional architectural patterns OR coverage of layers AI didn't think to address.
 
+**Empirical sweet-spot pattern**:
+- Narrow architectural surface (single decision; skill design): 2-round sweet spot; round 3 yields diminishing returns
+- Broad architectural surface (substrate-eval-grade synthesis; multi-decision unification): up to 3-round sweet spot
+
 ### After 2-3 rounds → architecturally LOCKED → persist decision record
 
 Decision-design phase COMPLETE. Propose final structure in chat before committing to file. Then commit + reference for future.
 
 **Do NOT continue into operational/runtime details at this phase** — defer to pre-implementation phase (`pre-implementation-sharpening` skill).
+
+## Round termination signals
+
+Lock + persist when ANY of these signals fire:
+
+| Signal | Action |
+|---|---|
+| User explicitly says "accept" / "lock" / "looks good, persist" | Lock immediately + persist |
+| Round surfaces 0 substantive refinements (after Pareto screen) | Strong signal proposal is solid OR next round = manufactured criticism. Default to LOCK + persist |
+| 2 rejected rounds in a row (no refinements accepted) | Suggest: "rounds are surfacing nothing accepted; either proposal is solid (lock) OR reframe needed (decompose / restart)" |
+| User requests round 4+ at decision-design phase | Respond: "round 4+ at decision-design phase signals decomposition is missing; recommend decomposing this decision into sub-decisions" (per decomposition trigger) |
+| AI surfaces only manufactured criticism (Pareto-fail refinements) | Respond: "refinements surfaced are not Pareto-improving; recommend lock OR explicit acknowledgment that we're in manufactured-criticism territory" |
+| User accepts refinements but doesn't trigger lock | Prompt: "ready to lock + persist? OR additional sharpening round?" — explicit termination prompt |
 
 ## CRITICAL: Decomposition trigger
 
@@ -101,13 +145,15 @@ Decision-design phase COMPLETE. Propose final structure in chat before committin
 - Decision has independent sub-concerns that can be separately locked
 - Decision feels too large to hold in mind during single round
 
+**Pareto + decomposition interaction**: if a refinement is genuinely not Pareto-improving (real tradeoff) AND isn't manufactured criticism, that's a SIGNAL that decomposition may be missing. The trade-off should be evaluated at sub-decision granularity, not at current-decision granularity.
+
 After decomposition: each sub-decision gets full 2-3 round treatment + final synthesis pass.
 
 ## Layered coverage observation (Phase 1 specific)
 
-Each round at decision-design phase covers a different architectural concern layer:
+Each round at decision-design phase EMPHASIZES (but doesn't exclusively cover) a different architectural concern layer:
 
-| Round | Layer of concern |
+| Round | Layer of concern emphasized |
 |---|---|
 | **Round 1** | Architectural decisions (what methods + types + abstractions) |
 | **Round 2** | Cross-cutting + schema details (boot, errors, transport, tier-awareness, audit integration) |
@@ -136,23 +182,78 @@ Watch for REVISIONS; treat as decision-record amendments (potentially flow back 
 
 **Pareto calibration**: EXPANSIONS are Pareto-improving by nature (add coverage without breaking existing). REVISIONS can be Pareto-improving OR worth-the-tradeoff — changing existing decisions might lose something to gain something; require explicit tradeoff justification.
 
+## Inter-round state management
+
+Inter-round state is conversation-context by default. For long sessions OR sessions spanning multiple chat turns, recommend tracking in chat as a "round log":
+- Surfaced refinements per round
+- Per-refinement disposition (accepted / rejected / deferred-to-later-round)
+- Pareto verdict per refinement
+
+Optionally persist to session-store if substrate supports session continuation. For audit-trail integration: each refinement disposition can emit AuditEvent.
+
+## Phase 1 → Phase 2 transition
+
+Phase 1 (decision-design-sharpening) completes when DR locked + persisted. Phase 2 (`pre-implementation-sharpening`) fires AT IMPLEMENTATION-START MOMENT — NOT immediately after Phase 1 completion.
+
+There may be substantial time gap between Phase 1 lock and Phase 2 trigger (could be hours, days, or weeks depending on when implementation begins).
+
+Phase 2 reads the locked DR + sharpens against operational/runtime concerns. Phase 2 architectural findings flow back to Phase 1 DR as amendments (potentially triggering new Phase 1 sharpening on the affected DR — per ~10-20% architectural flow-back).
+
 ## Composition with other skills
 
 | Skill type | Composition |
 |---|---|
+| Framing/scoping skills (e.g., frame-task pattern) | Operate UPSTREAM of this skill — framing precedes AI proposal; sharpening operates AFTER proposal exists |
 | `pre-implementation-sharpening` | Phase 2 of same pattern; fires at implementation-start moment, NOT at decision-formation moment |
 | Drift-detection skills (e.g., audit) | Operate POST-decision; this skill operates UPSTREAM at decision-formation moment |
 | Soundness-review skills (e.g., design-review) | Operate POST-decision; same — this skill upstream |
 | Orchestrator skills | Could route to this skill when architectural-decision moment surfaces in workflow |
-| Framing/scoping skills | Frame task BEFORE work begins; this skill operates AFTER first proposal exists, BEFORE commit |
 
-## Output
+## Output specification
 
-Per round:
-- Surface refinements (expansions + occasional revisions) as structured chat content
-- Wait for user accept/reject/refine
-- After accepted refinements: incorporate into proposal
-- After 2-3 rounds: persist decision record (propose final structure in chat first; commit after user approval)
+Concrete output of complete decision-design-sharpening session:
+
+- **Decision record (DR) at deployment-conventional path** (e.g., `docs/decisions/<topic>.md`)
+- **Status field**: ACCEPTED with sharpening-rounds metadata (e.g., "2-round sharpening: full monty + 1 user-triggered")
+- **Refinements summary section** noting:
+  - Round count + which rounds were user-triggered
+  - Refinements incorporated count + breakdown (X expansions; Y revisions)
+  - Pareto verdict per refinement (incorporated vs rejected vs deferred)
+- **DR body following standard structure** (per deployment conventions):
+  - Status / Owner / Related
+  - Context
+  - Decision
+  - Refinements applied (per round)
+  - Composition with existing architecture
+  - Defers
+  - Constraints flowing
+  - Files touched
+  - Revisit triggers
+
+## Concrete invocation example
+
+```
+1. AI proposes architectural decision in chat
+   → "Here's my proposal for X: [comprehensive proposal with 5-10 refinements]"
+
+2. User triggers sharpening
+   → "let's solidify this" OR "do another round" OR "challenge/refine"
+
+3. Skill activates (Phase 1, Round 2)
+   → AI surfaces 4-10 refinements: "Here's what round 2 surfaces..."
+   → Each refinement evaluated for Pareto
+   → User accepts/rejects/defers per refinement
+
+4. (Optional) User triggers Round 3
+   → AI surfaces additional refinements (complexity-dependent)
+
+5. User triggers lock
+   → "looks good, persist" OR "lock"
+   → Skill prompts: "ready to commit DR? structure: [shape]" (chat-first)
+   → User confirms; AI commits DR to file
+
+6. Output: DR persisted with full sharpening-rounds metadata
+```
 
 ## Audit-trail integration (optional; composable with audit-trail infrastructure if available)
 
