@@ -25,9 +25,13 @@ Each entry has:
 - **Name** — short identifier (kebab-case)
 - **Description** — one-paragraph explanation of the failure
   mode + how it manifests
-- **Applicability** — does this apply to PBS today / in this
-  architecture shape? (yes / partial / no — distributed-systems
-  failures often "no" for single-process apps)
+- **Applicability** — does this apply to the framework today / in
+  this architecture shape, including deployments the framework
+  serves (consulting clients at first bind, not just PBS-pioneer
+  state)? (yes / partial / no — distributed-systems failures
+  often "no" for single-process apps; PBS-only-state limitations
+  are NOT valid grounds for "no" since the framework targets
+  multi-deployment first-bind)
 - **Severity** — catastrophic / serious / minor (when it bites)
 - **Coverage status** — covered (which named discipline) /
   partial (which discipline + what's still uncovered) /
@@ -126,6 +130,37 @@ truth & invalidation).
 **Notes**: catches both within-session (caches) and cross-session
 (file representations) cases.
 
+### Convention-driven solution for gate-dispatched concern
+
+**Description**: a concern that the gate / Pydantic / dispatch
+code touches on every read/write is enforced via deployment-time
+convention (skill body imperative, prose rule in office-config,
+"deployment documents the X" claim) rather than via structural
+constraint. Each consulting client hits the same problem; each
+must solve it independently; some solve inconsistently. Drift
+across deployments is guaranteed eventually. The convention "works"
+because individual contributors are disciplined, but the framework
+relies on per-deployment-discipline rather than impossibility-by-
+construction. Manifests as: skill bodies saying "remember to set X
+on every Y"; Pydantic Optional fields with comments like "should
+always be set when Z"; two skills both having to "remember" the
+same convention.
+
+**Applicability**: yes (any framework with deployment instances).
+**Severity**: serious (compounding cross-deployment drift +
+inconsistent shapes + deferred conflicts when blueprints share).
+**Coverage status**: ✅ **covered** — **"Make wrong shapes
+impossible, not solvable" discipline (ARCH v0.21)**. Discriminator:
+gate / Pydantic / dispatch touches concern on every read/write →
+structural enforcement required. Retrospective scan: **slice 22
+(wrong-shapes-solvable)**. Prospective check: **design-review
+target 15**.
+**Notes**: session-11 case — type-name uniqueness across
+departments was leading toward Option C (convention-driven) until
+the discriminator surfaced; locked Option B (department-namespaced)
+as structural fix. Discipline named after the failure mode was
+caught.
+
 ---
 
 ## Category 2 — Coupling + drift failures
@@ -140,14 +175,22 @@ the code does Y" mysteries.
 **Applicability**: yes (any codebase with significant config
 layer).
 **Severity**: serious (silent behavioral changes).
-**Coverage status**: ⚠ **partial** — meta-rule 4 (execution
-determinism) constrains *where rules live* (deterministic →
-MCP gate; interpretive → skill); reduces drift surface but
-doesn't fully prevent. **Evaluate** after #9 for residual gaps.
+**Coverage status**: ⚠ **partial** — multi-discipline cover with
+residual gaps. Meta-rule 3 (source-of-truth + invalidation) is
+the primary cover for "data exists in 2+ places." Meta-rule 4
+(execution determinism) constrains *where rules live*
+(deterministic → MCP gate; interpretive → skill). **"Make wrong
+shapes impossible, not solvable" (v0.21)** narrows further: when
+a rule is gate-dispatched on every read/write, structural
+enforcement (one-source-of-truth via Pydantic + gate) is required,
+making drift impossible by construction. **Slice 22
+(wrong-shapes-solvable scan)** retrospectively flags residual
+cases. **Evaluate** after #9 for residual gaps.
 **Notes**: a residual case: `office-config.schema.yaml` vs
 `office_config.py` Pydantic model — could drift if not
 co-maintained. Today both are co-edited; convention not
-enforced.
+enforced. Slice 22's first run will flag this category of cases
+retrospectively.
 
 ### Hardcoded-instance-content-in-pattern-layer
 
@@ -180,6 +223,40 @@ principle + meta-rule 1 (integration-adapter pattern).
 **Notes**: every external integration goes through
 `Pydantic Protocol` + concrete adapter, not direct vendor SDK
 calls.
+
+### Manufactured-restraint defer
+
+**Description**: a defer rationale that masquerades as honest
+restraint but is actually offloading framework work to deployment
+time. Two flavors: **(a) pioneer-instance-anchored** — "today PBS
+doesn't need it" / "only planning exists" / "no consumer in PBS
+until #N" — silently optimizes for PBS instead of the framework
+that PBS validates. **(b) up-front-cost shaped** — "more sessions"
+/ "premature abstraction" / "YAGNI" / "we'll add it later when
+needed" — treats present-time effort as a valid defer reason when
+it isn't. Both produce manufactured restraint — the defer LOOKS
+like sober "wait for pressure" reasoning but is actually
+offloading. Each consulting client deploying tomorrow hits the gap
+at first bind; the framework should have closed it.
+
+**Applicability**: yes (any framework + pioneer-instance setup).
+**Severity**: serious (cumulative — each manufactured defer
+creates a first-bind gap for future deployments).
+**Coverage status**: ✅ **covered** — **pattern-vs-instance +
+sharp defer rule (ARCH v0.20)**. Two tests both must pass for an
+honest defer: chronological (info doesn't exist yet that would
+change the design) AND framework-cost (no hypothetical second-
+domain deployment needs this at first bind). Up-front costs
+(time, complexity, "premature") are NEVER valid defer reasons.
+Memory `feedback_pattern_not_instance_defers.md` propagates to
+future sessions.
+**Notes**: session-11 cases — `activate-department` skill
+defer-to-#11 ("today no department needs activating, only
+planning exists") + Bundle E adapter Protocol defer-to-#11 ("no
+consumer until first adapter-mode entity ships") were both
+manufactured-restraint-defer instances caught and reversed.
+Sharp-defer audit pulled six v1.x items forward to v1 under same
+discipline.
 
 ### Cargo-cult patterns
 
@@ -243,15 +320,24 @@ discipline (skill bypasses contract via direct Read), makes
 schema migrations harder, and silently degrades the "everything
 contract-bearing goes through MCP" promise.
 
-**Coverage status**: ⚠ **partial / uncovered as discipline-shaped scan.** Slice 16 covers strictness of existing gates;
-the comprehensiveness scan ("which surfaces lack gates that
-should have them?") is **scheduled as pre-RAG task #17 (MCP
-gate coverage comprehensiveness review)** — see ROADMAP. Until
-that task runs and any gaps close, status is "partial."
+**Coverage status**: ⚠ **partial — narrowing.** Three layers
+of cover now: (1) slice 16 covers strictness of existing gates;
+(2) **"Make wrong shapes impossible, not solvable" (v0.21)**
+makes "convention enforces what should be gated" structurally
+identifiable as anti-pattern; (3) **slice 22 (wrong-shapes-
+solvable scan)** + **design-review target 15** retrospectively
++ prospectively flag concerns enforced via skill-body discipline
+that should have structural gates. The comprehensiveness scan
+("which surfaces lack gates that should have them?") is also
+**scheduled as pre-RAG task #17 (MCP gate coverage
+comprehensiveness review)** — see ROADMAP. Status remains
+"partial" until #17 runs and gaps close, but the gap is
+narrower than before v0.21.
 
-**Notes**: candidate for slice 22 (a comprehensive-coverage
-sweep paired with slice 16's strictness check); decision deferred
-to task #17 — slice form vs one-off review.
+**Notes**: slice 22 + #17 + target 15 are the closing-loop
+combination. Slice 22 catches "convention where gate should be";
+#17 catches "no gate at all"; target 15 prevents new instances at
+design time.
 
 ### Implicit-contract-between-skills
 

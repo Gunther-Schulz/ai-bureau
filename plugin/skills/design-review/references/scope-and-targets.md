@@ -156,9 +156,13 @@ each side of the boundary:
   abstraction, or should there be a top-level shared-references
   tier (cross-skill, not skill-internal)?
 - The pbs_core / pbs_mcp split is described as "consequence of
-  meta-rule 4." Is that consequence load-bearing now, or
-  premature? Should it be deferred until the second consumer
-  emerges?
+  meta-rule 4." Is that consequence load-bearing now? Apply the
+  sharp defer rule (ARCH v0.20) — chronological test: does the
+  split's correctness depend on information that doesn't exist
+  yet? Framework-cost test: would consulting deployments at
+  first bind benefit from the split? Frame the answer in those
+  terms, not in "premature" or "wait for second consumer"
+  language.
 - The "static path-based access control belongs in settings.json"
   line — is this on the LLM/Python boundary, or is it a
   *different* axis (harness vs application code) that's been
@@ -825,15 +829,19 @@ status as new disciplines land).
 2. **For each failure mode**: identify which named discipline (in
    ARCHITECTURE.md) protects against it, OR mark as "uncovered."
 3. **For uncovered modes**:
-   - Assess applicability to PBS today (does this failure mode
-     have any plausible vector here?)
+   - Assess applicability to the **framework + its deployment
+     targets** (does this failure mode have a plausible vector at
+     framework-level OR at any first-bind consulting deployment
+     the framework serves?). PBS-pioneer state is one validation
+     surface; "PBS doesn't see this yet" is NOT valid grounds to
+     mark inapplicable per the sharp defer rule (ARCH v0.20).
    - Assess severity (catastrophic / serious / minor)
    - Assess proximity (immediate-risk / theoretical)
 4. **Recommend**: codify-now (high applicability + serious +
    immediate) / codify-on-trigger (theoretical-but-plausible) /
-   acknowledge-and-skip (not applicable to PBS shape, e.g.,
-   distributed-systems failures don't apply to single-process
-   PBS today).
+   acknowledge-and-skip (not applicable to the architecture
+   shape, e.g., distributed-systems failures don't apply to
+   single-process today across all deployments).
 
 **Catalog seeding** (initial entries from session 10
 postmortem):

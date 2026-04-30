@@ -108,7 +108,12 @@ what-it-unlocks + what-breaks + cost. Cross-cutting section exists
 recommendations themselves. Per `references/anti-bias-mechanism.md`:
 
 1. **Drop bloat**: any recommendations that are oversized scope,
-   premature abstraction, or duplicate concerns? Trim.
+   speculative abstraction without identified concrete consumer,
+   or duplicate concerns? Trim. ("Premature" is rejected as a
+   trim qualifier per sharp defer rule v0.20 — a recommendation
+   is bloat only if it lacks an identified consumer or
+   duplicates an existing concern, not because it "feels too
+   early.")
 2. **Add missing**: any subsystem whose review felt thin? Any
    recommendation type that should be present and isn't?
 3. **Reshape wrong-shape**: any recommendation framed in the wrong

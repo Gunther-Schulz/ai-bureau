@@ -646,8 +646,9 @@ session 11)**:
 commitment #17) — **POSITION 5 in remaining queue (revised
 session 11)**:
 - Comprehensive sweep of all contract-bearing files / file types
-  in the repo for gate presence + strictness. Slice 22 scaffolded
-  if discoveries warrant.
+  in the repo for gate presence + strictness. Slice 23 scaffolded
+  if discoveries warrant (slice 22 is wrong-shapes-solvable scan
+  per session 11; #17's slice number bumped accordingly).
 - Surveys real gates produced by #9 + #15 + #6 + #7 (not
   yet-to-be-written ones).
 - 1 session.

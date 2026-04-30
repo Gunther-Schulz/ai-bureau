@@ -256,8 +256,12 @@ linked decision records.
   retrofits (orchestrator, save-baustein, record-feedback,
   draft-textteil-b/c, review-draft, research-references each
   declare record_audit_event in mcp_tools_required + invoke at
-  appropriate checkpoints); slice 17 cross-reference invariant
-  audit (deferred until first projects accumulate events).
+  appropriate checkpoints); **slice 17 cross-reference invariant
+  audit implementation lands in #6 scope; first-run waits for
+  events** (chronological-valid: slice scans event records;
+  no events to scan pre-first-binding. Implementation deferred
+  is invalid per sharp defer rule v0.20; first-run deferred is
+  the honest framing).
 
 **2. Sparring-output structural promotion** — see
 `docs/decisions/sparring-output-v1.md`.
@@ -1523,10 +1527,11 @@ work).
     files; post-#9 + #11 + #15: new entity-md surfaces).
   - For each: gate present? Strict enough? If absent, propose
     gate name + sketch.
-  - Decision: scaffold as **slice 22** (comprehensiveness scan,
-    parallel + paired with slice 16's strictness scan) OR
-    one-off review session output. Lean toward slice 22 — gives
-    re-run cadence as new entities land.
+  - Decision: scaffold as **slice 23** (comprehensiveness scan,
+    parallel + paired with slice 16's strictness scan and slice
+    22's wrong-shapes-solvable scan) OR one-off review session
+    output. Lean toward slice 23 — gives re-run cadence as new
+    entities land.
   - Failure-mode-catalog entry `incomplete-gate-coverage`
     coverage status updated from `partial` to `covered` once
     delivered.
@@ -1541,7 +1546,7 @@ work).
 - **Dependencies**: requires #9 entity gate generalization
   having landed (post-#9 entity-mds are evaluated against the
   new generic gate, not the per-entity tools).
-- **Scope**: 1 session for the survey + slice 22 scaffolding.
+- **Scope**: 1 session for the survey + slice 23 scaffolding.
   Implementation of any new gates uncovered: per-gate
   sub-tasks, scoped per finding.
 - **Per #16 constraint (session 10)**: surveys the new
