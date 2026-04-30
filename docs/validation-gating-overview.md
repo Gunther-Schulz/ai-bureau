@@ -26,9 +26,9 @@ The reference card in ARCHITECTURE answers **"where does X go?"** for a given de
 
 ---
 
-## 2. The four layers of validation
+## 2. The five layers of validation
 
-Every concern in the system is validated through one or more of these four layers. The layers compose: L3 + L4 catch what L1 + L2 miss; L4 prevents new L1 + L2 gaps before they land.
+Every concern in the system is validated through one or more of these five layers. The layers compose: L3 + L4 catch what L1 + L2 miss; L4 prevents new L1 + L2 gaps before they land; L5 enforces contracts at the external boundary where L1's internal Pydantic gate doesn't reach.
 
 ### L1 — Runtime structural (gate / Pydantic / dispatch — fail-loud, hot path)
 
@@ -74,13 +74,31 @@ What it covers: design-time enforcement of the eight disciplines + meta-rules. S
 
 **Source of truth**: `plugin/skills/design-review/references/scope-and-targets.md` + `references/failure-mode-catalog.md` + `references/anti-bias-mechanism.md`. Skill version 0.10.0 (post-target-15).
 
+### L5 — External-boundary validation (added v0.23 ultrathink-review)
+
+What it does: validates contracts at the boundary between PBS and external systems. Different mechanisms than L1's internal Pydantic gate — cryptographic signing for A2A, token validation for auth, schema validation for CloudEvents, signed agent cards.
+
+When it fires: at every external interaction — A2A peer sends event, OAuth user authenticates, external scheduler triggers, adapter receives webhook, PBS produces signed event for external consumer.
+
+What it covers (inbound): A2A peer signature validation, OAuth token validation, CloudEvents shape validation when consuming external events, webhook signature verification.
+
+What it covers (outbound): cryptographic signing for outbound events, JOSE/JWT/JWS for outbound A2A, CloudEvents-conformant serialization of AuditEvents (per #10 ROADMAP standards-eval).
+
+What it does NOT cover: internal contract validation (that's L1) or AI-applied conventions (L2).
+
+Today: largely deferred (Tier 3 federation triggers most). Implementation surface fragmented across #10 (A2A signing — Tier 3) + #13 (auth token validation — Tier 2) + #6 (CloudEvents conformance evaluation per session-11 standards-eval) + adapter-specific webhook signature checks (per-adapter implementation in #11/#15).
+
+**Source of truth**: `docs/decisions/a2a-and-gemini-pattern-emulation.md` (A2A schema + signing) + `docs/decisions/governance-and-identity-sourcing.md` (auth) + ROADMAP #10 standards-conformance evaluations (CloudEvents, JOSE, OAuth/OIDC/SAML/SCIM) + per-adapter Pydantic Protocol implementations.
+
 ### How the layers compose
 
 ```
-L4 (prospective)         →  prevents new L1+L2 gaps from landing
-L1+L2 (runtime, hot path) →  enforce on every read/write + mint-time application
-L3 (retrospective)        →  catches drift that slipped past L1+L2
-                              + detects coverage gaps L4 should add
+L4 (prospective)            →  prevents new L1+L2 gaps from landing
+L1+L2 (runtime, hot path)    →  enforce on every read/write + mint-time application
+L3 (retrospective)           →  catches drift that slipped past L1+L2
+                                 + detects coverage gaps L4 should add
+L5 (boundary, inbound+outbound) →  enforces external contracts at PBS↔external boundary
+                                    (different mechanisms: signing, tokens, schema validation)
 ```
 
 A failure mode caught at L3 typically becomes either:
@@ -171,6 +189,19 @@ Every load-bearing validation gate, convention, slice, and target. Status legend
 | Slice 23 — gate coverage comprehensiveness | Incomplete-gate-coverage failure mode | ⏳ planned in #17 (renumbered from "slice 22" per session 11) | ROADMAP #17 |
 
 Slices 1-13 cover compliance (does X match its claims?) + implementation quality (test coverage, security, performance) — not discipline-aligned, but part of the L3 layer. See drift-surfaces-and-slices.md for full catalog.
+
+### L5 — External-boundary validation (PBS↔external)
+
+| Boundary | Mechanism | Status |
+|---|---|---|
+| **Inbound A2A peer event** | Signed agent card validation; cryptographic signature verification | ⏳ Tier 3 trigger; #10 deferred items + governance-and-identity-sourcing decision 2 |
+| **Inbound OAuth / OIDC / SAML token** | Token validation; user identification; role hydration via Actor adapter | ⏳ #13 + governance-and-identity-sourcing decision 2 |
+| **Inbound webhook (e.g., Lexware, Personio)** | Per-adapter signature verification | ⏳ #11 + #15 (per-adapter implementation) |
+| **Inbound CloudEvents** (cross-system event consumption) | Schema validation against CloudEvents spec | ⏳ #10 standards-conformance eval (0.5 session before #6) |
+| **Outbound signed AuditEvent** (for cross-org consumption) | Cryptographic signing (JOSE / JWT / JWS) + deterministic JSON canonicalization | ⏳ #10 deferred items (Tier 3 trigger) |
+| **Outbound CloudEvents-conformant serialization** | Map AuditEvent to CloudEvents core fields (`id`, `source`, `type`, `specversion`, `time`) | ⏳ #6 (if conformance accepted per evaluation) |
+
+L5 is largely Tier-2/Tier-3 territory; minimal in Tier 1 (single-process, single-user, no external boundary). Becomes load-bearing as deployments cross PBS↔external boundaries (cloud auth, federated agents, cross-system event consumption).
 
 ### L4 — Prospective design (design-review targets, discipline-aligned)
 

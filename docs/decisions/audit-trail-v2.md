@@ -213,3 +213,112 @@ data migration.
   write retrofit per v2
 - `plugin/skills/audit/references/drift-surfaces-and-slices.md` —
   slice 17 invariants simplified per v2
+
+---
+
+## Session-11 amendments (2026-04-30)
+
+Accumulated constraints from sessions 9, 10, 11 not yet reflected in
+the original decision text above. Captured here for #6 retrofit
+implementation.
+
+### A. `convention_applied` field on entity-mint events (per governance-and-identity-sourcing decision 4)
+
+When AI applies a deployment-specific convention rule to mint a new
+entity (e.g., actor-id from email pattern, doctype filename
+convention), the AuditEvent's `details:` payload includes:
+
+```yaml
+event_kind: entity_minted
+actor: <skill or agent name>
+actor_kind: skill
+details:
+  entity_type: <e.g., actor>
+  entity_id: <minted id>
+  convention_applied:
+    file: extensions/office/conventions/<topic>-conventions.md
+    section: "Actor identifier convention"
+    git_sha: <commit-sha-at-mint-time>
+  input: <originating input>
+```
+
+Pydantic validates `convention_applied` is required-when-applicable
+(entity-mint events MUST include it; other events don't need it). The
+`git_sha` ties the audit event to convention state at mint time,
+enabling defensible historical reconstruction even after conventions
+evolve. NOT a new event kind — structured field on existing
+entity-mint events.
+
+### B. Boundary placement refinements absorbed (session-11 sharp-defer audit)
+
+Two MCP tools previously v1.x are bundled into #6 retrofit scope:
+
+- **`dedupe_bausteine`**: dedupe procedure currently described in
+  `save-baustein/SKILL.md` lines 65-75 (title + tag overlap matching).
+  Move algorithm into MCP tool with reproducible scoring rule +
+  Pydantic candidate output schema.
+- **`record_baustein_use`**: takes baustein name + scope/key + kind ∈
+  {rejected, successful} + project/date/feedback_path; owns
+  frontmatter mutation with validation. Replaces direct `Edit` of
+  baustein frontmatter `rejected_uses[]` / `successful_uses[]`
+  fields described in `record-feedback/SKILL.md` lines 117-120.
+
+Both touch baustein frontmatter, single retrofit pass over
+save-baustein + record-feedback skills.
+
+### C. Approval event kinds (per session-9 followup #2)
+
+Three new event kinds for governance + workflow approvals:
+
+- `approval_requested` — actor requests approval; details include
+  `approving_actor`, `policy_rule`, `subject_entity_id`,
+  `requested_by`, `reason`
+- `approval_granted` — approver grants; details include
+  `approving_actor`, `subject_entity_id`, `original_request_id`
+- `approval_rejected` — approver rejects with reason
+
+Authorization rules ("Invoice >€10K needs partner approval") live
+in skill logic, NOT entity-shaped. The thing being approved is an
+entity (Invoice, Project-submission, schema change); the approval
+chain is in its event history.
+
+Per governance-and-identity-sourcing decision 1, the gate (Python)
+performs role enforcement using Actor.roles; the LLM (skill body)
+surfaces UX of approval workflow. Defense-in-depth.
+
+### D. CloudEvents conformance evaluation (per session-11 standards-eval, ROADMAP #10)
+
+0.5-session evaluation before #6 implementation lands: decide whether
+to bake CloudEvents-conformant serialization into v2 from inception
+(cheaper than retrofitting later) OR defer until concrete federation
+need surfaces.
+
+CloudEvents core fields (`id`, `source`, `type`, `specversion`,
+`time`) map cleanly onto AuditEvent's existing fields. Conformance
+is small Pydantic adjustment + emit-side serialization. Future
+leverage if A2A federation or Gemini-Enterprise interop needs
+cross-system event consumption.
+
+### E. AuditEvent schema fields shipped sessions 8 + 9 + 10
+
+Already-shipped additive fields recorded for completeness:
+- `actor_kind` (required) — `human` / `skill` / `external_agent` per #10
+- `actor_card` (optional) — agent-card identifier per #10
+- `origin_agent_card` (optional, required when `actor_kind=external_agent`)
+- `department:` filter on `query_audit_trail` (per #12)
+
+ProjectState gained `departments_active: list[str]` field session 9.
+
+### F. Cross-references for implementation
+
+- `record_decision` + `render_audit_trail` MCP tools — original v2 plan
+- `backfill_audit_trail` walks legacy prose sources — original v2 plan
+- Retrofits: orchestrator + save-baustein + record-feedback +
+  draft-textteil-b/c + review-draft + research-references; each
+  declares `record_audit_event` in `mcp_tools_required` and invokes
+  at appropriate checkpoints
+- ProjectState schema: drop `phase_history` field (v2 plan); add
+  per-department phase tracking (`phases: dict[str, str]`) per
+  Bundle C / #9
+- Slice 17 cross-reference invariant audit IMPLEMENTATION lands in
+  #6 scope; FIRST-RUN waits for events (chronological-valid)

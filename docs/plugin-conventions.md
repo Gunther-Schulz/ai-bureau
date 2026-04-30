@@ -351,12 +351,69 @@ History: session 7 introduced the corollary + plugin-wide sweep. Audit slice 14 
 
 ---
 
-## 14. Agents (deferred to v1+)
+## 14. Agents (formalization in #11; conceptual model session 11)
 
 When the first agent lands at `plugin/agents/<name>.md`, conventions will be added here. Expected shape (per skill-craft):
 
 - Frontmatter: `name`, `description` (when-to-use trigger), `tools` (which tools the agent can call), `model` (optional override).
-- Distinct from skills: agents are spawned for focused passes (deep code review, exhaustive citation verification) and run autonomously to a structured return.
+
+### Skill vs agent — invocation pattern wraps body (session 11)
+
+Per `docs/decisions/skill-expert-agent-and-domain-knowledge.md` (decision 3), skills and agents are NOT a hierarchy. The accurate model:
+
+- **Bodies** (the actual work logic) have inherent shape.
+- **Invocation patterns** wrap bodies — "skill" (user-driven, conversational, per-turn) or "agent" (autonomous loop, runs between user turns) or "both."
+- Some bodies fit only ONE wrapper; some fit BOTH.
+
+Mapping:
+
+- **Domain expertise + interactive sparring** (drafting, layered review, citation verification with user collaboration) → **skill-only**. Sparring requires human in the loop per VISION axis 2; autonomous mode breaks the requirement.
+- **Coordination / monitoring / batch / external-event-reactive** (corpus refresh, audit slice runner, design-review target runner, notification dispatcher, PM webhook handler) → **agent-mode** (often + skill-mode for manual override).
+- **Pure background / scheduled** (notification dispatch, scheduled fetches with no human-meaningful per-turn invocation) → **agent-only**.
+
+Concrete agents planned per ROADMAP #11 (each annotated with dual-mode capability):
+
+- `research-references-fetcher` — agent (scheduled refresh) + skill (manual fetch trigger)
+- `audit-slice-runner` — agent (per-pre-launch sweep) + skill (manual slice run)
+- `design-review-target-runner` — agent (per-pre-launch sweep) + skill (manual target run)
+- Future: `legal-reviewer` (deep §-by-§ checks per ROADMAP v2) — agent-only candidate
+
+### Skill granularity guidance — when to elevate vs keep as content (session 11)
+
+Per same decision record (decision 4), apply the **3-test analogue** before elevating fine-grained topics to separate skills:
+
+- **Stable identity** — does the topic have a stable name + identifier?
+- **State of record** — does the topic have its own state, or does state live on a containing entity?
+- **Lifecycle** — does the topic itself have a lifecycle, or only the containing entity?
+
+If all three apply → elevate to separate skill. If only stable identity → keep as content distributed across:
+
+- Process entities (`extensions/department/<dept>/processes/<topic>.md`)
+- References (`extensions/<scope>/references/<id>.md` body)
+- Skill body (the broader skill that invokes the topic content)
+- Skill references (`<skill>/references/<topic-modules>.md`)
+- Memory bausteine (accumulated patterns)
+
+Example: §13a-Verfahren passes stable identity but fails state-of-record + lifecycle (the project that USES §13a has state, not the Verfahren type itself). Stays as distributed content fueling the broader Begründungs-writer skill (`draft-textteil-b`). AI as runtime composes per-project §13a-specific behavior.
+
+This is the AI-as-runtime hybrid-shape principle (per ARCH v0.16) applied to skill-granularity decisions.
+
+### display_label optional field (session 11)
+
+Per same decision record (decision 1), skill frontmatter accepts an optional `display_label:` string field for per-deployment UX vocabulary. When set, slash commands + agent-card UI render the label instead of the raw skill `name`. When absent, falls back to `name`.
+
+Example:
+
+```yaml
+# draft-textteil-b/SKILL.md
+display_label: "Begründungs-Schreiber"   # PBS-Schulz UX label
+```
+
+Why optional + structured (not required, not pure prose convention):
+- Structured field has no semantic load (no failure mode to prevent); ergonomics win over prose convention.
+- Optional because deployments without distinct UX vocabulary use skill `name` directly (no friction).
+
+The architectural entity stays `skill` (no rename). "Expert" / "Specialist" / "Spezialist" / domain-specific vocabulary is per-deployment instance content per pattern-vs-instance discipline.
 
 ---
 

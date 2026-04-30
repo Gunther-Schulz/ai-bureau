@@ -249,6 +249,37 @@ Per the entity-elevation 3-test, most bausteine remain memory
 entries and don't elevate. Layer 2 fields TBD case-by-case when
 elevation occurs.
 
+### `department` / `office` / `universal` (registration-file entity types, locked Bundle A session 11)
+
+Three parallel registration entity types — one per scope-level
+registration file. Same Layer 2 frontmatter shape:
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `managed_entities` | dict[str, ManagedEntityRegistration] | ✅ | Map of short-name (registration key) → registration. Gate composes full namespaced type as `<scope-id>.<short-name>` per §3.2. |
+
+**`ManagedEntityRegistration` shape**:
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `pydantic_class` | str (dotted Python path) | ✅ | Class implementing the Layer 2 Pydantic for this entity type (e.g., `extensions.department.planning.entities.project.ProjectEntity`) |
+| `instances_at` | str \| null | ⚠ | Path pattern for native-mode instances (e.g., `<project-root>/state.md`, `extensions/department/planning/doctypes/{id}.md`). Null when adapter-mode. |
+| `adapter` | str \| null | ⚠ | Adapter id when adapter-mode (e.g., `lexware`, `personio`, `asana`). Null when native-mode. |
+
+`@model_validator`: at-least-one-of `{instances_at, adapter}` required (cannot be both null).
+
+**Pydantic class naming convention**:
+
+- `DepartmentEntity` — for `type: department` (registered in `extensions/department/<dept>/department.md`)
+- `OfficeEntity` — for `type: office` (registered in `extensions/office/office.md`)
+- `UniversalEntity` — for `type: universal` (registered in `extensions/universal/universal.md`)
+
+All three extend `EntityBase` (Layer 1 universal) + the same Layer 2 fields above. Same shape because the registration concept is uniform across scopes (per Bundle A close-out + governance-and-identity-sourcing decision 5 — managed entities at office and department levels follow the same registration shape; UniversalEntity locked explicitly per ARCH v0.23 ultrathink-review for symmetry).
+
+**Body conventions** for all three (per Bundle A close-out): `## What this <department/office/universal scope> does` / `## Conventions` / `## Cross-department coordination` (when applicable).
+
+Pydantic class definitions land with **#9 Bundle A implementation phase**.
+
 ---
 
 ## 5. Layer 3 — Per-deployment extension fields

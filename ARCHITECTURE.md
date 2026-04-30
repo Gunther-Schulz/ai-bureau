@@ -16,10 +16,56 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.22 (session 11 — `docs/validation-gating-overview.md` added as systems-view consolidating the four validation layers L1-L4; maintenance discipline rule 5 added for inventory-update sync)**.
+Status: **v0.23 (session 11 — ultrathink-review pass: discipline categorization (5 design + 3 operational + 4 meta-rules); Bundle A package layout reframed as recommended convention; L5 external-boundary validation added to overview; failure-mode catalog gains navigational-consolidation-drift + discipline-bloat entries; #20 demoted from BLOCKING; #18 heaviness sub-axes + framework bucketing; UniversalEntity surfaced explicitly)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.22 → v0.23**: **Ultrathink-review pass refinements**.
+  Session-11 cumulative commitments (6 ARCH bumps, Bundle A
+  locked, sharp-defer audit pulling 9 items forward, reference
+  card, validation-gating-overview, 2 memory files) reviewed under
+  ultrathink for drift / inconsistencies / refinement opportunities.
+  Refinements applied:
+  - **Discipline categorization** — discipline list reorganized
+    explicitly into "5 design disciplines (gate design decisions)"
+    + "3 operational principles (guide implementation choices)" +
+    "4 meta-rules" + "earlier resolved concepts absorbed into
+    disciplines." HANDOFF essential framing list aligned with
+    ARCH section structure (was inconsistent — listed 8 items
+    that didn't match ARCH's 8 sections).
+  - **Bundle A package layout reframed** as recommended convention
+    (NOT gate-enforced). Gate dispatches on `instances_at` paths
+    only, not on physical layout. Layout-flexible deployments can
+    deviate; audit slice may warn. Per "Make wrong shapes
+    impossible" discriminator: gate doesn't dispatch every
+    read/write on layout, so it's a convention. Bundle A close-out
+    reframed accordingly.
+  - **L5 external-boundary validation added** to validation-gating-
+    overview (was 4 layers; now 5). External-boundary validation
+    (A2A signing, OAuth/OIDC tokens, CloudEvents shape, JOSE/JWT
+    outbound signing) is a distinct layer from internal Pydantic
+    gate (L1). Largely Tier-2/Tier-3 territory; minimal in Tier 1.
+  - **Failure-mode catalog gains** `navigational-consolidation-drift`
+    (covered by maintenance discipline rules 3 + 5) +
+    `discipline-bloat / over-naming` (uncovered watch position;
+    candidate mitigation = periodic discipline-pruning check at
+    major version boundaries).
+  - **#20 PydanticAI demoted from BLOCKING** to "before Bundle B
+    Layer-3 mechanism specifically" (narrower surface; doesn't
+    gate broader implementation). #18 + #19 stay BLOCKING.
+  - **#18 agentic framework substrate eval** gains heaviness sub-
+    axes (operational vs cognitive) + framework bucketing
+    (enterprise-grade / mid-weight / lightweight / hand-rolled
+    baseline) + scope-creep guard. Substrate evals can run in
+    parallel — compresses BLOCKING window from 4-6 to 2-3 sessions.
+  - **UniversalEntity Pydantic class + universal.md registration**
+    surfaced explicitly in Bundle A close-out (was inferred-by-
+    symmetry; now locked).
+  - **audit-trail-v2 decision record** gains session-11 amendments
+    section (accumulated constraints from sessions 9-11).
+  - **Skill body sweep extended** with broader keyword set; one
+    additional check; no new fixes (only "stop for now" in
+    user-dialog-quote, not a defer rationale).
 - **v0.21 → v0.22**: **`docs/validation-gating-overview.md` added**
   as a systems-view of validation gating across the architecture.
   Surfaced session 11 mid-Bundle-A — the question "do we have plans

@@ -283,34 +283,39 @@ adopted.
   implementation + #11 plugin agents + #13 transport on top of
   an agentic framework substrate or hand-rolled. Multi-framework
   evaluation; not MS-AF-only.
-- **Frameworks in scope**:
-  - **MS Agent Framework** (Microsoft; production-ready
-    Python+.NET; sequential / concurrent / handoff / group-chat /
-    Magentic-One; OpenTelemetry; A2A)
-  - **LangGraph** (LangChain ecosystem; graph-based agent
-    workflows; widest community)
-  - **AutoGen** (Microsoft, predecessor to MS AF; multi-agent
-    conversation framework; mature)
-  - **CrewAI** (role-playing agents with collaboration; lighter
-    weight)
-  - **Semantic Kernel** (Microsoft; agent SDK with planners; .NET-
-    native, Python supported)
-  - **Smolagents** (Hugging Face; minimal agent framework;
-    intentionally lightweight)
-  - **OpenAI Swarm / Agents SDK** (OpenAI's official multi-agent
-    framework; less mature, OpenAI-aligned)
-  - **Hand-rolled** (current default — stays as the comparison
-    baseline)
-- **Heaviness as a key evaluation dimension** (per session-11
-  user direction): the substrate must serve our consulting
-  business spectrum from 1-person shops → small companies →
-  enterprise (Tier 3 / Gemini Enterprise). For each candidate,
-  evaluate:
+- **Frameworks in scope** (bucketed by category for meaningful
+  comparison; compare WITHIN buckets, then ACROSS buckets per
+  deployment scale needs):
+
+  | Bucket | Frameworks | Note |
+  |---|---|---|
+  | **Enterprise-grade** (production-ready, observability built-in, mature) | MS Agent Framework, Semantic Kernel, AutoGen | Best fit for Tier 3 / Gemini-Enterprise scale; may be overkill for 1-person shop |
+  | **Mid-weight** (popular community, common-case primitives) | LangGraph, CrewAI | Tier 2 cloud + small/medium-company sweet spot |
+  | **Lightweight** (intentionally minimal abstraction, low-overhead) | Smolagents (HuggingFace), OpenAI Swarm/Agents SDK | Best fit for 1-person shop / single-skill-utility deployment shapes |
+  | **Hand-rolled** (current default) | Raw Python + MCP + Pydantic | Comparison baseline; lowest cognitive + operational overhead |
+- **Heaviness as a key evaluation dimension** (per session-11 user
+  direction). Heaviness has TWO sub-axes that must be evaluated
+  separately because frameworks vary differently along each:
+
+  - **Operational heaviness** — boot time, memory footprint,
+    runtime deps, observability cost when nobody's watching,
+    deployment complexity. Easily measured.
+  - **Cognitive heaviness** — how much framework-specific
+    abstractions a developer must learn before being productive.
+    CrewAI's "agents+crews+tasks" mental model is one shape;
+    LangGraph's "state machine" another; raw Python+MCP near zero.
+    Harder to measure but real (especially for 1-person shops where
+    the user IS the developer + the operator).
+
+  The substrate must serve our consulting business spectrum from
+  1-person shops → small companies → enterprise (Tier 3 / Gemini
+  Enterprise). For each candidate, evaluate BOTH sub-axes at each
+  scale:
+
   - **1-person shop deployment** (Gunther's PBS today; future
     single-skill-utility shapes like brand-voice): does the
-    framework add substantial infrastructure overhead? Boot time?
-    Memory footprint? Observability cost when nobody's watching?
-    Setup complexity?
+    framework add substantial operational overhead? Substantial
+    cognitive overhead the user would have to absorb?
   - **Small company deployment** (5-20 person consulting client
     on Tier 2 cloud): does the framework's overhead feel
     proportional? Does it expose primitives the small office
@@ -321,11 +326,19 @@ adopted.
     enterprise needs (federated identity, multi-agent A2A,
     formal observability, regulatory governance)?
   - **Does the heaviness scale automatically?** Some frameworks
-    may have configuration-driven scaling (lightweight by
-    default, opt-in to enterprise primitives). Others may require
+    may have configuration-driven scaling (lightweight defaults,
+    opt-in to enterprise primitives). Others may require
     enterprise-grade deps regardless of deployment size. Critical
     for the consulting product positioning ("from solo
     practitioner to enterprise on the same architecture").
+
+- **Scope-creep guard** (added session 11 ultrathink-review): the
+  evaluation is time-boxed (2-3 sessions). Decisions made with
+  available evidence after time-box; further investigation deferred
+  ONLY with chronological reason ("framework X just shipped a major
+  release that changes the gap analysis" qualifies; "we should also
+  consider framework Y in similar bucket" does not — pick the
+  representative within bucket, not exhaustive enumeration).
 - **What an agentic framework would substrate** (any candidate):
   - Plugin-agent execution model (per #11 — currently undefined;
     we'd build it)
@@ -432,8 +445,18 @@ corpus) — session 11 commitment.
   - Per-reference metadata + citation traceability remain custom
   - LanceDB integration via LlamaIndex's wrapper
 
-**20. PydanticAI evaluation** (lower-priority but full investigation
-per session-11 direction) — session 11 commitment.
+**20. PydanticAI evaluation** (NOT BLOCKING for general
+implementation; evaluate before Bundle B Layer-3 mechanism decision
+specifically) — session 11 commitment, demoted from BLOCKING tier
+under session-11 ultrathink-review.
+
+**Why demoted from BLOCKING**: PydanticAI's win surface is
+genuinely narrower than #18/#19 (typed agent calls + sparring-output
+validation + Layer 3 mechanism). Not adopting it doesn't gate
+implementation work in #9/#11/#13 broadly; only gates the Bundle B
+Layer-3 mechanism decision (which #20 might inform). Listing as
+BLOCKING alongside #18/#19 (substrate-altering at scale) was
+over-weighted.
 
 - **Mission**: investigate PydanticAI as substrate for typed agent
   surfaces (skill output validation, Layer 3 mechanism implementation,

@@ -373,6 +373,24 @@ Pre-#13 single-user mode masks issues that #13 will surface.
 **Re-evaluate after #13.**
 **Notes**: scheduled re-evaluation when #13 lands.
 
+### Navigational-consolidation drift
+
+**Description**: as ARCH grows, navigational consolidation docs (reference card, validation-gating-overview, future similar) accumulate alongside detailed source-of-truth sections. Without explicit sync discipline, the navigational docs drift from the detailed sections — readers look at one, follow it, and act on stale guidance because the detailed source has changed.
+
+**Applicability**: yes (active concern post-session-11 with reference card + validation-gating-overview).
+**Severity**: minor-to-serious (depends on how stale the navigational doc gets before noticed).
+**Coverage status**: ✅ **covered** — ARCH "Maintenance discipline" rules 3 (reference card sync) + 5 (validation-gating-overview inventory sync). When changing a discipline / gate / slice / target / convention, both navigational + detailed surfaces update in same commit.
+**Notes**: enforced by author discipline + design-review target 14 sweep (will detect divergence between named disciplines and navigational doc inventories).
+
+### Discipline-bloat / over-naming
+
+**Description**: as architectural failure modes get caught, named disciplines accumulate. Each new discipline solves a real problem at the time of naming but adds cumulative cognitive load on future readers + rule-application overhead. Without periodic pruning, the discipline set grows monotonically; eventually new readers can't keep all named rules in mind, and discipline-driven design becomes its own friction.
+
+**Applicability**: yes (latent — session-11 added 4 new ARCH sections in v0.20-v0.22; not over-bloated yet at 11 sessions in, but trajectory matters).
+**Severity**: minor today; serious if unchecked at v50+ sessions.
+**Coverage status**: 🚫 **uncovered as discipline-shaped check**. Target 9 (subsumption) catches NEW commitments that subsume old ones; doesn't catch already-named disciplines that have become subsumed by later additions. Target 14 (discipline-gap) catches MISSING; doesn't catch OVER-named.
+**Notes**: candidate mitigation — periodic discipline-pruning check (analogous to legacy retirement scan; runs at major version boundaries, evaluates each named discipline against "is this still load-bearing or now subsumed by later discipline + meta-rules?"). Defer mitigation until pattern of over-naming surfaces; flag as watch position.
+
 ---
 
 ## Category 4 — Process + workflow failures
