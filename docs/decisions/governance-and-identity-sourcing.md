@@ -583,6 +583,71 @@ Each defer names a specific home + a specific cost being avoided. Per `feedback_
 - Skill bodies include the user-facing UX of the approval workflow (decision 1, layered enforcement).
 - Skill frontmatter sweep should NOT add `requires_role:` field — enforcement is at the gate, not in the skill (defense-in-depth principle).
 
+## Convention evolution + conflict resolution (session-11 per-DR gap detection)
+
+Per-DR gap detection surfaced two decisions within scope that
+weren't surfaced originally:
+
+### Convention versioning
+
+**Decision**: conventions evolve via in-place edit + git history.
+No formal version-number convention on convention md files.
+
+**Why**: conventions are prose; AI applies them at runtime + audit
+records `convention_applied: {file, section, git_sha}` per decision
+4 above. The `git_sha` IS the version anchor — six months later,
+"why was this entity minted this way?" reconstructs exactly via
+the git_sha-pinned convention text.
+
+**Implementation**:
+- Existing entities minted under prior convention versions stay
+  as-minted (their `convention_applied.git_sha` points to the
+  prior text). No retroactive remint required.
+- New entities minted after a convention edit use the new text
+  (their `convention_applied.git_sha` points to the new commit).
+- Audit slice 21 / target 12 verify the audit trail's convention
+  references resolve at their pinned shas.
+
+When a convention CHANGE produces NEW behavior (e.g., switch from
+`firstname-lastname` to `email-prefix-derived` actor IDs), there
+are two valid responses:
+- **Forward-only** (default): new entities use new convention; old
+  entities keep their old IDs. No mass-rename.
+- **Mass-rename** (rare; explicit operation): a separate skill
+  invocation walks all existing entities under the old convention
+  + renames per the new. Emits AuditEvent
+  `entity_renamed_per_convention_change` per entity. Rare; opt-in.
+
+### Convention conflict resolution
+
+**Decision**: when conventions in different files apply to the
+same concern, the more-specific scope wins. Priority order
+(most-specific to least-specific):
+
+1. **Department-specific** (`extensions/department/<dept>/conventions/<topic>.md`)
+2. **Office-wide** (`extensions/office/conventions/<topic>.md`)
+3. **Universal / framework default** (e.g., entity-md-spec §3.1)
+
+If two conventions at the SAME priority level conflict (e.g.,
+two department-specific conventions for the same concern in the
+same department), it's a **convention bug** — flag via audit slice
+21 + design-review target 12 (rule precision check). The bureau
+must reconcile; AI raises the conflict for explicit resolution
+rather than picking arbitrarily.
+
+**Implementation**: when AI applies a convention at mint-time, it
+walks priority order from most-specific. First applicable
+convention wins. AuditEvent's `convention_applied.file` records
+which file's convention fired (so resolution is reconstructible).
+
+**Cross-department coordination**: if a cross-department workflow
+needs a convention applied that differs per department, route the
+mint to the department-of-record (the department owning the
+entity being minted) and use ITS convention. Cross-department
+events relay results, not invocation.
+
+---
+
 ## Revisit triggers
 
 Re-open this decision record if:

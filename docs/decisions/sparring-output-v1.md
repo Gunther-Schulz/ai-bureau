@@ -255,3 +255,35 @@ impossible discipline; v0.20 — sharp defer rule)**:
   bodies bypassing the gate
 - If user disagrees with structural-vs-behavioral split for any
   of the 4 not promoted in v1
+
+## Schema versioning (session-11 per-DR gap detection)
+
+Per `ARCHITECTURE.md` v0.19 evolution patterns: output schemas
+(`ReviewOutput`, `RecommendationOutput`) follow the **structured +
+append-only** pattern. When a schema evolves:
+
+- **Adding a new optional field**: backward-compatible. Existing
+  skills + parsers don't surface the new field; new schema users
+  fill it. No migration needed.
+- **Adding a new required field**: SCHEMA-BREAKING. Coordinated
+  skill retrofit required (skills declaring the schema must be
+  updated to produce the new field). Plugin version bump per
+  semver-major if external consumers depend on the schema.
+- **Renaming an existing field**: SCHEMA-BREAKING. Same as adding
+  required.
+- **Removing a field**: SCHEMA-BREAKING. Same.
+
+The heuristic markdown-field parser (per "MCP tool design"
+section) is forgiving: missing fields produce `missing_fields[]`
+in the validation output rather than hard failures. Old skills
+producing old-schema output get classified as "missing required
+field" and routed back for retry. Forward-compat works through
+the validator's existing missing-field handling.
+
+**Bypass audit-trail**: when a skill triggers the
+`explicit-bypass-with-reason` path after 3 retry failures, the
+bypass MUST emit an `AuditEvent` with `event_kind=sparring_bypass`
++ `details: {skill_name, schema_name, reason}` per the audit-trail
+v2 retrofit (#6 scope). Without this, sparring-output bypasses are
+invisible to defensibility reconstruction. Constraint flows to #6
+retrofit.

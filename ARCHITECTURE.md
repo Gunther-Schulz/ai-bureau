@@ -16,10 +16,87 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.28 (session 11 — architectural-gap detection sweep across 4 lenses (failure-mode catalog / VISION-axis coverage / greenfield-derived / user-surfaced patterns). 3 real gaps applied: monolithic-skill-bundle entry updated to COVERED via v0.27 skill-granularity discipline; implicit-contract-between-skills entry tightened (sub-shape 2 — orchestrator handoff shapes — remaining gap; mitigation candidates named); cargo-cult patterns updated to COVERED via three-layer protection including new maintenance discipline rule 6 (periodic greenfield review at major version boundaries))**.
+Status: **v0.29 (session 11 — per-DR internal gap detection across 12 retroactively-reviewed DRs + backfill DRs for #8 (pre-action framing skill) + #15 (office-level managed entities Client + Actor). 3 internal-gap amendments applied: mcp-fallback-policy retry behavior + error-vs-unreachable distinction; sparring-output-v1 schema versioning + bypass audit-trail; governance-and-identity-sourcing convention versioning + conflict resolution. 8 gaps correctly deferred to instance/chronological. 2 new DRs backfilled for previously-DR-less commitments)**.
 
 > **Framework-foundation framing (read first, every session).** PBS is **the framework foundation for the consulting business**, validated by the Schulz planning bureau. PBS is the pioneer instance, never the product. At every architectural step, do the **full scalable foundational work** — designed for any expert-practitioner deployment (legal-practice / research-lab / brand-voice / consulting-client) at first bind, not minimum-viable-PBS. The framework is the IP; PBS-instance content is incidental. See "Pattern-vs-instance discipline" below for the operational rule + the sharp defer rule.
 
+- **v0.28 → v0.29**: **Per-DR internal gap detection + backfill
+  DRs for #8 + #15 (max-effort session 11)**. User asked: "and
+  feature gap analysis you just did covered all already processed
+  retroactive review corpus from earlier, right?" Honest answer:
+  prior gap detection (v0.28) covered ARCHITECTURE-level gaps;
+  did NOT directly cover per-DR INTERNAL gaps (decisions WITHIN
+  each DR's scope that should have been surfaced but weren't).
+  Ran deliberate per-DR gap detection across all 12 retroactively-
+  reviewed DRs (sessions 5-11).
+
+  **3 real internal-gap amendments applied** (decisions within
+  scope that needed surfacing):
+
+  - **mcp-fallback-policy.md**: added retry behavior decision
+    (fail-closed on FIRST unreachable; no skill-level retry-with-
+    backoff; transport handles its own connection retries) +
+    error-vs-unreachable distinction (fail-closed corollary
+    applies to UNREACHABILITY only; MCP-returned errors are
+    structured envelopes for skill-side handling per
+    backend-mcp-error-format).
+  - **sparring-output-v1.md**: added schema versioning behavior
+    (additive optional fields = forward-compat; required-field
+    additions are SCHEMA-BREAKING per v0.19 evolution patterns) +
+    bypass audit-trail decision (when sparring validation 3x-fails,
+    `explicit-bypass-with-reason` emits `sparring_bypass`
+    AuditEvent — without this, bypasses are invisible to
+    defensibility reconstruction).
+  - **governance-and-identity-sourcing.md**: added convention
+    versioning (in-place edit + git history; entities pin to
+    `git_sha` at mint-time per decision 4; forward-only default,
+    mass-rename rare opt-in) + convention conflict resolution
+    (more-specific scope wins: department > office > universal/
+    framework default; same-priority conflicts are bugs flagged by
+    audit slice 21 + design-review target 12).
+
+  **8 gaps correctly deferred to instance / chronological** (no
+  amendment needed):
+  - PII redaction in logs/audit events → deployment-instance per #13
+  - Event retention policy → deployment-instance per #13
+  - Cross-tenant data isolation → Tier 3 / #13
+  - Department deactivation/renaming → first deployment that needs it
+  - Body translation / multi-language → multi-language deployment
+  - display_label localization → same
+  - Trigger conflict resolution → first multi-skill conflict
+  - Tier 3 cross-org A2A trust model → Tier 3 trigger
+
+  **2 new backfill DRs written** (per session-11 user direction):
+
+  - **`pre-action-framing-skill.md`** (commitment #8): captures
+    meta-skill design — when triggers (non-trivial / new
+    commitment-shape / explicit invocation), what produces
+    (`FramingOutput` Pydantic schema with required `actual_problem`
+    / `in_scope` / `out_of_scope` / `approaches_considered (>=2)` /
+    `chosen_approach` / `chosen_approach_rationale` / `constraints`
+    / `success_criteria` / `confidence` / `confidence_basis`
+    fields), how integrates (project-level memory entry; downstream
+    skills consume; audit/design-review reference at review-time),
+    composes with skill-granularity v0.27 (passes 3-test). Worked
+    example: session-7 audit-trail v1 → v2 reversal would have
+    been caught at framing time if `frame-task` existed (the
+    `approaches_considered (>=2)` requirement forces single-write
+    architecture as alternative to dual-write).
+  - **`office-level-managed-entities.md`** (commitment #15):
+    consolidates Client + Actor schemas + cross-department
+    reference convention previously scattered across ROADMAP +
+    `office-vs-department.md` + `governance-and-identity-sourcing.md`
+    decision 5. Distinct scope: governance-and-identity-sourcing
+    is about governance + identity sourcing PRINCIPLES; this DR is
+    about the ENTITY TIER (Client + Actor as office-level managed
+    entities; cross-department reference convention via
+    `<entity>_id: str` Layer 2 fields with gate-validation;
+    adapter mode for both per glue-not-replacement; Layer 2 schemas
+    + body conventions per entity-md-spec).
+
+  No real-revise items beyond the three internal-gap amendments.
+  Per-DR detection found refinements that were implicit; backfill
+  DRs surface architectural decisions that were scattered.
 - **v0.27 → v0.28**: **Architectural-gap detection sweep
   (max-effort session 11)**. User asked: "btw, has your review
   also checked for architectural gaps? You know like the stuff I

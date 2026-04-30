@@ -158,6 +158,56 @@ with different correctness guarantees. The whole point of meta-rule
 
 ---
 
+## Session-11 per-DR internal gap detection — additional decisions
+
+Per-DR gap detection (session 11) surfaced two decisions within
+this DR's scope that weren't surfaced in the original text:
+
+### Retry behavior on MCP-unreachable
+
+**Decision**: skills MUST fail-closed on the FIRST MCP-unreachable
+event for contract-bearing reads. NO retry-with-backoff at the
+skill level.
+
+**Why**: retry-with-backoff at the skill layer creates timing
+ambiguity (was the read stale? did backend recover mid-session?).
+The MCP transport layer (stdio / HTTP per #13) handles its own
+connection-level retries appropriate to the transport. Skill-level
+retry would compound + obscure the failure mode. Loud + immediate
+failure is the consistent extension of fail-closed corollary.
+
+**Implementation**: skills' `fallback_when_mcp_absent` strings
+state "surface to user 'MCP unreachable; restart backend' and
+stop" — no retry sequence. Recovery happens at session-open
+after user restarts (per backend's session model).
+
+### Error-vs-unreachable distinction
+
+**Decision**: fail-closed corollary applies ONLY to MCP
+unreachability (transport failure / no response). MCP-returned
+errors (e.g., `tool_runtime`, `not_found`, `not_in_scope` per
+backend-mcp-error-format.md) do NOT trigger fail-closed; they
+return to the skill as structured error envelopes for skill-side
+handling.
+
+**Why**: the failure modes are categorically different:
+- **MCP unreachable** = backend down; the contract gate doesn't
+  exist; bypass would be silent invalid output. Fail-closed
+  required.
+- **MCP returned error** = backend up; the contract gate ran +
+  surfaced a typed error (e.g., `not_found` for a missing
+  project, `input_validation` for a malformed call). The contract
+  WORKED. Skill handles the error per its body logic (retry with
+  fixed input, fall back to alternate flow, surface to user as
+  domain-meaningful message, etc.).
+
+**Implementation**: skills distinguish `_error` envelope (per
+`backend-mcp-error-format.md`) from connection failure
+(`fallback_when_mcp_absent` triggered). The former is normal
+flow; the latter is the corollary's surface-and-stop case.
+
+---
+
 ## Session-11 retroactive review note (v0.21 — make wrong shapes impossible discipline)
 
 This decision is the canonical worked example of the
