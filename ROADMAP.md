@@ -338,6 +338,19 @@ not format).
   events route through the new generic entity gate (post-#9).
   `details.reasoning_full_text` may surface markdown for free-form
   fields (minor, not load-bearing).
+- **Per session-11 constraint (governance + identity sourcing
+  decision record)**: entity-mint AuditEvents include
+  `convention_applied: {file, section, git_sha}` field in the
+  `details:` payload when AI applied a convention rule to mint a
+  new entity. Pydantic validates required-when-applicable
+  (entity-mint events MUST include it; other events don't need
+  it). The `git_sha` ties the audit event to convention state at
+  mint time, enabling defensible historical reconstruction even
+  after conventions evolve. NOT a new event kind — structured
+  field on existing entity-mint events. Required for the
+  prose-rules-as-conventions pattern (per
+  `governance-and-identity-sourcing.md` decision 4 + operational
+  concern 3) to be auditable.
 
 **7. Bootstrap-write MCP tools** (session 7) — close the meta-rule
 4 fail-closed gap surfaced by audit slice 14.

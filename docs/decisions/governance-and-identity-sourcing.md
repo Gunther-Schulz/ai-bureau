@@ -318,6 +318,185 @@ This is why the **Bundle A test list expands** to include Actor-via-adapter cons
 
 If proposed shape fails any of these, redesign before locking.
 
+## Operational concerns — proactive defaults + detection + how-to-fix
+
+Three operational concerns surfaced during session-11 application
+of the AI-as-runtime conformance check (smoke + deep test) to the
+prose-rules pattern. None are blockers — design honors the
+principle — but each has practical handling spread across three
+modes:
+
+- **Proactive defaults** (ship-time): start with best-assumption
+  defaults derived from the pioneer instance, not from empty.
+  Bureaus see well-shaped examples to adapt rather than facing a
+  blank canvas.
+- **Detection** (runtime): violations still surface despite
+  defaults; audit + design-review + Pydantic catch them.
+- **How-to-fix** (when flagged): guidance for resolving violations
+  when they appear.
+
+The pattern: **defaults reduce the violation rate; detection
+catches what slips through; how-to-fix guides resolution.** All
+three modes work together. Empty-start + violation-only-detection
+is the failure mode this section guards against.
+
+### Concern 1: LLM interpretability — vague conventions produce inconsistent applications
+
+**Problem**: a vague convention rule produces inconsistent
+applications across invocations. AI may interpret "use sensible
+names" differently each time; same input → different output.
+Drift is silent until inconsistency surfaces.
+
+**Proactive default** (ship with): `extensions/office/conventions/`
+ships pre-populated with **template convention files** drawn from
+the PBS pioneer instance — well-shaped, imperative, with examples
+and edge cases. Bureaus adopting PBS see what good conventions
+look like and adapt; they don't start from empty. Templates cover
+common surfaces: actor-id minting, archive policy, file naming,
+notification triggers, audit-record conventions. Empty conventions
+file is NOT the default; well-shaped example IS.
+
+**Detection** (LLM audit territory — judgment-shaped check):
+audit slice 21 (entity-md conformance, post-#9) extends to a
+"rule precision" sub-check — LLM evaluates whether convention
+prose is imperative + has examples + has edge-case handling.
+Pure pattern judgment; LLM is the right tool. Telemetry first;
+auto-enforcement later if the pattern proves valuable.
+
+**How-to-fix when flagged — write conventions as imperative rules
+with concrete examples**:
+
+| Vague (avoid) | Precise (preferred) |
+|---|---|
+| "Use sensible IDs" | "Actor IDs follow `<firstname>-<lastname>` from email prefix; on collision, append middle initial: `alice-m-mueller`. Example: `alice.mueller@schulz-planung.de` → `alice-mueller`." |
+| "Archive old projects appropriately" | "Projects move to `archived/` after 18 months of inactivity; subfolder named `<closure-year>-<original-id>`. Example: `2024-friedrichshof-pv-3/`." |
+| "Name doctype files clearly" | "Doctype filenames: `<doctype-id>.md` for spec; per-project instances at `<project-root>/<doctype-id>/<filename>.tex`." |
+
+The discipline: imperative + concrete examples + edge-case handling.
+NOT principles or guidelines — those leave too much interpretive
+space for the LLM.
+
+### Concern 2: Body-size budget — convention bodies grow unbounded
+
+**Problem**: conventions accumulate over time. A bureau with 50
+conventions × 200 tokens each = 10K tokens of body in
+`office-config.md`. Hits entity-md-spec §16 thresholds (≤1500
+token bodies, ≤500 token sections). Loading the whole body becomes
+expensive; AI may struggle to keep all conventions in mind.
+
+**Proactive default** (ship with): the file structure is
+**already split by topic from day one** — `extensions/office/
+conventions/{actor,archive,naming,notification,audit}-conventions.md`.
+Bureaus inherit the split structure; they don't migrate from a
+single mega-file later. Avoids the "everything in office-config.md"
+anti-pattern entirely by structuring the canvas correctly upfront.
+
+**Detection** (deterministic-primary, LLM for clustering judgment):
+- **Threshold check** (deterministic, cheap): token-count entity
+  bodies, flag those exceeding §16 thresholds. Pure mechanical
+  check; runs in audit slice 21's body-size telemetry sub-check.
+- **Split judgment** (LLM): when a body is over budget, *should*
+  it be split into separate files? That's a clustering question —
+  do conventions group naturally by topic? LLM judges based on
+  reading the content. Reserved for files actually flagged.
+
+**How-to-fix when flagged — split convention files by topic**:
+
+```
+extensions/office/
+├── office-config.md                  # core deployment config
+└── conventions/
+    ├── actor-conventions.md          # identifier rules, role mapping
+    ├── archive-conventions.md        # retention, closure rules
+    ├── naming-conventions.md         # file/folder naming
+    ├── notification-conventions.md   # who-gets-pinged-when
+    └── audit-conventions.md          # what-gets-recorded-where
+```
+
+Each file stays within §16 thresholds. AI loads only relevant files
+per workflow (audit-conventions.md when audit retrofits run;
+actor-conventions.md when minting actors).
+
+**Pruning norm also applies** (per entity-md-spec §16.3): drop
+superseded conventions from the body during edits. Don't
+accumulate dead rules. Brief commit message captures what was
+removed and why. Convention md files are NOT append-only.
+
+### Concern 3: Audit trail of rule application
+
+**Problem**: when AI applies a convention to mint an entity, the
+audit event must record both the rule reference + the produced
+result. Without this, "why was alice-mueller minted that way?"
+reconstructs from *current* convention state — but the convention
+might have changed since then. Reconstruction unreliable.
+
+**Proactive default** (ship with): the `convention_applied` field
+is **in #6's first schema version** — Pydantic enforces it from
+day one of audit-trail v2 retrofit. NOT added retroactively after
+violations surface. Bureaus get the field for free; AI fills it
+when minting; auditability is structural, not optional.
+
+**Detection** (deterministic-primary, LLM for accuracy spot-check):
+- **Field-presence check** (deterministic, Pydantic): entity-mint
+  AuditEvents must have `convention_applied` field set when AI
+  applied a convention rule. Pydantic validates at write-time;
+  fail-loud if missing. Pure schema enforcement.
+- **Reference accuracy check** (LLM): does the cited convention
+  section actually contain a rule that would have produced this
+  result? Sample-based audit; LLM judgment. Reserved for
+  spot-checks, not every event.
+
+**How-to-fix when flagged — entity-mint AuditEvents include `convention_applied` field**:
+
+```yaml
+event_kind: entity_minted
+actor: alice         # who triggered the mint
+actor_kind: skill
+details:
+  entity_type: actor
+  entity_id: alice-mueller
+  convention_applied:
+    file: extensions/office/conventions/actor-conventions.md
+    section: "Actor identifier convention"
+    git_sha: <commit-sha-at-mint-time>
+  input: alice.mueller@schulz-planung.de
+```
+
+The `git_sha` ties the audit event to the convention state at mint
+time — even if conventions evolve later, the historical
+reconstruction is exact.
+
+**Home**: schema addition lands in **#6 audit-trail v2 retrofit**
+as part of the existing `details:` payload extension. Not a
+separate event kind; just a structured field added to entity-mint
+events. Pydantic validates required-when-applicable. Constraint
+passed to #6 (added to constraints section below).
+
+### Summary across all three modes
+
+| Concern | Proactive default (ship-time) | Detection (runtime) | How-to-fix when flagged |
+|---|---|---|---|
+| #1 Vague conventions | Convention templates pre-populated from PBS pioneer instance | LLM (audit slice 21 sub-check on prose precision) | Rewrite as imperative + examples + edge cases |
+| #2 Body-size budget | File structure pre-split by topic (`actor-conventions.md`, `archive-conventions.md`, etc.) | Deterministic token threshold + LLM clustering judgment | Split file; prune stale conventions |
+| #3 Audit field | Pydantic-required from #6 v1; AI fills automatically | Schema validation (deterministic) + LLM reference-accuracy spot-check | Backfill missing field if surfaced (rare with default) |
+
+**Pattern**:
+
+1. **Proactive defaults** reduce the violation rate at ship time —
+   bureaus inherit good shapes, not empty canvases.
+2. **Detection** is defense-in-depth — deterministic where cheap
+   and reliable, LLM where judgment is genuinely required. Same
+   logic as governance enforcement (decision 1: gate enforces
+   roles, not LLM).
+3. **How-to-fix** is documented guidance for when violations
+   surface despite defaults.
+
+The three modes work together. Empty-start with violation-only
+detection is the failure mode this section guards against —
+bureaus shouldn't have to discover good convention shape through
+trial-and-error when the pioneer instance has already done that
+work.
+
 ## Connection to existing architectural disciplines
 
 | Discipline | Connection |
@@ -389,6 +568,15 @@ Each defer names a specific home + a specific cost being avoided. Per `feedback_
 - Approval events extend to governance-change approvals (D1).
 - AuditEvent.actor references Actor.id (already in #6's scope per #15 constraint).
 - Audit slice or design-review check for convention drift (D5) bundled with audit slice 21.
+- **`convention_applied` field on entity-mint events** (per
+  operational concern 3): when AI applies a convention rule to
+  mint a new entity, AuditEvent's `details:` payload includes
+  `convention_applied: {file, section, git_sha}`. Pydantic
+  validates required-when-applicable (entity-mint events MUST
+  include it; other events don't need it). Required for
+  defensible historical reconstruction six months later. NOT a
+  new event kind — just a structured field on existing
+  entity-mint events.
 
 ### → #11 (Cowork integration)
 
