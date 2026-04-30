@@ -3389,6 +3389,84 @@ business → AI-office-builder v2 → THEN evaluate marketplace.
 commitment to build. Re-evaluate annually against trigger
 conditions.
 
+### Acquire + AI-office-ify existing small practices (v3 horizon option)
+
+**Why in the roadmap**: another long-horizon strategic option that
+builds on the same infrastructure as the marketplace. Captured as
+**option only** — no commitment to pursue. Documented so future-you
+can recognize when (if) the trigger conditions materialize.
+
+**The idea**: rather than waiting for retiring practitioners to
+bring their practices to a marketplace, *acquire* small expert
+practices (planning bureaus, legal practices, accounting firms,
+niche consulting shops) and AI-office-ify them using the v2
+builder + accumulated patterns. The AI-augmented practice can
+then be operated, held as portfolio, or sold (feeding the
+marketplace). Inverse direction of the marketplace's "retiring
+practitioner sells" supply: same demographic, different
+transaction direction.
+
+**How it composes with what we're already building**:
+- **AI-office-builder v2** is the precondition — without it, each
+  acquisition requires hand-built office scaffolding (uneconomical
+  at portfolio scale)
+- **Consulting offering** generates the operational know-how of
+  how to AI-augment a specific domain — that's the transformation
+  playbook each acquisition applies
+- **Marketplace (if it materializes)** provides exit liquidity
+  for transformed practices
+- **Schulz Planungsbüro is the inverse prototype** — validates
+  "build a practice, AI-augment it." The acquisition direction
+  validates the forward path (acquire a practice, AI-augment it).
+  Same architectural infrastructure serves both.
+
+**Sourcing candidates**: retiring practitioners with no succession;
+distressed small practices; undermarketed niche specialty firms.
+
+**Exit options per acquisition**:
+- **Hold + operate** as AI-augmented practice (income generator)
+- **Sell** as AI-augmented business (feeds the v3 marketplace)
+- **Roll up** into a portfolio (PE-shaped rollup of AI-augmented
+  small practices in adjacent or complementary domains)
+
+**What's hard / risky**:
+- Operating businesses ≠ building software — fundamentally
+  different skill set; running portfolio of practices needs
+  operations capability we don't currently have
+- Capital intensity — multi-acquisition portfolio needs
+  significant patient funding
+- Practitioner-handoff is sensitive — existing clients'
+  continuity, regulatory / fiduciary concerns per domain
+- Each domain's regulatory specifics constrain transformation
+  depth (legal practices have bar-association rules; accounting
+  has CPA certification; medical has licensing); the AI office
+  augments practice operations, doesn't replace the credentialed
+  practitioner
+
+**Trigger conditions** (re-evaluate when):
+- AI-office-builder v2 ships and demonstrably scaffolds working
+  offices in a small bounded timeframe
+- First consulting client retention extends 12+ months
+  (operational transformation playbook validated)
+- First AI-augmented practice sale completes (Schulz or similar)
+  — exit valuation evidence exists for "what an AI-augmented
+  practice is worth"
+- Capital partner with patient capital + practice-acquisition
+  experience surfaces (different relationship than typical
+  software-VC)
+
+**Strategic stance** — do NOT optimize toward this prematurely.
+Sequence: PBS pioneer → consulting traction → AI-office-builder v2
+→ marketplace (when/if) → THEN evaluate acquisition arm. Each
+prior stage produces evidence + capability for the next.
+Acquisitions without the v2 builder = unscalable; without the
+consulting playbook = unguided; without exit liquidity =
+illiquid portfolio.
+
+**Status**: v3-horizon option, parallel branch to the marketplace.
+No commitment to build. Re-evaluate annually with the marketplace
+section.
+
 ### Agent Simulation — runtime stress-test framework (long-horizon)
 
 **Why**: Inspired by Vertex AI's Agent Simulation pattern (cross-
