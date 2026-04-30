@@ -1,8 +1,25 @@
 # Strategic positioning — pbs-bureau as consulting IP
 
-**Status**: working document (session 9 initial; substantial rewrite session 13 per #22 Sub-DR B `docs/decisions/positioning-three-tier-framework.md`). Strategic discussion captured for durability across sessions. Distinct from `ARCHITECTURE.md` (technical architecture) and `ROADMAP.md` (commitment queue) — this doc covers **how the work positions in the consulting market** and **what consulting offerings flow from it**.
+**Status**: working document (session 9 initial; substantial rewrite session 13 per #22 Sub-DR B; further substantial rewrite session 14 per `docs/decisions/closest-neighbors-deep-read.md` + `docs/decisions/shape-extension-and-architectural-floor.md` + `docs/decisions/vision-realignment-session14.md`). Strategic discussion captured for durability across sessions. Distinct from `ARCHITECTURE.md` (technical architecture) and `ROADMAP.md` (commitment queue) — this doc covers **how the work positions in the consulting market** and **what consulting offerings flow from it**.
+
+**Operating geography**: EU, mainly Germany (DACH primary).
 
 This is a living document. Update when strategy refines; review periodically for drift.
+
+---
+
+## Layered approach — framework breadth + positioning narrowness (locked session 14)
+
+**Critical distinction** that shapes everything below:
+
+| Layer | Property | Truth |
+|---|---|---|
+| **Open source framework** | Workspace-shape-NEUTRAL | Architectural reality — primitives support any shape (practitioner / autonomous-business / personal-OS / knowledge-graph / federation / hybrid); community can build for any audience via shape-extension contract |
+| **Marketed product** | Practitioner-FOCUSED | Strategic positioning choice — Cherry Ventures fit + EU AI Act tailwind + empty OS market for practitioner shape |
+
+**Within Option B floor** (per `shape-extension-and-architectural-floor.md`): even shape-neutral framework primitives structurally enforce 3 accountability axioms regardless of shape (anti-Art-25-trap gate + claim-level audit + human authority chain). Other shapes can configure axis intensities but cannot disable structural floor.
+
+**Tom Sawyer dynamic**: framework is OS; community can author shape extensions for shapes PBS doesn't market (autonomous-business per Paperclip-style; personal-OS per PAI-style; sovereign for defense; etc.). Framework breadth grows organically without PBS effort. PBS-marketed energy stays focused on practitioner shape.
 
 ---
 
@@ -304,9 +321,150 @@ See `ROADMAP.md` v2 "AI-workspace generator" → v3 "Marketplace of specialists"
 
 ---
 
-## Competitive landscape
+## Closest OS neighbors — verified architecturally distinct (session 14 deep-reads)
 
-Different niches; positioning around specialization:
+Per session 14 closest-neighbors deep-read research (4 OS deep-reads + commercial scan + DACH analysis), PBS uniquely holds **5 of 6 distinctness axes** (workspace-as-practitioner-identity / specialist-as-codified-expertise-bundle / sparring-as-runtime-pillar / audit-by-construction / practitioner-as-author / multi-actor configurable). Closest neighbors fit 1-3 axes each.
+
+| OS Project | Axes-fit | Architectural shape | Closest by | PBS distinct on |
+|---|---|---|---|---|
+| **PAI (Personal AI Infrastructure)** | 3/5 | Customization layer on Claude Code (NOT framework) | Architectural overlap (workspace-as-identity + composable bundles + practitioner-as-author shape) | sparring runtime + audit-by-construction + multi-actor + substrate abstraction |
+| **OpenSail (TesslateAI)** | 2.5/6 | AI app-builder / agentic IDE (Bolt/Cursor lineage) | Verbal positioning (workspace + bundles + audit-log + non-developer audience) | workspace-as-practitioner-identity (vs container env) + sparring + claim-level audit + practitioner-as-author + composable specialist (vs containerized App) |
+| **Paperclip** | 1.5/6 | Autonomous multi-agent business orchestration (Postgres-backed) | Sophistication + market visibility ("zero-human company" framing — aspirational marketing, not structural) | claim-level audit (vs action-level) + sparring runtime + composable specialist + multi-actor regulators + practitioner-as-author + event-shaped coordination |
+| **Letta v1 (formerly MemGPT)** | 1-2/5 | Single-tier agent runtime + DB-backed state | Surface vocabulary collision (skills + subagents + memory + deployment) | three-tier separation + sparring + audit + workspace primitive + practitioner shape |
+
+**Cargo-cult risk LOW for all** — verbal collision is surface-only at code level. Architectural shapes diverge cleanly. **All four are ecosystem peers (interop targets, pattern sources, distribution surfaces) — not competitive runtimes for practitioner-shape positioning.**
+
+**Adoption opportunities surfaced** (~7 adopt + 3 defer; full table in `closest-neighbors-deep-read.md`):
+- A1 SKILL.md interop for Specialist (Letta-confirmed; Anthropic ecosystem standardized)
+- A2 Connector Proxy pattern → Adapter Protocol security (OpenSail)
+- A3 Contract-as-data → Specialist runtime contracts (OpenSail)
+- A4 Manifest schema versioning discipline (OpenSail)
+- A5 INSTALL.md wizard pattern (PAI)
+- A6 Closed-list capabilities with phantom-detection audit (PAI)
+- A7 USER/ vs system separation contract (PAI)
+- A8 issue_execution_decisions shape (Paperclip → PBS layered review)
+- A9 document_revisions rollback pattern (Paperclip → PBS send-gate snapshots)
+
+## Closest commercial neighbors (DACH + EU)
+
+| Company | Axes-fit | Geography | Notes |
+|---|---|---|---|
+| **Beck-Noxtua / Noxtua SE** (€80.7M Series B; backed by C.H.Beck + CMS + Dentons + Northern Data + Global Brain + KDDI) | 2/6 | DACH | "Legal AI Workspace"; ISO/IEC 42001 + BSI C5 + ISO/IEC 27018 certified; sovereign EU infrastructure on Northern Data; transparent reference disclosure + change tracking. **Closest commercial neighbor for German market BUT vertical SaaS shape + practitioner-as-USER not author**. **Sovereign-AI funding model precedent** (strategic capital, not classical VC) |
+| **Anthropic Claude Cowork + vertical plugins** (Feb 2026; financial services + HR + engineering + legal) | 2/6 | Global | Desktop workspace + Anthropic-or-partner-authored plugins encoding institutional knowledge. **Most architecturally-similar commercial offering — direction-of-travel evidence**. Enterprise-only + no sparring + no multi-actor + no self-host = PBS distinct |
+| **Stilta** (YC W26; IP/patent work) | 1/6 | US | "Every output source-backed, referenced, and auditable" — explicit audit-by-construction language. **Validates the axis** in single-vertical SaaS form |
+| **Avoice** (YC W26; "AI workspace for architects" / "Harvey for Architecture") | 1/6 | US/UK | Vertical SaaS for architecture firms; English-only; no DSGVO posture. **Does NOT block PBS in DACH** (no EU localization) — but watch for EU expansion |
+| **AutoSitu** (YC W26; "AI-native workspace for municipal development review") | 1/6 | US | **OPPORTUNITY not threat** — operates INVERSE side of PBS pioneer domain (cities reviewing applications). **Customer-of-PBS-output**: cities digitizing review = demand for audit-ready submissions = favors PBS audit-by-construction. **Single biggest finding** from commercial scan |
+
+## DACH competitive landscape (operating geography focus)
+
+| Company | Notes |
+|---|---|
+| **Phase0 (formerly Compa, Berlin; founded 2020)** | **Dominant DACH incumbent — 800+ firms / 1,500+ users.** "OS für moderne Architektur- und Ingenieurbüros." HOAI (LP 1-9) + AVA (DIN 276, GAEB) + AI-Bautagebuch + AI-LV-generation in beta. DSGVO-konform, EU-hosted. **Owns operational-software layer for DACH planner+architect mid-market.** **PBS positions ABOVE Phase0** — expertise codification + audit + multi-actor + sparring layer. Co-existence model: Phase0 = operational; PBS = expertise. **Do NOT compete on HOAI/AVA mechanics (5-year build)** |
+| **Langdock (Berlin)** | "Die Plattform für KI-Adoption." Frankfurt-hosted; ISO 27001 + SOC 2; DPA upfront; 40+ models. Custom-GPT primitive = weak practitioner-author proxy. **MEDIUM-HIGH substrate competitor** — DACH firm shopping "DSGVO-AI" buys Langdock + builds custom-GPTs themselves. **PBS differentiates: codified specialists + sparring + audit (categorically different from custom-GPTs)** |
+| **Beck-Noxtua / PRIME LEGAL AI / anwalts.ai** | DACH legal/tax commercial workspaces. Practitioner-as-USER not author. **Watch for archetype expansion** to Steuerberater / Architekturbüro / Planungsbüro |
+| **BAK (Bundesarchitektenkammer)** | Advocacy-only; **NO chamber-vendor partnership; NO chamber-stamp accreditation.** Liability concern ("Wer haftet für KI-Fehler?") is **PBS marketing wedge** — audit + practitioner-as-author + sparring directly address professional-liability anxiety |
+
+**No DACH commercial product targets the planning-bureau practitioner-author shape.** Beck-Noxtua adjacent (lawyers not planners). **Genuine OS-market gap PBS specifically architected for.**
+
+## Sharpened differentiators — 5 of 6 distinctness axes unique to PBS
+
+Per session 14 competitive research (4 deep-reads + commercial scan):
+
+| # | Axis | PBS holds | Closest competitor stance | Marketing wedge |
+|---|---|---|---|---|
+| 1 | **Workspace as practitioner-identity primitive** | ✅ unique | PAI = single-human; OpenSail = container env; Paperclip = company; Letta = no workspace | "Your practice is the workspace; not a container, not a SaaS tenant" |
+| 2 | **Specialist as composable codified expertise bundle** | ✅ unique | All competitors use skill-as-markdown-file; none codify the multi-component bundle (skills + entities + memory + references + adapters) | "Specialists distribute composable expertise; install what your practice needs" |
+| 3 | **Sparring as runtime pillar** | ✅ uniquely unique | All surveyed competitors treat sparring as installable skill (PAI's RedTeam/Council; community devils-advocate plugins); never as always-on runtime | "Sparring runs by default on every decision-class output, not as opt-in skill" |
+| 4 | **Audit by construction (claim-level)** | ✅ unique vs claim-level | OpenSail/Paperclip/PAI = action-level (who/what/when); Beck-Noxtua/Stilta = transparent references (partial); none bind every claim to evidence at write-time | "Defensibility for any per-deployment audience (regulator / court / peer / client / future-self)" |
+| 5 | **Practitioner-as-author** | ✅ unique | Letta/OpenSail/Paperclip = developer-author; PAI = "everyone" but actually power-user; commercial = practitioner-as-USER | "Practitioner authors specialists for their domain; not buyer of pre-built apps" |
+| 6 | **Multi-actor primitive (configurable per-deployment)** | ⚠ unique | PAI = single-human; Paperclip = user/agent/system but no external_agent; commercial = single-tenant | "Practitioner + clients + regulators + corpus references — all first-class actors; configurable per-deployment" |
+
+Plus **substrate abstraction at framework layer**: Letta/OpenSail/PAI/Paperclip all tightly substrate-coupled; PBS is genuinely substrate-pluggable (Claude Agent SDK + MS Agent Framework dual substrate per #18).
+
+## EU AI Act tailwind — asymmetric in PBS favor
+
+Per `docs/decisions/closest-neighbors-deep-read.md` + EU AI Act + DACH regulatory deep-look (session 14):
+
+- **Sparring uniquely operationalises Art. 14 human oversight** — "*understand the relevant capacities and limitations*" + "*remain aware of the possible tendency of automatically relying or over-relying*". Genuinely unique regulatory asset; no competitor holds this
+- **Practitioner-as-deployer = cleanest AI Act posture** — vs SaaS provider/deployer muddiness (Beck-Noxtua/Stilta face Art. 25 substantial-modification trap risk per deployment)
+- **Self-hostable + EU residency** = sovereign-AI alignment (BSI C5 sovereignty + DSGVO Art. 44-49 third-country transfer rules). Closed-source US-SaaS competitors face structural disadvantage
+- **Audit-by-construction = direct mapping** to Art. 11 (technical doc) + Art. 13 (instructions for use) + Art. 26(6) (6-month log retention)
+- **Hard requirement before Aug 2026 production**: Art. 50(4) AI-disclosure for B-Plan Begründung (public-interest output per BauGB §3 Öffentlichkeitsbeteiligung)
+- **Critical architectural constraint**: anti-Art-25-trap structurally enforced (specialist conformity manifest as Pydantic gate per Option B; impossible-by-construction)
+- **Major commercial asset**: ISO/IEC 42001 SoA scaffold publishable as marketplace asset (cuts cert cost for any EU practitioner workspace; €35-90k saved per deployment)
+
+## a16z / Sequoia "service-as-software" thesis as positioning risk for fundraising
+
+Per session 14 a16z research:
+
+**Sequoia (not a16z) owns canonical thesis** — Julien Bek's "Services: The New Software" (March 2026). Replace-the-consultant via AI-native firms. Portfolio: Harvey, Rogo, Crosby, Anterior, Lawhive, Mercor.
+
+**a16z reinforces but doesn't own**: Big Ideas in Tech 2025; outcome-based-pricing newsletter; Notes on AI Apps in 2026.
+
+**Adjacent VCs amplifying**: General Catalyst ($1.5B "creation strategy"); Bessemer (vertical AI eclipses vertical SaaS); NEA ($11T US labor spend); Menlo; Emergence ("AI-Native Services Playbook").
+
+**Critique** (TechCrunch Sep 2025): Stanford "workslop" research — 40% of employees deal with AI-generated work that creates remediation labor (~2hrs/instance, ~$9M/yr per 10K-person org). Thesis may be empirically harder than VC consensus assumes.
+
+**For PBS**: this thesis is the **antithesis of PBS positioning** (replace vs amplify). Accepting US-thesis-aligned VC capital would force narrative drift toward replace-the-practitioner — destroying audit-by-construction value proposition. **Avoid US classical VC route.**
+
+## Cherry Ventures (Berlin) — only published EU VC thesis match + recommended funding path
+
+Per session 14 European VC comparison:
+
+**Cherry's published thesis** — "Cherry's Investment Theses on AI" (July 2024) + "Bringing the AI Thesis to Life":
+- *"AI supports and enhances human creativity… without replacing"* — chess-player-and-computer model
+- European founders advantaged because they *"intimately understand the regulatory landscape"* — regulation as innovation surface
+- Portfolio: Cortea (regulatory compliance), Riplo (consulting OS), Sphinx (compliance automation)
+
+**PBS positioning lands cleanly in Cherry thesis. Only published EU VC thesis match.**
+
+**Other EU VCs** (mixed alignment, not thesis-match):
+- **Visionaries Club** (Berlin/London, €600M+ AUM) — applied AI for "Europe's oil economy" legacy sectors. Closer to vertical-application than amplify-practitioner. Acceptable second
+- **HV Capital + Earlybird** — Earlybird €360M Fund VIII (Apr 2026) explicitly favours infrastructure/foundation-model layers; misalignment with PBS application-layer positioning
+- **Index Ventures + Atomico** — leaning into AI but co-investing in **replace-the-professional plays** (Ankar AI patent firm Series A). Closer to Sequoia thesis. **Avoid**
+- **Project A + Speedinvest + La Famiglia** — La Famiglia merged into General Catalyst 2023; **carries replace-thesis import**. **Avoid GC-channel firms**
+
+### Recommended funding path (strategic sequencing)
+
+1. **Ground-up consulting revenue (PBS-Schulz pioneer)** + **EXIST/ZIM/go-Inno non-dilutive DACH grants** (18-24 months)
+   - go-Inno Innovation Vouchers — 50% consulting cost coverage up to €20K/yr
+   - ZIM (Zentrales Innovationsprogramm Mittelstand) — R&D grants for SME tech
+   - EXIST AI.STARTUP.HUB programmes (BMWK)
+   - Horizon Europe + EFRE Bundesländer programs
+   - **Preserves practitioner-amplification framing fully; EU AI Act tailwind compounds**
+
+2. **Strategic capital from publishers + chambers + state banks** (Beck-Noxtua model: €80.7M from C.H.Beck + CMS + Dentons + Northern Data — no classical VCs)
+   - Target German planning publishers (Beuth, Werner Verlag, vhw, BAK)
+   - Engineering chambers
+   - State-bank vehicles (IBB Berlin, BayStartUP Bayern, NRW.BANK)
+   - **Carries practitioner alignment by default**
+
+3. **Cherry Ventures as VC-of-last-resort** — only thesis-aligned EU VC
+
+4. **AVOID**: GC-channel firms (La Famiglia legacy); Index/Atomico growth-stage; US-classical VC (Sequoia/a16z thesis import)
+
+## ICP refinement (per three-tier framing)
+
+| Tier | What sells | ICP |
+|---|---|---|
+| Infrastructure | Framework adoption + consulting | Practitioner-archetype firms ready to deploy AI workspaces; consulting engagements |
+| Workspace | Pre-configured workspace templates per archetype | Specific archetype niches (planning bureaus, legal practices, research labs, accounting firms) — narrower than infrastructure ICP |
+| Specialist | Marketplace browse + install (v3) | Wider — any workspace operator including non-practitioner archetypes (community-buildable shape extensions) |
+
+**ICP discipline preserved**: PBS sells narrow (consulting + workspace templates per archetype); framework architecture serves broader (marketplace expands ecosystem). PBS-Schulz validates the planning-bureau workspace shape; other workspace shapes pioneered by other deployments OR community shape extensions.
+
+## Compliance specialist as marketplace asset (NEW per session 14)
+
+Per ROADMAP commitment #24 (`eu-ai-compliance` + `dach-regulatory-extension` specialists):
+
+- **Cross-archetype specialist** = applies to ANY EU practitioner workspace (every EU practitioner needs this)
+- **Distributable via marketplace v3** — major commercial asset
+- **ISO 42001 SoA scaffold** = the showcase deliverable (cuts cert cost €35-90k → near-free per deployment)
+- **Strategic narrative**: PBS is the only OS framework with a built-in EU AI Act compliance specialist + structural anti-Art-25 enforcement
+- **Fundraising amplifier**: directly addresses Cherry Ventures thesis ("regulatory landscape as innovation surface") + Beck-Noxtua-style strategic capital interest (publishers + chambers + state banks all care about regulatory compliance)
+- **Defensibility moat for PBS-Schulz pioneer**: bureau gets first-deployment advantage of fully-compliant production from day-1
+
+## Competitive landscape
 
 | Competitor type | Examples | Their shape | Our differentiation |
 |---|---|---|---|

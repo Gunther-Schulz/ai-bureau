@@ -661,6 +661,72 @@ multi-round sharpening work.
 - **Constraints flowing**: NONE substantive; these are meta-architectural
   skills that support OTHER architectural decisions across all commitments.
 
+**24. EU AI Act + DACH compliance specialist — HARD REQUIREMENT before Aug 2026 production**
+(NEAR-BLOCKING for first PBS-Schulz production B-Plan deployment) — session 14 commitment.
+
+- **Mission**: ship two-tier compliance specialist + substrate-level structural enforcement before production B-Plan output goes to UNB Stellungnahmen (Öffentlichkeitsbeteiligung publication = public-interest output triggering Art. 50(4) AI-disclosure).
+- **Two-tier specialist** (per Sub-DR A specialist 3-test: cohesive competence + distributable + reusable across workspaces):
+  - **`eu-ai-compliance` specialist** (cross-archetype — applies to ANY EU practitioner workspace):
+    - Skills: `assess-ai-act-classification` (Art. 6 derogation analysis + Annex III check); `generate-ai-disclosure` (Art. 50(4) auto-emitted); `export-compliance-bundle` (Annex IV doc + Art. 26(6) 6-month log + FRIA + DSGVO RoPA fragment); `validate-specialist-conformity` (anti-Art-25-trap gate); `iso-42001-soa-scaffold` (Statement of Applicability template — major commercial asset); `dsk-oh-ki-attest` (selection-criteria checklist); `fria-scaffold` (Art. 27 FRIA template)
+    - Entities: `ComplianceArtifact`, `RegulatoryReference`, `ConformityDeclaration`, `DisclosureReceipt`
+    - References: EU AI Act text (Reg. 2024/1689); Commission Art. 6 guidelines (when published Feb 2026); DSK Orientierungshilfe KI (May 2024); Hambacher Erklärung principles; ISO/IEC 42001 spec
+  - **`dach-regulatory-extension` specialist** (domain-anchored — extends with DACH-specific layer):
+    - Skills: `berufshaftpflicht-disclose` (client contract AI-disclosure clause); `bsi-c5-attest` (deferred until first public-sector deployment); `it-grundschutz-baseline` (Behörden contracts); `bmds-tracker` (KI-Durchführungsgesetz evolution)
+    - References: BAK / BRAK leitfaden; BSI publications; BMDS KI-Durchführungsgesetz; Bundesländer-specific landesrecht
+    - `depends_on: [eu-ai-compliance]`
+- **Substrate-level additions** (NOT specialist content; framework primitives — go through #25 Protocol pluggability):
+  - AuditEvent gains `ai_act_article_mapping: list[str]` field
+  - Default 6-month log retention (Art. 26(6))
+  - Specialist conformity manifest = Pydantic gate at Substrate Protocol layer (anti-Art-25-trap STRUCTURAL enforcement per Option B from `shape-extension-and-architectural-floor.md`)
+- **Hard requirements before any production B-Plan use (binding from Aug 2026)**:
+  - Art. 50(4) AI-disclosure on public-interest outputs (B-Plan Begründung is public-interest per BauGB §3 Öffentlichkeitsbeteiligung)
+  - DSGVO controller-posture clarity + RoPA
+  - BRAK/BAK-aligned client disclosure clause
+- **Critical architectural constraint**: Art. 25(1)(b) substantial-modification trap — practitioner-author categorization must STRUCTURALLY prevent specialist authorship from shifting intended purpose (or practitioner becomes provider with full Art. 16 obligations: CE marking, conformity assessment, EU database registration). Make impossible by structural design (specialist conformity manifest as Pydantic gate); NOT solvable by convention.
+- **Order**: AFTER #11 (Cowork integration — specialist primitive operational); AFTER #25 (shape extension framework + Protocol pluggability — needed for substrate-level conformity gate); BEFORE first PBS-Schulz production B-Plan ships.
+- **Strategic asset**: ISO 42001 SoA scaffold publishable as marketplace asset — cuts cert cost dramatically for any EU practitioner workspace adopter; major commercial differentiator.
+- **Constraints flowing**:
+  - **#9 Bundle B (entity gate + Layer 3)**: specialist conformity manifest is Pydantic Layer-2 schema; gate enforcement at write-time
+  - **#11 Cowork integration**: `setup-workspace` skill + `integrate-specialist` skill prompt for compliance-specialist installation as default for EU deployments
+  - **#6 audit-trail v2 retrofit**: `ai_act_article_mapping` field; 6-month retention default; new event kinds (compliance_artifact_emitted, disclosure_receipt_recorded, conformity_validation_run)
+  - **#25 Shape extension framework**: practitioner-shape extension's Option B floor implementation includes specialist conformity gate; other shapes inherit
+  - **VISION axis 2 + 3 + Foundation expansion (session 14)**: EU AI Act Art. 14 (sparring as human oversight operationalisation) + Berufsrecht (practitioner-as-author cleanest posture) directly map to PBS distinctness
+  - **`docs/strategic-positioning.md`**: compliance specialist as marketplace asset + Cherry Ventures thesis match (regulatory landscape as innovation surface)
+- **Files touched at implementation**:
+  - NEW: `extensions/specialists/eu-ai-compliance/` + `extensions/specialists/dach-regulatory-extension/`
+  - Substrate Protocol amendments (AuditEvent schema + retention default + conformity gate)
+  - `docs/strategic-positioning.md` updates (commercial asset + fundraising narrative)
+  - First-bind deployment template (PBS-Schulz pioneer production-readiness checklist)
+
+**25. Shape extension framework + Protocol pluggability**
+(FOUNDATIONAL; enables Tom Sawyer dynamic for community shape contributions) — session 14 commitment.
+
+- **Mission**: implement shape-extension contract per `docs/decisions/shape-extension-and-architectural-floor.md`. Workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust/Time); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/`.
+- **Scope**:
+  - Shape extension contract: `extensions/shapes/<shape-id>/shape.md` Layer 1+2 hybrid-shape (entity-md per #16) declaring `shape_id`, `display_name`, `default_configs` per axis, `shape_specific_primitives`, `substrate_compat`, `required_extensions`
+  - Coordination Protocol pluggability (event-default + call-shape extension reference per Paperclip-style autonomous-business needs)
+  - Audit Protocol granularity pluggability (claim-level baseline + action-level overlay + citation-only)
+  - Sparring Protocol intensity pluggability (always-on + optional + none)
+  - Trust/Governance Protocol pluggability (practitioner-judgment + budget-policy + none)
+  - Long-running runtime substrate adapter (referenced from R3a in-process MCP work; needed for autonomous-business shape)
+  - Practitioner-shape extension reference implementation (PBS pioneer = practitioner-shape) — validates contract end-to-end
+  - Option B structural floor implementation: anti-Art-25-trap gate (specialist conformity manifest Pydantic gate) + claim-level audit baseline (always emitted) + human authority chain enforcement (configurable granularity)
+- **Order**: AFTER #11 (Cowork integration — specialist primitive operational); AFTER #9 (entity gate + Substrate Protocol implementation); BEFORE marketplace v3 (shape extension contract = marketplace listing schema for shape distribution); BEFORE #24 implementation (which needs Option B structural floor).
+- **Strategic asset**: enables Tom Sawyer dynamic — community can author shape extensions for shapes PBS doesn't market (autonomous-business / personal-OS / sovereign / federation / hybrid). Framework breadth grows organically without PBS effort. Marketplace v3 hosts shape extensions alongside specialists.
+- **Constraints flowing**:
+  - **#9 implementation**: Substrate Protocol common surface gains shape-extension hooks; SpecialistDescriptor includes `shapes_supported` field
+  - **#11 Cowork integration**: `setup-workspace` skill prompts for shape selection; defaults to practitioner shape
+  - **#24 EU AI Act compliance specialist**: Option B floor implementation lives here; practitioner-shape extension's accountability binding inherits structurally
+  - **ROADMAP v3 marketplace**: marketplace listing schema includes shape extensions + substrate implementations alongside specialists
+  - **VISION**: VISION scope clarification (practitioner-shape) + architectural inheritance (Option B) reference shape extension model
+- **Files touched at implementation**:
+  - NEW: `extensions/shapes/practitioner/shape.md` (PBS pioneer reference)
+  - NEW: shape extension contract Pydantic schema + `register_shape` MCP tool
+  - Substrate Protocol amendments: shape-extension hooks; Protocol pluggability for Coordination/Sparring/Audit/Trust/Time
+  - `entity-md-spec.md` updates: shape-as-type added to namespacing examples
+  - `plugin-conventions.md` updates: shape extension authoring guidance
+  - Test scaffolds: at least one non-practitioner shape extension scaffolded as architectural validation (likely autonomous-business per Paperclip-style reference; community-buildable post-implementation)
+
 ---
 
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)

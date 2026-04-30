@@ -31,6 +31,57 @@ knowledge graph deployment, federation node). Per session 13 #22:
 `docs/decisions/terminology-and-specialist-primitive.md` (Sub-DR A)
 + `docs/decisions/positioning-three-tier-framework.md` (Sub-DR B).
 
+## VISION scope — practitioner shape (post-session-13 + session-14 framing)
+
+This VISION articulates the **practitioner-shape thesis** — the
+value claims PBS makes for expert practitioners (planners, lawyers,
+researchers, accountants, creatives, consultants, advisors). It is
+the pioneer-instance + marketed-product VISION.
+
+**The framework underneath is workspace-shape-neutral.** PBS
+framework primitives (Workspace + Specialist + Skill + sparring +
+audit + multi-actor + Substrate Protocol) support multiple
+workspace shapes: **practitioner** (this VISION's domain),
+**autonomous-business** (Paperclip-style operator-supervised
+multi-agent shop), **personal-OS** (PAI-style individual
+life-OS), **knowledge-graph** (RAG-only deployments),
+**federation** (cross-node specialist sharing), **hybrid**
+(combinations).
+
+This is the **layered approach** (locked session 14):
+
+- **Open source framework** = workspace-shape-neutral; community
+  can build for any shape via shape-extension pattern
+- **Marketed product (this VISION)** = practitioner-shape
+  positioning; Cherry Ventures thesis-aligned; EU AI Act
+  tailwind-aligned; PBS-Schulz pioneer reference deployment
+
+**Three VISION axes apply with full force to practitioner shape.**
+Other shapes built on the framework would have **other potential
+per-shape visions** if productized (autonomous-business emphasizes
+policy + budget + governance; personal-OS emphasizes individual
+capacity-amplification; KG emphasizes curation + citation hygiene).
+When second-shape productization happens, that shape gets its own
+per-shape VISION; this document remains the practitioner-shape
+articulation.
+
+**Architectural inheritance — Option B structural floor (locked
+session 14)**: even shape-neutral framework primitives
+**structurally enforce** axis 3 (authorship preservation)
+regardless of shape configuration. Specifically: anti-Art-25-trap
+gate (specialist conformity manifest) + claim-level audit emission
++ human authority somewhere in accountability chain. These cannot
+be disabled without explicit framework override (which produces
+non-PBS-conformant deployment). Other shapes can configure axis
+intensities (sparring optional vs always-on; audit granularity at
+action-level vs claim-level) but cannot disable structural
+accountability binding. See `ARCHITECTURE.md` "Option B structural
+floor" section + `docs/decisions/shape-extension-and-architectural-floor.md`.
+
+The framework breadth lives in `ARCHITECTURE.md` "Workspace shapes —
+framework-supported catalog"; positioning narrowness lives in this
+document and `docs/strategic-positioning.md`.
+
 ## The thesis
 
 PBS is built on three interlocking principles. None alone is
@@ -40,15 +91,23 @@ sufficient; all three together define the design space:
    The AI is a co-worker in the workflow itself, not a feature
    bolted onto an unchanged human workflow.
 
-2. **The AI is a sparring partner, not an answer machine.** It
-   challenges, generates counter-arguments, names uncertainty,
-   resists giving easy answers — keeping the user critically
-   engaged with the work.
+2. **Sparring as load-bearing runtime mechanism, not optional
+   skill or answer machine.** AI challenges, generates counter-
+   arguments, names uncertainty, resists giving easy answers — as
+   always-on runtime pillar, not as opt-in skill called per-task.
+   Keeps the practitioner critically engaged. Per session-14
+   competitive-landscape research: **no other OS or commercial
+   project treats sparring as runtime pillar**; all surveyed
+   competitors treat adversarial review as installable skill.
+   Genuinely structurally distinct positioning.
 
-3. **PBS produces output the user remains the author of.** Not
-   teaching, not capacity-building in the abstract; preserving
-   the user's role as the expert author who can defend, sign,
-   and stand behind the produced work.
+3. **PBS produces output the practitioner remains the author of.**
+   Not teaching, not capacity-building in the abstract;
+   preserving the practitioner's role as the expert author who
+   can defend, sign, and stand behind the produced work. Per
+   architectural inheritance (Option B): structural floor enforces
+   accountability binding in any shape; this axis specifically
+   articulates the practitioner-shape value claim.
 
 Three axes. Each must be served:
 
@@ -70,6 +129,105 @@ A system can fail on any axis independently:
 
 PBS aims for all three: **intertwined sparring partnership in
 service of defensible authorship.**
+
+### Counter-VISION engagement — the strongest opposing thesis (added Round 2 sharpening session 14)
+
+The dominant 2026 opposing thesis is **service-as-software**
+(Sequoia / Bek's "Services: The New Software"; a16z reinforcing):
+AI rapidly becomes better than median practitioner; replacing the
+practitioner reduces cost AND improves output quality; market
+wants outcomes not assistance. Portfolio examples: Harvey, Rogo,
+Crosby, Anterior, Lawhive, Mercor.
+
+PBS rejects this thesis specifically for **high-stakes regulated
+work** (B-Plan drafting, legal pleading, medical diagnosis, audit,
+financial advisory, regulatory filing). The argument:
+
+- **Accountability cannot be delegated.** Practitioner remains
+  professionally + legally responsible regardless of who/what
+  generated the output. Service-as-software creates an
+  accountability gap.
+- **Sparring + authorship-preservation IS the alternative to
+  delegation.** Practitioner trades skill-substitution for
+  capacity-amplification — net welfare positive across the
+  practitioner's career.
+- **EU AI Act + DACH Berufsrecht structurally rewards
+  practitioner-as-deployer posture** — service-as-software muddies
+  provider/deployer classification.
+- **Stanford "workslop" research** (TechCrunch Sep 2025): 40% of
+  employees deal with AI-generated work that creates remediation
+  labor (~2hrs/instance, ~$9M/yr per 10K-person org). The thesis
+  may be empirically harder than VC consensus assumes.
+
+PBS positioning is structurally hostile to the service-as-software
+thesis. Cherry Ventures (Berlin) is the only published EU VC
+thesis match: *"AI supports and enhances human creativity… without
+replacing"*; chess-player-and-computer model.
+
+### What VISION does NOT claim (added Round 2 sharpening session 14)
+
+Drawing the negative space sharpens the positive:
+
+- ❌ PBS does NOT claim practitioners become obsolete
+- ❌ PBS does NOT claim AI replaces human judgment
+- ❌ PBS does NOT claim it optimizes for speed at the cost of capacity
+- ❌ PBS does NOT claim sparring is always the right interaction
+  mode (oracle mode is right for fact lookup; sparring overhead
+  misplaced for trivial questions)
+- ❌ PBS does NOT claim audit-by-construction makes humans
+  unnecessary — it makes their accountability defensible
+- ❌ PBS does NOT claim AI-as-co-worker means AI does the bulk of
+  the work — could be AI handles 20% of mechanical labor, augments
+  practitioner on the 80% where judgment matters
+- ❌ PBS does NOT claim the framework is restricted to practitioner
+  shape — framework is shape-neutral; positioning is practitioner-
+  focused (per layered approach, session 14)
+
+### Robustness to AI capability growth (added Round 2 sharpening session 14)
+
+Question: as frontier models become MUCH better (2027+
+AGI-trajectory), does VISION still apply?
+
+**All three axes are robust** because the load-bearing claims are
+**accuracy-independent**:
+
+- **Axis 1 (intertwined-AI-workflow)**: workflow integration depth
+  is independent of AI capability. Better AI just makes integration
+  more valuable.
+- **Axis 2 (sparring)**: per Ming's IEP — capacity-preservation
+  concern is **accuracy-independent**. Even if AI is 99.9% correct,
+  exploration capacity matters. Better AI RAISES the temptation to
+  abandon exploration; doesn't eliminate the value of exploration.
+  Sparring becomes MORE valuable as AI accuracy increases.
+- **Axis 3 (authorship preservation)**: accountability cannot be
+  delegated regardless of AI capability. As AI improves,
+  regulatory frameworks tighten (EU AI Act trend);
+  practitioner-as-author becomes MORE load-bearing, not less.
+
+The capacity-preservation thesis strengthens with better AI; it
+does not weaken.
+
+### Falsification criteria (added Round 2 sharpening session 14)
+
+Pioneer-instance honesty: what would empirically falsify each axis?
+
+- **Axis 1**: falsified if practitioner deployments show better
+  outcomes from tacked-on features than continuous co-work. Watch
+  for: feature-by-feature satisfaction higher than orchestrated
+  workflow.
+- **Axis 2**: falsified if real sparring sessions consistently
+  degrade output quality vs oracle mode. Watch for: practitioner
+  friction without quality improvement; sparring-bypass-rate
+  trending up.
+- **Axis 3**: falsified if defensibility ISN'T enhanced by
+  structural authorship (regulators don't care about audit trails;
+  insurers don't reward source-grounding; courts don't honor
+  decision provenance). Watch for: real defensibility events where
+  audit-trail provided no benefit.
+
+**Update triggers**: Phase 1+ corpus deployment data; first-bind
+real use; per-axis empirical signal; major regulatory
+interpretation shift.
 
 ## Foundations
 
@@ -100,6 +258,28 @@ work.
 Foundations grow as we engage with more research. Add new entries
 here when external work becomes a reference for our own alignment
 checks.
+
+**Adjacent thinkers cited in axis bodies** (added Round 2
+sharpening session 14; not promoted to anchor status to avoid
+diluting Ming):
+
+- **Donald Schön** (*The Reflective Practitioner*) — practitioner
+  authoring via reflection-in-action; relevant to axis 3
+- **Hubert Dreyfus** (skill acquisition; novice → expert
+  progression) — practitioner-shape audience grounding
+- **Daniel Kahneman** (System 1 / System 2) — sparring as System 2
+  forcing function; relevant to axis 2
+
+**Empirical regulatory anchors** (also added Round 2 session 14):
+
+- **EU AI Act Article 14 (human oversight)** — sparring
+  operationalises this requirement
+- **Berufsrecht (German professional law) + Berufshaftpflicht** —
+  practitioner-as-author is the cleanest professional liability
+  posture; authorship-preservation is regulatory-rewarded
+- **Cherry Ventures published thesis** (regulatory landscape as
+  innovation surface) — strategic-empirical confirmation that
+  practitioner-amplification is fundable in EU/DACH context
 
 The contrast that makes axis 1 concrete:
 
@@ -899,3 +1079,66 @@ Three checklists, one per axis:
 This is the deepest anchor. ARCHITECTURE.md describes how the
 system is structured; this document describes why and against
 what failure modes.
+
+## VISION ≠ ARCHITECTURE — what lives where (added Round 2 sharpening session 14)
+
+VISION = WHY claims (value claims; what PBS commits to deliver).
+ARCHITECTURE = HOW implementations (structural primitives;
+disciplines; meta-rules). Disciplines (8 design + 3 operational +
+4 meta-rules) are HOW serving WHY.
+
+| VISION (WHY — value claims here) | ARCHITECTURE (HOW — implementation in `ARCHITECTURE.md`) |
+|---|---|
+| Sparring as load-bearing runtime mechanism | `counter_argument` Pydantic field + always-on emission per `sparring-output-v1.md` |
+| Authorship preservation | Audit-trail v2 single-write + practitioner-as-author primitive + claim → tool-result binding + Option B structural floor |
+| AI-as-continuous-co-worker | Specialist composition + Workspace + employed-specialists + event-shaped coordination |
+| Capacity preservation (per Ming IEP) | Sparring runtime + visible reasoning + commit-to-recommendations + selective friction |
+| Defensibility under challenge | Audit-by-construction + source-grounding contract + immutable snapshots |
+| Workspace identity / multi-actor framework support | Workspace primitive + `groupings` shape + multi-actor configurable per-deployment |
+
+When in doubt about WHERE a new commitment belongs:
+- Is it a value claim about what PBS delivers? → VISION (this doc)
+- Is it a structural primitive or implementation discipline? → `ARCHITECTURE.md`
+- Is it a strategic positioning choice? → `docs/strategic-positioning.md`
+
+## VISION lifecycle + update triggers (added Round 2 sharpening session 14)
+
+VISION is not static. Update triggers:
+
+- **Major AI capability shift** (frontier leap that materially
+  changes sparring economics or accountability classification)
+- **Major regulatory shift** (EU AI Act interpretation / DACH
+  Berufsrecht evolution that changes practitioner-as-deployer
+  posture)
+- **Real Phase 1+ corpus deployment data** showing axis-falsification
+  signal (per "Falsification criteria" above)
+- **Cross-deployment to second domain** providing per-axis
+  empirical validation
+- **Strategic positioning shift** (e.g., decision to expand from
+  practitioner-shape positioning to multi-shape positioning would
+  unscope this VISION accordingly + trigger per-shape VISIONs for
+  newly-marketed shapes)
+- **Major Ming-research evolution** (her future work might refine
+  sparring framing — re-anchor)
+- **Foundation thinker shift** (someone publishes work that
+  re-grounds an axis at deeper level)
+
+**Cadence**: VISION review fires alongside `ARCHITECTURE.md`
+greenfield review (per ARCH "Maintenance discipline" rule 6 —
+periodic greenfield review at major version boundaries — 0.x →
+0.x+5 OR per major-commitment milestones).
+
+**Document history**:
+- v0.1 (initial): three-axis thesis articulated
+- session 13 #22: AI workspace framing (was AI office); shape-
+  neutral framework + practitioner positioning layered approach;
+  thesis line + four deployment possibilities; expert-practitioner
+  unchanged as human archetype
+- session 14 (this update): Round 1 axis refinements (axis 2
+  framing as runtime mechanism; axis 3 scope-clarified to
+  practitioner shape); Round 2 sharpening (R1 counter-VISION
+  engagement; R2 negative space; R3 temporal robustness; R4
+  VISION≠ARCH boundary; R5 architectural inheritance / Option B;
+  R6 falsification criteria; R7 adjacent-thinker citations + EU
+  regulatory anchors; R8 lifecycle triggers); VISION scope section
+  added (practitioner-shape positioning + framework breadth)

@@ -154,6 +154,98 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
+## Session 14 — Competitive-landscape research + VISION re-alignment + Option B architectural floor + EU AI Act compliance specialist + Cherry Ventures funding path
+
+End of session 14 (2026-04-30). Six major work products shipped in batch commit. Operating-geography clarification mid-session ("EU, mainly Germany") reshaped strategic + regulatory framing. Paperclip + PAI + Avoice + a16z + EU AI Act each got dedicated research depth.
+
+**What shipped session 14** (commit batch with cascade):
+
+- **7 research passes complete** (4 OS deep-reads — Letta + OpenSail + PAI + Paperclip + commercial scan + OS+hybrid scan + Avoice/DACH architects + a16z/EU VC + EU AI Act/DACH regulatory). Cloned Letta + OpenSail + PAI + Paperclip to `~/dev/reference/` for local code-read. Gap-claim CONFIRMED with HIGH confidence raised — zero projects match 4+ of 5/6 distinctness axes simultaneously.
+
+- **3 NEW decision records persisted**:
+  - `docs/decisions/closest-neighbors-deep-read.md` — comprehensive synthesis of 4 deep-reads + commercial landscape + DACH analysis + 5-of-6 axes distinctness verdict + ~10 adoption opportunities table + watch-list entries
+  - `docs/decisions/shape-extension-and-architectural-floor.md` — shape-extension framework (workspace shapes as pluggable extensions; per-shape configuration defaults + shape-specific primitives) + Option B architectural floor (3 axioms structurally enforced regardless of shape: anti-Art-25-trap gate + claim-level audit + human authority chain) + Make-wrong-shapes-impossible application
+  - `docs/decisions/vision-realignment-session14.md` — Round 1 axis refinements + Round 2 R1-R8 sharpening + scope clarification (practitioner-shape) + foundation expansion + lifecycle triggers; locked Option B architectural inheritance for VISION axis 3 cross-shape enforcement
+
+- **VISION.md substantially updated** — axis 2 framing as runtime mechanism; axis 3 scope-clarified to practitioner shape; new sections: VISION scope (post-session-13+14) + Counter-VISION engagement (R1) + What VISION does NOT claim (R2) + Robustness to AI capability growth (R3) + Falsification criteria (R6) + VISION ≠ ARCHITECTURE boundary (R4) + Lifecycle triggers (R8); Foundations expansion (Schön + Dreyfus + Kahneman as adjacent body citations + EU AI Act Art. 14 / Berufsrecht / Cherry Ventures as empirical regulatory anchors).
+
+- **ARCHITECTURE.md v0.31 → v0.32** — NEW section "Workspace shapes — framework-supported catalog" (6 shapes: practitioner / autonomous-business / personal-OS / KG / federation / hybrid; shape extension contract; Tom Sawyer dynamic) + NEW section "Option B architectural floor" (3 axioms + composition with disciplines) + reference card rows (which workspace shape; can violate accountability; PBS-product vs framework split).
+
+- **ROADMAP commitments #24 + #25 added**:
+  - **#24 EU AI Act + DACH compliance specialist** (HARD REQUIREMENT before Aug 2026 production B-Plan use). Two-tier specialist: `eu-ai-compliance` (cross-archetype) + `dach-regulatory-extension` (domain-anchored). Substrate-level additions (AuditEvent ai_act_article_mapping; 6-month retention default; specialist conformity Pydantic gate). Hard requirements: Art. 50(4) AI-disclosure for B-Plan Begründung (public-interest per BauGB §3); DSGVO RoPA + controller posture; BRAK/BAK-aligned client disclosure. Critical architectural constraint: Art. 25(1)(b) substantial-modification trap structurally prevented (specialist conformity manifest as Pydantic gate; impossible-by-construction). Major commercial asset: ISO 42001 SoA scaffold publishable.
+  - **#25 Shape extension framework + Protocol pluggability** (FOUNDATIONAL; Tom Sawyer dynamic enablement). Shape extension contract; Protocol pluggability for Coordination/Sparring/Audit/Trust/Time; long-running runtime substrate adapter (referenced from R3a in-process MCP work; needed for autonomous-business shape); practitioner-shape extension reference implementation (PBS pioneer); Option B floor implementation (anti-Art-25-trap + claim-level audit + human authority chain enforcement).
+
+- **`docs/strategic-positioning.md` substantial rewrite** — NEW sections: Layered approach (framework breadth + positioning narrowness) + Closest OS neighbors (axes-fit table + adoption opportunities) + Closest commercial neighbors (Beck-Noxtua + Anthropic Cowork + Stilta + Avoice + AutoSitu) + DACH competitive landscape (Phase0 / Langdock / Beck-Noxtua + BAK marketing wedge) + Sharpened differentiators (5/6 axes unique) + EU AI Act tailwind + a16z/Sequoia thesis as positioning risk + Cherry Ventures as only published EU VC thesis match + Recommended funding path (consulting + grants + strategic + Cherry-of-last-resort) + ICP refinement + Compliance specialist as marketplace asset.
+
+- **3 failure-mode catalog entries added**:
+  - `verbal-framing-collision` — verbal positioning collision vs architectural distinctness; mitigation via approach-level test
+  - `approach-level test as repeatable diagnostic` — methodology for verbal-collision verification (simulate building pioneer instance on competitor's framework; if overlay > native, approach mismatch)
+  - `competitive-positioning instance-leak` — pattern-vs-instance discipline applied to own competitive positioning (parallel to ARCH defer-rationale instance-leak)
+
+- **Memory `feedback_propose_before_commit.md` REFINED** session 13 (from prior commit) — supersedes prior formulation. Decision-phase needs approval; markdown-content phase doesn't. Applied throughout session 14 cascade — single-batch persistence + commit + push.
+
+**Major architectural decisions locked session 14**:
+
+1. **Layered approach** (locked): OS framework workspace-shape-neutral + marketed product practitioner-focused. Framework breadth lives in ARCH; positioning narrowness lives in VISION + strategic-positioning.
+
+2. **Shape extension model** (NEW pattern): workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability; concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/`; PBS pioneer = practitioner-shape extension reference; community can build other-shape extensions (Tom Sawyer dynamic).
+
+3. **Option B architectural floor** (locked): 3 accountability axioms structurally enforced regardless of shape (anti-Art-25-trap gate + claim-level audit emission + human authority somewhere in accountability-bearing output chain). Other shapes can configure axis intensities (sparring optional vs always-on; audit overlay; coordination event vs call) but cannot disable structural floor without explicit framework override (which produces non-PBS-conformant deployment).
+
+4. **VISION re-alignment** (locked): three axes structurally same; refinements in axis-2 wording (runtime mechanism vs partner) + axis-3 scope (practitioner-shape-specific); 8 new subsections (R1-R8) added; lifecycle + falsification criteria + counter-VISION engagement + negative space + temporal robustness all explicit.
+
+5. **EU AI Act compliance commitment** (#24): HARD REQUIREMENT before Aug 2026 production. Two-tier specialist + substrate-level enforcement. Practitioner-as-deployer cleanest posture; sparring uniquely operationalises Art. 14; audit-by-construction maps Art. 11/13/26(6); ISO 42001 SoA scaffold = major commercial asset.
+
+6. **Funding path strategy locked**: ground-up consulting revenue + EXIST/ZIM/go-Inno DACH grants → strategic capital (Beck-Noxtua publishers + chambers + state banks model) → Cherry Ventures VC-of-last-resort. AVOID GC-channel firms + US-classical VC (Sequoia/a16z thesis import would force narrative drift).
+
+**Competitive landscape findings**:
+
+| Project | Axes-fit | Type | Verdict |
+|---|---|---|---|
+| PAI (Personal AI Infrastructure) | 3/5 | OS | Closest by architecture; single-human-bound + Claude-Code-coupled |
+| OpenSail (TesslateAI) | 2.5/6 | OS | Different domain (agentic IDE/app-builder); adjacent not competitor |
+| Beck-Noxtua | 2/6 | Commercial DACH | Closest commercial neighbor for German market; vertical SaaS shape |
+| Anthropic Claude Cowork | 2/6 | Commercial | Architectural direction-of-travel; Enterprise-only |
+| Paperclip | 1.5/6 | OS | Conceptually distinct (autonomous business vs practitioner); adoptable patterns |
+| Letta v1 | 1-2/5 | OS | Surface vocabulary collision; cargo-cult risk LOW |
+| Avoice (architects) | 1/6 | Commercial US/UK | Doesn't block PBS in DACH (no localization) |
+| AutoSitu (municipal review) | 1/6 | Commercial US | OPPORTUNITY not threat — inverse side; cities digitizing review = demand for audit-ready submissions |
+| Phase0 (DACH operational software) | NA (different layer) | Commercial DACH | Owns operational layer; PBS positions ABOVE on expertise + audit + multi-actor + sparring |
+| Langdock (DACH DSGVO platform) | 1/6 | Commercial DACH | Substrate-level threat; PBS differentiates via codified specialists |
+
+**What's deferred to next sessions**:
+
+- **#19 + #20** still pending (substrate evals — LlamaIndex pluggable RAG eval; PydanticAI eval). Both NEAR-BLOCKING for Bundles B/C/D/E + Phase 1 corpus.
+- **Memory adapter strategy** — extend #19 scope to include Mem0 / Zep / Graphiti / Cognee evaluation.
+- **Bundles B/C/D/E design** can proceed in parallel with #19/#20 (substrate-agnostic).
+- **#25 implementation** before #24 implementation (Option B floor needed for compliance specialist substrate-level enforcement).
+- **#11 Cowork integration** before #24 + #25 implementation (specialist primitive needs to be operational).
+
+**Watch-list entries** (per `closest-neighbors-deep-read.md`):
+
+- OpenSail practitioner-identity primitive emergence
+- PAI practitioner-archetype fork ("PAI for lawyers / consultants / planners")
+- Paperclip 5 trigger conditions (claim-level audit / always-on sparring / composable specialist / memory + invalidation / explicit practitioner courting)
+- Letta skills+subagents evolution toward composable expertise bundles
+- Beck-Noxtua archetype expansion (Steuerberater / Architekturbüro / Planungsbüro)
+- Avoice EU/German market entry with DSGVO posture
+- Anthropic Claude Cowork plugin ecosystem evolution
+- AutoSitu adoption growth (opportunity)
+- Cherry Ventures portfolio evolution (thesis maturation signal)
+- CUNY AI Journalism Lab cohort (24 practitioner-builders 2026)
+
+**Strategic insights crystallized session 14**:
+
+1. **AutoSitu finding**: cities digitizing review = demand for audit-ready submissions = favors PBS audit-by-construction. Frame PBS as enabling cross-side compatibility, not compliance overhead.
+2. **Cherry Ventures fit**: PBS positioning lands cleanly in Cherry's published thesis (only published EU VC thesis-aligned with practitioner-amplification).
+3. **Beck-Noxtua precedent**: validates strategic-capital path (€80.7M from publishers + law firms; no classical VCs) — sovereign-AI funding model for PBS.
+4. **EU AI Act asymmetric tailwind**: sparring uniquely operationalises Art. 14; practitioner-as-deployer cleanest posture; audit-by-construction maps Art. 11/13/26(6); self-host + EU residency = sovereign-AI alignment.
+5. **a16z/Sequoia thesis is antithesis**: accepting US-classical VC capital would force narrative drift; recommended fundraising path explicitly avoids GC-channel firms.
+6. **Compliance specialist = strategic asset**: ISO 42001 SoA scaffold cuts cert cost dramatically (€35-90k saved per deployment); marketplace v3 commercial asset.
+7. **Phase0 DACH dominance**: PBS does NOT compete with Phase0 on HOAI/AVA mechanics; positions ABOVE on expertise + audit + multi-actor + sparring.
+
+---
+
 ## Session 13 — #22 terminology + level-boundary re-evaluation shipped (Office → Workspace; Specialist NEW pattern primitive; Department demoted to optional grouping; three-tier framing; marketplace = of specialists)
 
 End of session 13 (2026-04-30). Decision-design phase: 3-round sharpening (full monty + 2 user-triggered) on a broad architectural surface (terminology + level boundaries + workspace + specialist + grouping + strategic positioning + cross-cutting integration). ~26 refinements surfaced; ~85% expansions, ~15% revisions. Decomposition triggered at Round 4 per `decision-design-sharpening` skill rules → split into Sub-DR A (terminology + Specialist primitive) + Sub-DR B (three-tier framework + marketplace + positioning). Per-sub-DR sharpening rounds skipped per Pareto analysis (Round 3 covered integration surface; per-sub-DR rounds = manufactured criticism risk).

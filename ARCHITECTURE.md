@@ -16,7 +16,9 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.31 (session 13 — terminology + level-boundary re-evaluation #22 shipped: Office → Workspace at pattern primitive level; Specialist NEW pattern primitive between Skill and Workspace; Department demoted from pattern primitive to optional `groupings:` shape (deployment-instance); three-tier framing locked (Infrastructure / Workspace / Specialist); marketplace = of specialists. Decomposed into Sub-DR A (`terminology-and-specialist-primitive.md`) + Sub-DR B (`positioning-three-tier-framework.md`).)**.
+Status: **v0.32 (session 14 — shape-extension framework + Option B architectural floor + competitive-landscape research synthesis + VISION re-alignment + EU AI Act compliance specialist commitment. Workspace shapes catalog + per-shape extension contract; Option B structural floor (anti-Art-25-trap gate + claim-level audit emission + human authority chain); 4 deep-reads (Letta + OpenSail + PAI + Paperclip); commercial landscape including DACH (Beck-Noxtua / Phase0 / Avoice / AutoSitu); Cherry Ventures thesis match + DACH funding path; ROADMAP commitments #24 + #25 added. See `docs/decisions/shape-extension-and-architectural-floor.md` + `docs/decisions/closest-neighbors-deep-read.md` + `docs/decisions/vision-realignment-session14.md`.)**.
+
+- **v0.31 → v0.32**: **Shape-extension framework + Option B architectural floor + competitive-landscape synthesis (session 14)**. Three coupled architectural additions: (1) **Shape-extension framework** — workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/` with default configs + shape-specific primitives; PBS pioneer = practitioner-shape extension reference implementation; layered approach formalized (OS framework workspace-shape-neutral + marketed product practitioner-focused). (2) **Option B architectural floor** — even shape-neutral framework primitives structurally enforce 3 accountability axioms regardless of shape: anti-Art-25-trap gate (specialist conformity manifest as Pydantic gate; impossible-by-construction per Make-wrong-shapes-impossible v0.21) + claim-level audit emission (decision provenance + sources[] + causes[]) + human authority somewhere in accountability-bearing output chain (configurable granularity: per-output / per-decision-class / per-policy / per-budget-cycle / per-specialist-installation). Other shapes can configure axis intensities (sparring optional vs always-on; audit overlay action-level on top of claim-level baseline; coordination event vs call) but cannot disable structural floor. (3) **Competitive-landscape research synthesis** — 4 OS deep-reads (Letta + OpenSail + PAI + Paperclip) + exhaustive commercial scan + DACH-specific (Beck-Noxtua / Phase0 / Langdock / Avoice / AutoSitu); 5 of 6 distinctness axes confirmed unique to PBS; ~10 adoption opportunities surfaced (~7 adopt + 3 defer). Cherry Ventures (Berlin) only published EU VC thesis-match. EU AI Act tailwind asymmetric in PBS favor (Art. 14 sparring; Art. 11/13/26(6) audit-by-construction; practitioner-as-deployer cleanest posture). NEW ROADMAP commitments: **#24 EU AI Act + DACH compliance specialist** (HARD REQUIREMENT before Aug 2026 production B-Plan use; cross-archetype `eu-ai-compliance` specialist + DACH-anchored extension; substrate-level additions for AuditEvent + retention defaults + specialist conformity gate); **#25 Shape extension framework + Protocol pluggability** (foundational; Tom Sawyer dynamic enablement; AFTER #11 + #9; BEFORE marketplace v3). Decision records: `docs/decisions/shape-extension-and-architectural-floor.md`, `docs/decisions/closest-neighbors-deep-read.md`, `docs/decisions/vision-realignment-session14.md`. VISION.md substantially updated (axis 2 framing as runtime mechanism; axis 3 scope-clarified to practitioner shape; new sections: scope clarification + counter-VISION engagement + negative space + temporal robustness + falsification + foundation expansion + lifecycle triggers + VISION≠ARCH boundary).
 
 - **v0.30 → v0.31**: **Terminology + level-boundary re-evaluation (#22) shipped (session 13)**. Three coupled changes locked together: (1) **Office → Workspace** at pattern primitive level (cross-archetype stress test: "office" metaphor fights ≥6/10 archetypes; PBS-instance-anchor signal); (2) **Specialist** introduced as NEW pattern primitive between Skill and Workspace — composable codified expertise bundle (skills + entities + process entities + references + memory + adapters); 5 composability axes (FROM/IN/WITH/ACROSS/OVER); 3-test (cohesive competence + distributable as unit + reusable across workspaces); two-tier classification (cross-archetype vs domain-anchored); (3) **Department demoted** from pattern primitive to optional `groupings: dict[str, list[specialist_id]] | None` shape on workspace.md (deployment-instance optional grouping convention; deployment names — PBS-Schulz uses "departments", legal practice may use "practice-areas"). Sub-DR A: `docs/decisions/terminology-and-specialist-primitive.md`. Sub-DR B (downstream strategic): `docs/decisions/positioning-three-tier-framework.md` — three-tier framing (Infrastructure / Workspace / Specialist); ICP refinement (PBS narrow + framework broader); four deployment possibilities (specialist authoring tier added); marketplace = of specialists (architectural constraints locked; v3 mechanics deferred). Cascade: file paths (`extensions/department/` → `extensions/specialists/`; `extensions/office/` → `extensions/workspace/`); Pydantic classes (`DepartmentEntity` → `SpecialistEntity`; `OfficeEntity` → `WorkspaceEntity`); skill frontmatter (`department:` → `specialist:` REQUIRED); slash commands (`/<specialist>:<skill>`); AuditEvent schema (`specialist_id` field); memory taxonomy axis 4 (`department` → `specialist`); ~12-15 DRs (s/department/specialist + s/office/workspace + logical re-reads); VISION rewrite (thesis line; deployment possibilities 3→4; AI-office → AI-workspace); ROADMAP v2 ("AI-office builder" → "AI-workspace generator") + v3 ("Marketplace of department modules" → "Marketplace of specialists"); strategic-positioning.md substantial rewrite. SpecialistDescriptor Pydantic Protocol added to substrate-protocol-design.md common surface. Pre-RAG, pre-launch, no projects bound — per ARCH "Maintenance discipline" deprecation rules: essentially free.
 
@@ -795,6 +797,9 @@ chase-six-sections pain when applying existing disciplines.
 | What's the type-name namespacing? | entity-md-spec §3.2 | `type: <scope-id>.<short-name>` always (e.g., `planning-document-work.project`, `workspace.actor`, `universal.reference`). Specialist namespacing makes collisions impossible by construction |
 | Should X have informed defaults shipped or empty canvas? | Informed defaults (v0.18) | Ship best-shape templates derived from PBS pioneer instance, NOT empty canvases. Bureaus inherit working starting points; refine from a base, not bootstrap |
 | Should X fail-loud or fail-soft? | Strict-validation discipline (meta-rule 4 corollary) | Required = fail-loud, no silent defaults; optional = explicit null. No silent fallback for contract-bearing concerns |
+| Which workspace shape is X for? | Workspace shapes catalog (added v0.32) | Practitioner (PBS-marketed) / autonomous-business / personal-OS / knowledge-graph / federation / hybrid. Framework supports all; PBS markets practitioner only |
+| Can X violate accountability for autonomous shapes? | Option B architectural floor (added v0.32) | NO — 3 axioms structurally enforced regardless of shape (anti-Art-25-trap gate + claim-level audit + human authority somewhere in chain). Configurable granularity; not configurable absence |
+| Should X be in PBS-the-product or framework-only? | Layered approach (locked session 14) | PBS-marketed = practitioner-shape only. Framework = workspace-shape-neutral; community can build other-shape extensions. Document split in `VISION.md` (practitioner) vs `ARCHITECTURE.md` (framework breadth) |
 
 ### How to use this card
 
@@ -1217,6 +1222,104 @@ skills declare `specialist: brand-voice`, no cross-specialist
 coordination needed since N=1). PBS today is also a single-
 specialist workspace (planning-document-work). The pattern handles
 N=0/1/many uniformly.
+
+---
+
+## Workspace shapes — framework-supported catalog (added session 14 per shape-extension DR)
+
+PBS framework is **workspace-shape-neutral**. Workspace primitives
+(Workspace + Specialist + Skill + sparring + audit + multi-actor +
+Substrate Protocol) support multiple workspace shapes via
+shape-extension pattern. See
+`docs/decisions/shape-extension-and-architectural-floor.md` for
+full reasoning.
+
+### Shape catalog (framework-supported; PBS-marketed practitioner-shape only)
+
+| Shape | What it is | Configuration defaults | Marketed by PBS? |
+|---|---|---|---|
+| **Practitioner** (PBS pioneer reference) | Expert practitioner authors specialists for their domain work | event-shaped + sparring-always-on + claim-level-audit + practitioner-as-author + practitioner-judgment trust | ✅ YES (this VISION; this product) |
+| **Autonomous-business** (Paperclip-style) | Operator/board supervises AI specialists as workforce | call-shaped (tickets) + sparring-optional + action-level-audit + operator-as-supervisor + budget-policy trust | ❌ framework-supported; community-buildable |
+| **Personal-OS** (PAI-style) | Single human + AI specialists for life management | event-shaped + sparring-as-skill + light-audit + individual-as-author + individual trust | ❌ framework-supported; community-buildable |
+| **Knowledge-graph** | Curator + corpus + AI for retrieval; no workflow loop | no-coordination + no-sparring + citation-audit + curator-as-author + corpus trust | ❌ framework-supported; community-buildable |
+| **Federation** | Multiple practitioners sharing specialists across nodes | per-node + cross-node specialist sharing + identity federation | ❌ framework-supported; community-buildable |
+| **Hybrid** | Combinations (e.g., practitioner with autonomous sub-orchestration) | per-hybrid configuration | ❌ framework-supported; explicit hybrid extension required |
+
+**Layered approach** (locked session 14):
+- **Open source framework** = workspace-shape-neutral; community can build for any shape
+- **Marketed product** = practitioner-shape positioning (per VISION); PBS-Schulz pioneer reference; Cherry Ventures thesis-aligned
+
+### Shape extension contract
+
+Each shape extension lives at `extensions/shapes/<shape-id>/` with:
+- `shape.md` (Layer 1+2 hybrid-shape entity-md per #16) declaring `shape_id`, `display_name`, `default_configs` per axis (coordination / sparring / audit / author / trust / time), `shape_specific_primitives` (Pydantic schemas + MCP gates needed per shape), `substrate_compat` (which substrates support), `required_extensions` (other shape extensions this depends on)
+- Shape-specific Pydantic primitives (e.g., autonomous-business shape adds `Ticket` + `Budget` + `CostEvent` Pydantic schemas)
+- Substrate adapter requirements (e.g., autonomous-business shape requires long-running runtime adapter)
+
+Specialists declare shape compatibility:
+```yaml
+specialist:
+  shapes_supported: [practitioner, autonomous-business]  # cross-shape
+```
+
+### Tom Sawyer dynamic
+
+Open-source framework + shape-extension contract = community can build shape extensions for shapes PBS doesn't market. Examples:
+- Community member wanting Paperclip-style autonomous-business → builds autonomous-business shape extension
+- Community member wanting PAI-style personal → builds personal-OS shape extension
+- Community member wanting sovereign-AI for defense → builds sovereign shape extension
+
+Framework hosts; PBS doesn't gatekeep. Within Option B floor (below).
+
+### Workspace-shape-vs-specialist distinction (subtle but load-bearing)
+
+- **Specialist** = composable codified expertise bundle (cohesive competence area; cross-workspace-employable)
+- **Shape** = workspace deployment configuration + supporting primitives (defines how specialists compose; what coordination/sparring/audit/trust defaults apply)
+- A specialist is shape-compatible (or cross-shape); a workspace uses exactly ONE shape (composition at hybrid-shape extension level only)
+
+---
+
+## Option B architectural floor (added session 14 per shape-extension DR)
+
+Per Make-wrong-shapes-impossible discipline (v0.21) applied to
+shape-extension framework: framework structurally enforces 3
+accountability axioms regardless of shape configuration. Shapes
+can configure axis intensities but cannot disable structural floor
+without explicit framework override (which produces non-PBS-conformant
+deployment). See
+`docs/decisions/shape-extension-and-architectural-floor.md` Part 2
+for full reasoning.
+
+### The 3 structural axioms (cannot be disabled regardless of shape)
+
+| # | Axiom | Why load-bearing |
+|---|---|---|
+| 1 | **Anti-Art-25-trap gate** (specialist conformity manifest as Pydantic gate) | EU AI Act Art. 25(1)(b): specialist authorship that materially shifts intended purpose makes practitioner a PROVIDER (full Art. 16 obligations: CE marking, conformity assessment, EU database registration). Make impossible by structural design |
+| 2 | **Claim-level audit emission** (decision provenance + sources[] + causes[]) | Defensibility cannot be reconstructed if claims aren't bound to evidence at write-time. Action-level audit is necessary but insufficient. Claim-level always emitted; shapes can ADD action-level overlay |
+| 3 | **Human authority somewhere in accountability-bearing output chain** | EU AI Act Art. 14 human oversight + DACH Berufsrecht (planner remains liable regardless of AI assistance). Configurable granularity (per-output / per-decision-class / per-policy / per-budget-cycle / per-specialist-installation) but NOT zero-human for accountability-bearing output |
+
+### What CAN be configured per shape
+
+- **Sparring intensity**: always-on (practitioner default) / optional (autonomous-business) / none (KG)
+- **Audit overlay**: action-level can be added on top of claim-level baseline
+- **Coordination**: event-shaped (PBS default) / call-shaped (Paperclip-style)
+- **Trust model**: practitioner-judgment / budget-policy / none
+- **Time model**: turn-based / long-running
+- **Author granularity**: per-output / per-decision-class / per-policy / per-budget-cycle / per-installation
+
+### Real-world parallel — autonomous trading systems
+
+Mirror: algos execute thousands of trades autonomously, BUT human risk officer authorized the strategy + position limits, BUT audit trail captures every decision, BUT compliance gate prevents algo from changing strategy autonomously. Same shape applied to AI workspaces: autonomous execution + human authority chain at configurable granularity.
+
+### Composition with disciplines
+
+| Discipline | Connection to Option B |
+|---|---|
+| **Make-wrong-shapes-impossible** (v0.21) | Direct application — anti-Art-25-trap as Pydantic gate is impossible-by-construction; specialist conformity manifest validation gate touches every read/write of specialist registration |
+| **Pattern-vs-instance** (v0.20) | Option B floor = pattern-level (applies to all shapes); axis configuration = instance-level (per shape) |
+| **AI-as-runtime hybrid-shape** (v0.16) | Specialist conformity manifest is markdown frontmatter with Pydantic Layer-2 validation — canonical hybrid-shape application |
+| **Substrate-pluggability** (v0.30) | Option B floor enforced at Substrate Protocol layer; substrate-specific implementation absorbs how (e.g., CASDK uses skill registration hooks; MS AF uses module manifest validation) |
+| **Validation-layering** (v0.18) | L1 (Pydantic schema) + L2 (gate enforcement) + L3 (audit slice) + L4 (design-review target for shape-extensions) + L5 (marketplace upload validation deferred to v3) |
 
 ---
 

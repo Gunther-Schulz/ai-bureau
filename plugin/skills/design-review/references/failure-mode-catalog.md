@@ -516,6 +516,69 @@ covers MCP layer; adapter-layer cascade not yet codified.
 
 ---
 
+### Verbal-framing-collision (added session 14 per `closest-neighbors-deep-read.md`)
+
+**Description**: another OS or commercial project's positioning vocabulary lines up verbally with PBS framing — shared words like "workspace", "specialist", "skills", "audit", "memory", "snapshot", "no lock-in" — but underlying architecture diverges. Risk: prospect/reviewer mistakes PBS for the lookalike OR PBS framing dilutes by association with weaker shapes.
+
+**Applicability**: ✅ active — surfaced by session-14 deep-read research (Letta + OpenSail + PAI + Paperclip all share verbal vocabulary with PBS at surface; architectural shapes diverge cleanly at code level).
+
+**Severity**: positioning risk; not architectural risk.
+
+**Coverage status**: ⚠ **partial** — addressed via approach-level test diagnostic (next entry). Strategic-positioning.md "Sharpened differentiators" section explicitly distinguishes verbal-overlap from architectural-distinctness.
+
+**Mitigation**: when a verbally-overlapping project surfaces, run **approach-level test** (next entry) — check whether building the pioneer instance on top of their framework requires substantial overlay. If overlay > native primitives, approach mismatch confirmed; verbal collision is surface.
+
+**Notes**: this is positioning-discipline, not architectural-discipline. Lives at strategic-positioning layer.
+
+---
+
+### Approach-level test as repeatable diagnostic (added session 14 per `closest-neighbors-deep-read.md`)
+
+**Description**: when a verbally-overlapping competitor surfaces, the standard feature-comparison underspecifies the question. The diagnostic: **simulate building PBS pioneer instance (PBS-Schulz planning bureau) on top of their framework. If overlay surface > native surface, approach mismatch confirmed.**
+
+**Applicability**: ✅ active — applied successfully session 14 to Letta + OpenSail + PAI + Paperclip. Each yielded clear verdict on architectural distinctness vs verbal overlap.
+
+**Severity**: methodology — not a failure mode itself, but a diagnostic that prevents the verbal-framing-collision failure mode.
+
+**Coverage status**: ✅ **covered** as repeatable diagnostic; can be applied to future competitive-emergence triggers (per closest-neighbors watch-list).
+
+**Pattern**:
+1. List the pioneer-instance workflow components (PBS-Schulz: B-Plan drafting + layered review + send gate + audit + cross-specialist coordination + memory + corpus + project state + external authorities + source-grounding contract — 10-13 components)
+2. Map each to competitor framework's primitives — verdict (✅ native / ⚠ overlay required / ❌ absent + must build)
+3. Count: if ✅ ≥ 70% → genuine architectural neighbor; if ⚠+❌ ≥ 50% → approach mismatch; verbal collision is surface
+
+**Notes**: Add to architectural-discipline toolkit. Run before declaring competitor at first verbal collision detection.
+
+---
+
+### Competitive-positioning instance-leak (added session 14 per session-13 framing correction)
+
+**Description**: when articulating PBS positioning vs competitors, framework's audience characterization leaks PBS-Schulz instance shape ("practitioner-with-AI-team-serving-clients-and-regulators"). Forces all competitive comparisons through PBS-Schulz instance-anchored frame; obscures framework's true breadth + weakens strategic positioning by over-specifying.
+
+**Applicability**: ✅ active — surfaced by user session 14 ("this framing is too close to our test case not the actual broader goal and vision of our project. please readjust your framing"). Applied pattern-vs-instance discipline to own competitive positioning.
+
+**Severity**: positioning + framework-articulation risk.
+
+**Coverage status**: ✅ **covered** session 14 via:
+- VISION scope clarification (practitioner-shape positioning + framework breadth)
+- Layered approach (OS framework workspace-shape-neutral + marketed product practitioner-focused)
+- Multi-actor primitive reframed: "configurable per-deployment external actor types" (not "specialists + clients + external authorities like UNB regulators")
+- Audit-by-construction reframed: "for any per-deployment defensibility need" (not "for regulatory defense")
+
+**Pattern (the trap)**:
+- Competitive positioning leaks pioneer-instance ("PBS practitioners SERVE CLIENTS and REGULATORS")
+- This forces comparison frame: "competitor doesn't serve clients/regulators" → instance-anchored differentiator
+- Genuine framework-level differentiator obscured: "framework supports configurable per-deployment external actors" → pattern-level differentiator
+
+**Pattern (corrected)**:
+- Pattern-vs-instance discipline applies to OWN competitive positioning, not just architectural rules
+- Framework breadth lives in ARCH; positioning narrowness lives in VISION + strategic-positioning
+- Distinctness axes articulated at framework level (configurable-per-deployment) with PBS-Schulz instance as reference example
+
+**Notes**: parallel to ARCH "Defer rationale anchored in PBS-instance state" (v0.20). Same discipline applied at competitive-positioning layer.
+
+---
+
 ## Adding to this catalog
 
 When a new failure mode is identified (postmortem, literature,
