@@ -16,7 +16,7 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.16 (session 10 — AI-as-runtime hybrid-shape principle locked + entity-md three-layer frontmatter contract)**.
+Status: **v0.17 (session 11 — AI-as-runtime conformance check (smoke + deep) added under the hybrid-shape discipline)**.
 
 - v0.1 → v0.2: nine entity types + 6 decision rules.
 - v0.2 → v0.3: scope-orthogonality live, layered manifests in
@@ -103,6 +103,20 @@ Status: **v0.16 (session 10 — AI-as-runtime hybrid-shape principle locked + en
   (Pattern-vs-instance split, still pre-RAG); office-config schema
   bump + skill frontmatter sweep deferred to #11. See
   `docs/decisions/office-vs-department.md`.
+- **v0.16 → v0.17**: **AI-as-runtime conformance check (smoke + deep)**
+  added under the AI-as-runtime hybrid-shape discipline. Two-level
+  test: smoke test (3 yes/no questions, 30-60 seconds, applied per
+  proposal) catches obvious violations cheaply; deep test (6 checks
+  in three tiers — architectural / operational / disqualifier,
+  5-10 minutes, applied when smoke escalates or stakes warrant)
+  provides full evaluation. Documented as manual mental checklist
+  with explicit promotion path: after 3-5 real applications,
+  evaluate for formalization as design-review target 15 (extending
+  the discipline-check pattern that targets 1-14 already cover for
+  the other 6 architectural disciplines — NOT a separate skill).
+  Manual phase first per design-review target-13 "pattern emergence"
+  discipline. See "AI-as-runtime conformance check" subsection
+  under the hybrid-shape principle section.
 - **v0.15 → v0.16**: **AI-as-runtime hybrid-shape principle**
   added as top-level architectural discipline (parallel to
   pattern-vs-instance + entity-elevation + glue-not-replacement).
@@ -906,6 +920,91 @@ remain rightly structured:
 The boundary: **structured for interfaces, identity, persistence,
 machine contracts; markdown for semantics, rules, domain knowledge,
 process descriptions; AI as runtime fuses them.**
+
+### AI-as-runtime conformance check (two-level: smoke + deep)
+
+Architectural proposals get checked against this principle. Two
+levels — fast default, deep escalation when concern surfaces.
+
+#### Smoke test (30-60 seconds, applied per proposal)
+
+Three yes/no questions. Goal: catch obvious violations cheaply.
+
+**Q1. Does the proposal encode rules / semantics / conditional
+logic in structured form (Pydantic, YAML frontmatter, config DSL)?**
+- NO → green
+- YES → follow-up: does the structured form serve a *concrete*
+  machine consumer (gate startup, audit slice, persistence
+  contract, machine-to-machine interface)?
+  - YES → green (interface contract, legitimately structured)
+  - NO or "not sure" → ⚠ escalate to deep test
+
+**Q2. Is the same rule or fact represented in more than one place
+(structured + prose, structured + code, prose + code)?**
+- NO → green
+- YES → ⚠ escalate (drift risk; source-of-truth violation)
+
+**Q3. Would a senior domain expert need engineer help to change
+this rule?**
+- NO (they edit markdown, done) → green
+- YES → ⚠ escalate (over-coupled to code)
+
+**Verdict**: all three green → proceed. Any ⚠ → run deep test
+before locking the design.
+
+#### Deep test (5-10 minutes, applied when smoke escalates OR
+stakes warrant)
+
+Six checks in three tiers:
+
+**Architectural — must pass (pattern-level conformance):**
+
+1. **Lives in prose** — rule is in markdown body that AI reads
+   at runtime, NOT encoded in structured frontmatter or config
+   DSL (unless concrete machine consumer justifies it).
+2. **Single source of truth** — rule is in exactly one place; not
+   duplicated structured + prose, or prose + code.
+3. **Cross-industry portable** — same architectural shape works
+   for legal-practice / research-lab / brand-voice / etc. via
+   prose-rewrite alone (no schema or code change for different
+   domain).
+
+**Operational — note + monitor (practical viability):**
+
+4. **LLM-interpretable** — current-generation LLMs reliably apply
+   the rule consistently across invocations; precise enough to
+   avoid hallucination at edge cases.
+5. **Body-size budget** — fits entity-md-spec §16 thresholds
+   (≤1500 token bodies, ≤500 token sections, prune-able when
+   stale).
+
+**Disqualifier — any fail = redesign:**
+
+6. **No SQL-DB-trap** — not building nested structured schemas to
+   encode rule data when prose would carry it. If the proposal is
+   even adjacent to this anti-pattern, redesign.
+
+#### When each test fires
+
+| Trigger | Action |
+|---|---|
+| Architectural proposal (Bundle decisions, new entity type, new mechanism) | Run smoke test |
+| Smoke test all-green | Proceed |
+| Smoke test any ⚠ | Run deep test |
+| New architectural discipline being introduced | Run deep test directly (skip smoke) |
+| Pattern-level decision with broad downstream consumers | Run deep test directly |
+| Periodic during audit / design-review sweeps | Run deep test on representative sample |
+
+#### Status
+
+**Documented as manual mental checklist.** After 3-5 real
+applications across upcoming Bundle work, evaluate for
+formalization as **design-review target 15** (extending the
+discipline-check pattern that targets 1-14 already cover for the
+other 6 architectural disciplines — NOT a separate skill). Manual
+phase first per design-review-target-13 "pattern emergence"
+discipline: wait for the checklist to surface real drift in real
+discussions before formalizing.
 
 ### Discipline check at audit + design-review time
 
