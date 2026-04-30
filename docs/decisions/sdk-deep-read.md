@@ -273,8 +273,11 @@ Skills/orchestrator code uses Protocol-typed Substrate; substrate-specific primi
 - **R3b → `docs/decisions/eval-framework-adoption.md`** — hybrid MS AF eval primitives adoption + PBS-specific evaluators + scenarios as entities (S1-S4 schema field refinements)
 - **R3c → `docs/decisions/permission-abstraction.md`** — unified `Substrate.request_permission()` Protocol method + `PermissionDecisionKind` enum (7 kinds) + Permission gates vs Quality gates distinction (T1-T8 + M5 + P1/P2/P5 refinements)
 - **R3d → `docs/decisions/subagent-primitives-adoption.md`** — case-by-case subagent adoption + per-substrate extension Protocols pattern (NEW architectural pattern) + common surface boundary criteria (P4 — guides #9 Substrate Protocol design)
+- **Synthesis → `docs/decisions/substrate-protocol-design.md`** — common Substrate Protocol surface synthesized from R3a-R3d + per-substrate extension Protocols + boundary criteria + boot/shutdown lifecycle + error hierarchy + tier-awareness + audit-trail integration; pre-implementation surfacing (round 3 operational/runtime concerns) captured early as head-start for #9 implementation phase
 
-Each DR underwent multi-round sharpening (round 1 AI full monty + round 2+ user-triggered; pattern captured in `memory/feedback_pre_decision_sharpening.md`).
+Each DR underwent multi-round sharpening per **two-phase pattern locked session 12** (per `memory/feedback_pre_decision_sharpening.md`):
+- Decision-design phase: 2-3 rounds (1 initial AI full monty + 1-2 user-triggered sharpening)
+- Pre-implementation phase: additional user-triggered rounds at implementation-start moment
 
 ### R1: Adopt PRIMITIVES-ONLY from BOTH substrates regardless of primary choice
 
