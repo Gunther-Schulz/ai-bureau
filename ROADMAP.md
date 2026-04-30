@@ -515,6 +515,40 @@ over-weighted.
     `validate_skill_output` stays
   - Layer 3 mechanism decided on its own merits
 
+**21. SDK deep-read — Claude Agent SDK + MS Agent Framework code analysis**
+(NEAR-BLOCKING for #9 implementation phase) — session 12 commitment, scaffolded.
+
+- **Mission**: clone both substrate SDKs locally and read actual code (not just
+  docs/blogs/searches that informed #18 decision). Verify our deep-eval claims
+  with code-level evidence; surface primitives we could leverage that we missed;
+  identify refactor opportunities in current/planned PBS code; discover
+  unanticipated capabilities; inform Substrate Protocol shape with actual SDK
+  API patterns rather than documented surface.
+- **Method**: clone both repos via `ref` skill convention to
+  `~/dev/reference/claude-agent-sdk/` + `~/dev/reference/agent-framework/`;
+  structured code-read with focus areas per substrate.
+- **Focus areas**:
+  - **Claude Agent SDK**: agent loop internals; MCP attach-to-agent mechanism;
+    RunHooks lifecycle (PRE/POST tool + lifecycle callbacks); Pydantic
+    structured output flow; Channels event-driven push internals; session JSON
+    shape (for AuditEvent compatibility analysis); plugin SKILL.md loader
+    behavior
+  - **MS Agent Framework**: agent middleware pipeline; 3-layer middleware
+    shape (agent / function / chat); workflow engine + checkpointing internals;
+    event-driven workflow trigger types; multi-provider connector patterns;
+    SKILL.md / Agent Skills loader; A2A integration shape
+- **Output**: `docs/decisions/sdk-deep-read.md` — findings + leverage
+  opportunities + refactor recommendations + Substrate Protocol design
+  implications.
+- **Scope**: 1 session (this session if context allows; otherwise next).
+- **Order**: before #9 implementation phase (Substrate Protocol shape benefits
+  from code-level read); could run parallel with #19 (LlamaIndex eval) + #20
+  (PydanticAI eval).
+- **Constraints flowing**: Substrate Protocol design (lands in #9) informed by
+  actual SDK API patterns; potential refactor list for existing PBS code;
+  potential primitives-only adoption recommendations from MS AF for use within
+  Claude Agent SDK substrate.
+
 ---
 
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)

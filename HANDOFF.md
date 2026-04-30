@@ -33,7 +33,18 @@ it" reasoning in the queue.
 
 ---
 
-## 🚧 BLOCKING SUBSTRATE EVALUATIONS (added session 11 — read before implementation work)
+## 🚧 BLOCKING SUBSTRATE EVALUATIONS (added session 11; #18 SHIPPED session 12; #21 NEW session 12 — read before implementation work)
+
+**STATUS UPDATE (session 12)**: #18 SHIPPED — Claude Agent SDK + MS Agent
+Framework adopted as dual-substrate; Substrate Protocol NEW architectural
+pattern; Tier 3 reframed per pattern-vs-instance discipline (Gemini Enterprise
+→ enterprise multi-agent A2A platform with Gemini / Azure AI Foundry / AWS
+Bedrock AgentCore as instances). See `docs/decisions/substrate-agentic-framework.md`
+for full eval + recommendation + counter-considerations. #21 NEW (SDK deep-read)
+added session 12 — near-blocking for #9 implementation phase.
+
+#19 (LlamaIndex pluggable RAG eval) + #20 (PydanticAI eval) still pending.
+Implementation phase WAITS for #21 + #19 + #20 to complete (#18 lift complete).
 
 Three substrate-framework evaluations BLOCKING for #9 implementation
 phase + #11 + #13 + Phase 1 corpus. Surfaced session 11 when the
@@ -44,16 +55,27 @@ implementation of every downstream pre-RAG commitment**; doing the
 evaluations after locking implementation choices means retrofitting
 under sunk-cost pressure.
 
-**REQUIRED READING before #18 substrate eval starts**:
+**REQUIRED READING before any pre-implementation work** (post-#18):
+`docs/decisions/substrate-agentic-framework.md` — substrate decision
+locked session 12. Captures: 9 disqualifying criteria; per-candidate
+verdicts; recommendation (Claude Agent SDK + MS AF dual-substrate; Substrate
+Protocol NEW pattern); counter-consideration (Shape A vs B + model-swap-ability
++ Tier 3 implications); hybrid analysis. **#21 (SDK deep-read) consumes this
+DR's recommendation as input.** **#9 implementation consumes the Substrate
+Protocol pattern as architectural foundation.** **#11 (Cowork integration)
+consumes Claude Agent SDK as primary substrate.** **#13 deployment flexibility
+consumes substrate × deployment matrix.**
+
+**REQUIRED READING for understanding the substrate eval method**:
 `docs/decisions/greenfield-architecture-review.md` §3 — establishes
 the **disqualifying criteria** for #18 (composes with MCP / supports
 hybrid-shape / Pydantic-compatible / no SQL-DB shapes / sparring
 composable / audit-trail compatible / pluggable transport / heaviness
 scales / vendor-neutral). Substrates failing any structural criterion
-are rejected without deep-eval. Eval transforms from "comprehensive
+were rejected without deep-eval. Eval transformed from "comprehensive
 comparison of 8 frameworks" to "reject obvious mismatches first;
-deep-eval the 2-4 survivors." Same DR also establishes #19 RAG
-pluggable boundary (parsers/chunkers/retrieval pluggable; per-ref
+deep-eval the 2-4 survivors" (final survivors: 4). Same DR also establishes
+#19 RAG pluggable boundary (parsers/chunkers/retrieval pluggable; per-ref
 Pydantic metadata + citation traceability + per-#13 ingestion split
 stay custom).
 
@@ -132,6 +154,32 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
+## Session 12 — #18 substrate eval shipped + Tier 3 reframing + #21 SDK deep-read scaffolded
+
+End of session 12 (2026-04-30). Max-effort session compressed 3-session scope (12-14) into single session: framing + 9 disqualifying criteria + screen against 10 candidates (8 original + 2 chronologically-valid additions: Claude Agent SDK + Strands) + verification pass + deep-eval + recommendation locked.
+
+**What shipped session 12** (commit `2a8dfb5`):
+
+- **Substrate decision** (`docs/decisions/substrate-agentic-framework.md` NEW; status ACCEPTED): **Claude Agent SDK adopted as primary substrate (full backend + frontend = Cowork plugin via #11) + Microsoft Agent Framework adopted as second backend (full backend; Path B frontend deferred to consulting signal — D5)**. Substrate-pluggability via explicit `Substrate` Protocol — NEW architectural pattern (Pydantic Protocol; substrate-coupling in core code impossible-by-construction per Make-wrong-shapes-impossible v0.21). Pattern: "Dual-substrate full-backend, single-frontend ship".
+- **5 frameworks DISQUALIFIED** with concrete reasoning + counter-arguments engaged: Semantic Kernel + AutoGen (subsumed by MS AF); CrewAI (3 criteria fail — hybrid-shape + sparring + heaviness); Smolagents (no scale-up — would force re-implementation at upper tiers); OpenAI Swarm (vendor-lock + MCP secondary); LangGraph (criterion 2 fail post-deep-eval — PromptTemplate-centric, not runtime-fueled markdown bodies; same architectural problem as CrewAI).
+- **Tier 3 reframing per pattern-vs-instance discipline**: previously Gemini-Enterprise-specific; now "enterprise multi-agent A2A platform" with Gemini Enterprise (canonical exemplar) / Azure AI Foundry / AWS Bedrock AgentCore as instances. Applied to: ROADMAP three-tier table + "Tier 3 platform port" section; `docs/decisions/a2a-and-gemini-pattern-emulation.md` (reframing note added); `docs/strategic-positioning.md` "Multi-archetype credibility" section sharpened with substrate-pluggable framing.
+- **ARCHITECTURE.md v0.29 → v0.30** version log entry: substrate-pluggability discipline + Substrate Protocol NEW pattern + Tier 3 reframing.
+- **#21 SDK deep-read** scaffolded as new BLOCKING-or-near-blocking commitment (in ROADMAP BLOCKING SUBSTRATE EVALUATIONS section): clone Claude Agent SDK + MS AF locally; structured code-read; output `docs/decisions/sdk-deep-read.md`. Verifies deep-eval claims with code-level evidence; informs Substrate Protocol shape with actual SDK API patterns.
+- **Memory `feedback_propose_before_commit.md`** added — process feedback captured: for substantive PBS architectural content (decision records, ARCH/VISION/ROADMAP edits), propose structure + key positions in chat first; commit to file only after user approval.
+
+**Counter-consideration surfaced session 12** (load-bearing for the recommendation):
+- **Runtime shape (Shape A vs Shape B)**: Claude Agent SDK + hand-rolled = Shape A (Claude IS the runtime via Claude Code); MS AF + Strands + LangGraph = Shape B (Python program IS the runtime). Adopting MS AF as primary = architectural shape pivot away from Cowork integration.
+- **Model-swap-ability**: Shape A locked to Claude (matches existing Tier 1-2 architecture); Shape B trivial multi-provider swap. Tier 3 = different archetype = different substrate is the documented escape valve for non-Claude.
+- **Tier 3 implications**: MS AF natively supports Tier 3 archetype → forces pattern-vs-instance reframing of Tier 3 from Gemini-specific to platform-agnostic.
+
+**What's next** (session 13+):
+- **#21 SDK deep-read**: clone both repos, structured code-read, decision record (current session may continue into this if context budget allows).
+- **Comprehensive doc review** (post-#21): Substrate Protocol pattern as ARCHITECTURE design discipline section (currently only in version log entry); reference card row for substrate-coupled vs substrate-agnostic; failure-mode-catalog updates if SDK exploration surfaces new modes; other DRs scan for any remaining Gemini-specific framings; Path B frontend + MS AF backend explicit ROADMAP placements informed by SDK deep-read findings.
+- **#19 + #20** still pending (substrate evals).
+- **Bundles B/C/D/E design** can proceed in parallel (substrate-agnostic per session-11 framing — confirmed: Pydantic + MCP + entity-md + audit-trail all transfer cleanly across substrates).
+
+---
+
 ## Session 11 — pre-RAG queue re-ordering + sharp-defer audit
 
 Session 11 re-ordered the pre-RAG queue and audited the v1.x
@@ -165,18 +213,24 @@ session-9 reframe — #9 no longer extracts a universal core, it
 designs the contract from scratch. See ROADMAP.md per-commitment
 Order notes for full chronological rationale.
 
-**Pre-RAG queue (revised session 11 — substrate evaluations
-front-loaded)**:
-**#18 → #20 → #19 → Bundles B/C/D/E (substrate-informed design) →
+**Pre-RAG queue (revised session 12 — #18 SHIPPED; #21 added; queue compressed)**:
+**~~#18~~ ✅ → #21 (SDK deep-read) → #19 → #20 → Bundles B/C/D/E (substrate-informed design) →
 #9 implementation → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C →
 D → Phase 0 → Phase 1+#14**.
 
-#18 + #20 land before Bundle B's Layer-3 mechanism decision
-(PydanticAI may inform that). #19 lands anytime before Phase 1
-corpus (could run in parallel with implementation work after
-#9). All three are evaluation sessions producing decision
-records; they don't displace existing commitments — they decide
-HOW to implement them.
+**#18 ✅ SHIPPED session 12** (commit `2a8dfb5`): Claude Agent SDK + MS Agent
+Framework dual-substrate adopted; Substrate Protocol NEW pattern; Tier 3
+reframed per pattern-vs-instance discipline. See
+`docs/decisions/substrate-agentic-framework.md` for full eval + recommendation.
+**#21 NEW** (SDK deep-read) added session 12: clone both SDKs + code-read +
+findings DR. Near-blocking for #9 implementation phase (Substrate Protocol
+shape benefits from code-level evidence beyond docs).
+
+#21 + #20 land before Bundle B's Layer-3 mechanism decision (PydanticAI may
+inform that). #19 lands anytime before Phase 1 corpus (could run in parallel
+with implementation work after #9). #21 + #19 + #20 are evaluation sessions
+producing decision records; they don't displace existing commitments — they
+decide HOW to implement them.
 
 **Sharp-defer audit results (session 11)** — six v1.x backlog
 items pulled forward to v1 pre-launch as framework infrastructure
@@ -418,11 +472,9 @@ defers, not YAGNI.
 ## Read order for next session
 
 1. **This file (HANDOFF.md)** — current state
-2. **`ARCHITECTURE.md`** — **v0.16**. AI-as-runtime hybrid-shape
-   discipline added (session 10). Office-vs-department resolved
-   (v0.11); scope-orthogonality 4 axes; meta-rule 3 invalidation
-   includes ProjectState.departments_active.
-3. **`docs/decisions/ai-as-runtime-hybrid-shape.md`** — session-10
+2. **`ARCHITECTURE.md`** — **v0.30 (session 12 — substrate-pluggability discipline + Substrate Protocol pattern + Tier 3 reframing)**. AI-as-runtime hybrid-shape discipline added (session 10, v0.16). Office-vs-department resolved (v0.11); scope-orthogonality 4 axes; meta-rule 3 invalidation includes ProjectState.departments_active. Sessions 11-12 also added: pattern-vs-instance sharp defer rule (v0.20); make-wrong-shapes-impossible discipline (v0.21); validation-gating systems-view doc (v0.22); ARCH disciplines greenfield review (v0.27); architectural-gap detection sweep + maintenance rule 6 (v0.28); per-DR internal gap detection + 2 backfill DRs (v0.29).
+3. **`docs/decisions/substrate-agentic-framework.md`** — **session-12 LOAD-BEARING artifact (NEW)**. Substrate decision: Claude Agent SDK + MS Agent Framework dual-substrate; Substrate Protocol NEW architectural pattern; Tier 3 reframing per pattern-vs-instance discipline. **Read before tackling #21 (SDK deep-read), #9 (entity gate uses Substrate Protocol), #11 (Cowork integration uses Claude Agent SDK), #13 (substrate × deployment matrix).**
+4. **`docs/decisions/ai-as-runtime-hybrid-shape.md`** — session-10
    load-bearing artifact. **Read before tackling #9** (which
    implements the generic entity gate + Layer-1/Layer-2 contract +
    entity-md spec). Three-layer frontmatter contract; body
@@ -444,11 +496,8 @@ defers, not YAGNI.
    scaffold. Single source of truth for hybrid-shape contract
    implementation. **Read before tackling #9** (which fills in
    Layer-2 schemas + body specs per entity type).
-8. **`ROADMAP.md`** — commitments #10 + #12 + #16 shipped.
-   **Remaining pre-RAG queue (revised session 11 — runtime-fabric-
-   first re-ordering)**: **#9 → #15 → #6 → #7 → #17 → #11 → #13 →
-   #8 → C → D → Phase 0 → Phase 1+#14**. Generalize-and-publish
-   in v1.x. AI-office builder + Agent Simulation in v2.
+8. **`ROADMAP.md`** — commitments #10 + #12 + #16 + **#18** shipped (session 12). #21 (SDK deep-read) NEW (session 12; near-blocking for #9 implementation phase).
+   **Remaining pre-RAG queue (revised session 12)**: **#21 → #19 → #20 → Bundles B/C/D/E (substrate-informed) → #9 → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C → D → Phase 0 → Phase 1+#14**. Generalize-and-publish in v1.x. AI-office builder + Agent Simulation in v2.
 8. **`docs/plugin-conventions.md`** — §11 (triggers) + §11b
    (fail-closed fallback policy)
 9. **`VISION.md`** — pioneer-instance milestones
