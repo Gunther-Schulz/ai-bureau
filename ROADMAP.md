@@ -439,6 +439,10 @@ ROADMAP v2 "AI-office builder" entry.
     Without this, adapter-mode managed entities have one-way
     visibility (PBS asks but never hears); with it, audit trail
     captures full bidirectional change history.
+    **DEFERRED to #11 per session-11 decision** — Bundle E in
+    the bundle structure below; first adapter-mode entity ships
+    with #11 (Cowork integration's invoicing/PM scaffolding) so
+    Protocol design has a concrete consumer at that point.
   - `ProjectState` refactor: move from
     `backend/mcp-server/src/pbs_mcp/project_state.py` to
     `extensions/department/planning/entities/project.py`. Reframe
@@ -473,9 +477,55 @@ ROADMAP v2 "AI-office builder" entry.
   shape, managed-entity concept rationale, per-company
   customization choice + rationale, ProjectState refactor
   rationale).
-- **Scope**: 2-3 sessions of dedicated work (was 1-2 — expanded
-  per session-9 reframe to include managed-entity design + per-
-  company customization mechanism design).
+
+- **Bundle structure (session 11 reorganization)**: #9's design
+  was originally framed as a single 2-3 session pass. Session-11
+  discussion surfaced that the seven open decisions are too coupled
+  to rush AND too distinct to bundle without depth loss. Restructured
+  as **5 design bundles** + implementation:
+
+  - **Bundle A — Department module + location/registration**
+    (1 session). Foundational shape: `extensions/department/<dept>/`
+    package layout, `department.md` registration file shape (Layer-2
+    `type: department` schema declaring `managed_entities` registry +
+    `path_pattern` per entity + Pydantic class refs), gate's
+    department-discovery mechanism at startup. **Why first**: every
+    later bundle slots into this.
+  - **Bundle B — Entity gate + Layer 3** (1 session). Gate signatures
+    (`read_entity` / `write_entity` / `list_entities`), error model,
+    body-preservation, cross-ref validation tightness; Layer 3
+    customization mechanism (Option A/B/C — Option C `metadata: dict`
+    is the leading position with explicit elevation triggers).
+    **Why second**: highest blast radius (every later commitment
+    writes through gate); needs A's department-registration shape
+    settled.
+  - **Bundle C — ProjectEntity migration + per-department phase/
+    lifecycle** (1 session). Field-by-field plan for ProjectState →
+    ProjectEntity (relocate to `extensions/department/planning/
+    entities/project.py`); `phase: str` → `phases: dict[str, str]`
+    (#12 D1); `lifecycle: Lifecycle` → `lifecycle: dict[str,
+    Lifecycle]` (#12 D2). **Why third**: validates A + B by use; if
+    foundation is wrong, friction surfaces here.
+  - **Bundle D — Office-config schema additions** (~0.5 session).
+    Concrete YAML shape of `departments.<name>.entities.<entity>.
+    {mode, adapter, config}` + interaction with `department.md`
+    declarations (override layer pattern). **Why fourth**: mostly
+    mechanical once A is settled.
+  - **Bundle E — Adapter Protocol shape (Gap B)**: **DEFERRED to
+    #11** per session-11 decision. `subscribe_to_changes(callback)`
+    vs `poll_for_changes()` vs both — zero adapter-mode entities
+    today; designing the Protocol without a concrete consumer =
+    under-specified. First adapter-mode entity ships with #11
+    (Cowork integration's invoicing/PM scaffolding); Bundle E lands
+    in #11's scope at that point.
+
+- **Scope (revised session 11)**: ~3.5 design sessions
+  (A + B + C + half of D) + 1-2 implementation sessions
+  = **4.5-5.5 sessions total** (was 2-3). Expansion warranted —
+  per #16's failure-mode catalog, rushed architectural decisions
+  produce silent-convergence + SQL-DB-trap failure modes; spending
+  the time matches discipline. User explicitly accepted scope
+  trade in session 11.
 - **Connection to commitment #8 (framing skill)**: framing skill
   builds on this work — the reasoning produced here becomes the
   pattern-vs-instance reasoning the framing skill codifies for
@@ -672,6 +722,20 @@ context" section.
   conflict with #16 — frontmatter pattern is the same in both.
   See `docs/decisions/ai-as-runtime-hybrid-shape.md` for full
   Layer-1 + Layer-2 + body-conventions spec.
+
+- **Bundle E from #9 absorbed (session-11 decision)** — adapter
+  Protocol shape (Gap B from #12 infrastructure-primitive review)
+  lands in #11's scope, not #9. Specifically: `subscribe_to_changes
+  (callback)` (push) vs `poll_for_changes() -> list[Event]` (pull)
+  vs both. Adapter-emitted events translate to AuditEvents with
+  `actor_kind=external_agent` + `origin_agent_card=<adapter URL>`
+  per #10's existing design. **Why #11**: first adapter-mode
+  managed entity ships with #11 (Cowork integration's
+  invoicing/PM scaffolding). Protocol design without a concrete
+  consumer = under-specified; folding into #11 means the design
+  has the first real adapter to test against. Adapter Protocol
+  Pydantic interface is decided here; concrete adapters (Lexware,
+  Harvest) follow per-deployment.
 - **Studying anthropics/knowledge-work-plugins repo**: planned
   as a discovery activity that informs this commitment. Multiple
   plugins are relevant to our work — not just for "how to

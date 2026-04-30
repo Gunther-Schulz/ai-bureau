@@ -345,15 +345,21 @@ capability. See ROADMAP.md "Recommended next-session order"
 block + per-commitment Order notes for full rationale.
 
 ```
-Session 11-13: #9  (Department contract + managed-entity + generic entity gate)  2-3 sessions
-Session 14-15: #15 (Client + Actor as office-level managed entities)              1-2 sessions
-Session 16-18: #6  (audit-trail v2 retrofit)                                      2-3 sessions
-Session 19:    #7  (bootstrap-write MCP tools)                                    1 session
-Session 20:    #17 (MCP gate coverage comprehensiveness review)                   1 session
-Session 21-25: #11 (Cowork integration refactor)                                  3-5 sessions
-Session 26-28: #13 (deployment flex + Coolify reference deployment)               2-3 sessions
-Session 29-30: #8  (pre-action framing skill)                                     1-2 sessions
-Session 31+:   C (sparring-output integration) → D (plugin version bump)
+Session 11-15: #9  (Department contract + managed-entity + generic entity gate) 4.5-5.5 sessions
+                   - Bundle A: dept module + location/registration   (~1 session)
+                   - Bundle B: entity gate + Layer 3                  (~1 session)
+                   - Bundle C: ProjectEntity migration + phase/lifecycle  (~1 session)
+                   - Bundle D: office-config schema additions         (~0.5 session)
+                   - Implementation (Pydantic + gate + migrations)    (1-2 sessions)
+                   Bundle E (adapter Protocol) deferred to #11.
+Session 16-17: #15 (Client + Actor as office-level managed entities)              1-2 sessions
+Session 18-20: #6  (audit-trail v2 retrofit)                                      2-3 sessions
+Session 21:    #7  (bootstrap-write MCP tools)                                    1 session
+Session 22:    #17 (MCP gate coverage comprehensiveness review)                   1 session
+Session 23-27: #11 (Cowork integration refactor + adapter Protocol)               3-5 sessions
+Session 28-30: #13 (deployment flex + Coolify reference deployment)               2-3 sessions
+Session 31-32: #8  (pre-action framing skill)                                     1-2 sessions
+Session 33+:   C (sparring-output integration) → D (plugin version bump)
 Then:          Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 ```
 
@@ -387,7 +393,8 @@ Then:          Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled
 
 **#9 — Department module contract + managed-entity concept +
 generic entity gate** (ROADMAP commitment #9) — **POSITION 1 in
-remaining queue (revised session 11)**:
+remaining queue (revised session 11)** — **CURRENT WORK**:
+
 - **Mission**: design the department module contract +
   managed-entity concept with two delivery modes (native +
   adapter-delegated). Produces the generic
@@ -399,18 +406,35 @@ remaining queue (revised session 11)**:
   or #15 (Client/Actor) before #9 forces per-loader hacks
   (creating exactly the silent-convergence failure mode #16
   prevents) or one-off gates #9 has to refactor.
-- **Per #12 constraints**: per-department phase tracking
-  (`phases: dict[str, str]`), per-department lifecycle
+
+- **Bundle structure (session-11 reorganization)**: scope expanded
+  from 2-3 sessions to **4.5-5.5 sessions** to handle 7 coupled
+  open decisions properly. Restructured as 5 design bundles +
+  implementation. Bundle E deferred to #11.
+
+  | Bundle | Decisions | Status |
+  |---|---|---|
+  | **A** — Department module + location/registration | `extensions/department/<dept>/` package layout; `department.md` registration file shape; `path_pattern` declarations; gate's department-discovery mechanism | **In progress (session 11)** |
+  | **B** — Entity gate + Layer 3 | `read_entity`/`write_entity`/`list_entities` signatures, error model, body-preservation, cross-ref validation tightness; Layer 3 mechanism (Option C `metadata: dict` is leading position) | Pending |
+  | **C** — ProjectEntity migration + phase/lifecycle | ProjectState → ProjectEntity field-by-field plan; `phase: str` → `phases: dict[str, str]`; `lifecycle: Lifecycle` → `lifecycle: dict[str, Lifecycle]` | Pending |
+  | **D** — Office-config schema additions | `departments.<name>.entities.<entity>.{mode,adapter,config}` shape; override-layer pattern with department.md | Pending |
+  | **E** — Adapter Protocol shape (Gap B) | subscribe vs poll vs both; Pydantic Protocol interface | **DEFERRED to #11** (no consumer until first adapter-mode entity ships) |
+
+- **Per #12 constraints** (lands in Bundle C): per-department phase
+  tracking (`phases: dict[str, str]`), per-department lifecycle
   (`lifecycle: dict[str, Lifecycle]`), Project-as-long-running-
   entity opt-in per department.
-- **Per #16 constraints**: generic entity gate + Layer-1/Layer-2
-  Pydantic contract + `docs/conventions/entity-md-spec.md`
-  authored alongside Layer-2 schemas + ProjectState relocates to
-  `extensions/department/planning/entities/project.py` + audit
+- **Per #16 constraints** (split across bundles): generic entity
+  gate (Bundle B) + Layer-1/Layer-2 Pydantic contract finalized
+  (Bundle C) + `docs/conventions/entity-md-spec.md` updates + audit
   slice 21 + design-review target 12 implementation + migration of
-  `extensions/universal/doctypes.yaml` + per-domain `doctypes.yaml`
-  → per-entity md files.
-- 2-3 sessions.
+  `extensions/universal/doctypes.yaml` (implementation phase).
+- **Bundle A — current entry point**: in-progress in session 11.
+  Discussion centered on: where path/location declarations live
+  (department.md vs Pydantic class vs spec doc). Leading position:
+  `department.md` (Layer 2 frontmatter for `type: department`)
+  declares `path_pattern` per managed entity + Pydantic class refs.
+  Schema (`project.py`) carries fields only, not location.
 
 **#15 — Office-level managed entities (Client + Actor)** (ROADMAP
 commitment #15) — **POSITION 2 in remaining queue (revised
