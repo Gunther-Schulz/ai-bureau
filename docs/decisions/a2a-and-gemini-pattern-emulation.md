@@ -1,8 +1,10 @@
 # Decision record: A2A schema compatibility + Gemini Enterprise pattern emulation
 
-**Status**: ACCEPTED (session 8, 2026-04-29)
+**Status**: ACCEPTED (session 8, 2026-04-29); reframing note added session 12 (2026-04-30) per #18 substrate eval
 **Owner**: per-session HANDOFF; ARCHITECTURE.md pattern-vs-instance discipline; ROADMAP commitment #10
-**Related**: ROADMAP v2 "Gemini Enterprise migration path" (Tier 3 of deployment ladder); commitments #6 (audit-trail v2 retrofit), #11 (Cowork integration), #12 (office-vs-department modularization), #13 (deployment flexibility)
+**Related**: ROADMAP v2 "Tier 3 enterprise multi-agent A2A platform port + parallel development" (was "Gemini Enterprise migration path" — reframed session 12); commitments #6 (audit-trail v2 retrofit), #11 (Cowork integration), #12 (office-vs-department modularization), #13 (deployment flexibility), #18 (substrate eval — Tier 3 reframing source)
+
+**Reframing note (session 12 substrate eval, 2026-04-30)**: this DR was originally Gemini-Enterprise-specific framed (per session 8 context). Per pattern-vs-instance discipline applied during #18 substrate eval, Tier 3 destination is platform-agnostic — Gemini Enterprise is the canonical exemplar (Anthropic Claude in Gemini's Model Garden = natural credibility-flow target) but Azure AI Foundry + AWS Bedrock AgentCore are also valid Tier 3 enterprise multi-agent A2A platform instances. The schema patterns + adoption decisions in this DR remain valid regardless of platform-of-choice; only the Gemini-specific framing is reframed. See `docs/decisions/substrate-agentic-framework.md` "Counter-consideration: Tier 3 implications" for the analysis.
 
 ## Context
 

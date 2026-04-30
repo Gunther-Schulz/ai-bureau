@@ -309,9 +309,11 @@ Different niches; positioning around specialization:
 
 ## Multi-archetype credibility (planned, post-Tiers-1-2-maturity)
 
-Most AI-office consultants will run on ONE archetype — either single-big-model (open-source / Anthropic-shop) or multi-agent A2A (Gemini Enterprise / enterprise platform). Few will run on both.
+Most AI-office consultants will run on ONE archetype — either single-big-model (open-source / Anthropic-shop) or multi-agent A2A (enterprise platform — Gemini Enterprise / Azure AI Foundry / AWS Bedrock AgentCore). Few will run on both.
 
-**The plan** (per ROADMAP v2 "Gemini Enterprise port + parallel development"): once Tiers 1-2 are mature (PBS-bureau working in real Schulz Planungsbüro use; pre-RAG queue completed; Phase 1 corpus ingested; first project producing real work), the architect ports + parallel-develops on Gemini Enterprise's multi-agent A2A archetype — **regardless of specific client demand**. The motivation is multi-archetype credibility for the consulting offering: building IS the validation work that earns the verified track record other consultants can't easily match.
+**Substrate-pluggable framework foundation** (per `docs/decisions/substrate-agentic-framework.md`, session 12): the framework is built substrate-pluggable from day 1 with TWO complete backends — Claude Agent SDK (Anthropic ecosystem; primary deployment) + Microsoft Agent Framework (multi-provider; backend ready, Path B frontend deferred to consulting signal). This makes the multi-archetype consulting pitch a verifiable claim NOW rather than a post-Tier-3-port future state.
+
+**The plan** (per ROADMAP v2 "Tier 3 enterprise multi-agent A2A platform port + parallel development"): once Tiers 1-2 are mature (PBS-bureau working in real Schulz Planungsbüro use; pre-RAG queue completed; Phase 1 corpus ingested; first project producing real work), the architect ports + parallel-develops on a Tier-3 enterprise multi-agent A2A platform (Gemini Enterprise as default exemplar; Azure AI Foundry or AWS Bedrock AgentCore depending on consulting context + substrate choice) — **regardless of specific client demand**. The motivation is multi-archetype credibility for the consulting offering: building IS the validation work that earns the verified track record other consultants can't easily match.
 
 **The consulting positioning shift this enables** (vs single-archetype peers):
 

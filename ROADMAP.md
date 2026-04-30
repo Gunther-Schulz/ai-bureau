@@ -3357,14 +3357,16 @@ The v2 builder design constraint (marketplace-compatible
 blueprint format) is the only load-bearing implication for
 current work.
 
-### Gemini Enterprise port + parallel development — Tier 3 of deployment ladder
+### Tier 3 — Enterprise multi-agent A2A platform port + parallel development
+
+**Reframing note (session 12 substrate eval, 2026-04-30)**: this section was previously titled "Gemini Enterprise port + parallel development" with Gemini Enterprise framed as the exclusive Tier 3 target. Per pattern-vs-instance discipline applied during #18 substrate eval, Tier 3 destination is platform-agnostic — pattern is "**enterprise multi-agent A2A platform**"; instances include **Gemini Enterprise** (canonical exemplar — Anthropic Claude in Gemini's Model Garden = natural credibility-flow target), **Azure AI Foundry** (Microsoft's parallel enterprise AI platform; natural fit if MS AF substrate adopted), **AWS Bedrock AgentCore** (AWS's parallel; natural fit if Strands substrate adopted). Specific platform-of-choice depends on consulting client's ecosystem. The motivation, structure, and substantive content of this section remain valid; framing reframes from Gemini-exclusive to platform-pluggable. See `docs/decisions/substrate-agentic-framework.md` "Counter-consideration: Tier 3 implications" for the analysis.
 
 **Why this is in the roadmap (revised session 9 followup)**:
 **planned post-validation, regardless of client demand**. Was
 previously framed as "persistence of the option, probably never";
 upgraded to **planned workstream** post-v1-validation, motivated
 by **exposure + learning** (not specific business case). The user
-will port + parallel-develop on Gemini Enterprise once PBS's
+will port + parallel-develop on a Tier-3 enterprise multi-agent A2A platform (Gemini Enterprise as default exemplar; Azure AI Foundry or AWS Bedrock AgentCore depending on substrate choice + consulting context) once PBS's
 performance is validated through real Schulz Planungsbüro use,
 even without a big client trigger. **This is Tier 3** of the
 three-tier deployment ladder; Tiers 1-2 are covered by pre-RAG
@@ -3397,7 +3399,7 @@ In priority order:
 |---|---|---|---|
 | **1 — Local** | Single-big-model orchestration | stdio MCP, local files, no auth, single user | Default for solo / small clients wanting data on their machine |
 | **2 — Cloud-hosted container** | **Same archetype** as Tier 1 | HTTP MCP, cloud storage, auth, multi-user per office | Most consulting clients — managed service, cross-device |
-| **3 — Gemini Enterprise** | **Different archetype** (multi-agent A2A) | N agents communicating via A2A, Memory Bank, Agent Identity, Agent Gateway | Enterprise scale (1000+ users, federated authority, regulatory governance, cross-org workflows) |
+| **3 — Enterprise multi-agent A2A platform** (Gemini Enterprise / Azure AI Foundry / AWS Bedrock AgentCore) | **Different archetype** (multi-agent A2A) | N agents communicating via A2A, persistent memory service, agent identity, governance gateway | Enterprise scale (1000+ users, federated authority, regulatory governance, cross-org workflows) |
 
 **Tier 1 ↔ Tier 2** = same archetype, different deployment.
 Pluggable transport/persistence/auth layers. Same codebase.
