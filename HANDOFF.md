@@ -172,11 +172,15 @@ End of session 12 (2026-04-30). Max-effort session compressed 3-session scope (1
 - **Model-swap-ability**: Shape A locked to Claude (matches existing Tier 1-2 architecture); Shape B trivial multi-provider swap. Tier 3 = different archetype = different substrate is the documented escape valve for non-Claude.
 - **Tier 3 implications**: MS AF natively supports Tier 3 archetype → forces pattern-vs-instance reframing of Tier 3 from Gemini-specific to platform-agnostic.
 
+**What also shipped session 12**: **#21 SDK deep-read** (commit `1c1be3d`) — `docs/decisions/sdk-deep-read.md` (NEW; status ACCEPTED). Cloned both substrate SDKs; code-read public API surfaces + structures; verified #18 deep-eval claims; surfaced 4 refactor opportunities (R3a-R3d) + Substrate Protocol design refinement (narrower common surface + per-substrate extension Protocols). Plus **#22 terminology + level-boundary re-evaluation** scaffolded as next dedicated session work.
+
+**Session 12 IN-PROGRESS work** (may carry to next session if context overflows): SDK findings adoption-decision discussion. Plan: R3a (in-process MCP) → R3b (MS AF eval primitives) → R3c (permission primitives → governance/sparring) → R3d (subagents-as-skills) → Substrate Protocol common surface iteration. Key insight defusing initial Protocol-shape worry: business logic is ~80% substrate-portable (skills + Pydantic + MCP gates + audit-trail + persistence + hybrid-shape); substrate-specific value-adds are leverage opportunities not constraints. Substrate-pluggable claim holds for load-bearing core.
+
 **What's next** (session 13+):
-- **#21 SDK deep-read**: clone both repos, structured code-read, decision record (current session may continue into this if context budget allows).
-- **Comprehensive doc review** (post-#21): Substrate Protocol pattern as ARCHITECTURE design discipline section (currently only in version log entry); reference card row for substrate-coupled vs substrate-agnostic; failure-mode-catalog updates if SDK exploration surfaces new modes; other DRs scan for any remaining Gemini-specific framings; Path B frontend + MS AF backend explicit ROADMAP placements informed by SDK deep-read findings.
+- **#22 terminology + level-boundary re-evaluation**: NEXT dedicated session per ROADMAP queue. Cross-domain stress-test "office / department / expert-practitioner" terminology against multiple archetypes. Pre-RAG essential.
+- **Comprehensive doc review** (post-#22): Substrate Protocol pattern as ARCHITECTURE design discipline section (currently only in version log entry); reference card row for substrate-coupled vs substrate-agnostic; failure-mode-catalog updates if SDK exploration surfaces new modes; other DRs scan for any remaining Gemini-specific framings; Path B frontend + MS AF backend explicit ROADMAP placements informed by SDK deep-read findings.
 - **#19 + #20** still pending (substrate evals).
-- **Bundles B/C/D/E design** can proceed in parallel (substrate-agnostic per session-11 framing — confirmed: Pydantic + MCP + entity-md + audit-trail all transfer cleanly across substrates).
+- **Bundles B/C/D/E design** can proceed in parallel (substrate-agnostic per session-11 framing — confirmed by SDK deep-read: Pydantic + MCP + entity-md + audit-trail all transfer cleanly across substrates).
 
 ---
 
