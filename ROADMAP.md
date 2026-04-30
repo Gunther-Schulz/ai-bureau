@@ -240,6 +240,235 @@ See full analysis at
   on contract fields — graceful failure reporting; validation is
   the gate's responsibility.
 
+### 🚧 BLOCKING SUBSTRATE EVALUATIONS (added session 11)
+
+Three substrate-framework evaluations BLOCKING for #9 implementation
+phase + #11 + #13 + Phase 1 corpus + all downstream code work.
+Surfaced session 11 when the substrate question ("why don't we
+build on agentic frameworks?") + corrected counterfactual ("we
+started 2 days ago, so full refactor when it's a win is the
+explicit tenet") forced honest re-evaluation. Each is a focused
+1-2 session investigation producing a decision record.
+
+**Why blocking**: substrate choice (orchestration runtime + RAG
+primitives + typed agent abstraction) influences the Python
+implementation of every downstream pre-RAG commitment. Doing the
+evaluations after locking implementation choices means
+retrofitting under sunk-cost pressure. Doing them now, at the
+2-days-in scale, is the cheap window — per "deep + complete
+integration, no consideration for sunk costs" (session-7 #11
+directive) + pre-launch deprecation discipline (essentially free
+per ARCH).
+
+**What can proceed in parallel** (substrate-agnostic): Bundles
+B + C + D + E design work (entity gate signatures, Pydantic
+schema shapes, body-preservation contracts, Layer 3 mechanism
+options, ProjectEntity migration plan). Pure design doesn't
+depend on substrate. Implementation phase WAITS for substrate
+decision.
+
+**Order**: #18 (MS AF) first — highest leverage, affects
+orchestration + transport + agent runtime. #19 (LlamaIndex) second
+— RAG-specific, before Phase 1. #20 (PydanticAI) third — narrowest
+surface, but evaluating now lets us treat as future-ready if
+adopted.
+
+**18. Agentic framework substrate evaluation (multi-framework)**
+(BLOCKING) — session 11 commitment.
+
+- **Mission**: full investigation of agentic framework substrate
+  candidates for orchestration / agent runtime / transport /
+  observability. NOT adapter-level wrapping; substrate-level
+  evaluation. Determines whether we build #9 entity gate Python
+  implementation + #11 plugin agents + #13 transport on top of
+  an agentic framework substrate or hand-rolled. Multi-framework
+  evaluation; not MS-AF-only.
+- **Frameworks in scope**:
+  - **MS Agent Framework** (Microsoft; production-ready
+    Python+.NET; sequential / concurrent / handoff / group-chat /
+    Magentic-One; OpenTelemetry; A2A)
+  - **LangGraph** (LangChain ecosystem; graph-based agent
+    workflows; widest community)
+  - **AutoGen** (Microsoft, predecessor to MS AF; multi-agent
+    conversation framework; mature)
+  - **CrewAI** (role-playing agents with collaboration; lighter
+    weight)
+  - **Semantic Kernel** (Microsoft; agent SDK with planners; .NET-
+    native, Python supported)
+  - **Smolagents** (Hugging Face; minimal agent framework;
+    intentionally lightweight)
+  - **OpenAI Swarm / Agents SDK** (OpenAI's official multi-agent
+    framework; less mature, OpenAI-aligned)
+  - **Hand-rolled** (current default — stays as the comparison
+    baseline)
+- **Heaviness as a key evaluation dimension** (per session-11
+  user direction): the substrate must serve our consulting
+  business spectrum from 1-person shops → small companies →
+  enterprise (Tier 3 / Gemini Enterprise). For each candidate,
+  evaluate:
+  - **1-person shop deployment** (Gunther's PBS today; future
+    single-skill-utility shapes like brand-voice): does the
+    framework add substantial infrastructure overhead? Boot time?
+    Memory footprint? Observability cost when nobody's watching?
+    Setup complexity?
+  - **Small company deployment** (5-20 person consulting client
+    on Tier 2 cloud): does the framework's overhead feel
+    proportional? Does it expose primitives the small office
+    will use (multi-user, audit, basic governance) without
+    forcing enterprise-grade complexity?
+  - **Enterprise deployment** (100+ users, Tier 3 / Gemini
+    Enterprise): does the framework expose primitives that
+    enterprise needs (federated identity, multi-agent A2A,
+    formal observability, regulatory governance)?
+  - **Does the heaviness scale automatically?** Some frameworks
+    may have configuration-driven scaling (lightweight by
+    default, opt-in to enterprise primitives). Others may require
+    enterprise-grade deps regardless of deployment size. Critical
+    for the consulting product positioning ("from solo
+    practitioner to enterprise on the same architecture").
+- **What an agentic framework would substrate** (any candidate):
+  - Plugin-agent execution model (per #11 — currently undefined;
+    we'd build it)
+  - Multi-agent coordination patterns
+  - Observability
+  - A2A interop (varies per framework — MS AF native; others
+    adapter)
+- **What survives substrate change** (architectural commitments,
+  documentation — substrate-agnostic):
+  - All ARCH disciplines (eight + meta-rules + reference card +
+    validation-gating-overview)
+  - VISION axes (sparring + authorship — implementable on any
+    substrate)
+  - entity-md spec, scope orthogonality, audit-trail v2 schemas
+  - MCP integration (multiple frameworks support MCP servers;
+    composes)
+- **Concrete read needed per candidate**:
+  - **Prompt model**: does it assume prompts-as-template, or is
+    it agnostic about prompt provenance? Critical for
+    AI-as-runtime hybrid-shape (markdown bodies as runtime fuel)
+  - **State model**: composes with our scope-orthogonality?
+  - **Pydantic / typing alignment**
+  - **MCP integration shape**
+  - **Anthropic ecosystem alignment** (Claude Code dev runtime +
+    Cowork end-user runtime — does the framework compose or add
+    friction?)
+  - **Lock-in risk** (vendor neutrality)
+  - **Heaviness profile** (per scale tier above)
+  - **Observability integration cost**
+  - **Community + churn risk** (LangGraph wider community but
+    LangChain churn; MS AF Microsoft-maintained; CrewAI smaller;
+    etc.)
+- **Output**: `docs/decisions/substrate-agentic-framework.md` —
+  multi-framework comparative table + per-candidate gap
+  analysis + heaviness scaling assessment + adoption cost
+  estimate + decision (adopt one / reject all / partial /
+  primitives-only adoption from one or more).
+- **Scope**: 2-3 sessions (broader than initial 1-2 estimate
+  given multi-framework scope).
+- **Order**: position 1 in pre-RAG queue. Before Bundles B-D-E
+  design can lock implementation-relevant decisions; before #9
+  implementation phase.
+- **Constraints flowing if a substrate is adopted**:
+  - #9 entity gate Python implementation built on chosen
+    framework's agent primitives
+  - #11 plugin agents use framework's agent shape
+  - #13 transport uses framework's observability + transport
+    abstractions
+  - #10 A2A interop partially obtained by adoption (varies per
+    framework)
+- **Constraints flowing if all rejected** (hand-rolled stays):
+  - Confirms hand-rolled substrate; decision record documents
+    why per-framework didn't fit (anti-cargo-cult anchor for
+    future sessions)
+  - May surface specific primitives worth adopting at adapter
+    level (e.g., MS AF observability, LangGraph state-machine
+    primitives) without substrate adoption
+
+**19. LlamaIndex pluggable RAG evaluation** (BLOCKING for Phase 1
+corpus) — session 11 commitment.
+
+- **Mission**: investigate LlamaIndex's RAG primitives for pluggable
+  adoption (NOT all-or-nothing substrate replacement). Specifically:
+  which primitives plug in to replace handbuild stack, which we
+  keep custom, performance comparison.
+- **Pluggable framing per user direction**: the question is NOT
+  "adopt LlamaIndex as substrate" but "which specific primitives
+  plug in?" Primitives-by-primitive evaluation:
+  - Document parsers (PDF, web-text, HTML) — pluggable candidate
+  - Chunkers (per-paragraph for laws, per-section for narrative) —
+    pluggable candidate; LlamaIndex supports custom chunking
+  - Vector store wrappers (LanceDB has a LlamaIndex integration) —
+    pluggable; we'd use LanceDB regardless
+  - Hybrid retrieval (BM25 + vector + reranking) — pluggable
+    candidate
+  - Query engines (composable retrieval pipelines) — pluggable
+    candidate
+  - Citation / source-tracking primitives — pluggable candidate
+  - Per-reference Pydantic metadata model — KEEP CUSTOM (entity-md
+    based; tied to our entity model)
+  - Citation traceability tied to entity model — KEEP CUSTOM
+  - Per-#13 ingestion-vs-serving split — KEEP CUSTOM (deployment
+    architecture, not RAG-pipeline concern)
+- **Concrete read needed**:
+  - Performance comparison: LlamaIndex retrieval pipeline vs
+    handbuild for our use cases (German legal text, multilingual,
+    per-paragraph chunking)
+  - Stability + churn: LlamaIndex has had churn but more stable
+    than LangChain — concrete read
+  - Plugability: can we use LlamaIndex parsers + chunkers WITHOUT
+    adopting LlamaIndex's metadata + entity model?
+  - Specific primitives: which save real engineering vs duplicate
+    what we already have
+- **Output**: `docs/decisions/rag-stack-llamaindex.md` — per-primitive
+  evaluation + pluggable boundary + adoption recommendations +
+  performance read + decision.
+- **Scope**: 1-2 sessions.
+- **Order**: position 2 in pre-RAG queue (after #18). Before Phase 1
+  corpus download (corpus shape gets locked once entries are
+  processed).
+- **Constraints flowing if pluggable adoption**:
+  - Phase 1 corpus pipeline uses LlamaIndex for parsers + chunkers +
+    retrieval
+  - Per-reference metadata + citation traceability remain custom
+  - LanceDB integration via LlamaIndex's wrapper
+
+**20. PydanticAI evaluation** (lower-priority but full investigation
+per session-11 direction) — session 11 commitment.
+
+- **Mission**: investigate PydanticAI as substrate for typed agent
+  surfaces (skill output validation, Layer 3 mechanism implementation,
+  any future typed multi-step agent calls). Determine whether
+  adoption now is future-ready leverage or premature substrate cost.
+- **Concrete read needed**:
+  - PydanticAI's typed agent call abstraction vs our skill +
+    MCP tool model (skills orchestrate; MCP tools are typed Pydantic;
+    is there a real gap PydanticAI fills?)
+  - Sparring-output validation: could PydanticAI replace
+    `validate_skill_output` MCP tool? What's the win?
+  - Layer 3 mechanism: could PydanticAI's typed extra-fields shape
+    inform Layer 3 Option A (Pydantic subclass per deployment)?
+  - Future v2 builder: PydanticAI for typed multi-step reasoning in
+    the office-builder?
+- **Output**: `docs/decisions/substrate-pydantic-ai.md` — gap
+  analysis + win surface + decision (adopt now / adopt at v2 /
+  reject).
+- **Scope**: 1 session.
+- **Order**: position 3 in pre-RAG queue (after #18 + #19). Earlier
+  than v2 because evaluating now lets us be future-ready if adopted
+  (per "full refactor at 2-days-in is cheap"). Could also surface
+  insights for Bundle B Layer-3-mechanism decision.
+- **Constraints flowing if adopted**:
+  - Skill output validation rebuilt on PydanticAI
+  - Layer 3 mechanism may shift toward Option A (Pydantic subclass)
+    if PydanticAI makes that ergonomic
+  - Future v2 builder uses PydanticAI for typed reasoning
+- **Constraints flowing if rejected/deferred**:
+  - Confirms current sparring-output pattern; existing
+    `validate_skill_output` stays
+  - Layer 3 mechanism decided on its own merits
+
+---
+
 ### v1 commitments (pulled forward from ROADMAP, 2026-04-29 session 6)
 
 Three architectural items were *pulled forward to v1* — they MUST

@@ -33,6 +33,40 @@ it" reasoning in the queue.
 
 ---
 
+## 🚧 BLOCKING SUBSTRATE EVALUATIONS (added session 11 — read before implementation work)
+
+Three substrate-framework evaluations BLOCKING for #9 implementation
+phase + #11 + #13 + Phase 1 corpus. Surfaced session 11 when the
+substrate question + corrected counterfactual ("we started 2 days
+ago, full refactor when it's a win is the explicit tenet") forced
+honest re-evaluation. **Substrate choice influences the Python
+implementation of every downstream pre-RAG commitment**; doing the
+evaluations after locking implementation choices means retrofitting
+under sunk-cost pressure.
+
+**What can proceed in parallel** (substrate-agnostic): Bundles B + C
++ D + E design work (entity gate signatures, Pydantic schema shapes,
+body-preservation contracts, Layer 3 mechanism options,
+ProjectEntity migration plan). Pure design doesn't depend on
+substrate. Implementation phase WAITS for substrate decisions.
+
+**Order** (front of pre-RAG queue):
+
+| Eval | Scope | Why first |
+|---|---|---|
+| **#18 — Agentic framework substrate (multi-framework + heaviness)** | 2-3 sessions | Highest leverage; affects orchestration + transport + agent runtime. Multi-framework: MS Agent Framework, LangGraph, AutoGen, CrewAI, Semantic Kernel, Smolagents, OpenAI Swarm/Agents SDK, hand-rolled baseline. **Heaviness dimension critical**: framework must serve 1-person shop → small company → enterprise spectrum. Does heaviness scale automatically? |
+| **#19 — LlamaIndex pluggable RAG eval** | 1-2 sessions | RAG-specific; before Phase 1 corpus. **Pluggable framing**: NOT all-or-nothing substrate. Primitives-by-primitive evaluation (parsers / chunkers / hybrid retrieval / query engines pluggable; per-reference Pydantic metadata + citation traceability + per-#13 ingestion split stay custom). Performance comparison vs handbuild. |
+| **#20 — PydanticAI evaluation** | 1 session | Narrowest surface (typed agent calls / sparring-output validation / Layer 3 mechanism). Lower priority but full investigation per session-11 direction (full refactor at 2-days-in is cheap; future-ready if adopted). |
+
+**Each produces a decision record** (`docs/decisions/<name>.md`)
+with adoption / rejection / partial / pluggable conclusion +
+constraints flowing to downstream commitments.
+
+**See ROADMAP.md commitments #18, #19, #20** for the full
+investigation scopes.
+
+---
+
 ## ⚡ For next session — essential framing
 
 **Read these three before substantive work, in this order:**
@@ -94,9 +128,18 @@ session-9 reframe — #9 no longer extracts a universal core, it
 designs the contract from scratch. See ROADMAP.md per-commitment
 Order notes for full chronological rationale.
 
-**Pre-RAG queue**:
-**#9 → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C → D → Phase 0
-→ Phase 1+#14**.
+**Pre-RAG queue (revised session 11 — substrate evaluations
+front-loaded)**:
+**#18 → #20 → #19 → Bundles B/C/D/E (substrate-informed design) →
+#9 implementation → #15 → #6 → #7 → #17 → #11 → #13 → #8 → C →
+D → Phase 0 → Phase 1+#14**.
+
+#18 + #20 land before Bundle B's Layer-3 mechanism decision
+(PydanticAI may inform that). #19 lands anytime before Phase 1
+corpus (could run in parallel with implementation work after
+#9). All three are evaluation sessions producing decision
+records; they don't displace existing commitments — they decide
+HOW to implement them.
 
 **Sharp-defer audit results (session 11)** — six v1.x backlog
 items pulled forward to v1 pre-launch as framework infrastructure
@@ -413,25 +456,35 @@ Actor entity for multi-user auth. See ROADMAP.md per-commitment
 Order notes for full chronological rationale.
 
 ```
-Session 11-16: #9  (Department contract + managed-entity + generic entity gate
+Session 12-14: #18 (agentic framework substrate eval — multi-framework + heaviness) 2-3 sessions
+Session 15:    #20 (PydanticAI eval)                                                  1 session
+                   ← #18 + #20 produce decision records;
+                     Bundle B Layer-3 mechanism informed by #20
+Session 16-17: #19 (LlamaIndex pluggable RAG eval)                                    1-2 sessions
+                   ← can also run in parallel with #9 design;
+                     must complete before Phase 1 corpus
+Session 12-21: #9  (Department contract + managed-entity + generic entity gate
                    + Bundle E + activation skill + schema migration framework
-                   + manifest Pydantic models) 5-6 sessions
+                   + manifest Pydantic models) 5-6 sessions, BUT:
+                   - Bundles B/C/D/E DESIGN can proceed in parallel
+                     with #18/#19/#20 (substrate-agnostic)
                    - Bundle A: dept module + location/registration   (~1 session)
-                   - Bundle B: entity gate + Layer 3                  (~1 session)
+                   - Bundle B: entity gate + Layer 3 (Layer-3 informed by #20)  (~1 session)
                    - Bundle C: ProjectEntity migration + phase/lifecycle  (~1 session)
                    - Bundle D: office-config schema additions         (~0.5 session)
                    - Bundle E: adapter Protocol shape (restored)      (~0.5 session)
                    - Implementation (Pydantic + gate + migrations
                      + activation skill + schema-migration framework
-                     + manifest Pydantic) 2 sessions
-Session 17-18: #15 (Client + Actor as office-level managed entities)              1-2 sessions
-Session 19-22: #6  (audit-trail v2 retrofit + dedupe_bausteine + record_baustein_use) 3-4 sessions
-Session 23:    #7  (bootstrap-write MCP tools + Tier 2/3 cross-ref + introspection) 1-2 sessions
-Session 24:    #17 (MCP gate coverage comprehensiveness review)                   1 session
-Session 25-29: #11 (Cowork integration refactor + concrete adapter implementations) 3-5 sessions
-Session 30-32: #13 (deployment flex + Coolify reference + cross-tier migration tools) 2-3 sessions
-Session 33-34: #8  (pre-action framing skill)                                     1-2 sessions
-Session 35+:   C (sparring-output integration) → D (plugin version bump)
+                     + manifest Pydantic) 2 sessions — WAITS for #18 outcome
+Session 22-23: #15 (Client + Actor as office-level managed entities)              1-2 sessions
+Session 24-27: #6  (audit-trail v2 retrofit + dedupe_bausteine + record_baustein_use
+                   + CloudEvents conformance evaluation per #10) 3-4 sessions
+Session 28:    #7  (bootstrap-write MCP tools + Tier 2/3 cross-ref + introspection) 1-2 sessions
+Session 29:    #17 (MCP gate coverage comprehensiveness review)                   1 session
+Session 30-34: #11 (Cowork integration refactor + concrete adapter implementations) 3-5 sessions
+Session 35-37: #13 (deployment flex + Coolify reference + cross-tier migration tools) 2-3 sessions
+Session 38-39: #8  (pre-action framing skill)                                     1-2 sessions
+Session 40+:   C (sparring-output integration) → D (plugin version bump)
 Then:          Phase 0 items 4 + 5 → Phase 1 corpus + #14 (Memory Bank bundled)
 ```
 
