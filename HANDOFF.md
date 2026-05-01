@@ -7,7 +7,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 ## Anchors (carry forward, never rebuilt)
 
 - **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
-- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's product (architectural patterns + structural disciplines) and tooling (dev-skill methodology + decision-making disciplines); preliminary-lock anchor; the ground truth the rebuild serves
+- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's structural primitives + shape-neutrality + foundations + falsification; PURE STANCE ABOUT THE PRODUCT (tooling lives in DISCIPLINES + plugin/skills + memory); preliminary-lock anchor; the ground truth the rebuild serves
 - `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
 - `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
 - `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
@@ -118,13 +118,17 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **Naming exploration deferred**: PBS-as-acronym is leftover from Planungsbüro Schulz instance-anchoring origin; framework name should change. Top candidate surfaced: "Atelier" (workshop / craft / co-work imagery; cross-language; composable with shape names). Other candidates: Auctor (Latin "author"); Praxis (structured-practice). Decision deferred — significant cascade scope (repo rename + plugin manifest + marketplace + cross-doc references + memory dir path).
     - **Branches-first principle locked in VISION** itself ("When communicating about PBS, lead with the branches; trunk + roots are the supporting cast"). No separate memory rule needed since VISION is read at session start; principle is visible there. Marketing-shape elaboration in `drafts/marketing-themes.md`.
 
-19. **VISION "three layers" → "product + tooling" restructure** — user observation: dev-skill methodology + working disciplines are not equal-weight to architectural patterns; they're tooling, not product. The previous "three layers" framing carried false equivalence.
-    - Restructured "## The three layers" section → "## Product and tooling" (two categorically different kinds of content):
-      - **Product**: framework=mechanisms / shape=policies; A-B-C scope; Pattern A; bipartite multi-aspect; structural disciplines (cascade, pattern-vs-instance, make-wrong-shapes-impossible). What every deployment built on PBS inherits structurally.
-      - **Tooling**: pre-decision sharpening; coherence-audit; sparring applied to development; decision-making disciplines (preliminary-lock, no-defer, source-grounded). How the framework is built and sustained; distributable for contributors and similar-framework-builders.
-    - Both ship; categorically different. Most deployment-users interact only with product.
-    - Refinement: structural disciplines (cascade, pattern-vs-instance, make-wrong-shapes-impossible) moved with architectural patterns (they're STRUCTURAL — shape how the framework holds). Decision-making disciplines (preliminary-lock, no-defer, source-grounded) stayed with development tooling.
-    - Cascade: MAINTENANCE.md + HANDOFF.md anchor descriptions updated.
+19. **VISION refocused on product only — tooling moved out** — user reframing across multiple turns:
+    - Step 1 (initial): user noted dev-skill methodology + working disciplines aren't equal-weight to architectural patterns; restructured "## The three layers" → "## Product and tooling" with product/tooling distinction.
+    - Step 2 (sharpening): user noted product is being locked-down NOW; tooling emerged as side-product; tooling not yet shippable; not primary marketing focus. Added PRIMARY/SECONDARY weighting + maturity context.
+    - Step 3 (final): user reframed — "VISION should really again for clarity and focus focus in the 'product' — it's the vision for the goal not the tools that get us there." Removed "Product and tooling" section entirely.
+    - **Final state**: VISION focuses purely on the product. "## Product and tooling" → "## The framework's shape-neutrality" (covers shape-neutrality + structural primitives — all product-side). Tooling content NO LONGER in VISION — distributed in natural homes:
+      - `plugin/skills/` — actual dev skills (decision-design-sharpening v0.3.1; pre-implementation-sharpening v0.3.1; coherence-audit v0.2.2)
+      - `DISCIPLINES.md` — 7 working disciplines (decision-process side)
+      - `memory/` — cross-session AI behavior rules
+      - `MAINTENANCE.md` — structural disciplines (cascade, etc.) + TOP-LEVEL ARCHITECTURE
+    - **Tooling status**: emerged as side-product through framework-development work; sharpening skills built BECAUSE we needed them, not as deliberate ship-target. Working-title status; maturity-incomplete. Product is locked-down primary; tooling is implementation-detail-becomes-shippable-eventually.
+    - Cascade: MAINTENANCE.md + HANDOFF.md anchor descriptions updated; BACKLOG Phase 5+ has tooling-promotion item (TOOLING.md or unified narrative when tooling matures).
 
 **Phase 1.5 outcome (locked session 16)**:
 

@@ -14,15 +14,11 @@ The framework as a tree:
 
 When communicating about PBS, lead with the branches; trunk + roots are the supporting cast.
 
-## Product and tooling
+## The framework's shape-neutrality
 
-PBS ships two categorically different kinds of content:
+PBS generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms. Per-shape positioning lives in STRATEGY; per-shape architectural detail lives in ARCH.
 
-- **The product** (what every deployment built on PBS inherits structurally): framework=mechanisms / shape=policies; A-B-C scope model (Framework C definitions / Owner B instances / Layer A layered content); Pattern A protocol pluggability (Surface + Implementations + Instance/binding); bipartite multi-aspect primitives; structural disciplines (cascade, pattern-vs-instance, make-wrong-shapes-impossible).
-
-- **The tooling** (how the framework is built and sustained; distributable for contributors and those building similar AI-co-worker frameworks): pre-decision sharpening (decision-design + pre-implementation phases); coherence-audit (cross-decision corpus auditing); sparring as runtime mechanism applied to development itself; decision-making disciplines (preliminary-lock, no-defer, source-grounded).
-
-Most deployment-users interact only with the product. The framework generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms. Per-shape positioning lives in STRATEGY; per-shape architectural detail lives in ARCH.
+The framework's structural primitives — framework=mechanisms / shape=policies; A-B-C scope model (Framework C definitions / Owner B instances / Layer A layered content); Pattern A protocol pluggability (Surface + Implementations + Instance/binding); bipartite multi-aspect primitives — apply uniformly across shapes. The structural disciplines — cascade, pattern-vs-instance, make-wrong-shapes-impossible — protect this shape-neutrality.
 
 ## The thesis
 

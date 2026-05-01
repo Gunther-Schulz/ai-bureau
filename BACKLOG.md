@@ -135,6 +135,10 @@ When resolved:
 - **Testing harness for the framework** — eventual harness for systematic testing of framework primitives (mechanisms, protocols, shape conformance, sparring-output validation, audit-emission correctness). Composes with PydanticAI eval framework if adopted (per Phase 3 #7). Distinct from per-skill testing; this is harness for the framework layer itself.
 - **Markdown structure validation (investigation + adoption)** — investigate (a) existing libraries for markdown structural validation (frontmatter conformance, required-sections-present, cross-ref existence, schema-of-allowed-tag-values); (b) what we already had in archived code (`backend/mcp-server/` + `plugin/skills/{audit,design-review}/`). Composes with Phase 3 #8.
 
+### Open — Tooling promotion to shippable status (lifted from VISION post-1.85 restructure)
+
+- **Tooling unified narrative doc** [origin: VISION post-1.85 restructure removing tooling from VISION] — when the framework's tooling (dev-skill methodology + decision-making disciplines + sharpening skills + coherence-audit) matures from emerged-side-product to deliberate-ship-target, write unified narrative doc (TOOLING.md or similar) that articulates what the tooling is + why it's distributable + how contributors / similar-framework-builders use it. Until then: tooling content stays distributed across `plugin/skills/` + `DISCIPLINES.md` + `memory/` + `MAINTENANCE.md` in their natural homes. Trigger: when at least 2 framework deployments use the tooling externally OR when sharpening skills feel deliberately shippable (not just "we needed them"); whichever fires first.
+
 ### Open — STRATEGY content lifted from VISION Phase 1.85
 
 When STRATEGY.md is created, fold these positioning claims (removed from VISION during clean-stance restructure):
