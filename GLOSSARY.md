@@ -54,10 +54,10 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 **Boundary test**: ask "will the practitioner be able to defend this output six months from now under regulatory or professional challenge, having forgotten the details?" If no, axis 3 fails.
 
 **Composes with**:
-- `defensibility` — operational test for this axis
-- `authorship mechanisms` — class of mechanisms supporting axis 3 (visible reasoning, audit trail, explicit human-authority gates)
-- `practitioner` — the role this axis protects
-- `practitioner-shape` — workspace shape where this axis is mandated
+- `defensibility` — operational test for this axis (canonical entry forthcoming)
+- `authorship mechanisms` — class of axis-3 mechanisms (canonical entry forthcoming)
+- `practitioner` — the role this axis protects (canonical entry forthcoming)
+- `practitioner-shape` — workspace shape where this axis is mandated (canonical entry forthcoming; see `shape` named-shapes catalog)
 
 **Source**: VISION axis 3 (third principle of the thesis); "Authorship preservation, not rubber-stamping" section; the defensibility test.
 
@@ -76,7 +76,12 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 
 **Canonical**: The shape-neutral universal layer of the pbs-bureau architecture — the bounded set of mechanisms (atomic interface contracts), architectural protocols (pluggable subsystems), and architectural disciplines that any workspace shape can compose with.
 
-**What it is**: The "what's POSSIBLE" boundary. The framework defines the universe of capabilities, contracts, and rules available to any workspace. The framework/shape architectural relationship — what's POSSIBLE (framework) vs what's MANDATED (shape) — is locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE. The framework is the open-source, marketed product's foundation; PBS-Schulz is one practitioner-shape deployment built from the framework. The framework includes: mechanisms (audit emission, source-grounding, sparring Protocol surface, etc.); architectural protocols (Coordination, Audit, Sparring, Trust, Time as pluggable subsystems with multiple implementations); architectural disciplines (cascade discipline, no-defer principle, preliminary-lock principle, make-wrong-shapes-impossible, AI-as-runtime hybrid-shape, pattern-vs-instance, glue-not-replacement).
+**What it is**: The "what's POSSIBLE" boundary. The framework defines the universe of capabilities, contracts, and rules available to any workspace. The framework/shape architectural relationship — what's POSSIBLE (framework) vs what's MANDATED (shape) — is locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE. The framework is the open-source, marketed product's foundation; PBS-Schulz is one practitioner-shape deployment built from the framework.
+
+The framework includes:
+- **mechanisms** (audit emission, source-grounding, sparring Protocol surface, etc.)
+- **architectural protocols** (Coordination, Audit, Sparring, Trust, Time as pluggable subsystems with multiple implementations)
+- **architectural disciplines** (cascade discipline, no-defer principle, preliminary-lock principle, make-wrong-shapes-impossible, AI-as-runtime hybrid-shape, pattern-vs-instance, glue-not-replacement)
 
 **What it is NOT**:
 - Not a specific shape's configuration (shape is the policy layer OVER the framework)
@@ -127,7 +132,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - shape definitions (policy bundles for an archetype)
 - substrate definitions (runtime contracts: Claude Agent SDK, MS AF, future)
 - protocol-implementation definitions (concrete impls: always-on-sparring, claim-level-audit, etc.)
-- specialist DEFINITIONS (composable expertise bundles distributable on marketplace; specialist's dual-nature: DEFINITION = Framework C; INSTANCE-CONTENT = Owner B)
+- specialist DEFINITIONS (canonical entry forthcoming; dual-nature primitive: DEFINITION here, INSTANCE-CONTENT in Owner B)
 
 **What it is NOT**:
 - Not for instances (those go to Owner B)
@@ -172,12 +177,12 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Boundary test**: ask "is the AI a participating colleague in actual work production, or a discrete convenience feature on the side?" If feature-on-the-side → tacked-on AI (failure mode for axis 1).
 
 **Composes with**:
-- `tacked-on AI` — the failure mode contrasted
-- `intertwined AI` — positive mode (AI in axis-1 mode)
-- `co-worker` — relational claim about AI's mode of participation
-- `trust mechanisms` — class of axis-1 mechanisms (source-grounding, persistent state, orchestration, audit trail, continuous awareness, explicit human-authority gates)
-- `workflow` — what intertwining intertwines WITH (axis 1 needs a workflow to intertwine with)
-- `category collapse` — risk to axis 1
+- `tacked-on AI` — the failure mode contrasted (canonical entry forthcoming)
+- `intertwined AI` — positive mode (canonical entry forthcoming)
+- `co-worker` — relational claim about AI's mode of participation (canonical entry forthcoming)
+- `trust mechanisms` — class of axis-1 mechanisms (canonical entry forthcoming)
+- `workflow` — what intertwining intertwines WITH (canonical entry forthcoming)
+- `category collapse` — risk to axis 1 (canonical entry forthcoming)
 
 **Source**: VISION axis 1 (first principle of the thesis); contrast table (tacked-on vs intertwined).
 
@@ -195,7 +200,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - **Axis**: cross-axis
 - **VISION usage**: implicit (ARCH territory)
 
-**Canonical**: The scope category for LAYERED CONTENT — content varying by deployment context (universal applies to all; domain-keyed applies to deployments in a specific domain; state-keyed applies to deployments in a specific jurisdiction). **Orthogonal axis** to framework/shape framing — Layer A is about content scoping by deployment context, not about mechanism vs policy.
+**Canonical**: The scope category for LAYERED CONTENT — content varying by deployment context (universal / domain-keyed / state-keyed). **Orthogonal axis** to framework/shape framing (about content scoping, not mechanism vs policy).
 
 **What it is**: One of three scope classifications. Layer A is **independent** of the framework=mechanisms / shape=policies framing — it's an axis for content layering by domain/state context. Identity is by `layer_scope` + `layer_key` in entity-md frontmatter. Effective content for a workspace = universal + active-domains + active-states (workspace declares which apply via its scope configuration).
 
@@ -246,9 +251,9 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Members**:
 - workspace itself (workspace.md selecting shape + substrate + active specialists)
 - workspace-scope managed entities:
-  - practitioner-record (system representation of the practitioner-as-author; the human itself is cross-cutting, but the record is workspace-scope)
-  - Actor (event emitter — could be human-practitioner or AI runtime)
-  - Client (engagement target / contracting counterparty)
+  - practitioner-record (system representation; canonical `practitioner` entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
+  - Actor (event emitter; canonical entry forthcoming)
+  - Client (engagement target; canonical entry forthcoming)
   - additional managed entities per workspace's needs
 - specialist instance content (entities owned within an active specialist instance — distinct from specialist DEFINITION which is Framework C)
 - work-unit instances (kind specialist-defined: `project` for planning bureau; `matter` for legal practice; `case` for medical practice; `engagement` for consulting; `manuscript` for research; `audit` for accounting)
@@ -352,9 +357,8 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Boundary test**: ask "does the AI challenge / generate counter-arguments / surface uncertainty, or deliver easy answers?" If easy-answers → answer-machine failure mode (axis 2 failure).
 
 **Composes with**:
-- 8 sparring sub-mechanisms: `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
-- `sparring mechanisms` — class of axis-2 framework-level mechanisms supporting sparring mode
-- `Vivienne Ming foundation` (cited in VISION)
+- 8 sparring sub-mechanisms (canonical entries forthcoming): `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
+- `sparring mechanisms` — class of axis-2 mechanisms (canonical entry forthcoming)
 
 **Source**: VISION axis 2 (second principle of the thesis) + Vivienne Ming foundation; "Sparring partner, not answer machine" section.
 
