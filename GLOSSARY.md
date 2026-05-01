@@ -80,7 +80,7 @@ The primitives that compose into a workspace deployment.
 Surface + Implementations + Instance/binding. See `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Recurring patterns: Protocol pluggability" for the pattern.
 
 - [substrate](#substrate) (cross-listed; primary location §2)
-- protocol (forthcoming) — architectural pluggable subsystem
+- [protocol (architectural)](#protocol-architectural) — architectural pluggable subsystem
 - adapter (forthcoming) — external integration boundary
 
 ### 6. Sparring sub-mechanisms (axis 2 detail)
@@ -284,7 +284,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 
 **Composes with**:
 - `mechanism` — atomic units of the framework (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `protocol` (architectural) — pluggable subsystems within the framework (canonical entry forthcoming)
+- `protocol` (architectural) — pluggable subsystems within the framework
 - `shape` — counterpart in the framework/shape architectural relationship (relationship locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `workspace` — deployment-instance container that integrates framework + shape + specialists + practitioners
 
@@ -443,7 +443,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 
 **What it is NOT**:
 - Not a `policy` — policies are atomic CONFIGURED VALUES (defaults, requirements, constraints) within a shape's bundle; mechanisms are atomic INTERFACE CONTRACTS in the framework
-- Not a `protocol` (architectural; canonical entry forthcoming) — a protocol's surface IS a mechanism, but the protocol-with-multiple-implementations structure adds composition beyond a single mechanism
+- Not a `protocol` (architectural) — a protocol's surface IS a mechanism, but the protocol-with-multiple-implementations structure adds composition beyond a single mechanism
 - Not the `framework` itself — the framework is the CONTAINER of mechanisms (+ protocols + disciplines); a single mechanism is one element of the container
 - Not a workspace-level or instance-level construct — mechanisms live at framework level with no shape-specific values
 - Not an architectural discipline — disciplines are RULES about how to design (canonical homes: `MAINTENANCE.md` + `DISCIPLINES.md`); mechanisms are CAPABILITIES the framework provides
@@ -461,7 +461,7 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 - `framework` — contains mechanisms as its atomic interface contracts (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `policy` — counterpart atom in the framework=mechanisms / shape=policies framing
 - `shape` — applies policies OVER mechanisms (which active / mandatory / defaults; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `protocol` (architectural) — pluggable subsystem within the framework (canonical entry forthcoming; relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- `protocol` (architectural) — pluggable subsystem within the framework (relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section: "mechanism is the atom — a single interface contract; capability with defined input/output surface"
@@ -627,6 +627,70 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - `actor` (broader category; practitioner is one kind)
 - `Owner B scope` (where practitioner-record lives)
 - ARCH Layer 3 practitioner-detail topics (placeholder until Phase 3 — multi-practitioner workspace mechanics; legal-entity workspace context; signing-practitioner-per-work-product configuration; archived material to consult: `office-level-managed-entities.md` for practitioner-record schema)
+
+---
+
+## protocol (architectural)
+
+- **Class**: PRIMITIVE (atomic; the pluggable-subsystem unit) — **tri-aspect** Pattern A (Surface + Implementations + Instance/binding) per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"
+- **Layer**: multi-aspect (Surface = framework-mechanism; Implementations = Framework C; Instance/binding = workspace-bound or shape-policy-selected)
+- **Axis**: cross-axis (different protocols serve different axes — Sparring Protocol = axis 2; Audit Protocol = cross-axis; etc.)
+- **VISION usage**: implicit (architectural concept underlying mechanisms across all axes; not directly named in current VISION)
+
+**Canonical**: An architectural pluggable subsystem within the framework — a Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). Pattern A canonical instance: protocol is the meta-pattern of which `substrate` and `adapter` are specific kinds. Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
+
+**What it is**: The Pattern A architectural shape made concrete. Each protocol has:
+1. **Surface** (mechanism; framework-level): an abstract Protocol contract defining what the subsystem provides
+2. **Implementations** (Framework C; distributable): concrete realizations of the surface
+3. **Instance/binding** (Owner B; workspace-bound, OR shape-policy-selected): the active implementation in a deployment
+
+Different selection levels exist:
+- **Substrate Protocol**: workspace selects (one running instance per workspace via `workspace.md substrate:` field)
+- **Adapter Protocol**: workspace activates instances (multiple may run; per workspace.md adapter bindings)
+- **Sparring Protocol**: shape selects (practitioner-shape mandates `always-on-sparring` impl; personal-OS-shape may use `sparring-as-skill` impl) — selection lives in shape-policy
+- **Audit Protocol**: shape policy + workspace overrides (granularity, retention)
+
+**What it is NOT**:
+- Not **Pydantic Protocol** — Pydantic Protocol is the Python typing concept (`typing.Protocol`); architectural Protocol is the broader pluggable-subsystem pattern. Architectural Protocols may USE Pydantic Protocol for their Surface implementation, but the pattern is independent of Python.
+- Not a single `mechanism` — a mechanism is atomic; protocol has multiple impls + selection beyond the surface alone
+- Not a `substrate` or `adapter` alone — those are SPECIFIC kinds of Pattern A primitives; protocol is the canonical pattern of which they are members
+- Not a workflow or session — protocols are framework-level architectural primitives; workflows + sessions are runtime/work-pattern concepts
+
+**Cross-archetype catalog (named architectural protocols; archived corpus + locked Pattern A members)**:
+- **Substrate Protocol** (locked) — runtime contract; workspace selects one
+- **Adapter Protocol** (forthcoming entry; pattern instance per integration class — email adapter, accounting adapter, MCP adapter, etc.)
+- **Sparring Protocol** — axis-2 support; shape selects implementation (always-on / optional / sparring-as-skill / none)
+- **Audit Protocol** — cross-axis emission; shape policy determines granularity (claim-level / action-level / light)
+- **Coordination Protocol** — cross-specialist / cross-actor coordination shape (event-shaped vs call-shaped per shape policy)
+- **Trust Protocol** — trust model (practitioner-judgment vs budget-policy vs individual)
+- **Time Protocol** — temporal semantics (turn-based vs long-running vs heartbeat-based)
+
+Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + their surfaces; shapes provide policies selecting implementations + parameterizing them.
+
+**Boundary test**: Three questions:
+1. Is this an architectural pluggable subsystem with Surface + Impls + Instance/binding? → it's a Pattern A primitive (substrate / adapter / one of the architectural protocols)
+2. Is this the Python typing structural concept (`typing.Protocol`)? → that's Pydantic Protocol — different concept; architectural Protocol may use it as implementation technique
+3. Is this a single atomic interface contract without multiple impls? → it's a `mechanism`, not a Protocol
+
+**Composes with**:
+- `mechanism` — Protocol Surface IS a mechanism (atomic interface contract)
+- `Framework C scope` — Protocol implementations live there as distributable definitions
+- `shape` — shape policies select among Protocol implementations for shape-policy-selected protocols (like Sparring)
+- `workspace` — workspace activates specific Protocol instances per workspace.md (for workspace-selected protocols like substrate) or inherits shape's selections
+- `substrate` — specific Pattern A instance (workspace-selected)
+- `adapter` (forthcoming) — specific Pattern A instance (workspace-activated; multiple per workspace possible)
+
+**Source**:
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Recurring patterns: Protocol pluggability" — defines Pattern A; lists known instances (substrate, adapter, protocol meta)
+- Locked GLOSSARY entries: `substrate` (Pattern A instance; tri-aspect explicitly described); `mechanism` (Protocol Surface listed as mechanism example: "Sparring Protocol surface")
+- Archived corpus for full per-protocol detail (Phase 3 ARCH territory): `substrate-protocol-design.md`, `shape-extension-and-architectural-floor.md`
+
+**See**:
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Recurring patterns: Protocol pluggability" (canonical pattern description)
+- `substrate` (canonical Pattern A instance; locked)
+- `adapter` (forthcoming; canonical Pattern A instance — workspace-activated multiple)
+- `mechanism` (Protocol Surface IS a mechanism)
+- ARCH Layer 3 protocol-detail topics (placeholder until Phase 3 — per-protocol Surface specifications, per-implementation detail, selection mechanics; archived material to consult: `substrate-protocol-design.md`, `shape-extension-and-architectural-floor.md`)
 
 ---
 
@@ -910,7 +974,7 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - `shape` — shapes declare compatibility with substrates (not all shapes work on all substrates)
 - `workspace` — workspace selects exactly one substrate via `workspace.md`
 - `Owner B scope` — running substrate instance is bound to workspace deployment (Owner B)
-- `protocol` (architectural) — substrate Protocol surface is one of the framework's architectural Protocols (canonical entry forthcoming)
+- `protocol` (architectural) — substrate Protocol surface is one of the framework's architectural Protocols
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" — substrate listed as Framework C definition member + framework-mechanism category
