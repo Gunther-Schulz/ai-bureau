@@ -2,7 +2,7 @@
 name: decision-design-sharpening
 description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/surface/refine to solidify" (or original "challenge/review/refine to solidify") / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "what are we surfacing" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.3.0
+version: 0.3.1
 ---
 
 # Decision-design sharpening (Phase 1)
@@ -103,6 +103,15 @@ Stress-test what round 1 missed:
 - **Cross-cutting concerns?** Boot/shutdown, errors, transport, deployment-tier-awareness, audit integration
 
 Surface 4-10 genuine refinements per round (empirical observation). Distinguish EXPANSIONS (~80-90%) from REVISIONS (~10-20%). Apply Pareto discipline: each surfaced refinement should be Pareto-improving (better in some dimension without being worse in others). If not Pareto-improving, force "why?" challenge — could be manufactured criticism past where evidence warrants.
+
+**Post-round self-check (v0.3.1)**: at the end of each round (after surfacing findings + applying Pareto verdicts), AI explicitly evaluates against termination signals + sweet-spot pattern + Lens 1+8+9 collective REVISION count (where applicable) and commits a position:
+
+- **STABLE — lock at this round** with reasons (cite specific termination signals: "0 REVISIONS surfaced", "narrow architectural surface = 2-round sweet spot", "all findings are EXPANSIONS not architectural pivots")
+- **CONTINUE — Round N+1 warranted** with reasons (cite remaining open questions, broad architectural surface, or specific lens that surfaced incomplete coverage)
+
+User confirms or overrides. Counters self-validation bias in BOTH directions: defaulting to "continue" because more rounds feel productive (manufactured-criticism risk) vs defaulting to "stable" because ending is comfortable (premature-lock risk). Forcing explicit position with rationale makes the self-check observable.
+
+The check is mechanical — termination signals from the next section are the discriminator. Don't override signals with vague "feels stable" or "could go deeper" — name the specific signal.
 
 ### Round 3 (OPTIONAL, complexity-dependent): Second sharpening (USER-TRIGGERED)
 

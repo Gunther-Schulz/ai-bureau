@@ -2,7 +2,7 @@
 name: pre-implementation-sharpening
 description: Use at implementation-start moment for major architectural commitment (after architectural decisions are LOCKED in decision records; before implementation code is written). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including "let's start implementing X" / "before we implement, what details haven't we surfaced" / "implementation-readiness check" / "solidify before implement" / "lock down implementation details" / "challenge/surface/refine before we ship" (or original "challenge/review/refine before we ship") / "verify implementation readiness" / "what implementation details are we missing". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge → surface → refine → solidify cycle applied at implementation-start moment. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Output is implementation-readiness checklist + decision-record amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use drift-detection skills).
 when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in decision records; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check" / "solidify before implement" / "challenge/surface/refine implementation readiness" / "lock down implementation details" / "before we ship X". Do NOT use for decision-formation moments — that's decision-design-sharpening.
-version: 0.3.0
+version: 0.3.1
 ---
 
 # Pre-implementation sharpening (Phase 2)
@@ -112,6 +112,17 @@ After 2-3 rounds:
 - Implementation-readiness checklist (concrete deliverables per implementation phase)
 - Decision-record amendments for ~10-20% architectural findings that surface in pre-implementation rounds
 - Persist via chat-first-then-file pattern
+
+### Post-round self-check (v0.3.1)
+
+At the end of each round (after surfacing findings + applying Pareto verdicts), AI explicitly evaluates against termination signals + sweet-spot pattern + flow-back rate (architectural-finding percentage) and commits a position:
+
+- **STABLE — implementation-readiness is sufficient** with reasons (cite: "Round N yielded 0 substantive refinements", "narrow implementation surface = 2-round sweet spot", "flow-back rate within expected ~10-20% range")
+- **CONTINUE — Round N+1 warranted** with reasons (cite specific category that surfaced incomplete coverage: lifecycle gaps, transport unspecified, error-handling deferred, deployment-tier ambiguity)
+
+User confirms or overrides. Counters self-validation bias in BOTH directions: defaulting to "continue" because more rounds feel productive (manufactured-criticism risk) vs defaulting to "stable" because shipping is comfortable (premature-implementation risk). Forcing explicit position with rationale makes the self-check observable.
+
+The check is mechanical — termination signals from the next section are the discriminator. Don't override signals with vague "feels stable" or "could go deeper" — name the specific signal.
 
 ## Round termination signals
 
