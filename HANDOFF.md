@@ -93,6 +93,13 @@ This is the running session log for the **foundational rebuild** launched sessio
     - Cascade-pass: TOC §7 (3 forthcoming → live); intertwining (axis 1) Composes-with (forthcoming markers stripped for the 3 modes); cross-archetype illustrations include mixed-state evolution paths.
     - GLOSSARY: 25 → 28 locked entries.
 
+16. **VISION sanity check (3-lens scan)**: applied lenses for vocabulary alignment with locked GLOSSARY (28 entries) + instance-anchoring residual leakage + axis-interactions articulation. Surfaced 4 findings + 1 BACKLOG addition:
+    - **V1 (Lens 1)**: line 17 "shape-extension pattern" — outdated framing; per session-16 architectural decision shape-extension was merged into shape. Updated to "via shape definitions composing policies over framework mechanisms."
+    - **V2 (Lens 1)**: line 217 axis-2 checklist listed 7 sparring sub-mechanisms; GLOSSARY tracks 8 (anti-sycophancy missing from VISION). Added anti-sycophancy to checklist.
+    - **L1 (Lens 2)**: line 162 "council meetings" was planning-bureau-anchored prose. Generalized to "challenge contexts (correspondence exchanges, council meetings, court hearings, peer review, audit committees, etc.)"
+    - **L2 (Lens 2)**: line 179 "cover mail" was planning-bureau Anschreiben-equivalent. Generalized to "cover communication (Anschreiben in PBS-Schulz pioneer; cover letter / transmittal note in other archetypes)"
+    - **Lens 3 (axis interactions)**: VISION sketches via examples but doesn't articulate systematically. Position: not VISION revision (would bloat anchored role); flag for Phase 3 ARCH as dedicated architectural-pattern topic. Added to BACKLOG.
+
 **Phase 1.5 outcome (locked session 16)**:
 
 Layered doc structure designed and persisted in `MAINTENANCE.md` (Layer 0; read at session start). 5-layer model: Entry → Foundations → Overview → Architecture detail → DRs → Specs, plus Memory orthogonal. Cascade discipline elevated to top-level rule (per user direction): all docs stay in consistent state; changes propagate up/down/sideways in same commit.

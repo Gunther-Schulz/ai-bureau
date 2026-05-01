@@ -14,7 +14,7 @@ PBS-bureau is the pioneer instance of this workspace infrastructure — specific
 
 This document articulates the **practitioner-shape thesis** — the value claims PBS makes for expert practitioners (planners, lawyers, researchers, accountants, creatives, consultants, advisors). It is the pioneer-instance + marketed-product VISION.
 
-**The framework underneath is workspace-shape-neutral.** Framework primitives support multiple workspace shapes via shape-extension pattern: practitioner (this VISION's domain), autonomous-business (operator-supervised), personal-OS (individual life-OS), knowledge-graph, federation, hybrid. Other shapes have their own potential per-shape visions if productized.
+**The framework underneath is workspace-shape-neutral.** Framework primitives support multiple workspace shapes (each shape composing policies over framework mechanisms): practitioner (this VISION's domain), autonomous-business (operator-supervised), personal-OS (individual life-OS), knowledge-graph, federation, hybrid. Other shapes have their own potential per-shape visions if productized.
 
 **Three VISION axes apply with full force to practitioner shape.** When second-shape productization happens, that shape gets its own per-shape VISION; this document remains the practitioner-shape articulation.
 
@@ -159,7 +159,7 @@ The third axis. Even an intertwined AI in sparring mode can fail if the produced
 
 PBS is **an output-producing tool for an expert practitioner.** Not a teaching tool. The practitioner is already an expert author with years of domain knowledge; PBS does not exist to make them a better author. It exists to help them produce more work-products, more consistently, with better citation hygiene, in less time.
 
-But the produced work-products go out under the practitioner-author's name (or the firm's name with the practitioner-author signing). They get signed, sent to authorities or clients, defended in correspondence exchanges, debated in council meetings. The practitioner-author is legally and professionally accountable for everything PBS produces on their behalf.
+But the produced work-products go out under the practitioner-author's name (or the firm's name with the practitioner-author signing). They get signed, sent to authorities or clients, defended in challenge contexts (correspondence exchanges, council meetings, court hearings, peer review, audit committees, etc. — the specific fora vary per practitioner archetype). The practitioner-author is legally and professionally accountable for everything PBS produces on their behalf.
 
 This creates the third axis: **PBS produces output; the practitioner remains the author.** Authorship in the professional/legal sense — capable of defending the output, accountable for what's signed, having engaged with the judgment calls. Capacity-building in the abstract is a side effect when it happens; authorship preservation is the actual purpose.
 
@@ -176,7 +176,7 @@ This test cuts through edge cases:
 - A perfectly automated drafting feature that removes the practitioner's engagement with key argumentation choices fails (practitioner can't defend the choice later).
 - A "skip review" shortcut that bypasses layered review fails.
 - A summarization feature that compresses reasoning into pithy bullet points (losing the chain) fails (defense requires the full chain).
-- A fully automated send pipeline (no practitioner review of the cover mail) fails (the practitioner owns the words sent under their name).
+- A fully automated send pipeline (no practitioner review of the cover communication — Anschreiben in PBS-Schulz pioneer; cover letter / transmittal note in other archetypes) fails (the practitioner owns the words sent under their name).
 
 All might pass axes 1 and 2 (intertwined, sparring-friendly in some sense). They fail axis 3.
 
@@ -214,7 +214,7 @@ Three checklists, one per axis:
 
 **Axis 2 — Interaction mode (sparring):**
 
-- Does the proposed feature support counter-argument / confidence calibration / "what's missing?" checkpoints / selective friction / asymmetric knowledge respect / commit-to-recommendations / visible reasoning? Or does it deliver easy answers, suppress uncertainty, automate engagement away?
+- Does the proposed feature support counter-argument / confidence calibration / "what's missing?" checkpoints / selective friction / asymmetric knowledge respect / anti-sycophancy / commit-to-recommendations / visible reasoning? Or does it deliver easy answers, suppress uncertainty, automate engagement away?
 
 **Axis 3 — Authorship preservation (defensibility):**
 
