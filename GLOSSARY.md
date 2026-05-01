@@ -444,6 +444,56 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 ---
 
+## skill
+
+- **Class**: PRIMITIVE (atomic; the work-logic unit) — single-aspect (no multi-scope manifestation)
+- **Layer**: cross-cutting (skill is an application-level work-logic unit that lives within specialists; manifests at whatever scope the containing specialist manifests at)
+- **Axis**: cross-axis (skills serve any axis depending on what work they encode)
+- **VISION usage**: implicit (VISION line 7 says "codified expertise bundled as specialists"; skills are the atomic units of that expertise; not directly defined as glossary term in VISION)
+
+**Canonical**: An atomic unit of work logic within a specialist — an auto-loaded behavioral protocol that fires when its trigger conditions match. Skills are the smallest composable unit of codified expertise; specialists bundle multiple skills (+ entities + memory + adapters) into a distributable expertise package.
+
+**What it is**: A skill is what you'd reach for when you want to express "do this specific kind of work when this condition is met." Skills have triggers (when they fire), body content (what they instruct), and may declare output schemas (Pydantic models for structured output). Multiple skills compose into a specialist; the specialist is the cohesion abstraction; the skill is the atomic unit.
+
+**What it is NOT**:
+- Not a `specialist` — specialist is the bundle; skills are units within it
+- Not a `workspace` — workspace activates specialists (which contain skills); workspace doesn't activate skills directly
+- Not a `mechanism` — skills are application-level work logic, not framework-level interface contracts
+- Not a sparring sub-mechanism — those are specific axis-2 capabilities (counter-argument, confidence calibration, etc.); skills are general-purpose work units that may USE sparring mechanisms
+- Not a `workflow` (canonical entry forthcoming) — workflow is the broader pattern of work; skills are atomic actions within workflows
+
+**Cross-archetype illustration** (named examples; archived plugin/skills/ catalog):
+- **orchestrator** — coordinates session-open + decision routing + state management (PBS-Schulz)
+- **save-baustein** — saves reusable text patterns to memory (PBS-Schulz; cross-archetype)
+- **draft-textteil-b** — drafts B-Plan-Begründung text (planning-domain; PBS-Schulz)
+- **validate-checklist** — validates work against doctype checklists (cross-archetype)
+- **citation-verification** — checks legal/scholarly citations (cross-archetype)
+- **review-draft** — runs layered review with sparring mechanisms (cross-archetype)
+
+A specialist activates a coherent set of skills; e.g., `planning-document-work` specialist bundles `orchestrator + save-baustein + draft-textteil-b + review-draft + validate-checklist + research-references + verify-citations + ...`.
+
+**Boundary test**: Three questions:
+1. Is this an atomic unit of work logic that fires on a trigger? → it's a skill
+2. Is this codified expertise BUNDLED as a distributable unit? → it's a `specialist` (containing skills)
+3. Is this a framework-level interface contract? → it's a `mechanism`, not a skill
+
+**Composes with**:
+- `specialist` — specialist contains skills as its atomic work-logic units; skill cannot be used outside specialist context (a specialist provides the skill's runtime context, dependencies, references)
+- `mechanism` — skills use framework mechanisms (audit emission, source-grounding, sparring) at runtime via the substrate
+- `workflow` (canonical entry forthcoming) — skills participate in broader workflows (sequence of skill firings + decisions)
+- `actor` (canonical entry forthcoming) — skills emit AuditEvents with `actor_kind: skill` per archived audit-trail v2 schema
+
+**Source**:
+- VISION (`VISION.md`) line 7 (thesis): "codified expertise bundled as specialists" — skills implicit as the atomic units of expertise
+- Locked GLOSSARY entry `specialist`: "skills are atomic work logic units within a specialist; specialist is the bundle that contains skills"
+- Inherited from Anthropic plugin convention: skills as auto-loaded behavioral protocols with trigger frontmatter
+
+**See**:
+- `specialist` (which contains skills)
+- ARCH Layer 3 skill-detail topics (placeholder until Phase 3 — skill granularity 3-test, frontmatter schema, output validation; archived material to consult: `skill-expert-agent-and-domain-knowledge.md`, `terminology-and-specialist-primitive.md` for `specialist:` frontmatter requirement)
+
+---
+
 ## sparring (axis 2)
 
 - **Class**: DERIVED (claim/mode defined in VISION)
@@ -506,7 +556,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 A workspace activates a domain-relevant set: PBS-Schulz might activate `planning-document-work + project-management + invoicing`; Müller Law workspace might activate `legal-research + citation-verification + project-management + invoicing`.
 
 **Boundary test**: Three questions:
-1. Is this a unit of work logic that fires on a trigger? → it's a `skill` (canonical entry forthcoming) — within a specialist
+1. Is this a unit of work logic that fires on a trigger? → it's a `skill` — within a specialist
 2. Is this a deployment scope? → it's a `workspace`
 3. Is this codified expertise bundled as a distributable unit? → it's a specialist
 4. Disambiguator: is this multiple interchangeable implementations of one Protocol surface? → it's a Pattern A primitive (substrate / adapter / protocol), NOT specialist
@@ -515,7 +565,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - `workspace` — workspace activates specialists per `specialists_active` field in `workspace.md`
 - `Framework C scope` — specialist DEFINITIONS live here as distributable bundles
 - `Owner B scope` — specialist INSTANCE-CONTENT (entities owned by the deployed specialist instance) lives here
-- `skill` — skills are atomic work logic units within a specialist (canonical entry forthcoming)
+- `skill` — skills are atomic work logic units within a specialist
 - `mechanism` — specialists use framework mechanisms (audit emission, source-grounding, sparring) via the substrate at runtime
 - `shape` — shape policies may mandate certain specialists or constrain what's permitted (e.g., practitioner-shape may mandate sparring-relevant specialists)
 - `adapter` — specialists may bundle adapter implementations as part of their package (canonical entry forthcoming)
