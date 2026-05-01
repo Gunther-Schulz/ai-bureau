@@ -1,6 +1,6 @@
 # Decision record: Terminology + Specialist primitive
 
-**Status**: ACCEPTED (session 13, 2026-04-30)
+**Status**: ACCEPTED (session 13, 2026-04-30); session-15 amendment 2026-05-01 (Defers section re-examined under v0.33 no-defer principle: D1+D2 reframed as watch-list entries; D3+D4+D5+D6 reframed as decisions made now). Per v0.33 preliminary-lock principle, this DR remains preliminary-locked; revisable when VISION ideal design demands. Main decisions (Workspace primitive + Specialist as new pattern primitive + Department demoted) hold under v0.34 entity-md scope model restructure (Workspace + Specialist + Project become Owner B category; Specialist DEFINITION becomes Framework C primitive — specialist's dual-nature resolved per restructure DR §1).
 **Owner**: ARCHITECTURE.md "Pattern-vs-instance discipline" + "Substrate-pluggability discipline" + plugin-conventions §<TBD> + ROADMAP commitment #22
 **Sharpening metadata**: 3-round decision-design-sharpening (full monty + 2 user-triggered). ~26 refinements surfaced; ~85% expansions, ~15% revisions. Per-sub-DR sharpening rounds skipped post-decomposition (Round 3 covered integration surface; per-sub-DR rounds would yield diminishing returns + risk manufactured criticism per `feedback_refine_pareto.md`).
 **Related**:
@@ -146,7 +146,7 @@ Distinction matters for marketplace organization; doesn't affect architectural s
 | Empty specialist (skills=[]) | Allowed — entities + references + memory provide value (knowledge-graph deployments) |
 | Workspace-instance content (e.g., Hendrik's signing convention) | NOT a specialist; lives at workspace-scope. Fails distribution test |
 | Hyper-specific niche topic (e.g., §13a-Verfahren) | NOT a specialist; content distributed across existing specialist's process entities + references + skill body. Fails cohesion test |
-| Composite specialist (legal-practice-package bundling intake + discovery + filing) | DEFER (D5) — could be recursive composition OR marketplace metadata; await concrete need |
+| Composite specialist (legal-practice-package bundling intake + discovery + filing) | DECIDED v1: not supported. Specialists compose only at workspace-employed level (flat). Marketplace bundle metadata (W1) may document composing-specialist references for UX; install-time still resolves to flat employed list. Future composite specialist support is a v2+ feature. |
 
 ### Decomposition trigger (parallel to skill-granularity)
 
@@ -319,23 +319,40 @@ Per Round 3 of decision-design-sharpening: operational concerns surfaced for #9 
 | Concern | Position |
 |---|---|
 | Boot order | Workspace bootstraps specialists in dependency order (topological sort); event subscriptions resolved after all installed |
-| Hot-add/remove specialist | DEFER (D6) — implementation simplifies if specialists settle at workspace boot |
+| Hot-add/remove specialist | DECIDED v1: not supported. Specialists settle at workspace boot. Adding/removing a specialist requires workspace restart. Future hot-reload support is a v2+ feature (per session-15 D6 reframe). |
 | Specialist conflict (two declaring same entity type) | Impossible-by-construction per type-name namespacing; adapter id collisions caught at install |
 | Shared specialist state (one specialist deployed to multiple workspaces) | Each workspace has independent state instance; code/structure shared. State NEVER shared across workspaces |
-| Specialist version skew | Workspace.md declares specialist + version; install-time validation. Migration tooling deferred (D1) to ROADMAP v3 marketplace |
+| Specialist version skew | Workspace.md declares specialist + version; install-time validation. Migration tooling = part of W1 marketplace mechanics watch-list (awaiting v3 launch milestone). |
 
-## Defers (chronological-valid)
+## Decisions + watch-list entries (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Cost being avoided |
-|---|---|---|
-| D1: Specialist marketplace mechanics (registry, versioning, distribution, pricing, governance) | ROADMAP v3 | Substrate (#11 Cowork) defines plugin distribution; downstream of substrate decisions |
-| D2: Cross-substrate specialist portability | Post-#11 first concrete cross-substrate need | No concrete cross-substrate user today |
-| D3: Specialist-granularity discipline check (audit slice / design-review target) | Bundle with skill-granularity check (still pending) | No clear case of over-granularity today |
-| D4: Multi-grouping (orthogonal classifications over specialists) | First concrete demand | Single-grouping covers all known cases |
-| D5: Composite specialist (specialist employing other specialists) | First marketplace need | Could be recursive composition OR marketplace metadata; different shapes |
-| D6: Specialist hot-reload (runtime add/remove) | First concrete need | Implementation simplifies if specialists settle at boot |
+> **Session 15 amendment**: previously this section was titled "Defers (chronological-valid)" with 6 entries. Under v0.33 no-defer principle, re-examined with both tests (external-information test + effort-asymmetry test). Result: D1 + D2 reframed as watch-list entries (genuine external signals); D3 + D4 + D5 + D6 reframed as decisions made now (effort-asymmetry test failed; could decide today).
 
-All chronological-valid: each names specific information that doesn't exist yet.
+### Decisions made now (D3, D4, D5, D6)
+
+**D3 (was defer): Specialist-granularity discipline check** (audit slice / design-review target) — DECISION: designed alongside skill-granularity check (parallel structure). Audit slice scans `extensions/framework/specialists/<id>/` against the 3-test (cohesive competence + distributable as unit + reusable across workspaces); flags over-elevated specialists for split or under-elevated content for consolidation. Design-review target enforces 3-test prospectively at specialist-creation time. Implementation lands with #9 audit slice + design-review target work. Per validation-layering (v0.18): L3 retrospective + L4 prospective.
+
+**D4 (was defer): Multi-grouping** (orthogonal classifications over specialists) — DECISION: v1 supports single grouping per workspace (`groupings: dict[str, list[specialist_id]] | None`). v1 does NOT support multi-grouping (orthogonal classification axes). Workaround for v1: pick the most-load-bearing classification axis. Future multi-grouping support is a v2+ feature designed when concrete need surfaces with specific use case constraints (e.g., "specialists by department AND by discipline simultaneously").
+
+**D5 (was defer): Composite specialist** (specialist employing other specialists) — DECISION: v1 does NOT support composite specialists. Specialists compose only at workspace-employed level (`workspace.md.specialists_employed: list[<specialist-id>]` enumerates flat). Workaround: document specialist bundles in marketplace metadata (per W1 marketplace mechanics watch-list); each bundle entry references its composing specialists for marketplace UX, but install-time still resolves to flat employed list. Future composite specialist support (recursive composition with inherited constraints + shared state) is a v2+ feature.
+
+**D6 (was defer): Specialist hot-reload** (runtime add/remove) — DECISION: v1 does NOT support specialist hot-reload. Specialists settle at workspace boot. Adding/removing a specialist requires workspace restart. Workaround: when specialist set changes, restart workspace MCP server. Same pattern as shape-locked-at-creation per shape-extension DR D2 reframe. Future hot-reload support is a v2+ feature when concrete need surfaces.
+
+### Watch-list entries (D1, D2)
+
+**W1 (was D1): Specialist marketplace mechanics** (registry, versioning, distribution, pricing, governance) — awaiting **marketplace v3 launch milestone** (depends on community of primitives + commercial constraints + governance signals not yet existing). Resolution: design at v3 launch phase. Architectural shape (Specialist as Framework C primitive; SpecialistDescriptor Pydantic Protocol; specialist DEFINITION in `extensions/framework/specialists/<id>/specialist.md` per v0.34 restructure) is locked. Note: overlaps with shape-extension W1; marketplace v3 hosts ALL Framework C primitive kinds uniformly per `entity-md-scope-model-restructure.md` E3-7.
+
+**W2 (was D2): Cross-substrate specialist portability sufficiency** (whether `substrate_compat: list[SubstrateId]` declaration is sufficient or additional Pydantic fields needed for cross-substrate compatibility) — awaiting **first concrete cross-substrate user** (community member or consulting client wanting to use specialist authored for one substrate in another substrate). Resolution: when signal arrives, evaluate per-substrate contract gaps; revise SpecialistDescriptor Pydantic if needed. Declaration field IS designed; sufficiency for cross-substrate requires real user. Parallel to shape-extension W3 cross-shape portability case.
+
+### Re-examination methodology (per v0.33 no-defer principle)
+
+Same tests applied to each previous defer:
+
+1. **External-information test**: does the previous "Home" / "Cost being avoided" name a SPECIFIC external signal? Generic claims ("first concrete need", "no concrete user today", "no clear case of over-granularity today") fail.
+2. **Effort-asymmetry test**: could the design work be done today if we chose? If yes — even if might be wrong — NOT a chronological gap.
+
+D1, D2 PASS both tests → valid watch-list entries.
+D3, D4, D5, D6 FAIL effort-asymmetry test → decisions made now.
 
 ## Migration cascade
 

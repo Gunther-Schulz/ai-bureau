@@ -1,6 +1,6 @@
 # Decision record: Shape-extension framework + Option B architectural floor (session 14)
 
-**Status**: ACCEPTED (session 14, 2026-04-30)
+**Status**: ACCEPTED (session 14, 2026-04-30); session-15 amendment 2026-05-01 (Defers section re-examined under v0.33 no-defer principle: D1+D3+D4 reframed as watch-list entries; D2+D5 reframed as decisions made now). Per v0.33 preliminary-lock principle, this DR remains preliminary-locked; revisable when VISION ideal design demands.
 **Owner**: ARCHITECTURE.md (Workspace shapes catalog + Option B section); ROADMAP commitment #25 (Shape extension framework + Protocol pluggability)
 **Sharpening metadata**: Multi-round iterative — emerged from competitive deep-read (Paperclip "could framework do this?" question) + EU AI Act regulatory analysis (anti-Art-25-trap structural enforcement) + layered approach formalization (framework shape-neutral + practitioner positioning).
 **Related**:
@@ -210,17 +210,42 @@ Operational concerns surfaced for #25 implementation phase head-start:
 | **Multi-shape deployment** | Can ONE PBS instance host MULTIPLE workspaces with DIFFERENT shapes? YES — each workspace independent; substrate shared |
 | **Shape extension versioning** | Per-shape semver; framework-shape compatibility matrix in shape.md |
 
-## Defers (chronological-valid)
+## Decisions + watch-list entries (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Cost being avoided |
-|---|---|---|
-| **D1: Shape extension marketplace** (publishable shapes + community shape contributions) | ROADMAP v3 marketplace | Marketplace shape locked Sub-DR B; v3 mechanics deferred |
-| **D2: Hot-swap shape on running workspace** | First concrete need | Implementation simplifies if shape locked at workspace creation |
-| **D3: Cross-shape specialist portability** (specialist authored for practitioner shape used in autonomous-business shape) | First concrete cross-shape user | No concrete user today |
-| **D4: Long-running runtime substrate adapter** (needed for autonomous-business shape) | First autonomous-business shape implementation | Substrate adapter is shape-extension-driven; build when shape needed |
-| **D5: Pure-autonomy override flag** (declares non-PBS-conformant deployment) | First concrete pure-autonomy use case | No concrete user; theoretical override path |
+> **Session 15 amendment**: previously this section was titled "Defers (chronological-valid)" with 5 entries. Under v0.33 no-defer principle, re-examined with both tests (external-information test + effort-asymmetry test). Result: D1 + D3 + D4 reframed as watch-list entries (genuine external signals); D2 + D5 reframed as decisions made now (effort-asymmetry test failed; could decide today).
 
-All chronological-valid: each names specific information that doesn't exist yet.
+### Decisions made now (D2, D5)
+
+**D2 (was defer): Hot-swap shape on running workspace** — DECISION: v1 does NOT support hot-swap. Shape is locked at workspace creation. Workaround for shape-change need: create new workspace + manually migrate content. Future hot-swap support is a v2+ feature designed when concrete need surfaces with specific deployment's constraints. The decision is "no hot-swap in v1" — not a defer of the hot-swap design.
+
+**D5 (was defer): Pure-autonomy override flag** — DECISION: pure-autonomy override mechanism designed now with deliberately-difficult-to-use semantics (convenience override defeats Option B structural enforcement; difficulty level protects PBS brand integrity + EU practitioner unintentional opt-out).
+
+Mechanism:
+- workspace.md field: `option_b_floor_override: false | NonPBSConformant`
+- `NonPBSConformant` is a typed object requiring: `accept_non_pbs_conformant: true` + `acknowledged_at: <ISO-8601 timestamp>` + `acknowledger_actor_id: <actor-id>` + `reason: <prose>` + `non_external_output: bool` (must be true for override to validate)
+- Override emits prominent AuditEvent (`event_kind=option_b_floor_overridden`) on every workspace boot
+- Tooling warns aggressively at every operation surface (terminal, MCP responses, audit reports)
+- Override produces non-PBS-conformant deployment: NOT eligible for marketplace v3 distribution; cannot use "PBS-conformant" branding; cannot be linked from PBS-marketed reference materials
+- Use case constraint: only valid when `non_external_output: true` (research simulation, internal R&D, no client/regulator output) — accountability binding doesn't apply where there's no external accountability concern
+
+### Watch-list entries (D1, D3, D4)
+
+**W1 (was D1): Shape extension marketplace mechanics** (auth / pricing / governance / deprecation procedures) — awaiting **marketplace v3 launch milestone**. Resolution: design at v3 launch phase; depends on community of primitives + commercial signals + marketplace governance constraints that don't exist pre-launch. Architectural shape (marketplace = of Framework C primitives, including specialists per Sub-DR B) is locked.
+
+**W3 (was D3): Cross-shape specialist portability sufficiency** (whether `shapes_supported: [<shape-id>+]` declaration is sufficient or additional Pydantic fields needed for cross-shape compatibility) — awaiting **first concrete cross-shape user** (community member or consulting client wanting to use practitioner-shape specialist in autonomous-business shape). Resolution: when signal arrives, evaluate per-shape contract gaps; revise specialist Pydantic if needed. Declaration field IS designed (sufficient for current single-shape use); sufficiency for cross-shape requires real user.
+
+**W4 (was D4): Long-running runtime substrate adapter concrete implementation** — awaiting **first autonomous-business shape extension built** (community-driven; not in PBS-marketed scope). Resolution: when signal arrives, implement adapter; Time Protocol abstraction (in #25 scope per session-15 ROADMAP) provides Protocol surface to fill. The Protocol abstraction is decided now; the concrete adapter implementation awaits specific deployment need.
+
+### Re-examination methodology (per v0.33 no-defer principle)
+
+Each previous "Defer (chronological-valid)" entry was tested:
+
+1. **External-information test**: does the previous "Home" / "Cost being avoided" name a SPECIFIC external signal (Phase 1 corpus deployment data; first-bind real workflow performance; regulatory ruling X; community-built shape extension; second-domain feedback)? Generic claims ("first concrete need", "no concrete user today") fail this test.
+2. **Effort-asymmetry test**: could the design work be done today if we chose to? If yes — even if might be wrong — NOT a chronological gap. Wrong design today is cheaper to revise (per Preliminary-lock principle) than missing design accumulating downstream cost.
+
+D1, D3, D4 PASS both tests → valid watch-list entries (kept; reframed without "defer" vocabulary).
+
+D2, D5 FAIL effort-asymmetry test → decisions made now.
 
 ## Cascade
 
