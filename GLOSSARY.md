@@ -91,9 +91,9 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 
 ### 7. Modes & relations (conversational vocabulary)
 
-- co-worker (forthcoming) — relational claim about AI's mode of participation
-- intertwined AI (forthcoming) — positive axis-1 mode
-- tacked-on AI (forthcoming) — failure mode of axis 1
+- [co-worker](#co-worker) — relational claim about AI's mode of participation
+- [intertwined AI](#intertwined-ai) — positive axis-1 mode
+- [tacked-on AI](#tacked-on-ai) — failure mode of axis 1
 
 **Note**: "AI runtime" is informal shorthand for substrate's tri-aspect Instance (per Pattern A) — used colloquially in docs but not a separate GLOSSARY primitive. Architectural primitive is `substrate`.
 
@@ -320,6 +320,67 @@ In all archetypes: claim = atomic-defensible-assertion. Cross-archetype shape co
 
 ---
 
+## co-worker
+
+- **Class**: DERIVED (relational claim/mode defined in VISION axis 1; characterizes AI's role in the workflow)
+- **Layer**: cross-cutting
+- **Axis**: axis-1 (defines AI's participation mode under intertwining; not a separate axis but axis-1's relational claim)
+- **VISION usage**: directly used (`VISION.md` line 27 axis 1: "AI is a co-worker in the workflow itself, not a feature bolted onto an unchanged human workflow"; line 53 contrast table: "AI is a co-worker in the workflow itself"; line 60: "the AI is a participating colleague in the actual production of accountability-bearing work-products"; line 71: "AI-as-co-worker means AI does the bulk of the work" negative claim)
+
+**Canonical**: The relational claim that the AI runtime participates in workflow as a CO-WORKER — a colleague in the actual production of accountability-bearing work — distinct from "AI as tool" / "AI as assistant" / "AI as oracle". The co-worker frame is what axis-1 architectural support enables; without it, AI defaults to tacked-on convenience-feature mode.
+
+**What it is**: The categorical role-claim about AI's participation. When AI is a co-worker:
+- AI participates in real work output (drafts, retrieves, decides, acts) — not just suggesting / summarizing on the side
+- AI shares awareness of workflow state across sessions (axis-1 mechanisms enabling persistent state across sessions)
+- AI orchestrates work alongside the practitioner
+- AI is held to source-grounding / audit / authorship discipline like any colleague producing accountability-bearing work
+
+The co-worker frame is operational, not metaphysical: it's about architectural commitments that PERMIT AI to act co-worker-shaped (vs tool-shaped). Whether the AI "feels" like a colleague is irrelevant; whether the architecture treats AI's outputs as colleague-grade work-products is what counts.
+
+**What it is NOT**:
+- Not "AI as tool" — tools don't share workflow state; co-worker does
+- Not "AI as assistant" — assistant frames are subordinate; co-worker frame implies equal-grade-of-work participation
+- Not "AI as oracle" — oracle delivers answers and the human submits them; co-worker produces work alongside the human under shared accountability discipline
+- Not anthropomorphism — co-worker is the architectural-stance label, not a claim about AI sentience or agency
+- Not full-autonomous-agent — co-worker still operates under practitioner-authority gates per axis 3 (authority binding mechanism); colleague-grade autonomy, not unrestricted
+
+**Cross-archetype illustration**: co-worker frame applies wherever axis-1 architectures deploy:
+- Practitioner-shape (PBS-Schulz): planner + AI-co-worker drafting Begründung together
+- Legal practice: lawyer + AI-co-worker drafting brief together
+- Research lab: researcher + AI-co-worker drafting/reviewing manuscript together
+- Auditor: auditor + AI-co-worker working through findings together
+
+Same role-shape across archetypes; differs by what work is produced.
+
+**Boundary test**: Three questions:
+1. Does AI participate in the work-PRODUCTION (drafting, deciding, acting) or stay on the side (suggesting, summarizing, formatting)? → if production, co-worker; if side, tool/assistant
+2. Does AI share workflow state across sessions, or restart fresh each time? → if shared, co-worker; if fresh, tool
+3. Is AI's output held to the same discipline (source-grounding / audit / defensibility) as the practitioner's? → if yes, co-worker; if relaxed, tool/assistant
+
+**Cardinality + lifecycle**: N/A — co-worker is a relational claim/mode, not an instance-having entity. The frame applies whenever axis-1 architectures are deployed and the AI runtime operates within them. Mode state can SHIFT over deployment lifetime (architectural deepening realizes co-worker frame more fully; category collapse degrades it).
+
+**Composes with**:
+- `intertwining (axis 1)` — co-worker IS the relational frame intertwining establishes
+- `intertwined AI` — positive mode where co-worker frame is realized
+- `tacked-on AI` — failure mode where co-worker frame collapses to tool-frame
+- `category collapse` (forthcoming) — the force that breaks the co-worker frame regardless of architectural intent (host environment can collapse co-worker to tool-shape)
+- `practitioner` — the human side of the co-worker pairing
+- `substrate` (Instance aspect) — the runtime that occupies the co-worker role
+- `mechanism` — co-worker frame requires axis-1 mechanisms (persistent state, orchestration, source-grounding, audit emission, authority binding)
+
+**Source**:
+- VISION (`VISION.md`) lines 27, 53, 60, 71 (axis 1 framing + contrast table + negative-claim qualifier)
+- Locked GLOSSARY entries: `intertwining (axis 1)`; `practitioner`; `intertwined AI`
+
+**See**:
+- `intertwining (axis 1)` (which establishes co-worker frame)
+- `intertwined AI` (positive realization)
+- `tacked-on AI` (failure mode contrast)
+- `practitioner` (human side of the pairing)
+- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3 — the mechanisms enabling co-worker frame)
+
+---
+
 ## defensibility
 
 - **Class**: DERIVED (property/test defined in VISION axis 3; not a primitive with instances but the operational criterion that axis-3 architectures must satisfy)
@@ -539,6 +600,70 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 
 ---
 
+## intertwined AI
+
+- **Class**: DERIVED (positive axis-1 mode; the success state)
+- **Layer**: cross-cutting
+- **Axis**: axis-1 (the success state of axis-1)
+- **VISION usage**: directly used (`VISION.md` line 37 axis-1 contrast table; line 53 contrast table; line 60: "real intertwining where the AI is a participating colleague")
+
+**Canonical**: The positive realization of axis 1 — AI deeply embedded in workflow as co-worker; participates in real work production; cross-session state awareness; orchestration-aware; held to colleague-grade discipline. Per VISION axis 1: the success state architectures should target.
+
+**What it is**: The architectural success state for axis 1. Concrete markers:
+- AI shows up at workflow handoff points (review, send, response handling) without being explicitly invoked
+- AI's output composes into work artifacts (Begründung paragraphs, brief sections) rather than living in side-channel chats
+- Cross-session work continues seamlessly; AI knows what was decided last week
+- Sparring (axis 2) fires within work-production, not as a separate "review" step (axis-2 activates within axis-1 intertwining; per VISION line 43 axis-interaction: tacked-on sparring is still axis-1 failure)
+
+Intertwined AI is the operational success state for which axis-1 architectural support exists.
+
+**What it is NOT**:
+- Not "more AI" or "better AI" — intertwined is about INTEGRATION DEPTH, not capability
+- Not full-autonomous-agent — intertwined still operates under practitioner-authority gates (axis 3)
+- Not the same as "AI agent" generically — most "AI agent" demos are still tacked-on (per VISION line 60); intertwined is the deep-end version
+- Not a UX claim — intertwined is architectural-shape claim, not a feeling or interaction-quality claim
+
+**Cross-archetype illustration**:
+- Practitioner-shape (PBS-Schulz): planner + AI work the B-Plan project across many sessions; AI knows project state, runs review at relevant moments, drafts Begründung paragraphs that compose into the artifact
+- Legal practice: lawyer + AI work the matter; AI tracks case state across sessions, drafts brief sections, runs citation verification at appropriate workflow stages
+- Research lab: researcher + AI work the manuscript; AI knows methodology decisions, drafts results sections, runs literature checks during writing
+- Auditor: auditor + AI work the audit; AI tracks finding state, drafts audit-report sections, runs source verification
+
+**Mixed-state common in transition deployments**: workspaces commonly have PARTIAL intertwining — some workflow stages intertwined (drafting + review where AI co-works), other stages tacked-on (send + response where AI is on the side). Mode state can shift per workflow stage; full intertwining is the target architecture, transition deployments evolve toward it.
+
+**Boundary test**: Three questions (intertwined-success markers):
+1. Does AI participate at workflow handoff points without explicit invocation? → if yes, intertwined
+2. Does AI output compose into work artifacts (vs side-channel chat)? → if yes, intertwined
+3. Does AI track work state across sessions? → if yes, intertwined
+
+All three resolving "intertwined-side" = axis 1 succeeding.
+
+**Cardinality + lifecycle**: N/A — operational mode, not instance. The mode is realized whenever axis-1 mechanisms are in place AND practitioner uses them as designed. Mode state shifts in BOTH directions over deployment lifetime: tacked-on → intertwined as architecture deepens (mechanism additions, workflow integration); intertwined → tacked-on as category collapse degrades (host-UX changes, workflow-bypass patterns).
+
+**Composes with**:
+- `intertwining (axis 1)` — intertwined AI IS the success state of this axis
+- `tacked-on AI` — failure mode contrasted; same axis, opposite shape
+- `co-worker` — the relational frame intertwined AI realizes
+- `category collapse` (forthcoming) — the force that degrades intertwined → tacked-on regardless of architectural intent
+- `sparring (axis 2)` — axis-2 activates WITHIN axis-1 intertwining; sparring fires within work-production, not as separate review step (VISION line 43 axis-interaction)
+- `workflow` — what intertwined AI intertwines WITH (intertwining requires workflow to embed in)
+- `practitioner` — the human side of the co-worker pairing
+- `substrate` (Instance aspect) — the runtime that operates intertwined
+- `mechanism` — intertwined AI requires axis-1 mechanisms (persistent state, orchestration, source-grounding, audit emission, authority binding)
+
+**Source**:
+- VISION (`VISION.md`) lines 37, 53 (axis-1 contrast tables); line 60 (deep-end intertwining claim); line 43 (axis-interaction: axis-2 within axis-1)
+- Locked GLOSSARY entries: `intertwining (axis 1)`; `co-worker`
+
+**See**:
+- `intertwining (axis 1)` (the architectural commitment intertwined AI realizes)
+- `tacked-on AI` (failure-mode contrast)
+- `co-worker` (relational frame)
+- `workflow` (what gets intertwined with)
+- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
+
+---
+
 ## intertwining (axis 1)
 
 - **Class**: DERIVED (claim/mode defined in VISION)
@@ -561,9 +686,9 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Boundary test**: ask "is the AI a participating colleague in actual work production, or a discrete convenience feature on the side?" If feature-on-the-side → tacked-on AI (failure mode for axis 1).
 
 **Composes with**:
-- `tacked-on AI` — the failure mode contrasted (canonical entry forthcoming)
-- `intertwined AI` — positive mode (canonical entry forthcoming)
-- `co-worker` — relational claim about AI's mode of participation (canonical entry forthcoming)
+- `tacked-on AI` — the failure mode contrasted
+- `intertwined AI` — positive mode (the success state of this axis)
+- `co-worker` — relational claim about AI's mode of participation
 - `trust mechanisms` — class of axis-1 mechanisms (collective term; per-mechanism detail in ARCH Layer 3)
 - `workflow` — what intertwining intertwines WITH
 - `category collapse` — risk to axis 1 (canonical entry forthcoming)
@@ -1193,6 +1318,70 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - `Framework C scope` (where substrate definitions live)
 - `workspace` (which selects exactly one substrate)
 - ARCH Layer 3 substrate-detail topics (placeholder until Phase 3 — Substrate Protocol method set; per-substrate implementation detail; deployment-tier framing; eval-framework integration; archived material to consult: `substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`)
+
+---
+
+## tacked-on AI
+
+- **Class**: DERIVED (failure mode of axis 1; the contrast / anti-pattern)
+- **Layer**: cross-cutting
+- **Axis**: axis-1 (failure mode of axis-1)
+- **VISION usage**: directly used (`VISION.md` line 37 + 53 axis-1 contrast tables; line 43 axis-interaction: "Tacked-on but well-designed sparring is still tacked-on (axis 1 failure)"; line 60: "Most 'AI agent' demos are tacked-on"; line 90 axis-1 falsification: "falsified if practitioner deployments show better outcomes from tacked-on features"; line 150 + 205 + 225: category collapse explicitly produces tacked-on shape)
+
+**Canonical**: The architectural failure mode for axis 1 — AI as discrete convenience-feature bolted onto an unchanged human workflow; no cross-session state; no orchestration awareness; no colleague-grade discipline. Per VISION: the contrast that makes axis 1 concrete; what intertwining is NOT.
+
+**What it is**: The architectural anti-pattern. Concrete markers of tacked-on:
+- AI provides convenience features (summarize this; format that; suggest synonyms) on the side of unchanged workflow
+- Workflow itself is unchanged — practitioner drafts, reviews, sends as before; AI is a side-tool not a co-worker
+- No cross-session memory: each interaction starts fresh
+- AI output isn't held to source-grounding / audit / defensibility discipline (because it doesn't compose into accountability-bearing work-products)
+- Most "AI agent" demos and most current AI-product integrations are tacked-on by default — adding "AI to existing tool" usually preserves the tool-shape and adds AI-as-feature
+
+Tacked-on AI is the LANDSCAPE DEFAULT against which axis 1 deliberately positions; recognizing it requires understanding what intertwining looks like in contrast.
+
+**What it is NOT**:
+- Not "bad AI" or "low-capability AI" — tacked-on can be technically excellent and still be tacked-on (a brilliant AI summarizer that doesn't change workflow shape is still tacked-on)
+- Not "AI assistant" specifically — AI assistants CAN be intertwined or tacked-on depending on architectural integration depth; the failure mode is structural, not naming
+- Not the same as "tool use" — AI using tools is a substrate capability; tacked-on is about whether AI participation reshapes workflow
+- Not a moral failing — tacked-on is the SAFE DEFAULT; intertwining requires deliberate architectural choice + workflow as precondition
+
+**Cross-archetype illustration** (tacked-on failure modes per archetype):
+- Practitioner-shape: planner uses AI to summarize sources but drafts Begründung manually with no AI participation in argumentation = tacked-on
+- Legal practice: lawyer uses AI for legal research lookup but writes brief without AI co-drafting = tacked-on
+- Research lab: researcher uses AI to format citations but writes manuscript without AI methodology engagement = tacked-on
+- Auditor: auditor uses AI to spell-check report but writes findings without AI evidence-traversal = tacked-on
+- Generic-knowledge-work: any AI-in-text-editor where AI suggests improvements on already-drafted text = tacked-on by default
+
+Same anti-pattern shape across archetypes: AI on the side, not in the workflow. Mixed-state common in transition deployments — partial intertwining at some workflow stages with tacked-on at others; recovery starts by deepening architecture at the tacked-on stages.
+
+**Boundary test**: Three questions (mirror of intertwined AI; tacked-on markers):
+1. Does AI only participate when explicitly invoked? → if yes, tacked-on
+2. Does AI output live in side-channel chat (doesn't compose into artifacts)? → if yes, tacked-on
+3. Does AI restart fresh each session with no work-state awareness? → if yes, tacked-on
+
+Any "tacked-on-side" answer = axis 1 at risk; all three = full tacked-on failure.
+
+**Cardinality + lifecycle**: N/A — failure-mode shape, not instance. The mode manifests whenever axis-1 mechanisms are absent OR the workflow precondition is missing OR category collapse forces tacked-on shape regardless of intent. Mode state can shift in BOTH directions: tacked-on → intertwined via architecture deepening; intertwined → tacked-on via category collapse / host-UX changes / workflow-bypass.
+
+**Composes with**:
+- `intertwining (axis 1)` — tacked-on AI is the failure mode for this axis
+- `intertwined AI` — positive mode contrasted
+- `co-worker` — the relational frame tacked-on AI fails to realize
+- `category collapse` (forthcoming) — the risk that produces tacked-on regardless of architectural intent (host environment forces tacked-on shape per VISION line 150)
+- `workflow` — tacked-on AI exists outside the workflow (workflow continues unchanged); intertwined exists within
+- `practitioner` — the human side that operates without AI co-worker participation in the tacked-on mode
+- `substrate` (Instance aspect) — the runtime, in tacked-on mode, doesn't share workflow state architecturally
+
+**Source**:
+- VISION (`VISION.md`) lines 37, 43, 53, 60, 90 (falsification), 150 (category-collapse connection), 205, 225 (axis-1 check)
+- Locked GLOSSARY entries: `intertwining (axis 1)`; `intertwined AI`
+
+**See**:
+- `intertwining (axis 1)` (the axis tacked-on fails)
+- `intertwined AI` (positive contrast)
+- `co-worker` (relational frame failed)
+- `category collapse` (the force that produces tacked-on regardless of intent)
+- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
 
 ---
 

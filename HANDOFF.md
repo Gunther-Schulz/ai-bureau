@@ -89,6 +89,10 @@ This is the running session log for the **foundational rebuild** launched sessio
     - All 3 sharpening skills updated with auto-add-to-BACKLOG expectation: when sharpening / audit surfaces forward-references / deferred items, add corresponding entries to BACKLOG under relevant phase section in same commit.
     - Cascade: MAINTENANCE.md 5-layer table updated (BACKLOG added to Layer 0); HANDOFF.md anchors list + session-start reading order updated; DISCIPLINES.md session-start reading reference updated; HANDOFF.md "Future ROADMAP items" + "Phase 3 ARCH considerations" sections collapsed to BACKLOG pointer (deduplicated).
 
+15. **Axis-1 mode triplet locked**: `co-worker` + `intertwined AI` + `tacked-on AI` (Round 1 full-monty + Round 2 sharpening with 7 EXPANSIONS, 0 REVISIONS — locked stable). DERIVED class — modes/claims for axis 1, parallel structure to defensibility (axis-3 test). Cross-references form a triangle (co-worker = relational frame; intertwined AI = positive realization; tacked-on AI = failure mode contrast). Round 2 surfaced parallel-structure pattern: axis-2 has answer-machine/oracle/validator failure modes (per VISION line 144 Ming research); axis-3 has rubber-stamping. Added to BACKLOG as Phase 2 GLOSSARY items.
+    - Cascade-pass: TOC §7 (3 forthcoming → live); intertwining (axis 1) Composes-with (forthcoming markers stripped for the 3 modes); cross-archetype illustrations include mixed-state evolution paths.
+    - GLOSSARY: 25 → 28 locked entries.
+
 **Phase 1.5 outcome (locked session 16)**:
 
 Layered doc structure designed and persisted in `MAINTENANCE.md` (Layer 0; read at session start). 5-layer model: Entry → Foundations → Overview → Architecture detail → DRs → Specs, plus Memory orthogonal. Cascade discipline elevated to top-level rule (per user direction): all docs stay in consistent state; changes propagate up/down/sideways in same commit.
