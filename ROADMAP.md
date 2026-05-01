@@ -716,7 +716,7 @@ multi-round sharpening work.
   - Audit Protocol granularity pluggability (claim-level baseline + action-level overlay + citation-only)
   - Sparring Protocol intensity pluggability (always-on + optional + none)
   - Trust/Governance Protocol pluggability (practitioner-judgment + budget-policy + none)
-  - Long-running runtime substrate adapter (referenced from R3a in-process MCP work; needed for autonomous-business shape)
+  - Time Protocol pluggability (turn-based default + long-running extension shape) — the *abstraction* lands in #25; concrete long-running runtime substrate adapter implementation is deferred per DR D4 to first autonomous-business shape implementation (substrate adapter is shape-extension-driven; build when shape needed). #25 locks the Protocol surface so D4 implementation slots cleanly later
   - Practitioner-shape extension reference implementation (PBS pioneer = practitioner-shape) — validates contract end-to-end
   - Option B structural floor implementation: anti-Art-25-trap gate (specialist conformity manifest Pydantic gate) + claim-level audit baseline (always emitted) + human authority chain enforcement (configurable granularity)
 - **Order (locked session 14 reorder)**: **POSITION 1 in pre-RAG queue** — DESIGN first as architectural foundation (locks shape extension contract + Option B floor specs; downstream Bundle design + #11 + #24 inherit). IMPLEMENTATION can wait for #11 substrate (specialist primitive operational in Cowork plugin shape) + #9 entity gate. Sequence: **#25 design** → #20 → Bundles → #11 → #25 implementation lands within #11 → #24 → #19. BEFORE marketplace v3 (shape extension contract = marketplace listing schema for shape distribution).
