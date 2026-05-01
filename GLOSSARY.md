@@ -117,6 +117,8 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 
 **Renaming note (A2 — primitive-set lens, applied session 16)**: the `actor_kind: ai_runtime` value was renamed FROM `actor_kind: skill` to eliminate naming collision with the `skill` primitive (the atomic work-logic unit within a specialist). The previous overload — `skill` meaning both "work-logic unit" AND "actor kind for AI-fired actions" — is corrected. `ai_runtime` aligns with substrate's tri-aspect Instance nomenclature.
 
+**Cardinality + lifecycle** (per EA3 Round 3 audit): Actor cardinality per workspace = 1 ai_runtime (substrate's Instance is singular per workspace) + 1+ humans (practitioner-record(s); per shape — practitioner-shape mandates ≥1, multi-practitioner-shape allows N) + N external actors (peers, clients, external systems contacting the workspace; bounded by which adapters are activated). Lifecycle = practitioner-record created at workspace setup OR per-practitioner-addition; ai_runtime exists for duration of substrate activation; external actor records emerge when external entities first interact (lazy-creation per archived governance-and-identity-sourcing.md).
+
 **What it is NOT**:
 - Not a `practitioner` — practitioner is one specific actor kind (a human-practitioner-author); actor is the broader category that also includes AI runtimes and external systems
 - Not the AI runtime — AI runtime is one actor kind (typically `actor_kind: ai_runtime` for substrate-running-instance-fired actions); actor is the abstraction
@@ -141,6 +143,7 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 - `practitioner` — practitioner-record is one specific actor kind (human-practitioner-author)
 - `audit trail` — actors' events compose into audit trail (specific mechanism instance; canonical detail in ARCH Layer 3 per A1, not a separate GLOSSARY entry)
 - `skill` — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
+- `work-unit` — actors emit events scoped to work-units; actor attribution is per-work-unit in audit trail
 
 **Source**:
 - Locked GLOSSARY entries: `mechanism` ("`actor_kind` enum (declared on every audit event; framework-level guarantee)"); `Owner B scope` ("Actor (event emitter — could be human-practitioner or AI runtime)"); `skill` (composes-with: "skills emit AuditEvents via the AI runtime that fires them — `actor_kind: ai_runtime`")
@@ -286,6 +289,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 - `mechanism` — the AuditEvent schema IS a framework-mechanism (atomic interface contract)
 - `skill` — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
 - `defensibility` (forthcoming) — events are the structural substrate enabling axis-3 defensibility (reconstructible reasoning chain)
+- `work-unit` — events are emitted scoped to work-units; each event records its work-unit attribution per archived audit-trail-v2 schema (every event traceable to the work-unit it concerns)
 
 **Source**:
 - Locked GLOSSARY entries: `mechanism` (lists "AuditEvent schema (Pydantic model contract for audit emission)" as canonical mechanism example); `actor` (events are emitted by actors)
@@ -537,11 +541,10 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 
 **Members**:
 - workspace itself (workspace.md selecting shape + substrate + active specialists)
-- workspace-scope managed entities:
+- workspace-scope managed entities (universal across shapes):
   - practitioner-record (system representation; per `practitioner` entry — bipartite: human cross-cutting, record at Owner B)
-  - Actor (event emitter; one of `actor_kind: human / skill / external`)
-  - Client (engagement target; canonical entry forthcoming)
-  - additional managed entities per workspace's needs
+  - Actor (event emitter; one of `actor_kind: human / ai_runtime / external`)
+  - additional managed entities per shape-policy mandate (NOT framework-level): each shape may mandate its own engagement-target managed entity — e.g., practitioner-shape mandates `Client` (engagement target for accountability-bearing service); autonomous-business-shape mandates `Customer`; research-lab-shape mandates `Funder` / `Co-author` / `Institution`; etc. Per RA4 (Round 3 audit, session 16): `Client` was previously enumerated here as universal; corrected to shape-policy-mandated since not universal across archetypes (personal-OS-shape has no engagement-target).
 - specialist instance content (entities owned within an active specialist instance — distinct from specialist DEFINITION which is Framework C)
 - work-unit instances (kind specialist-defined: `project` for planning bureau; `matter` for legal practice; `case` for medical practice; `engagement` for consulting; `manuscript` for research; `audit` for accounting)
 
@@ -634,6 +637,8 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 **What it is**: The role around which axis 3 (authorship preservation) is built. The practitioner is the human who signs the Begründung, the brief, the manuscript, the audit report — and who must be able to defend it later (the defensibility test). Architecturally this manifests in two aspects: the HUMAN itself (a person in the world; not a system entity; cross-cutting) AND a system RECORD (a managed entity at Owner B representing the practitioner — name, credentials, signing authority, role bindings). The HUMAN bears accountability legally + professionally; the RECORD is the system's stand-in that makes events traceable to a named person.
 
+**Cardinality + lifecycle** (per EA4 Round 3 audit): Practitioner-record cardinality per workspace = 1+ depending on shape (practitioner-shape solo workspace = 1; multi-practitioner-shape partnership workspace = N; legal-entity-shape workspace = N named practitioners under firm context). Lifecycle: practitioner-record created at workspace setup (initial practitioner) OR per-practitioner-addition (subsequent practitioners joining a multi-practitioner workspace). Mutability = mutable-with-audit (changes to credentials, signing authority, role bindings emit audit events; never silently rewritten). Records persist through workspace lifetime; deactivation semantics (practitioner leaving the firm) settled at ARCH Layer 3 — preliminary lock: deactivation marks record dormant, not deleted (preserves audit-trail attribution to historic outputs).
+
 **What it is NOT**:
 - Not an `actor` — actor is the broader event-emitter category; practitioner is one specific actor kind (`actor_kind: human` for practitioner-emitted events)
 - Not a `specialist` — specialist is composable codified expertise (a tool the workspace activates); practitioner is the human author who employs the workspace's specialists
@@ -661,6 +666,7 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - `authorship preservation (axis 3)` — practitioner is the role axis 3 protects
 - `Owner B scope` — practitioner-RECORD lives here as workspace-scope managed entity (the HUMAN aspect doesn't "live" anywhere in the system; cross-cutting)
 - `defensibility` (forthcoming) — operational test of axis 3; the test asks "will the practitioner be able to defend this six months from now?"
+- `work-unit` — practitioners are the human authors signing work-unit outputs; defensibility test asks "will the practitioner defend THIS work-unit's outputs?" (the work-unit is the bounded artifact per which defensibility is judged)
 
 **Source**:
 - VISION (`VISION.md`):
@@ -942,6 +948,8 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 
 **What it is**: The cohesion abstraction for codified expertise. A specialist packages everything needed to address a defined competence area into a single distributable unit. Workspaces activate specialists via `workspace.md`'s `specialists_active` field; an activated specialist runs within the workspace's substrate, contributing its skills + entities + memory to the workspace's work output. Specialists are designed to be reusable across workspaces (e.g., `citation-verification` works in legal, research, and planning workspaces); marketplace distribution (per archived ROADMAP v3) treats specialists as the canonical distributable unit.
 
+**Cardinality + lifecycle** (per EA1 Round 3 audit): Specialist DEFINITIONS are immutable Framework C distributables. Specialist INSTANCES are activated/deactivated by `workspace.md` `specialists_active` changes; multiple specialists active per workspace simultaneously. Specialist instance content (entities owned by the deployed specialist instance — e.g., bausteine, work-units of the specialist's kind) lives at Owner B as workspace-scope managed entities; **persists across activation/deactivation cycles** (deactivating a specialist doesn't delete its accumulated content; preserves practitioner work). ARCH Layer 3 settles instance-content destruction semantics (deletion-with-audit vs archival; on workspace dissolution).
+
 **What it is NOT**:
 - Not a Pattern A primitive — specialist has NO multiple interchangeable implementations (the `planning-document-work` specialist is one specific bundle, not interchangeable with another impl)
 - Not a `workspace` — workspaces activate specialists; specialist is one of many elements a workspace activates
@@ -973,6 +981,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - `mechanism` — specialists use framework mechanisms (audit emission, source-grounding, sparring) via the substrate at runtime
 - `shape` — shape policies may mandate certain specialists or constrain what's permitted (e.g., practitioner-shape may mandate sparring-relevant specialists)
 - `adapter` — specialists may bundle adapter implementations as part of their package (per locked `adapter` entry)
+- `work-unit` — specialists DEFINE work-unit kinds (the kind discriminator lives in specialist DEFINITION at Framework C); workspace's active specialists determine which work-unit kinds are available in that deployment
 
 **Source**:
 - VISION (`VISION.md`):
@@ -1050,6 +1059,8 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 
 **What it is**: A domain-specific structure of work. Workflows are pattern-level concepts: "how does B-Plan-Begründung drafting actually proceed?" or "how does a legal brief get from intake to filing?" Workflows include activities (drafting, reviewing, sending), artifacts (Begründung, Stellungnahme, signed brief), decisions (which argumentation type, which authorities to address), and handoffs (between sessions, between humans, between AI and human). Sessions execute parts of workflows; specialists provide the skills that progress workflow steps; the architecture's intertwining requirements (persistent state, orchestration, audit, etc.) are what allow AI to participate in workflows as co-worker rather than as discrete-feature-tool.
 
+**Cardinality + lifecycle** (per EA2 Round 3 audit): Workflows are SPECIALIST-DEFINED — each specialist DEFINITION declares the workflow patterns it supports for its competence area (e.g., `planning-document-work` specialist defines the B-Plan-Begründung drafting workflow). Cardinality per workspace = sum of workflows defined across active specialists. Lifecycle = workflow patterns are immutable (defined in specialist DEFINITION at Framework C); workflow EXECUTIONS run against work-units over time and span many sessions. ARCH Layer 3 settles workflow representation schema + handoff semantics + multi-session continuity.
+
 **What it is NOT**:
 - Not a `session` — session is one execution unit; workflow is the broader pattern that sessions execute parts of
 - Not a `skill` — skill is atomic work logic that fires on a trigger; workflow is the broader pattern of work in which many skills fire
@@ -1075,6 +1086,7 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 - `skill` — skills are atomic work-logic units that progress workflow steps
 - `specialist` — specialists provide bundles of skills relevant to specific workflow stages
 - `workspace` — workspaces SUPPORT workflows (workspace's deployed specialists + state enable workflow progression)
+- `work-unit` — workflows EXECUTE AGAINST work-units; one workflow may progress one work-unit through stages, or multiple workflows in sequence may progress the same work-unit (drafting workflow → review workflow → send workflow against same project)
 
 **Source**:
 - VISION (`VISION.md`):
@@ -1095,7 +1107,7 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 ## work-unit
 
 - **Class**: PRIMITIVE (atomic; the deployment-bound work-artifact unit; specialist-defines kind)
-- **Layer**: cross-cutting (work-units sit at Owner B as workspace-scope managed instances; the KIND is specialist-defined at Framework C — kind discriminator lives in specialist DEFINITION, instance content at Owner B)
+- **Layer**: cross-cutting — bipartite-candidacy under examination per Round 3 audit (similar shape to workflow's A3 hedge): the KIND DISCRIMINATOR lives in specialist DEFINITION (Framework C); the INSTANCE lives at Owner B as workspace-scope managed entity. Could be reclassified bipartite Pattern B (parallel to specialist) if Phase 3 ARCH determines kind-discriminator deserves multi-aspect treatment. Currently single-aspect cross-cutting.
 - **Axis**: cross-axis (work-units are the artifact-containers all axes operate against — axis-1 intertwined work happens IN work-units; axis-2 sparring fires DURING work-unit progression; axis-3 authorship attaches TO work-units)
 - **VISION usage**: implicit (VISION's "interactive practitioner workflows" line 7 produces work-products; work-unit is the deployment-bound container for those products; not directly named in VISION)
 
@@ -1159,7 +1171,9 @@ The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at 
 
 **Canonical**: The deployment-instance container that integrates framework mechanisms + shape policies + active specialists + practitioners + state into a coherent unit for accountability-bearing work; selects exactly one shape via its `workspace.md`; lives at Owner B scope.
 
-**What it is**: The top-level deployment primitive — what gets bound when a practitioner deploys PBS for their work. A workspace is the central Owner B instance: its `workspace.md` selects shape + substrate + active specialists; its workspace-scope managed entities (practitioner-record, Actor, Client) live at Owner B; its layered content (references, doctypes, bausteine per Layer A) varies by domain/state context (configured via workspace's `scope.{domains, states}`).
+**What it is**: The top-level deployment primitive — what gets bound when a practitioner deploys PBS for their work. A workspace is the central Owner B instance: its `workspace.md` selects shape + substrate + active specialists; its workspace-scope managed entities (practitioner-record, Actor, plus shape-policy-mandated managed entities like `Client` in practitioner-shape, `Customer` in autonomous-business-shape, etc. — per RA4 Round 3 audit, engagement-target entities are shape-policy-mandated, NOT framework-level) live at Owner B; its layered content (references, doctypes, bausteine per Layer A) varies by domain/state context (configured via workspace's `scope.{domains, states}`).
+
+**Cardinality**: exactly 1 workspace per "deployment" (where deployment = one bound runtime: a single git-clone-instance + active substrate + workspace.md configuration; multi-deployment scenarios = multiple workspaces). Per EA5 Round 3 audit: "deployment" definition flagged for Phase 3 ARCH sharpening — current preliminary lock is "one git-cloned + activated workspace.md per deployment."
 
 **What it is NOT**:
 - Not the `framework` — framework is the universal mechanism layer (what's POSSIBLE); workspace is one deployment instance built from framework + shape policies
