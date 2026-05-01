@@ -110,19 +110,22 @@ Known instances (preliminary-locked; more may surface):
 
 ### Other multi-aspect primitives (NOT Protocol pattern)
 
-Some primitives have multi-aspect / dual-nature structure but do NOT follow the Protocol pattern:
+Some primitives are **multi-aspect** (manifest at multiple scopes) but do NOT follow the Protocol pattern. The COUNT of aspects varies:
 
-- **specialist** — bipartite: DEFINITION (Framework C; distributable bundle) + INSTANCE-CONTENT (Owner B; entities owned within the deployed specialist). NO multiple implementations: a specialist IS its definition.
-- **practitioner** — bipartite of different shape: HUMAN (cross-cutting; the actual person; not "placed") + RECORD (Owner B; system representation).
+- **Pattern A primitives** (Protocol pattern; tri-aspect): substrate, adapter, protocol — Surface + Implementations + Instance/binding (3 aspects across mechanism / Framework C / Owner B)
+- **specialist** (Pattern B; bipartite): DEFINITION (Framework C; distributable bundle) + INSTANCE-CONTENT (Owner B; entities owned within the deployed specialist) — 2 aspects. NO multiple implementations: a specialist IS its definition.
+- **practitioner** (Pattern C; bipartite of different shape): HUMAN (cross-cutting; the actual person; not "placed") + RECORD (Owner B; system representation) — 2 aspects.
 
-Each has its own dual-nature description in its GLOSSARY entry; not generalized as Protocol pattern. Don't conflate.
+The Layer tag value `multi-aspect` covers all multi-scope primitives regardless of count. Each entry's body specifies the count + which aspects + which scopes.
+
+Each has its own multi-aspect description in its GLOSSARY entry; only Pattern A is generalized as a recurring named pattern. Don't conflate B / C with A.
 
 ### Glossary entry classification
 
 Each GLOSSARY entry tags itself with:
 
 - **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION
-- **Layer**: framework-mechanism / shape-policy / cross-cutting / dual-nature
+- **Layer**: framework-mechanism / shape-policy / cross-cutting / multi-aspect
 - **Axis**: axis-1 / axis-2 / axis-3 / cross-axis (where applicable)
 - **VISION usage**: directly used in VISION / implicit / derived-from-VISION-terms / framework-meta
 

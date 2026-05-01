@@ -7,7 +7,7 @@ Canonical source for term definitions across the pbs-bureau corpus. Per `MAINTEN
 Each entry is tagged on 4 axes (per `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section):
 
 - **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION
-- **Layer**: framework-mechanism / shape-policy / cross-cutting / dual-nature / framework-meta
+- **Layer**: framework-mechanism / shape-policy / cross-cutting / multi-aspect / framework-meta
 - **Axis**: axis-1 / axis-2 / axis-3 / cross-axis (where applicable)
 - **VISION usage**: directly used / implicit / derived-from-VISION-terms / framework-meta
 
@@ -132,7 +132,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - shape definitions (policy bundles for an archetype)
 - substrate definitions (runtime contracts: Claude Agent SDK, MS AF, future)
 - protocol-implementation definitions (concrete impls: always-on-sparring, claim-level-audit, etc.)
-- specialist DEFINITIONS (canonical entry forthcoming; dual-nature primitive: DEFINITION here, INSTANCE-CONTENT in Owner B)
+- specialist DEFINITIONS (canonical entry forthcoming; bipartite multi-aspect primitive: DEFINITION here, INSTANCE-CONTENT in Owner B)
 
 **What it is NOT**:
 - Not for instances (those go to Owner B)
@@ -479,14 +479,14 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 ## substrate
 
-- **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — with **dual-nature** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
-- **Layer**: dual-nature (framework-mechanism for the Protocol surface; Framework C for implementations; cross-cutting at workspace runtime)
+- **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — **tri-aspect** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
+- **Layer**: multi-aspect (framework-mechanism for the Protocol surface; Framework C for implementations; Owner B at workspace runtime)
 - **Axis**: cross-axis (substrate hosts all axes' runtime behavior)
 - **VISION usage**: implicit (VISION doesn't directly use "substrate"; concept lives in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE + Framework C scope members)
 
 **Canonical**: A deployment runtime that workspaces run on — defines the agent loop, tool/MCP-server registration, permission flow, hook events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
 
-**What it is**: One of the framework's mechanism categories (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE). The substrate provides the runtime contract any workspace operates on. The Protocol surface (interface contract) is universal/shape-neutral; specific implementations differ in how they realize that surface (e.g., Claude Agent SDK = Anthropic plugin runtime; MS Agent Framework = Microsoft agentic framework). **Substrate is an instance of the Protocol pattern** (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"): Substrate Protocol Surface (mechanism; framework-level) + concrete Implementations (Framework C definitions: Claude Agent SDK, MS AF, future) + a running Instance bound to each workspace deployment (Owner B; via `workspace.md` `substrate:` field). NOT the same as specialist's dual-nature (specialist is bipartite definition+instance-content; no multiple implementations).
+**What it is**: One of the framework's mechanism categories (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE). The substrate provides the runtime contract any workspace operates on. The Protocol surface (interface contract) is universal/shape-neutral; specific implementations differ in how they realize that surface (e.g., Claude Agent SDK = Anthropic plugin runtime; MS Agent Framework = Microsoft agentic framework). **Substrate is an instance of the Protocol pattern** (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"): Substrate Protocol Surface (mechanism; framework-level) + concrete Implementations (Framework C definitions: Claude Agent SDK, MS AF, future) + a running Instance bound to each workspace deployment (Owner B; via `workspace.md` `substrate:` field). NOT the same as specialist's bipartite manifestation (specialist is definition+instance-content; no multiple implementations like substrate has).
 
 **What it is NOT**:
 - Not the `framework` itself — framework is the universal mechanism layer; substrate is one mechanism category within the framework
