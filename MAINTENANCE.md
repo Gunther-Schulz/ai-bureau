@@ -103,7 +103,7 @@ Some framework primitives recur with a structural shape: **Surface + Implementat
 Known instances (preliminary-locked; more may surface):
 
 - **substrate** (locked) — Substrate Protocol surface + concrete substrates (Claude Agent SDK, MS Agent Framework) + workspace's running substrate per `workspace.md`
-- **adapter** (canonical entry forthcoming) — Adapter Protocol surfaces per integration class + concrete adapters (e.g., gmail-adapter, lexware-adapter, MCP-protocol-based adapters) + workspace's active adapters
+- **adapter** — Adapter Protocol surfaces per integration class + concrete adapters (e.g., gmail-adapter, lexware-adapter, MCP-protocol-based adapters) + workspace's active adapters; Pattern A primitive distinct from substrate along internal-vs-external axis (per locked GLOSSARY entry)
 - **protocol** (architectural; canonical entry forthcoming) — the meta-concept: Coordination/Audit/Sparring/Trust/Time Protocol surfaces + their concrete implementations + per-shape-policy or per-workspace selection
 
 **Naming**: "Protocol pattern" with explicit disambiguation from **Pydantic Protocol** (the Python typing concept; `typing.Protocol`). The architectural Protocol pattern is broader — it describes pluggable-subsystem structure regardless of implementation technique.
