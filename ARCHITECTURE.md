@@ -16,8 +16,9 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.33 (session 15 — no-defer principle + preliminary-lock principle. Two coupled meta-architectural changes per user direction. v0.20 chronological-defer permission removed; replaced with watch-list mechanism naming awaited external signals. All prior decisions explicitly preliminary-locked; revisable when VISION ideal design demands. See "No-defer principle" + "Preliminary-lock principle" sections + memory `feedback_preliminary_lock.md` + sharpened `feedback_pattern_not_instance_defers.md` + `feedback_defer_instinct.md`.)**.
+Status: **v0.34 (session 15 — entity-md scope model restructure: three-category scope structure (Layer A / Owner B / Framework C) + Definition vs instance binding pattern (NEW architectural pattern). Replaces flat 6-axis scope enum. 3-round decision-design-sharpening locked the architectural foundation. See "Three-category scope model" section (replaces "Layering convention: scope orthogonality") + `docs/decisions/entity-md-scope-model-restructure.md`.)**.
 
+- **v0.33 → v0.34**: **Entity-md scope model restructure (session 15)**. Replaces flat 6-axis scope enum (universal/domain/state/specialist/workspace/project per session-13 #22 Sub-DR A) with three-category scope structure: **Layer A** (universal/domain/state — layered content; merge by specificity), **Owner B** (workspace/specialist/project — deployment-instance ownership), **Framework C** (shape/substrate/protocol/specialist DEFINITIONS — framework primitives; immutable; distributable). Each entity has exactly ONE category populated; Pydantic at-least-one-of validator enforces. Plus NEW **Definition vs instance binding pattern** — framework-primitive DEFINITIONS in Framework C; INSTANCE-SELECTION via workspace.md fields (Owner B) referencing definitions: `shape: <id>` (one), `substrate: <id>` (one; relocated from backend composition root), `specialists_employed: [<id>+]`, `protocol_overrides: {<axis>: <id>}` (Option B floor axioms NOT overridable). Plus **Specialist dual-nature** resolution (the only category-spanning primitive: definition in Framework C; scope in Owner B). 3-round decision-design-sharpening: round 1 full monty + 2 user-triggered rounds; 19 refinements (4 revisions + 15 expansions). Replaces ARCH "Layering convention: scope orthogonality" section with "Three-category scope model"; entity-md-spec §3 Layer 1 + §3.2 type namespacing rewrite + §4 Layer 2 schemas added for shape/substrate/protocol/specialist + §6 body conventions added; ROADMAP #25 scope expanded to incorporate three-category foundation + actual schema designs. Filesystem migration: `extensions/{shapes,substrates,protocols,specialists}/<id>/` → `extensions/framework/{shapes,substrates,protocols,specialists}/<id>/`. Pre-launch / no production entity-md instances persisted = essentially zero migration cost today. Decision record: `docs/decisions/entity-md-scope-model-restructure.md`.
 - **v0.32 → v0.33**: **No-defer principle (supersedes v0.20 chronological-defer permission) + Preliminary-lock principle (NEW top-level architectural principle) — session 15 user direction**. Two coupled meta-architectural changes. (1) **No-defer principle** replaces v0.20 "Defer ONLY for chronological reason" framing — that wording was structurally permissive (offered an escape hatch defer-instinct learned to wear as a chronological-defer-as-YAGNI mask; surfaced session 15 when AI applied "speculation about future framework primitives is up-front-cost defer territory" to reject framework-axis design — itself a chronological-defer-mask). New rule: **never defer**; if external information genuinely doesn't exist, surface as **watch-list entry** naming the specific external signal awaited (Phase 1 corpus deployment data; first-bind real workflow; regulatory ruling X; community-built shape extension; second-domain feedback). Watch-list entries have resolution mechanisms; defers languish. Two tests for "literally cannot decide today": external-information test (name specific external signal) + effort-asymmetry test (could we do the design today if we chose? if yes, NOT a chronological gap). Composed with sharpened memory entries. (2) **Preliminary-lock principle** (NEW top-level architectural principle) — every architectural decision in this repo is preliminary-locked. "Locked" vocabulary means current best position derived from available reasoning, NOT permanent. Subject to re-examination when VISION ideal design demands. Only persistent anchor: VISION axes (revise only on real-world falsification per VISION's own falsification criteria — extremely high bar). PBS is in deep design + exploratory phase; specs / DRs / ARCH / code all living drafts. Preliminary-lock is the prerequisite for Maintenance discipline rule 6 (periodic greenfield review) being meaningful. Vocabulary discipline: "Locked" = preliminary-locked; "Anchored" = VISION axes only; avoid "Settled" (false permanence). Memory: feedback_preliminary_lock.md (NEW) + feedback_pattern_not_instance_defers.md (sharpened to no-defer) + feedback_defer_instinct.md (sharpened to disguise-recognition). Reference card row updated.
 - **v0.31 → v0.32**: **Shape-extension framework + Option B architectural floor + competitive-landscape synthesis (session 14)**. Three coupled architectural additions: (1) **Shape-extension framework** — workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/` with default configs + shape-specific primitives; PBS pioneer = practitioner-shape extension reference implementation; layered approach formalized (OS framework workspace-shape-neutral + marketed product practitioner-focused). (2) **Option B architectural floor** — even shape-neutral framework primitives structurally enforce 3 accountability axioms regardless of shape: anti-Art-25-trap gate (specialist conformity manifest as Pydantic gate; impossible-by-construction per Make-wrong-shapes-impossible v0.21) + claim-level audit emission (decision provenance + sources[] + causes[]) + human authority somewhere in accountability-bearing output chain (configurable granularity: per-output / per-decision-class / per-policy / per-budget-cycle / per-specialist-installation). Other shapes can configure axis intensities (sparring optional vs always-on; audit overlay action-level on top of claim-level baseline; coordination event vs call) but cannot disable structural floor. (3) **Competitive-landscape research synthesis** — 4 OS deep-reads (Letta + OpenSail + PAI + Paperclip) + exhaustive commercial scan + DACH-specific (Beck-Noxtua / Phase0 / Langdock / Avoice / AutoSitu); 5 of 6 distinctness axes confirmed unique to PBS; ~10 adoption opportunities surfaced (~7 adopt + 3 defer). Cherry Ventures (Berlin) only published EU VC thesis-match. EU AI Act tailwind asymmetric in PBS favor (Art. 14 sparring; Art. 11/13/26(6) audit-by-construction; practitioner-as-deployer cleanest posture). NEW ROADMAP commitments: **#24 EU AI Act + DACH compliance specialist** (HARD REQUIREMENT before Aug 2026 production B-Plan use; cross-archetype `eu-ai-compliance` specialist + DACH-anchored extension; substrate-level additions for AuditEvent + retention defaults + specialist conformity gate); **#25 Shape extension framework + Protocol pluggability** (foundational; Tom Sawyer dynamic enablement; AFTER #11 + #9; BEFORE marketplace v3). Decision records: `docs/decisions/shape-extension-and-architectural-floor.md`, `docs/decisions/closest-neighbors-deep-read.md`, `docs/decisions/vision-realignment-session14.md`. VISION.md substantially updated (axis 2 framing as runtime mechanism; axis 3 scope-clarified to practitioner shape; new sections: scope clarification + counter-VISION engagement + negative space + temporal robustness + falsification + foundation expansion + lifecycle triggers + VISION≠ARCH boundary).
 
@@ -854,7 +855,7 @@ chase-six-sections pain when applying existing disciplines.
 
 | When you're asking… | Look here | One-line rule |
 |---|---|---|
-| Where does X live across scope axes (universal vs domain vs state vs specialist vs workspace vs project)? | Meta-rule 3 + scope-orthogonality layering convention | 6 axes, orthogonal; place at the **most-specific axis that doesn't lie** about the data |
+| Where does X live across scope categories? | Three-category scope model (v0.34) | **Three categories**, exactly ONE populated per entity (Pydantic at-least-one-of). **Layer A** (universal/domain/state — layered content; merge by specificity): place at the most-specific axis that doesn't lie about the data. **Owner B** (workspace/specialist/project — deployment-instance ownership): place at the natural owner of the entity. **Framework C** (shape/substrate/protocol/specialist DEFINITIONS — framework primitives; immutable; distributable): all framework-supplied primitives. Specialist is dual-nature (Framework C definition; Owner B scope for entities owned within instance) |
 | Should X be a Pydantic structured field or a markdown body section? | AI-as-runtime hybrid-shape principle | **Structured** for interfaces / identity / persistence / machine contracts; **prose** for semantics / rules / domain knowledge / process |
 | Should X be enforced structurally or by deployment-time convention? | Make wrong shapes impossible, not solvable | If gate / Pydantic / dispatch touches X on every read/write → **structural**. If AI applies X at mint-time / decision-time → **prose convention with audit**. **Sub-rule**: if external system / scheduler / cron needs to dispatch on X (per Gap A proactive time-driven triggers from #12 infrastructure-primitive review) → structural, even if conceptually "feels like" a rule |
 | Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply. **Reference-style entities** (citations, regulations, sources) pass via "active vs amended/overturned" lifecycle. **When 3-test passes, choose NEW type only if Layer-2 schema differs structurally from existing types**; otherwise reuse existing type with `category` field or scope distinction (e.g., funding sources reuse `reference` type with `category: funding-source`, not a new `funding_source` type) |
@@ -2873,70 +2874,135 @@ testability benefit at near-zero cost.
 
 ---
 
-# Layering convention: scope orthogonality (universal × domain × state × department)
+# Three-category scope model (v0.34 restructure session 15; supersedes v0.11 4-axis "scope orthogonality")
 
-(Demoted from meta-rule in v0.5 per design-review. It's a
-*layering pattern* applied to specific entity types, not a placement
-axis itself — it doesn't answer "where does this go?", it answers
-"once you know it's the kind of thing that layers, which subdirectory?". Extended in v0.11 with the department axis per #12.)
+> **v0.34 RESTRUCTURE per `docs/decisions/entity-md-scope-model-restructure.md`** (session 15): flat 6-axis enum (universal/domain/state/specialist/workspace/project — extended from session-13 #22 Sub-DR A) REPLACED with three explicit scope categories. Each entity has exactly ONE category populated. Plus NEW Definition vs instance binding pattern. The previous 4-axis scope orthogonality (universal × domain × state × department) is preserved within Category A; the rest of the previous flat enum (specialist/workspace/project) becomes Category B; framework primitives (shape/substrate/protocol + specialist DEFINITIONS) become Category C.
 
-Reference content, doctype registries, skeletons, bausteine, and
-department-specific configuration all decompose along **four**
-orthogonal axes:
+The architecture has **three scope categories**, each with distinct gate-dispatch semantics. A category answers: "what kind of placement is this?" — different from the layered-content concept that the prior framing emphasized.
 
-- **universal** — applies to every German Planungsbüro deploying
-  this app, regardless of planning domain or Bundesland.
-- **domain** — applies to bureaus working in a specific planning
-  domain (e.g. PV-FFA, Wind, Naturschutz, Innenentwicklung).
-  Multiple domains can be active simultaneously.
-- **state** — applies to bureaus working in a specific Bundesland
-  (BB, BW, BY, ..., TH). Multiple states can be active simultaneously.
-- **department** *(added v0.11 per #12)* — applies to a specific
-  capability area within an office (planning, project-management,
-  invoicing, brand-voice, legal-work, etc.). Opt-in per entry —
-  most existing entries stay in the original 3 axes; department-
-  specific entries declare the 4th. Multiple departments can be
-  active simultaneously per office.
+## Category A — Layer scope (layered content; merge by specificity)
 
-A bureau's effective content is its `(domains × states × departments)`
-selection (set in `office-config.yaml > scope.{domains,states}` and
-`departments.<name>`). Layered loaders merge the universal layer
-with each selected domain/state/department layer at runtime.
+The classical 3-axis layering (per v0.5 design-review demotion from meta-rule). Layer A entities decompose along three orthogonal axes:
 
-**Where this applies:**
+- **universal** — applies to every deployment, regardless of domain or jurisdiction
+- **domain** — applies to deployments in specific domains (e.g., PV-FFA, Wind, Naturschutz, Innenentwicklung; multiple domains can be active simultaneously)
+- **state** — applies to deployments in specific jurisdictions (e.g., BB, BW, BY, ..., TH; multiple states can be active simultaneously)
 
-- **References manifests**: `extensions/{universal,domain/<X>,state/<X>,department/<X>}/references-manifest.yaml`
-- **Doctype manifests**: `extensions/{universal,domain/<X>,state/<X>,department/<X>}/doctypes.yaml`
-- **Skeletons**: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
-- **Bausteine**: `memory/bausteine/{universal,domain/<X>,state/<X>,department/<X>}/<name>.md`
-- **Office-style overlays**: `plugin/templates/office-style/office-style.{default,<DOMAIN>}.sty`
-- **Department config** *(added v0.11)*: `extensions/department/<X>/department.yaml` (event_subscriptions + per-department metadata; spec'd in `office-vs-department.md`, implementation deferred to #11)
+A deployment's effective Layer A content = universal + active-domains + active-states (set in `workspace.md > scope.{domains,states}`). Layered loaders merge across active scope_keys; most-specific wins on conflicts.
 
-**Hard rules for placing layered content:**
+**Used for**: doctypes, references, manifests, bausteine, conventions content (any content that varies per deployment via domain/state characteristics).
 
-- Decide the scope BEFORE the path. Ask: does this apply to every
-  German bureau (universal), every bureau in this domain (domain),
-  every bureau in this state (state), or only this department
-  (department)?
-- A baustein has exactly one scope. If a candidate baustein applies
-  to multiple, either promote it up the layer (`universal` if truly
-  cross-domain-cross-department) or split it.
-- An entry's home is independent of who created it.
-- Most universal/domain/state content is department-agnostic — it
-  applies across departments. Only declare a `department/<X>` cell
-  when content is genuinely department-specific (invoicing-billing-
-  templates, PM-deadline-conventions).
+**Filesystem**: `extensions/{universal,domain/<X>,state/<X>}/<entity-type>/<id>.md`
 
-**Out of scope (entity types this convention doesn't apply to):**
-Skill Bundles, Backend, External Data — none of these layer along
-the scope axes. Configuration partially applies (its manifest tree
-under `extensions/` does; the office-config file itself doesn't).
-Skills declare `department:` in frontmatter (per #12) but skill
-*bundles* themselves don't layer along the 4 axes — they're
-discovered by their bundle path, not via layered loader merge.
+**Layer 1 fields**: `layer_scope: universal | domain | state` + `layer_key: null | "<domain-or-state-id>"`.
 
-**The `author-manifest` skill** scaffolds new domain, state, or
-department manifests for scopes that don't yet have content.
+## Category B — Owner scope (deployment-instance ownership)
+
+Owner B entities are owned by named deployment-instance scopes:
+
+- **workspace** — workspace.md itself + entities owned at workspace level (actors, clients)
+- **specialist** — entities owned within a specialist instance (skills running in instance, processes, internal references; **distinct from specialist DEFINITION which is Framework C**)
+- **project** — project entity instances (per-project state.md, decisions, snapshots)
+
+**Used for**: workspace.md, workspace-scope managed entities (Client + Actor per #15), specialist instance content, per-project artifacts.
+
+**Filesystem**: `extensions/workspace/...` (workspace-owned entities); specialist instance content lives within deployed specialist's local layout; `<project-root>/state.md` and `<project-root>/_ai/` for project-scope.
+
+**Layer 1 fields**: `owner_scope: workspace | specialist | project` + `owner_key: null | "<specialist-id>" | "<project-id>"`.
+
+**Gate dispatch**: owner-lookup by (owner_scope, owner_key).
+
+## Category C — Framework primitive (definitions; immutable; distributable)
+
+Framework C entities are framework-supplied primitives — distributable definitions, never instance-specific:
+
+- **shape** — workspace shape definitions (practitioner / autonomous-business / personal-OS / KG / federation / hybrid)
+- **substrate** — substrate implementation definitions (claude-agent-sdk / ms-agent-framework / future)
+- **protocol** — Protocol implementation definitions (event-coordination / always-on-sparring / claim-level-audit / etc.; per shape's pluggable Protocol axes)
+- **specialist** — specialist DEFINITIONS (the distributable composable bundle; distinct from Owner B specialist scope)
+
+**Used for**: framework-supplied or community-built distributable primitives; ROADMAP v3 marketplace listings list Framework C entities.
+
+**Filesystem**: `extensions/framework/{shapes,substrates,protocols,specialists}/<id>/`.
+
+**Layer 1 fields**: `framework_kind: shape | substrate | protocol | specialist` + `framework_key: "<id>"`.
+
+**Gate dispatch**: framework registry lookup; compat matrix validation; **Option B floor enforcement** (anti-Art-25-trap, claim-level audit, human authority chain — non-overridable per `docs/decisions/shape-extension-and-architectural-floor.md`).
+
+## Definition vs instance binding pattern (NEW v0.34)
+
+Framework C definitions are bound to a workspace via Owner B workspace.md fields:
+
+```yaml
+# workspace.md (Owner B; type=workspace.workspace)
+shape: <shape-id>                          # exactly one Framework C reference
+substrate: <substrate-id>                  # exactly one Framework C reference (relocated from backend composition root)
+specialists_employed: [<specialist-id>+]   # multi-valued Framework C references
+protocol_overrides:                        # optional per-axis overrides; defaults from shape
+  coordination: <protocol-id>
+  sparring: <protocol-id>
+  audit: <protocol-id>
+  trust: <protocol-id>
+  time: <protocol-id>
+groupings: dict[str, list[<specialist-id>+]] | null   # optional grouping convention per #22
+```
+
+Validation gate enforces compat: `substrate` ∈ shape's `substrate_compat`; specialists' `shapes_supported` includes selected shape; `protocol_overrides` ∈ shape's `protocols_allowed` per kind; **Option B floor axioms NOT overridable**.
+
+Per-instance Layer 3 customization via existing entity-md-spec Layer 3 mechanism (deferred to #9).
+
+## Specialist dual-nature (the only category-spanning primitive)
+
+Specialist is the only primitive spanning two categories:
+
+- **Specialist DEFINITION** = Framework C entity (distributable composable bundle); lives at `extensions/framework/specialists/<specialist-id>/specialist.md`
+- **Specialist as SCOPE** = Owner B value (entities WITHIN a specialist's instance use `owner_scope: specialist, owner_key: <specialist-id>`)
+
+Two facets, not contradictory. Shape/substrate/protocol do NOT have this dual-nature — their internal pieces ship as part of the definition's package.
+
+## Where each category applies
+
+**Category A — Layer scope** (layered content):
+- References manifests: `extensions/{universal,domain/<X>,state/<X>}/references/<id>.md`
+- Doctype manifests: `extensions/{universal,domain/<X>,state/<X>}/doctypes/<id>.md`
+- Skeletons: `plugin/templates/skeletons/{universal,domain/<X>}/<doctype>/`
+- Bausteine: `memory/bausteine/{universal,domain/<X>,state/<X>}/<name>.md`
+- Workspace-style overlays: `plugin/templates/workspace-style/workspace-style.{default,<DOMAIN>}.sty`
+
+**Category B — Owner scope** (deployment-instance):
+- workspace.md: `<workspace-root>/workspace.md` (or `~/.config/pbs-bureau/workspace.md` per #11 migration)
+- workspace-owned entities: `extensions/workspace/{actors,clients}/<id>.md`
+- Specialist-instance content: `extensions/specialists/<specialist-id>/...` (content owned by the specialist instance — NOT the definition)
+- Project entities: `<project-root>/state.md` + `<project-root>/_ai/...`
+
+**Category C — Framework primitive** (definitions):
+- Shape definitions: `extensions/framework/shapes/<shape-id>/shape.md`
+- Substrate definitions: `extensions/framework/substrates/<substrate-id>/substrate.md`
+- Protocol definitions: `extensions/framework/protocols/<protocol-id>/protocol.md`
+- Specialist definitions: `extensions/framework/specialists/<specialist-id>/specialist.md`
+
+## Hard rules for placing entities
+
+- **Decide the category BEFORE the path**. Ask: is this layered content (Category A), deployment-instance-owned (Category B), or a framework-supplied distributable definition (Category C)?
+- **Each entity belongs to exactly one category.** Pydantic at-least-one-of validator enforces.
+- **Within Category A**: a baustein/manifest entry has exactly one layer (universal / domain / state). Promote to universal if truly cross-cutting; split if straddling.
+- **Within Category B**: workspace-scope entities apply to deployment as a whole; specialist-instance entities live within a specialist; project entities live with their project.
+- **Within Category C**: definitions are immutable + distributable. Per-instance customization via Layer 3 (Owner B) reference fields, never by editing the definition.
+
+## Out of scope (entity types this convention doesn't apply to)
+
+Skill Bundles, Backend, External Data — none of these are entity-md scoped. Configuration partially applies (its manifest tree under `extensions/` does; workspace.md is itself an Owner B entity-md). Skills declare `specialist:` in frontmatter (per #22 + #11 sweep) which becomes the Owner B owner_scope semantics, but skill bundle FILES live in plugin layout, not extensions/.
+
+## Migration from v0.11 4-axis structure
+
+Per ARCH evolution patterns (v0.19; structured + mutable): pre-launch + no production entity-md instances persisted = essentially zero migration cost today. The migration converts:
+
+- Old `scope: universal/domain/state` + `scope_key: <key>` → Layer A `layer_scope` + `layer_key`
+- Old `scope: department` + `scope_key: <dept-id>` → Owner B `owner_scope: specialist` + `owner_key: <specialist-id>` (per #22 specialist rename) OR Framework C `framework_kind: specialist` + `framework_key: <specialist-id>` (when entity IS the specialist DEFINITION)
+- Old `scope: office` → Owner B `owner_scope: workspace` (per #22 workspace rename); workspace.md type becomes `workspace.workspace`
+- Old `scope: project` → Owner B `owner_scope: project`
+
+Full filesystem cascade (path migrations) lands with #11 single-touch refactor.
 
 ---
 

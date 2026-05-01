@@ -706,34 +706,45 @@ multi-round sharpening work.
   - `docs/strategic-positioning.md` updates (commercial asset + fundraising narrative)
   - First-bind deployment template (PBS-Schulz pioneer production-readiness checklist)
 
-**25. Shape extension framework + Protocol pluggability**
-(FOUNDATIONAL; enables Tom Sawyer dynamic for community shape contributions) — session 14 commitment.
+**25. Framework primitive entity-md design (shape + substrate + protocol + specialist DEFINITIONS) + three-category scope foundation + Protocol pluggability**
+(FOUNDATIONAL; enables Tom Sawyer dynamic for community framework primitive contributions; scope expanded session 15 from "shape extensions only" to "all framework primitive entity-md kinds" per `docs/decisions/entity-md-scope-model-restructure.md`) — session 14 commitment, scope-expanded session 15.
 
-- **Mission**: implement shape-extension contract per `docs/decisions/shape-extension-and-architectural-floor.md`. Workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust/Time); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/`.
+- **Mission**: implement Framework C scope category (per v0.34 entity-md scope model restructure) + shape extension contract (per `docs/decisions/shape-extension-and-architectural-floor.md`) + Definition vs instance binding pattern. Framework primitives = shape / substrate / protocol / specialist DEFINITIONS. Workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust/Time); concrete primitives live as `extensions/framework/{shapes,substrates,protocols,specialists}/<id>/`. Definitions in Framework C (immutable; distributable); instance-selection via workspace.md fields (Owner B) referencing definitions.
 - **Scope**:
-  - Shape extension contract: `extensions/shapes/<shape-id>/shape.md` Layer 1+2 hybrid-shape (entity-md per #16) declaring `shape_id`, `display_name`, `default_configs` per axis, `shape_specific_primitives`, `substrate_compat`, `required_extensions`
-  - Coordination Protocol pluggability (event-default + call-shape extension reference per Paperclip-style autonomous-business needs)
-  - Audit Protocol granularity pluggability (claim-level baseline + action-level overlay + citation-only)
-  - Sparring Protocol intensity pluggability (always-on + optional + none)
-  - Trust/Governance Protocol pluggability (practitioner-judgment + budget-policy + none)
-  - Time Protocol pluggability (turn-based default + long-running extension shape) — the *abstraction* lands in #25; concrete long-running runtime substrate adapter implementation is deferred per DR D4 to first autonomous-business shape implementation (substrate adapter is shape-extension-driven; build when shape needed). #25 locks the Protocol surface so D4 implementation slots cleanly later
-  - Practitioner-shape extension reference implementation (PBS pioneer = practitioner-shape) — validates contract end-to-end
-  - Option B structural floor implementation: anti-Art-25-trap gate (specialist conformity manifest Pydantic gate) + claim-level audit baseline (always emitted) + human authority chain enforcement (configurable granularity)
-- **Order (locked session 14 reorder)**: **POSITION 1 in pre-RAG queue** — DESIGN first as architectural foundation (locks shape extension contract + Option B floor specs; downstream Bundle design + #11 + #24 inherit). IMPLEMENTATION can wait for #11 substrate (specialist primitive operational in Cowork plugin shape) + #9 entity gate. Sequence: **#25 design** → #20 → Bundles → #11 → #25 implementation lands within #11 → #24 → #19. BEFORE marketplace v3 (shape extension contract = marketplace listing schema for shape distribution).
-- **Strategic asset**: enables Tom Sawyer dynamic — community can author shape extensions for shapes PBS doesn't market (autonomous-business / personal-OS / sovereign / federation / hybrid). Framework breadth grows organically without PBS effort. Marketplace v3 hosts shape extensions alongside specialists.
+  - **Three-category scope foundation** (per v0.34 restructure): Layer A / Owner B / Framework C scope categories with Pydantic at-least-one-of validator. Layer 1 frontmatter fields per entity-md-spec §3 (v0.34 restructure).
+  - **Shape extension contract** (Framework C): `extensions/framework/shapes/<shape-id>/shape.md` Layer 1+2 entity-md per restructured spec. Layer 2 fields per entity-md-spec §4 `shape` entry (display_name, default_configs per axis, protocols_allowed per kind, shape_specific_primitives, substrate_compat, required_extensions, semver, option_b_floor).
+  - **Substrate definition entity-md form** (Framework C): `extensions/framework/substrates/<substrate-id>/substrate.md` for `claude-agent-sdk` + `ms-agent-framework`. Layer 2 fields per entity-md-spec §4 `substrate` entry (display_name, substrate_protocol_compat, agent_loop_implementation, mcp_attach_mechanism, runhooks_lifecycle, shape_compat, boot_characteristics, semver). Substrate selection RELOCATED from backend composition-root code to workspace.md field per AI-as-runtime hybrid-shape principle.
+  - **Protocol pluggability via Framework C entity-md** (5 axes): `extensions/framework/protocols/<protocol-id>/protocol.md`. Layer 2 fields per entity-md-spec §4 `protocol` entry (display_name, protocol_kind, pydantic_class, shape_compat, substrate_compat, failure_modes, option_b_axiom, semver). Concrete implementations include event-coordination, call-coordination, always-on-sparring, optional-sparring, claim-level-audit, action-level-audit, etc. Per-axis defaults in shape.md `default_configs`; per-workspace overrides via workspace.md `protocol_overrides` (Option B floor axioms NOT overridable).
+  - **Specialist DEFINITION entity-md form** (Framework C; per #22 Sub-DR A specialist primitive): `extensions/framework/specialists/<specialist-id>/specialist.md`. Layer 2 fields per entity-md-spec §4 `specialist` entry (display_name, composability_axes, classification, skills_bundled, entity_types_owned, references_required, memory_required, adapters_consumed, shapes_supported, semver). Distinct from Owner B specialist scope (specialist's dual-nature).
+  - **Definition vs instance binding pattern**: workspace.md (Owner B) reference fields binding to Framework C definitions: `shape: <id>` + `substrate: <id>` + `specialists_employed: [<id>+]` + `protocol_overrides: {<axis>: <id>}` + `groupings`. Validation gate enforces compat matrix.
+  - **Practitioner-shape extension reference implementation** (PBS pioneer = practitioner-shape Framework C entity): `extensions/framework/shapes/practitioner/shape.md` validates contract end-to-end.
+  - **Option B structural floor implementation**: anti-Art-25-trap gate (specialist conformity manifest Pydantic gate) + claim-level audit baseline (always emitted) + human authority chain enforcement (configurable granularity). Non-overridable per shape; enforced at Framework C category gate validation.
+- **Order (locked session 14 reorder; scope expanded session 15)**: **POSITION 1 in pre-RAG queue** — DESIGN first as architectural foundation (locks three-category scope structure + shape extension contract + substrate-as-entity-md + protocol-as-entity-md + specialist DEFINITION shape + Option B floor; downstream Bundle design + #11 + #24 inherit). IMPLEMENTATION (Pydantic gate + filesystem migrations + actual config-as-data deployment) lands across #11 + #9. Sequence: **#25 design** → #20 → Bundles → #11 → #25 implementation lands within #11 → #24 → #19. BEFORE marketplace v3 (Framework C category = marketplace listing schema for ALL framework primitive distribution: shapes + substrates + protocols + specialist definitions).
+- **Strategic asset**: enables Tom Sawyer dynamic — community can author Framework C primitives for any kind PBS doesn't market (autonomous-business / personal-OS / sovereign / federation / hybrid shapes; new substrate impls; new Protocol impls; cross-archetype specialists). Framework breadth grows organically. Marketplace v3 hosts ALL Framework C primitive kinds uniformly (extends #22 Sub-DR B "marketplace of specialists" to "marketplace of framework primitives").
 - **Constraints flowing**:
-  - **#9 implementation**: Substrate Protocol common surface gains shape-extension hooks; SpecialistDescriptor includes `shapes_supported` field
-  - **#11 Cowork integration**: `setup-workspace` skill prompts for shape selection; defaults to practitioner shape
-  - **#24 EU AI Act compliance specialist**: Option B floor implementation lives here; practitioner-shape extension's accountability binding inherits structurally
-  - **ROADMAP v3 marketplace**: marketplace listing schema includes shape extensions + substrate implementations alongside specialists
-  - **VISION**: VISION scope clarification (practitioner-shape) + architectural inheritance (Option B) reference shape extension model
+  - **Three-category foundation**: enables/structures all subsequent Framework C primitive kinds — not just shape; substrate + protocol + specialist DEFINITIONS too
+  - **#9 Bundle B (entity gate + Layer 3)**: implements three-category gate dispatch (Pydantic at-least-one-of; per-category validation rules); Layer 3 mechanism per entity-md-spec defer
+  - **#9 Bundle A (specialist module + location/registration)**: registration files use Framework C entity-md form directly; no separate `managed_entities` map needed (superseded by namespacing rules)
+  - **#9 Bundle D (workspace.md schema)**: workspace.md fields match Definition vs instance binding pattern
+  - **#11 Cowork integration**: `setup-workspace` skill prompts for shape + substrate + specialists selection; defaults to practitioner shape + claude-agent-sdk substrate; filesystem migrations (`extensions/specialists/<id>/` → `extensions/framework/specialists/<id>/`; specialist-instance content path)
+  - **#24 EU AI Act compliance specialist**: Option B floor implementation lives here; eu-ai-compliance specialist DEFINITION lives at `extensions/framework/specialists/eu-ai-compliance/`; cross-archetype classification
+  - **#6 Audit-trail v2 retrofit**: AuditEvent schema additions (6 category fields per restructure); per-category audit filtering
+  - **ROADMAP v3 marketplace**: marketplace listing schema = Framework C entity-md form; uniform across all primitive kinds
+  - **VISION**: VISION scope clarification (practitioner-shape) + architectural inheritance (Option B) + practitioner vs specialist distinction reference Framework C category
 - **Files touched at implementation**:
-  - NEW: `extensions/shapes/practitioner/shape.md` (PBS pioneer reference)
-  - NEW: shape extension contract Pydantic schema + `register_shape` MCP tool
-  - Substrate Protocol amendments: shape-extension hooks; Protocol pluggability for Coordination/Sparring/Audit/Trust/Time
-  - `entity-md-spec.md` updates: shape-as-type added to namespacing examples
-  - `plugin-conventions.md` updates: shape extension authoring guidance
-  - Test scaffolds: at least one non-practitioner shape extension scaffolded as architectural validation (likely autonomous-business per Paperclip-style reference; community-buildable post-implementation)
+  - NEW: `extensions/framework/shapes/practitioner/shape.md` (PBS pioneer reference)
+  - NEW: `extensions/framework/substrates/{claude-agent-sdk,ms-agent-framework}/substrate.md` (substrate definitions; relocated from backend code)
+  - NEW: `extensions/framework/protocols/{event-coordination,call-coordination,always-on-sparring,optional-sparring,claim-level-audit,action-level-audit,...}/protocol.md` (5 Protocol kinds × multiple impls per kind)
+  - NEW: `extensions/framework/specialists/planning-document-work/specialist.md` (PBS pioneer specialist DEFINITION; replaces previous `extensions/specialists/planning-document-work/` content)
+  - NEW: Pydantic schemas in pbs_core (post-#9 lift): EntityBase Layer 1 with three-category fields + per-category validators; ShapeEntity / SubstrateEntity / ProtocolEntity / SpecialistDefinitionEntity Layer 2 classes; WorkspaceEntity Layer 2 with binding fields
+  - NEW: `register_shape` / `register_substrate` / `register_protocol` / `register_specialist` MCP tools (or unified `register_framework_primitive` per gate dispatch)
+  - Substrate Protocol amendments: three-category gate hooks; Protocol pluggability per axis enforced at gate
+  - `entity-md-spec.md`: §3 + §3.2 + §4 + §6 already updated v0.34 (this commit)
+  - `ARCHITECTURE.md`: "Three-category scope model" section already rewritten v0.34 (this commit); reference card row already updated
+  - `ROADMAP.md`: this commitment scope expanded v0.34 (this commit)
+  - `plugin-conventions.md` updates: shape extension authoring guidance + substrate authoring guidance + protocol authoring guidance + specialist definition authoring guidance
+  - Filesystem migrations (#11 single-touch): pre-launch zero migration cost; existing pbs-bureau pre-restructure entity content shifts to new paths
+  - Test scaffolds: at least one non-practitioner shape + one second substrate + one Protocol per axis scaffolded as architectural validation (likely community-buildable post-implementation)
 
 ---
 

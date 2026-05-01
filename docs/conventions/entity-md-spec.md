@@ -1,20 +1,23 @@
 # Entity-md spec — formatting + terminology reference
 
-> **NAMING SUPERSEDED session 13 per #22 Sub-DR A** (`docs/decisions/terminology-and-specialist-primitive.md`):
-> `department` → `specialist` (pattern primitive between Skill and Workspace);
-> `office` → `workspace` (top-level deployment scope). Structural conventions
-> (Layer 1 + Layer 2 + body sections; namespacing rules; cross-ref syntax)
-> REMAIN VALID with renamed primitives. File-paths + scope axis enum +
-> type-namespacing examples to be fully cascaded with #11 single-touch
-> refactor — partial rename applied here for the most-visible sections;
-> remaining instances clean up alongside skill frontmatter sweep.
+> **v0.34 RESTRUCTURE session 15** per `docs/decisions/entity-md-scope-model-restructure.md`:
+> flat 6-axis `scope` + `scope_key` enum REPLACED with three-category structure
+> (Layer A: universal/domain/state; Owner B: workspace/specialist/project;
+> Framework C: shape/substrate/protocol/specialist-DEFINITION). Each entity
+> has exactly ONE category populated; Pydantic at-least-one-of validator
+> enforces. Plus NEW Definition-vs-instance binding pattern: framework-primitive
+> DEFINITIONS in Framework C; INSTANCE-SELECTION via workspace.md fields
+> (Owner B) referencing definitions. Layer 2 schemas added for shape/substrate/
+> protocol/specialist Framework C entity types (§4); body conventions added
+> (§6); type namespacing per category (§3.2). Migration to three-category
+> structure: pre-launch zero migration cost today; full cascade scheduled with
+> #11 single-touch refactor.
+>
+> **Earlier supersession** (session 13 per #22 Sub-DR A): `department` → `specialist`;
+> `office` → `workspace`. Both renames absorbed by v0.34 restructure where applicable.
 
-**Status**: scaffold authored session 10; **naming superseded session 13 per
-#22 Sub-DR A**. Layer 1 + body section names + formatting conventions
-complete; Layer 2 per-entity-type schemas grow in during #9 alongside
-Pydantic implementation.
-**Owner**: ARCHITECTURE.md "AI-as-runtime hybrid-shape principle"
-section + `docs/decisions/ai-as-runtime-hybrid-shape.md` + `docs/decisions/terminology-and-specialist-primitive.md`.
+**Status**: scaffold authored session 10; v0.34 restructure session 15 (three-category structure + Definition-vs-instance binding pattern). Layer 1 + Layer 2 schemas + body section conventions complete for all categories; specific Layer 2 fields per Framework C entity type grow in during #9 + #25 implementation phases.
+**Owner**: ARCHITECTURE.md "Three-category scope model" section (was "Layering convention: scope orthogonality") + `docs/decisions/entity-md-scope-model-restructure.md` (v0.34) + `docs/decisions/ai-as-runtime-hybrid-shape.md` (Layer 1+2+3 contract) + `docs/decisions/terminology-and-specialist-primitive.md` (#22 Sub-DR A).
 **Validated by**: design-review target 12 (prospective) + audit
 slice 21 (retrospective).
 
@@ -67,17 +70,72 @@ generic entity gate (post-#9 `read_entity` / `write_entity`).
 These fields appear in EVERY entity-md regardless of type. Pydantic
 base `EntityBase`. Fail-loud validation at gate.
 
+> **v0.34 restructure (session 15)** per `docs/decisions/entity-md-scope-model-restructure.md`: replaces flat 6-axis `scope` + `scope_key` with three-category structure (Layer A / Owner B / Framework C). Each entity has exactly ONE category populated; Pydantic at-least-one-of validator enforces. The previous `scope` + `scope_key` fields are SUPERSEDED. Old fields ↔ new fields mapping in §12 migration.
+
+### Common Layer 1 fields (every entity, regardless of category)
+
 | Field | Type | Required | Allowed values / Format | Notes |
 |---|---|---|---|---|
-| `id` | str | ✅ | kebab-case (`[a-z0-9-]+`); unique within scope | The stable identifier. Matches file basename. |
+| `id` | str | ✅ | kebab-case (`[a-z0-9-]+`); unique within (scope-category, scope-key, type) | The stable identifier. Matches file basename. |
 | `label` | str | ✅ | non-empty | Human-readable display name. |
-| `type` | str (namespaced) | ✅ | `<scope-id>.<short-name>` (e.g., `universal.doctype`, `planning-document-work.project`, `workspace.actor`, `litigation.matter`). See §3.2 for namespacing convention. | Routes to Layer-2 Pydantic subclass at gate. Living set extended per #9. |
-| `scope` | enum | ✅ | `universal` / `domain` / `state` / `specialist` / `workspace` / `project` (renamed from `department` / `office` session 13 per #22 Sub-DR A) | 6-axis position per ARCHITECTURE meta-rule 3 + #12 + #22. |
-| `scope_key` | str \| null | ✅ | `null` for universal; `"Naturschutz"` / `"PV-FFA"` / `"Wind"` for domain; `"MV"` / `"BB"` for state; `"planning-document-work"` / `"invoicing"` for specialist; `null` for workspace | Identifies WHICH entry within the scope axis. |
+| `type` | str | ✅ | per-category rules (see §3.2) | Routes to Layer-2 Pydantic subclass at gate. |
 | `status` | enum | ✅ | `active` / `deferred` / `stub` / `archived` | Canonical lifecycle marker. |
 | `last_updated` | date | ✅ | ISO 8601 (`YYYY-MM-DD`) | Freshness. Updated on every meaningful edit. |
 | `description` | str \| null | ⚠ optional | one-line | Used in listings (e.g., `list_entities` MCP output). Keep short — full description goes in body. |
 | `tags` | list[str] | ⚠ optional | each tag kebab-case | Free-form categorization. |
+
+### Scope category fields (exactly ONE category populated; Pydantic at-least-one-of validator)
+
+#### Category A — Layer scope (layered content; merge by specificity)
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `layer_scope` | enum \| null | when category active | `universal` / `domain` / `state` |
+| `layer_key` | str \| null | when domain/state | null for universal; e.g., `"Naturschutz"` / `"PV-FFA"` for domain; `"MV"` / `"BB"` for state |
+
+Used for: doctypes, references, manifests, bausteine, conventions content. Effective content = universal + active-domains + active-states (per workspace.md `scope.{domains,states}`); most-specific wins on conflicts. Gate dispatch: layered loader merges across active scope_keys.
+
+#### Category B — Owner scope (deployment-instance ownership)
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `owner_scope` | enum \| null | when category active | `workspace` / `specialist` / `project` |
+| `owner_key` | str \| null | when specialist/project | null for `workspace` (workspace.md is the workspace itself); e.g., `"planning-document-work"` for specialist; `"<project-id>"` for project |
+
+Used for: workspace.md (the workspace itself; owner_scope=workspace, owner_key=null); entities owned within a specialist instance (skills, processes, internal references — owner_scope=specialist, owner_key=<specialist-id>); project entity instances (per-project state.md, decisions, snapshots — owner_scope=project, owner_key=<project-id>). Gate dispatch: owner-lookup by (owner_scope, owner_key).
+
+#### Category C — Framework primitive (definitions; immutable; distributable)
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `framework_kind` | enum \| null | when category active | `shape` / `substrate` / `protocol` / `specialist` |
+| `framework_key` | str | required when framework_kind active | e.g., `"practitioner"` for shape; `"claude-agent-sdk"` for substrate; `"event-coordination"` for protocol; `"planning-document-work"` for specialist DEFINITION |
+
+Used for: framework-supplied primitive DEFINITIONS — distributable, immutable, composable. Gate dispatch: framework registry lookup; compat matrix validation; Option B floor enforcement (anti-Art-25-trap, claim-level audit, human authority chain — non-overridable per `shape-extension-and-architectural-floor.md`).
+
+**Specialist dual-nature** (the only category-spanning primitive): specialist DEFINITION lives in Framework C (`framework_kind: specialist`; entity is the distributable bundle); specialist as SCOPE is Owner B (entities WITHIN a specialist's instance use `owner_scope: specialist, owner_key: <specialist-id>`). See `docs/decisions/entity-md-scope-model-restructure.md` §1 "Specialist dual-nature" for full reasoning.
+
+Shape / substrate / protocol do NOT have dual-nature — their internal pieces ship as part of the definition's package, not as Owner B sub-entities.
+
+### Definition vs instance binding pattern (per restructure DR §2)
+
+Framework C definitions are bound by Owner B workspace.md reference fields:
+
+```yaml
+# workspace.md (Owner B; type=workspace.workspace; owner_scope=workspace, owner_key=null)
+shape: <shape-id>                          # Framework C reference; exactly one
+substrate: <substrate-id>                  # Framework C reference; exactly one
+specialists_employed: [<specialist-id>+]   # Framework C references; multi-valued
+protocol_overrides:                        # optional per-axis Framework C references; defaults from shape
+  coordination: <protocol-id>
+  sparring: <protocol-id>
+  audit: <protocol-id>
+  trust: <protocol-id>
+  time: <protocol-id>
+groupings: dict[str, list[<specialist-id>+]] | null   # per #22 Sub-DR A
+```
+
+Validation gate enforces compat: `substrate` in shape's `substrate_compat`; specialists' `shapes_supported` includes selected shape; `protocol_overrides` in shape's `protocols_allowed` per kind; **Option B floor axioms NOT overridable**.
 
 **Format conventions for Layer 1**:
 
@@ -87,48 +145,62 @@ base `EntityBase`. Fail-loud validation at gate.
 - Quoting: prefer unquoted scalars; quote only when YAML would mis-parse (colons, brackets, leading hyphens)
 - Dates: ISO 8601 (`2026-04-30`) — NO `Date(...)`, NO `2026/04/30`
 
-### 3.2 Type namespacing convention (locked session 11, Bundle A)
+### 3.2 Type namespacing per scope category (v0.34 restructure; locked session 15)
 
-The `type:` field is **always namespaced** as `<scope-id>.<short-name>`:
+The `type:` field follows category-specific namespacing rules. Three rule shapes; each makes wrong shapes impossible by construction within its category.
 
-- `<scope-id>` = the registering scope's identifier:
-  - `universal` for universal-scope entities
-  - `office` for office-level entities (registered in `extensions/office/office.md`)
-  - `<department-id>` for department-scoped entities (registered in `extensions/department/<id>/department.md`)
-- `<short-name>` = the registration key under the scope's `managed_entities` map
+#### Category A — Layer scope: `<layer_scope>.<entity-type>`
 
-Examples:
-
-| Entity | Type field | Registered in |
+| Entity | Type field | Layer 1 scope-category fields |
 |---|---|---|
-| Actor at office level | `office.actor` | `extensions/office/office.md` `managed_entities.actor` |
-| Client at office level | `office.client` | `extensions/office/office.md` `managed_entities.client` |
-| Project in planning dept | `planning.project` | `extensions/department/planning/department.md` `managed_entities.project` |
-| Doctype in planning dept | `planning.doctype` | `extensions/department/planning/department.md` `managed_entities.doctype` |
-| Reference at universal scope | `universal.reference` | `extensions/universal/universal.md` `managed_entities.reference` |
-| Matter in legal-practice dept (hypothetical) | `litigation.matter` | `extensions/department/litigation/department.md` |
+| Universal doctype b-plan-begruendung | `universal.doctype` | layer_scope=universal, layer_key=null |
+| Universal reference (BauGB) | `universal.reference` | layer_scope=universal, layer_key=null |
+| Domain reference saP | `domain.reference` | layer_scope=domain, layer_key=Naturschutz |
+| State legal supplement | `state.legal-supplement` | layer_scope=state, layer_key=MV |
 
-In **registration files** (`department.md` / `office.md` / `universal.md`), the `managed_entities` map uses the SHORT form as the key:
+#### Category B — Owner scope: `<owner_scope-or-specialist-id>.<entity-type>`
 
-```yaml
-# extensions/department/planning/department.md frontmatter
-managed_entities:
-  project:                                    # SHORT form (key)
-    pydantic_class: extensions.department.planning.entities.project.ProjectEntity
-    instances_at: "<project-root>/state.md"
-  doctype:
-    pydantic_class: extensions.department.planning.entities.doctype.DoctypeEntity
-    instances_at: "extensions/department/planning/doctypes/{id}.md"
-```
+- **workspace**: `type: workspace.<entity-type>` (e.g., `workspace.workspace` for workspace.md itself; `workspace.actor`; `workspace.client`)
+- **specialist**: `type: <specialist-id>.<entity-type>` (e.g., `planning-document-work.process`, `planning-document-work.project-deadline`, `litigation.matter`)
+- **project**: `type: project.<entity-type>` or just `type: project` (most projects use Layer 1+2 directly without entity-type sub-discrimination; e.g., `project` for state.md; `project.snapshot`; `project.module-decision`)
 
-The gate composes the FULL namespaced form (`planning.project`, `planning.doctype`) from the registration scope's identifier. Entity-md files (instances) use the FULL form in their `type:` field — unambiguous, machine-readable, no implicit context required.
+| Entity | Type field | Layer 1 scope-category fields |
+|---|---|---|
+| Workspace.md (PBS-Schulz) | `workspace.workspace` | owner_scope=workspace, owner_key=null |
+| Workspace actor | `workspace.actor` | owner_scope=workspace, owner_key=null |
+| Workspace client | `workspace.client` | owner_scope=workspace, owner_key=null |
+| Specialist process (regelverfahren) | `planning-document-work.process` | owner_scope=specialist, owner_key=planning-document-work |
+| Specialist doctype | `planning-document-work.doctype` | owner_scope=specialist, owner_key=planning-document-work |
+| Project state.md | `project` | owner_scope=project, owner_key=<project-id> |
+| Project snapshot | `project.snapshot` | owner_scope=project, owner_key=<project-id> |
+| Hypothetical legal matter | `litigation.matter` | owner_scope=specialist, owner_key=litigation |
 
-**Why namespaced** (vs globally unique names or convention-driven uniqueness):
+#### Category C — Framework primitive: unprefixed type matching the kind
 
-- Prevents type-name collisions across departments without requiring deployment-specific conventions. Multi-department deployments where two departments naturally reuse common type names (`doctype`, `record`, `entity`) work by construction.
-- Makes blueprint sharing across deployments collision-safe. A planning blueprint and a litigation blueprint can coexist in the same office without renaming.
-- Aligns with how every other department-shaped system handles namespacing (Python modules, SQL schemas, Kubernetes namespaces, plugin slash-command namespacing per #11).
-- Audit-trail filtering becomes natural: `query_audit_trail(type_prefix="litigation.")` returns all litigation-department entity events; cross-department analysis is easy.
+Framework primitives use unprefixed type matching the kind (consistent with §4 registration-file-type exception for department/office/universal types; reduces redundancy with framework_key field).
+
+| Entity | Type field | Layer 1 scope-category fields |
+|---|---|---|
+| Shape definition (practitioner) | `shape` | framework_kind=shape, framework_key=practitioner |
+| Substrate definition (claude-agent-sdk) | `substrate` | framework_kind=substrate, framework_key=claude-agent-sdk |
+| Substrate definition (ms-agent-framework) | `substrate` | framework_kind=substrate, framework_key=ms-agent-framework |
+| Protocol definition (event-coordination) | `protocol` | framework_kind=protocol, framework_key=event-coordination |
+| Protocol definition (always-on-sparring) | `protocol` | framework_kind=protocol, framework_key=always-on-sparring |
+| Specialist DEFINITION (planning-document-work) | `specialist` | framework_kind=specialist, framework_key=planning-document-work |
+
+**Note specialist dual-nature**: specialist DEFINITION uses `type: specialist` + `framework_kind: specialist` (Framework C); entities OWNED within a specialist instance use `type: <specialist-id>.<entity-type>` + `owner_scope: specialist` (Owner B). Two different uses of "specialist" in the type system.
+
+**Why per-category namespacing** (instead of uniform `<category>.<entity-type>`):
+
+- **Layer A + Owner B**: namespacing prevents type-name collisions across scope-keys (multiple specialists naturally reuse common type names like `process`, `doctype`, `project-deadline`); makes blueprint sharing collision-safe; aligns with Python modules / SQL schemas / Kubernetes namespaces.
+- **Framework C**: no sub-types within a framework primitive (a shape isn't a category of "shape entity types"; the shape itself IS the entity); identity comes from framework_key. Same pattern as registration-file types per §4.
+- **Audit-trail filtering**: type-prefix queries work naturally per category (e.g., `query_audit_trail(type_prefix="litigation.")` returns all entities owned by litigation specialist; `query_audit_trail(framework_kind="shape")` returns all shape-related events).
+
+### Pre-restructure registration files (transitioning out per #11 single-touch refactor)
+
+The pre-v0.34 registration-file pattern (`extensions/department/<dept>/department.md` + `extensions/office/office.md` + `extensions/universal/universal.md` with `managed_entities` maps; locked session 11 Bundle A) is SUPERSEDED by the three-category structure. Specialist DEFINITIONS now use Framework C entity-md form directly; entities owned within specialist instances use Owner B scope.
+
+Migration to three-category structure: scheduled with #11 single-touch refactor (file path migrations + Pydantic class migrations). Pre-launch / no production entity-md instances persisted = essentially zero migration cost today.
 
 ### 3.1 Identifier uniqueness conventions
 
@@ -259,36 +331,79 @@ Per the entity-elevation 3-test, most bausteine remain memory
 entries and don't elevate. Layer 2 fields TBD case-by-case when
 elevation occurs.
 
-### `department` / `office` / `universal` (registration-file entity types, locked Bundle A session 11)
+### `department` / `office` / `universal` (pre-restructure registration-file types — SUPERSEDED v0.34)
 
-Three parallel registration entity types — one per scope-level
-registration file. Same Layer 2 frontmatter shape:
+> **SUPERSEDED v0.34**: pre-restructure used `managed_entities` registration map at `department.md` / `office.md` / `universal.md` to declare which entity types each scope hosted. Three-category structure replaces this: Owner B specialist scope hosts entities WITHIN a specialist instance (no registration map needed; entity type derived from `<specialist-id>.<entity-type>` namespacing); Framework C primitives are self-registering via filesystem location (`extensions/framework/<kind>/<id>/`). Pre-restructure registration files (department.md / office.md / universal.md) migrate to Framework C specialist-DEFINITION entities OR Owner B workspace.md per #11 single-touch refactor.
+
+The pre-restructure shape, kept here for migration reference:
+
+- `DepartmentEntity` (was for `type: department`) → SUPERSEDED. Specialist DEFINITIONS now use Framework C entity-md form (see `specialist` Framework C entry below).
+- `OfficeEntity` (was for `type: office`) → SUPERSEDED. Workspace.md is now Owner B `type: workspace.workspace`.
+- `UniversalEntity` (was for `type: universal`) → SUPERSEDED. Universal-scope entities self-classify via Layer A `layer_scope: universal`; no central registration entity needed.
+
+### `shape` (Framework C; v0.34 NEW per #25 Shape extension framework)
+
+Framework C entity type for workspace shape definitions. Lives at `extensions/framework/shapes/<shape-id>/shape.md`.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `managed_entities` | dict[str, ManagedEntityRegistration] | ✅ | Map of short-name (registration key) → registration. Gate composes full namespaced type as `<scope-id>.<short-name>` per §3.2. |
+| `display_name` | str | ✅ | e.g., "Practitioner Workspace" |
+| `default_configs` | object | ✅ | Per-axis defaults: `coordination_protocol` / `sparring_intensity` / `audit_granularity` / `author_primitive` / `trust_model` / `time_model` |
+| `protocols_allowed` | dict[str, list[str]] | ✅ | Per Protocol kind (coordination/sparring/audit/trust/time): list of allowed protocol-ids that this shape composes with. Workspace's `protocol_overrides` must select from these. |
+| `shape_specific_primitives` | list[str] | ⚠ | Pydantic schemas + MCP gates needed per shape (e.g., `Ticket` + `Budget` for autonomous-business shape) |
+| `substrate_compat` | list[str] | ✅ | Substrate ids supported (e.g., `[claude_agent_sdk, ms_agent_framework]`) |
+| `required_extensions` | list[str] | ⚠ | Other shape extensions this depends on (e.g., hybrid shape might compose two shapes) |
+| `semver` | str | ✅ | Per-shape version |
+| `option_b_floor` | object | ✅ | Anti-Art-25-trap + claim-level audit + human authority chain enforcement (always-on per shape; `shape-extension-and-architectural-floor.md` Option B floor) |
 
-**`ManagedEntityRegistration` shape**:
+### `substrate` (Framework C; v0.34 NEW per #25 + relocated from backend code)
+
+Framework C entity type for substrate implementation definitions. Lives at `extensions/framework/substrates/<substrate-id>/substrate.md`. Selected by workspace.md `substrate: <substrate-id>` field.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `pydantic_class` | str (dotted Python path) | ✅ | Class implementing the Layer 2 Pydantic for this entity type (e.g., `extensions.department.planning.entities.project.ProjectEntity`) |
-| `instances_at` | str \| null | ⚠ | Path pattern for native-mode instances (e.g., `<project-root>/state.md`, `extensions/department/planning/doctypes/{id}.md`). Null when adapter-mode. |
-| `adapter` | str \| null | ⚠ | Adapter id when adapter-mode (e.g., `lexware`, `personio`, `asana`). Null when native-mode. |
+| `display_name` | str | ✅ | e.g., "Claude Agent SDK" |
+| `substrate_protocol_compat` | list[str] | ✅ | Substrate Protocol surfaces implemented (per `substrate-protocol-design.md` common surface) |
+| `agent_loop_implementation` | str | ✅ | Module reference (e.g., `extensions.framework.substrates.claude_agent_sdk.agent_loop`) |
+| `mcp_attach_mechanism` | str | ✅ | How MCP servers attach (e.g., `in-process` / `stdio` / `http`) |
+| `runhooks_lifecycle` | list[str] | ✅ | Lifecycle hooks supported (e.g., `[pre_tool, post_tool, on_error]`) |
+| `shape_compat` | list[str] | ✅ | Shapes this substrate works with (e.g., `[practitioner, autonomous-business]` or `["all"]`) |
+| `boot_characteristics` | object | ⚠ | Operational profile: `boot_time` / `memory_footprint` / `runtime_deps` |
+| `semver` | str | ✅ | Per-substrate version |
 
-`@model_validator`: at-least-one-of `{instances_at, adapter}` required (cannot be both null).
+### `protocol` (Framework C; v0.34 NEW per #25 Protocol pluggability)
 
-**Pydantic class naming convention**:
+Framework C entity type for Protocol implementation definitions. Lives at `extensions/framework/protocols/<protocol-id>/protocol.md`. Selected per shape's `default_configs` AND optionally overridden via workspace.md `protocol_overrides`.
 
-- `DepartmentEntity` — for `type: department` (registered in `extensions/department/<dept>/department.md`)
-- `OfficeEntity` — for `type: office` (registered in `extensions/office/office.md`)
-- `UniversalEntity` — for `type: universal` (registered in `extensions/universal/universal.md`)
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `display_name` | str | ✅ | e.g., "Event-Shaped Coordination" |
+| `protocol_kind` | enum | ✅ | `coordination` / `sparring` / `audit` / `trust` / `time` |
+| `pydantic_class` | str | ✅ | Module reference for the Pydantic Protocol implementation |
+| `shape_compat` | list[str] | ✅ | Shapes this protocol implementation works with (e.g., `[practitioner]` for sparring=always-on; `[autonomous-business]` for sparring=optional) |
+| `substrate_compat` | list[str] | ⚠ | Substrate constraints (most protocols are substrate-agnostic; some require specific substrate primitives) |
+| `failure_modes` | list[object] | ⚠ | Documented failure modes + recovery paths |
+| `option_b_axiom` | enum \| null | ⚠ | If this protocol implements one of the 3 non-overridable axioms: `anti_art_25_trap` / `claim_level_audit` / `human_authority_chain` / null |
+| `semver` | str | ✅ | Per-protocol version |
 
-All three extend `EntityBase` (Layer 1 universal) + the same Layer 2 fields above. Same shape because the registration concept is uniform across scopes (per Bundle A close-out + governance-and-identity-sourcing decision 5 — managed entities at office and department levels follow the same registration shape; UniversalEntity locked explicitly per ARCH v0.23 ultrathink-review for symmetry).
+### `specialist` (Framework C DEFINITION; v0.34 NEW per #22 Sub-DR A)
 
-**Body conventions** for all three (per Bundle A close-out): `## What this <department/office/universal scope> does` / `## Conventions` / `## Cross-department coordination` (when applicable).
+Framework C entity type for specialist DEFINITIONS (the distributable composable bundle). Lives at `extensions/framework/specialists/<specialist-id>/specialist.md`. Distinct from Owner B specialist scope (entities within a specialist's instance).
 
-Pydantic class definitions land with **#9 Bundle A implementation phase**.
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `display_name` | str | ✅ | e.g., "Planning Document Work" |
+| `composability_axes` | list[enum] | ✅ | Per #22 Sub-DR A: subset of `[FROM, IN, WITH, ACROSS, OVER]` |
+| `classification` | enum | ✅ | `cross_archetype` (e.g., citation-verification) / `domain_anchored` (e.g., planning-document-work) |
+| `skills_bundled` | list[str] | ✅ | Skill ids included in this specialist (skills live within `extensions/framework/specialists/<id>/skills/`) |
+| `entity_types_owned` | list[str] | ✅ | Entity types owned by an instance of this specialist (e.g., `[planning-document-work.process, planning-document-work.project-deadline]`) — defines the Owner B sub-types this specialist hosts |
+| `references_required` | list[str] | ⚠ | Reference content this specialist needs (cross-refs into Layer A universal/domain references) |
+| `memory_required` | list[str] | ⚠ | Memory entries this specialist needs |
+| `adapters_consumed` | list[str] | ⚠ | Integration adapters this specialist uses (per glue-not-replacement) |
+| `shapes_supported` | list[str] | ✅ | Shapes this specialist works under (e.g., `[practitioner, autonomous-business]` for cross-shape; `[practitioner]` for shape-specific) |
+| `semver` | str | ✅ | Per-specialist-definition version |
+
+Pydantic class definitions for shape / substrate / protocol / specialist Framework C entities land with **#25 + #9 implementation phases**.
 
 ---
 
@@ -386,6 +501,53 @@ missing sections.
 ## Edge cases
 ## Mapping to PBS concepts
 ## Communication conventions
+```
+
+#### `shape` (Framework C; v0.34)
+
+```markdown
+## What this shape is for
+## When to use this shape (vs alternatives)
+## Default configs explained
+## Shape-specific primitives
+## Substrate compat reasoning
+## Migration from other shapes (if applicable)
+## Option B floor enforcement (the 3 axioms in this shape's context)
+```
+
+#### `substrate` (Framework C; v0.34)
+
+```markdown
+## What this substrate provides
+## Substrate Protocol surfaces implemented
+## Operational characteristics    (boot time, memory, MCP attach pattern, RunHooks)
+## Compat constraints    (which shapes work, which don't, why)
+## Migration / version evolution
+## Known limitations
+```
+
+#### `protocol` (Framework C; v0.34)
+
+```markdown
+## What this implementation does    (per axis: coordination/sparring/audit/trust/time)
+## Configuration knobs
+## Compat constraints    (which shapes + substrates)
+## Failure modes + recovery
+## Option B axiom binding    (if this protocol implements an axiom; null otherwise)
+## Migration / version evolution
+```
+
+#### `specialist` (Framework C DEFINITION; v0.34)
+
+```markdown
+## What this specialist is for
+## Composability axes    (FROM/IN/WITH/ACROSS/OVER per #22 Sub-DR A)
+## Skills bundled    (high-level overview; details in skills/<name>/SKILL.md)
+## Entity types owned    (the Owner B sub-types this specialist hosts)
+## Required references    (cross-refs into Layer A universal/domain references)
+## Memory dependencies
+## Cross-archetype vs domain-anchored classification reasoning
+## Adapter dependencies    (per glue-not-replacement)
 ```
 
 ---
