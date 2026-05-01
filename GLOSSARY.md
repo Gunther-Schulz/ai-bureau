@@ -32,6 +32,77 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 
 ---
 
+## Categories (navigation)
+
+Reading map by concept-cluster. Each entry's canonical body lives in alphabetical order below; categories here are navigational only. Some primitives appear in multiple categories (cross-listed) — canonical body is single-located.
+
+### 1. Foundational (read first)
+
+Atoms + containers + scope classifications. The architecture's load-bearing primitives.
+
+- [mechanism](#mechanism) — atomic interface contract within the framework
+- [policy](#policy) — atomic configured value within a shape
+- [framework](#framework) — universal mechanism layer (META-PRIMITIVE container)
+- [shape](#shape) — policy bundle archetype (META-PRIMITIVE container)
+- [Framework C scope](#framework-c-scope) — placement category for definitions
+- [Owner B scope](#owner-b-scope) — placement category for instances
+- [Layer A scope](#layer-a-scope) — placement category for layered content
+
+### 2. Compositional primitives (deployment chain)
+
+The primitives that compose into a workspace deployment.
+
+- [workspace](#workspace) — deployment-instance container
+- [substrate](#substrate) — runtime contract (Pattern A; tri-aspect)
+- [specialist](#specialist) — composable expertise bundle (Pattern B; bipartite)
+- [skill](#skill) — atomic work-logic unit within specialist
+- practitioner (forthcoming) — human author who bears accountability (Pattern C; bipartite)
+- session (forthcoming) — bounded interaction unit
+- workflow (forthcoming) — pattern of work in a domain
+
+### 3. VISION axes
+
+- [intertwining (axis 1)](#intertwining-axis-1) — workflow embedding
+- [sparring (axis 2)](#sparring-axis-2) — interaction mode
+- [authorship preservation (axis 3)](#authorship-preservation-axis-3) — outcome orientation
+
+### 4. Audit + event primitives (cross-axis structural substrate)
+
+- [actor](#actor) — event emitter
+- [event](#event) — audit emission unit
+- audit trail (forthcoming) — sequence of events
+- source-grounding (forthcoming) — every claim traceable to source
+- persistent state (forthcoming) — state across sessions
+- orchestration (forthcoming) — continuous decision layer
+
+### 5. Pattern A primitives (Protocol pluggability)
+
+Surface + Implementations + Instance/binding. See `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Recurring patterns: Protocol pluggability" for the pattern.
+
+- [substrate](#substrate) (cross-listed; primary location §2)
+- protocol (forthcoming) — architectural pluggable subsystem
+- adapter (forthcoming) — external integration boundary
+
+### 6. Sparring sub-mechanisms (axis 2 detail)
+
+Eight named mechanisms supporting sparring mode (all forthcoming):
+- counter-argument, confidence calibration, visible reasoning, selective friction, asymmetric knowledge respect, anti-sycophancy, commit-to-recommendations, what's-missing
+
+### 7. Modes & relations (conversational vocabulary)
+
+- [AI runtime](#ai-runtime) — conversational term for substrate's running instance (STUB; cross-refs `substrate`)
+- co-worker (forthcoming) — relational claim about AI's mode of participation
+- intertwined AI (forthcoming) — positive axis-1 mode
+- tacked-on AI (forthcoming) — failure mode of axis 1
+
+### 8. Meta concepts
+
+- pioneer instance (forthcoming) — workspace as production-tool + research-lab + IP-proving-ground
+- category collapse (forthcoming) — biggest risk to axis 1
+- defensibility (forthcoming) — operational test for axis 3
+
+---
+
 ## actor
 
 - **Class**: PRIMITIVE (atomic; the event-emitter unit)
