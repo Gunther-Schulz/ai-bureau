@@ -148,8 +148,8 @@ investigation scopes.
 
 1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
 2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
-3. **`ARCHITECTURE.md`** — **v0.34** (session 15: entity-md scope model restructure to three-category structure (Layer A / Owner B / Framework C) + Definition vs instance binding pattern; replaces v0.11 4-axis "scope orthogonality" + flat 6-axis enum from session-13 #22 Sub-DR A). Plus session-15 earlier: no-defer principle + preliminary-lock principle (v0.33). Cumulative prior session work: shape-extension framework + Option B floor (v0.32); workspace/specialist primitives (v0.31); substrate-pluggability + Substrate Protocol pattern (v0.30); per-DR internal gap detection (v0.29); architectural-gap detection sweep + maintenance rule 6 periodic greenfield review (v0.28); ARCH disciplines greenfield (v0.27); VISION sharpenings (v0.26); greenfield architecture review under VISION lens (v0.25). See `docs/decisions/entity-md-scope-model-restructure.md` (v0.34) + `docs/decisions/greenfield-architecture-review.md`. **Read the "Data + boundary reference card" near the top first** — it consolidates the "where does X go?" rules across all disciplines into one table. **Companion**: `docs/validation-gating-overview.md` (v0.22, L5 added v0.23) — systems-view consolidating the FIVE validation layers (L1 runtime structural / L2 runtime conventional / L3 retrospective scan / L4 prospective design / L5 external-boundary). Read both before designing a new gate or convention. The architectural surface, organized:
-   - **6 design disciplines** (load-bearing rules that gate design decisions): pattern-vs-instance + no-defer principle (v0.33; supersedes v0.20 chronological-defer permission), preliminary-lock principle (v0.33; NEW), make-wrong-shapes-impossible (v0.21), AI-as-runtime hybrid-shape (v0.16), entity-elevation 3-test (v0.13), glue-not-replacement (v0.15)
+3. **`ARCHITECTURE.md`** — **v0.35** (session 15: skill-granularity + specialist-granularity discipline checks elevated to ARCH; cascade from Stage 4 sweep). Cumulative session 15 work: entity-md scope model restructure to three-category structure + Definition vs instance binding pattern (v0.34); no-defer principle + preliminary-lock principle (v0.33). Cumulative prior session work: shape-extension framework + Option B floor (v0.32); workspace/specialist primitives (v0.31); substrate-pluggability + Substrate Protocol pattern (v0.30); per-DR internal gap detection (v0.29); architectural-gap detection sweep + maintenance rule 6 periodic greenfield review (v0.28); ARCH disciplines greenfield (v0.27); VISION sharpenings (v0.26); greenfield architecture review under VISION lens (v0.25). See `docs/decisions/entity-md-scope-model-restructure.md` (v0.34) + `docs/decisions/greenfield-architecture-review.md`. **Read the "Data + boundary reference card" near the top first** — it consolidates the "where does X go?" rules across all disciplines into one table. **Companion**: `docs/validation-gating-overview.md` (v0.22, L5 added v0.23) — systems-view consolidating the FIVE validation layers (L1 runtime structural / L2 runtime conventional / L3 retrospective scan / L4 prospective design / L5 external-boundary). Read both before designing a new gate or convention. The architectural surface, organized:
+   - **6 design disciplines** (load-bearing rules that gate design decisions): pattern-vs-instance + no-defer principle (v0.33; supersedes v0.20 chronological-defer permission), preliminary-lock principle (v0.33; NEW), make-wrong-shapes-impossible (v0.21), AI-as-runtime hybrid-shape (v0.16), entity-elevation 3-test (v0.13) — with skill-granularity + specialist-granularity elevation analogues (v0.27 + v0.35), glue-not-replacement (v0.15)
    - **3 operational principles** (rules that guide implementation choices): validation-layering deterministic-primary (v0.18), three evolution patterns mutable/append-only/forward-only (v0.19), informed-defaults ship-best-shape (v0.18)
    - **4 meta-rules**: app-vs-office (#1), memory-vs-RAG (#2), source-of-truth + invalidation (#3), execution-determinism + fail-closed corollary (#4)
    - **Earlier resolved concepts** absorbed into disciplines: archetype-portability (paragraph in pattern-vs-instance v0.10), office-vs-department modularization (#12, resolved v0.11), managed-entity concept (#9, framed v0.12)
@@ -204,6 +204,75 @@ Before answering an architectural question that touches one of these topics, rea
 | A2A / Gemini-pattern emulation (Tier 3) | `docs/decisions/a2a-and-gemini-pattern-emulation.md` |
 
 **Failure-prone area** (per `~/dev/Gunther-Schulz/dotfiles/claude/failure-modes.md` 2026-05-01 entry): design discussions touching `extensions/specialists/*`, `extensions/department/*`, or any reference/entity layout. Drift pattern: from "principles I know about hybrid-shape / AI-as-runtime" to "what the specific entity type's spec actually says." When a question touches body conventions, frontmatter fields, or namespacing for a specific entity type, read `docs/conventions/entity-md-spec.md` before answering — pattern-matching from general principles is the documented failure mode.
+
+---
+
+## Session 15 — Meta-architectural shift + entity-md scope model restructure + framework primitive content (no-defer + preliminary-lock principles + three-category scope model + Definition vs instance binding pattern + 9 framework primitive entity-md instances + Stage 4 DR sweep)
+
+End of session 15 (2026-05-01). 7 commits, ~3500 lines of architectural content. **Two foundational meta-architectural principles codified (v0.33) + major scope-model restructure (v0.34) + skill/specialist-granularity elevation (v0.35) + 9 framework primitive entity-md instances written + ~17 DRs amended under no-defer principle.** The largest architectural session to date in scope.
+
+**What shipped session 15** (chronological commit order):
+
+1. **`6c0df6a`** — ROADMAP #25 D4 reconciliation (foundation): reconciled scope contradiction between ROADMAP item-6 (Long-running runtime substrate adapter IN-SCOPE) and DR D4 (DEFERRED). Replaced with Time Protocol pluggability (abstraction in #25; concrete adapter implementation in W4 watch-list awaiting first autonomous-business shape extension).
+
+2. **`79989d3`** — **ARCH v0.32 → v0.33: no-defer principle + preliminary-lock principle**. Two coupled meta-architectural changes per user direction.
+   - **No-defer principle** (supersedes v0.20 "Defer ONLY for chronological reason" permission). Previous v0.20 was structurally permissive; defer-instinct learned to wear it as chronological-defer-as-YAGNI mask. New rule: **never defer**; if external information genuinely doesn't exist, surface as **watch-list entry** naming specific external signal. Two tests: external-information test + effort-asymmetry test.
+   - **Preliminary-lock principle** (NEW top-level discipline). Every architectural decision is preliminary-locked; "locked" vocabulary means current best position, not permanent. Only persistent anchor: VISION axes (revise only on real-world falsification). PBS in deep design + exploratory phase; specs / DRs / ARCH / code = living drafts.
+   - Memory: `feedback_preliminary_lock.md` (NEW) + `feedback_pattern_not_instance_defers.md` (sharpened to no-defer) + `feedback_defer_instinct.md` (sharpened to disguise-recognition).
+
+3. **`ffe8ebb`** — **ARCH v0.33 → v0.34: entity-md scope model restructure**. Replaces flat 6-axis enum (universal/domain/state/specialist/workspace/project per session-13 #22 Sub-DR A) with three-category scope structure: **Layer A** (universal/domain/state — layered content) + **Owner B** (workspace/specialist/project — deployment-instance ownership) + **Framework C** (shape/substrate/protocol/specialist DEFINITIONS — framework primitives). Plus NEW **Definition vs instance binding pattern** — framework-primitive DEFINITIONS in Framework C; INSTANCE-SELECTION via workspace.md fields (Owner B): `shape: <id>`, `substrate: <id>`, `specialists_employed: [<id>+]`, `protocol_overrides: {<axis>: <id>}`. Specialist dual-nature (DEFINITION = Framework C; SCOPE = Owner B) resolved. 3-round decision-design-sharpening (full monty + 2 user-triggered; 19 refinements all Pareto-improving). New DR `docs/decisions/entity-md-scope-model-restructure.md`.
+
+4. **`47a14da`** — practitioner-shape.md PBS pioneer reference + 2 DR Stage 4 reviews (interleaved: shape-extension D1-D5 + #22 Sub-DR A D1-D6 reframed under no-defer principle).
+
+5. **`9e82352`** — substrate.md schemas (CASDK + MS AF) + 5 protocol.md files (event-coordination + always-on-sparring + claim-level-audit + practitioner-judgment-trust + turn-based-time) + planning-document-work specialist DEFINITION + 2 substrate DR Stage 4 reviews.
+
+6. **`8b19ef0`** — Stage 4 full sweep: 15 DRs re-examined under v0.33 no-defer principle. Substantive amendments to 4 DRs (permission-abstraction with 6 v1 decisions; in-process-mcp-server with 4 v1 decisions; skill-expert-agent-and-domain-knowledge with 1 decision; subagent-primitives-adoption with consolidations); brief amendments to 11 DRs documenting reclassification (phase routing / watch-list / decided-now / process commitment).
+
+7. **`<this commit>`** — **ARCH v0.34 → v0.35: skill-granularity + specialist-granularity discipline checks elevated to ARCH**. Cascade from Stage 4 sweep amendments (skill-expert-agent-and-domain-knowledge.md D3 + #22 Sub-DR A D3 reframes). Added "Elevation analogue for specialists" sub-section + "Discipline check for elevation analogues at audit/design-review time" sub-section. Implementation bundled with #9 audit + design-review ripples.
+
+**9 framework primitive entity-md instances written** (Stage 3; option 1 interpretation B):
+
+- 1 shape: `extensions/framework/shapes/practitioner/shape.md` (PBS pioneer reference; validates contract end-to-end)
+- 2 substrates: `extensions/framework/substrates/{claude-agent-sdk, ms-agent-framework}/substrate.md`
+- 5 protocols: `extensions/framework/protocols/{event-coordination, always-on-sparring, claim-level-audit, practitioner-judgment-trust, turn-based-time}/protocol.md`
+- 1 specialist DEFINITION: `extensions/framework/specialists/planning-document-work/specialist.md` (PBS pioneer; captures existing PBS plugin/skills/ content as Framework C primitive)
+
+All bindings consistent: practitioner-shape's `default_configs` references the 5 protocols by id; protocols reference `shape_compat: practitioner`; substrates declare `shape_compat: practitioner`; specialist declares `shapes_supported: practitioner`. Definition vs instance binding pattern validated end-to-end.
+
+**Stage 4 DR sweep outcomes** (15 DRs amended this session; 4 more amended interleaved earlier):
+
+- **Substantive v1 decisions documented**: ~10 across permission-abstraction (6: caching / PermissionRequest as entity / conditional / bulk / two-stage / appeals) + in-process-mcp-server (4: hot-reload / concurrent-tool-calls / sequential architecture / tool versioning RESOLVED) + skill-expert-agent-and-domain-knowledge (1: skill-granularity discipline check) + #22 Sub-DR A (4: granularity check / multi-grouping / composite specialist / hot-reload).
+- **Watch-list consolidation**: marketplace mechanics watch-list spans shape-extension W1 + #22 Sub-DR A W1 + positioning-three-tier-framework D1+D2+D4 + in-process-mcp-server W7 + closest-neighbors-deep-read D2 — all consolidate under marketplace v3 launch milestone (single v3 work item).
+- **COMPLETED items archived**: substrate decision (#18 shipped session 12); broader terminology re-eval (#22 shipped session 13); RAG primitives adoption (phase routing to #19).
+- **Process commitments separated from defers**: periodic substrate re-eval per Maintenance discipline rule 6.
+
+**Major architectural decisions locked session 15**:
+
+1. **No-defer principle (v0.33)**: never defer; surface info-gaps as watch-list entries naming specific external signals. Replaces v0.20 chronological-defer permission.
+
+2. **Preliminary-lock principle (v0.33)**: every architectural decision is preliminary-locked; only VISION axes are anchored. PBS in deep design + exploratory phase; specs / DRs / ARCH / code all living drafts.
+
+3. **Three-category scope model (v0.34)**: replaces flat 6-axis enum. Layer A (layered content) + Owner B (deployment-instance ownership) + Framework C (framework primitives; immutable; distributable).
+
+4. **Definition vs instance binding pattern (v0.34)**: framework-primitive DEFINITIONS in Framework C; INSTANCE-SELECTION via workspace.md reference fields (Owner B). Specialist dual-nature (DEFINITION = Framework C; SCOPE = Owner B for entities owned within instance).
+
+5. **Skill-granularity + specialist-granularity discipline checks elevated to ARCH (v0.35)**: parallel to entity-elevation slice 20 + target 11. L3 retrospective audit slices + L4 prospective design-review targets bundled with #9 ripples.
+
+**What's deferred to next sessions** (not "deferred" per no-defer principle — phase routing per ROADMAP queue):
+
+- **Stage 5 — Implementation cascade**: AuditEvent schema additions (6 category fields per v0.34); Pydantic gate three-category dispatch (lands #9 Bundle B); filesystem migrations (`extensions/{specialists,workspace}/...` → `extensions/framework/{specialists,workspace}/...` per v0.34; lands #11 single-touch refactor); skill frontmatter sweep (per #11 specialist: REQUIRED frontmatter sweep across 19+ skills).
+
+- **Stage 6 — Continue pre-RAG queue per HANDOFF locked order**: #20 PydanticAI evaluation → Bundles B/C/D/E (#9 design) → #11 Cowork integration → #24 EU AI Act + DACH compliance specialist → #19 LlamaIndex pluggable RAG eval (+ memory adapter eval per session-14 scope expansion).
+
+- **Recurring per preliminary-lock + no-defer**: every session re-applies preliminary-lock test on touched decisions; ongoing per-session vigilance, not one-time sweep.
+
+**Memory feedbacks applied + tested session 15**:
+- `feedback_pattern_not_instance_defers.md` (sharpened v0.33) — never defer; watch-list entries name specific external signals; up-front costs invalid.
+- `feedback_defer_instinct.md` (sharpened v0.33) — disguise-recognition (chronological-defer mask, "speculation" mask, "we haven't done it yet" mask).
+- `feedback_preliminary_lock.md` (NEW) — every prior decision preliminary-locked except VISION axes.
+- `feedback_judgment_and_automate.md` — committed positions throughout; minimal menu-presenting.
+- `feedback_full_monty_upfront.md` — comprehensive proposals in initial chat (3-round decision-design-sharpening of three-category restructure surfaced 19 refinements all Pareto-improving).
+- `feedback_propose_before_commit.md` — surface decisions in chat at decision phases; write content directly post-lock without per-content approval.
 
 ---
 

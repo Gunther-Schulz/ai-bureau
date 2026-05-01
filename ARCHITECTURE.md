@@ -16,8 +16,9 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.34 (session 15 — entity-md scope model restructure: three-category scope structure (Layer A / Owner B / Framework C) + Definition vs instance binding pattern (NEW architectural pattern). Replaces flat 6-axis scope enum. 3-round decision-design-sharpening locked the architectural foundation. See "Three-category scope model" section (replaces "Layering convention: scope orthogonality") + `docs/decisions/entity-md-scope-model-restructure.md`.)**.
+Status: **v0.35 (session 15 — Stage 4 sweep cascade: skill-granularity + specialist-granularity discipline checks elevated to ARCH; "Discipline check for elevation analogues at audit/design-review time" sub-section added. Decided session 15 per skill-expert-agent-and-domain-knowledge.md D3 + terminology-and-specialist-primitive.md D3 reframes (both moved from defer-instinct to decide-now under v0.33 no-defer principle). Implementation bundled with #9 audit + design-review ripples.)**.
 
+- **v0.34 → v0.35**: **Skill-granularity + specialist-granularity discipline checks elevated to ARCH (session 15)**. Added "Elevation analogue for specialists" sub-section under entity-elevation discipline (parallel to v0.27 "Elevation analogue for skills"). Plus "Discipline check for elevation analogues at audit/design-review time" sub-section covering both: skill-granularity audit slice + design-review target (parallel to entity-elevation slice 20 + target 11); specialist-granularity audit slice + design-review target (parallel structure). All bundled with #9 audit + design-review ripples for first-run. Decision flowed from session-15 Stage 4 sweep amendments to `docs/decisions/skill-expert-agent-and-domain-knowledge.md` D3 + `docs/decisions/terminology-and-specialist-primitive.md` D3 (both reframed from defer-instinct masks to decide-now under v0.33 no-defer principle's effort-asymmetry test). Per validation-layering discipline (v0.18): L3 retrospective audit slices + L4 prospective design-review targets.
 - **v0.33 → v0.34**: **Entity-md scope model restructure (session 15)**. Replaces flat 6-axis scope enum (universal/domain/state/specialist/workspace/project per session-13 #22 Sub-DR A) with three-category scope structure: **Layer A** (universal/domain/state — layered content; merge by specificity), **Owner B** (workspace/specialist/project — deployment-instance ownership), **Framework C** (shape/substrate/protocol/specialist DEFINITIONS — framework primitives; immutable; distributable). Each entity has exactly ONE category populated; Pydantic at-least-one-of validator enforces. Plus NEW **Definition vs instance binding pattern** — framework-primitive DEFINITIONS in Framework C; INSTANCE-SELECTION via workspace.md fields (Owner B) referencing definitions: `shape: <id>` (one), `substrate: <id>` (one; relocated from backend composition root), `specialists_employed: [<id>+]`, `protocol_overrides: {<axis>: <id>}` (Option B floor axioms NOT overridable). Plus **Specialist dual-nature** resolution (the only category-spanning primitive: definition in Framework C; scope in Owner B). 3-round decision-design-sharpening: round 1 full monty + 2 user-triggered rounds; 19 refinements (4 revisions + 15 expansions). Replaces ARCH "Layering convention: scope orthogonality" section with "Three-category scope model"; entity-md-spec §3 Layer 1 + §3.2 type namespacing rewrite + §4 Layer 2 schemas added for shape/substrate/protocol/specialist + §6 body conventions added; ROADMAP #25 scope expanded to incorporate three-category foundation + actual schema designs. Filesystem migration: `extensions/{shapes,substrates,protocols,specialists}/<id>/` → `extensions/framework/{shapes,substrates,protocols,specialists}/<id>/`. Pre-launch / no production entity-md instances persisted = essentially zero migration cost today. Decision record: `docs/decisions/entity-md-scope-model-restructure.md`.
 - **v0.32 → v0.33**: **No-defer principle (supersedes v0.20 chronological-defer permission) + Preliminary-lock principle (NEW top-level architectural principle) — session 15 user direction**. Two coupled meta-architectural changes. (1) **No-defer principle** replaces v0.20 "Defer ONLY for chronological reason" framing — that wording was structurally permissive (offered an escape hatch defer-instinct learned to wear as a chronological-defer-as-YAGNI mask; surfaced session 15 when AI applied "speculation about future framework primitives is up-front-cost defer territory" to reject framework-axis design — itself a chronological-defer-mask). New rule: **never defer**; if external information genuinely doesn't exist, surface as **watch-list entry** naming the specific external signal awaited (Phase 1 corpus deployment data; first-bind real workflow; regulatory ruling X; community-built shape extension; second-domain feedback). Watch-list entries have resolution mechanisms; defers languish. Two tests for "literally cannot decide today": external-information test (name specific external signal) + effort-asymmetry test (could we do the design today if we chose? if yes, NOT a chronological gap). Composed with sharpened memory entries. (2) **Preliminary-lock principle** (NEW top-level architectural principle) — every architectural decision in this repo is preliminary-locked. "Locked" vocabulary means current best position derived from available reasoning, NOT permanent. Subject to re-examination when VISION ideal design demands. Only persistent anchor: VISION axes (revise only on real-world falsification per VISION's own falsification criteria — extremely high bar). PBS is in deep design + exploratory phase; specs / DRs / ARCH / code all living drafts. Preliminary-lock is the prerequisite for Maintenance discipline rule 6 (periodic greenfield review) being meaningful. Vocabulary discipline: "Locked" = preliminary-locked; "Anchored" = VISION axes only; avoid "Settled" (false permanence). Memory: feedback_preliminary_lock.md (NEW) + feedback_pattern_not_instance_defers.md (sharpened to no-defer) + feedback_defer_instinct.md (sharpened to disguise-recognition). Reference card row updated.
 - **v0.31 → v0.32**: **Shape-extension framework + Option B architectural floor + competitive-landscape synthesis (session 14)**. Three coupled architectural additions: (1) **Shape-extension framework** — workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/` with default configs + shape-specific primitives; PBS pioneer = practitioner-shape extension reference implementation; layered approach formalized (OS framework workspace-shape-neutral + marketed product practitioner-focused). (2) **Option B architectural floor** — even shape-neutral framework primitives structurally enforce 3 accountability axioms regardless of shape: anti-Art-25-trap gate (specialist conformity manifest as Pydantic gate; impossible-by-construction per Make-wrong-shapes-impossible v0.21) + claim-level audit emission (decision provenance + sources[] + causes[]) + human authority somewhere in accountability-bearing output chain (configurable granularity: per-output / per-decision-class / per-policy / per-budget-cycle / per-specialist-installation). Other shapes can configure axis intensities (sparring optional vs always-on; audit overlay action-level on top of claim-level baseline; coordination event vs call) but cannot disable structural floor. (3) **Competitive-landscape research synthesis** — 4 OS deep-reads (Letta + OpenSail + PAI + Paperclip) + exhaustive commercial scan + DACH-specific (Beck-Noxtua / Phase0 / Langdock / Avoice / AutoSitu); 5 of 6 distinctness axes confirmed unique to PBS; ~10 adoption opportunities surfaced (~7 adopt + 3 defer). Cherry Ventures (Berlin) only published EU VC thesis-match. EU AI Act tailwind asymmetric in PBS favor (Art. 14 sparring; Art. 11/13/26(6) audit-by-construction; practitioner-as-deployer cleanest posture). NEW ROADMAP commitments: **#24 EU AI Act + DACH compliance specialist** (HARD REQUIREMENT before Aug 2026 production B-Plan use; cross-archetype `eu-ai-compliance` specialist + DACH-anchored extension; substrate-level additions for AuditEvent + retention defaults + specialist conformity gate); **#25 Shape extension framework + Protocol pluggability** (foundational; Tom Sawyer dynamic enablement; AFTER #11 + #9; BEFORE marketplace v3). Decision records: `docs/decisions/shape-extension-and-architectural-floor.md`, `docs/decisions/closest-neighbors-deep-read.md`, `docs/decisions/vision-realignment-session14.md`. VISION.md substantially updated (axis 2 framing as runtime mechanism; axis 3 scope-clarified to practitioner shape; new sections: scope clarification + counter-VISION engagement + negative space + temporal robustness + falsification + foundation expansion + lifecycle triggers + VISION≠ARCH boundary).
@@ -1757,6 +1758,69 @@ against its appropriate elevation criteria.
 **Source of truth**: `docs/decisions/skill-expert-agent-and-
 domain-knowledge.md` Decision 4 + `docs/plugin-conventions.md`
 §14 (skill granularity guidance).
+
+### Elevation analogue for specialists (added v0.35 — specialist-granularity criteria)
+
+The same restraint-in-elevation discipline applies to specialists, with criteria parallel to skill-granularity (this DR's predecessor analogue) but at the specialist primitive level. Where skill-elevation asks "is this concept skill-shaped (vs in-skill content distributed across body + references + memory + process entities)?", **specialist-elevation** asks "is this concept specialist-shaped (vs internal content within an existing specialist OR workspace-scope content)?"
+
+**The specialist-granularity principle** (per `docs/decisions/terminology-and-specialist-primitive.md` #22 Sub-DR A):
+
+> **Prefer internal content within existing specialists OR workspace-scope content over new specialists. Elevate a competence area to its own specialist only when cohesive competence + distributable as unit + reusable across workspaces ALL apply.**
+
+**The 3-test for specialists** (parallel to skill-granularity 3-test; distinct criteria):
+
+| Test | Question | Why it matters |
+|---|---|---|
+| **Cohesive competence** | Has clear what's-IN / what's-OUT? Internal cohesion + external decoupling? | A topic that fragments across multiple competence areas isn't a single specialist; should be split or absorbed |
+| **Distributable as unit** | Versionable; installable independently; clear distribution boundary? | Marketplace v3 distribution unit IS the specialist; topic without distribution boundary fails |
+| **Reusable across workspaces** | Recurs across multiple workspaces (cross-archetype OR within-archetype both qualify)? | Single-workspace niche content stays at workspace-scope; doesn't warrant Framework C distributable status |
+
+All three required.
+
+**Worked examples** (per #22 Sub-DR A):
+- Workspace-instance content (e.g., Hendrik's signing convention) → fails distribution test → workspace-scope content, NOT a specialist
+- Hyper-niche topic (e.g., §13a-Verfahren) → fails cohesion test → distributed across existing specialist's content, NOT a specialist
+- citation-verification → passes all 3 → cross-archetype specialist
+- planning-document-work → passes all 3 → domain-anchored specialist
+
+**Composition with skill-elevation + entity-elevation**: three analogues compose hierarchically. A concept gets evaluated at appropriate granularity:
+- Is it scoped to a specialist's instance? → entity (within specialist)
+- Is it skill-shaped within a specialist? → skill
+- Is it the codified-expertise BUNDLE itself? → specialist (Framework C)
+
+**Source of truth**: `docs/decisions/terminology-and-specialist-primitive.md` (#22 Sub-DR A).
+
+### Discipline check for elevation analogues at audit/design-review time (added v0.35)
+
+Both skill-granularity + specialist-granularity disciplines need the audit + design-review enforcement parallel to entity-elevation's checkpoints (per "Where the discipline is enforced (multi-checkpoint)" sub-section above). Decided session 15 per session-15 amendments to `docs/decisions/skill-expert-agent-and-domain-knowledge.md` D3 + `docs/decisions/terminology-and-specialist-primitive.md` D3 (both reframed under v0.33 no-defer principle from "defer until pattern emerges" to "decide now alongside parallel work").
+
+**Skill-granularity audit slice** (parallel to entity-elevation slice 20):
+- Scans `plugin/skills/<name>/` (and post-#11 `extensions/framework/specialists/<id>/skills/<name>/`) against the 3-test (distinct workflow + distinct output + reuse across projects)
+- Flags over-elevated skills for consolidation; under-elevated content for split
+- L3 retrospective per validation-layering discipline (v0.18)
+- First-run scheduled with #9 audit ripple
+
+**Skill-granularity design-review target** (parallel to entity-elevation target 11):
+- Enforces 3-test prospectively at skill-creation time
+- Decision-record convention: any DR proposing a new skill must include explicit 3-test verdict
+- L4 prospective per validation-layering discipline (v0.18)
+- First-run scheduled with #9 design-review ripple
+
+**Specialist-granularity audit slice** (parallel structure):
+- Scans `extensions/framework/specialists/<id>/` against the specialist 3-test (cohesive competence + distributable as unit + reusable across workspaces)
+- Flags over-elevated specialists for consolidation; under-elevated content for split
+- L3 retrospective
+- First-run scheduled with #9 audit ripple (or #11 specialist-content sweep)
+
+**Specialist-granularity design-review target** (parallel structure):
+- Enforces 3-test prospectively at specialist-creation time
+- Decision-record convention: any DR proposing a new specialist must include explicit 3-test verdict
+- L4 prospective
+- First-run scheduled with #9 design-review ripple
+
+**Implementation**: bundled with #9 audit + design-review ripples (single-touch refactor of audit + design-review skills with multiple new slices/targets together).
+
+**Why elevated to ARCH (vs staying in DRs)**: parallel to entity-elevation discipline being a top-level ARCH section, skill-granularity + specialist-granularity disciplines deserve top-level visibility. Pattern-vs-instance discipline applies: the elevation analogues are pattern-level (any deployment using skills + specialists has the same granularity questions), not PBS-instance-specific.
 
 ---
 
