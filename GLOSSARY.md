@@ -854,7 +854,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 - **Axis**: axis-2
 - **VISION usage**: directly used (`VISION.md` axis 2 — second interlocking principle)
 
-**Canonical**: An interaction mode where AI challenges, generates counter-arguments, names uncertainty, and resists giving easy answers; load-bearing runtime mechanism per VISION axis 2 (not optional skill).
+**Canonical**: An interaction mode (axis 2) where AI challenges, generates counter-arguments, names uncertainty, and resists giving easy answers. VISION axis 2 frames sparring as "load-bearing runtime mechanism" (using "mechanism" colloquially — meaning load-bearing AT RUNTIME, distinct from the locked architectural primitive `mechanism` = atomic interface contract). Architecturally, the framework supports the axis via the Sparring Protocol (Pattern A primitive; surface + impls + selection) + 8 sparring sub-mechanisms (each a framework-level interface contract per locked `mechanism` vocabulary).
 
 **What it is**: The second VISION axis. AI participates in sparring-mode interaction, distinct from oracle-mode (humans submit AI's answer as their own; performance same as AI alone) or validator-mode (humans ask AI to support preconceptions; sycophancy loop; performance worse than AI alone). Per Vivienne Ming's research, only sparring-mode produces value rivaling or beating prediction markets. Sparring keeps the practitioner critically engaged.
 
@@ -882,7 +882,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 
 ## specialist
 
-- **Class**: PRIMITIVE (atomic; the bundled-expertise unit) — **bipartite** multi-aspect (DEFINITION in Framework C; INSTANCE-CONTENT in Owner B)
+- **Class**: PRIMITIVE (atomic; the bundled-expertise unit) — **bipartite multi-aspect Pattern B** (DEFINITION in Framework C; INSTANCE-CONTENT in Owner B)
 - **Layer**: multi-aspect (Framework C for the distributable definition; Owner B for entities owned by the deployed specialist instance)
 - **Axis**: cross-axis (specialists support any axis through their bundled skills + entities + adapters)
 - **VISION usage**: directly used (`VISION.md` thesis line 7: "codified expertise bundled as specialists")
@@ -940,7 +940,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 
 ## substrate
 
-- **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — **tri-aspect** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
+- **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — **tri-aspect Pattern A** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
 - **Layer**: multi-aspect (framework-mechanism for the Protocol surface; Framework C for implementations; Owner B at workspace runtime)
 - **Axis**: cross-axis (substrate hosts all axes' runtime behavior)
 - **VISION usage**: implicit (VISION doesn't directly use "substrate"; concept lives in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE + Framework C scope members)
