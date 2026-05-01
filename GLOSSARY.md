@@ -477,6 +477,56 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 ---
 
+## substrate
+
+- **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — with **dual-nature** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
+- **Layer**: dual-nature (framework-mechanism for the Protocol surface; Framework C for implementations; cross-cutting at workspace runtime)
+- **Axis**: cross-axis (substrate hosts all axes' runtime behavior)
+- **VISION usage**: implicit (VISION doesn't directly use "substrate"; concept lives in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE + Framework C scope members)
+
+**Canonical**: A deployment runtime that workspaces run on — defines the agent loop, tool/MCP-server registration, permission flow, hook events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
+
+**What it is**: One of the framework's mechanism categories (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE). The substrate provides the runtime contract any workspace operates on. The Protocol surface (interface contract) is universal/shape-neutral; specific implementations differ in how they realize that surface (e.g., Claude Agent SDK = Anthropic plugin runtime; MS Agent Framework = Microsoft agentic framework). Substrate dual-nature mirrors specialist's pattern: DEFINITIONS are distributable Framework C entities; the concrete RUNNING substrate is bound at workspace deployment.
+
+**What it is NOT**:
+- Not the `framework` itself — framework is the universal mechanism layer; substrate is one mechanism category within the framework
+- Not a `shape` — shape is the policy bundle archetype; substrate is a runtime-contract mechanism that shapes specify compatibility with (not equivalent)
+- Not a `workspace` — workspaces select a substrate via `workspace.md`; substrate is what they run ON
+- Not the `codebase` — substrate is the architectural runtime contract + its implementations; the codebase realizes one substrate impl
+
+**Cross-archetype illustration**: All shapes use SOME substrate; not all shapes are compatible with all substrates. Examples (named, factually existing):
+- **Claude Agent SDK** — Anthropic's plugin/agent runtime; archived as primary substrate per session-12 substrate eval
+- **MS Agent Framework** — Microsoft's agentic framework; archived as second backend
+- (Future substrates may emerge — e.g., specialized runtimes for Tier-3 / federation / autonomous-business shapes)
+
+A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowledge-graph-shape workspace might run on a different substrate optimized for retrieval; the SAME framework mechanisms (audit emission, source-grounding, etc.) compose with each.
+
+**Boundary test**: ask "what's the runtime contract this workspace operates on?" → it's the substrate. Three disambiguators:
+1. Is this a runtime-contract Protocol surface or implementation? → substrate (mechanism + Framework C definition)
+2. Is this a configured value in a shape's bundle? → it's a `policy`, not substrate
+3. Is this a workspace-instance-level binding? → it's workspace configuration (workspace selects which substrate)
+
+**Composes with**:
+- `framework` — substrate is one mechanism category within the framework
+- `mechanism` — the substrate's Protocol surface IS a mechanism (framework-level interface contract)
+- `Framework C scope` — substrate IMPLEMENTATIONS live here as distributable definitions
+- `shape` — shapes declare compatibility with substrates (not all shapes work on all substrates)
+- `workspace` — workspace selects exactly one substrate via `workspace.md`
+- `Owner B scope` — running substrate instance is bound to workspace deployment (Owner B)
+- `protocol` (architectural) — substrate Protocol surface is one of the framework's architectural Protocols (canonical entry forthcoming)
+
+**Source**:
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" — substrate listed as Framework C definition member + framework-mechanism category
+- `Framework C scope` GLOSSARY entry: "substrate definitions (runtime contracts: Claude Agent SDK, MS AF, future)"
+- `workspace` GLOSSARY entry: "workspace runs on exactly one substrate"
+
+**See**:
+- `Framework C scope` (where substrate definitions live)
+- `workspace` (which selects exactly one substrate)
+- ARCH Layer 3 substrate-detail topics (placeholder until Phase 3 — Substrate Protocol method set; per-substrate implementation detail; deployment-tier framing; eval-framework integration; archived material to consult: `substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`)
+
+---
+
 ## workspace
 
 - **Class**: PRIMITIVE (atomic; the deployment-instance unit)
@@ -517,7 +567,7 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `Owner B scope` — workspace lives as the central instance + container for workspace-scope managed entities (practitioner-record, Actor, Client)
 - `specialist` — workspace activates a list of specialists per `specialists_active` field in `workspace.md` (canonical entry forthcoming)
 - `practitioner` — workspace serves practitioner(s); records at Owner B (canonical entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
-- `substrate` — workspace runs on exactly one substrate (canonical entry forthcoming)
+- `substrate` — workspace runs on exactly one substrate (selected via `workspace.md` `substrate` field)
 - `session` — interaction units occur within a workspace (canonical entry forthcoming)
 - `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
 
