@@ -154,6 +154,36 @@ The detailed "Read order for next session" section further down is the long-form
 
 ---
 
+## 📚 Topic → load-bearing source map (architectural questions)
+
+The global "Honesty about sources" rule (`~/.claude/CLAUDE.md`) applies to every assertion in every session. This map identifies which specs / decision records are load-bearing for common pbs-bureau architectural topics, so recognition-failure on which source is authoritative is reduced.
+
+Before answering an architectural question that touches one of these topics, read the load-bearing source(s). If skipping (cost-bias is legitimate), state the basis explicitly — "from principles, not from [source]" / "I'd need to check [source]" / "best guess" — per the global rule.
+
+| Topic / question | Load-bearing source(s) |
+|---|---|
+| Entity body shape / layout / frontmatter / namespacing conventions | `docs/conventions/entity-md-spec.md` + `docs/decisions/ai-as-runtime-hybrid-shape.md` |
+| Reference entities (body, source preservation, RAG ingestion) | `docs/conventions/entity-md-spec.md` §reference + `docs/rag-pipeline-decisions.md` |
+| Substrate / agent runtime / Pydantic Protocol | `docs/decisions/substrate-agentic-framework.md` + `docs/decisions/substrate-protocol-design.md` + `docs/decisions/sdk-deep-read.md` |
+| Workspace / specialist primitive / three-tier framework | `docs/decisions/terminology-and-specialist-primitive.md` + `docs/decisions/positioning-three-tier-framework.md` |
+| Shape extension / Option B architectural floor / accountability axioms | `docs/decisions/shape-extension-and-architectural-floor.md` |
+| EU AI Act / DACH compliance specialist (#24) | ROADMAP #24 + `docs/decisions/shape-extension-and-architectural-floor.md` |
+| VISION (sparring / authorship / counter-vision) | `VISION.md` + `docs/decisions/vision-realignment-session14.md` + `docs/decisions/counter-vision-engagement.md` |
+| Audit-trail / event schema | `docs/decisions/audit-trail-v2.md` |
+| MCP gates / fail-closed policy | `docs/decisions/mcp-fallback-policy.md` |
+| Office-vs-department legacy (now: workspace-vs-specialist) | `docs/decisions/office-vs-department.md` (NAMING SUPERSEDED) + `docs/decisions/terminology-and-specialist-primitive.md` |
+| Bundle A entity gate (`department.md`, `instances_at`, namespacing) | HANDOFF Bundle A close-out + `docs/conventions/entity-md-spec.md` |
+| Greenfield architecture review / disciplines | `docs/decisions/greenfield-architecture-review.md` |
+| Subagent / eval / permission / in-process MCP (R3a-R3d) | `docs/decisions/subagent-primitives-adoption.md` + `docs/decisions/eval-framework-adoption.md` + `docs/decisions/permission-abstraction.md` + `docs/decisions/in-process-mcp-server.md` |
+| Governance / identifier sourcing | `docs/decisions/governance-and-identity-sourcing.md` |
+| Skill-expert-agent / domain knowledge | `docs/decisions/skill-expert-agent-and-domain-knowledge.md` |
+| Closest-neighbors / competitive landscape | `docs/decisions/closest-neighbors-deep-read.md` + `docs/strategic-positioning.md` |
+| A2A / Gemini-pattern emulation (Tier 3) | `docs/decisions/a2a-and-gemini-pattern-emulation.md` |
+
+**Failure-prone area** (per `~/dev/Gunther-Schulz/dotfiles/claude/failure-modes.md` 2026-05-01 entry): design discussions touching `extensions/specialists/*`, `extensions/department/*`, or any reference/entity layout. Drift pattern: from "principles I know about hybrid-shape / AI-as-runtime" to "what the specific entity type's spec actually says." When a question touches body conventions, frontmatter fields, or namespacing for a specific entity type, read `docs/conventions/entity-md-spec.md` before answering — pattern-matching from general principles is the documented failure mode.
+
+---
+
 ## Session 14 — Competitive-landscape research + VISION re-alignment + Option B architectural floor + EU AI Act compliance specialist + Cherry Ventures funding path
 
 End of session 14 (2026-04-30). Six major work products shipped in batch commit. Operating-geography clarification mid-session ("EU, mainly Germany") reshaped strategic + regulatory framing. Paperclip + PAI + Avoice + a16z + EU AI Act each got dedicated research depth.
