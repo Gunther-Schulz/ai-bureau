@@ -92,6 +92,31 @@ The two questions are orthogonal: a reference can be universal-Layer-A; an entit
 | EU AI Act | (nothing) | (nothing — lives in eu-ai-compliance specialist) |
 | Long-running work-units | (nothing — workspace + specialist suffice) | Practitioner-shape may activate a "project" specialist; legal-practice may activate "matter"; work-unit kind is specialist-defined |
 
+### Recurring patterns: Protocol pluggability (the Protocol pattern)
+
+Some framework primitives recur with a structural shape: **Surface + Implementations + Instance/binding** — the **Protocol pattern**. When this pattern manifests, the primitive has three aspects:
+
+1. **Surface** (mechanism; framework-level): an abstract Protocol contract defining the interface
+2. **Implementations** (Framework C definitions; distributable): concrete realizations of the surface
+3. **Instance/binding** (Owner B; workspace-level): the running implementation a workspace selected/bound
+
+Known instances (preliminary-locked; more may surface):
+
+- **substrate** (locked) — Substrate Protocol surface + concrete substrates (Claude Agent SDK, MS Agent Framework) + workspace's running substrate per `workspace.md`
+- **adapter** (canonical entry forthcoming) — Adapter Protocol surfaces per integration class + concrete adapters (e.g., gmail-adapter, lexware-adapter, MCP-protocol-based adapters) + workspace's active adapters
+- **protocol** (architectural; canonical entry forthcoming) — the meta-concept: Coordination/Audit/Sparring/Trust/Time Protocol surfaces + their concrete implementations + per-shape-policy or per-workspace selection
+
+**Naming**: "Protocol pattern" with explicit disambiguation from **Pydantic Protocol** (the Python typing concept; `typing.Protocol`). The architectural Protocol pattern is broader — it describes pluggable-subsystem structure regardless of implementation technique.
+
+### Other multi-aspect primitives (NOT Protocol pattern)
+
+Some primitives have multi-aspect / dual-nature structure but do NOT follow the Protocol pattern:
+
+- **specialist** — bipartite: DEFINITION (Framework C; distributable bundle) + INSTANCE-CONTENT (Owner B; entities owned within the deployed specialist). NO multiple implementations: a specialist IS its definition.
+- **practitioner** — bipartite of different shape: HUMAN (cross-cutting; the actual person; not "placed") + RECORD (Owner B; system representation).
+
+Each has its own dual-nature description in its GLOSSARY entry; not generalized as Protocol pattern. Don't conflate.
+
 ### Glossary entry classification
 
 Each GLOSSARY entry tags itself with:
