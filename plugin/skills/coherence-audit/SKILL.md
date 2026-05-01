@@ -2,7 +2,7 @@
 name: coherence-audit
 description: Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including "audit the glossary", "review the corpus", "cross-entry audit", "is the architecture clean", "are these the right primitives", "primitive-set audit", "set-level review", "coherence check", "is the vocabulary coherent". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening).
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.2.0
+version: 0.2.1
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -90,7 +90,7 @@ Mechanical check.
 - Verify Source citations resolve (cited file:line exists; line numbers correct)
 - Per `MAINTENANCE.md` cascade discipline: every reference to a now-changed term should have been updated when the change locked
 
-### Lens 5: Mechanical compliance (tags + sources)
+### Lens 5: Mechanical compliance (tags + sources + provenance hygiene)
 
 Schema + discipline check across entries (was Lens 4 + Lens 6 in v0.1.0; merged because both are checklist-driven mechanical checks rather than architectural sparring).
 
@@ -100,6 +100,10 @@ Schema + discipline check across entries (was Lens 4 + Lens 6 in v0.1.0; merged 
 - Source sections cite file:line where claims have file:line basis (per `feedback_source_grounded.md`)
 - Synthesis flagged distinctly from citation
 - "Pattern-matched / inferred" basis flagged at low confidence
+- **Provenance hygiene** (v0.2.1): entries should NOT contain audit/revision history breadcrumbs ("per RA4 Round 3 audit", "per A1 — primitive-set lens, applied session 16", "per Phase 1.75 + feedback_X resolution"). Provenance lives in HANDOFF.md notes + git log + commit messages. Discriminator:
+  - **Strip**: audit-revision-history markers ("per <audit-name>", "applied session N", "Round N audit"). These pollute canonical-definition prose.
+  - **Keep**: load-bearing forward-references / discipline notes ("deferred to Phase 3 ARCH", "deliberately NOT 'X' — X is locked vocabulary for Y", "Phase 6 reconciles..."). These are SEMANTIC context future readers need.
+  - The test: would removing this breadcrumb confuse a fresh reader's understanding of WHAT THE PRIMITIVE IS? If no, strip; if yes, keep.
 
 ### Lens 6: Symmetry
 
@@ -198,6 +202,17 @@ Per `feedback_judgment_and_automate.md`: don't menu the findings; commit a posit
 ### Step 5: Apply revisions in cascade-aware order
 
 Per `MAINTENANCE.md` cascade discipline: when locking a corpus-level revision, identify all affected entries and update in same commit (or tightly-coupled sequence explicitly marked as completing the cascade).
+
+**Provenance discipline when applying revisions** (v0.2.1): when applying a finding's revision to an entry, do NOT embed audit-revision-history breadcrumbs in the entry text. Provenance goes in:
+- **HANDOFF.md note** for the audit run (records what was changed + why)
+- **Commit message** (records exact diff + rationale)
+- **git log** (full history)
+
+The entry stays canonical: definition prose without "per RA4 Round 3 audit" / "per A1 — primitive-set lens, applied session 16" markers. Fresh readers see the locked definition; readers wanting provenance check HANDOFF + git log.
+
+Anti-pattern caught by Lens 5 provenance-hygiene check: AI applying a revision feels productive when it adds an "applied session X" marker (signals work-was-done). But that marker pollutes the canonical layer. Resist the urge.
+
+**Exception**: load-bearing forward-references / discipline notes ("deferred to Phase 3 ARCH", "deliberately NOT 'X'") stay because they're SEMANTIC context, not provenance.
 
 ### Step 6: Output
 
