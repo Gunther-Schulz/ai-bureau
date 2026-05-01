@@ -10,6 +10,20 @@ Target users: solo professionals and small companies in expert-practitioner doma
 
 PBS-bureau is the pioneer instance of this workspace infrastructure — specifically a Planungsbüro (German planning bureau) workspace shape. The patterns generalize to any practitioner workspace shape (legal practice, research lab, creative studio, etc.).
 
+## What this framework also is
+
+PBS as marketed product is the workspace infrastructure for expert practitioners. PBS as framework contribution is broader: **a method-and-architecture for building accountability-bearing AI-co-worker systems for any expert-practitioner archetype.**
+
+The framework comprises three load-bearing layers:
+
+1. **Architectural patterns** reusable across AI-co-worker systems: framework=mechanisms / shape=policies; A-B-C scope model (Framework C definitions / Owner B instances / Layer A layered content); Pattern A protocol pluggability (Surface + Implementations + Instance/binding); bipartite multi-aspect primitives (Patterns B + C: definition+instance-content; human+record).
+
+2. **Dev-skill methodology** for building such systems: pre-decision sharpening (decision-design + pre-implementation phases); coherence-audit (cross-decision corpus auditing); applying sparring as runtime mechanism to the development process itself (the architecture's own discipline applied recursively).
+
+3. **Working disciplines** for sustaining architectural integrity: cascade discipline (changes propagate up/down/sideways); preliminary-lock principle (decisions revisable except VISION axes); pattern-vs-instance discipline (instance-anchoring leakage is the primary framework failure mode); make-wrong-shapes-impossible (structural constraints over conventions); no-defer (decisions made now; info-gaps as watch-list); source-grounded (every assertion has a basis).
+
+The pioneer instance (PBS-Schulz, German Planungsbüro) is BOTH a real workspace deployment AND a research-lab for the framework. Framework discoveries surface through pioneer-instance work; pioneer-instance soundness depends on framework integrity. This co-evolution is intentional, not incidental.
+
 ## VISION scope — practitioner shape
 
 This document articulates the **practitioner-shape thesis** — the value claims PBS makes for expert practitioners (planners, lawyers, researchers, accountants, creatives, consultants, advisors). It is the pioneer-instance + marketed-product VISION.
@@ -194,15 +208,29 @@ A system with full trust + sparring but weak authorship preservation produces ac
 
 ## Implications
 
-Two implications worth surfacing here (the rest live in ARCH or STRATEGY):
+Four implications worth surfacing here (the rest live in ARCH or STRATEGY):
 
 ### Workflow as precondition (axis 1)
 
 Intertwined AI needs a workflow to intertwine with. Domains with rich, structured workflows (planning, law, engineering, healthcare, accounting) are natural fits — there's a real pattern of work to embed in. Generic "knowledge work" without explicit workflow is much harder; nothing concrete to intertwine with.
 
+### AI-as-runtime as precondition (all axes)
+
+The three axes require AI participation in RUNTIME work — not as pre-computed-tooling consumer, but as the runtime executor of memory access, reasoning, claim production, sparring engagement, source verification. Axis 1 is impossible without runtime AI participation (no co-worker = no intertwining). Axis 2 is impossible without runtime engagement (no AI to spar with at the relevant moments). Axis 3 requires reasoning-chain-traceable claims that emerge from runtime AI work (post-hoc-defensible chains require capture-at-creation, not retrofit).
+
+This commits the architecture to **AI-as-runtime hybrid-shape**: AI is load-bearing at runtime, not abstracted behind deterministic-only logic. The pre-RAG-database trap (build deterministic SQL-style tooling that AI consumes) is the failure mode this commitment guards against. Memory, reasoning, claim-state, and sparring engagement are markdown-skeleton-plus-AI-reads-at-runtime, not Pydantic-models-AI-consumes.
+
 ### Category-collapse risk (axis 1 protection)
 
 The biggest risk to the thesis is **category collapse**: PBS gradually reduced to a "tacked-on" feature catalog because each discrete addition seemed reasonable in isolation. Especially at risk: GUI integrations into hosts where the host's UX paradigm is feature-driven. Each integration must be checked: does it expose intertwined workflow, or does it reduce PBS to a "summarize this" plugin in someone else's tool? The first is a frontend; the second is category collapse.
+
+### Pattern-vs-instance discipline (framework integrity protection)
+
+Framework primitives are PATTERN-LEVEL, not pioneer-instance-anchored. Instance-anchoring leakage — defining a primitive in terms of pioneer-specific assumptions (PBS-Schulz solo-human practitioner; German planning bureau workflow; DACH regulatory specifics; EU AI Act terminology) — is the primary framework failure mode. The session-16 rebuild was triggered by five such leakages accumulated across the corpus.
+
+This discipline protects the framework's shape-neutrality (per "What this framework also is" + line 17 above) operationally: every primitive must work for hypothetical legal-practice / research-paper-review / engineering-doc / personal-OS workspaces. Pioneer-instance examples appear as illustrations, not load-bearing claims. Verifiable structurally — coherence-audit's instance-leakage lens explicitly tests "would this primitive work for hypothetical X workspace?" before locking.
+
+Pattern-vs-instance discipline is what makes the framework distributable as method (per "What this framework also is" — distinct from pioneer-instance + workspace-deployment).
 
 ## How to use this document
 
@@ -254,3 +282,4 @@ Cross-doc: VISION axes get IMPLEMENTED in ARCH; STRATEGY engages with opposing m
   - **Vocabulary drift swept**: no "office" terms; no chronological-defer wording (superseded by v0.33 no-defer principle in `memory/`); no archived-doc cross-refs.
   - Net: 1069 → ~280 lines. Three axes preserved exactly; foundations preserved inline; falsification + robustness preserved; defensibility test preserved (generalized).
 - session 16 (rebuild Phase 1.8): VISION terminology audit on its own. ~15 candidate terms walked through 6 families (workspace / practitioner / sparring / authorship / framework / meta). 2 inline tightenings applied: (1) dropped "AI" prefix from "AI workspace" (every PBS workspace is AI by design — redundant); (2) parallel wording in 3-layer protection summary ("trust mechanisms / sparring mechanisms / authorship mechanisms" — replaced inconsistent "infrastructure" suffix). All other terms deferred to GLOSSARY (Phase 2) for formal lock — VISION's usage was already consistent in context; what's missing is canonical definitions, which is GLOSSARY territory not VISION's. The audit's value: confirmed term list GLOSSARY must lock, derived from VISION's actual usage rather than abstract architectural concepts.
+- session 16 (rebuild Phase 1.85): VISION sanity check (3-lens scan against 28 locked GLOSSARY entries) + expansion pass. **Sanity check** applied 4 small fixes: shape-extension-pattern outdated framing → "shape definitions composing policies over framework mechanisms"; anti-sycophancy added to axis-2 sub-mechanism checklist (was 7, now 8 matching GLOSSARY); two minor instance-anchoring generalizations (council meetings → challenge contexts; cover mail → cover communication). **Expansion pass** added: (1) new "What this framework also is" section articulating the framework as method-and-architecture (not just product), with three load-bearing layers (architectural patterns / dev-skill methodology / working disciplines); (2) "AI-as-runtime as precondition (all axes)" implication; (3) "Pattern-vs-instance discipline (framework integrity protection)" implication. Implications grew from 2 to 4. Driver: holistic view that VISION served Phase 2 GLOSSARY adequately but would under-serve Phase 3+ ARCH because it treated the framework's methodological contribution + architectural-integrity disciplines as implicit rather than explicit value-claims.

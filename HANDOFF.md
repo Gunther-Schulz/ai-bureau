@@ -27,7 +27,8 @@ This is the running session log for the **foundational rebuild** launched sessio
 | 1.5 | Design layered doc structure | ✅ Done session 16 (locked in `MAINTENANCE.md`) |
 | 1.75 | VISION tightening pass (structure) | ✅ Done session 16 (1069 → 255 lines; content moved out lives in `archive/VISION.md`) |
 | 1.8 | VISION terminology audit (term-level) | ✅ Done session 16 (15 candidates across 6 families; 2 inline tightenings; rest deferred to Phase 2 GLOSSARY) |
-| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | Next — proposal pending |
+| 1.85 | VISION sanity check + expansion pass | ✅ Done session 16 (4 sanity-check fixes; 3 expansion sections added: "What this framework also is" + 2 new Implications; framework now explicitly articulated as method-and-architecture, not just product) |
+| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | In progress — 28 locked entries; ~5 remaining (axis-2/axis-3 failure modes; pioneer instance; category collapse) |
 | 3 | Rebuild ARCH against locked vocabulary | Pending |
 | 4 | Rebuild DRs selectively (collapse where possible) | Pending |
 | 5 | Rebuild ROADMAP lean | Pending |
@@ -99,6 +100,12 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **L1 (Lens 2)**: line 162 "council meetings" was planning-bureau-anchored prose. Generalized to "challenge contexts (correspondence exchanges, council meetings, court hearings, peer review, audit committees, etc.)"
     - **L2 (Lens 2)**: line 179 "cover mail" was planning-bureau Anschreiben-equivalent. Generalized to "cover communication (Anschreiben in PBS-Schulz pioneer; cover letter / transmittal note in other archetypes)"
     - **Lens 3 (axis interactions)**: VISION sketches via examples but doesn't articulate systematically. Position: not VISION revision (would bloat anchored role); flag for Phase 3 ARCH as dedicated architectural-pattern topic. Added to BACKLOG.
+
+17. **VISION expansion (Phase 1.85)** — holistic view surfaced that VISION served Phase 2 GLOSSARY adequately but would under-serve Phase 3+ ARCH because it treated the framework's methodological contribution + architectural-integrity disciplines as implicit rather than explicit value-claims. Three additions:
+    - **"What this framework also is" section**: articulates the framework as method-and-architecture (not just workspace product). Three load-bearing layers — architectural patterns (framework=mechanisms / shape=policies; A-B-C scope; Pattern A; bipartite multi-aspect); dev-skill methodology (sharpening, coherence-audit, sparring-applied-to-development); working disciplines (cascade, preliminary-lock, pattern-vs-instance, make-wrong-shapes-impossible, no-defer, source-grounded). Pioneer instance (PBS-Schulz) framed as BOTH real workspace deployment AND research-lab for the framework — co-evolution intentional.
+    - **"AI-as-runtime as precondition (all axes)" implication**: the three axes require AI participation in RUNTIME work; pre-RAG-database trap (deterministic SQL-style tooling AI consumes) is the failure mode this guards against. AI-as-runtime hybrid-shape committed.
+    - **"Pattern-vs-instance discipline (framework integrity protection)" implication**: instance-anchoring leakage is the primary framework failure mode (5 leakages triggered the rebuild). Framework primitives must work for hypothetical legal / research / engineering / personal-OS workspaces; verifiable via coherence-audit Lens 8. Pattern-vs-instance discipline is what makes the framework distributable as method.
+    - Implications section grew 2 → 4. "What this is, in one line" stays as workspace-product thesis; "What this framework also is" sits adjacent for the broader framework-as-method claim.
 
 **Phase 1.5 outcome (locked session 16)**:
 
