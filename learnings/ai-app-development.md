@@ -183,6 +183,96 @@ Each surfaced an issue AI's local-coherent output hadn't.
 
 ---
 
+## Observation 15: Audit-history breadcrumbs pollute canonical docs over time
+
+**Pattern**: Each audit / refinement / sharpening round adds markers like "per RA4 Round 3 audit" / "per A1 — primitive-set lens, applied session 16" / "Note (R1 — Round 2 audit)" — these FEEL productive (signal work-was-done) but pollute the canonical layer. Over time, breadcrumbs accumulate and canonical entries become provenance-history-mixed-with-stance. Same failure mode as comments in code that explain TODO history rather than current intent.
+
+**Evidence (session 16)**: After Round 2 + Round 3 GLOSSARY audits, breadcrumbs accumulated across ~8 entries (specialist, workflow, work-unit, Owner B scope, workspace, etc.). User flagged: "should we keep meta information like 'per RA4 Round 3 audit, engagement-target entities are shape-policy-mandated...' in glossary?" Cleanup applied. Discipline subsequently codified into coherence-audit skill Lens 5 v0.2.1 with explicit Step 5 instruction NOT to embed provenance markers when applying findings.
+
+**Implication**: provenance lives in HANDOFF.md + git log + commit messages. Canonical docs hold pure stance. Discriminator when applying revisions: STRIP audit-revision-history markers ("per X round Y audit"); KEEP load-bearing forward-references / discipline notes ("Phase 3 ARCH resolves..." / "deliberately NOT 'behavioral protocol' — protocol is locked architectural vocabulary"). The test: would removing this breadcrumb confuse a fresh reader's understanding of WHAT THE PRIMITIVE IS? If no, strip; if yes, keep.
+
+**Test it against**: edit a canonical doc after applying audit findings; observe whether AI naturally adds "per X..." markers without user intervention. Self-validation bias triggers the breadcrumb-add reflex.
+
+---
+
+## Observation 16: Stable-vs-continue self-check at end of each round counters bias in both directions
+
+**Pattern**: After each sharpening / audit round, AI should explicitly evaluate against termination signals and commit STABLE-or-CONTINUE position with rationale citing specific signals. Without this explicit step, default tendencies bias in BOTH directions: defaulting to "continue" because more rounds feel productive (manufactured-criticism risk; Pareto-fail refinements) OR defaulting to "stable" because ending is comfortable (premature-lock risk; missed REVISIONS).
+
+**Evidence (session 16)**: Multiple sharpening cycles this session. User asked at decision points "value in another round or stable?" — AI committed STABLE position with reasons (Lens 1+8+9 collective REVISION count = 0; narrow architectural surface = 2-round sweet spot; all findings are EXPANSIONS not architectural pivots). The explicit position-commit + reasoning prevented drift toward either default. Self-check subsequently codified into v0.3.1 of all 3 sharpening skills (decision-design / pre-implementation / coherence-audit) as Step-after-procedure addition.
+
+**Implication**: explicit self-check forces observable position rather than implicit drift. The discipline is mechanical: termination signals are the discriminator; don't override with vague "feels stable" or "could go deeper" — name the specific signal (zero-revision count; sweet-spot pattern; manufactured-criticism flag; surface-size triggering decomposition).
+
+**Test it against**: end of any sharpening round; observe whether AI commits explicit STABLE-or-CONTINUE position with cited termination signal, or defaults to one direction without rationale.
+
+---
+
+## Observation 17: Three-place persistence model emerges for cross-cutting brainstorm
+
+**Pattern**: Different kinds of thinking need different persistence places. AI-app development with high cross-cutting brainstorm density needs three orthogonal locations:
+- **BACKLOG.md** — phase-tagged WORK items (load-bearing pending work; resolved when locked)
+- **memory/** — cross-session AI BEHAVIOR rules (apply uniformly; affect future sessions)
+- **drafts/** — exploratory IDEAS / future-candidates (not load-bearing; loose; can graduate or be discarded)
+
+Without a place for "thoughts I had while working on something else," ideas either pollute canonical docs (wrong place — VISION/GLOSSARY become brainstorm dumps) or get lost between sessions.
+
+**Evidence (session 16)**: User mid-flow surfaced marketing-shape thinking while doing VISION clean-stance restructure. Quote: "i just dont want to lose this. and i dont want to keep this in memory necessarily. so if we could just find a place... just as a reference for the future as a candidate to build upon. just strongly mark it as a possible DRAFT loose candidate. sometimes I think of stuff while working on other stuff and need to persist this." Established drafts/ directory pattern in response. drafts/README.md captures the discipline; first draft (marketing-themes.md) demonstrates format.
+
+**Implication**: For AI-app development with markdown-heavy corpus + sustained user-AI sparring sessions, the three-place model gives clean routing. Routing rule when a thought surfaces:
+- load-bearing pending work → BACKLOG (phase-tagged; resolves when work done)
+- cross-session AI behavior → memory (applies uniformly; affects future sessions)
+- exploratory idea / future-candidate → drafts (loose; not load-bearing)
+
+The model itself surfaces from sustained-session work; doesn't emerge from one-shot AI app development.
+
+**Test it against**: when a thought surfaces during work that doesn't fit current task; observe whether it can be routed cleanly to one of the three places, or whether it accumulates in canonical docs (a smell suggesting routing model is missing).
+
+---
+
+## Observation 18: Canonical docs hold pure stance; communication leads with branches not trunk
+
+**Pattern**: Two related disciplines for AI-app architecture documentation:
+
+(a) **Canonical docs (VISION, GLOSSARY, MAINTENANCE) hold pure stance** — what something IS. Comparing language ("X is Y, but more broadly Z"), positioning narrowness ("for target users in solo-to-small segment"), and provenance markers ("per session 16 phase 1.85") pollute the stance layer. Marketing/positioning belongs in STRATEGY; provenance in HANDOFF/git-log; pure stance in canonical docs.
+
+(b) **When communicating about the framework**, lead with positive outcomes (lush branches — what it PRODUCES) over protective mechanisms (trunk — what it GUARDS AGAINST). Trunk is load-bearing but not foreground; branches are what people see and want.
+
+These are distinct disciplines but compose naturally — both about distinguishing FOREGROUND from BACKGROUND in documentation.
+
+**Evidence (session 16)**: VISION went through expansion → restructure cycle. First expansion (Phase 1.85) added "What this framework also is" with comparing language ("PBS as marketed product is X / framework contribution is broader: Y"). User pushback: "vision should just state what we are. clarity. no comparing language." Restructured to clean-stance "What this is" + "The three layers" — pure stance, no positioning, no provenance, no comparison.
+
+Tree analogy emerged separately when AI proposed multiple trunk-led taglines ("AI that pushes back. Work that holds up." / "AI that earns your signature."). User reframed: "pushing back, defensibility, all sound negative... [trunk] is the trunk of the tree but what most people see first are the beautiful lush branches with all their green leaves." Branches-first locked as cross-session principle (memory feedback_tree_analogy.md).
+
+**Implication**: Two principles to internalize:
+- Canonical-doc clean-stance: state IS, not relates-to / positions-against / how-it-evolved
+- Communication branches-first: lead with cultivated outcomes (what the framework grows), use protective mechanisms (sparring / defensibility / intertwining) as supporting cast
+
+Both apply across sessions. Discipline catches a specific failure mode: AI tends to ADD comparing-language or trunk-led-framing because they feel informative, but they pollute or under-sell.
+
+**Test it against**: review any canonical doc draft for comparing language ("X is Y but Z") or trunk-led foregrounding ("AI that protects against...") — observe whether the reader gets the IS-claim or the produces-this-outcome cleanly.
+
+---
+
+## Observation 19: Pre-compact discipline — explicit doc-state audit before session ends
+
+**Pattern**: When a session is about to compact (lossy summarization), the preserved-state quality determines next-session pickup quality. Explicit pre-compact discipline: audit each session-start doc + verify recent decisions are captured + ensure no inconsistencies between docs. Without explicit pre-compact step, drift accumulates that next-session has to detect + fix.
+
+**Evidence (session 16)**: User said "next time i will compact this session so lets makesure handoff and all otehr docs are in a good state to pick up from next time." Triggered: HANDOFF phase-table audit (Phase 1.85 row description was outdated — said "expansion pass" but actual final state was clean-stance restructure); BACKLOG audit (resolved entries had "this commit" placeholder instead of actual ref); anchors list audit (drafts/ missing). Pre-compact pass caught + fixed all three.
+
+**Implication**: Pre-compact discipline is a checklist:
+- Phase-table descriptions accurate to final state (not earlier-phase-version)
+- Anchors list complete (all session-start docs listed)
+- Resolved BACKLOG entries have commit-refs not placeholders
+- Recent notes capture latest state (not partial)
+- Cross-doc cross-references resolve
+- New files / patterns added in session are referenced from session-start docs
+
+The discipline composes with cascade discipline (changes propagate across docs in same commit) but adds a session-end checkpoint pass.
+
+**Test it against**: end of any sustained-session AI-app work; audit session-start docs; observe whether next-session can pick up without reconstruction.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:
