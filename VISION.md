@@ -6,7 +6,13 @@ This document anchors the deepest "why" behind the architecture. Every design de
 
 **A framework for AI partnership that cultivates expert craft — through deeply intertwined co-work, productive sparring, and defensibly authored output.**
 
-The framework as a tree: the lush branches the practitioner experiences are cultivated expert craft — growing capacity, compounding work over time, deepening practice. The trunk holding the branches is three structural axes — intertwining, sparring, authorship preservation. Trunk is load-bearing but not foreground; branches are what the framework produces. When communicating about PBS, lead with branches; the trunk is supporting cast.
+The framework as a tree:
+
+- **Branches** (foreground; what the practitioner experiences): cultivated expert craft — growing capacity, compounding work over time, deepening practice
+- **Trunk** (load-bearing; structural commitments): three axes — intertwining, sparring, authorship preservation
+- **Roots** (anchoring; what the trunk rests on): empirical and theoretical foundations — Vivienne Ming's IEP research; regulatory pressure converging on practitioner-amplification across jurisdictions; adjacent thinkers (Schön, Kahneman, Dreyfus). Detailed in "Foundations" below.
+
+When communicating about PBS, lead with the branches; trunk + roots are the supporting cast.
 
 ## The three layers
 
