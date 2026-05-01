@@ -1,15 +1,19 @@
 # Session handoff — pbs-bureau (rebuild)
 
+> **🔴 At session start, read `DISCIPLINES.md` FIRST** — working procedure + cross-session disciplines + memory composition. Then `VISION.md`, `MAINTENANCE.md`, this file.
+
 This is the running session log for the **foundational rebuild** launched session 16 (2026-05-01). The previous multi-session running handoff (sessions 1-15) is at `archive/HANDOFF.md` for reference.
 
 ## Anchors (carry forward, never rebuilt)
 
+- **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
 - `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation); preliminary-lock anchor; the ground truth the rebuild serves
-- `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + cross-reference discipline + maintenance rules); read at session start
+- `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
+- `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
 
-**Session-start reading**: `VISION.md` + `MAINTENANCE.md` + `HANDOFF.md` ≈ 1.7k lines.
+**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file). Plus `GLOSSARY.md` for current vocabulary state.
 
 ## Rebuild phases
 
