@@ -27,9 +27,9 @@ The tree could organize marketing materials at multiple altitudes:
 
 Each audience meets the tree at a different altitude. Marketing scaffold mirrors the metaphor.
 
-## Extension candidates (per memory `feedback_tree_analogy.md` — extension list)
+## Extension candidates
 
-If marketing surfaces a need for finer-grained framing, candidates exist:
+If marketing surfaces a need for finer-grained framing beyond the locked branches/trunk/roots, candidates exist:
 
 - **Fruits** — signed work-products / deliverables (Begründungen, briefs, manuscripts; what gets harvested + shipped). Useful for client-facing positioning ("the work this tree produces").
 - **Seeds** — bausteine / specialists / patterns that propagate (the framework's distributability mechanism). Useful for framework-as-method positioning ("what propagates beyond a single deployment").
@@ -41,7 +41,7 @@ Discipline (per memory feedback): don't force any of these unless real need emer
 
 ## Candidate tagline variants explored (session 16)
 
-All centered on branches-first framing per locked tree-analogy memory rule:
+All centered on branches-first framing per VISION's tree-analogy ("When communicating about PBS, lead with the branches; trunk + roots are the supporting cast"):
 
 - "AI partnership that cultivates expert craft." (current locked)
 - "Where expert practice flourishes through AI partnership."
@@ -49,7 +49,7 @@ All centered on branches-first framing per locked tree-analogy memory rule:
 - "For experts: AI that grows with you."
 - "Expert craft. Cultivated by AI partnership."
 
-Trunk-led variants (rejected per tree-analogy memory rule — sound negative/feature-listy):
+Trunk-led variants (rejected per VISION's branches-first communication principle — sound negative/feature-listy):
 - "AI that pushes back. Work that holds up." (trunk-led)
 - "AI that earns your signature." (defensibility-led)
 - "AI that argues with you. You sign the work." (sparring-led)

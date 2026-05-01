@@ -116,7 +116,7 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **Tree analogy** anchored in VISION: lush branches (cultivated craft, growing capacity, compounding work) lead; trunk (sparring/defensibility/intertwining mechanisms) is supporting cast.
     - **WORKING TITLES — both PBS name AND tagline are provisional**. NOT mentioned in VISION itself (clean stance — VISION carries no provisional markers). Status flagged here in HANDOFF for next-session awareness.
     - **Naming exploration deferred**: PBS-as-acronym is leftover from Planungsbüro Schulz instance-anchoring origin; framework name should change. Top candidate surfaced: "Atelier" (workshop / craft / co-work imagery; cross-language; composable with shape names). Other candidates: Auctor (Latin "author"); Praxis (structured-practice). Decision deferred — significant cascade scope (repo rename + plugin manifest + marketplace + cross-doc references + memory dir path).
-    - **Memory captured**: `feedback_tree_analogy.md` — cross-session principle for taglines / positioning / messaging — branches-first, trunk-second.
+    - **Branches-first principle locked in VISION** itself ("When communicating about PBS, lead with the branches; trunk + roots are the supporting cast"). No separate memory rule needed since VISION is read at session start; principle is visible there. Marketing-shape elaboration in `drafts/marketing-themes.md`.
 
 **Phase 1.5 outcome (locked session 16)**:
 
