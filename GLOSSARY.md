@@ -6,7 +6,7 @@ Canonical source for term definitions across the pbs-bureau corpus. Per `MAINTEN
 
 Each entry is tagged on 4 axes (per `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section):
 
-- **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION / STUB (cross-ref to canonical primitive — not a separate primitive itself)
+- **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION
 - **Layer**: framework-mechanism / shape-policy / cross-cutting / multi-aspect / framework-meta
 - **Axis**: axis-1 / axis-2 / axis-3 / cross-axis (where applicable)
 - **VISION usage**: directly used / implicit / derived-from-VISION-terms / framework-meta
@@ -59,6 +59,7 @@ The primitives that compose into a workspace deployment.
 - [practitioner](#practitioner) — human author who bears accountability (Pattern C; bipartite)
 - [session](#session) — bounded interaction unit
 - [workflow](#workflow) — pattern of work in a domain
+- [work-unit](#work-unit) — deployment-bound work-artifact (specialist-defines kind: project / matter / case / engagement / manuscript / audit)
 
 ### 3. VISION axes
 
@@ -89,10 +90,11 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 
 ### 7. Modes & relations (conversational vocabulary)
 
-- [AI runtime](#ai-runtime) — conversational term for substrate's running instance (STUB; cross-refs `substrate`)
 - co-worker (forthcoming) — relational claim about AI's mode of participation
 - intertwined AI (forthcoming) — positive axis-1 mode
 - tacked-on AI (forthcoming) — failure mode of axis 1
+
+**Note (R1 — Round 2 audit, applied session 16)**: "AI runtime" was a STUB entry redirecting to substrate's tri-aspect Instance. Removed as redundant — the term continues as informal shorthand in docs (referring to substrate's Instance aspect per Pattern A) without a glossary slot. Architectural primitive is `substrate`.
 
 ### 8. Meta concepts
 
@@ -214,21 +216,6 @@ Skills invoke adapters at runtime (e.g., draft-cover-mail skill invokes email-ad
 
 ---
 
-## AI runtime
-
-- **Class**: STUB / cross-ref (not a separate primitive; conversational term for an aspect of `substrate`)
-- **Layer**: see `substrate` (the canonical primitive)
-- **Axis**: cross-axis
-- **VISION usage**: directly-used implicitly ("AI" / "the AI" / "AI co-worker" in VISION axis 1+2 framing; "AI runtime" not literally used)
-
-**Canonical**: Conversational / VISION-language term for `substrate`'s running instance (the third aspect of substrate's tri-aspect manifestation per Pattern A; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"). The "AI" in VISION axis 1 framing ("AI is a co-worker in the workflow itself") refers to the AI runtime — substrate-bound, specialist-activating, skill-firing, output-producing.
-
-**Why no separate primitive entry**: The architectural primitive is `substrate` (tri-aspect: Surface + Impls + Instance). "AI runtime" is conversationally what we call the Instance aspect when speaking about the active agent. A separate primitive would be redundant.
-
-**See**: `substrate` (canonical primitive; Instance aspect IS the AI runtime); `co-worker` (forthcoming; relational claim about AI's mode of participation).
-
----
-
 ## authorship preservation (axis 3)
 
 - **Class**: DERIVED (claim/mode defined in VISION)
@@ -252,7 +239,7 @@ Skills invoke adapters at runtime (e.g., draft-cover-mail skill invokes email-ad
 
 **Composes with**:
 - `defensibility` — operational test for this axis (canonical entry forthcoming)
-- `authorship mechanisms` — class of axis-3 mechanisms (canonical entry forthcoming)
+- `authorship mechanisms` — class of axis-3 mechanisms (collective term; per-mechanism detail in ARCH Layer 3 per A1)
 - `practitioner` — the role this axis protects
 - `practitioner-shape` — workspace shape where this axis is mandated (canonical entry forthcoming; see `shape` named-shapes catalog)
 
@@ -427,7 +414,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - `tacked-on AI` — the failure mode contrasted (canonical entry forthcoming)
 - `intertwined AI` — positive mode (canonical entry forthcoming)
 - `co-worker` — relational claim about AI's mode of participation (canonical entry forthcoming)
-- `trust mechanisms` — class of axis-1 mechanisms (canonical entry forthcoming)
+- `trust mechanisms` — class of axis-1 mechanisms (collective term; per-mechanism detail in ARCH Layer 3 per A1)
 - `workflow` — what intertwining intertwines WITH
 - `category collapse` — risk to axis 1 (canonical entry forthcoming)
 
@@ -651,7 +638,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - Not an `actor` — actor is the broader event-emitter category; practitioner is one specific actor kind (`actor_kind: human` for practitioner-emitted events)
 - Not a `specialist` — specialist is composable codified expertise (a tool the workspace activates); practitioner is the human author who employs the workspace's specialists
 - Not a `workspace` — practitioners work IN workspaces; workspace serves the practitioner
-- Not the `AI runtime` — AI runtime is conversational term for substrate's running instance; practitioner is human (the AI is co-worker, not the author)
+- Not the `substrate`'s Instance aspect (informally "the AI runtime") — substrate's running instance is the AI side of the workspace; practitioner is human (the AI is co-worker, not the author)
 - Not multiple-kinds-of-practitioner — practitioner is singular always; kind variation (solo / partnership / legal-entity-firm) lives at WORKSPACE LEVEL (multi-practitioner workspace; legal-entity workspace context), NOT at practitioner level (per Phase 1.75 + `feedback_apply_principle_uniformly` resolution)
 
 **Cross-archetype illustration**: practitioners across archetypes share the same role-shape (human author bearing accountability) but differ in workspace configuration:
@@ -867,7 +854,7 @@ Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + thei
 - **Axis**: cross-axis (skills serve any axis depending on what work they encode)
 - **VISION usage**: implicit (VISION line 7 says "codified expertise bundled as specialists"; skills are the atomic units of that expertise; not directly defined as glossary term in VISION)
 
-**Canonical**: An atomic unit of work logic within a specialist — an auto-loaded behavioral procedure that fires when its trigger conditions match. Skills are the smallest composable unit of codified expertise; specialists bundle multiple skills (+ entities + memory + adapters) into a distributable expertise package. (Note: deliberately NOT "behavioral protocol" — `protocol` is locked architectural vocabulary for Pattern A pluggable subsystems.)
+**Canonical**: An atomic unit of work logic within a specialist — a behavioral procedure invoked when its trigger conditions match (loading semantics — auto-load, explicit-load, lazy-load — are substrate-defined per Pattern A; `auto-loaded` is the convention in Anthropic-plugin-substrate but not architecturally mandated). Skills are the smallest composable unit of codified expertise; specialists bundle multiple skills (+ entities + memory + adapters) into a distributable expertise package. (Note: deliberately NOT "behavioral protocol" — `protocol` is locked architectural vocabulary for Pattern A pluggable subsystems.)
 
 **What it is**: A skill is what you'd reach for when you want to express "do this specific kind of work when this condition is met." Skills have triggers (when they fire), body content (what they instruct), and may declare output schemas (Pydantic models for structured output). Multiple skills compose into a specialist; the specialist is the cohesion abstraction; the skill is the atomic unit.
 
@@ -933,8 +920,8 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 **Boundary test**: ask "does the AI challenge / generate counter-arguments / surface uncertainty, or deliver easy answers?" If easy-answers → answer-machine failure mode (axis 2 failure).
 
 **Composes with**:
-- 8 sparring sub-mechanisms (canonical entries forthcoming): `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
-- `sparring mechanisms` — class of axis-2 mechanisms (canonical entry forthcoming)
+- 8 sparring sub-mechanisms (specific instances of the abstract `mechanism` primitive; ARCH Layer 3 detail per A1, NOT separate GLOSSARY entries): `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
+- `sparring mechanisms` — class of axis-2 mechanisms (collective term; per-mechanism detail in ARCH Layer 3 per A1)
 
 **Source**: `VISION.md` line 142 ("## Sparring partner, not answer machine (axis 2)"); line 100 ("### Vivienne Ming — sparring as the productive mode (axis 2 anchor)"); line 81 (axis-2 robustness claim — sparring becomes MORE valuable as AI accuracy increases); line 190 (sparring-mechanisms framing).
 
@@ -1009,7 +996,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - **Axis**: cross-axis (substrate hosts all axes' runtime behavior)
 - **VISION usage**: implicit (VISION doesn't directly use "substrate"; concept lives in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE + Framework C scope members)
 
-**Canonical**: A deployment runtime that workspaces run on — defines the agent execution loop, tool surface, capability/permission flow, lifecycle events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
+**Canonical**: A deployment runtime that workspaces run on — defines the execution model (agent loop, dataflow, event-driven, etc. — substrate-impl-defined), tool surface, capability/permission flow, lifecycle events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
 
 **What it is**: One of the framework's mechanism categories (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE). The substrate provides the runtime contract any workspace operates on. The Protocol surface (interface contract) is universal/shape-neutral; specific implementations differ in how they realize that surface (e.g., Claude Agent SDK = Anthropic plugin runtime; MS Agent Framework = Microsoft agentic framework). **Substrate is an instance of the Protocol pattern** (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"): Substrate Protocol Surface (mechanism; framework-level) + concrete Implementations (Framework C definitions: Claude Agent SDK, MS AF, future) + a running Instance bound to each workspace deployment (Owner B; via `workspace.md` `substrate:` field). NOT the same as specialist's bipartite manifestation (specialist is definition+instance-content; no multiple implementations like substrate has).
 
@@ -1100,7 +1087,66 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 **See**:
 - `intertwining (axis 1)` (which intertwines with workflow)
 - `session` (which executes parts of workflow)
+- `work-unit` (the deployment-bound artifact one workflow execution produces / progresses)
 - ARCH Layer 3 workflow-detail topics (placeholder until Phase 3 — workflow representation, handoff semantics, multi-session workflow continuity; archived material to consult: workflow descriptions in archived plugin/skills/)
+
+---
+
+## work-unit
+
+- **Class**: PRIMITIVE (atomic; the deployment-bound work-artifact unit; specialist-defines kind)
+- **Layer**: cross-cutting (work-units sit at Owner B as workspace-scope managed instances; the KIND is specialist-defined at Framework C — kind discriminator lives in specialist DEFINITION, instance content at Owner B)
+- **Axis**: cross-axis (work-units are the artifact-containers all axes operate against — axis-1 intertwined work happens IN work-units; axis-2 sparring fires DURING work-unit progression; axis-3 authorship attaches TO work-units)
+- **VISION usage**: implicit (VISION's "interactive practitioner workflows" line 7 produces work-products; work-unit is the deployment-bound container for those products; not directly named in VISION)
+
+**Canonical**: The deployment-bound work-artifact container — a single bounded unit of accountability-bearing work that one or more workflows progress against. The KIND is specialist-defined (e.g., `project` for planning bureau, `matter` for legal practice, `case` for medical practice, `engagement` for consulting, `manuscript` for research lab, `audit` for accounting). Lives at Owner B as workspace-scope managed instance; cardinality is multiple per workspace (a practitioner-shape workspace typically tracks N concurrent work-units across active workflows).
+
+**What it is**: The artifact-shaped container for "one piece of accountability-bearing work the practitioner will sign and defend." A work-unit has lifecycle (initiated → in-progress → completed / sent / archived), associated artifacts (drafts, references, sent versions), state (decisions made, sources cited, sparring outcomes), and audit-trail attribution (events emitted scoped to this unit). Workflows execute AGAINST work-units (one workflow may progress one work-unit through stages; or one work-unit may be progressed by multiple workflows in sequence).
+
+**What it is NOT**:
+- Not a `workflow` — workflow is the PATTERN (sequence of activities + artifacts + decisions); work-unit is one deployment-bound INSTANCE of work the workflow progresses
+- Not a `session` — sessions are bounded interactions; work-units span many sessions over time
+- Not a `specialist` — specialists DEFINE work-unit kinds (per the kind discriminator in specialist's DEFINITION); work-unit is the deployment-bound instance, specialist is the codified-expertise bundle that knows how to handle that kind
+- Not a `workspace` — workspace contains many work-units; workspace is the deployment container, work-unit is one bounded artifact-instance within it
+- Not the produced output — produced output (Begründung PDF, signed brief, submitted manuscript) is an artifact OF a work-unit; the work-unit is the bounded-work-container that holds the artifact + its history + decisions
+
+**Cross-archetype illustration** (kind names per archived corpus + cross-archetype examples):
+- **Practitioner-shape (PBS-Schulz pioneer)**: `project` kind (e.g., "25-03 Maxsolar - Friedrichshof" tracking one B-Plan project from intake through approval)
+- **Legal practice**: `matter` kind (one engagement: client + opposing party + filings + case state)
+- **Medical practice**: `case` kind (one patient encounter or treatment trajectory)
+- **Consulting**: `engagement` kind (one project: scope + deliverables + billing)
+- **Research lab**: `manuscript` kind (one paper from drafting through submission and revision)
+- **Accounting / auditor**: `audit` kind (one audit engagement: scope + fieldwork + findings + report)
+- **Autonomous-business-shape**: `task` or `order` kind (operator-supervised AI work batch)
+- **Personal-OS-shape**: `task` or `goal` kind
+- **Federation-shape**: cross-node `peering` work-units possible
+
+The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at Framework C. Workspace's active specialists determine which kinds are available in that deployment.
+
+**Boundary test**: Three questions:
+1. Is this the DEPLOYMENT-BOUND artifact-instance one piece of work tracks? → it's a work-unit
+2. Is this the PATTERN of how that work proceeds? → it's a `workflow`
+3. Is this the DEFINITION of which work-unit kinds exist for this competence area? → it's the kind discriminator inside a `specialist` DEFINITION (at Framework C)
+
+**Composes with**:
+- `specialist` — specialists DEFINE work-unit kinds; the kind discriminator lives in specialist DEFINITION (Framework C); workspace's active specialists determine which kinds are available
+- `workflow` — workflows EXECUTE AGAINST work-units (one workflow progresses one work-unit through stages; or multiple workflows in sequence)
+- `workspace` — workspace CONTAINS work-units as workspace-scope managed instances at Owner B; cardinality multiple per workspace
+- `Owner B scope` — work-unit instances live there as workspace-scope managed entities (per `Owner B scope` members list — already cross-referenced)
+- `event` — events are emitted scoped to work-units (each event records its work-unit attribution per archived audit-trail-v2 schema)
+- `actor` — actors emit events against work-units (practitioner authorizing send; AI runtime drafting; external client responding)
+- `practitioner` — practitioners are the human authors signing work-unit outputs; defensibility test asks "will the practitioner be able to defend THIS work-unit's outputs?"
+
+**Source**:
+- Locked GLOSSARY entries: `Owner B scope` ("work-unit instances (kind specialist-defined: `project` for planning bureau; `matter` for legal practice; `case` for medical practice; `engagement` for consulting; `manuscript` for research; `audit` for accounting)"); `workspace` (cross-archetype examples reference per-archetype work patterns); `specialist` (Composes-with implies specialists define kinds)
+- Archived corpus for kind discriminator detail (Phase 3 ARCH territory): `entity-md-scope-model-restructure.md` (Owner B placement); per-specialist DEFINITION files in archived `plugin/skills/` (e.g., planning-document-work specialist's `project` kind)
+
+**See**:
+- `Owner B scope` (where work-unit instances live)
+- `workflow` (which executes against work-units)
+- `specialist` (which defines kinds)
+- `workspace` (which contains work-units)
+- ARCH Layer 3 work-unit-detail topics (placeholder until Phase 3 — kind discriminator schema, lifecycle states, artifact attachment semantics, audit-trail attribution; archived material to consult: `entity-md-scope-model-restructure.md`, archived per-specialist DEFINITIONs)
 
 ---
 
@@ -1146,6 +1192,8 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `practitioner` — workspace serves practitioner(s); records at Owner B (bipartite primitive: human cross-cutting, record at Owner B)
 - `substrate` — workspace runs on exactly one substrate (selected via `workspace.md` `substrate` field)
 - `session` — interaction units occur within a workspace
+- `workflow` — workspaces SUPPORT workflows; workspace's deployed specialists + state + active substrate enable workflow progression (axis-1 intertwining requires workflow to embed in)
+- `work-unit` — workspaces CONTAIN work-units as workspace-scope managed instances (cardinality multiple per workspace); kinds defined by active specialists
 - `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
 
 **Source**:
