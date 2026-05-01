@@ -76,6 +76,7 @@ Items surfaced during the rebuild that should land in the rebuilt ROADMAP when P
 
 1. **AI-app-development-facilitation skill** (high priority per user direction session 16) — captures cross-project discipline for building AI-centric apps; transferable to other AI-app projects. Consumes accumulated observations from `learnings/` folder. Per user: "should be our first ROADMAP item even though we will have many items that come before it."
 2. **`learnings/` distillation** — when per-session entries accumulate stable patterns (typically 3-5 sessions of evidence), distill into structured topic-specific docs in `learnings/`; promote held observations to memory feedback rules / DRs / ARCH disciplines as appropriate. Feeds into the skill above.
+3. **Testing harness for the framework** (later) — per user direction session 16. Eventual harness for systematic testing of framework primitives (mechanisms, protocols, shape conformance, sparring-output validation, audit-emission correctness, etc.). Composes with PydanticAI eval framework if adopted (per Phase 3 consideration #7). Distinct from per-skill testing in archived backend; this is harness for the framework layer itself.
 
 ## Inputs to consider for the rebuild (from session-16 findings)
 
@@ -87,3 +88,11 @@ Persisted in `archive/INDEX.md` "Status note" section. Six findings flagged as i
 4. Instance-anchoring leakage (5 sites)
 5. "Mechanism vs policy" vocabulary not in corpus (introduced in session-16 conversation; needs to land as named architecture if accepted)
 6. Filesystem location drift (shape-extension DR vs v0.34 restructure)
+
+## Phase 3 ARCH rebuild — considerations surfaced
+
+Items surfaced session 16 that Phase 3 (ARCH rebuild) should explicitly address:
+
+7. **PydanticAI revisit** — archived `#18 substrate eval` + `#20 PydanticAI eval` need re-examination when Phase 3 rebuilds substrate decision. Per WebFetch from official PydanticAI docs (session 16): PydanticAI is a Python agent framework with type-safe Pydantic-validated structured outputs + tool registration + 15+ provider model-agnostic. Could be substrate candidate (alone or alongside Claude Agent SDK / MS Agent Framework). Verify by reading archived `substrate-agentic-framework.md` + `permission-abstraction.md` when Phase 3 starts.
+
+8. **Markdown-validation feasibility analysis** — Phase 3 ARCH should explicitly characterize what kinds of validation are feasible for our markdown architecture and what kinds aren't. Per session-16 reasoning + archived AI-as-runtime hybrid-shape principle: validating LLM **outputs** (structured Pydantic-conforming data) is feasible (PydanticAI / vanilla Pydantic); validating LLM **inputs** (markdown procedures, prompts, SKILL bodies) is impossible-by-nature in a typed-system sense — only structural validation possible (frontmatter present, sections conform). Semantic validation of procedures requires LLM-judged eval (Phase 0 testing methodology territory). This distinction informs what kind of structural enforcement ARCH builds vs what's deliberately AI-as-runtime hybrid-shape territory.
