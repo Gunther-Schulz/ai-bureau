@@ -1,6 +1,6 @@
 # Working disciplines — how we operate across sessions
 
-This document persists the cross-session working discipline for pbs-bureau development. **Read at session start** alongside `VISION.md` + `MAINTENANCE.md` + `HANDOFF.md`.
+This document persists the cross-session working discipline for pbs-bureau development. **Read at session start** alongside `VISION.md` + `MAINTENANCE.md` + `HANDOFF.md` + `BACKLOG.md`.
 
 Scope: this doc is **cross-session** — applies to all future dev work on this project regardless of phase. Phase-specific state (current rebuild progression, what we're working on now) lives in `HANDOFF.md`.
 

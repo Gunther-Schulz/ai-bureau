@@ -113,6 +113,10 @@ After 2-3 rounds:
 - Decision-record amendments for ~10-20% architectural findings that surface in pre-implementation rounds
 - Persist via chat-first-then-file pattern
 
+### Auto-add to BACKLOG.md (v0.3.1)
+
+When pre-implementation sharpening surfaces items that aren't actionable in current scope (e.g., implementation-readiness checklist items deferred to next phase; DR amendments needed for related decisions; cross-cutting concerns spanning multiple implementation phases), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit. BACKLOG is the central work-item tracker.
+
 ### Post-round self-check (v0.3.1)
 
 At the end of each round (after surfacing findings + applying Pareto verdicts), AI explicitly evaluates against termination signals + sweet-spot pattern + flow-back rate (architectural-finding percentage) and commits a position:

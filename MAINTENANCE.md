@@ -172,7 +172,7 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 | Layer | What lives there | Where | Reading scope at session start | Line budget per doc |
 |---|---|---|---|---|
-| **0 — Entry** | README + HANDOFF + MAINTENANCE (this file) | Top-level | **Always read** | ~100 / lean log / ~150 |
+| **0 — Entry** | README + HANDOFF + MAINTENANCE (this file) + DISCIPLINES + BACKLOG | Top-level | **Always read** | ~100 / lean log / ~150 / ~150 / ~300 |
 | **1 — Foundations** | VISION + GLOSSARY | Top-level | **Always read** | ~1000 / ~500 |
 | **2 — Overview** | ARCHITECTURE + ROADMAP + STRATEGY | Top-level | Read on substantive sessions | ~500 each |
 | **3 — Architecture detail** (topical) | `docs/architecture/<topic>.md` | per primitive / discipline / cross-cutting concern | Read when working in that area | ~500 each, 15-20 topics total |
@@ -181,13 +181,15 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Memory** (orthogonal, not layered): `memory/` — feedback files + bausteine + universal prose. Persistent state, not architecture.
 
-**Active reading at session start**: Layer 0 + Layer 1 ≈ ~1.7k lines. Constant per session, not proportional to corpus size.
+**Active reading at session start**: Layer 0 + Layer 1 ≈ ~2.2k lines. Constant per session, not proportional to corpus size.
 
 ### Layer 0 — Entry
 
 - **README.md** — one-screen project description; what PBS is; how to enter; pointers to Layer 1
 - **HANDOFF.md** — lean session log; ~30-100 lines per session; rotate older sessions to `archive/handoffs/HANDOFF-sessions-N-M.md` when active HANDOFF crosses ~500 lines (keep current session + last 2 entries active)
 - **MAINTENANCE.md** — this file; doc system rules
+- **DISCIPLINES.md** — cross-session working discipline; how we operate
+- **BACKLOG.md** — Phase-tagged work-item tracker; pending items across phases (Phase 2 / 3 / 4 / 5 / 6 / cross-cutting); items added when surfaced + resolved when locked + archived at phase boundaries
 
 ### Layer 1 — Foundations (anchored; rarely change)
 

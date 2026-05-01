@@ -9,6 +9,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
 - `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation); preliminary-lock anchor; the ground truth the rebuild serves
 - `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
+- `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
 - `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
@@ -16,7 +17,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 **Consult when relevant** (not session-start required):
 - `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
 
-**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file). Plus `GLOSSARY.md` for current vocabulary state.
+**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md`. Plus `GLOSSARY.md` for current vocabulary state.
 
 ## Rebuild phases
 
@@ -81,6 +82,13 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **Stable-vs-continue self-check formalized**: previously ad-hoc; now part of all 3 sharpening skills (decision-design-sharpening v0.3.0 → v0.3.1; pre-implementation-sharpening v0.3.0 → v0.3.1; coherence-audit v0.2.1 → v0.2.2). At end of each round, AI explicitly commits STABLE-or-CONTINUE position with rationale citing specific termination signals — counters self-validation bias in both directions (defaulting to "continue" / manufactured-criticism risk vs defaulting to "stable" / premature-lock risk).
     - GLOSSARY: 24 → 25 locked entries.
 
+14. **`BACKLOG.md` created (Layer 0 doc) + sharpening skills updated to auto-add to it**:
+    - Previously scattered across HANDOFF "Future ROADMAP items" + "Phase 3 ARCH considerations" + GLOSSARY forward-references + TOC forthcoming markers + coherence-audit reserved Lens 11-15 — no central tracker.
+    - `BACKLOG.md` introduced as Layer 0 entry (read at session start alongside DISCIPLINES + VISION + MAINTENANCE + HANDOFF). Phase-tagged sections (Phase 2 / 3 / 4 / 5 / 6 / cross-cutting); Open / Resolved sub-sections; per-item format captures origin + description + refs.
+    - Initial backlog populated from extraction across HANDOFF / GLOSSARY / coherence-audit (~50+ items across phases). Phase 3 ARCH alone has ~30 items (workflow + work-unit bipartite-classification, "deployment" definition sharpening, 12 specific mechanisms, 5 named architectural Protocols, per-Pattern-A-primitive details, per-primitive-detail topics, etc.).
+    - All 3 sharpening skills updated with auto-add-to-BACKLOG expectation: when sharpening / audit surfaces forward-references / deferred items, add corresponding entries to BACKLOG under relevant phase section in same commit.
+    - Cascade: MAINTENANCE.md 5-layer table updated (BACKLOG added to Layer 0); HANDOFF.md anchors list + session-start reading order updated; DISCIPLINES.md session-start reading reference updated; HANDOFF.md "Future ROADMAP items" + "Phase 3 ARCH considerations" sections collapsed to BACKLOG pointer (deduplicated).
+
 **Phase 1.5 outcome (locked session 16)**:
 
 Layered doc structure designed and persisted in `MAINTENANCE.md` (Layer 0; read at session start). 5-layer model: Entry → Foundations → Overview → Architecture detail → DRs → Specs, plus Memory orthogonal. Cascade discipline elevated to top-level rule (per user direction): all docs stay in consistent state; changes propagate up/down/sideways in same commit.
@@ -108,14 +116,9 @@ VISION tightened from 1069 → 255 lines. Three axes preserved exactly; Ming fou
 
 AI proposes entry text → user adjusts/challenges/confirms → AI persists in `GLOSSARY.md`.
 
-## Future ROADMAP items to remember (Phase 5 will consume this)
+## Pending work items
 
-Items surfaced during the rebuild that should land in the rebuilt ROADMAP when Phase 5 runs. Captured here so they don't get lost between now and Phase 5.
-
-1. **AI-app-development-facilitation skill** (high priority per user direction session 16) — captures cross-project discipline for building AI-centric apps; transferable to other AI-app projects. Consumes accumulated observations from `learnings/` folder. Per user: "should be our first ROADMAP item even though we will have many items that come before it."
-2. **`learnings/` distillation** — when per-session entries accumulate stable patterns (typically 3-5 sessions of evidence), distill into structured topic-specific docs in `learnings/`; promote held observations to memory feedback rules / DRs / ARCH disciplines as appropriate. Feeds into the skill above.
-3. **Testing harness for the framework** (later) — per user direction session 16. Eventual harness for systematic testing of framework primitives (mechanisms, protocols, shape conformance, sparring-output validation, audit-emission correctness, etc.). Composes with PydanticAI eval framework if adopted (per Phase 3 consideration #7). Distinct from per-skill testing in archived backend; this is harness for the framework layer itself.
-4. **Markdown structure validation** (investigation + adoption) — per user direction session 16. Investigate: (a) existing libraries for markdown structural validation (frontmatter conformance, required-sections-present, cross-ref existence, schema-of-allowed-tag-values); (b) what we already had in archived code (`backend/mcp-server/` + `plugin/skills/{audit,design-review}/` per archived `archive/INDEX.md`). Composes with the markdown-validation feasibility analysis (per Phase 3 consideration #8). Distinguishes structural validation (feasible; libraries may exist) from semantic procedure validation (impossible-by-nature; LLM-judged eval territory).
+→ See **`BACKLOG.md`** for Phase-tagged work-item tracker (Phase 2 GLOSSARY remaining + Phase 3 ARCH + Phase 4 DRs + Phase 5 ROADMAP + Phase 6 specs/code + cross-cutting). Items added when surfaced; resolved when locked; archived at phase boundaries.
 
 ## Inputs to consider for the rebuild (from session-16 findings)
 
@@ -127,11 +130,3 @@ Persisted in `archive/INDEX.md` "Status note" section. Six findings flagged as i
 4. Instance-anchoring leakage (5 sites)
 5. "Mechanism vs policy" vocabulary not in corpus (introduced in session-16 conversation; needs to land as named architecture if accepted)
 6. Filesystem location drift (shape-extension DR vs v0.34 restructure)
-
-## Phase 3 ARCH rebuild — considerations surfaced
-
-Items surfaced session 16 that Phase 3 (ARCH rebuild) should explicitly address:
-
-7. **PydanticAI revisit** — archived `#18 substrate eval` + `#20 PydanticAI eval` need re-examination when Phase 3 rebuilds substrate decision. Per WebFetch from official PydanticAI docs (session 16): PydanticAI is a Python agent framework with type-safe Pydantic-validated structured outputs + tool registration + 15+ provider model-agnostic. Could be substrate candidate (alone or alongside Claude Agent SDK / MS Agent Framework). Verify by reading archived `substrate-agentic-framework.md` + `permission-abstraction.md` when Phase 3 starts.
-
-8. **Markdown-validation feasibility analysis** — Phase 3 ARCH should explicitly characterize what kinds of validation are feasible for our markdown architecture and what kinds aren't. Per session-16 reasoning + archived AI-as-runtime hybrid-shape principle: validating LLM **outputs** (structured Pydantic-conforming data) is feasible (PydanticAI / vanilla Pydantic); validating LLM **inputs** (markdown procedures, prompts, SKILL bodies) is impossible-by-nature in a typed-system sense — only structural validation possible (frontmatter present, sections conform). Semantic validation of procedures requires LLM-judged eval (Phase 0 testing methodology territory). This distinction informs what kind of structural enforcement ARCH builds vs what's deliberately AI-as-runtime hybrid-shape territory.

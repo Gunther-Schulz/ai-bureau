@@ -199,6 +199,8 @@ Corpus-level findings cascade — locking one revision propagates to multiple en
 
 Per `feedback_judgment_and_automate.md`: don't menu the findings; commit a position per finding. User adjusts/challenges/confirms.
 
+**Auto-add to BACKLOG.md** (v0.2.2): when audit surfaces items that aren't actionable in current scope (e.g., "Phase 3 ARCH resolves..." forward-references; deferred details; Lens 11-15 corpus-specific findings during Phase 2 GLOSSARY audit), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit as the audit application. BACKLOG is the central work-item tracker; coherence-audit's deferrals must surface there or risk getting lost.
+
 **Post-audit self-check (v0.2.2)**: at the end of the audit (after surfacing findings + Pareto verdicts across all 10 lenses), AI explicitly evaluates against termination signals + Lens 1+8+9 collective REVISION count and commits a position:
 
 - **STABLE — corpus is set-coherent** with reasons (cite: "Lens 1+8+9 collective REVISION count = 0", "all findings are mechanical EXPANSIONS not architectural REVISIONS", "previous audit run yielded similar low-yield findings")

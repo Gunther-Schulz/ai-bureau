@@ -104,6 +104,8 @@ Stress-test what round 1 missed:
 
 Surface 4-10 genuine refinements per round (empirical observation). Distinguish EXPANSIONS (~80-90%) from REVISIONS (~10-20%). Apply Pareto discipline: each surfaced refinement should be Pareto-improving (better in some dimension without being worse in others). If not Pareto-improving, force "why?" challenge — could be manufactured criticism past where evidence warrants.
 
+**Auto-add to BACKLOG.md** (v0.3.1): when sharpening surfaces forward-references / deferred items (e.g., "Phase 3 ARCH resolves..." hedges; chronological-defers; not-actionable-now refinements), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit. BACKLOG is the central work-item tracker; deferrals must surface there or risk getting lost across sessions.
+
 **Post-round self-check (v0.3.1)**: at the end of each round (after surfacing findings + applying Pareto verdicts), AI explicitly evaluates against termination signals + sweet-spot pattern + Lens 1+8+9 collective REVISION count (where applicable) and commits a position:
 
 - **STABLE — lock at this round** with reasons (cite specific termination signals: "0 REVISIONS surfaced", "narrow architectural surface = 2-round sweet spot", "all findings are EXPANSIONS not architectural pivots")
