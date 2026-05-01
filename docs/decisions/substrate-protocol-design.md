@@ -7,7 +7,7 @@
 > plugin manifest in CASDK; module spec in MS AF). Substrate-coupling
 > impossible-by-construction per ARCH v0.21.
 
-**Status**: ACCEPTED — session 12 (2026-04-30); 3-round sharpening (full monty + cross-cutting + pre-implementation early-surfacing); decision-design phase rounds 1+2 architecturally lock the design; round 3 marked clearly as pre-implementation surfacing (early); **session 13 amendment adds SpecialistDescriptor per #22 Sub-DR A**
+**Status**: ACCEPTED — session 12 (2026-04-30); 3-round sharpening (full monty + cross-cutting + pre-implementation early-surfacing); decision-design phase rounds 1+2 architecturally lock the design; round 3 marked clearly as pre-implementation surfacing (early); **session 13 amendment adds SpecialistDescriptor per #22 Sub-DR A**; **session 15 amendment** (2026-05-01) re-examines Defers section under v0.33 no-defer principle (most entries reframed as phase routing; W7 valid watch-list). Per v0.33 preliminary-lock principle, this DR remains preliminary-locked; revisable when VISION ideal design demands. Substrate Protocol surface holds under v0.34 entity-md scope model restructure (substrate definitions become Framework C entity-md; substrate selection relocates from backend composition root to workspace.md per Definition vs instance binding pattern — substrate.md schemas in entity-md-spec §4 map cleanly to common Substrate Protocol surface).
 **Owner**: ROADMAP commitment #21 (SDK deep-read R3a-R3d synthesis); architectural foundation for #9 implementation
 **Related**: `substrate-agentic-framework.md` (#18 — Substrate Protocol pattern introduced); `sdk-deep-read.md` (#21 — origin findings); `in-process-mcp-server.md` (R3a — register_mcp_server method); `eval-framework-adoption.md` (R3b — substrate-agnostic eval); `permission-abstraction.md` (R3c — request_permission method); `subagent-primitives-adoption.md` (R3d — per-substrate extension Protocols pattern + common surface boundary criteria); `terminology-and-specialist-primitive.md` (#22 Sub-DR A — SpecialistDescriptor Protocol amendment)
 
@@ -518,17 +518,34 @@ Smaller refinements documented for #9 implementation phase reference. Implementa
 | R3c (permission abstraction) | request_permission method + 7 PermissionDecisionKinds in common surface; substrate impl dispatches to native primitives |
 | R3d (subagent + extensions) | Per-substrate extension Protocols pattern; common surface boundary criteria; subagent primitives in ClaudeAgentSDKExtensions |
 
-## Defers (chronological-valid)
+## Implementation phase routing + watch-list (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Reason |
+> **Session 15 amendment**: previously this section was titled "Defers (chronological-valid)" with 7 entries. Under v0.33 no-defer principle, re-examined: most entries are PHASE ROUTING (work scheduled in #9/#11/#13 implementation phases per two-phase pattern), not chronological gaps. Reframed accordingly. One entry (D7) is a real watch-list candidate.
+
+### Phase routing (work scheduled per two-phase pattern + ROADMAP queue)
+
+These are scheduled to specific implementation phases — not chronological gaps. The design is locked here; concrete work happens in the named phase:
+
+| Item | Implementation phase | Notes |
 |---|---|---|
-| **D1**: Detailed implementation of common Substrate Protocol methods | #9 implementation phase | This DR locks design; #9 implements |
-| **D2**: ClaudeAgentSDKSubstrate full implementation | #11 Cowork integration phase | Cowork is the natural deployment target |
-| **D3**: MSAgentFrameworkSubstrate full implementation | #18 dual-substrate plan execution | Backend implementation work for second substrate |
-| **D4**: HandRolledSubstrate fallback implementation | Tier 1 default; lands with #9 | Minimal impl |
-| **D5**: Pre-implementation sharpening rounds at #9 implementation start | #9 implementation phase | Per two-phase pattern; surfaces additional implementation details + flow-back of architectural findings |
-| **D6**: Round 3 operational concerns (R1-R11) implementation | #9/#11/#13 implementation phases | Pre-implementation sharpening rounds at each phase will surface what's needed |
-| **D7**: Per-substrate extension Protocols pattern as full ARCH discipline section | Comprehensive doc review post-#22 | Per R3d D5 |
+| Detailed implementation of common Substrate Protocol methods (was D1) | #9 implementation phase | This DR locks design; #9 implements |
+| ClaudeAgentSDKSubstrate full implementation (was D2) | #11 Cowork integration phase | Primary substrate; Cowork is natural deployment target |
+| MSAgentFrameworkSubstrate full implementation (was D3) | Per #18 dual-substrate plan; sequenced with #11/#13 | Second backend; Path B frontend awaits W2 below |
+| HandRolledSubstrate fallback implementation (was D4) | Tier 1 default; lands with #9 | Minimal impl per #18 hybrid plan |
+| Pre-implementation sharpening rounds at #9 implementation start (was D5) | #9 implementation phase | Per session-12 two-phase pattern; surfaces operational details + ~10-20% architectural flow-back |
+| Round 3 operational concerns (R1-R11) implementation (was D6) | #9/#11/#13 implementation phases | Pre-implementation sharpening rounds per phase determine what's needed when |
+
+### Watch-list entry (W7)
+
+**W7 (was D7): Per-substrate extension Protocols pattern as full ARCH discipline section** — awaiting **comprehensive doc review during Stage 4 sweep** (per session-15 work plan: Stage 4 reviews ARCH disciplines themselves at major version boundaries per Maintenance discipline rule 6). Resolution: when Stage 4 sweep covers ARCH disciplines, evaluate whether per-substrate extension Protocols pattern deserves dedicated discipline section vs staying as v0.30 changelog reference. Currently mentioned in v0.30 changelog; may warrant promotion to dedicated section.
+
+### Re-examination methodology
+
+D1-D6 fail external-information test (no specific external signal awaited — they're scheduled work) but they're not defers either; they're phase routing. Reframed as routing entries to clarify status.
+
+D7 is the only entry naming a specific external signal (Stage 4 sweep that hasn't run yet); valid watch-list.
+
+Decisions made: substrate-pluggability discipline holds (per v0.30 ARCH); all substrate-design choices locked; Stage 4 sweep evaluates ARCH discipline section structure separately.
 
 ## Constraints flowing to downstream commitments
 

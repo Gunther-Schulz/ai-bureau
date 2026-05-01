@@ -373,17 +373,35 @@ Is this eval pattern-level or PBS-instance? The METHOD (greenfield-criteria → 
 
 The Substrate Protocol pattern itself is pattern-level — applies to any AI-office substrate-choice scenario. Generalizes to other deployments: a legal-practice or research-lab AI office in the v2 builder era could run the same eval against then-current frameworks; the criteria stay valid (rooted in VISION axes + named disciplines), the candidates change, the Substrate Protocol pattern stays.
 
-## Defers (per defer-instinct discipline + sharp defer rule v0.20)
+## Status archive + watch-list + process commitments (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Status | Home | Reason |
+> **Session 15 amendment**: previously this section was titled "Defers (per defer-instinct discipline + sharp defer rule v0.20)". Under v0.33 no-defer principle, re-examined: D1+D2 are completed (not defers anymore); D4 is process commitment (not a defer); D3+D5 are valid watch-list entries.
+
+### Completed (status archive)
+
+| Item | Completion |
+|---|---|
+| Deep-eval of survivors (was D1) | ✅ COMPLETED session 12 (compressed from session 13 schedule into max-effort session 12) |
+| Final substrate decision (was D2) | ✅ COMPLETED session 12 — recommendation locked (compressed from session 14 schedule) |
+
+### Watch-list entries
+
+| W# | Concrete decision currently un-makeable | Awaiting external signal | Resolution mechanism |
 |---|---|---|---|
-| **D1**: Deep-eval of survivors | ✅ COMPLETED session 12 | this DR | (was scheduled session 13; compressed into max-effort session 12) |
-| **D2**: Final substrate decision | ✅ COMPLETED session 12 (recommendation locked) | this DR | (was scheduled session 14; compressed into max-effort session 12) |
-| **D3**: Re-verification of disqualified candidates | NOT scheduled | (re-verify only on user request OR if survivor deep-eval surfaces disqualifying-criterion blind spot) | Re-verification cost without specific signal = manufactured rigor |
-| **D4**: Periodic substrate re-eval | Future ARCH "Maintenance discipline" rule 6 (periodic greenfield review at major version boundaries) | (recurring) | Substrate fit drifts over time; revisit triggers below |
-| **D5 NEW**: Path B frontend (web UI / CLI / Cowork-equivalent for Shape B) | Deferred to consulting signal | Future ROADMAP item (see "Constraints flowing" → ROADMAP) | **Chronological-valid**: needs consulting-client signal that doesn't exist yet. The MS AF backend is current-scope; only the user-facing surface waits for signal. Architecture is ready; engineering is roadmap-tagged |
+| **W3 (was D3)**: Re-verification of disqualified candidates | User request OR survivor deep-eval surfaces disqualifying-criterion blind spot | When signal arrives, re-evaluate the disqualified candidate(s) against current criteria. Re-verification without specific signal = manufactured rigor (own framing); valid watch-list. |
+| **W5 (was D5)**: Path B frontend (web UI / CLI / Cowork-equivalent for Shape B) | Consulting-client signal for non-Anthropic deployment | Architecture is ready (MS AF backend in scope); only user-facing surface waits for concrete consulting client constraints. When signal arrives, ~1-2 weeks engineering per cost estimate. |
 
-Each defer names a specific home + specific chronological cost avoided. Per `feedback_pattern_not_instance_defers.md` + `feedback_defer_instinct.md`: chronological-valid (info-gap), not up-front-cost.
+### Process commitments (not defers; recurring)
+
+| Item | Process |
+|---|---|
+| Periodic substrate re-eval (was D4) | Per ARCH "Maintenance discipline" rule 6 (periodic greenfield review at major version boundaries). Substrate fit drifts over time; recurring evaluation per discipline rule. |
+
+### Re-examination methodology
+
+D1+D2 had ✅ completion markers and weren't really defers anymore — moved to status archive.
+D3+D5 PASS external-information test (specific external signals: user request / disqualified-candidate blind spot; consulting-client signal) and PASS effort-asymmetry test (the design WORK depends on the external signal arriving with concrete constraints). Reframed as watch-list entries.
+D4 is a process commitment — periodic review per ARCH discipline; not a chronological gap.
 
 ## Constraints flowing to downstream commitments
 
