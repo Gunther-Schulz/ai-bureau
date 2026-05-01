@@ -135,6 +135,39 @@ Reading any GLOSSARY entry, the layered approach is structurally visible: founda
 
 ---
 
+## TOP-LEVEL SCOPE — Repo identity: framework source, not deployment instance
+
+This repo is **the framework + dev tooling source — the starting point for deployments**, NOT a deployment instance itself.
+
+**What lives here**:
+- Framework architecture + foundational vocabulary (VISION, GLOSSARY, MAINTENANCE, DISCIPLINES, ARCHITECTURE per Phase 3, DRs, specs)
+- **Dev skills only** in `plugin/skills/` — development-process tooling for working ON the framework (sharpening, framing, etc.); pattern-level; not domain-specific
+- Plugin manifest scaffolding (`.claude-plugin/`, `plugin/.claude-plugin/`) — for distribution, not for self-instantiation
+- Memory feedback files (cross-session AI behavior)
+
+**What does NOT live here**:
+- **App skills** — domain-specific workflow logic (drafting, review, validation, domain orchestration). These belong in **deployment instances** built from this framework, not in the framework source. Archive history (v0.35) bundled 19 PBS app skills directly in `plugin/skills/` — that conflated framework with pioneer instance. The rebuild reverses that: framework stays clean; deployments contain their own app skills.
+- Workspace instances (`workspace.md`, practitioner records, project state)
+- Layer A content for any specific domain/state (PBS extensions, doctype manifests, baustein YAML)
+- Per-deployment configuration
+
+**Why this matters**:
+- **Distribution clarity**: anyone can clone this repo as a clean starting point for their own deployment without inheriting another deployment's instance state
+- **Pattern-vs-instance discipline applied to repo structure**: per `feedback_pattern_not_instance_defers.md`, framework = pattern-level; PBS-Schulz = pioneer instance. The repo embodying both was a session-12-era conflation that the rebuild corrects.
+- **Rebuild-bias prevention**: app skills encode v0.35 vocabulary; restoring them mid-rebuild contaminates locked-architecture work. Phase 6 doesn't rebuild app skills INTO this repo — it rebuilds them as part of deploying the pioneer instance separately.
+
+**Cascade implications**:
+- Archived app skills (`archive/plugin/skills/<19 bundles>`) stay archived **permanently** in this repo's history; they don't return to active `plugin/skills/`. Phase 6 builds them into a separate deployment workspace (PBS-Schulz instance), not back here.
+- Plugin manifest description (`plugin/.claude-plugin/plugin.json`) currently still describes PBS-domain workflow — staleness; needs rewrite to describe the framework-source-distribution role when Phase 3+ surfaces concrete framework distribution mechanics.
+- Future tooling decisions test against: "is this dev tooling for working ON the framework, OR app/domain logic for a deployment?" — only the former lives here.
+
+**See**:
+- `feedback_dev_vs_app_skills.md` (memory) — archive/restore criteria for plugin skills under this distinction
+- `feedback_pattern_not_instance_defers.md` (memory) — pattern-vs-instance discipline (broader)
+- `archive/INDEX.md` — archived app skills + rationale (don't restore)
+
+---
+
 ## The 5-layer model
 
 | Layer | What lives there | Where | Reading scope at session start | Line budget per doc |

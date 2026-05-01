@@ -92,17 +92,21 @@ MCP server implementation embodying v0.35 architectural decisions. Pre-launch; n
 - `mcp-server/` — Python package: Pydantic schemas (ProjectState with `departments_active`, AuditEvent with session-13 schema, sparring-output v1 + RecommendationOutput, manifest models), MCP tool implementations, integration adapter scaffolding, audit-trail v2 single-write, logging conventions, test layout
 - `README.md` — backend-specific README
 
-## plugin/ (working skills, archived to remove rebuild bias)
+## plugin/ (app skills, archived permanently — DO NOT restore to this repo)
 
-19 skill bundles authored against v0.35 vocabulary (`department:` frontmatter pre-rename to `specialist:` per session-13 sweep that was deferred to #11 single-touch refactor; old slash-command namespacing).
+**App-skill bundles** authored against v0.35 vocabulary (`department:` frontmatter pre-rename to `specialist:` per session-13 sweep deferred to #11 single-touch refactor; old slash-command namespacing).
+
+**These do NOT return to this repo's `plugin/skills/`** per `MAINTENANCE.md` "TOP-LEVEL SCOPE" commitment: this repo is framework source, not deployment instance. App skills belong in deployment instances (Phase 6 builds PBS-Schulz pioneer instance separately). Distinct from **dev skills** (which were resurrected post-Phase-1 because they're development-process tools for working ON the framework; see HANDOFF.md session-16 note 6).
 
 - `CLAUDE.md` — plugin-level meta-rule 4 summary
-- `skills/` — orchestrator, save-baustein, record-feedback, draft-textteil-b, draft-textteil-c, review-draft, validate-checklist, validate-bausteine, validate-latex-style, verify-citations, research-references, draft-cover-mail, survey-project, promote-to-skill, watch-list, audit, design-review, author-manifest, setup-office (19 total)
+- `skills/` — 19 app skill bundles remaining: orchestrator, save-baustein, record-feedback, draft-textteil-b, draft-textteil-c, review-draft, validate-checklist, validate-bausteine, validate-latex-style, verify-citations, research-references, draft-cover-mail, survey-project, promote-to-skill, watch-list, audit, design-review, author-manifest, setup-office
 - `templates/` — workspace-style overlays + skeletons (universal + per-domain)
 
-## .claude-plugin/ (plugin manifest, co-archived with plugin/)
+**Resurrected post-Phase-1** (moved to active `plugin/skills/` at repo root — permanent residence per repo-identity commitment): dev skills `decision-design-sharpening` + `pre-implementation-sharpening` — development-process tooling; pattern-level; not domain-specific.
 
-- `plugin.json` — Anthropic plugin manifest pointing at `plugin/skills/`; archived alongside plugin to keep coherent
+## .claude-plugin/ + plugin/.claude-plugin/ (manifests, fully restored post-Phase-1)
+
+`marketplace.json` (was `archive/.claude-plugin/`) and `plugin.json` (was `archive/plugin/.claude-plugin/`) moved back to active locations alongside dev-skill resurrection. Both descriptions still reference PBS-domain workflow; staleness flagged for Phase 6 rewrite when app-skill rebuild starts.
 
 ## extensions/{universal,domain,state}/ (PBS-Schulz content, archived to remove rebuild bias on scope structure)
 

@@ -15,3 +15,6 @@ backend/data/
 .vscode/
 *.swp
 *~
+
+# Runtime artifacts (Claude Code /compact signal, etc.)
+.ai/

@@ -90,13 +90,14 @@ Detailed mechanism: `MAINTENANCE.md` "TOP-LEVEL RULE — Cascade discipline".
 
 The foundational architectural commitments that future sessions inherit:
 
+- **Repo identity: framework source, not deployment instance** (locked session 16): this repo holds framework + dev tooling only; app skills + per-deployment instance content belong in deployment workspaces, not here
 - **Framework = MECHANISMS; Shape = POLICIES** (foundational architectural commitment; locked session 16)
 - **Atoms vs containers**: `mechanism` + `policy` are atomic primitives; `framework` + `shape` are meta-primitive containers
 - **A-B-C scope model** (preliminary-locked): Framework C (definitions) + Owner B (instances) derived from framework/shape; Layer A (layered content) orthogonal axis
 - **5-layer doc structure**: Entry → Foundations → Overview → Architecture detail → DRs → Specs (+ Memory orthogonal)
 - **GLOSSARY entry classification**: 4-axis tagging (Class / Layer / Axis / VISION usage)
 
-Detail in `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section.
+Detail in `MAINTENANCE.md` "TOP-LEVEL SCOPE" + "TOP-LEVEL ARCHITECTURE" sections.
 
 ---
 
@@ -123,6 +124,7 @@ The following memory files compose with this framing:
 | `feedback_links_plain_text.md` | Bare URLs; CLI doesn't render markdown links |
 | `feedback_ai_as_runtime.md` | AI as runtime, not consumer |
 | `feedback_wrong_shapes_impossible.md` | Structural constraints over conventional solutions |
+| `feedback_dev_vs_app_skills.md` | Repo is framework source; dev skills live here, app skills don't |
 
 Memory location: `/home/g/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/`. Index: `MEMORY.md` in same directory.
 
