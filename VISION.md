@@ -2,37 +2,21 @@
 
 This document anchors the deepest "why" behind the architecture. Every design decision and every commitment traces back to one thesis. When in doubt about whether a proposed feature belongs, check it against this thesis first.
 
-## What this is, in one line
+## What this is
 
-**A workspace pools and leverages codified expertise (bundled as specialists) to automate and support interactive practitioner workflows in a coherent manner.**
+**PBS is the framework for AI-co-worker systems for accountability-bearing work — structurally protecting three axes: intertwining, sparring, and authorship preservation.**
 
-Target users: solo professionals and small companies in expert-practitioner domains (planners, lawyers, researchers, accountants, consultants, boutique firms). Not enterprise federated deployments — that's a different archetype with a documented migration path. Single-big-model orchestration's strengths (domain coherence, low operational overhead, vendor-neutral, big-context cross-specialist reasoning) land precisely in the solo-to-small expert-practitioner segment.
+Method-and-architecture: distributable across deployments rather than tied to a single product instance.
 
-PBS-bureau is the pioneer instance of this workspace infrastructure — specifically a Planungsbüro (German planning bureau) workspace shape. The patterns generalize to any practitioner workspace shape (legal practice, research lab, creative studio, etc.).
+## The three layers
 
-## What this framework also is
+PBS is realized through three layers:
 
-PBS as marketed product is the workspace infrastructure for expert practitioners. PBS as framework contribution is broader: **a method-and-architecture for building accountability-bearing AI-co-worker systems for any expert-practitioner archetype.**
+- **Architectural patterns** — reusable shapes the framework codifies (framework=mechanisms / shape=policies; A-B-C scope model; Pattern A protocol pluggability; bipartite multi-aspect primitives; etc.)
+- **Dev-skill methodology** — disciplined development process used to build the architecture (pre-decision sharpening; coherence-audit; sparring as runtime mechanism applied to development itself)
+- **Working disciplines** — architectural-integrity rules sustained across the corpus (cascade; preliminary-lock; pattern-vs-instance; make-wrong-shapes-impossible; no-defer; source-grounded)
 
-The framework comprises three load-bearing layers:
-
-1. **Architectural patterns** reusable across AI-co-worker systems: framework=mechanisms / shape=policies; A-B-C scope model (Framework C definitions / Owner B instances / Layer A layered content); Pattern A protocol pluggability (Surface + Implementations + Instance/binding); bipartite multi-aspect primitives (Patterns B + C: definition+instance-content; human+record).
-
-2. **Dev-skill methodology** for building such systems: pre-decision sharpening (decision-design + pre-implementation phases); coherence-audit (cross-decision corpus auditing); applying sparring as runtime mechanism to the development process itself (the architecture's own discipline applied recursively).
-
-3. **Working disciplines** for sustaining architectural integrity: cascade discipline (changes propagate up/down/sideways); preliminary-lock principle (decisions revisable except VISION axes); pattern-vs-instance discipline (instance-anchoring leakage is the primary framework failure mode); make-wrong-shapes-impossible (structural constraints over conventions); no-defer (decisions made now; info-gaps as watch-list); source-grounded (every assertion has a basis).
-
-The pioneer instance (PBS-Schulz, German Planungsbüro) is BOTH a real workspace deployment AND a research-lab for the framework. Framework discoveries surface through pioneer-instance work; pioneer-instance soundness depends on framework integrity. This co-evolution is intentional, not incidental.
-
-## VISION scope — practitioner shape
-
-This document articulates the **practitioner-shape thesis** — the value claims PBS makes for expert practitioners (planners, lawyers, researchers, accountants, creatives, consultants, advisors). It is the pioneer-instance + marketed-product VISION.
-
-**The framework underneath is workspace-shape-neutral.** Framework primitives support multiple workspace shapes (each shape composing policies over framework mechanisms): practitioner (this VISION's domain), autonomous-business (operator-supervised), personal-OS (individual life-OS), knowledge-graph, federation, hybrid. Other shapes have their own potential per-shape visions if productized.
-
-**Three VISION axes apply with full force to practitioner shape.** When second-shape productization happens, that shape gets its own per-shape VISION; this document remains the practitioner-shape articulation.
-
-The framework breadth (which shapes the framework supports + how the framework structurally encodes value claims) is ARCH territory. Positioning narrowness (why practitioner-shape is what PBS markets; funding fit; competitive landscape) lives in STRATEGY.
+The framework generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms. Per-shape positioning lives in STRATEGY; per-shape architectural detail lives in ARCH.
 
 ## The thesis
 
@@ -139,7 +123,7 @@ Most AI products are designed to deliver the answer before the user feels the di
 Cited in axis bodies but not promoted to anchor status (avoid diluting Ming):
 
 - **Donald Schön** (*The Reflective Practitioner*) — practitioner authoring via reflection-in-action; relevant to axis 3
-- **Hubert Dreyfus** (skill acquisition; novice → expert progression) — practitioner-shape audience grounding
+- **Hubert Dreyfus** (skill acquisition; novice → expert progression) — expert-practitioner audience grounding
 - **Daniel Kahneman** (System 1 / System 2) — sparring as System 2 forcing function; relevant to axis 2
 
 ### Empirical regulatory evidence (axes 2 + 3 universality)
@@ -190,7 +174,7 @@ This test cuts through edge cases:
 - A perfectly automated drafting feature that removes the practitioner's engagement with key argumentation choices fails (practitioner can't defend the choice later).
 - A "skip review" shortcut that bypasses layered review fails.
 - A summarization feature that compresses reasoning into pithy bullet points (losing the chain) fails (defense requires the full chain).
-- A fully automated send pipeline (no practitioner review of the cover communication — Anschreiben in PBS-Schulz pioneer; cover letter / transmittal note in other archetypes) fails (the practitioner owns the words sent under their name).
+- A fully automated send pipeline (no practitioner review of the cover communication accompanying the work) fails (the practitioner owns the words sent under their name).
 
 All might pass axes 1 and 2 (intertwined, sparring-friendly in some sense). They fail axis 3.
 
@@ -224,13 +208,13 @@ This commits the architecture to **AI-as-runtime hybrid-shape**: AI is load-bear
 
 The biggest risk to the thesis is **category collapse**: PBS gradually reduced to a "tacked-on" feature catalog because each discrete addition seemed reasonable in isolation. Especially at risk: GUI integrations into hosts where the host's UX paradigm is feature-driven. Each integration must be checked: does it expose intertwined workflow, or does it reduce PBS to a "summarize this" plugin in someone else's tool? The first is a frontend; the second is category collapse.
 
-### Pattern-vs-instance discipline (framework integrity protection)
+### Pattern-vs-instance discipline (framework integrity)
 
-Framework primitives are PATTERN-LEVEL, not pioneer-instance-anchored. Instance-anchoring leakage — defining a primitive in terms of pioneer-specific assumptions (PBS-Schulz solo-human practitioner; German planning bureau workflow; DACH regulatory specifics; EU AI Act terminology) — is the primary framework failure mode. The session-16 rebuild was triggered by five such leakages accumulated across the corpus.
+Framework primitives are PATTERN-LEVEL, not anchored to any specific deployment instance. Instance-anchoring leakage — defining a primitive in terms of one shape's specifics (solo-human practitioners; particular jurisdictions; particular regulatory regimes) — is the primary framework failure mode.
 
-This discipline protects the framework's shape-neutrality (per "What this framework also is" + line 17 above) operationally: every primitive must work for hypothetical legal-practice / research-paper-review / engineering-doc / personal-OS workspaces. Pioneer-instance examples appear as illustrations, not load-bearing claims. Verifiable structurally — coherence-audit's instance-leakage lens explicitly tests "would this primitive work for hypothetical X workspace?" before locking.
+This discipline protects the framework's shape-neutrality operationally: every primitive must work for hypothetical legal-practice / research-paper-review / engineering-doc / personal-OS workspaces. Specific-deployment examples appear as illustrations, not load-bearing claims. Verifiable structurally — coherence-audit's instance-leakage lens tests "would this primitive work for hypothetical X workspace?" before locking.
 
-Pattern-vs-instance discipline is what makes the framework distributable as method (per "What this framework also is" — distinct from pioneer-instance + workspace-deployment).
+Pattern-vs-instance discipline is what makes the framework distributable across shapes rather than tied to a single deployment.
 
 ## How to use this document
 
@@ -266,9 +250,11 @@ This is the deepest anchor. ARCH describes how the system is structured; this do
 
 VISION = WHY (value claims). ARCHITECTURE = HOW (structural primitives + disciplines). STRATEGY = MARKET (positioning + competitive landscape + funding).
 
-Cross-doc: VISION axes get IMPLEMENTED in ARCH; STRATEGY engages with opposing market thesis (service-as-software vs PBS practitioner-amplification).
+Cross-doc: VISION axes get IMPLEMENTED in ARCH; STRATEGY engages with market positioning (per-shape positioning + competitive landscape + funding fit).
 
-**Update triggers + lifecycle**: VISION review fires periodically alongside major architectural rebuilds. Specific triggers: major AI capability shift; major regulatory shift; real Phase 1+ deployment data showing axis-falsification signal; cross-deployment second-domain validation; strategic positioning shift (would unscope VISION + trigger per-shape VISIONs).
+**Update triggers + lifecycle**: VISION review fires periodically alongside major architectural rebuilds. Specific triggers: major AI capability shift; major regulatory shift; cross-deployment validation showing axis-falsification signal.
+
+**Pioneer instance**: PBS-Schulz (Planungsbüro Schulz, German planning bureau) is the current pioneer-instance deployment of the framework. See `PIONEER.md` for pioneer-instance status and relation to framework.
 
 ## Document history
 
@@ -282,4 +268,4 @@ Cross-doc: VISION axes get IMPLEMENTED in ARCH; STRATEGY engages with opposing m
   - **Vocabulary drift swept**: no "office" terms; no chronological-defer wording (superseded by v0.33 no-defer principle in `memory/`); no archived-doc cross-refs.
   - Net: 1069 → ~280 lines. Three axes preserved exactly; foundations preserved inline; falsification + robustness preserved; defensibility test preserved (generalized).
 - session 16 (rebuild Phase 1.8): VISION terminology audit on its own. ~15 candidate terms walked through 6 families (workspace / practitioner / sparring / authorship / framework / meta). 2 inline tightenings applied: (1) dropped "AI" prefix from "AI workspace" (every PBS workspace is AI by design — redundant); (2) parallel wording in 3-layer protection summary ("trust mechanisms / sparring mechanisms / authorship mechanisms" — replaced inconsistent "infrastructure" suffix). All other terms deferred to GLOSSARY (Phase 2) for formal lock — VISION's usage was already consistent in context; what's missing is canonical definitions, which is GLOSSARY territory not VISION's. The audit's value: confirmed term list GLOSSARY must lock, derived from VISION's actual usage rather than abstract architectural concepts.
-- session 16 (rebuild Phase 1.85): VISION sanity check (3-lens scan against 28 locked GLOSSARY entries) + expansion pass. **Sanity check** applied 4 small fixes: shape-extension-pattern outdated framing → "shape definitions composing policies over framework mechanisms"; anti-sycophancy added to axis-2 sub-mechanism checklist (was 7, now 8 matching GLOSSARY); two minor instance-anchoring generalizations (council meetings → challenge contexts; cover mail → cover communication). **Expansion pass** added: (1) new "What this framework also is" section articulating the framework as method-and-architecture (not just product), with three load-bearing layers (architectural patterns / dev-skill methodology / working disciplines); (2) "AI-as-runtime as precondition (all axes)" implication; (3) "Pattern-vs-instance discipline (framework integrity protection)" implication. Implications grew from 2 to 4. Driver: holistic view that VISION served Phase 2 GLOSSARY adequately but would under-serve Phase 3+ ARCH because it treated the framework's methodological contribution + architectural-integrity disciplines as implicit rather than explicit value-claims.
+- session 16 (rebuild Phase 1.85): VISION sanity check + clean-stance restructure. Sanity check applied 4 small fixes against 28 locked GLOSSARY entries (shape-extension-pattern outdated framing replaced; anti-sycophancy added to axis-2 sub-mechanism checklist; two minor instance-anchoring generalizations). Clean-stance restructure: replaced "What this is, in one line" + "What this framework also is" + "VISION scope — practitioner shape" with "What this is" (clean stance) + "The three layers" (architectural patterns / dev-skill methodology / working disciplines). Removed: target-users positioning sentence; pioneer-instance inline mentions; practitioner-shape scope-narrowing section; comparing-language ("PBS as marketed product is X / PBS as framework contribution is Y"). Pioneer-instance content moved to `PIONEER.md` as separate doc. Added 2 implications: AI-as-runtime as precondition; Pattern-vs-instance discipline. Implications grew 2 → 4. Driver: VISION should be clean stance, not explanatory or comparing — state what the framework IS, not what it relates to.

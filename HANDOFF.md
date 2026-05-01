@@ -7,9 +7,10 @@ This is the running session log for the **foundational rebuild** launched sessio
 ## Anchors (carry forward, never rebuilt)
 
 - **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
-- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation); preliminary-lock anchor; the ground truth the rebuild serves
+- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's three layers (architectural patterns / dev-skill methodology / working disciplines); preliminary-lock anchor; the ground truth the rebuild serves
 - `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
 - `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
+- `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
 - `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
@@ -101,11 +102,13 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **L2 (Lens 2)**: line 179 "cover mail" was planning-bureau Anschreiben-equivalent. Generalized to "cover communication (Anschreiben in PBS-Schulz pioneer; cover letter / transmittal note in other archetypes)"
     - **Lens 3 (axis interactions)**: VISION sketches via examples but doesn't articulate systematically. Position: not VISION revision (would bloat anchored role); flag for Phase 3 ARCH as dedicated architectural-pattern topic. Added to BACKLOG.
 
-17. **VISION expansion (Phase 1.85)** — holistic view surfaced that VISION served Phase 2 GLOSSARY adequately but would under-serve Phase 3+ ARCH because it treated the framework's methodological contribution + architectural-integrity disciplines as implicit rather than explicit value-claims. Three additions:
-    - **"What this framework also is" section**: articulates the framework as method-and-architecture (not just workspace product). Three load-bearing layers — architectural patterns (framework=mechanisms / shape=policies; A-B-C scope; Pattern A; bipartite multi-aspect); dev-skill methodology (sharpening, coherence-audit, sparring-applied-to-development); working disciplines (cascade, preliminary-lock, pattern-vs-instance, make-wrong-shapes-impossible, no-defer, source-grounded). Pioneer instance (PBS-Schulz) framed as BOTH real workspace deployment AND research-lab for the framework — co-evolution intentional.
-    - **"AI-as-runtime as precondition (all axes)" implication**: the three axes require AI participation in RUNTIME work; pre-RAG-database trap (deterministic SQL-style tooling AI consumes) is the failure mode this guards against. AI-as-runtime hybrid-shape committed.
-    - **"Pattern-vs-instance discipline (framework integrity protection)" implication**: instance-anchoring leakage is the primary framework failure mode (5 leakages triggered the rebuild). Framework primitives must work for hypothetical legal / research / engineering / personal-OS workspaces; verifiable via coherence-audit Lens 8. Pattern-vs-instance discipline is what makes the framework distributable as method.
-    - Implications section grew 2 → 4. "What this is, in one line" stays as workspace-product thesis; "What this framework also is" sits adjacent for the broader framework-as-method claim.
+17. **VISION clean-stance restructure (Phase 1.85)** — holistic view surfaced that VISION served Phase 2 GLOSSARY adequately but would under-serve Phase 3+ ARCH because it treated the framework's methodological contribution + architectural-integrity disciplines as implicit rather than explicit. User reframing during execution: "VISION should just state what we are — what the vision is. Clarity. No comparing language, no explanatory framing." Resulted in clean-stance restructure rather than just additions:
+    - **Removed from VISION**: "Target users" positioning sentence + single-big-model framing; pioneer-instance inline mentions; "VISION scope — practitioner shape" entire section (positioning/scope-narrowing; STRATEGY territory); comparing language ("PBS as marketed product is X / PBS as framework contribution is Y").
+    - **Replaced** "What this is, in one line" + "What this framework also is" with: "What this is" (clean stance — framework for AI-co-worker systems for accountability-bearing work, structurally protecting three axes) + "The three layers" (architectural patterns / dev-skill methodology / working disciplines).
+    - **Two new Implications**: "AI-as-runtime as precondition (all axes)" (guards pre-RAG-database trap; commits to AI-as-runtime hybrid-shape); "Pattern-vs-instance discipline (framework integrity)" (instance-anchoring leakage is primary failure mode; verifiable via coherence-audit Lens 8). Implications grew 2 → 4.
+    - **Created** `PIONEER.md` as separate Layer-0 doc — captures pioneer-instance status + relation to framework without polluting VISION's clean stance. Pioneer content (PBS-Schulz, German Planungsbüro identity, status, archived corpus pointers) lives there, cross-referenced from VISION's "Where this fits" section.
+    - Sanity-check fixes folded into restructure: shape-extension-pattern outdated framing replaced; anti-sycophancy added to axis-2 sub-mechanism checklist; two minor instance-anchoring generalizations (council meetings → challenge contexts; cover mail → cover communication).
+    - Net: VISION unchanged-line-count (~280 lines) but substantively cleaner — pure stance, no positioning, no comparison. Clean foundation for Phase 3+ ARCH.
 
 **Phase 1.5 outcome (locked session 16)**:
 
