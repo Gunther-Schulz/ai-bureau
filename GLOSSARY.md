@@ -102,7 +102,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - `mechanism` — atomic units of the framework (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `protocol` (architectural) — pluggable subsystems within the framework (canonical entry forthcoming)
 - `shape` — counterpart in the framework/shape architectural relationship (canonical entry forthcoming; relationship locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `workspace` — deployment-instance container that integrates framework + shape + specialists + practitioners (canonical entry forthcoming)
+- `workspace` — deployment-instance container that integrates framework + shape + specialists + practitioners
 
 **Source**: VISION (`VISION.md`):
 - Line 17: "The framework underneath is workspace-shape-neutral. Framework primitives support multiple workspace shapes via shape-extension pattern"
@@ -375,7 +375,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - `shape` — contains policies as its atomic bundle elements (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `mechanism` — counterpart atom in the framework=mechanisms / shape=policies framing (mechanism = framework atom; policy = shape atom)
 - `framework` — contains mechanisms over which policies are LAYERED (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `workspace` — selects a shape and inherits its policies (canonical entry forthcoming)
+- `workspace` — selects a shape and inherits its policies
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section: "policy is the atom — a single configured value; requirement/default/constraint"
@@ -423,7 +423,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 **Composes with**:
 - `framework` — counterpart in the framework/shape architectural relationship (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `policy` — atomic unit contained within a shape's bundle
-- `workspace` — deploys exactly one shape via `workspace.md` (canonical entry forthcoming)
+- `workspace` — deploys exactly one shape via `workspace.md`
 - `Framework C scope` — where shape DEFINITIONS live as distributable framework primitives
 - `mechanism` — what shape policies configure (which active / mandatory / defaults; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 
@@ -474,3 +474,62 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 **See**:
 - VISION "Sparring partner, not answer machine (axis 2)" section + Foundations Vivienne Ming subsection
 - ARCH Layer 3 axis-2-mechanism topic (placeholder until Phase 3)
+
+---
+
+## workspace
+
+- **Class**: PRIMITIVE (atomic; the deployment-instance unit)
+- **Layer**: cross-cutting (workspace integrates framework mechanisms + shape policies + practitioners; orthogonal to mechanism/policy split per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- **Axis**: cross-axis (workspace is the container in which all three VISION axes manifest)
+- **VISION usage**: directly used (`VISION.md` thesis line 7 + cross-archetype examples throughout)
+
+**Canonical**: The deployment-instance container that integrates framework mechanisms + shape policies + active specialists + practitioners + state into a coherent unit for accountability-bearing work; selects exactly one shape via its `workspace.md`; lives at Owner B scope.
+
+**What it is**: The top-level deployment primitive — what gets bound when a practitioner deploys PBS for their work. A workspace is the central Owner B instance: its `workspace.md` selects shape + substrate + active specialists; its workspace-scope managed entities (practitioner-record, Actor, Client) live at Owner B; its layered content (references, doctypes, bausteine per Layer A) varies by domain/state context (configured via workspace's `scope.{domains, states}`).
+
+**What it is NOT**:
+- Not the `framework` — framework is the universal mechanism layer (what's POSSIBLE); workspace is one deployment instance built from framework + shape policies
+- Not a `shape` — shape is the policy-bundle archetype (definition; lives in Framework C); workspace is an instance that SELECTS exactly one shape
+- Not a `specialist` (canonical entry forthcoming) — specialist is composable expertise; workspace ACTIVATES specialists from the list in `workspace.md`
+- Not a `session` (canonical entry forthcoming) — sessions are bounded interaction units WITHIN a workspace
+- Not a single application running on a server — deployment-shape-agnostic (could be local, cloud, hybrid); not synonymous with "office" (prior naming, demoted session 13; workspace is broader)
+
+**Cross-archetype illustration**:
+- Planning bureau: "PBS-Schulz workspace"
+- Legal practice: "Müller Law workspace"
+- Research lab: "Smith Lab workspace"
+- Solo creative: "Anna's Writing workspace"
+- Knowledge graph: "BNatSchG knowledge workspace"
+- Federation node: "Federation X workspace"
+
+All workspaces are built from the same framework; they differ in selected shape (which configures policies), active specialists, and Layer A content per their domain/state scope.
+
+**Boundary test**: ask "what's the deployment scope of this work?" The answer names a workspace.
+- If answer is "a single feature" → it's a skill or specialist, not a workspace
+- If answer is "the open-source product" → it's the framework, not a workspace
+- If answer is "a configuration archetype" → it's a shape, not a workspace
+- If answer is "a particular bounded interaction" → it's a session, not a workspace
+
+**Composes with**:
+- `shape` — workspace selects exactly one shape via `workspace.md` (the shape's policy bundle configures workspace's behavior over framework mechanisms)
+- `framework` — workspace inherits framework's mechanisms; the selected shape's policies determine which are active/mandatory and what defaults apply
+- `Owner B scope` — workspace lives as the central instance + container for workspace-scope managed entities (practitioner-record, Actor, Client)
+- `specialist` — workspace activates a list of specialists per `specialists_active` field in `workspace.md` (canonical entry forthcoming)
+- `practitioner` — workspace serves practitioner(s); records at Owner B (canonical entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
+- `substrate` — workspace runs on exactly one substrate (canonical entry forthcoming)
+- `session` — interaction units occur within a workspace (canonical entry forthcoming)
+- `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
+
+**Source**:
+- VISION (`VISION.md`):
+  - Line 7 (thesis): "A workspace pools and leverages codified expertise (bundled as specialists) to automate and support interactive practitioner workflows in a coherent manner"
+  - Line 11: "any practitioner workspace shape (legal practice, research lab, creative studio, etc.)"
+  - Multiple cross-archetype examples throughout
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Cross-cutting" classification (workspace listed as cross-cutting alongside practitioner, session, workflow)
+
+**See**:
+- `Owner B scope` (where workspace itself + workspace-scope managed entities live)
+- `shape` (what workspace selects)
+- `Layer A scope` (content scoping per workspace's domain/state configuration)
+- ARCH Layer 3 workspace-detail topics (placeholder until Phase 3 — `workspace.md` schema; multi-practitioner workspace; legal-entity workspace context; deployment configurations)
