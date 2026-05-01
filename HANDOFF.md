@@ -10,26 +10,49 @@ expert-practitioner deployment (legal-practice / research-lab /
 brand-voice / consulting-client) at first bind, not
 minimum-viable-PBS today with infrastructure added later.
 
-**Defer rule (sharp)**: defer ONLY for chronological reason
-(downstream shape unlocked, second-domain feedback needed,
-upstream precedent unresolved). **Up-front costs are NEVER
-valid defer reasons** — not "more sessions," not "premature,"
-not "YAGNI," not "PBS doesn't need it yet." See
-ARCHITECTURE.md "Pattern-vs-instance discipline" → "Defer rule"
-subsection (v0.20) and `memory/feedback_pattern_not_instance_
-defers.md`.
+**No-defer principle (v0.33; supersedes v0.20 chronological-
+defer permission)**: **Never defer.** If a decision cannot be
+made today because external information genuinely doesn't exist
+(Phase 1 corpus deployment data; first-bind real workflow;
+regulatory ruling X; community-built shape extension;
+second-domain feedback), surface as a **watch-list entry**
+naming the specific external signal awaited — not as a "defer".
+Watch-list entries have resolution mechanisms (signal arrives →
+decision made by mechanism Y); defers languish. The previous
+v0.20 "chronological-defer permission" framing was structurally
+permissive — defer-instinct learned to wear it as a mask
+(session 15 surfaced "speculation about future X" as the latest
+disguise). See ARCHITECTURE.md "No-defer principle" subsection
+(v0.33) + `memory/feedback_pattern_not_instance_defers.md` +
+`memory/feedback_defer_instinct.md` (both sharpened v0.33).
 
-The two tests that must pass for any defer to be honest:
+**Two tests for "literally cannot decide today"** (both must
+pass; if either fails, decide now):
 
-1. **Chronological**: is there specific information that would
-   change the design, and that information will exist later but
-   not now? Name it.
-2. **Framework-cost**: would a hypothetical legal-practice /
-   consulting-client deployment opening tomorrow need this? If
-   yes, design now.
+1. **External-information test**: is there a SPECIFIC external
+   signal whose absence prevents the decision? Name it precisely.
+   "We haven't designed it yet" / "downstream isn't locked when
+   we could lock it now" — fail the test.
+2. **Effort-asymmetry test**: could we do the design today if we
+   chose? If yes — even if it might be wrong — NOT a chronological
+   gap. Wrong design today is cheaper to revise (per
+   Preliminary-lock principle) than missing design accumulating
+   downstream cost.
 
-This frame supersedes any prior "we'll add it when PBS needs
-it" reasoning in the queue.
+**Preliminary-lock principle (added v0.33)**: every architectural
+decision in this repo is **preliminary-locked**. "Locked"
+vocabulary means current best position — not permanent. All DRs,
+all ARCH disciplines, all meta-rules, all spec rules, all ROADMAP
+commitments, all code = **living drafts** subject to
+re-examination when VISION ideal design demands. **Only
+persistent anchor**: VISION axes (revise only on real-world
+falsification per VISION's own criteria). PBS is in deep design +
+exploratory phase. See ARCHITECTURE.md "Preliminary-lock
+principle" section (v0.33) + `memory/feedback_preliminary_lock.md`.
+
+This frame supersedes any prior "we'll add it when PBS needs it"
+reasoning AND any prior "we already decided X, so we work around
+it" reasoning.
 
 ---
 
@@ -125,8 +148,8 @@ investigation scopes.
 
 1. **This file (`HANDOFF.md`)** — current session state, queue, recent decisions
 2. **`VISION.md`** — three axes (intertwining-AI-workflow + sparring partnership + authorship preservation) + Vivienne Ming's research foundation (oracle / validator / sparring-partner modes; only sparring outperforms human-alone or AI-alone). **Without this, AI drifts toward oracle/validator-mode framings — gives easy answers instead of generating productive friction. Empirically confirmed session 9: VISION re-grounding caught a misframing mid-conversation, prompted the role-shift refinement.**
-3. **`ARCHITECTURE.md`** — **v0.29** (cumulative session-11 review work: greenfield architecture review under VISION lens (v0.25); VISION sharpenings (v0.26); ARCH disciplines greenfield (v0.27 — skill-granularity elevated); architectural-gap detection sweep + maintenance rule 6 periodic greenfield review (v0.28); per-DR internal gap detection with 3 amendments + 2 backfill DRs (v0.29). Architecture survives clean-slate review under max-effort. See `docs/decisions/greenfield-architecture-review.md` — REQUIRED READING before #18 substrate eval starts. **Read the "Data + boundary reference card" near the top first** — it consolidates the "where does X go?" rules across all disciplines into one table. **Companion**: `docs/validation-gating-overview.md` (v0.22, L5 added v0.23) — systems-view consolidating the FIVE validation layers (L1 runtime structural / L2 runtime conventional / L3 retrospective scan / L4 prospective design / L5 external-boundary). Read both before designing a new gate or convention. The architectural surface, organized:
-   - **5 design disciplines** (load-bearing rules that gate design decisions): pattern-vs-instance + sharp defer rule (v0.20), make-wrong-shapes-impossible (v0.21), AI-as-runtime hybrid-shape (v0.16), entity-elevation 3-test (v0.13), glue-not-replacement (v0.15)
+3. **`ARCHITECTURE.md`** — **v0.33** (session 15: no-defer principle + preliminary-lock principle added; v0.20 chronological-defer permission removed and replaced with watch-list mechanism; all prior decisions explicitly preliminary-locked except VISION axes). Cumulative prior session work: shape-extension framework + Option B floor (v0.32); workspace/specialist primitives (v0.31); substrate-pluggability + Substrate Protocol pattern (v0.30); per-DR internal gap detection (v0.29); architectural-gap detection sweep + maintenance rule 6 periodic greenfield review (v0.28); ARCH disciplines greenfield (v0.27); VISION sharpenings (v0.26); greenfield architecture review under VISION lens (v0.25). See `docs/decisions/greenfield-architecture-review.md`. **Read the "Data + boundary reference card" near the top first** — it consolidates the "where does X go?" rules across all disciplines into one table. **Companion**: `docs/validation-gating-overview.md` (v0.22, L5 added v0.23) — systems-view consolidating the FIVE validation layers (L1 runtime structural / L2 runtime conventional / L3 retrospective scan / L4 prospective design / L5 external-boundary). Read both before designing a new gate or convention. The architectural surface, organized:
+   - **6 design disciplines** (load-bearing rules that gate design decisions): pattern-vs-instance + no-defer principle (v0.33; supersedes v0.20 chronological-defer permission), preliminary-lock principle (v0.33; NEW), make-wrong-shapes-impossible (v0.21), AI-as-runtime hybrid-shape (v0.16), entity-elevation 3-test (v0.13), glue-not-replacement (v0.15)
    - **3 operational principles** (rules that guide implementation choices): validation-layering deterministic-primary (v0.18), three evolution patterns mutable/append-only/forward-only (v0.19), informed-defaults ship-best-shape (v0.18)
    - **4 meta-rules**: app-vs-office (#1), memory-vs-RAG (#2), source-of-truth + invalidation (#3), execution-determinism + fail-closed corollary (#4)
    - **Earlier resolved concepts** absorbed into disciplines: archetype-portability (paragraph in pattern-vs-instance v0.10), office-vs-department modularization (#12, resolved v0.11), managed-entity concept (#9, framed v0.12)

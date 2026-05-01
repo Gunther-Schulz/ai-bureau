@@ -16,8 +16,9 @@ them.
 > authority gates, counter-arguments, calibrated confidence,
 > selective friction. See `VISION.md` for the full thesis.
 
-Status: **v0.32 (session 14 — shape-extension framework + Option B architectural floor + competitive-landscape research synthesis + VISION re-alignment + EU AI Act compliance specialist commitment. Workspace shapes catalog + per-shape extension contract; Option B structural floor (anti-Art-25-trap gate + claim-level audit emission + human authority chain); 4 deep-reads (Letta + OpenSail + PAI + Paperclip); commercial landscape including DACH (Beck-Noxtua / Phase0 / Avoice / AutoSitu); Cherry Ventures thesis match + DACH funding path; ROADMAP commitments #24 + #25 added. See `docs/decisions/shape-extension-and-architectural-floor.md` + `docs/decisions/closest-neighbors-deep-read.md` + `docs/decisions/vision-realignment-session14.md`.)**.
+Status: **v0.33 (session 15 — no-defer principle + preliminary-lock principle. Two coupled meta-architectural changes per user direction. v0.20 chronological-defer permission removed; replaced with watch-list mechanism naming awaited external signals. All prior decisions explicitly preliminary-locked; revisable when VISION ideal design demands. See "No-defer principle" + "Preliminary-lock principle" sections + memory `feedback_preliminary_lock.md` + sharpened `feedback_pattern_not_instance_defers.md` + `feedback_defer_instinct.md`.)**.
 
+- **v0.32 → v0.33**: **No-defer principle (supersedes v0.20 chronological-defer permission) + Preliminary-lock principle (NEW top-level architectural principle) — session 15 user direction**. Two coupled meta-architectural changes. (1) **No-defer principle** replaces v0.20 "Defer ONLY for chronological reason" framing — that wording was structurally permissive (offered an escape hatch defer-instinct learned to wear as a chronological-defer-as-YAGNI mask; surfaced session 15 when AI applied "speculation about future framework primitives is up-front-cost defer territory" to reject framework-axis design — itself a chronological-defer-mask). New rule: **never defer**; if external information genuinely doesn't exist, surface as **watch-list entry** naming the specific external signal awaited (Phase 1 corpus deployment data; first-bind real workflow; regulatory ruling X; community-built shape extension; second-domain feedback). Watch-list entries have resolution mechanisms; defers languish. Two tests for "literally cannot decide today": external-information test (name specific external signal) + effort-asymmetry test (could we do the design today if we chose? if yes, NOT a chronological gap). Composed with sharpened memory entries. (2) **Preliminary-lock principle** (NEW top-level architectural principle) — every architectural decision in this repo is preliminary-locked. "Locked" vocabulary means current best position derived from available reasoning, NOT permanent. Subject to re-examination when VISION ideal design demands. Only persistent anchor: VISION axes (revise only on real-world falsification per VISION's own falsification criteria — extremely high bar). PBS is in deep design + exploratory phase; specs / DRs / ARCH / code all living drafts. Preliminary-lock is the prerequisite for Maintenance discipline rule 6 (periodic greenfield review) being meaningful. Vocabulary discipline: "Locked" = preliminary-locked; "Anchored" = VISION axes only; avoid "Settled" (false permanence). Memory: feedback_preliminary_lock.md (NEW) + feedback_pattern_not_instance_defers.md (sharpened to no-defer) + feedback_defer_instinct.md (sharpened to disguise-recognition). Reference card row updated.
 - **v0.31 → v0.32**: **Shape-extension framework + Option B architectural floor + competitive-landscape synthesis (session 14)**. Three coupled architectural additions: (1) **Shape-extension framework** — workspace shapes are pluggable extensions; framework provides shape-neutral primitives + Protocol pluggability (Coordination/Sparring/Audit/Trust); concrete shapes (practitioner / autonomous-business / personal-OS / KG / federation / hybrid) live as `extensions/shapes/<shape-id>/` with default configs + shape-specific primitives; PBS pioneer = practitioner-shape extension reference implementation; layered approach formalized (OS framework workspace-shape-neutral + marketed product practitioner-focused). (2) **Option B architectural floor** — even shape-neutral framework primitives structurally enforce 3 accountability axioms regardless of shape: anti-Art-25-trap gate (specialist conformity manifest as Pydantic gate; impossible-by-construction per Make-wrong-shapes-impossible v0.21) + claim-level audit emission (decision provenance + sources[] + causes[]) + human authority somewhere in accountability-bearing output chain (configurable granularity: per-output / per-decision-class / per-policy / per-budget-cycle / per-specialist-installation). Other shapes can configure axis intensities (sparring optional vs always-on; audit overlay action-level on top of claim-level baseline; coordination event vs call) but cannot disable structural floor. (3) **Competitive-landscape research synthesis** — 4 OS deep-reads (Letta + OpenSail + PAI + Paperclip) + exhaustive commercial scan + DACH-specific (Beck-Noxtua / Phase0 / Langdock / Avoice / AutoSitu); 5 of 6 distinctness axes confirmed unique to PBS; ~10 adoption opportunities surfaced (~7 adopt + 3 defer). Cherry Ventures (Berlin) only published EU VC thesis-match. EU AI Act tailwind asymmetric in PBS favor (Art. 14 sparring; Art. 11/13/26(6) audit-by-construction; practitioner-as-deployer cleanest posture). NEW ROADMAP commitments: **#24 EU AI Act + DACH compliance specialist** (HARD REQUIREMENT before Aug 2026 production B-Plan use; cross-archetype `eu-ai-compliance` specialist + DACH-anchored extension; substrate-level additions for AuditEvent + retention defaults + specialist conformity gate); **#25 Shape extension framework + Protocol pluggability** (foundational; Tom Sawyer dynamic enablement; AFTER #11 + #9; BEFORE marketplace v3). Decision records: `docs/decisions/shape-extension-and-architectural-floor.md`, `docs/decisions/closest-neighbors-deep-read.md`, `docs/decisions/vision-realignment-session14.md`. VISION.md substantially updated (axis 2 framing as runtime mechanism; axis 3 scope-clarified to practitioner shape; new sections: scope clarification + counter-VISION engagement + negative space + temporal robustness + falsification + foundation expansion + lifecycle triggers + VISION≠ARCH boundary).
 
 - **v0.30 → v0.31**: **Terminology + level-boundary re-evaluation (#22) shipped (session 13)**. Three coupled changes locked together: (1) **Office → Workspace** at pattern primitive level (cross-archetype stress test: "office" metaphor fights ≥6/10 archetypes; PBS-instance-anchor signal); (2) **Specialist** introduced as NEW pattern primitive between Skill and Workspace — composable codified expertise bundle (skills + entities + process entities + references + memory + adapters); 5 composability axes (FROM/IN/WITH/ACROSS/OVER); 3-test (cohesive competence + distributable as unit + reusable across workspaces); two-tier classification (cross-archetype vs domain-anchored); (3) **Department demoted** from pattern primitive to optional `groupings: dict[str, list[specialist_id]] | None` shape on workspace.md (deployment-instance optional grouping convention; deployment names — PBS-Schulz uses "departments", legal practice may use "practice-areas"). Sub-DR A: `docs/decisions/terminology-and-specialist-primitive.md`. Sub-DR B (downstream strategic): `docs/decisions/positioning-three-tier-framework.md` — three-tier framing (Infrastructure / Workspace / Specialist); ICP refinement (PBS narrow + framework broader); four deployment possibilities (specialist authoring tier added); marketplace = of specialists (architectural constraints locked; v3 mechanics deferred). Cascade: file paths (`extensions/department/` → `extensions/specialists/`; `extensions/office/` → `extensions/workspace/`); Pydantic classes (`DepartmentEntity` → `SpecialistEntity`; `OfficeEntity` → `WorkspaceEntity`); skill frontmatter (`department:` → `specialist:` REQUIRED); slash commands (`/<specialist>:<skill>`); AuditEvent schema (`specialist_id` field); memory taxonomy axis 4 (`department` → `specialist`); ~12-15 DRs (s/department/specialist + s/office/workspace + logical re-reads); VISION rewrite (thesis line; deployment possibilities 3→4; AI-office → AI-workspace); ROADMAP v2 ("AI-office builder" → "AI-workspace generator") + v3 ("Marketplace of department modules" → "Marketplace of specialists"); strategic-positioning.md substantial rewrite. SpecialistDescriptor Pydantic Protocol added to substrate-protocol-design.md common surface. Pre-RAG, pre-launch, no projects bound — per ARCH "Maintenance discipline" deprecation rules: essentially free.
@@ -859,7 +860,7 @@ chase-six-sections pain when applying existing disciplines.
 | Should X be elevated to a managed entity, or stay as memory entry / event / nested field? | Entity-elevation discipline (3-test) | Elevate ONLY when stable-identity AND state-of-record AND lifecycle all apply. **Reference-style entities** (citations, regulations, sources) pass via "active vs amended/overturned" lifecycle. **When 3-test passes, choose NEW type only if Layer-2 schema differs structurally from existing types**; otherwise reuse existing type with `category` field or scope distinction (e.g., funding sources reuse `reference` type with `category: funding-source`, not a new `funding_source` type) |
 | Is X shared across multiple specialists? | Workspace-vs-specialist (#22 Sub-DR A) + workspace-scope managed entities (#15) | If shared (Client referenced by planning + invoicing; Actor referenced across specialists) → **workspace-scope managed entity** at `extensions/workspace/...`. Cross-specialist references via `<entity>_id: str` Layer-2 fields; gate validates references exist at write time. Specialist-only entities stay at specialist level |
 | Should X be Pydantic-validated or LLM-judged? | Validation layering (v0.18) | Deterministic primary (Pydantic / type / threshold) where the answer is determinate; LLM secondary for genuine judgment (prose precision, fit-to-shape) |
-| Should X be in v1 framework now, or deferred? | Pattern-vs-instance + sharp defer rule (v0.20) | Defer ONLY for chronological reason (info doesn't exist yet). Up-front costs ("more sessions", "premature", "PBS doesn't need it yet") are NEVER valid defer reasons |
+| Should X be in framework now? | Pattern-vs-instance + no-defer principle (v0.33) | Decisions made NOW. Watch-list entry only when external info genuinely doesn't exist (Phase 1 deployment data; regulatory ruling X; community-built shape extension; first-bind real workflow). Generic "premature" / "YAGNI" / "haven't done it yet" / "downstream isn't locked when we could lock it now" / "speculation about future X when we could design X today" — all rejected. Prior decisions are preliminary-locked per Preliminary-lock principle (revisable when VISION ideal design demands) |
 | When does X mutate, append, or stay forward-only? | Three evolution patterns (v0.19) | **Mutable** (migration framework, e.g., workspace.md) / **append-only** (additive backward-compat, e.g., AuditEvent) / **forward-only prose** (no migration; historical anchoring via `git_sha` / `convention_applied`) |
 | Does X go through MCP gate or direct file Read/Write? | Meta-rule 4 + fail-closed corollary | Contract-bearing files (typed Pydantic + cross-ref invariants) go through gate; loose markdown is skill-direct. Fail-closed on MCP unreachable — never bypass |
 | Where does X get its source-of-truth + invalidation contract? | Meta-rule 3 | Each piece of state has exactly ONE canonical source; invalidation contract names what changes when source changes |
@@ -1031,64 +1032,91 @@ fields), korrektur-rules and similar prose memory.
   — and most of them will need the deferred infrastructure at
   first bind. See "Defer rule" subsection below.
 
-### Defer rule: chronological reason only
+### No-defer principle (v0.33; supersedes v0.20 chronological-defer permission)
 
-The discipline's operational rule for deferring any
-infrastructure-shaped commitment (a skill, a gate, a Pydantic
-class, a registration mechanism, an audit slice, a body
-convention, a Layer-2 schema field):
+The discipline's operational rule for any infrastructure-shaped
+commitment (skill, gate, Pydantic class, registration mechanism,
+audit slice, body convention, Layer-2 schema field, entity-md
+scope axis, Protocol surface): **decisions are made now.**
 
-**Defer ONLY for chronological reason** — i.e., the design
-genuinely depends on information that doesn't exist yet:
+**Why v0.20 was wrong**: "Defer ONLY for chronological reason"
+was structurally permissive — it offered an escape hatch that
+defer-instinct learned to wear as a mask. The chronological test
+("is information genuinely missing?") often resolved to "we
+haven't done the design work yet" — up-front cost wearing
+chronological clothing. Removing the permissive framing closes
+the escape hatch. The pattern was empirically demonstrated
+session 15 when the AI applied "speculation about future
+framework primitives is up-front-cost defer territory" to reject
+substrate/protocol entity-md axis design — that "speculation"
+framing was itself chronological-defer-as-YAGNI in disguise (we
+COULD design substrate.md / protocol.md schemas today; we just
+hadn't).
 
-- Downstream consumer's shape isn't locked → designing now would
-  lock the wrong abstraction
-- Second-domain deployment is required to validate the
-  abstraction → without it the design over-fits PBS
-- Upstream decision is unresolved → depends-on chain is real
-- Genuine ordering constraint that the design's correctness
-  depends on
+**The new rule**: **never defer.** If a decision cannot be made
+today because external information doesn't yet exist, surface as
+a **watch-list entry** naming the specific external signal
+awaited. Watch-list entries have resolution mechanisms (signal
+arrives → decision made by mechanism Y). "Defer" is removed from
+the architectural vocabulary because it lacks a resolution
+mechanism and accumulates passively.
 
-**Up-front costs are NEVER valid defer reasons:**
+**Test for "literally cannot decide today"** (both must pass; if
+either fails, decide now):
 
+1. **External-information test**: Is there specific external
+   information whose absence genuinely prevents the decision?
+   Name it precisely (Phase 1 corpus deployment data; first-bind
+   real workflow performance; regulatory ruling X; second-domain
+   deployment feedback; community-built shape extension).
+   Generic claims ("we haven't designed it yet"; "downstream
+   isn't locked when we could lock it now") fail the test.
+2. **Effort-asymmetry test**: Could we do the design work today
+   if we chose to? If yes — even if the design might be wrong —
+   it's NOT a chronological gap. Wrong design today is cheaper
+   to revise (per Preliminary-lock principle below) than missing
+   design accumulating downstream cost.
+
+**Watch-list entry format**:
+
+> **W&lt;N&gt;: &lt;Concrete decision currently un-makeable&gt;** —
+> awaiting **&lt;specific external signal&gt;**. Resolution: when
+> signal arrives, decision X made by mechanism Y.
+
+**Watch-list entries are ACTIVE** (periodically reviewed for
+signal arrival); **defers are PASSIVE** (languish). The
+vocabulary distinction enforces the discipline distinction.
+
+**Invalid defer reasons** (look like chronological-defer; aren't):
+
+- ❌ "We haven't done the design work yet" — that IS the work;
+  do it
 - ❌ "It would take more sessions" — irrelevant; do the full work
-- ❌ "We might design it wrong" — only relevant if a NAMED future
-  signal would change the design; otherwise design now
-- ❌ "Premature abstraction" — without a specific information gap,
-  this is manufactured restraint
-- ❌ "YAGNI" — the canonical form of manufactured restraint;
-  rejected
+- ❌ "Premature abstraction" — without named external signal,
+  manufactured restraint
+- ❌ "YAGNI" — canonical defer-instinct mask; rejected
 - ❌ "PBS doesn't need it yet" / "only planning exists today" /
-  "no consumer in PBS until #11" — pioneer-instance bias; the
-  consulting framework's consumers include hypothetical
-  deployments opening tomorrow
+  "no consumer in PBS until #11" — pioneer-instance bias
+- ❌ "Downstream consumer's shape isn't locked when we could lock
+  it now" — locking IS the work
+- ❌ "Already-implemented parts work as-is" — sunk cost doesn't
+  constrain ideal design (Preliminary-lock principle below)
 - ❌ "We can add it later when needed" — adding later means
-  consulting clients hit the gap at first bind
+  consulting clients hit gap at first bind
+- ❌ "Speculation about future X" — when we could design X today
 
-**Two tests in order, both must pass for a defer to be honest:**
+**Valid watch-list signals** (all name specific external events):
 
-1. **Chronological test**: "Is there a specific piece of
-   information that would change this design, and that
-   information will exist later but not now?" If yes, name it
-   explicitly. If no, the defer is invalid — design now.
-2. **Framework-cost test**: "Would a hypothetical legal-practice
-   / research-lab / consulting-client deployment opening tomorrow
-   need this?" If yes, it's framework infrastructure — design
-   now regardless of PBS state.
-
-The rule composes with the existing "honest defers name a
-specific cost" guidance (see `feedback_defer_instinct.md`
-memory): the named cost must be a **future-information cost**
-(the chronological test passes), not an up-front cost.
-
-This rule was added v0.20 after a session-11 design loop where
-the AI repeatedly produced PBS-instance-anchored defer
-rationales despite the discipline being named since v0.8.
-Sharpening was required because the discipline as previously
-written caught content-coupling at architectural-rule level but
-not pioneer-instance bias at defer-rationale level. The bias is
-particularly insidious because it *looks like* sober "wait for
-pressure" reasoning.
+- ✅ Phase 1 corpus deployment data on chunk-effectiveness —
+  measurement requires real corpus query traffic
+- ✅ First-bind real workflow performance — cannot synthesize
+  without real deployment
+- ✅ EU AI Act Art. 6 Commission guidelines — regulatory ruling
+  not yet issued
+- ✅ Community-built autonomous-business shape extension —
+  validates ticket primitive + budget primitive design
+- ✅ First cross-domain deployment — second-domain feedback
+  validates pattern split
 
 **Coupling exceptions** (where domain-coupling at architecture
 level is allowed):
@@ -1112,13 +1140,25 @@ level is allowed):
   this: a new mechanism that subsumes a PBS-specific legacy
   mechanism *and* generalizes is correct; one that subsumes
   PBS-specific in a PBS-specific way perpetuates the coupling.
+- **NEW v0.33**: when a "defer" rationale appears in any DR or
+  proposal, force the no-defer test before accepting. Flag any
+  language matching the invalid-defer-reasons list above.
 
-**Connection to current work**: every session-7 commitment
-(meta-rule 4 fail-closed corollary, target 9 subsumption check,
-audit slice 18 legacy retirement scan, framing skill, audit-trail
-v2 single-write architecture, Skill Bundle frontmatter
-convention) is pattern-level by construction. The discipline
-makes that property explicit and load-bearing for future work.
+**Connection to Preliminary-lock principle** (below): the two
+compose. Never defer NEW decisions, AND prior locks aren't
+excuses to defer revision. A "permanently-locked" decision used
+to block re-examination is just a defer of revision.
+
+This rule was revised v0.33 after a session-15 design loop where
+the AI applied "speculation about future framework primitives is
+up-front-cost defer territory" — chronological-defer-as-YAGNI in
+disguise. The v0.20 wording offered structural permission;
+revision removes the permission.
+
+Memory: `feedback_pattern_not_instance_defers.md` +
+`feedback_defer_instinct.md` (both sharpened v0.33 to recognize
+defer-instinct disguises) + `feedback_preliminary_lock.md` (NEW;
+makes prior-lock revision explicit).
 
 ### Validation under the single-domain-pioneer constraint
 
@@ -1292,6 +1332,99 @@ skills declare `specialist: brand-voice`, no cross-specialist
 coordination needed since N=1). PBS today is also a single-
 specialist workspace (planning-document-work). The pattern handles
 N=0/1/many uniformly.
+
+---
+
+## Preliminary-lock principle (added v0.33)
+
+**Every architectural decision in this repo is PRELIMINARY-LOCKED.**
+The "locked" vocabulary used across HANDOFF + DRs + ARCH means
+**current best position derived from available reasoning** — not
+permanent, not settled, not non-revisable. Every decision is
+subject to re-examination when VISION ideal design demands it.
+
+**Why explicit**: false stability anchors against re-examination.
+When a session reads "locked" and treats the decision as
+non-revisable, the defer-instinct gets a polite excuse — "we
+already decided X, so we work around it" — that compounds
+architectural debt around wrong locks. PBS is in deep design +
+exploratory phase; specs, DRs, ARCH, code are **living drafts**.
+Locking is provisional.
+
+**The anchor that ISN'T preliminary-locked**: **VISION axes.**
+VISION is the persistent constant against which all other
+artifacts are tested. When ARCH discipline conflicts with VISION
+ideal design → ARCH revises. When DR conflicts with VISION → DR
+revises. When spec conflicts with VISION ideal design → spec
+revises. (VISION itself revises only on falsification per
+VISION's own falsification-criteria section — extremely high bar;
+load-bearing real-world signal required.)
+
+**Preliminary-lock test** (apply when a prior decision is treated
+as a constraint on current work):
+
+1. Is this decision the IDEAL design per VISION lens, or the
+   result of past compromise / up-front-cost defer / scope
+   limitation?
+2. Has subsequent reasoning surfaced reasons to revise?
+3. Would treating this as fixed produce a worse outcome than
+   re-examining?
+
+If any answer suggests revision → **re-examine**. The cost of
+revising a preliminary-lock now is much smaller than the cost of
+compounding around a wrong lock.
+
+**Preliminary-lock applies to**:
+
+| Scope | Items |
+|---|---|
+| All DRs | Every "Status: ACCEPTED" is preliminary |
+| All ARCH disciplines | Every v0.X version is preliminary (including this principle itself + the no-defer principle above) |
+| All meta-rules | Including meta-rules 1-4 |
+| All entity-md spec rules | Layer 1 + Layer 2 + body conventions + scope enum |
+| All ROADMAP commitments | Including #25 + the framework-axis design |
+| All code | backend/ + plugin/ |
+
+**Preliminary-lock does NOT apply to**:
+
+| Scope | Why anchored |
+|---|---|
+| VISION axes | Anchor; revise only on real-world falsification per VISION's falsification criteria |
+| Memory feedback principles | User-codified explicitly; user revises directly |
+| User-stated working-style preferences | Same — codified user direction |
+
+**Composition with other disciplines**:
+
+| Discipline | Connection |
+|---|---|
+| **Maintenance discipline rule 6** (periodic greenfield review) | Preliminary-lock is the prerequisite — without it, "we already decided that" blocks re-examination |
+| **No-defer principle** (above) | Two compose: never defer NEW decisions, AND prior locks aren't excuses to defer revision |
+| **Pattern-vs-instance discipline** | Preliminary-lock applies to pattern-level decisions too; pattern is the IP and the IP can be wrong |
+| **AI-as-runtime hybrid-shape** | Living markdown bodies exemplify preliminary-lock: prose is revisable as understanding evolves |
+| **Make-wrong-shapes-impossible** | Structural enforcement is preliminary too — the structural shape can be wrong |
+
+**Vocabulary discipline**:
+
+- "Locked" = preliminary-locked (current best position)
+- "Anchored" = VISION axes only (high-bar revision via real-world falsification)
+- "Settled" = avoid; suggests false permanence
+- "Decided" = preliminary-decided (revisable)
+
+**Discipline check at audit/design-review time**: when an audit
+or review surfaces a tension with prior locked decision, default
+action is **re-examine** (not "the decision is locked"). The user
+explicitly broke open prior architectural locks in session 15
+when the framework-axis question revealed defer-instinct
+masquerading as chronological-defer; same pattern available at
+any point.
+
+This principle was added v0.33 in response to session-15 user
+direction: "we are still fully in the design and exploratory
+phase. any code or specs written are living drafts. even when we
+say locked down, it's preliminary locked which are subject to
+breaking up at any moment."
+
+Memory: `feedback_preliminary_lock.md`.
 
 ---
 
