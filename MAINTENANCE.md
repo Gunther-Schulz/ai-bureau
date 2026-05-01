@@ -195,7 +195,7 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 ### Layer 1 — Foundations (anchored; rarely change)
 
-- **VISION.md** — three-axis thesis + framework's three layers + foundations + falsification criteria. **Anchored** per preliminary-lock principle (`memory/feedback_preliminary_lock.md`); revise only on real-world falsification per VISION's own criteria. Pure stance — no positioning (STRATEGY territory), no architectural detail (ARCH territory), no provenance (HANDOFF + git log).
+- **VISION.md** — three-axis thesis + framework's product + tooling + foundations + falsification criteria. **Anchored** per preliminary-lock principle (`memory/feedback_preliminary_lock.md`); revise only on real-world falsification per VISION's own criteria. Pure stance — no positioning (STRATEGY territory), no architectural detail (ARCH territory), no provenance (HANDOFF + git log).
 - **GLOSSARY.md** — canonical vocabulary. **ONE home for every term definition.** Each entry: one-sentence canonical definition + non-examples + cross-archetype examples + boundary tests + cross-references to Layer 3 topic where the term has structural detail. Layer 3+ docs cite GLOSSARY rather than redefining terms.
 
 **Cross-doc territory rule**: framework breadth (which shapes the framework supports + how the framework structurally encodes value claims) is ARCH territory. Positioning narrowness (target users + competitive landscape + funding fit + per-shape market positioning) is STRATEGY territory. Pure stance (what the framework IS + the axes it protects) is VISION territory. Foundational vocabulary is GLOSSARY territory. When content surfaces, route by territory rule before lock.

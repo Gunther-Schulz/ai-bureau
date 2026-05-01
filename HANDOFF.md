@@ -7,7 +7,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 ## Anchors (carry forward, never rebuilt)
 
 - **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
-- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's three layers (architectural patterns / dev-skill methodology / working disciplines); preliminary-lock anchor; the ground truth the rebuild serves
+- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's product (architectural patterns + structural disciplines) and tooling (dev-skill methodology + decision-making disciplines); preliminary-lock anchor; the ground truth the rebuild serves
 - `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
 - `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
 - `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
@@ -117,6 +117,14 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **WORKING TITLES — both PBS name AND tagline are provisional**. NOT mentioned in VISION itself (clean stance — VISION carries no provisional markers). Status flagged here in HANDOFF for next-session awareness.
     - **Naming exploration deferred**: PBS-as-acronym is leftover from Planungsbüro Schulz instance-anchoring origin; framework name should change. Top candidate surfaced: "Atelier" (workshop / craft / co-work imagery; cross-language; composable with shape names). Other candidates: Auctor (Latin "author"); Praxis (structured-practice). Decision deferred — significant cascade scope (repo rename + plugin manifest + marketplace + cross-doc references + memory dir path).
     - **Branches-first principle locked in VISION** itself ("When communicating about PBS, lead with the branches; trunk + roots are the supporting cast"). No separate memory rule needed since VISION is read at session start; principle is visible there. Marketing-shape elaboration in `drafts/marketing-themes.md`.
+
+19. **VISION "three layers" → "product + tooling" restructure** — user observation: dev-skill methodology + working disciplines are not equal-weight to architectural patterns; they're tooling, not product. The previous "three layers" framing carried false equivalence.
+    - Restructured "## The three layers" section → "## Product and tooling" (two categorically different kinds of content):
+      - **Product**: framework=mechanisms / shape=policies; A-B-C scope; Pattern A; bipartite multi-aspect; structural disciplines (cascade, pattern-vs-instance, make-wrong-shapes-impossible). What every deployment built on PBS inherits structurally.
+      - **Tooling**: pre-decision sharpening; coherence-audit; sparring applied to development; decision-making disciplines (preliminary-lock, no-defer, source-grounded). How the framework is built and sustained; distributable for contributors and similar-framework-builders.
+    - Both ship; categorically different. Most deployment-users interact only with product.
+    - Refinement: structural disciplines (cascade, pattern-vs-instance, make-wrong-shapes-impossible) moved with architectural patterns (they're STRUCTURAL — shape how the framework holds). Decision-making disciplines (preliminary-lock, no-defer, source-grounded) stayed with development tooling.
+    - Cascade: MAINTENANCE.md + HANDOFF.md anchor descriptions updated.
 
 **Phase 1.5 outcome (locked session 16)**:
 
