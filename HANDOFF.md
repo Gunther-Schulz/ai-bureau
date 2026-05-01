@@ -13,6 +13,9 @@ This is the running session log for the **foundational rebuild** launched sessio
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
 
+**Consult when relevant** (not session-start required):
+- `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
+
 **Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file). Plus `GLOSSARY.md` for current vocabulary state.
 
 ## Rebuild phases
@@ -66,6 +69,13 @@ VISION tightened from 1069 → 255 lines. Three axes preserved exactly; Ming fou
 **Lock GLOSSARY entry-by-entry (per user direction "step by step")**. Order: foundational meta-primitives first (framework, shape, mechanism, policy), then atoms (workspace, practitioner, specialist, skill, AI runtime), then scope classifications (Layer A, Owner B, Framework C), then derived (axes, sparring sub-mechanisms, cross-axis mechanisms), then cross-cutting (actor, event, session, workflow, substrate, protocol).
 
 AI proposes entry text → user adjusts/challenges/confirms → AI persists in `GLOSSARY.md`.
+
+## Future ROADMAP items to remember (Phase 5 will consume this)
+
+Items surfaced during the rebuild that should land in the rebuilt ROADMAP when Phase 5 runs. Captured here so they don't get lost between now and Phase 5.
+
+1. **AI-app-development-facilitation skill** (high priority per user direction session 16) — captures cross-project discipline for building AI-centric apps; transferable to other AI-app projects. Consumes accumulated observations from `learnings/` folder. Per user: "should be our first ROADMAP item even though we will have many items that come before it."
+2. **`learnings/` distillation** — when per-session entries accumulate stable patterns (typically 3-5 sessions of evidence), distill into structured topic-specific docs in `learnings/`; promote held observations to memory feedback rules / DRs / ARCH disciplines as appropriate. Feeds into the skill above.
 
 ## Inputs to consider for the rebuild (from session-16 findings)
 
