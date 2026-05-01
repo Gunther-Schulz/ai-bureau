@@ -38,9 +38,9 @@ When resolved:
 - ~~**work-unit**~~ [resolved 6a5dc53] — added per Round 3 audit RA2 (was missing canonical home)
 - ~~**claim**~~ [resolved 480bfaa] — added per Round 3 audit RA1 (atomic accountability-bearing-assertion)
 - ~~**defensibility**~~ [resolved 8547337] — operational test for axis 3
-- ~~**co-worker**~~ [resolved this commit] — relational claim about AI's mode of participation
-- ~~**intertwined AI**~~ [resolved this commit] — positive axis-1 mode (success state)
-- ~~**tacked-on AI**~~ [resolved this commit] — failure mode of axis 1 (contrast / anti-pattern)
+- ~~**co-worker**~~ [resolved ec5840a] — relational claim about AI's mode of participation
+- ~~**intertwined AI**~~ [resolved ec5840a] — positive axis-1 mode (success state)
+- ~~**tacked-on AI**~~ [resolved ec5840a] — failure mode of axis 1 (contrast / anti-pattern)
 - ~~**AI runtime**~~ [resolved 480bfaa REMOVED] — was STUB-only; redundant with substrate's Instance aspect
 - ~~**RA4 Client instance-leakage fix**~~ [resolved 6a5dc53] — moved from framework-level to shape-policy-mandated
 

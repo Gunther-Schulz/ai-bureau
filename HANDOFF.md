@@ -17,6 +17,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 
 **Consult when relevant** (not session-start required):
 - `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
+- `drafts/` — exploratory ideas / future-candidates / brainstorm output (NOT locked, NOT load-bearing); discipline in `drafts/README.md`. Currently holds: `marketing-themes.md` (session-16 marketing-shape thinking captured during VISION clean-stance work)
 
 **Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md`. Plus `GLOSSARY.md` for current vocabulary state.
 
@@ -28,8 +29,8 @@ This is the running session log for the **foundational rebuild** launched sessio
 | 1.5 | Design layered doc structure | ✅ Done session 16 (locked in `MAINTENANCE.md`) |
 | 1.75 | VISION tightening pass (structure) | ✅ Done session 16 (1069 → 255 lines; content moved out lives in `archive/VISION.md`) |
 | 1.8 | VISION terminology audit (term-level) | ✅ Done session 16 (15 candidates across 6 families; 2 inline tightenings; rest deferred to Phase 2 GLOSSARY) |
-| 1.85 | VISION sanity check + expansion pass | ✅ Done session 16 (4 sanity-check fixes; 3 expansion sections added: "What this framework also is" + 2 new Implications; framework now explicitly articulated as method-and-architecture, not just product) |
-| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | In progress — 28 locked entries; ~5 remaining (axis-2/axis-3 failure modes; pioneer instance; category collapse) |
+| 1.85 | VISION sanity check + clean-stance restructure | ✅ Done session 16 (4 sanity-check fixes against locked GLOSSARY; clean-stance restructure removed positioning + comparing language; new tagline + tree analogy with branches/trunk/roots; 2 new Implications — AI-as-runtime + pattern-vs-instance discipline; PIONEER.md created for pioneer-instance content; drafts/ pattern established for exploratory ideas) |
+| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | In progress — 28 locked entries; ~6 remaining per BACKLOG Phase 2 (pioneer instance; category collapse; axis-2 failure modes batch — answer-machine / oracle / validator AI; rubber-stamping) |
 | 3 | Rebuild ARCH against locked vocabulary | Pending |
 | 4 | Rebuild DRs selectively (collapse where possible) | Pending |
 | 5 | Rebuild ROADMAP lean | Pending |
