@@ -92,6 +92,8 @@ USER-TRIGGERED rounds outperform AI-self-triggered rounds because external-persp
 ### Round 2: First sharpening (USER-TRIGGERED)
 
 Stress-test what round 1 missed:
+- **Primitive-set lens** (LOAD-BEARING when proposing a new primitive): should this concept be a SEPARATE primitive, or could it merge with an existing one? Is it really a refinement (DERIVED) of an existing primitive? Does its boundary cleanly partition conceptual space, or overlap / leave gaps with existing primitives? — counters self-validation bias of accepting AI's initial categorization. (For corpus-level set-redesign across multiple already-locked primitives, see `coherence-audit` Lens 1.)
+- **Naming collisions?** Does the proposed primitive's name (or any enum/field within it) collide with existing locked vocabulary? Same word with two distinct meanings is a structural smell.
 - **Schema fields incomplete?** Missing required fields, optional fields, validation rules?
 - **Lifecycle distinctions missing?** State machines, entity lifecycle, request lifecycle?
 - **Composition gaps with other decisions?** How does this interact with existing decisions?

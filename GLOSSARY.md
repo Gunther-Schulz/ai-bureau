@@ -6,7 +6,7 @@ Canonical source for term definitions across the pbs-bureau corpus. Per `MAINTEN
 
 Each entry is tagged on 4 axes (per `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section):
 
-- **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION
+- **Class**: PRIMITIVE (atomic) / META-PRIMITIVE (container) / DERIVED (composition) / SCOPE-CLASSIFICATION / STUB (cross-ref to canonical primitive — not a separate primitive itself)
 - **Layer**: framework-mechanism / shape-policy / cross-cutting / multi-aspect / framework-meta
 - **Axis**: axis-1 / axis-2 / axis-3 / cross-axis (where applicable)
 - **VISION usage**: directly used / implicit / derived-from-VISION-terms / framework-meta
@@ -70,10 +70,8 @@ The primitives that compose into a workspace deployment.
 
 - [actor](#actor) — event emitter
 - [event](#event) — audit emission unit
-- audit trail (forthcoming) — sequence of events
-- source-grounding (forthcoming) — every claim traceable to source
-- persistent state (forthcoming) — state across sessions
-- orchestration (forthcoming) — continuous decision layer
+
+**Note (A1 — primitive-set lens, applied session 16)**: specific mechanism instances (audit trail = sequence of events; source-grounding = traceability claim; persistent state = cross-session state; orchestration = continuous decision layer) are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (placeholder until Phase 3). Same applies to the 8 sparring sub-mechanisms (see §6 below). GLOSSARY locks SHAPE primitives (mechanism, policy, framework, shape, etc.); specific mechanism instances are ARCH territory.
 
 ### 5. Pattern A primitives (Protocol pluggability)
 
@@ -85,8 +83,9 @@ Surface + Implementations + Instance/binding. See `MAINTENANCE.md` "TOP-LEVEL AR
 
 ### 6. Sparring sub-mechanisms (axis 2 detail)
 
-Eight named mechanisms supporting sparring mode (all forthcoming):
-- counter-argument, confidence calibration, visible reasoning, selective friction, asymmetric knowledge respect, anti-sycophancy, commit-to-recommendations, what's-missing
+Eight named mechanisms supporting sparring mode: counter-argument, confidence calibration, visible reasoning, selective friction, asymmetric knowledge respect, anti-sycophancy, commit-to-recommendations, what's-missing.
+
+**Note (A1 — primitive-set lens, applied session 16)**: these are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (placeholder until Phase 3). See §4 note for the rationale.
 
 ### 7. Modes & relations (conversational vocabulary)
 
@@ -107,16 +106,18 @@ Eight named mechanisms supporting sparring mode (all forthcoming):
 
 - **Class**: PRIMITIVE (atomic; the event-emitter unit)
 - **Layer**: cross-cutting (actor spans human + AI runtime + external systems; orthogonal to framework/shape split)
-- **Axis**: cross-axis (actors emit events serving any axis)
+- **Axis**: cross-axis (actors emit events serving any axis; axis-3 lean — actors are the named-emitter primitive enabling axis-3 defensibility through audit attribution)
 - **VISION usage**: implicit (VISION's "the user" + "the AI" map to actor kinds; not directly defined)
 
 **Canonical**: An entity that emits events within the architecture — a human, an AI runtime, or an external system. Every AuditEvent declares its emitting actor (`actor_kind` enum; framework-level guarantee per locked `mechanism` entry). Actors are workspace-scope managed entities at Owner B (per `Owner B scope` members list).
 
-**What it is**: The primitive that gives the architecture answer-to-the-question "who/what did this?" Every audit-emitted event has an actor; every action attributable in the audit trail traces to an actor. Actors are typed (`actor_kind`): typically `human`, `skill` (for AI-runtime-fired skills), or `external` (for events arriving from outside the workspace, e.g., A2A peers per archived corpus). The `actor_kind` enum lives at framework-mechanism level; specific actor records live as workspace-scope managed entities at Owner B.
+**What it is**: The primitive that gives the architecture answer-to-the-question "who/what did this?" Every audit-emitted event has an actor; every action attributable in the audit trail traces to an actor. Actors are typed (`actor_kind`): typically `human`, `ai_runtime` (for substrate-running-instance-fired actions; named to disambiguate from the `skill` primitive — work-logic unit), or `external` (for events arriving from outside the workspace, e.g., A2A peers per archived corpus). The `actor_kind` enum lives at framework-mechanism level; specific actor records live as workspace-scope managed entities at Owner B.
+
+**Renaming note (A2 — primitive-set lens, applied session 16)**: the `actor_kind: ai_runtime` value was renamed FROM `actor_kind: skill` to eliminate naming collision with the `skill` primitive (the atomic work-logic unit within a specialist). The previous overload — `skill` meaning both "work-logic unit" AND "actor kind for AI-fired actions" — is corrected. `ai_runtime` aligns with substrate's tri-aspect Instance nomenclature.
 
 **What it is NOT**:
 - Not a `practitioner` — practitioner is one specific actor kind (a human-practitioner-author); actor is the broader category that also includes AI runtimes and external systems
-- Not the AI runtime — AI runtime is one actor kind (typically `actor_kind: skill` for AI-fired actions); actor is the abstraction
+- Not the AI runtime — AI runtime is one actor kind (typically `actor_kind: ai_runtime` for substrate-running-instance-fired actions); actor is the abstraction
 - Not an `event` — events are emitted BY actors; actor is the emitter, event is what gets emitted
 - Not a workspace-config field — actors are managed entities (records); workspace.md may reference actors, not contain them inline
 
@@ -136,11 +137,11 @@ Eight named mechanisms supporting sparring mode (all forthcoming):
 - `mechanism` — `actor_kind` enum is a framework-level mechanism (interface contract requiring every event to declare its actor)
 - `Owner B scope` — actor records live as workspace-scope managed entities
 - `practitioner` — practitioner-record is one specific actor kind (human-practitioner-author)
-- `audit trail` (forthcoming) — actors' events compose into audit trail
-- `skill` — skills emit events with `actor_kind: skill`
+- `audit trail` — actors' events compose into audit trail (specific mechanism instance; canonical detail in ARCH Layer 3 per A1, not a separate GLOSSARY entry)
+- `skill` — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
 
 **Source**:
-- Locked GLOSSARY entries: `mechanism` ("`actor_kind` enum (declared on every audit event; framework-level guarantee)"); `Owner B scope` ("Actor (event emitter — could be human-practitioner or AI runtime)"); `skill` (composes-with: "skills emit AuditEvents with `actor_kind: skill`")
+- Locked GLOSSARY entries: `mechanism` ("`actor_kind` enum (declared on every audit event; framework-level guarantee)"); `Owner B scope` ("Actor (event emitter — could be human-practitioner or AI runtime)"); `skill` (composes-with: "skills emit AuditEvents via the AI runtime that fires them — `actor_kind: ai_runtime`")
 - `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Authority binding" row in concept-by-concept table: "`actor_kind` enum includes `human`; AuditEvent records emitting actor"
 
 **See**:
@@ -193,7 +194,7 @@ Eight named mechanisms supporting sparring mode (all forthcoming):
 - `practitioner` — the role this axis protects
 - `practitioner-shape` — workspace shape where this axis is mandated (canonical entry forthcoming; see `shape` named-shapes catalog)
 
-**Source**: VISION axis 3 (third principle of the thesis); "Authorship preservation, not rubber-stamping" section; the defensibility test.
+**Source**: `VISION.md` line 154 ("## Authorship preservation, not rubber-stamping (axis 3)"); line 164 (the practitioner-author claim); line 191 (authorship mechanisms framing); line 82 (axis-3 robustness claim); line 191 (practitioner's "professional/legal standing" framing).
 
 **See**:
 - VISION's "Authorship preservation, not rubber-stamping (axis 3)" section for full claim
@@ -210,10 +211,10 @@ Eight named mechanisms supporting sparring mode (all forthcoming):
 
 **Canonical**: A structured unit emitted to the audit trail by an actor — captures decision provenance, actor kind, timestamp, and per-event-kind details. The AuditEvent schema is a framework-level mechanism (atomic interface contract per locked `mechanism` entry).
 
-**What it is**: The smallest unit of audit-trail content. Each event records: which actor emitted it (per `actor_kind` enum), when, what kind of event (event_kind), and event-specific details (sources, causes, decision rationale, etc. per archived audit-trail-v2 schema). Events compose into the audit trail (forthcoming entry); the audit trail composes from events emitted over time. Per archived corpus, events are append-only — never rewritten — which is what makes them load-bearing for axis-3 defensibility.
+**What it is**: The smallest unit of audit-trail content. Each event records: which actor emitted it (per `actor_kind` enum), when, what kind of event (event_kind), and event-specific details (sources, causes, decision rationale, etc. per archived audit-trail-v2 schema). Events compose into the audit trail (specific mechanism instance, ARCH Layer 3 detail per A1); the audit trail composes from events emitted over time. Per archived corpus, events are append-only — never rewritten — which is what makes them load-bearing for axis-3 defensibility.
 
 **What it is NOT**:
-- Not the audit trail (forthcoming) — audit trail is the COMPOSITION (sequence) of events; event is the atomic unit
+- Not the audit trail (ARCH Layer 3 detail per A1) — audit trail is the COMPOSITION (sequence) of events; event is the atomic unit
 - Not an `actor` — actors EMIT events; event is what gets emitted
 - Not a workspace-state mutation — events are append-only audit records; workspace state is mutable; per archived `audit-trail-v2.md` these were unified into single-write architecture (state rendered FROM events)
 - Not a session log — sessions may contain events but the event is the architectural primitive
@@ -227,14 +228,14 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 
 **Boundary test**: Three questions:
 1. Is this an atomic structured emission unit with declared actor + timestamp + kind? → it's an event
-2. Is this the sequence/composition of events over time? → it's the audit trail (forthcoming)
+2. Is this the sequence/composition of events over time? → it's the audit trail (ARCH Layer 3 per A1)
 3. Is this the entity emitting? → it's an `actor`
 
 **Composes with**:
 - `actor` — every event declares its emitting actor (`actor_kind` field; framework-level guarantee)
-- `audit trail` (forthcoming) — events compose into the audit trail; audit trail = sequence of events
+- `audit trail` — events compose into the audit trail; audit trail = sequence of events (specific mechanism instance; canonical detail in ARCH Layer 3 per A1)
 - `mechanism` — the AuditEvent schema IS a framework-mechanism (atomic interface contract)
-- `skill` — skills emit events with `actor_kind: skill`
+- `skill` — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
 - `defensibility` (forthcoming) — events are the structural substrate enabling axis-3 defensibility (reconstructible reasoning chain)
 
 **Source**:
@@ -245,7 +246,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 
 **See**:
 - `actor` — events are emitted by actors
-- `audit trail` (forthcoming) — composition of events
+- `audit trail` (ARCH Layer 3 per A1) — composition of events
 - `mechanism` — AuditEvent schema as framework-mechanism
 - ARCH Layer 3 event-schema topics (placeholder until Phase 3 — full AuditEvent Pydantic shape, event_kind catalog, append-only discipline; archived material to consult: `audit-trail-v2.md`)
 
@@ -264,7 +265,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 
 The framework includes:
 - **mechanisms** (audit emission, source-grounding, sparring Protocol surface, etc.)
-- **architectural protocols** (Coordination, Audit, Sparring, Trust, Time as pluggable subsystems with multiple implementations)
+- **architectural protocols** (Pattern A pluggable subsystems with multiple implementations): Substrate, Adapter, Coordination, Audit, Sparring, Trust, Time. Substrate + Adapter additionally classified as PRIMITIVE primitives (per their canonical entries); the rest are named architectural Protocols (forthcoming entries). All share Pattern A shape per `protocol (architectural)` entry.
 - **architectural disciplines** (cascade discipline, no-defer principle, preliminary-lock principle, make-wrong-shapes-impossible, AI-as-runtime hybrid-shape, pattern-vs-instance, glue-not-replacement)
 
 **What it is NOT**:
@@ -368,7 +369,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - `workflow` — what intertwining intertwines WITH
 - `category collapse` — risk to axis 1 (canonical entry forthcoming)
 
-**Source**: VISION axis 1 (first principle of the thesis); contrast table (tacked-on vs intertwined).
+**Source**: `VISION.md` line 23 ("## The thesis"); line 49 (axis-1 contrast table); line 60 (deep-end intertwining claim); line 199 ("Workflow as precondition (axis 1)" implication); line 203 ("Category-collapse risk (axis 1 protection)").
 
 **See**:
 - VISION "The thesis" axis 1 + tacked-on/intertwined contrast table
@@ -580,7 +581,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - **Axis**: axis-3 (primary anchor — practitioner is the axis-3 archetype, the role authorship preservation protects); cross-axis
 - **VISION usage**: directly used (`VISION.md` lines 11, 15, 19 + axis 3 framing throughout)
 
-**Canonical**: The human expert author who bears accountability for produced work — the natural-or-legal-person under whose name accountability-bearing output is signed and defended. Bipartite multi-aspect primitive (Pattern C; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Other multi-aspect primitives"): HUMAN (cross-cutting; the actual person, not "placed") + RECORD (Owner B; system representation including identity, credentials, signing authority, role bindings).
+**Canonical**: The human expert author who bears accountability for produced work — the natural person under whose name accountability-bearing output is signed and defended. Bipartite multi-aspect primitive (Pattern C; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Other multi-aspect primitives"): HUMAN (cross-cutting; the actual person, not "placed") + RECORD (Owner B; system representation including identity, credentials, signing authority, role bindings). Legal-entity context (firm-level contracting party) lives at WORKSPACE level (legal-entity workspace context), not at practitioner level — practitioner is always a natural person.
 
 **What it is**: The role around which axis 3 (authorship preservation) is built. The practitioner is the human who signs the Begründung, the brief, the manuscript, the audit report — and who must be able to defend it later (the defensibility test). Architecturally this manifests in two aspects: the HUMAN itself (a person in the world; not a system entity; cross-cutting) AND a system RECORD (a managed entity at Owner B representing the practitioner — name, credentials, signing authority, role bindings). The HUMAN bears accountability legally + professionally; the RECORD is the system's stand-in that makes events traceable to a named person.
 
@@ -632,19 +633,19 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 
 ## protocol (architectural)
 
-- **Class**: PRIMITIVE (atomic; the pluggable-subsystem unit) — **tri-aspect** Pattern A (Surface + Implementations + Instance/binding) per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"
+- **Class**: META-PRIMITIVE (the Pattern A architectural shape itself; named architectural Protocols + `substrate` + `adapter` are specific PRIMITIVE instances of this pattern)
 - **Layer**: multi-aspect (Surface = framework-mechanism; Implementations = Framework C; Instance/binding = workspace-bound or shape-policy-selected)
 - **Axis**: cross-axis (different protocols serve different axes — Sparring Protocol = axis 2; Audit Protocol = cross-axis; etc.)
 - **VISION usage**: implicit (architectural concept underlying mechanisms across all axes; not directly named in current VISION)
 
-**Canonical**: An architectural pluggable subsystem within the framework — a Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). Pattern A canonical instance: protocol is the meta-pattern of which `substrate` and `adapter` are specific kinds. Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
+**Canonical**: The Pattern A architectural shape — pluggable subsystem with Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). META-PRIMITIVE (the pattern itself); specific instances of this pattern are PRIMITIVEs: `substrate`, `adapter`, plus named architectural Protocols (Sparring, Audit, Coordination, Trust, Time — forthcoming canonical entries). Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
 
-**What it is**: The Pattern A architectural shape made concrete. Each protocol has:
+**What it is**: The Pattern A architectural shape made concrete. Each protocol-instance has:
 1. **Surface** (mechanism; framework-level): an abstract Protocol contract defining what the subsystem provides
 2. **Implementations** (Framework C; distributable): concrete realizations of the surface
 3. **Instance/binding** (Owner B; workspace-bound, OR shape-policy-selected): the active implementation in a deployment
 
-Different selection levels exist:
+Different selection levels exist across instances:
 - **Substrate Protocol**: workspace selects (one running instance per workspace via `workspace.md substrate:` field)
 - **Adapter Protocol**: workspace activates instances (multiple may run; per workspace.md adapter bindings)
 - **Sparring Protocol**: shape selects (practitioner-shape mandates `always-on-sparring` impl; personal-OS-shape may use `sparring-as-skill` impl) — selection lives in shape-policy
@@ -652,8 +653,8 @@ Different selection levels exist:
 
 **What it is NOT**:
 - Not **Pydantic Protocol** — Pydantic Protocol is the Python typing concept (`typing.Protocol`); architectural Protocol is the broader pluggable-subsystem pattern. Architectural Protocols may USE Pydantic Protocol for their Surface implementation, but the pattern is independent of Python.
-- Not a single `mechanism` — a mechanism is atomic; protocol has multiple impls + selection beyond the surface alone
-- Not a `substrate` or `adapter` alone — those are SPECIFIC kinds of Pattern A primitives; protocol is the canonical pattern of which they are members
+- Not a single `mechanism` — a mechanism is atomic; protocol-instances have multiple impls + selection beyond the surface alone
+- Not itself a primitive — protocol is the META-PRIMITIVE pattern; specific Pattern A instances (`substrate`, `adapter`, named architectural Protocols) are the PRIMITIVEs
 - Not a workflow or session — protocols are framework-level architectural primitives; workflows + sessions are runtime/work-pattern concepts
 
 **Cross-archetype catalog (named architectural protocols; archived corpus + locked Pattern A members)**:
@@ -668,7 +669,7 @@ Different selection levels exist:
 Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + their surfaces; shapes provide policies selecting implementations + parameterizing them.
 
 **Boundary test**: Three questions:
-1. Is this an architectural pluggable subsystem with Surface + Impls + Instance/binding? → it's a Pattern A primitive (substrate / adapter / one of the architectural protocols)
+1. Is this an architectural pluggable subsystem with Surface + Impls + Instance/binding? → it's a Pattern A instance (a PRIMITIVE — `substrate` / `adapter` / one of the named architectural Protocols)
 2. Is this the Python typing structural concept (`typing.Protocol`)? → that's Pydantic Protocol — different concept; architectural Protocol may use it as implementation technique
 3. Is this a single atomic interface contract without multiple impls? → it's a `mechanism`, not a Protocol
 
@@ -804,7 +805,7 @@ Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + thei
 - **Axis**: cross-axis (skills serve any axis depending on what work they encode)
 - **VISION usage**: implicit (VISION line 7 says "codified expertise bundled as specialists"; skills are the atomic units of that expertise; not directly defined as glossary term in VISION)
 
-**Canonical**: An atomic unit of work logic within a specialist — an auto-loaded behavioral protocol that fires when its trigger conditions match. Skills are the smallest composable unit of codified expertise; specialists bundle multiple skills (+ entities + memory + adapters) into a distributable expertise package.
+**Canonical**: An atomic unit of work logic within a specialist — an auto-loaded behavioral procedure that fires when its trigger conditions match. Skills are the smallest composable unit of codified expertise; specialists bundle multiple skills (+ entities + memory + adapters) into a distributable expertise package. (Note: deliberately NOT "behavioral protocol" — `protocol` is locked architectural vocabulary for Pattern A pluggable subsystems.)
 
 **What it is**: A skill is what you'd reach for when you want to express "do this specific kind of work when this condition is met." Skills have triggers (when they fire), body content (what they instruct), and may declare output schemas (Pydantic models for structured output). Multiple skills compose into a specialist; the specialist is the cohesion abstraction; the skill is the atomic unit.
 
@@ -831,10 +832,10 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 3. Is this a framework-level interface contract? → it's a `mechanism`, not a skill
 
 **Composes with**:
-- `specialist` — specialist contains skills as its atomic work-logic units; skill cannot be used outside specialist context (a specialist provides the skill's runtime context, dependencies, references)
+- `specialist` — specialist contains skills as its atomic work-logic units; skill cannot be used outside specialist context — a specialist provides the skill's runtime context, dependencies, references. **Note**: this specialist-as-skill-bundle constraint is a PBS architectural commitment (per archived `terminology-and-specialist-primitive.md`); differs from Anthropic's bare-skill plugin convention where skills can exist standalone in `plugin/skills/`. Phase 6 reconciles which convention applies to PBS app-skill rebuild.
 - `mechanism` — skills use framework mechanisms (audit emission, source-grounding, sparring) at runtime via the substrate
 - `workflow` — skills participate in broader workflows (sequence of skill firings + decisions)
-- `actor` — skills emit AuditEvents with `actor_kind: skill` per archived audit-trail v2 schema
+- `actor` — skills emit AuditEvents via the AI runtime that fires them (`actor_kind: ai_runtime`); renamed from prior `actor_kind: skill` per A2 to eliminate naming collision with this primitive
 
 **Source**:
 - VISION (`VISION.md`) line 7 (thesis): "codified expertise bundled as specialists" — skills implicit as the atomic units of expertise
@@ -872,7 +873,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 - 8 sparring sub-mechanisms (canonical entries forthcoming): `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
 - `sparring mechanisms` — class of axis-2 mechanisms (canonical entry forthcoming)
 
-**Source**: VISION axis 2 (second principle of the thesis) + Vivienne Ming foundation; "Sparring partner, not answer machine" section.
+**Source**: `VISION.md` line 142 ("## Sparring partner, not answer machine (axis 2)"); line 100 ("### Vivienne Ming — sparring as the productive mode (axis 2 anchor)"); line 81 (axis-2 robustness claim — sparring becomes MORE valuable as AI accuracy increases); line 190 (sparring-mechanisms framing).
 
 **See**:
 - VISION "Sparring partner, not answer machine (axis 2)" section + Foundations Vivienne Ming subsection
@@ -945,7 +946,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - **Axis**: cross-axis (substrate hosts all axes' runtime behavior)
 - **VISION usage**: implicit (VISION doesn't directly use "substrate"; concept lives in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE + Framework C scope members)
 
-**Canonical**: A deployment runtime that workspaces run on — defines the agent loop, tool/MCP-server registration, permission flow, hook events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
+**Canonical**: A deployment runtime that workspaces run on — defines the agent execution loop, tool surface, capability/permission flow, lifecycle events, and session/context primitives via a Protocol surface; concrete implementations (Claude Agent SDK, MS Agent Framework, future) live as Framework C definitions; a workspace selects exactly one substrate via its `workspace.md`.
 
 **What it is**: One of the framework's mechanism categories (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE). The substrate provides the runtime contract any workspace operates on. The Protocol surface (interface contract) is universal/shape-neutral; specific implementations differ in how they realize that surface (e.g., Claude Agent SDK = Anthropic plugin runtime; MS Agent Framework = Microsoft agentic framework). **Substrate is an instance of the Protocol pattern** (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"): Substrate Protocol Surface (mechanism; framework-level) + concrete Implementations (Framework C definitions: Claude Agent SDK, MS AF, future) + a running Instance bound to each workspace deployment (Owner B; via `workspace.md` `substrate:` field). NOT the same as specialist's bipartite manifestation (specialist is definition+instance-content; no multiple implementations like substrate has).
 
@@ -991,7 +992,7 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 ## workflow
 
 - **Class**: PRIMITIVE (atomic; the work-pattern unit)
-- **Layer**: cross-cutting (workflows are domain-specific patterns; not framework-mechanism, not shape-policy, not Framework C definition)
+- **Layer**: cross-cutting — bipartite-candidacy under examination per A3 (primitive-set lens, session 16). The DEFINITION aspect (the pattern itself: "how does B-Plan-Begründung drafting actually proceed?") could be Framework C OR Layer A (domain-keyed); the INSTANCE aspect (workflow execution in a specific workspace) is realized through sessions over time. Phase 3 ARCH resolves whether workflow is single-aspect cross-cutting (current) or bipartite Pattern B (DEFINITION + INSTANCE-CONTENT, parallel to specialist).
 - **Axis**: axis-1 (primary anchor — workflow is what intertwined AI intertwines WITH); cross-axis (workflows span all axes during execution)
 - **VISION usage**: directly used (`VISION.md` thesis line 7: "interactive practitioner workflows"; line 27 axis 1: "AI is a co-worker in the workflow itself"; "Workflow as precondition" implication retained in current VISION)
 

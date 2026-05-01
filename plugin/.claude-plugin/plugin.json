@@ -1,20 +1,16 @@
 {
   "name": "pbs",
   "version": "0.3.0",
-  "description": "German Planungsbüro document workflow assistant. Orchestrator coordinates drafting, review, and finalization of B-Plan Begründungen, Textliche Festsetzungen, Umweltberichte, and Gutachten across the (universal × domain × state) scope axes. Local in-process RAG backend (LanceDB + bge-m3 + reranker), layered manifests, per-project memory under <project>/_ai/ or .ai/.",
+  "description": "Workspace framework — source repository (architectural rebuild in progress, session 16+). Currently holds development tooling only (sharpening skills used during architecture/design work). Framework distribution mechanics + app-skill packaging surface in Phase 3+.",
   "author": {
     "name": "Gunther Schulz"
   },
   "repository": "https://github.com/Gunther-Schulz/pbs-bureau",
   "license": "MIT",
   "keywords": [
-    "planning",
-    "latex",
-    "german",
-    "rag",
-    "documents",
-    "b-plan",
-    "umweltbericht",
-    "gutachten"
+    "framework",
+    "workspace",
+    "architecture",
+    "development"
   ]
 }
