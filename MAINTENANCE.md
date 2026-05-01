@@ -181,6 +181,8 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Memory** (orthogonal, not layered): `memory/` — feedback files + bausteine + universal prose. Persistent state, not architecture.
 
+**Drafts** (orthogonal, not layered): `drafts/` — exploratory thinking / future-candidates / brainstorm output. **NOT locked, NOT load-bearing.** Drafts can graduate to locked docs (STRATEGY / VISION / GLOSSARY / ARCH) when matured + user-locked, OR be discarded. Don't cascade-pass against drafts. Discipline + format detail in `drafts/README.md`.
+
 **Active reading at session start**: Layer 0 + Layer 1 ≈ ~2.2k lines. Constant per session, not proportional to corpus size.
 
 ### Layer 0 — Entry
