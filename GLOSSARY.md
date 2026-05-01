@@ -32,6 +32,69 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 
 ---
 
+## actor
+
+- **Class**: PRIMITIVE (atomic; the event-emitter unit)
+- **Layer**: cross-cutting (actor spans human + AI runtime + external systems; orthogonal to framework/shape split)
+- **Axis**: cross-axis (actors emit events serving any axis)
+- **VISION usage**: implicit (VISION's "the user" + "the AI" map to actor kinds; not directly defined)
+
+**Canonical**: An entity that emits events within the architecture — a human, an AI runtime, or an external system. Every AuditEvent declares its emitting actor (`actor_kind` enum; framework-level guarantee per locked `mechanism` entry). Actors are workspace-scope managed entities at Owner B (per `Owner B scope` members list).
+
+**What it is**: The primitive that gives the architecture answer-to-the-question "who/what did this?" Every audit-emitted event has an actor; every action attributable in the audit trail traces to an actor. Actors are typed (`actor_kind`): typically `human`, `skill` (for AI-runtime-fired skills), or `external` (for events arriving from outside the workspace, e.g., A2A peers per archived corpus). The `actor_kind` enum lives at framework-mechanism level; specific actor records live as workspace-scope managed entities at Owner B.
+
+**What it is NOT**:
+- Not a `practitioner` (forthcoming) — practitioner is one specific actor kind (a human-practitioner-author); actor is the broader category that also includes AI runtimes and external systems
+- Not the AI runtime — AI runtime is one actor kind (typically `actor_kind: skill` for AI-fired actions); actor is the abstraction
+- Not an `event` (forthcoming) — events are emitted BY actors; actor is the emitter, event is what gets emitted
+- Not a workspace-config field — actors are managed entities (records); workspace.md may reference actors, not contain them inline
+
+**Cross-archetype illustration**: actors recur across all workspace shapes:
+- Practitioner-shape: human-practitioner-author actor + AI runtime actor + occasional external actors (clients sending email)
+- Autonomous-business-shape: operator/board actor (humans) + AI runtime actors + customer-system actors (external)
+- Personal-OS-shape: individual actor (human) + AI runtime actor
+- Federation-shape: cross-node-peer actors (external A2A)
+
+**Boundary test**: Three questions:
+1. Does this entity emit audit events? → it's an actor
+2. Is this the typed-kind of who emitted? → that's `actor_kind` (a property of actor + a framework mechanism)
+3. Is this the structured emission unit? → that's an `event` (forthcoming), not an actor
+
+**Composes with**:
+- `event` (forthcoming) — events are emitted by actors
+- `mechanism` — `actor_kind` enum is a framework-level mechanism (interface contract requiring every event to declare its actor)
+- `Owner B scope` — actor records live as workspace-scope managed entities
+- `practitioner` (forthcoming) — practitioner-record is one specific actor kind (human-practitioner-author)
+- `audit trail` (forthcoming) — actors' events compose into audit trail
+- `skill` — skills emit events with `actor_kind: skill`
+
+**Source**:
+- Locked GLOSSARY entries: `mechanism` ("`actor_kind` enum (declared on every audit event; framework-level guarantee)"); `Owner B scope` ("Actor (event emitter — could be human-practitioner or AI runtime)"); `skill` (composes-with: "skills emit AuditEvents with `actor_kind: skill`")
+- `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Authority binding" row in concept-by-concept table: "`actor_kind` enum includes `human`; AuditEvent records emitting actor"
+
+**See**:
+- `event` (forthcoming) — what actors emit
+- `practitioner` (forthcoming) — one actor kind (human)
+- `mechanism` — `actor_kind` is a framework-mechanism
+- ARCH Layer 3 actor-detail topics (placeholder until Phase 3 — full actor_kind enum, A2A actor support per archived `a2a-and-gemini-pattern-emulation.md`, actor identity sourcing per archived `governance-and-identity-sourcing.md`)
+
+---
+
+## AI runtime
+
+- **Class**: STUB / cross-ref (not a separate primitive; conversational term for an aspect of `substrate`)
+- **Layer**: see `substrate` (the canonical primitive)
+- **Axis**: cross-axis
+- **VISION usage**: directly-used implicitly ("AI" / "the AI" / "AI co-worker" in VISION axis 1+2 framing; "AI runtime" not literally used)
+
+**Canonical**: Conversational / VISION-language term for `substrate`'s running instance (the third aspect of substrate's tri-aspect manifestation per Pattern A; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Recurring patterns: Protocol pluggability"). The "AI" in VISION axis 1 framing ("AI is a co-worker in the workflow itself") refers to the AI runtime — substrate-bound, specialist-activating, skill-firing, output-producing.
+
+**Why no separate primitive entry**: The architectural primitive is `substrate` (tri-aspect: Surface + Impls + Instance). "AI runtime" is conversationally what we call the Instance aspect when speaking about the active agent. A separate primitive would be redundant.
+
+**See**: `substrate` (canonical primitive; Instance aspect IS the AI runtime); `co-worker` (forthcoming; relational claim about AI's mode of participation).
+
+---
+
 ## authorship preservation (axis 3)
 
 - **Class**: DERIVED (claim/mode defined in VISION)
@@ -64,6 +127,56 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 **See**:
 - VISION's "Authorship preservation, not rubber-stamping (axis 3)" section for full claim
 - ARCH Layer 3 axis-3-mechanism topic (placeholder until Phase 3)
+
+---
+
+## event
+
+- **Class**: PRIMITIVE (atomic; the audit-emission unit)
+- **Layer**: framework-mechanism (the AuditEvent schema is a framework-level interface contract; events are the structured units of audit emission)
+- **Axis**: cross-axis (events serve all three axes — they're the substrate enabling axis-3 defensibility primarily, plus axis-1 trust + axis-2 sparring records)
+- **VISION usage**: implicit (VISION mentions "audit trail" line 92, 172, 183; events are the structured units of that trail; not directly defined as glossary term)
+
+**Canonical**: A structured unit emitted to the audit trail by an actor — captures decision provenance, actor kind, timestamp, and per-event-kind details. The AuditEvent schema is a framework-level mechanism (atomic interface contract per locked `mechanism` entry).
+
+**What it is**: The smallest unit of audit-trail content. Each event records: which actor emitted it (per `actor_kind` enum), when, what kind of event (event_kind), and event-specific details (sources, causes, decision rationale, etc. per archived audit-trail-v2 schema). Events compose into the audit trail (forthcoming entry); the audit trail composes from events emitted over time. Per archived corpus, events are append-only — never rewritten — which is what makes them load-bearing for axis-3 defensibility.
+
+**What it is NOT**:
+- Not the audit trail (forthcoming) — audit trail is the COMPOSITION (sequence) of events; event is the atomic unit
+- Not an `actor` — actors EMIT events; event is what gets emitted
+- Not a workspace-state mutation — events are append-only audit records; workspace state is mutable; per archived `audit-trail-v2.md` these were unified into single-write architecture (state rendered FROM events)
+- Not a session log — sessions may contain events but the event is the architectural primitive
+
+**Cross-archetype illustration**: events emitted across all workspace shapes share the same AuditEvent schema; differ in event_kind catalog per shape:
+- Practitioner-shape: claim-level events (decision_made, source_grounded, sparring_fired, send_authorized, signature_applied)
+- Autonomous-business-shape: action-level events (task_started, task_completed, budget_consumed, approval_requested)
+- All shapes: framework-level events (workspace_booted, specialist_activated, substrate_initialized)
+
+The framework provides the AuditEvent schema (mechanism); shapes determine which event kinds are MANDATORY emission per their policies.
+
+**Boundary test**: Three questions:
+1. Is this an atomic structured emission unit with declared actor + timestamp + kind? → it's an event
+2. Is this the sequence/composition of events over time? → it's the audit trail (forthcoming)
+3. Is this the entity emitting? → it's an `actor`
+
+**Composes with**:
+- `actor` — every event declares its emitting actor (`actor_kind` field; framework-level guarantee)
+- `audit trail` (forthcoming) — events compose into the audit trail; audit trail = sequence of events
+- `mechanism` — the AuditEvent schema IS a framework-mechanism (atomic interface contract)
+- `skill` — skills emit events with `actor_kind: skill`
+- `defensibility` (forthcoming) — events are the structural substrate enabling axis-3 defensibility (reconstructible reasoning chain)
+
+**Source**:
+- Locked GLOSSARY entries: `mechanism` (lists "AuditEvent schema (Pydantic model contract for audit emission)" as canonical mechanism example); `actor` (events are emitted by actors)
+- `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table "Audit emission" row
+- VISION `VISION.md` line 92 (falsification axis 3): "if defensibility ISN'T enhanced by structural authorship (regulators don't care about audit trails)"
+- Archived `audit-trail-v2.md` for full schema detail (Phase 3 ARCH territory)
+
+**See**:
+- `actor` — events are emitted by actors
+- `audit trail` (forthcoming) — composition of events
+- `mechanism` — AuditEvent schema as framework-mechanism
+- ARCH Layer 3 event-schema topics (placeholder until Phase 3 — full AuditEvent Pydantic shape, event_kind catalog, append-only discipline; archived material to consult: `audit-trail-v2.md`)
 
 ---
 
@@ -305,7 +418,7 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 - workspace itself (workspace.md selecting shape + substrate + active specialists)
 - workspace-scope managed entities:
   - practitioner-record (system representation; canonical `practitioner` entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
-  - Actor (event emitter; canonical entry forthcoming)
+  - Actor (event emitter; one of `actor_kind: human / skill / external`)
   - Client (engagement target; canonical entry forthcoming)
   - additional managed entities per workspace's needs
 - specialist instance content (entities owned within an active specialist instance — distinct from specialist DEFINITION which is Framework C)
