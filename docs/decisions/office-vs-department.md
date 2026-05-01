@@ -511,7 +511,11 @@ Per #10's "three multipliers" framing — same logic applies to #12:
 
 Cost asymmetry: pre-RAG, with zero projects bound and `departments_active` defaulting to `[]`, the schema addition is a 1-line Pydantic field. Post-Phase-1 + post-first-bind: every existing state.md needs migration; every audit event needs department-awareness retrofit; every memory entry potentially re-categorized.
 
-## Defers (with proper-home identification)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 3 entries below. Result: D1 + D2 are phase routing to #9 (Pattern-vs-instance split for ProjectState refactor). D3 (state.md migration to multi-department-aware shape) is a valid watch-list entry — names a chronological-valid signal (target-schema-not-yet-locked; awaits #9 + #11 finalization of state.md schema). Per v0.33 preliminary-lock: this DR remains preliminary-locked AND naming-superseded by #22 Sub-DR A. Original entries kept below as historical record.
+
+### Original entries (with proper-home identification)
 
 Three honest defers, each with specific home + cost being avoided:
 

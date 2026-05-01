@@ -122,7 +122,11 @@ Cross-references `ARCHITECTURE.md` "Workspace shapes" + `docs/decisions/shape-ex
 | Glue-not-replacement (v0.15) | Service-as-software thesis = replacement; PBS = glue/amplify; counter-VISION engagement (R1) makes this contrast explicit |
 | AI-as-runtime hybrid-shape (v0.16) | VISION axes implemented via specialist runtime composition — sparring + audit-by-construction + practitioner-author all live in hybrid-shape entity-md + Pydantic gates |
 
-## Defers (chronological-valid)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: ALL entries are valid watch-list entries (specific external signals: D1 first productization of non-practitioner shape; D2 future research surfacing load-bearing thinker — passes effort-asymmetry test because "adding without justification dilutes Ming anchor" is the cost being avoided, requiring real load-bearing work to surface; D3 Phase 1+ corpus deployment + first-bind real use; D4 first hybrid-shape deployment). Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries (chronological-valid)
 
 | Defer | Home | Cost being avoided |
 |---|---|---|

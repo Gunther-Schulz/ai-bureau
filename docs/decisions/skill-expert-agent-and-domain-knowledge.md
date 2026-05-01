@@ -177,13 +177,24 @@ topics) unchanged; reasoning sharper.
 | **Glue-not-replacement** | Decision 2 — prefer adapter mode when external system exists; native when not. Per meta-rule 1 + glue-not-replacement principle. |
 | **Sharp defer rule (v0.20)** | None deferred under instance-anchored rationale. All four decisions land at architectural level now (display_label field, setup prompt mechanism, skill-vs-agent distinction, fine-grained-expertise placement) — framework infrastructure. |
 
-## Defers (per defer-instinct discipline)
+## Decisions + phase routing (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Specific cost being avoided |
-|---|---|---|
-| **D1**: Concrete `display_label` rendering implementation in Cowork slash commands | #11 (Cowork integration) — slash command UX surface lives here | Pre-empting #11 design without concrete Cowork plugin shape; this DR specifies the field convention |
-| **D2**: setup-office prompt UX (exact phrasing, adapter list curation, "declare custom adapter later" workflow) | #11 setup-office retrofit | Implementation detail; this DR specifies the principle (prompt at setup, no pre-chosen default) |
-| **D3**: Skill-granularity discipline check (audit slice OR design-review target that flags over-elevated skills, parallel to entity-elevation slice 20 + target 11) | Future audit/design-review work; bundled with #9-followup or #11 | No clear case of over-elevation today; defer until pattern emerges |
+> **Session 15 amendment**: previously titled "Defers (per defer-instinct discipline)" with 3 entries. Re-examined: 1 entry reframed as decision made now (D3); 2 entries are phase routing to #11. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Note: parallel to #22 Sub-DR A D3 reframe (specialist-granularity discipline check) — same decision logic applied.
+
+### Decision made now (D3)
+
+**D3 (was defer): Skill-granularity discipline check** — DECISION: designed alongside specialist-granularity discipline check (parallel structure per #22 Sub-DR A session-15 D3 reframe). Audit slice scans `plugin/skills/<name>/` (and post-#11 `extensions/framework/specialists/<id>/skills/<name>/`) against the 3-test (distinct workflow + distinct output + reuse across projects); flags over-elevated skills for consolidation or under-elevated content for split. Design-review target enforces 3-test prospectively at skill-creation time. Implementation lands with #9 audit slice + design-review target work (per validation-layering discipline: L3 retrospective + L4 prospective). Generic "no clear case of over-elevation today; defer until pattern emerges" framing was failure of external-information test (no specific external signal); could decide today.
+
+### Phase routing (D1, D2)
+
+**D1 — Concrete `display_label` rendering in Cowork slash commands** is scheduled to #11 Cowork integration phase (slash command UX surface lives there).
+
+**D2 — setup-office prompt UX details** is scheduled to #11 setup-office retrofit (implementation detail; this DR specifies the principle of prompting at setup with no pre-chosen default).
+
+### Re-examination methodology
+
+D3 had generic "no clear case of over-elevation today" framing — failed external-information test. Could decide today; reframed as concrete v1 design decision parallel to #22 Sub-DR A D3 reframe.
+D1, D2 are scheduled to #11 implementation phase — phase routing, not chronological gaps.
 
 ## Constraints flowing to downstream commitments
 

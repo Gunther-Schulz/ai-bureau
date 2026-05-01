@@ -292,26 +292,42 @@ Applying entity-elevation 3-test:
 6. Wire 3 initial gates through abstraction: SEND_GATE + FOUR_WAY_DECISION + LIFECYCLE_TRANSITION
 7. Audit-trail integration (emit `permission_requested` / `permission_granted` / `permission_denied` events)
 
-## Defers (chronological-valid)
+## Decisions + phase routing (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Reason |
-|---|---|---|
-| **D1**: MS AF substrate impl of `request_permission` | When MS AF substrate backend lands per #18 dual-substrate plan | Implementation work; bundled with other Substrate Protocol methods |
-| **D2**: Tier 2 multi-user approval workflows | #13 deployment flexibility (Tier 2 lands there) | Tier 2 infrastructure not present yet |
-| **D3**: Tier 3 A2A signed permission requests | #10 A2A interop expansion (Tier 3 trigger) | Tier 3 federation infrastructure not present |
-| **D4**: design-review target "permission gate coverage scan" | Post-#9 implementation when permission flow has multiple call sites | Need code surface to scan against |
-| **D5**: Cowork-native consent UI integration | #11 Cowork integration phase | Cowork integration substrate work needed first |
-| **D6**: Permission caching via PermissionMode | Implementation-time optimization | Performance optimization; ship without first |
-| **D7**: PermissionRequest as managed entity | Tier 2 deployment | Tier 1 doesn't need lifecycle entity |
-| **D8**: Permission revocation flow implementation | With #6 audit-trail retrofit | Bundled with approval events ship |
-| **D9**: Conditional permission ("allow IF") | Defer to specific use case need | Too complex for Phase 0 |
-| **D10**: Bulk permissions (multi-decision batch) | Defer until pattern surfaces in real workflows | Premature optimization |
-| **D11**: Propose vs execute two-stage permission | Defer to specific use case need | Too complex |
-| **D12**: Denial appeals mechanism | Defer | Re-request with additional context covers Phase 0 |
-| **D13**: Rate limiting / cost protection | Defer | Not needed pre-Tier-2 multi-user |
-| **D14**: PII handling / encryption in permission contexts | #13 deployment-instance | Per existing PII defer |
+> **Session 15 amendment**: previously titled "Defers (chronological-valid)" with 14 entries. Re-examined under v0.33 no-defer principle: 6 entries reframed as decisions made now (effort-asymmetry test failed; could decide today); 8 entries are phase routing (work scheduled to specific implementation phase per ROADMAP queue, not chronological gaps). Per v0.33 preliminary-lock: this DR remains preliminary-locked.
 
-Each defer names specific home + chronological cost. Per `feedback_pattern_not_instance_defers.md`: chronological-valid (info-gap), not up-front-cost.
+### Decisions made now (D6, D7, D9, D10, D11, D12)
+
+**D6 (was defer): Permission caching via PermissionMode** — DECISION: v1 does NOT cache permissions (always-fresh permission request). v2+ may add caching as performance optimization when concrete need surfaces (e.g., real workload shows permission flow as latency hotspot).
+
+**D7 (was defer): PermissionRequest as managed entity** — DECISION: v1 does NOT elevate PermissionRequest to managed entity (per entity-elevation 3-test: lifecycle is single-action; no state-of-record needs persistence beyond audit-trail; no stable identity referenced by other entities). PermissionRequest stays as in-flow data + AuditEvent record. v2+ may revisit if Tier 2 multi-user surfaces lifecycle need.
+
+**D9 (was defer): Conditional permission ("allow IF" semantics)** — DECISION: v1 does NOT support conditional permissions. PermissionDecision is binary (allow/deny) with optional reason text. v2+ may add conditional grants when concrete use case surfaces with specific constraint shape.
+
+**D10 (was defer): Bulk permissions (multi-decision batch)** — DECISION: v1 does NOT support bulk permissions. Each PermissionDecisionKind requested individually via `request_permission`. v2+ may add bulk shape when real workflow patterns surface (e.g., layered review with N items requiring same authorization).
+
+**D11 (was defer): Propose vs execute two-stage permission** — DECISION: v1 single-stage permission (propose+execute coupled). v2+ may add two-stage when concrete use case surfaces requiring "AI proposes; user authorizes proposal; AI executes authorized proposal" semantics distinct from "AI requests; user authorizes; AI proceeds".
+
+**D12 (was defer): Denial appeals mechanism** — DECISION: v1 supports re-request with additional context (skill receives PermissionDeniedError; can include user-feedback context in next request). No formal appeals mechanism. v2+ may add formal appeals when audit-trail accumulates patterns showing appeal need.
+
+### Phase routing (work scheduled per implementation queue)
+
+| Item | Phase |
+|---|---|
+| MS AF substrate impl of `request_permission` (was D1) | Per #18 dual-substrate plan; sequenced with #11/#13 |
+| Tier 2 multi-user approval workflows (was D2) | #13 deployment flexibility |
+| Tier 3 A2A signed permission requests (was D3) | #10 A2A interop expansion (Tier 3 trigger) |
+| Design-review target "permission gate coverage scan" (was D4) | Post-#9 implementation when permission flow has multiple call sites; bundled with #9 design-review ripple |
+| Cowork-native consent UI integration (was D5) | #11 Cowork integration phase |
+| Permission revocation flow implementation (was D8) | #6 audit-trail v2 retrofit (bundled with approval events ship) |
+| Rate limiting / cost protection (was D13) | #13 Tier 2 multi-user deployment |
+| PII handling / encryption in permission contexts (was D14) | #13 deployment-instance per existing PII defer |
+
+### Re-examination methodology
+
+D6, D7, D9-D12 had generic "defer to specific use case need" / "Too complex for Phase 0" / "Premature optimization" framings — failed external-information test (no specific external signal named). Could decide today (effort-asymmetry test failed). Reframed as v1 decisions with v2+ revisit triggers.
+
+D1-D5, D8, D13-D14 are scheduled to specific implementation phases per ROADMAP queue — phase routing, not chronological gaps.
 
 ## Constraints flowing to downstream commitments
 

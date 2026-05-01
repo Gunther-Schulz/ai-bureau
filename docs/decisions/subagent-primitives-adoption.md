@@ -267,18 +267,40 @@ Different shape; same architectural intent (parallel execution + isolated contex
 - MS AF subagent-equivalent extension Protocol design — when MS AF substrate backend lands
 - Cross-substrate subagent equivalence enforcement — NOT required (per-substrate extensions intentionally distinct)
 
-## Defers (chronological-valid)
+## Decisions + phase routing + watch-list (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Reason |
-|---|---|---|
-| **D1**: Detailed scenario list for subagent adoption | Per actual scenario emergence (post-#9 implementation) | Use cases surface in real workflows |
-| **D2**: Pre-defined subagent definitions (entity-md instances) | First scenario where pre-definition pays off | Premature without specific use case |
-| **D3**: MS AF subagent-equivalent extension Protocol design | When MS AF substrate backend lands per #18 | Substrate-specific work |
-| **D4**: Broader terminology re-evaluation (skill vs subagent vs Expert) | #22 dedicated session | Pattern-vs-instance discipline applied to terminology — its own work item |
-| **D5**: Per-substrate extension Protocols pattern as full ARCH discipline section | Comprehensive doc review post-#22 | ARCH integration deferred until terminology re-eval informs naming |
-| **D6**: Subagent vs ad-hoc execution context boundary refinement | Implementation-time when boundary fuzziness surfaces | Architectural detail; resolves with concrete code |
-| **D7**: Cross-subagent communication coordination | Not current need; defer until use case emerges | Premature without specific scenario |
-| **D8**: Subagent reuse vs respawn semantics | Implementation detail | Per-implementation decision |
+> **Session 15 amendment**: previously titled "Defers (chronological-valid)" with 8 entries. Re-examined: D4 is COMPLETED (#22 shipped session 13); D5 is duplicate of substrate-protocol-design.md W7 (consolidated); 3 entries are valid watch-list entries (D1, D2, D7); 3 entries are phase routing (D3, D6, D8). Per v0.33 preliminary-lock: this DR remains preliminary-locked.
+
+### COMPLETED (D4)
+
+**D4 — Broader terminology re-evaluation (skill vs subagent vs Expert)** ✅ COMPLETED session 13 via #22 Sub-DR A (`terminology-and-specialist-primitive.md`). Specialist primitive introduced; workspace + specialist + project named; Expert vocabulary clarified per `skill-expert-agent-and-domain-knowledge.md`. No outstanding work.
+
+### Consolidated duplicate (D5)
+
+**D5 — Per-substrate extension Protocols pattern as full ARCH discipline section** is the same item as substrate-protocol-design.md W7 (session-15 amendment). Consolidated; tracked once at substrate-protocol-design.md as W7 awaiting Stage 4 ARCH disciplines review.
+
+### Watch-list entries (D1, D2, D7)
+
+| W# | Concrete decision currently un-makeable | Awaiting external signal | Resolution mechanism |
+|---|---|---|---|
+| **W1 (was D1)**: Detailed scenario list for subagent adoption | First concrete subagent use case in real workflow (post-#9 implementation; first project bound) | Use cases will surface in real workflows; document patterns; build scenario list from actual evidence |
+| **W2 (was D2)**: Pre-defined subagent definitions as entity-md instances | First scenario where pre-definition pays off (likely emerges from W1) | When pattern-of-reuse surfaces, elevate scenario to entity-md form |
+| **W7 (was D7)**: Cross-subagent communication coordination | First concrete cross-subagent use case (parallel scenarios that need coordinating) | When use case surfaces, evaluate event-coordination Protocol fit OR design new mechanism |
+
+### Phase routing (D3, D6, D8)
+
+| Item | Phase |
+|---|---|
+| MS AF subagent-equivalent extension Protocol design (was D3) | Per #18 dual-substrate plan; sequenced when MS AF substrate backend lands |
+| Subagent vs ad-hoc execution boundary refinement (was D6) | Implementation-time per #9 Substrate Protocol implementation; architectural detail resolves with concrete code |
+| Subagent reuse vs respawn semantics (was D8) | Implementation-time per substrate implementation; per-substrate decision |
+
+### Re-examination methodology
+
+D4 was completed by subsequent DR — moved to status archive.
+D5 is a duplicate tracked elsewhere — consolidated.
+D1, D2, D7 PASS external-information test (specific external signal: first concrete use case / scenario emergence) and PASS effort-asymmetry test (design depends on use-case-specific constraints not yet existing) — valid watch-list entries.
+D3, D6, D8 are scheduled to specific implementation phases per ROADMAP queue — phase routing.
 
 ## Constraints flowing to downstream commitments
 

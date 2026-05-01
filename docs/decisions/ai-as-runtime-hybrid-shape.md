@@ -388,7 +388,9 @@ Per ARCHITECTURE.md "Pattern-vs-instance discipline" — the principle must work
 
 The principle generalizes cleanly. Cross-domain portability is achieved through prose, not schema abstraction.
 
-## Defers (per defer-instinct discipline)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 6 entries below. Result: D2 (gate-level selective section read) is a valid watch-list entry — names specific external signals (median entity body > 1500 tokens OR any single entity body > 4000 tokens routinely; audit slice 21 telemetry fires the trigger). D1, D3, D4, D5, D6 are phase routing (work scheduled to #9 / Phase 1 corpus / audit ripple / design-review ripple per ROADMAP queue), not chronological gaps. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
 
 | Defer | Home | Specific cost being avoided |
 |---|---|---|

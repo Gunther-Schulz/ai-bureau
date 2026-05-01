@@ -206,7 +206,11 @@ This is an **honest defer** under sharp defer rule, distinct from manufactured r
 | **Validation-layering (v0.18)** | Greenfield review's "where would we diverge" surfaces the deterministic-vs-LLM judgment line for sparring mechanisms 4-7 (currently behavioral, candidate for structural-after-empirical-data). |
 | **Pioneer-instance positioning** | Greenfield exercise validates that PBS-current-state and PBS-aspirational-state are aligned; the framework IS what we'd build greenfield. |
 
-## Defers (per defer-instinct discipline)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: D1 (sparring mechanisms 4-7 elevation to structural) is a valid watch-list entry (specific external signal: 5-10 real sparring sessions accumulating empirical pattern data). D2 (substrate adoption decision) is COMPLETED — #18 substrate eval shipped session 12 (`substrate-agentic-framework.md`). D3 (RAG primitives adoption) is phase routing to #19 LlamaIndex pluggable eval per pre-RAG queue. D4 (periodic discipline-pruning check) is a process commitment per ARCH Maintenance discipline rule 6 (periodic greenfield review at major version boundaries) — not a defer. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries (per defer-instinct discipline)
 
 | Defer | Home | Specific cost being avoided |
 |---|---|---|

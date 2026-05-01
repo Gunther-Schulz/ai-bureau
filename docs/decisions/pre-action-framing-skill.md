@@ -127,7 +127,11 @@ framing artifact + audit chain.
 | **Pattern-vs-instance + sharp defer rule (v0.20)** | `frame-task` is pattern-level (every domain has framing needs). The TRIGGER conditions are deployment-instance (which tasks are non-trivial varies per domain). |
 | **Skill-granularity discipline (v0.27)** | `frame-task` passes the 3-test: distinct workflow (preparation interaction, not work itself); distinct output (FramingOutput artifact); reuse across projects (every non-trivial task). Elevation warranted. |
 
-## Defers (per defer-instinct discipline)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: D1 (FramingOutput schema field tuning) is a valid watch-list entry — names specific external signal (first 5-10 real framings; refine per empirical signal). D2, D3, D4 are phase routing (D2 → #11 orchestrator PROCEDURE.md reshape; D3 → #11 slash command pattern; D4 → #6 audit-trail v2 retrofit). Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries (per defer-instinct discipline)
 
 | Defer | Home | Specific cost being avoided |
 |---|---|---|

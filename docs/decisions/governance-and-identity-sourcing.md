@@ -527,7 +527,11 @@ The decisions generalize cleanly:
 
 Same architectural mechanism (adapter pattern + gate enforcement + prose conventions + git foundation), different domain prose. Pattern-level. ✓
 
-## Defers (per defer-instinct discipline)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 5 entries below. Result: ALL entries are phase routing (work scheduled to #6 audit-trail v2 retrofit / #15 Client+Actor / #13 deployment flexibility / #9 Bundle A / #9 audit ripple per ROADMAP queue), not chronological gaps. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries (per defer-instinct discipline)
 
 | Defer | Home | Specific cost being avoided |
 |---|---|---|

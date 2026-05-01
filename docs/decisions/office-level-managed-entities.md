@@ -209,7 +209,11 @@ Audit slice 21 + design-review target 12 verify presence + non-emptiness; gate d
 | **Glue-not-replacement (v0.15)** | Adapter mode is the explicit application — Client adapter lets Salesforce stay the source-of-truth for client data; Actor adapter lets Personio stay the source-of-truth for HR data. PBS coordinates without replacing. |
 | **Sharp defer rule (v0.20)** | Per session-11 sharp-defer audit, this commitment lands at first-bind framework infrastructure (consulting clients deploying with multi-department offices need Client + Actor at first bind). Not deferred per "PBS only has Gunther + Hendrik today" framing. |
 
-## Defers (per defer-instinct discipline)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: ALL entries are phase routing (work scheduled to specific implementation phase per ROADMAP queue: D1 → #9 Bundle E adapter Protocol shape; D2 → per-deployment + #11 Cowork integration's invoicing/PM scaffolding for first concrete adapter; D3 → #9 Bundle B Layer 3 mechanism; D4 → #9 schema migration framework). Not chronological gaps. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Note: this DR is also NAMING SUPERSEDED per #22 Sub-DR A (Office-level → Workspace-scope); naming cascade scheduled with #11 single-touch refactor. Original entries kept below as historical record.
+
+### Original entries (per defer-instinct discipline)
 
 | Defer | Home | Specific cost being avoided |
 |---|---|---|

@@ -184,7 +184,11 @@ For Layer 2 sparring quality + DefensibilityEvaluator scoring:
 7. Author 5-10 initial scenarios in `extensions/{department}/eval-scenarios/` covering core MCP gates + sparring schemas + state.md round-trip + R3a parity
 8. Wire CI: `pytest backend/eval/` runs harness + fails on eval failure
 
-## Defers (chronological-valid)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 7 entries below. Result: 6 entries are valid watch-list entries (each names a specific external signal: D1 5-10 real sparring sessions; D2 first project artifact OR synthetic project artifact authored; D3 stable orchestrator workflow + persistent state samples; D4 Phase-1-corpus completion; D5 first consulting engagement; D7 performance-eval need surfacing). D6 (web dashboard + notifications) is phase routing to Tier 2+ deployment (#13). Per v0.33 preliminary-lock: this DR remains preliminary-locked. This DR is one of the cleaner defer-tables — most entries already had specific external signals named at write-time. Original entries kept below as historical record.
+
+### Original entries (chronological-valid)
 
 | Defer | Home | Reason |
 |---|---|---|

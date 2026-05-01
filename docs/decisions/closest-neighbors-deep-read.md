@@ -231,7 +231,11 @@ Monitor for evolution:
 | Substrate-pluggability (v0.30) | All 4 substrates (Letta + OpenSail + PAI + Paperclip) tightly substrate-coupled; PBS framework-layer abstraction is genuinely distinct |
 | Glue-not-replacement (v0.15) | Counter-VISION engagement (in `vision-realignment-session14.md`) consumes service-as-software thesis as antithesis. PBS = glue/amplify; service-as-software = replace |
 
-## Defers (chronological-valid)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 3 entries below. Result: D1 (memory adapter integration) is RESCOPING — already executed via #19 scope expansion to include memory adapter eval (Mem0 / Zep / Graphiti / Cognee) per HANDOFF session-14 follow-up (#19 scope locked). Not a defer. D2 (PBS published as MCP tool) is a valid watch-list entry awaiting marketplace v3 launch milestone. D3 (Asqav composition vs build evaluation) is phase routing to #6 audit-trail v2 retrofit. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries (chronological-valid)
 
 | Defer | Home | Cost being avoided |
 |---|---|---|

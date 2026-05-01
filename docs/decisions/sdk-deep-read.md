@@ -309,7 +309,11 @@ Per "Insight 2" above. Common surface = ~5-6 methods. Per-substrate extensions a
 
 Both substrates use SKILL.md format for Agent Skills — this DR confirmed. Hybrid-shape compatibility holds for both.
 
-## Defers
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: ALL entries are phase routing (work scheduled to specific implementation phase per ROADMAP queue: D1 → #11 Cowork integration; D2 → Phase 0 item 5 testing methodology design; D3 → per-implementation-phase as substrate primitives are adopted; D4 → #9 Substrate Protocol implementation). Not chronological gaps. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Original entries kept below as historical record.
+
+### Original entries
 
 | Defer | Home | Specific cost being avoided (chronological) |
 |---|---|---|

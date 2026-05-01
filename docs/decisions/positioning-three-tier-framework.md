@@ -149,7 +149,11 @@ VISION cascade (specific edits):
 | "AI-office builder" references | "AI-office builder" | "AI-workspace generator" |
 | Architectural requirements section | "Office: a container for multiple departments" | "Workspace: deployment scope; assembles specialists" |
 
-## Defers (chronological-valid)
+## Defers — re-examined session 15 under v0.33 no-defer principle
+
+> **Session 15 amendment**: re-examined the 4 entries below. Result: ALL entries are valid watch-list entries (specific external signal: ROADMAP v3 marketplace launch milestone for D1+D2+D4; Tier 3 productization (post-pioneer-instance phase) for D3). Watch-list framing: signal arrives → decision made by mechanism Y; not passive defer. Per v0.33 preliminary-lock: this DR remains preliminary-locked. Note: D1+D4 overlap with shape-extension W1 + #22 Sub-DR A W1 marketplace mechanics watch-list — consolidated under single v3 work item per `entity-md-scope-model-restructure.md` E3-7. Original entries kept below as historical record.
+
+### Original entries (chronological-valid)
 
 | Defer | Home | Cost being avoided |
 |---|---|---|

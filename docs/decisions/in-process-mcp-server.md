@@ -185,17 +185,38 @@ Implemented as scenario type `mcp_gate_parity` in R3b eval framework (per cross-
 - **M10 (TransportMode discrimination at runtime)**: code that needs to know "am I running in-process or subprocess?" gets answer via `MCPServerHandle.transport` field access. No explicit `is_in_process()` helper needed.
 - **M11 (Tool deregistration)**: `MCPServerHandle.stop()` is the path. Lifecycle state transitions to STOPPING → STOPPED. Audit-trail emission on deregistration (`mcp_server_deregistered` event kind).
 
-## Defers (chronological-valid)
+## Decisions + phase routing + watch-list (re-examined session 15 under v0.33 no-defer principle)
 
-| Defer | Home | Reason |
-|---|---|---|
-| **D1**: Detailed `pbs_mcp` module reorganization | #11 implementation phase | Reorganization needs concrete consumer (Cowork integration) to test against |
-| **D2**: Substrate-specific extension Protocols (Claude-Agent-SDK-only primitives like `create_sdk_mcp_server`) | #9 Substrate Protocol design | Substrate-specific extensions designed alongside common Protocol |
-| **D3**: Tool function signature compatibility verification | Implementation time | Verifies at code-write moment; not architectural |
-| **D4**: Hot-reload during development | Substrate-specific dev convenience | Not architectural; defer to dev tooling work |
-| **D5**: Concurrent tool calls handling | Sequential orchestrator architecture | Irrelevant for current PBS shape |
-| **D6**: Tool versioning per evolution patterns | Per-tool schema versioning at implementation | Already covered by ARCH v0.19 evolution patterns |
-| **D7**: User-contributed code trust model | Marketplace work (ROADMAP v3) | Marketplace shape determines trust model |
+> **Session 15 amendment**: previously titled "Defers (chronological-valid)" with 7 entries. Re-examined: 4 entries reframed as decisions made now (D3, D4, D5, D6); 1 entry is phase routing to #11 (D1); 1 entry is COMPLETED via session-12 substrate-protocol-design.md (D2); 1 valid watch-list entry awaits marketplace v3 (D7). Per v0.33 preliminary-lock: this DR remains preliminary-locked.
+
+### Decisions made now (D3, D4, D5, D6)
+
+**D3 (was defer): Tool function signature compatibility verification** — DECISION: implementation-time check, not a defer at all. Verifies at code-write moment; type checker + Pydantic validation handle it. No ongoing defer obligation.
+
+**D4 (was defer): Hot-reload during development** — DECISION: v1 does NOT support hot-reload. Standard restart-MCP-server-on-tool-change workflow. Hot-reload is dev tooling concern, not architectural; v2+ may add via dev-tooling work if friction surfaces.
+
+**D5 (was defer): Concurrent tool calls handling** — DECISION: PBS architecture is sequential orchestrator (per existing ARCH discipline). Concurrent tool calls within a single agent turn is NOT supported; substrate-specific extension Protocols may expose if substrate provides natively (CASDK does have this primitive but PBS code uses sequential pattern). Architectural choice locked: sequential.
+
+**D6 (was defer): Tool versioning per evolution patterns** — RESOLVED (not a defer): already covered by ARCH v0.19 three-evolution-patterns discipline. Per-tool schema versioning follows the structured + mutable pattern (versioned migrations) or structured + append-only (additive backward-compat) per the tool's nature. No additional architectural work needed; this entry can be archived.
+
+### Phase routing (D1)
+
+**D1 — Detailed `pbs_mcp` module reorganization** is scheduled to #11 Cowork integration phase. Reorganization needs concrete consumer (Cowork integration substrate) to test against. Not a chronological gap; just scheduled to the right phase.
+
+### COMPLETED (D2)
+
+**D2 — Substrate-specific extension Protocols (CASDK-only primitives like `create_sdk_mcp_server`)** ✅ DELIVERED in session 12 via `substrate-protocol-design.md` (ClaudeAgentSDKExtensions Protocol per R3d). No outstanding work.
+
+### Watch-list (W7)
+
+**W7 (was D7): User-contributed code trust model** — awaiting **marketplace v3 launch milestone** (when community begins contributing tool implementations through the marketplace; trust model decisions depend on marketplace shape + governance). Resolution: design at v3 launch phase; overlaps with shape-extension W1 + #22 W1 marketplace mechanics watch-list (consolidates as one v3 work item).
+
+### Re-examination methodology
+
+D3, D4, D5, D6 had generic implementation-time framings — failed external-information test. Could decide today; reframed as architectural choices for v1.
+D1 is phase routing to a specific implementation phase.
+D2 is COMPLETED via subsequent DR.
+D7 is a valid watch-list (specific external signal: marketplace v3 launch).
 
 ## Constraints flowing to downstream commitments
 
