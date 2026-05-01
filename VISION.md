@@ -4,9 +4,9 @@ This document anchors the deepest "why" behind the architecture. Every design de
 
 ## What this is
 
-**PBS is the framework for AI-co-worker systems for accountability-bearing work — structurally protecting three axes: intertwining, sparring, and authorship preservation.**
+**A framework for AI partnership that cultivates expert craft — through deeply intertwined co-work, productive sparring, and defensibly authored output.**
 
-Method-and-architecture: distributable across deployments rather than tied to a single product instance.
+The framework as a tree: the lush branches the practitioner experiences are cultivated expert craft — growing capacity, compounding work over time, deepening practice. The trunk holding the branches is three structural axes — intertwining, sparring, authorship preservation. Trunk is load-bearing but not foreground; branches are what the framework produces. When communicating about PBS, lead with branches; the trunk is supporting cast.
 
 ## The three layers
 

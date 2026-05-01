@@ -110,6 +110,13 @@ This is the running session log for the **foundational rebuild** launched sessio
     - Sanity-check fixes folded into restructure: shape-extension-pattern outdated framing replaced; anti-sycophancy added to axis-2 sub-mechanism checklist; two minor instance-anchoring generalizations (council meetings → challenge contexts; cover mail → cover communication).
     - Net: VISION unchanged-line-count (~280 lines) but substantively cleaner — pure stance, no positioning, no comparison. Clean foundation for Phase 3+ ARCH.
 
+18. **VISION header tagline + tree analogy locked (working titles)** — VISION's "What this is" section got new tagline + tree-analogy framing per user direction:
+    - **New tagline**: "A framework for AI partnership that cultivates expert craft — through deeply intertwined co-work, productive sparring, and defensibly authored output."
+    - **Tree analogy** anchored in VISION: lush branches (cultivated craft, growing capacity, compounding work) lead; trunk (sparring/defensibility/intertwining mechanisms) is supporting cast.
+    - **WORKING TITLES — both PBS name AND tagline are provisional**. NOT mentioned in VISION itself (clean stance — VISION carries no provisional markers). Status flagged here in HANDOFF for next-session awareness.
+    - **Naming exploration deferred**: PBS-as-acronym is leftover from Planungsbüro Schulz instance-anchoring origin; framework name should change. Top candidate surfaced: "Atelier" (workshop / craft / co-work imagery; cross-language; composable with shape names). Other candidates: Auctor (Latin "author"); Praxis (structured-practice). Decision deferred — significant cascade scope (repo rename + plugin manifest + marketplace + cross-doc references + memory dir path).
+    - **Memory captured**: `feedback_tree_analogy.md` — cross-session principle for taglines / positioning / messaging — branches-first, trunk-second.
+
 **Phase 1.5 outcome (locked session 16)**:
 
 Layered doc structure designed and persisted in `MAINTENANCE.md` (Layer 0; read at session start). 5-layer model: Entry → Foundations → Overview → Architecture detail → DRs → Specs, plus Memory orthogonal. Cascade discipline elevated to top-level rule (per user direction): all docs stay in consistent state; changes propagate up/down/sideways in same commit.
