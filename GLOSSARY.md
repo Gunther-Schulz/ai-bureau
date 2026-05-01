@@ -258,7 +258,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - Visible reasoning capability (Pydantic field on outputs requiring reasoning chain)
 
 **What it is NOT**:
-- Not a `policy` (canonical entry forthcoming) — policies are atomic CONFIGURED VALUES (defaults, requirements, constraints) within a shape's bundle; mechanisms are atomic INTERFACE CONTRACTS in the framework
+- Not a `policy` — policies are atomic CONFIGURED VALUES (defaults, requirements, constraints) within a shape's bundle; mechanisms are atomic INTERFACE CONTRACTS in the framework
 - Not a `protocol` (architectural; canonical entry forthcoming) — a protocol's surface IS a mechanism, but the protocol-with-multiple-implementations structure adds composition beyond a single mechanism
 - Not the `framework` itself — the framework is the CONTAINER of mechanisms (+ protocols + disciplines); a single mechanism is one element of the container
 - Not a workspace-level or instance-level construct — mechanisms live at framework level with no shape-specific values
@@ -269,13 +269,13 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Boundary test**: Three questions:
 1. Is this an atomic capability with a defined input/output surface? → likely a mechanism
 2. Is this shape-neutral (any shape could use it)? → likely a mechanism (lives in framework)
-3. Is this a configured value (default, requirement, mandatory)? → it's a `policy` (canonical entry forthcoming), not a mechanism
+3. Is this a configured value (default, requirement, mandatory)? → it's a `policy`, not a mechanism
 
 If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a framework mechanism. Move to shape-extension.
 
 **Composes with**:
 - `framework` — contains mechanisms as its atomic interface contracts (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `policy` — counterpart atom in the framework=mechanisms / shape=policies framing (canonical entry forthcoming)
+- `policy` — counterpart atom in the framework=mechanisms / shape=policies framing
 - `shape` — applies policies OVER mechanisms (which active / mandatory / defaults; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `protocol` (architectural) — pluggable subsystem; protocol surface is itself a mechanism, with the protocol-with-impls structure adding composition (canonical entry forthcoming)
 
@@ -285,7 +285,7 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section (atom-vs-container relationship + concept-by-concept worked examples)
-- Other foundational meta-primitives + atoms: `framework`, `shape`, `policy` (forthcoming)
+- Other foundational meta-primitives + atoms: `framework`, `shape`, `policy`
 - ARCH Layer 3 mechanism-detail topics (placeholder until Phase 3 — per-mechanism canonical detail)
 
 ---
@@ -333,6 +333,62 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 
 ---
 
+## policy
+
+- **Class**: PRIMITIVE (atomic; irreducible unit of a shape's bundle)
+- **Layer**: shape-policy (this entry describes the atomic unit at the shape layer)
+- **Axis**: cross-axis (policies can configure any axis-related mechanism)
+- **VISION usage**: implicit (VISION doesn't use "policy" as a defined term; the framework=mechanisms / shape=policies framing is locked in `MAINTENANCE.md`, not VISION)
+
+**Canonical**: An atomic configured value within a shape — a single requirement, default, or constraint configuring how a framework mechanism is used for that shape's archetype; the smallest unit of "what's MANDATED" a shape declares.
+
+**What it is**: The atomic unit of a shape's policy bundle. Policies are shape-level — they configure framework mechanisms for a specific archetype, with shape-specific values. They define WHAT'S MANDATED (out of what the framework's mechanisms make POSSIBLE). Multiple policies compose into a shape's bundle; the shape is the container.
+
+**Examples** (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table; practitioner-shape policies):
+- Audit granularity = claim-level (configures the framework's audit-emission mechanism)
+- Sparring always-on as runtime pillar (configures the sparring mechanism)
+- Human authority required somewhere in accountability-bearing output chain (configures authority-binding mechanism)
+- Modifications require explicit re-conformance event (configures specialist-modification mechanism)
+- (Per other shapes, different policies configure the same mechanisms differently)
+
+**What it is NOT**:
+- Not a `mechanism` (canonical entry locked) — mechanisms are atomic INTERFACE CONTRACTS in the framework; policies are atomic CONFIGURED VALUES in a shape
+- Not a `shape` (canonical entry locked) — shape is the BUNDLE of policies (container); a single policy is one element
+- Not a workspace-instance configuration — policies live at SHAPE level (in a shape definition's bundle); workspace deployments inherit them from the selected shape
+- Not the framework — framework provides the mechanisms; policies live in shapes that layer over the framework
+
+**Cross-archetype illustration** (same mechanism, different policies per shape): the framework provides the audit-emission MECHANISM (AuditEvent schema + `actor_kind` enum). Different shapes declare different POLICIES configuring it:
+- Practitioner-shape policy: audit granularity = claim-level; emission required for every output
+- Autonomous-business-shape policy: audit granularity = action-level; emission per task
+- Personal-OS-shape policy: audit granularity = light; emission optional
+
+Same mechanism (the framework's audit-emission contract); different policies (each shape's archetype-specific values).
+
+**Boundary test**: Three questions:
+1. Is this a configured value (a default, requirement, or constraint)? → likely a policy
+2. Is this shape-specific (varies by archetype)? → likely a policy (lives in a shape's bundle)
+3. Is this an interface contract any shape could use? → it's a `mechanism` (canonical entry locked), not a policy
+
+If a candidate fails test 2 (it's universal across shapes; no archetype variation), it's not a policy — it's mechanism territory.
+
+**Composes with**:
+- `shape` — contains policies as its atomic bundle elements (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- `mechanism` — counterpart atom in the framework=mechanisms / shape=policies framing (mechanism = framework atom; policy = shape atom)
+- `framework` — contains mechanisms over which policies are LAYERED (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- `workspace` — selects a shape and inherits its policies (canonical entry forthcoming)
+
+**Source**:
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section: "policy is the atom — a single configured value; requirement/default/constraint"
+- `MAINTENANCE.md` "Concept-by-concept (worked examples)" table: practitioner-shape column = examples of policies per axis
+
+**See**:
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section (atom-vs-container relationship + concept-by-concept worked examples)
+- Other foundational meta-primitives + atoms: `mechanism`, `framework`, `shape`
+- `Framework C scope` — where shape definitions (containing policy bundles) live
+- ARCH Layer 3 per-shape policy-detail topics (placeholder until Phase 3)
+
+---
+
 ## shape
 
 - **Class**: META-PRIMITIVE (container; the category of policy bundles, not a single policy itself)
@@ -348,7 +404,7 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 - Not a workspace (a workspace IS DEPLOYED as a specific shape's archetype; the shape is the configuration definition)
 - Not the framework (shape sits OVER framework per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE; framework is the universal mechanism layer)
 - Not a deployment instance (shape DEFINITIONS are universal/distributable; live in Framework C scope; per-deployment selection happens via `workspace.md`)
-- Not a single policy (shape is a BUNDLE; `policy` canonical entry forthcoming)
+- Not a single policy (shape is a BUNDLE)
 - Not always practitioner-shape (PBS markets practitioner-shape; framework supports multiple shapes — see named-shapes catalog below)
 
 **Cross-archetype catalog (named shapes — canonical per-shape detail forthcoming)**:
@@ -360,13 +416,13 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 - **hybrid-shape** — combinations of above
 
 **Boundary test**: Three questions:
-1. Is this an atomic unit contained within a shape (one element of its bundle)? → it's a `policy` (canonical entry forthcoming)
+1. Is this an atomic unit contained within a shape (one element of its bundle)? → it's a `policy`
 2. Is this an interface contract any shape could use? → it's a `mechanism` (canonical entry forthcoming; lives in framework, not shape)
 3. Is this a bundle of policies for a workspace archetype? → it's a shape
 
 **Composes with**:
 - `framework` — counterpart in the framework/shape architectural relationship (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
-- `policy` — atomic unit contained within a shape's bundle (canonical entry forthcoming)
+- `policy` — atomic unit contained within a shape's bundle
 - `workspace` — deploys exactly one shape via `workspace.md` (canonical entry forthcoming)
 - `Framework C scope` — where shape DEFINITIONS live as distributable framework primitives
 - `mechanism` — what shape policies configure (which active / mandatory / defaults; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE; canonical entry forthcoming)
