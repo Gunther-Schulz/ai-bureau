@@ -132,7 +132,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - shape definitions (policy bundles for an archetype)
 - substrate definitions (runtime contracts: Claude Agent SDK, MS AF, future)
 - protocol-implementation definitions (concrete impls: always-on-sparring, claim-level-audit, etc.)
-- specialist DEFINITIONS (canonical entry forthcoming; bipartite multi-aspect primitive: DEFINITION here, INSTANCE-CONTENT in Owner B)
+- specialist DEFINITIONS (bipartite multi-aspect primitive: DEFINITION here, INSTANCE-CONTENT in Owner B)
 
 **What it is NOT**:
 - Not for instances (those go to Owner B)
@@ -477,6 +477,64 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 ---
 
+## specialist
+
+- **Class**: PRIMITIVE (atomic; the bundled-expertise unit) — **bipartite** multi-aspect (DEFINITION in Framework C; INSTANCE-CONTENT in Owner B)
+- **Layer**: multi-aspect (Framework C for the distributable definition; Owner B for entities owned by the deployed specialist instance)
+- **Axis**: cross-axis (specialists support any axis through their bundled skills + entities + adapters)
+- **VISION usage**: directly used (`VISION.md` thesis line 7: "codified expertise bundled as specialists")
+
+**Canonical**: A composable bundle of codified expertise — skills + entities + memory + adapters — distributable as a unit. Bipartite multi-aspect primitive: a specialist's DEFINITION lives at Framework C scope (the distributable bundle); when a workspace activates a specialist, the entities owned by the specialist's instance live at Owner B scope. NOT a Pattern A primitive — a specialist has no multiple interchangeable implementations; it IS its definition.
+
+**What it is**: The cohesion abstraction for codified expertise. A specialist packages everything needed to address a defined competence area into a single distributable unit. Workspaces activate specialists via `workspace.md`'s `specialists_active` field; an activated specialist runs within the workspace's substrate, contributing its skills + entities + memory to the workspace's work output. Specialists are designed to be reusable across workspaces (e.g., `citation-verification` works in legal, research, and planning workspaces); marketplace distribution (per archived ROADMAP v3) treats specialists as the canonical distributable unit.
+
+**What it is NOT**:
+- Not a Pattern A primitive — specialist has NO multiple interchangeable implementations (the `planning-document-work` specialist is one specific bundle, not interchangeable with another impl)
+- Not a `workspace` — workspaces activate specialists; specialist is one of many elements a workspace activates
+- Not a `skill` — skill is the atomic unit of work logic WITHIN a specialist; specialist is the bundle that contains skills
+- Not a `practitioner` — practitioner is the human author; specialist is the codified expertise that the practitioner-led workspace deploys
+- Not the `framework` — framework provides universal mechanisms; specialist is one Framework C definition among many primitive kinds
+
+**Cross-archetype illustration** (named, archived examples):
+- **planning-document-work** — domain-anchored specialist; PBS pioneer reference; bundles skills for B-Plan-Begründung drafting + review
+- **citation-verification** — cross-archetype specialist; usable in legal practice (case-law citations), research lab (paper citations), planning bureau (legal-text citations)
+- **project-management** — cross-archetype business specialist
+- **invoicing** — cross-archetype business specialist (with adapter for accounting integration)
+- **brand-voice** — cross-archetype creative specialist
+- **legal-research** — legal-practice-anchored specialist
+
+A workspace activates a domain-relevant set: PBS-Schulz might activate `planning-document-work + project-management + invoicing`; Müller Law workspace might activate `legal-research + citation-verification + project-management + invoicing`.
+
+**Boundary test**: Three questions:
+1. Is this a unit of work logic that fires on a trigger? → it's a `skill` (canonical entry forthcoming) — within a specialist
+2. Is this a deployment scope? → it's a `workspace`
+3. Is this codified expertise bundled as a distributable unit? → it's a specialist
+4. Disambiguator: is this multiple interchangeable implementations of one Protocol surface? → it's a Pattern A primitive (substrate / adapter / protocol), NOT specialist
+
+**Composes with**:
+- `workspace` — workspace activates specialists per `specialists_active` field in `workspace.md`
+- `Framework C scope` — specialist DEFINITIONS live here as distributable bundles
+- `Owner B scope` — specialist INSTANCE-CONTENT (entities owned by the deployed specialist instance) lives here
+- `skill` — skills are atomic work logic units within a specialist (canonical entry forthcoming)
+- `mechanism` — specialists use framework mechanisms (audit emission, source-grounding, sparring) via the substrate at runtime
+- `shape` — shape policies may mandate certain specialists or constrain what's permitted (e.g., practitioner-shape may mandate sparring-relevant specialists)
+- `adapter` — specialists may bundle adapter implementations as part of their package (canonical entry forthcoming)
+
+**Source**:
+- VISION (`VISION.md`):
+  - Line 7 (thesis): "A workspace pools and leverages codified expertise (bundled as specialists)"
+  - Line 11: "any practitioner workspace shape (legal practice, research lab, creative studio, etc.)" — implies specialists deploy to multiple shapes
+- `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Other multi-aspect primitives": specialist named as Pattern B (bipartite definition+instance-content)
+- Locked GLOSSARY entries: `Framework C scope` (members include specialist DEFINITIONS); `Owner B scope` (members include specialist instance content)
+
+**See**:
+- `Framework C scope` (where specialist definitions live)
+- `Owner B scope` (where specialist instance content lives)
+- `workspace` (which activates specialists)
+- ARCH Layer 3 specialist-detail topics (placeholder until Phase 3 — specialist granularity 3-test, composability axes, two-tier classification, marketplace mechanics; archived material to consult: `terminology-and-specialist-primitive.md`, `entity-md-scope-model-restructure.md`)
+
+---
+
 ## substrate
 
 - **Class**: PRIMITIVE (atomic; the deployment-runtime unit) — **tri-aspect** (Protocol surface = mechanism; implementations = Framework C definitions; running instance = workspace-bound at Owner B)
@@ -541,7 +599,7 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 **What it is NOT**:
 - Not the `framework` — framework is the universal mechanism layer (what's POSSIBLE); workspace is one deployment instance built from framework + shape policies
 - Not a `shape` — shape is the policy-bundle archetype (definition; lives in Framework C); workspace is an instance that SELECTS exactly one shape
-- Not a `specialist` (canonical entry forthcoming) — specialist is composable expertise; workspace ACTIVATES specialists from the list in `workspace.md`
+- Not a `specialist` — specialist is composable expertise; workspace ACTIVATES specialists from the list in `workspace.md`
 - Not a `session` (canonical entry forthcoming) — sessions are bounded interaction units WITHIN a workspace
 - Not a single application running on a server — deployment-shape-agnostic (could be local, cloud, hybrid); not synonymous with "office" (prior naming, demoted session 13; workspace is broader)
 
@@ -565,7 +623,7 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `shape` — workspace selects exactly one shape via `workspace.md` (the shape's policy bundle configures workspace's behavior over framework mechanisms)
 - `framework` — workspace inherits framework's mechanisms; the selected shape's policies determine which are active/mandatory and what defaults apply
 - `Owner B scope` — workspace lives as the central instance + container for workspace-scope managed entities (practitioner-record, Actor, Client)
-- `specialist` — workspace activates a list of specialists per `specialists_active` field in `workspace.md` (canonical entry forthcoming)
+- `specialist` — workspace activates a list of specialists per `specialists_active` field in `workspace.md`
 - `practitioner` — workspace serves practitioner(s); records at Owner B (canonical entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
 - `substrate` — workspace runs on exactly one substrate (selected via `workspace.md` `substrate` field)
 - `session` — interaction units occur within a workspace (canonical entry forthcoming)
