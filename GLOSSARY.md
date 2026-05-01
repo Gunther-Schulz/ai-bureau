@@ -58,7 +58,7 @@ The primitives that compose into a workspace deployment.
 - [skill](#skill) — atomic work-logic unit within specialist
 - practitioner (forthcoming) — human author who bears accountability (Pattern C; bipartite)
 - [session](#session) — bounded interaction unit
-- workflow (forthcoming) — pattern of work in a domain
+- [workflow](#workflow) — pattern of work in a domain
 
 ### 3. VISION axes
 
@@ -365,7 +365,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - `intertwined AI` — positive mode (canonical entry forthcoming)
 - `co-worker` — relational claim about AI's mode of participation (canonical entry forthcoming)
 - `trust mechanisms` — class of axis-1 mechanisms (canonical entry forthcoming)
-- `workflow` — what intertwining intertwines WITH (canonical entry forthcoming)
+- `workflow` — what intertwining intertwines WITH
 - `category collapse` — risk to axis 1 (canonical entry forthcoming)
 
 **Source**: VISION axis 1 (first principle of the thesis); contrast table (tacked-on vs intertwined).
@@ -586,7 +586,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 **What it is NOT**:
 - Not a `workspace` — workspace contains many sessions over time; workspace is the deployment-instance, session is one bounded interaction within it
-- Not a `workflow` (forthcoming) — workflow is the pattern of work in a domain (sequence of activities); session is one execution-unit during which workflow steps may be progressed
+- Not a `workflow` — workflow is the pattern of work in a domain (sequence of activities); session is one execution-unit during which workflow steps may be progressed
 - Not a single `event` — events fire WITHIN sessions; session is the bounded container, event is the atomic emission unit
 - Not the `substrate` — substrate manages sessions (session lifecycle is a substrate primitive); session is one runtime artifact
 
@@ -598,14 +598,14 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 **Boundary test**: Three questions:
 1. Is this a bounded interaction with start/end + context boundaries? → it's a session
 2. Is this the deployment-instance container that holds many sessions? → it's a `workspace`
-3. Is this the pattern of work that sessions execute parts of? → it's a `workflow` (forthcoming)
+3. Is this the pattern of work that sessions execute parts of? → it's a `workflow`
 
 **Composes with**:
 - `workspace` — workspaces contain many sessions over their lifetime
 - `substrate` — substrate manages session lifecycle (start/end, context, persistence handoff)
 - `event` — events fire within sessions; session bounds emission timing
 - `actor` — actors operate within sessions
-- `workflow` (forthcoming) — sessions execute parts of broader workflows
+- `workflow` — sessions execute parts of broader workflows
 
 **Source**:
 - VISION (`VISION.md`) implicit reference: persistent-state-across-sessions is part of axis-1 architectural support
@@ -692,7 +692,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - Not a `workspace` — workspace activates specialists (which contain skills); workspace doesn't activate skills directly
 - Not a `mechanism` — skills are application-level work logic, not framework-level interface contracts
 - Not a sparring sub-mechanism — those are specific axis-2 capabilities (counter-argument, confidence calibration, etc.); skills are general-purpose work units that may USE sparring mechanisms
-- Not a `workflow` (canonical entry forthcoming) — workflow is the broader pattern of work; skills are atomic actions within workflows
+- Not a `workflow` — workflow is the broader pattern of work; skills are atomic actions within workflows
 
 **Cross-archetype illustration** (named examples; archived plugin/skills/ catalog):
 - **orchestrator** — coordinates session-open + decision routing + state management (PBS-Schulz)
@@ -712,7 +712,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 **Composes with**:
 - `specialist` — specialist contains skills as its atomic work-logic units; skill cannot be used outside specialist context (a specialist provides the skill's runtime context, dependencies, references)
 - `mechanism` — skills use framework mechanisms (audit emission, source-grounding, sparring) at runtime via the substrate
-- `workflow` (canonical entry forthcoming) — skills participate in broader workflows (sequence of skill firings + decisions)
+- `workflow` — skills participate in broader workflows (sequence of skill firings + decisions)
 - `actor` — skills emit AuditEvents with `actor_kind: skill` per archived audit-trail v2 schema
 
 **Source**:
@@ -864,6 +864,58 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - `Framework C scope` (where substrate definitions live)
 - `workspace` (which selects exactly one substrate)
 - ARCH Layer 3 substrate-detail topics (placeholder until Phase 3 — Substrate Protocol method set; per-substrate implementation detail; deployment-tier framing; eval-framework integration; archived material to consult: `substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`)
+
+---
+
+## workflow
+
+- **Class**: PRIMITIVE (atomic; the work-pattern unit)
+- **Layer**: cross-cutting (workflows are domain-specific patterns; not framework-mechanism, not shape-policy, not Framework C definition)
+- **Axis**: axis-1 (primary anchor — workflow is what intertwined AI intertwines WITH); cross-axis (workflows span all axes during execution)
+- **VISION usage**: directly used (`VISION.md` thesis line 7: "interactive practitioner workflows"; line 27 axis 1: "AI is a co-worker in the workflow itself"; "Workflow as precondition" implication retained in current VISION)
+
+**Canonical**: A pattern of work in a domain — sequence of activities, artifacts, decisions, and handoffs that defines how a practitioner produces accountability-bearing output. Per VISION axis 1: workflow is what intertwined AI intertwines WITH; without a workflow, axis 1 has nothing to embed in.
+
+**What it is**: A domain-specific structure of work. Workflows are pattern-level concepts: "how does B-Plan-Begründung drafting actually proceed?" or "how does a legal brief get from intake to filing?" Workflows include activities (drafting, reviewing, sending), artifacts (Begründung, Stellungnahme, signed brief), decisions (which argumentation type, which authorities to address), and handoffs (between sessions, between humans, between AI and human). Sessions execute parts of workflows; specialists provide the skills that progress workflow steps; the architecture's intertwining requirements (persistent state, orchestration, audit, etc.) are what allow AI to participate in workflows as co-worker rather than as discrete-feature-tool.
+
+**What it is NOT**:
+- Not a `session` — session is one execution unit; workflow is the broader pattern that sessions execute parts of
+- Not a `skill` — skill is atomic work logic that fires on a trigger; workflow is the broader pattern of work in which many skills fire
+- Not a `specialist` — specialist bundles skills + entities for a competence area; workflow is domain-pattern that may span multiple specialists' contributions
+- Not a `workspace` — workspace is the deployment container; workflow is the work-pattern the workspace supports
+
+**Cross-archetype illustration**: workflows differ per archetype (the discriminator is what kind of accountability-bearing output gets produced and how):
+- Planning bureau: B-Plan-Begründung drafting workflow (intake → research → draft → review → send → response handling)
+- Legal practice: matter workflow (intake → research → drafting → filing → response cycle)
+- Research lab: manuscript workflow (research → drafting → peer review → revision → submission)
+- Auditor: audit engagement workflow (planning → fieldwork → finding → report)
+
+Per VISION's "Workflow as precondition" implication: domains with rich, structured workflows are natural fits for axis-1 intertwining. Generic "knowledge work" without explicit workflow is much harder.
+
+**Boundary test**: Three questions:
+1. Is this a domain-specific pattern of work (sequence + artifacts + decisions + handoffs)? → it's a workflow
+2. Is this one bounded execution unit? → it's a `session`
+3. Is this an atomic work-logic unit? → it's a `skill`
+
+**Composes with**:
+- `intertwining (axis 1)` — workflow is what axis-1 AI intertwines WITH; "Workflow as precondition" implication
+- `session` — sessions execute parts of workflows (one workflow may span many sessions)
+- `skill` — skills are atomic work-logic units that progress workflow steps
+- `specialist` — specialists provide bundles of skills relevant to specific workflow stages
+- `workspace` — workspaces SUPPORT workflows (workspace's deployed specialists + state enable workflow progression)
+
+**Source**:
+- VISION (`VISION.md`):
+  - Line 7 (thesis): "interactive practitioner workflows"
+  - Line 27 (axis 1): "AI is a co-worker in the workflow itself, not a feature bolted onto an unchanged human workflow"
+  - "Workflow as precondition" implication subsection retained in tightened VISION
+- `intertwining (axis 1)` GLOSSARY entry: "workflow — what intertwining intertwines WITH (axis 1 needs a workflow to intertwine with)"
+- `session` GLOSSARY entry: "sessions execute parts of broader workflows"
+
+**See**:
+- `intertwining (axis 1)` (which intertwines with workflow)
+- `session` (which executes parts of workflow)
+- ARCH Layer 3 workflow-detail topics (placeholder until Phase 3 — workflow representation, handoff semantics, multi-session workflow continuity; archived material to consult: workflow descriptions in archived plugin/skills/)
 
 ---
 
