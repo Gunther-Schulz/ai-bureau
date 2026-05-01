@@ -46,7 +46,7 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 **What it is NOT**:
 - Not a `practitioner` (forthcoming) — practitioner is one specific actor kind (a human-practitioner-author); actor is the broader category that also includes AI runtimes and external systems
 - Not the AI runtime — AI runtime is one actor kind (typically `actor_kind: skill` for AI-fired actions); actor is the abstraction
-- Not an `event` (forthcoming) — events are emitted BY actors; actor is the emitter, event is what gets emitted
+- Not an `event` — events are emitted BY actors; actor is the emitter, event is what gets emitted
 - Not a workspace-config field — actors are managed entities (records); workspace.md may reference actors, not contain them inline
 
 **Cross-archetype illustration**: actors recur across all workspace shapes:
@@ -58,10 +58,10 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 **Boundary test**: Three questions:
 1. Does this entity emit audit events? → it's an actor
 2. Is this the typed-kind of who emitted? → that's `actor_kind` (a property of actor + a framework mechanism)
-3. Is this the structured emission unit? → that's an `event` (forthcoming), not an actor
+3. Is this the structured emission unit? → that's an `event`, not an actor
 
 **Composes with**:
-- `event` (forthcoming) — events are emitted by actors
+- `event` — events are emitted by actors
 - `mechanism` — `actor_kind` enum is a framework-level mechanism (interface contract requiring every event to declare its actor)
 - `Owner B scope` — actor records live as workspace-scope managed entities
 - `practitioner` (forthcoming) — practitioner-record is one specific actor kind (human-practitioner-author)
@@ -73,7 +73,7 @@ Entries are alphabetical (case-insensitive). Cross-references are explicit; read
 - `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE "Authority binding" row in concept-by-concept table: "`actor_kind` enum includes `human`; AuditEvent records emitting actor"
 
 **See**:
-- `event` (forthcoming) — what actors emit
+- `event` — what actors emit
 - `practitioner` (forthcoming) — one actor kind (human)
 - `mechanism` — `actor_kind` is a framework-mechanism
 - ARCH Layer 3 actor-detail topics (placeholder until Phase 3 — full actor_kind enum, A2A actor support per archived `a2a-and-gemini-pattern-emulation.md`, actor identity sourcing per archived `governance-and-identity-sourcing.md`)
@@ -214,7 +214,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 **Composes with**:
 - `mechanism` — atomic units of the framework (atom-vs-container relationship per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `protocol` (architectural) — pluggable subsystems within the framework (canonical entry forthcoming)
-- `shape` — counterpart in the framework/shape architectural relationship (canonical entry forthcoming; relationship locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- `shape` — counterpart in the framework/shape architectural relationship (relationship locked in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - `workspace` — deployment-instance container that integrates framework + shape + specialists + practitioners
 
 **Source**: VISION (`VISION.md`):
@@ -594,7 +594,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 - `specialist` — specialist contains skills as its atomic work-logic units; skill cannot be used outside specialist context (a specialist provides the skill's runtime context, dependencies, references)
 - `mechanism` — skills use framework mechanisms (audit emission, source-grounding, sparring) at runtime via the substrate
 - `workflow` (canonical entry forthcoming) — skills participate in broader workflows (sequence of skill firings + decisions)
-- `actor` (canonical entry forthcoming) — skills emit AuditEvents with `actor_kind: skill` per archived audit-trail v2 schema
+- `actor` — skills emit AuditEvents with `actor_kind: skill` per archived audit-trail v2 schema
 
 **Source**:
 - VISION (`VISION.md`) line 7 (thesis): "codified expertise bundled as specialists" — skills implicit as the atomic units of expertise
