@@ -57,7 +57,7 @@ The primitives that compose into a workspace deployment.
 - [specialist](#specialist) — composable expertise bundle (Pattern B; bipartite)
 - [skill](#skill) — atomic work-logic unit within specialist
 - practitioner (forthcoming) — human author who bears accountability (Pattern C; bipartite)
-- session (forthcoming) — bounded interaction unit
+- [session](#session) — bounded interaction unit
 - workflow (forthcoming) — pattern of work in a domain
 
 ### 3. VISION axes
@@ -573,6 +573,54 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 
 ---
 
+## session
+
+- **Class**: PRIMITIVE (atomic; the bounded-interaction unit)
+- **Layer**: cross-cutting (sessions exist within workspaces; managed by substrate; not framework-mechanism, not shape-policy)
+- **Axis**: cross-axis (sessions span all three axes — interactions can be sparring + audit-emitting + authorship-bearing)
+- **VISION usage**: implicit (VISION's "persistent state across sessions" — the cross-session-persistence claim is part of axis-1 architectural support)
+
+**Canonical**: A bounded interaction unit within a workspace — typically one human-AI exchange or work-session. Substrate manages session lifecycle (start/end, context boundaries); state persists ACROSS sessions (per axis-1 architectural mechanism); events fire WITHIN sessions (per `event` entry). A workspace contains many sessions over its lifetime.
+
+**What it is**: The unit at which interactions happen. When you sit down to work with PBS, that work happens within a session: substrate manages the session boundary (when it starts, when it ends, what context is active); within the session, skills fire, events emit, decisions get made. The next session inherits persistent state from prior sessions (e.g., project state, decisions, baustein memory). Sessions are bounded; persistence is cross-session.
+
+**What it is NOT**:
+- Not a `workspace` — workspace contains many sessions over time; workspace is the deployment-instance, session is one bounded interaction within it
+- Not a `workflow` (forthcoming) — workflow is the pattern of work in a domain (sequence of activities); session is one execution-unit during which workflow steps may be progressed
+- Not a single `event` — events fire WITHIN sessions; session is the bounded container, event is the atomic emission unit
+- Not the `substrate` — substrate manages sessions (session lifecycle is a substrate primitive); session is one runtime artifact
+
+**Cross-archetype illustration**:
+- Practitioner-shape: a planning bureau session = drafting Begründung interaction (1+ hours of human-AI co-work); legal practice session = brief-drafting + research interaction
+- Autonomous-business-shape: a session may be an operator approval review or an AI-org task-batch
+- All shapes: substrate manages the bounded interaction; persistence happens across boundaries
+
+**Boundary test**: Three questions:
+1. Is this a bounded interaction with start/end + context boundaries? → it's a session
+2. Is this the deployment-instance container that holds many sessions? → it's a `workspace`
+3. Is this the pattern of work that sessions execute parts of? → it's a `workflow` (forthcoming)
+
+**Composes with**:
+- `workspace` — workspaces contain many sessions over their lifetime
+- `substrate` — substrate manages session lifecycle (start/end, context, persistence handoff)
+- `event` — events fire within sessions; session bounds emission timing
+- `actor` — actors operate within sessions
+- `workflow` (forthcoming) — sessions execute parts of broader workflows
+
+**Source**:
+- VISION (`VISION.md`) implicit reference: persistent-state-across-sessions is part of axis-1 architectural support
+- `substrate` GLOSSARY entry: substrate's Protocol surface includes session/context primitives
+- `workspace` GLOSSARY entry: "interaction units occur within a workspace"
+- `event` GLOSSARY entry: events fire within sessions (implicit; events have timestamps tying them to session timeline)
+
+**See**:
+- `workspace` (which contains sessions)
+- `substrate` (which manages session lifecycle)
+- `event` (which fires within sessions)
+- ARCH Layer 3 session-detail topics (placeholder until Phase 3 — session boundary semantics, context-handoff rules, persistent-state migration across sessions; archived material to consult: `substrate-protocol-design.md` for session/context API)
+
+---
+
 ## shape
 
 - **Class**: META-PRIMITIVE (container; the category of policy bundles, not a single policy itself)
@@ -834,7 +882,7 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - Not the `framework` — framework is the universal mechanism layer (what's POSSIBLE); workspace is one deployment instance built from framework + shape policies
 - Not a `shape` — shape is the policy-bundle archetype (definition; lives in Framework C); workspace is an instance that SELECTS exactly one shape
 - Not a `specialist` — specialist is composable expertise; workspace ACTIVATES specialists from the list in `workspace.md`
-- Not a `session` (canonical entry forthcoming) — sessions are bounded interaction units WITHIN a workspace
+- Not a `session` — sessions are bounded interaction units WITHIN a workspace
 - Not a single application running on a server — deployment-shape-agnostic (could be local, cloud, hybrid); not synonymous with "office" (prior naming, demoted session 13; workspace is broader)
 
 **Cross-archetype illustration**:
@@ -860,7 +908,7 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `specialist` — workspace activates a list of specialists per `specialists_active` field in `workspace.md`
 - `practitioner` — workspace serves practitioner(s); records at Owner B (canonical entry forthcoming; dual-aspect: human cross-cutting, record at Owner B)
 - `substrate` — workspace runs on exactly one substrate (selected via `workspace.md` `substrate` field)
-- `session` — interaction units occur within a workspace (canonical entry forthcoming)
+- `session` — interaction units occur within a workspace
 - `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
 
 **Source**:
