@@ -104,6 +104,10 @@ When resolved:
 
 - **Axis-interactions explicit articulation** [origin: VISION sanity check, Lens 3] — VISION sketches axis interactions through examples (sparring within intertwining; tacked-on sparring is axis-1 failure; defensibility resolves at claim-granularity in axis-1 work-products) but doesn't articulate them systematically. Add as Phase 3 ARCH topic: dedicated axis-interactions analysis as architectural pattern. Avoids bloating VISION's anchored-foundation role; richer detail belongs at ARCH layer.
 
+### Open — multi-VISION model decision (lifted from VISION Phase 1.85)
+
+- **Multi-VISION model question** [origin: VISION Phase 1.85 clean-stance restructure] — VISION used to claim "this document remains the practitioner-shape articulation; when second-shape productization happens, that shape gets its own per-shape VISION." Removed during Phase 1.85 (VISION is now shape-neutral). Open architectural decision: when second-shape productization happens, does (a) each shape get its own per-shape VISION; (b) VISION expand to multi-shape unified articulation; (c) VISION stays shape-neutral and per-shape positioning lives in STRATEGY only? Decision deferred to Phase 3 ARCH or Phase 5 STRATEGY (whichever surfaces it first).
+
 ### Open — coherence-audit corpus-specific lens activation
 
 - **Lens 11 (Inter-layer consistency)** — formalize ARCH ↔ GLOSSARY ↔ DR ↔ spec citation health checks
@@ -130,6 +134,15 @@ When resolved:
 - **`learnings/` distillation** — when per-session entries accumulate stable patterns (typically 3-5 sessions of evidence), distill into structured topic-specific docs in `learnings/`; promote held observations to memory feedback rules / DRs / ARCH disciplines as appropriate. Feeds into the AI-app-development skill above.
 - **Testing harness for the framework** — eventual harness for systematic testing of framework primitives (mechanisms, protocols, shape conformance, sparring-output validation, audit-emission correctness). Composes with PydanticAI eval framework if adopted (per Phase 3 #7). Distinct from per-skill testing; this is harness for the framework layer itself.
 - **Markdown structure validation (investigation + adoption)** — investigate (a) existing libraries for markdown structural validation (frontmatter conformance, required-sections-present, cross-ref existence, schema-of-allowed-tag-values); (b) what we already had in archived code (`backend/mcp-server/` + `plugin/skills/{audit,design-review}/`). Composes with Phase 3 #8.
+
+### Open — STRATEGY content lifted from VISION Phase 1.85
+
+When STRATEGY.md is created, fold these positioning claims (removed from VISION during clean-stance restructure):
+
+- **Target users / ICP positioning**: solo professionals and small companies in expert-practitioner domains (planners, lawyers, researchers, accountants, consultants, boutique firms). NOT enterprise federated deployments — that's a different archetype with separate migration path.
+- **Single-big-model orchestration competitive framing**: framework's strengths (domain coherence; low operational overhead; vendor-neutral; big-context cross-specialist reasoning) land precisely in the solo-to-small expert-practitioner segment. Useful for STRATEGY's competitive-landscape section.
+- **Competitive positioning vs service-as-software market thesis** (mentioned in archived VISION; STRATEGY engages with opposing market thesis).
+- **Per-shape positioning + funding fit + cross-archetype migration paths** — when productizing second shape, STRATEGY articulates per-shape positioning (existing VISION cross-doc reference says STRATEGY = positioning + competitive landscape + funding).
 
 ---
 
