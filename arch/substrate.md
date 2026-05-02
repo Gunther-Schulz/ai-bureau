@@ -261,33 +261,36 @@ Per-impl session-store Protocol exposed via Surface §F session-management categ
 
 ## 10. Boot + shutdown phase ordering (architectural-level)
 
-The substrate has explicit boot phase + shutdown phase with ordered stages. Ordering is architectural commitment — deviations break audit-trail invariants (e.g., flush audit-trail before resource release prevents event loss).
+The substrate has explicit boot phase + shutdown phase with ordered stages. Ordering is architectural commitment — deviations break audit-trail invariants. **Audit Protocol owns audit-trail persistence + integrity** (per `arch/audit.md` §2.B + §11); substrate composes WITH Audit Protocol but does NOT itself flush the audit-trail.
 
 ### Boot sequence (architectural ordering)
+
+**Precondition**: Audit Protocol must already be booted (per `arch/audit.md` §11 boot-before-substrate ordering) so that substrate's own architectural events (`mcp_server_registered`, `boot_complete`, etc.) have an emission destination.
 
 1. Load substrate configuration (per workspace.md + per-impl config schema)
 2. Determine deployment tier from configuration (Tier 1 / Tier 2 / Tier 3)
 3. Instantiate substrate Implementation: `substrate = await ChosenSubstrate.from_config(config)`
-4. Register configured MCP servers (per config.mcp_servers list)
+4. Register configured MCP servers (per config.mcp_servers list); emit `mcp_server_registered` events via Audit Protocol per §8 dual-emission
 5. Register lifecycle hooks (substrate-level + skill-level)
 6. Register specialists (per active specialists list; substrate-native materialization per Surface §G)
 7. Activate substrate: `await substrate.is_ready` becomes True
-8. Emit `boot_complete` audit event
+8. Emit `boot_complete` audit event via Audit Protocol per §8 substrate-internal direct emission path
 9. Begin agent loop: `result = await substrate.run_agent(...)`
 
 ### Shutdown sequence (architectural ordering)
 
-1. Emit `shutdown_initiated` audit event
+Substrate shuts down BEFORE Audit Protocol (per `arch/audit.md` §11 audit-shuts-down-LAST ordering). Substrate releases its own runtime resources; audit-trail flush + integrity verification happen later in Audit Protocol's shutdown.
+
+1. Emit `shutdown_initiated` audit event via Audit Protocol
 2. Wait for in-flight agent runs to complete OR cancel per cancellation policy (pre-implementation forward-reference)
 3. Stop accepting new run_agent calls
 4. Drain pending permission requests
 5. Stop MCP servers (subprocess MCP servers gracefully terminate)
-6. Flush audit-trail (must complete before resource release)
-7. Release resources
-8. Emit `shutdown_complete` audit event
-9. `await substrate.shutdown()` returns
+6. Release substrate-internal runtime resources (substrate impl runtime; MCP server subprocess handles; per-impl session-state per Surface §F)
+7. Emit `shutdown_complete` audit event via Audit Protocol
+8. `await substrate.shutdown()` returns
 
-The flush-before-release ordering preserves audit-trail integrity across shutdown — prevents reasoning-chain-reconstruction failures L8 auditor (per `profiles/L8-auditor-reviewer-posthoc.md`) would encounter on workspace shutdown.
+**Note**: substrate does NOT flush audit-trail at shutdown. Audit Protocol's shutdown sequence (per `arch/audit.md` §11 steps 4-7) handles: drain pending events from adapter / sparring / coordination Pattern A protocols → flush audit-trail to disk → verify hash-chain integrity → emit `audit_trail_integrity_verified` (final event). This composition preserves the invariant that every emitted event is persisted before workspace shutdown completes.
 
 ## 11. Substrate error categories (architectural-level)
 

@@ -1,6 +1,6 @@
 # Decision record: Substrate ARCH topic (Phase 3.4 first canonical arch/<topic>.md)
 
-**Status**: ACCEPTED — session 16 (2026-05-02); 2-round sharpening (Round 1 full monty + Round 2 cross-cutting + schema-detail layer per `decision-design-sharpening` v0.6.0 layered coverage observation) + retroactive profile-anchored validation pass (post-procedural-discipline lock; ≥3 cluster representatives Read with cited content).
+**Status**: ACCEPTED — session 16 (2026-05-02); 2-round sharpening (Round 1 full monty + Round 2 cross-cutting + schema-detail layer per `decision-design-sharpening` v0.6.0 layered coverage observation) + retroactive profile-anchored validation pass (post-procedural-discipline lock; ≥3 cluster representatives Read with cited content). **AMENDED session 16 (post-Phase-3.4-#4) per `DISCIPLINES.md` Discipline 10 retroactive greenfield-pass: REVISION-1 applied to §10 boot/shutdown ordering — substrate.md §10 was archive-anchored with substrate-flushes-audit-trail; corrected to align with `arch/audit.md` §11 (audit Protocol owns audit-trail flush; shuts down AFTER substrate).**
 
 **Owner**: Phase 3.4 Per-architectural-Protocol detail rebuild; foundation for Pattern A protocol topics 2-7 (adapter / sparring / audit / coordination / trust / time) which compose with substrate's Surface contract.
 
@@ -101,6 +101,33 @@ After 5-location procedural redundancy locked (canonical session-16 fix for skil
 | Round 2 | 11 | 0 | 0 |
 | Profile validation | 0 (reinforced) | 0 | 0 |
 | **Total** | **13** | **0** | **3** |
+
+### Retroactive greenfield-pass amendment (session 16; post-Phase-3.4-#4; `DISCIPLINES.md` Discipline 10)
+
+User-triggered audit: investigated WHY procedural laxness allowed `arch/coordination.md` Round 1 cargo-cult drift. Concern: laxness pattern likely affected earlier locked work too. HIGH-risk Phase 3.4 topics (substrate + audit) audited per Discipline 10 discriminator (re-validate / stress-test / pattern-vs-instance / greenfield-derive per archive-derived element).
+
+**substrate.md audit findings**:
+
+| Element | Source | Verdict |
+|---|---|---|
+| 7 Surface capability categories | Archive (`substrate-protocol-design.md`) | GREENFIELD-VALID — each independently derives from locked architecture |
+| Per-impl extension Protocols pattern | Archive (`sdk-deep-read.md` R3d) | GREENFIELD-VALID — per TOP-LEVEL DESIGN PRINCIPLES §1 wrong-shapes-impossible (typed Protocols + isinstance = structural) |
+| Boundary criteria (5-row decision rule) | Archive R3d P4 | GREENFIELD-VALID |
+| 3 substrate Implementations (CIRCA 2026) | Archive (`substrate-agentic-framework.md`) | GREENFIELD-VALID — time-stamping properly applied |
+| **Boot/shutdown phase ordering (§10)** | Archive (`substrate-protocol-design.md` round-2 Q6) | **REVISION-1 REQUIRED** — substrate-flushes-audit-trail contradicts `arch/audit.md` §11 (locked later; audit Protocol owns flush; shuts down AFTER substrate) |
+| Substrate error categories (5) | Archive round-2 Q2 | GREENFIELD-VALID |
+| Transport variation (3 modes) | Archive | GREENFIELD-VALID |
+| Deployment-tier awareness | Archive | GREENFIELD-VALID |
+| Substrate-internal direct emission | Archive | GREENFIELD-VALID — structurally required (resolves MCP-gate-circularity) |
+| Per-shape error semantics | Greenfield-derived (not archive) | GREENFIELD-VALID |
+
+**REVISION-1 applied this commit**: §10 boot sequence adds Audit-Protocol-must-be-booted precondition; §10 shutdown sequence removes substrate-flushes-audit-trail step; explicit cross-ref to `arch/audit.md` §11 for ordering. Substrate releases its own runtime resources; Audit Protocol's later shutdown handles audit-trail flush + integrity verification.
+
+**Root cause of REVISION-1**: archived `substrate-protocol-design.md` had no Audit-Protocol-as-separate-Pattern-A; substrate handled audit-trail flush directly. When `arch/audit.md` locked Audit Protocol AS Pattern A (Phase 3.4 #4), the cascade back to substrate.md §10 was missed. Canonical greenfield-evaluation failure mode: substrate.md adopted archive's substrate-handles-audit-trail commitment without re-validating after audit Protocol Pattern A locked.
+
+**arch/audit.md audit findings**: 0 architectural REVISIONS. Audit topic was written LATER in Phase 3.4 sequence with stronger procedural awareness; audit-trail-as-canonical-source + audit-Protocol-shuts-down-AFTER-substrate are greenfield-derived architectural commitments that properly composed with already-locked substrate (which is why audit topic surfaced the substrate-handles-audit-trail issue and broke the dependency at lock time — but the cascade back to substrate.md was missed).
+
+**Audit corpus totals**: 1 architectural REVISION across HIGH-risk topics (substrate + audit). Validates user's worry that procedural laxness introduced architectural drift; magnitude tractable (1 cross-topic inconsistency, not deep cargo-cult).
 
 ## Composition with existing architecture
 

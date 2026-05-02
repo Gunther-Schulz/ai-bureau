@@ -529,6 +529,43 @@ Sharpening totals: 21 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejec
 
 ---
 
+**Note 40: Procedural-laxness investigation + 3-layer execution-fidelity defense + Phase 2.1 retroactive greenfield-pass on HIGH-risk topics**:
+
+User flagged red-flag pattern after `arch/coordination.md` Round 1 cargo-cult drift: META-failure (per `drafts/execution-fidelity.md`) recurring despite 5-location procedural-redundancy fix (commit `be7c8fa`). Investigation surfaced root causes (no procedural enforcement / throughput pressure / confirmation bias from prior 0-REVISION topics / archive-as-template-vs-input confusion / self-validation on speed-of-execution metrics).
+
+**3-layer defense locked this session**:
+
+1. **Procedural redundancy** (5-location; commit `be7c8fa`) — addresses Disguise #1 (compaction pattern-matching) only
+2. **Procedural escalation** — NEW DISCIPLINES.md Discipline 10 "Greenfield evaluation of archived material" + decision-design-sharpening v0.6.0 → v0.7.0 Round 1 termination checklist (mandatory; commit `55c016c`); addresses Disguises #4 + #5 + #8
+3. **Structural enforcement** — NEW `plugin/hooks/architectural_commit_gate.py` PreToolUse hook (commit `5fa376a`); 3 checks: skill freshness + profile freshness + archive-citation cross-check; blocks Edit/Write on architectural artifacts unless preparatory Reads happened
+
+Hook deployed + activated (`/reload-plugins`). Smoke tests pass: arch/* writes block when prerequisites missing; HANDOFF/Read/Bash allow.
+
+**Phase 2.1 retroactive greenfield-pass on HIGH-risk topics** (substrate + audit; per Discipline 10):
+
+| Topic | Audit verdict |
+|---|---|
+| `arch/substrate.md` + DR | **REVISION-1 surfaced** — §10 boot/shutdown ordering contradicted `arch/audit.md` §11 (substrate-flushes-audit-trail vs audit-Protocol-owns-flush). Root cause: archived `substrate-protocol-design.md` round-2 Q6 had no Audit-Protocol-as-Pattern-A; substrate handled audit-trail flush directly. When audit topic locked AS Pattern A (Phase 3.4 #4), cascade back to substrate §10 was missed. Canonical greenfield-evaluation failure mode. **REVISION-1 applied this commit**: §10 boot precondition + shutdown step alignment with audit.md §11. |
+| `arch/audit.md` + DR | **0 architectural REVISIONS**. Audit topic was greenfield-cleaner (locked LATER with stronger procedural awareness; properly composed with already-locked substrate). |
+
+**Audit corpus totals**: 1 architectural REVISION across HIGH-risk topics. Validates user's worry that procedural laxness introduced architectural drift; magnitude tractable (1 cross-topic inconsistency, not deep cargo-cult).
+
+**Discriminator findings** (per audit element analysis): substrate.md cargo-culted archive's substrate-handles-audit-trail commitment without re-validating after audit Protocol Pattern A locked. The other 8 substrate.md elements (Surface categories / per-impl extensions / boundary criteria / 3 Implementations / error categories / transport / deployment-tier / direct emission) all greenfield-validated. So drift was localized to the cross-topic-cascade-not-applied case — exactly the failure mode Discipline 10 is designed to catch.
+
+**Status**: HIGH-risk audit complete with 1 REVISION applied. User decision pending: run MEDIUM-risk audit (adapter + sparring + Phase 3.1 4 decisions + quality-gate-scope-lock) OR defer to Phase 3.8 C3 boundary audit.
+
+**Locked artifact state added**:
+- 5 hard checkpoints + 3 trigger conditions for coherence-audit cadence (Discipline 9)
+- Discipline 10 (NEW; greenfield evaluation of archived material)
+- decision-design-sharpening v0.7.0 (NEW Round 1 termination checklist)
+- plugin/hooks/architectural_commit_gate.py NEW (PreToolUse hook; 3 checks)
+- plugin.json hooks section + plugin version 0.3.0 → 0.4.0
+- substrate-arch-topic.md DR amended (REVISION-1 retroactive greenfield-pass record)
+- arch/substrate.md §10 corrected (boot precondition + shutdown alignment with audit.md §11)
+- 10 disciplines now in DISCIPLINES.md (was 9; added Discipline 10)
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
