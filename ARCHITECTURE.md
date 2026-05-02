@@ -30,7 +30,7 @@
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
-| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter / sparring / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 1 of 8 (substrate drafted; DR `substrate-arch-topic.md`) |
+| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 2 of 8 (substrate + adapter drafted; DRs `substrate-arch-topic.md` + `adapter-arch-topic.md`) |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
@@ -56,7 +56,7 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 | # | Topic file | Primary content (one-liner) | Phase |
 |---|---|---|---|
 | 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 — DRAFTED |
-| 2 | `arch/adapter.md` | Adapter Protocol Surface + per-integration-class + lifecycle/auth | 3.4 |
+| 2 | `arch/adapter.md` ✅ | Adapter Protocol Surface (META + per-integration-class) + per-impl + lifecycle/auth | 3.4 — DRAFTED |
 | 3 | `arch/sparring.md` | Sparring Protocol Surface + 8 sub-mechanisms + impl variations | 3.4 |
 | 4 | `arch/audit.md` | Audit Protocol Surface + audit-emission + audit-trail + event primitive | 3.4 |
 | 5 | `arch/coordination.md` | Coordination Protocol Surface + actor primitive interaction | 3.4 |
@@ -265,6 +265,27 @@ Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. P
 **Procedural-fidelity case**: Round 1 initially applied skill from synthesized memory; user-detected; SKILL.md re-Read; Round 2 properly executed under codified discipline. 5-location structural fix (commit `be7c8fa`) locked before Round 2 + retroactive profile-anchored validation pass. Documented as canonical session-16 case in `learnings/ai-app-development.md` Observation 28 + `drafts/execution-fidelity.md`.
 
 **Full detail**: `arch/substrate.md`. **DR**: `docs/decisions/substrate-arch-topic.md`.
+
+### Adapter ARCH topic (Phase 3.4 second Pattern A protocol) — LOCKED
+
+**Resolution**: `arch/adapter.md` LOCKED as second canonical Pattern A protocol topic. Validates substrate-established 18-section template + introduces **two-layer Surface variation** (META-Surface conventions + per-integration-class Surfaces) for Pattern A protocols where per-instance-class admits semantic coherence within class but heterogeneity across classes.
+
+- **Internal-vs-external axis**: substrate INTERNAL runtime contract; adapter EXTERNAL integration boundary — load-bearing distinction
+- **META-Surface** (cross-class): lifecycle entry / auth surface / permission flow integration / audit emission / error mapping / health check / versioning
+- **Per-integration-class Surfaces** (5 currently): Email / Accounting / MCP-Server / A2A-Peer / File-Sync (each with class-specific capability categories)
+- **Multi-instance cardinality**: typically N adapters per workspace (vs substrate's singular)
+- **Audit emission**: skill-side via MCP gate ONLY (no circularity issue — adapters don't register MCP gate; substrate does)
+- **Permission flow composition**: adapter writes (axis-3 send) request_permission via substrate Surface §C
+- **Auth + lifecycle**: per-class auth models (OAuth / API key / shared secret / certificate); proactive + reactive refresh; per-shape encryption mandates
+- **Cross-shape policy variation**: practitioner-shape mandates per-action audit + fail-closed on send; autonomous-business relax for continuity; personal-OS skip per-action
+- **Hot-swap re-binding**: adapter instances re-bindable mid-workspace-life (NOT deploy-time-only); workflow_instance re-binding compatibility declared
+- **Quota + circuit-breaker**: per-class metrics; closed/open/half-open state; per-shape thresholds
+
+**Sharpening totals**: 20 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected (Round 1 = 8 EXPANSIONS / Round 2 cross-cutting + schema-detail layer = 12 EXPANSIONS).
+
+**GLOSSARY back-check**: clean (multi-instance-Pattern-A + auth-state-at-Owner-B already implicit in `protocol (architectural)` + Owner B scope entries). Profile-cluster validation 4/4 PASS with cited content.
+
+**Full detail**: `arch/adapter.md`. **DR**: `docs/decisions/adapter-arch-topic.md`.
 
 ### Phase 3.1 closed
 

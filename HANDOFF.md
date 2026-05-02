@@ -404,6 +404,58 @@ A. Agent loop entry / B. MCP server registration + discovery / C. Permission flo
 
 ---
 
+**Note 36: Adapter ARCH topic LOCKED (Phase 3.4 second Pattern A protocol topic)**:
+
+`arch/adapter.md` LOCKED + DR `adapter-arch-topic.md` created. Second Pattern A protocol topic; validates substrate-established 18-section template AND introduces **two-layer Surface variation** for Pattern A protocols with per-instance-class semantic coherence.
+
+**Sharpening trajectory** (executed under just-codified `feedback_skill_files_are_sources.md` discipline):
+- Round 1 (full monty; architectural decisions layer): 8 EXPANSIONS surfaced. 3 manufactured criticisms rejected (per-class granularity over-engineering / merge into substrate as "external substrate" / audit-via-MCP-gate creates substrate dependency).
+- User triggered Round 2 explicitly (sanity-checked GLOSSARY back-check is part of process).
+- Round 2 (cross-cutting + schema-detail layer per layered coverage observation): 12 EXPANSIONS surfaced (auth + lifecycle architectural / per-class error categories / multi-instance lifecycle / quota + rate-limit / circuit-breaker / per-action audit-event kinds / permission flow composition / cross-shape policy variation / state separation / hot-swap re-binding / versioning / bidirectional-vs-unidirectional shape detail). 2 manufactured criticisms rejected (multi-instance Pattern A as new META-classification / hot-swap defer to Phase 6).
+
+**Sharpening totals**: 20 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected.
+
+**GLOSSARY back-check** (Round 2 termination): considered multi-instance-Pattern-A as standalone classification + auth-state-at-Owner-B as new sub-category. **Verdict: NOT glossary-grade** — already implicit in `protocol (architectural)` GLOSSARY entry's "cardinality variation between substrate and adapter" + Owner B scope's existing entity-state framing. **No retro-fit fires.**
+
+**Profile-anchored validation**: 4/4 clusters PASS with cited content (current-context profiles G + L5a + L1 + L4a + L8 still in evidence from substrate Round 2 retroactive pass; reused validly per within-session continuity discipline). Notable cited content:
+- L5a line 90 (active adapters: email Outlook + LaTeX compile + qualified-electronic-signature) → DIRECTLY validates §5 multi-instance + §4 per-archetype adapter set
+- L5a line 66 (ad-hoc communication via adapter) → §1 cross-axis + §11 cross-mode adapter operations
+- G line 157 (cross-shape consumption; shape policy bundle determines activation) → §11 cross-shape policy variation
+- L8 line 29 (audit-trail integrity across deployments) → §8 per-action audit emission
+
+**Two-layer Surface pattern** (NEW architectural pattern this topic introduces):
+- META-Surface = cross-class architectural conventions (lifecycle / auth / permission integration / audit emission / error mapping / versioning)
+- Per-integration-class Surfaces = semantically coherent capability contracts per class (Email / Accounting / MCP-Server / A2A-Peer / File-Sync)
+- Decision criterion for two-layer vs single-layer: does per-instance-class admit semantic coherence within class but heterogeneity across classes? Yes → two-layer (adapter); no → single-layer (substrate)
+- Future Pattern A protocol topics may adopt two-layer pattern where applicable
+
+**Internal-vs-external axis** (load-bearing distinction codified):
+- substrate = INTERNAL runtime contract for agent execution within workspace
+- adapter = EXTERNAL-WORLD integration boundary connecting workspace to outside systems
+- Cardinality variation flows from this distinction (substrate singular per workspace; adapter multiple)
+- May surface at Phase 3.5 cross-cutting integrators as architectural-axis vocabulary candidate
+
+**Audit emission distinction** (substrate vs adapter):
+- Substrate: dual paths (internal direct + skill-side via MCP gate) — resolves MCP-gate-circularity (substrate registers MCP gate; can't go through it)
+- Adapter: skill-side ONLY via MCP gate — no circularity issue (adapter doesn't register MCP gate)
+- Both write to same audit-trail.jsonl; auditor reads unified event stream per L8 audit-trail-integrity discipline
+
+**Cascade applied** (this commit):
+- `arch/adapter.md` NEW (18 sections; two-layer Surface; per-integration-class Surfaces enumerated)
+- `docs/decisions/adapter-arch-topic.md` NEW (status ACCEPTED; sharpening provenance + two-layer Surface pattern documentation)
+- `ARCHITECTURE.md` updated (Phase 3.4 progress 2 of 8; topic catalog adapter row drafted; locked decisions section)
+- `BACKLOG.md` Phase 3.4 adapter Resolved with detail
+- HANDOFF.md this Note 36
+
+**Status**: Phase 3.4 progress 2 of 8 Pattern A protocol topics LOCKED (substrate ✅ + adapter ✅). Remaining: sparring / audit / coordination / trust / time + quality-gate (Phase 3.6). Foundation-up ordering continues.
+
+**Locked artifact state added**:
+- 2 of 14 arch/<topic>.md files created (substrate + adapter; 12 remaining)
+- 7 DRs in docs/decisions/ (was 6; adapter-arch-topic.md NEW)
+- All other state unchanged from Note 35
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
