@@ -53,7 +53,7 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 
 **Full detail**: `GLOSSARY.md` workflow entry.
 
-**Future DR target**: workflow bipartite-classification decision warrants Phase 4 DR (rationale + options considered + why B3 chosen) per coherence-audit Lens 14 (DR coverage gap). Not yet created.
+**DR**: `docs/decisions/workflow-bipartite-classification.md` — decision rationale + options considered + sharpening rounds metadata + cascade applied + revisit triggers. Created session 16 ahead of formal Phase 4 DR rebuild (per coherence-audit Lens 14 DR coverage discipline applied early).
 
 ## Disciplines applying to all ARCH work
 

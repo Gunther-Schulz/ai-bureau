@@ -181,6 +181,24 @@ Plus explicit non-coverage question: what use cases does primitive NOT cover; in
 
 "Design with the end in mind" (G). "Defer only when truly awaited evidence" (D). If composability concerns aren't gated at the start, producer-side design can produce non-composable artifacts. If defer-instinct isn't gated at decision moments, architectural questions get punted on speculative grounds rather than resolved through mental modeling. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
 
+## Profile fleshing priority queue
+
+15 of 17 profiles are skeletons; flesh on-demand when specific decisions need them. Priority queue tied to upcoming Phase 3 sub-phases:
+
+| Priority | Profile | Trigger | Why |
+|---|---|---|---|
+| HIGH | L4a + L4b workspace deployer (solo + firm-IT) | Phase 3.1 work-unit bipartite-classification | Work-unit cardinality + multi-tenant governance affect deployer profiles directly |
+| HIGH | L1 specialist creator | Phase 3.3 per-mechanism + 3.5 specialist-mechanics | Specialist creator's perspective grounds packaging-boundary checks |
+| MEDIUM | L5d auditor at firm | Phase 3.5 claim-mechanics + defensibility-mechanics | Engagement-based work model + multi-engagement governance |
+| MEDIUM | L8 auditor / reviewer post-hoc | Phase 3.5 defensibility-mechanics | Defensibility test from evaluator side |
+| MEDIUM | L2 shape definer | Phase 3.4 per-protocol + per-shape policy work | Shape primitive's policy bundle design |
+| LOW | L3 deployment template creator | Phase 3.5 + composability tooling | Template composition; can wait until tooling ready |
+| LOW | L5b/c/g/h/i/j archetypes (lawyer/researcher/medical/architect/junior/multi-jurisdictional) | When primitive serving these archetypes is sharpened | On-demand per decision |
+| LOW | L5e + L5f non-practitioner shapes | Phase 3+ second-shape productization (per shape-neutrality watch-list) | Awaits second-shape design |
+| LOW | L9 shape catalog curator | Phase 3+ ecosystem maturity | Awaits shape catalog growth |
+
+Don't pre-flesh all profiles. Flesh when specific decision needs the depth.
+
 ## Persistence + evolution
 
 **Status discipline**: profiles are PRELIMINARY (parallel to `learnings/` status discipline). Concrete grounding but not architectural lock — profiles evolve as practice surfaces gaps.

@@ -107,30 +107,84 @@ Detail in `MAINTENANCE.md` "TOP-LEVEL SCOPE" + "TOP-LEVEL ARCHITECTURE" sections
 
 ---
 
-## Memory composition (locked feedback rules)
+## Discipline map — when each fires
 
-The following memory files compose with this framing:
+Disciplines compose. Different disciplines fire at different decision moments. This table shows when each engages so AI applies the right ones in context.
+
+### Validation gates (structural; fire before specific work proceeds)
+
+| Gate | Fires when | Codified at |
+|---|---|---|
+| **G — Composability Gate** | Designing any L1-L4 producer artifact (specialist / shape / template / workspace) | `profiles/G-composability-gate.md` + `profiles/INDEX.md` |
+| **D — Defer Gate** | AI considers deferring any architectural item | `profiles/INDEX.md` "D Gate procedure" + `feedback_pattern_not_instance_defers.md` |
+
+### Decision-design disciplines (fire during architectural decisions)
+
+| Discipline | Fires when | Codified at |
+|---|---|---|
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot) | Substantive architectural decisions | `feedback_pre_decision_sharpening.md` + `plugin/skills/decision-design-sharpening/` v0.4.0 |
+| Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `feedback_multi_axis_validation.md` + `profiles/INDEX.md` |
+| Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `feedback_foundation_up_ordering.md` |
+| Apply principle uniformly | When user states a principle/goal | `feedback_apply_principle_uniformly.md` |
+| Decision-phase approval; content-phase no approval | Surfacing positions/framings to user | `feedback_propose_before_commit.md` + `feedback_judgment_and_automate.md` |
+
+### Cross-session work disciplines (fire on every substantive session)
+
+| Discipline | Fires when | Codified at |
+|---|---|---|
+| Re-ground in VISION + ARCH | Start of substantive PBS work | `feedback_vision_arch_grounding.md` |
+| Source-grounded; cite file:line | Asserting what a doc/DR says | `feedback_source_grounded.md` |
+| Cascade discipline | Changing concept/primitive/term in any doc | `MAINTENANCE.md` "TOP-LEVEL RULE — Cascade" |
+| Commit regularly + push after commit | Per-logical-unit work completion | `feedback_push_after_commit.md` |
+| LLM-instruction tightness for markdown layer | Authoring skill / ARCH / GLOSSARY content | `feedback_llm_instruction_tightness.md` |
+
+### Architectural commitments (anchor framework decisions)
+
+| Commitment | Codified at |
+|---|---|
+| AI as runtime, not consumer | `feedback_ai_as_runtime.md` |
+| Make wrong shapes impossible (structural over conventional) | `feedback_wrong_shapes_impossible.md` |
+| Pattern-vs-instance discipline | `feedback_pattern_not_instance_defers.md` |
+| Repo identity: framework source, not deployment instance | `feedback_dev_vs_app_skills.md` + `MAINTENANCE.md` "TOP-LEVEL SCOPE" |
+| Preliminary lock except VISION axes | `feedback_preliminary_lock.md` |
+
+### Audit + coherence disciplines (fire during corpus validation)
+
+| Discipline | Fires when | Codified at |
+|---|---|---|
+| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.0 |
+| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.0 "Audit scaling strategies" |
+| Provenance hygiene (no audit-history breadcrumbs in canonical content) | Applying lock revisions | coherence-audit Lens 5 v0.2.1 |
+| Profile-grounded validation | Pre-validation + post-validation | `profiles/INDEX.md` |
+
+### Operational disciplines
+
+| Discipline | Fires when | Codified at |
+|---|---|---|
+| Stop on block; don't work around | Hook/permission/sandbox blocks | `feedback_blocked_actions.md` |
+| Plugin reload doesn't sync marketplace clone | Stale skill list after pushing plugin changes | `feedback_plugin_marketplace_clone_sync.md` |
+
+## Memory composition (locked feedback rules)
 
 | File | Role |
 |---|---|
 | `feedback_propose_before_commit.md` | Decision-phase approval; content-phase doesn't |
 | `feedback_judgment_and_automate.md` | Commit positions; routine work without asking |
-| `feedback_push_after_commit.md` | Push immediately after commit |
+| `feedback_push_after_commit.md` | Commit regularly + push immediately after commit |
 | `feedback_source_grounded.md` | Cite file:line; flag synthesis vs citation |
 | `feedback_vision_arch_grounding.md` | Re-ground in VISION + ARCH for substantive work |
 | `feedback_apply_principle_uniformly.md` | Test inherited categories independently |
-| `feedback_pre_decision_sharpening.md` | Sharpening rounds before locking |
-| `feedback_full_monty_upfront.md` | Comprehensive refinement upfront |
-| `feedback_pattern_not_instance_defers.md` | Never defer; watch-list info-gaps |
-| `feedback_defer_instinct.md` | Defer-instinct in disguises |
+| `feedback_pre_decision_sharpening.md` | 2-round sweet spot + full-monty-upfront (consolidated) |
+| `feedback_pattern_not_instance_defers.md` | Never defer; D Gate; watch-list info-gaps; defer-instinct disguises (consolidated) |
 | `feedback_preliminary_lock.md` | VISION axes anchored; everything else preliminary |
 | `feedback_blocked_actions.md` | Surface blocks; don't workaround |
-| `feedback_refine_pareto.md` | Challenge most-aggressive change before shipping |
 | `feedback_llm_instruction_tightness.md` | Sharpen markdown instruction layer |
-| `feedback_links_plain_text.md` | Bare URLs; CLI doesn't render markdown links |
 | `feedback_ai_as_runtime.md` | AI as runtime, not consumer |
 | `feedback_wrong_shapes_impossible.md` | Structural constraints over conventional solutions |
-| `feedback_dev_vs_app_skills.md` | Repo is framework source; dev skills live here, app skills don't |
+| `feedback_dev_vs_app_skills.md` | Repo is framework source; dev skills here; app skills in deployments |
+| `feedback_plugin_marketplace_clone_sync.md` | Marketplace clone sync mechanics |
+| `feedback_foundation_up_ordering.md` | Items others depend on come first |
+| `feedback_multi_axis_validation.md` | Archetype × work-type × role + non-coverage |
 
 Memory location: `/home/g/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/`. Index: `MEMORY.md` in same directory.
 
