@@ -218,9 +218,62 @@ After profile foundation + multi-axis discipline locked (note 29), substantial f
 
 ---
 
+## Session 16 continuation #4 (2026-05-02 — evening continuation; Phase 3.1 closure + audit)
+
+**Note 31: Phase 3.1 closed; coherence-audit Phase 3.1-boundary**:
+
+Post-compact continuation completing Phase 3.1 (4 architectural locks landed in succession, then phase-boundary coherence-audit):
+
+**Work-unit bipartite-classification LOCKED** (commit 6e4cbf5):
+- Re-classified to Pattern B parallel to workflow + specialist (KIND DEFINITION at Framework C via specialist's bundle; INSTANCE at Owner B)
+- ALWAYS-PRESENT container (load-bearing asymmetry vs workflow's optional applicability) — every accountability-bearing piece of work IS a work-unit
+- 8 EXPANSIONS / 0 REVISIONs / 3 manufactured criticisms rejected
+- Asymmetry insight surfaced from user Lens-6 prompt → triggered bidirectional-cascade discipline codification
+
+**Bidirectional-cascade + profile-anchored validation disciplines codified** (commit a79d6f8):
+- MAINTENANCE.md TOP-LEVEL RULE expanded with Bidirectional cascade subsection (UPSTREAM = GLOSSARY → ARCH/DRs/specs; DOWNSTREAM = ARCH/DR/spec work surfacing glossary-grade insight requires retro-fit to GLOSSARY before lock)
+- decision-design-sharpening v0.4.0 → v0.5.0: added GLOSSARY back-check + profile-anchored validation explicit Round 2 steps
+- Discriminator: shape-specific surface → profile-anchored; purely structural cascade → multi-axis principle-level
+- Canonical exemplar: work-unit's always-present container surfaced glossary-grade structural fact; codification captures the mechanism
+
+**Deployment definition LOCKED** (commit f650ccd):
+- DERIVED concept = workspace-as-bound-runtime; 1:1 cardinality at framework level
+- Vocabulary distinction: workspace = entity (configuration view); deployment = binding-relation (runtime view)
+- Workspace identity portability across deployments (backup→restore / substrate migration / re-activation) deferred to Phase 6 spec
+- 8 EXPANSIONS / 0 REVISIONs / 3 manufactured criticisms rejected (R1 retire-vocabulary / R2 scope-classification / R3 Pattern A all rejected)
+
+**Engaged-authorship operational definition LOCKED** (commit 82a7a5d) — **Phase 3.1 final item**:
+- DERIVED axis-3 success mode; elevated from inline Condition #1 of defensibility to standalone GLOSSARY entry
+- Two-phase composite: (1) production-phase engagement (axis-2-anchored sparring events) + (2) attestation-phase engagement (axis-3-anchored per-claim attestation event)
+- Both phases independent + both must structurally complete (per locked rubber-stamping: axis-2 failures + rubber-stamping are INDEPENDENT dimensions)
+- Per-claim per-version granularity
+- Two layers: framework-PRESENCE (Y/N event-existence test) + shape-policy-QUALITY (depth signals; quality-gate enforces)
+- Canonical bidirectional-cascade exemplar: ARCH-territory work surfaced glossary-grade structural fact requiring retro-fit AND elevation to standalone GLOSSARY entry
+- 10 EXPANSIONS / 0 REVISIONs / 4 manufactured criticisms rejected
+
+**Phase 3.1 COHERENCE-AUDIT ran at phase boundary** (this commit):
+- 10 lenses applied; scoped systematic strategy (LOAD-BEARING lenses corpus-wide; others focused on session locks + immediate cross-ref neighborhood)
+- **0 architectural REVISIONS surfaced across all 10 lenses** — corpus architecturally stable post-Phase-3.1
+- **9 cascade-fix EXPANSIONS applied**:
+  - Lens 4 (cascade health): 2 stale-forthcoming markers fixed (Adapter Protocol locked but marked forthcoming in `protocol (architectural)`; quality-gate ARCH-topic-vs-GLOSSARY-entry ambiguity in workflow)
+  - Lens 6 (symmetry): 7 reciprocal cross-refs to engaged authorship added (sparring / answer-machine / oracle / validator / category collapse / actor / workflow Composes-with sections)
+- Lens 1 + 8 + 9 (LOAD-BEARING) collectively yielded 0 REVISIONs → strong signal corpus is set-coherent per skill termination signal
+- All EXPANSIONS mechanical cascade-cleanup; no decision overhead
+
+**Sharpening discipline observed (sweet spot empirics confirmed)**:
+- All 4 Phase 3.1 architectural decisions locked at 2 rounds (sweet spot for narrow architectural surface)
+- 0 architectural REVISIONS across all decisions = high signal of architectural coherence (G + D gates + multi-axis + profile-anchored validation working as designed)
+- User reaffirmed flexibility-vs-hard-lock: 2 rounds is empirical sweet spot, not hard rule; termination signals dictate
+
+**Phase 3.1 closure**: workflow / work-unit / deployment / engaged-authorship all LOCKED. ARCHITECTURE.md status table marks 3.1 COMPLETE. Phase 3.2 (topic taxonomy) ready to begin.
+
+**Status**: Phase 3.1 closed; corpus coherence-audited at phase boundary; ready for Phase 3.2 topic taxonomy work.
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
-(Note: existing #2 section follows; this section is below the new #3)
+(Note: existing #2 section follows; this section is below the new #3 + #4)
 
 ## Session 16 continuation (2026-05-02)
 

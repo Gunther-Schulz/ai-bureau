@@ -152,6 +152,7 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 - `audit trail` — actors' events compose into audit trail (specific mechanism instance; canonical detail in ARCH Layer 3, not a separate GLOSSARY entry)
 - `skill` — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
 - `work-unit` — actors emit events scoped to work-units; actor attribution is per-work-unit in audit trail
+- `engaged authorship` — practitioner's engagement is tested via human-actor events (`actor_kind: human`); AI-runtime sparring events serve as the production-phase substrate but are not the engagement subject; engaged-authorship test resolves on practitioner-actor attribution
 
 **Source**:
 - Locked GLOSSARY entries: `mechanism` ("`actor_kind` enum (declared on every audit event; framework-level guarantee)"); `Owner B scope` ("Actor (event emitter — could be human-practitioner or AI runtime)"); `skill` (composes-with: "skills emit AuditEvents via the AI runtime that fires them — `actor_kind: ai_runtime`")
@@ -277,6 +278,7 @@ Negative-marker test (answer-machine NOT occurring):
 - `oracle AI` — sibling failure mode (declarative-direction shape vs extractive-direction shape)
 - `validator AI` — sibling failure mode (affirmation-direction shape vs extractive-direction shape)
 - `tacked-on AI` — axis-1 parallel failure mode; both manifest category collapse on different axes
+- `engaged authorship` — production-phase failure mode contrast; answer-machine extraction during production bypasses engaged-authorship's production-phase engagement (no sparring participation → no engaged authorship at production phase → defensibility's engaged-authorship condition fails per claim)
 
 **Cardinality + lifecycle**: Cardinality N/A — failure mode shape, not instance. The mode manifests per practitioner per workspace per work-unit, in moments where query patterns shift to extraction-only. **Lifecycle**: occurs in moments rather than persistent states; can manifest sporadically or pervasively depending on workload + ROI-perception drift; reversible via deliberate re-engagement (sparring-shaped queries) or architectural friction (mechanisms that surface unbidden challenges regardless of query shape).
 
@@ -391,6 +393,7 @@ Negative-marker test (collapse NOT occurring):
 - `co-worker` — relational frame that collapses (re-categorized to tool)
 - `sparring (axis 2)` — axis-2 collapse target (sparring → answer-machine / oracle / validator)
 - `authorship preservation (axis 3)` — axis-3 engaged-authorship state being degraded
+- `engaged authorship` — axis-3 success mode that category collapse degrades; axis-3 manifestation = rubber-stamping (attestation-phase) and axis-2 manifestations = answer-machine/oracle/validator AI (production-phase) all bypass engaged-authorship's two-phase composite test
 - `defensibility` — collapsed authorship state (rubber-stamping) fails defensibility test
 - `practitioner` — the cognitive-state-bound agent in whom the force operates
 - `mechanism` — counter-mechanisms (sparring sub-mechanisms; engagement-feedback mechanisms; deliberate-re-engagement signals) work to RESIST collapse but don't prevent it; architectural intent enables, doesn't enforce
@@ -1186,6 +1189,7 @@ Negative-marker test (oracle NOT occurring):
 - `answer-machine AI` — sibling failure mode (extractive-direction shape vs declarative-direction shape)
 - `validator AI` — sibling failure mode (affirmation-direction shape vs declarative-direction shape)
 - `tacked-on AI` — axis-1 parallel failure mode
+- `engaged authorship` — production-phase failure mode contrast; oracle transcription during production bypasses engaged-authorship's production-phase engagement (transcription is not sparring participation → no engaged authorship at production phase → claims indefensible per defensibility test)
 
 **Cardinality + lifecycle**: Cardinality N/A — failure mode shape. Manifests per practitioner per workspace per work-unit, in moments where the practitioner shifts from sparring-with-AI to transcribing-AI-positions. **Lifecycle**: occurs in moments; can manifest sporadically or pervasively; reversible via deliberate sparring-engagement or architectural friction (mechanisms that force engagement with AI declarations rather than passive transcription — e.g., requiring practitioner to articulate counter-arguments before accepting AI position).
 
@@ -1483,7 +1487,7 @@ Different selection levels exist across instances:
 
 **Cross-archetype catalog (named architectural protocols; archived corpus + locked Pattern A members)**:
 - **Substrate Protocol** (locked) — runtime contract; workspace selects one
-- **Adapter Protocol** (forthcoming entry; pattern instance per integration class — email adapter, accounting adapter, MCP adapter, etc.)
+- **Adapter Protocol** (locked; per `adapter` GLOSSARY entry) — pattern instance per integration class (email adapter, accounting adapter, MCP adapter, etc.)
 - **Sparring Protocol** — axis-2 support; shape selects implementation (always-on / optional / sparring-as-skill / none)
 - **Audit Protocol** — cross-axis emission; shape policy determines granularity (claim-level / action-level / light)
 - **Coordination Protocol** — cross-specialist / cross-actor coordination shape (event-shaped vs call-shaped per shape policy)
@@ -1862,6 +1866,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 - `claim` — sparring fires AT claim granularity (counter-arguments target individual claims; confidence calibration applies per claim; selective friction triggers per claim ambiguity)
 - `answer-machine AI` / `oracle AI` / `validator AI` — Ming-research-distinguished axis-2 failure modes; sparring is the state these mode-failures degrade FROM
 - `category collapse` — general force; axis-2 failure modes are its axis-2 manifestations
+- `engaged authorship` — sparring events are the production-phase substrate for engaged-authorship's two-phase composite test (per-claim sparring participation observed via sparring-event emissions = production-phase engagement signal); engaged authorship's production-phase failure modes are the axis-2 failure modes (answer-machine / oracle / validator AI)
 
 **Source**: `VISION.md` line 142 ("## Sparring partner, not answer machine (axis 2)"); line 100 ("### Vivienne Ming — sparring as the productive mode (axis 2 anchor)"); line 81 (axis-2 robustness claim — sparring becomes MORE valuable as AI accuracy increases); line 190 (sparring-mechanisms framing).
 
@@ -2100,6 +2105,7 @@ Negative-marker test (validator NOT occurring):
 - `oracle AI` — sibling failure mode (declarative direction)
 - `tacked-on AI` — axis-1 parallel failure mode
 - Anti-sycophancy mechanism (per ARCH Layer 3 sparring sub-mechanisms) — counter-mechanism specifically designed to resist validator-mode failure
+- `engaged authorship` — production-phase failure mode contrast; validator-mode confirmation during production bypasses engaged-authorship's production-phase engagement (sycophantic confirmation is not sparring participation → no engaged authorship at production phase → claims fail defensibility)
 
 **Cardinality + lifecycle**: Cardinality N/A — failure mode shape. Manifests per practitioner per workspace per work-unit. **Lifecycle**: occurs in moments; can manifest sporadically or pervasively; reversible via deliberate engagement with disconfirming evidence + open-ended query reformulation. Anti-sycophancy mechanisms (axis-2 sub-mechanism) are the specific counter-mechanism.
 
@@ -2185,7 +2191,8 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 - `claim` — claims emitted during workflow_instance execution attribute to that workflow_instance; per-claim audit composes into workflow audit context
 - `event` — workflow_instance emits lifecycle events (workflow_started, phase_transitioned, workflow_completed, suspended, abandoned, failed); audit-emission mechanism captures these
 - `mechanism` — composes with multiple framework-level mechanisms: persistent state (workflow_instance state across sessions); audit emission (lifecycle events); authority binding (phase transitions may require specific authority; workflow definition declares per-phase authority requirements)
-- `category collapse` / `quality-gate` (forthcoming ARCH topic) — workflow_instance execution is observability source for quality-gate's drift detection (e.g., practitioner approving phase transitions without engaging review content → axis-3 rubber-stamping signal)
+- `category collapse` / `quality-gate` (GLOSSARY entry locked; full Phase 3.6 ARCH topic forthcoming) — workflow_instance execution is observability source for quality-gate's drift detection (e.g., practitioner approving phase transitions without engaging review content → axis-3 rubber-stamping signal)
+- `engaged authorship` — engagement events fire at workflow phases when codified workflow exists (drafting → review → signing); workflow's optional-overlay applicability is orthogonal to engaged-authorship's mandatory always-present status (engagement events fire per claim regardless of workflow_instance)
 
 **Source**:
 - VISION (`VISION.md`):
