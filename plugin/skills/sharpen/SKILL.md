@@ -2,7 +2,7 @@
 name: sharpen
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including \"sharpen this\", \"sharpen the {target}\", \"review this critically\", \"what would you push back on\", \"challenge this\", \"what's load-bearing vs decorative\", \"what should I cut\", \"tighten this\", \"where are the gaps\", \"be ruthless on this\", \"another round\", \"go deeper\", \"what else\". Single critical pass by default; iterates when user signals deeper."
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.10.0
+version: 0.11.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -81,7 +81,7 @@ The bias triggers in two predictable directions:
 
 Counter-mechanism: force the cut-questions explicitly. What's redundant? What's overclaim? What's decorative? What could be removed without loss?
 
-### 6. Post-pass self-check
+### 6. Post-pass self-check (cognitive-mode passes)
 
 Before declaring STABLE: the lens questions in Step 2 are categorical (each tests for content matching a category). Run additional **cognitive-mode passes** — each prompts a different default the categorical lens misses:
 
@@ -103,68 +103,93 @@ Before declaring STABLE: the lens questions in Step 2 are categorical (each test
 
 Simulate honestly across all passes — don't manufacture findings the simulation wouldn't actually produce.
 
-Commit STABLE or CONTINUE position with rationale. **Empirical density check is mandatory** — pattern-matching expected decay vs measuring actual density is META-failure surface (per session-16 canonical case).
+## Termination criteria — comprehensive framework (v0.11.0)
 
-### Mandatory density check at every round termination
+**Goal**: STABLE = evidence that surface is COVERED, NOT "no findings this round." Density / surface-type / Q-test are INSTRUMENTATION verifying the goal — never substitutes for the goal.
 
-Count substantive findings (HIGH + MEDIUM impact; exclude cosmetic / NO-ACTION) for current round. Compare to previous round's count.
+Single-metric verdicts (density alone / HIGH-count alone / Q4 alone) are insufficient. Surface-coverage is multi-signal.
 
-| Density behavior | Verdict signal |
+### Layer 1 — Empirical evidence signals (positive coverage indicators)
+
+Track at each round termination:
+
+| Signal | Measure | Coverage interpretation |
+|---|---|---|
+| **Cognitive-mode pass coverage** | Per-round track which passes applied (categorical lens / non-categorical / cold-read / mechanism-simulation) | All applicable applied = surface explored |
+| **Counter-stress survival** | % of prior-round findings that survive Round N stress-test (vs being revised/withdrawn) | Trending toward 100% = surface stabilizing |
+| **HIGH-finding count** | HIGH count current round | 0 in current round = load-bearing rigor saturating |
+| **HIGH-finding decay** | HIGH count trend across rounds | Trending toward 0 = saturating |
+| **Total substantive density** | (HIGH+MEDIUM) count current vs previous | ≥50% drop = decay; ≥25% drop = partial decay; <25% = holding |
+| **Pareto-acceptance ratio** | Accepted findings / surfaced findings (per round) | Dropping = manufactured-criticism territory approaching |
+| **Q4 specific-concern test** | Specific Round-N+1 concern nameable with substance | Unanswerable when forced = manufactured criticism territory |
+
+**Surface-type declaration (mandatory)**: ARCHITECTURAL-DECISION / PROCEDURE-DOCUMENT / SET-LEVEL AUDIT / META-ARCHITECTURAL. Different surfaces have different baseline density profiles; pattern-matching wrong decay = surface-type-mismatch bias.
+
+Surface-type sweet spots (informational baselines for orientation, NOT verdict criteria):
+- ARCHITECTURAL-DECISION: typically 2-3 rounds (per `DISCIPLINES.md` Discipline 3 empirical pattern from session-12)
+- PROCEDURE-DOCUMENT: typically 4-5+ rounds (broader cognitive-pass surface; per session-16 empirical)
+- SET-LEVEL AUDIT: per-cluster (each cluster sharpens until cluster-exhausted)
+- META-ARCHITECTURAL: indeterminate; user-trigger primary
+
+### Layer 2 — Counter-bias mechanisms (verify signals are honest)
+
+Every termination verdict requires explicit counter-bias check:
+
+| Counter | Catches |
 |---|---|
-| Drops ≥50% | DECAY CONFIRMED → STABLE candidate |
-| Holds within ±25% OR increases | DECAY NOT CONFIRMED → CONTINUE candidate |
-| Drops 25-50% | AMBIGUOUS → user-decision |
+| **Manufactured-comfort** | Premature STABLE due to round-fatigue / completion-comfort |
+| **Manufactured-criticism** | Extending rounds with non-Pareto / cosmetic findings |
+| **Surface-type-mismatch** | Pattern-matching wrong-surface decay |
+| **Self-validation** | Confirming current verdict without independent test |
+| **Single-metric tunnel-vision** | Using one signal alone instead of multi-signal coverage assessment |
+| **Coverage-blindness** | Declaring STABLE without tracking cognitive-mode passes applied |
+| **Counter-stress avoidance** | Pure-extension (only adding new findings) without testing prior findings |
 
-Density check is OBJECTIVE (count); not pattern-match against expected decay (6→5→3→0-1 from `DISCIPLINES.md` Discipline 3 — that pattern is empirical for ARCHITECTURAL DECISIONS specifically, not all surface types).
+### Layer 3 — Verdict logic
 
-### Surface-type declaration (mandatory)
+**CONTINUE when ANY of**:
+- C1: Round N has HIGH findings (load-bearing concerns surfaced; surface not yet covered) — load-bearing signal of remaining substance
+- C2: Cognitive-mode passes incomplete (specific pass not yet applied per Layer 1 coverage)
+- C3: Specific Round-N+1 concern nameable with substance (Q4 answerable)
+- C4: Counter-stress survival incomplete (Round N extends rather than tests prior; pure-add bias)
+- C5: User explicit trigger ("another round" / "go deeper" / "what else")
+- C6: Pareto-acceptance ratio holding (findings still substantive; no manufactured-criticism trend)
 
-Different surface types have different decay profiles. Declare explicitly:
+**STABLE when ALL of**:
+- S1: HIGH count = 0 in current round (load-bearing rigor saturated)
+- S2: All applicable cognitive-mode passes applied (Layer 1 coverage matrix complete)
+- S3: Q4 unanswerable (no specific Round-N+1 concern with substance)
+- S4: Counter-stress survival ≥80% (surface stable; not actively shifting)
+- S5: Density decay confirmed (HIGH-only ≥50% drop AND total substantive ≥25% drop)
+- S6: Pareto-acceptance ratio dropping (manufactured-criticism territory approaching)
+- S7: Specific termination signal cited (not "feels done")
+- S8: Manufactured-comfort counter-test passes (round-fatigue not the driver)
 
-- **ARCHITECTURAL-DECISION** (per-decision sharpening; sweet spot 2-3 rounds; expected decay 6→5→3→0-1)
-- **PROCEDURE-DOCUMENT** (process docs / runbooks / methodology; broader cognitive-pass surface; sweet spot may be 4-5 rounds)
-- **SET-LEVEL AUDIT** (corpus-level review; per-cluster density; may yield findings across many rounds without decay until cluster exhausted)
-- **META-ARCHITECTURAL** (foundational discipline / framework rebuild / cross-cutting concerns; broadest; sweet spot indeterminate; user-trigger primary)
+**USER-DECISION** when:
+- Mixed signals (some CONTINUE conditions hold; some STABLE conditions hold)
+- HIGH count partially decayed but ≠ 0
+- User-trigger overrides AI-judgment unless ALL S-conditions verified
 
-Pattern-matching architectural-decision decay onto procedure-document or set-level audit is recurrent bias surface.
+### Layer 4 — Mandatory output at every round termination
 
-### Honest termination test
+AI surfaces in chat (NOT skipped; NOT pattern-matched):
 
-At every Round N termination, AI explicitly answers (NOT pattern-matched verdicts):
+1. **Coverage matrix**: which cognitive-mode passes applied this round? Which not yet?
+2. **Density count**: substantive findings (HIGH/MEDIUM/LOW/NO-ACTION) current vs previous
+3. **HIGH-finding decay trend**: current HIGH count + trend across rounds
+4. **Counter-stress survival rate**: % of prior-round findings tested + survived
+5. **Pareto-acceptance ratio**: accepted findings / surfaced findings
+6. **Q4 + Q5 honest answers**: specific Round-N+1 concern OR specific termination signal cited
+7. **Counter-bias checks** (all of Layer 2): each counter explicitly checked
+8. **Verdict**: CONTINUE / STABLE / USER-DECISION with rationale citing specific Layer 3 conditions
 
-| # | Question |
-|---|---|
-| Q1 | Current round substantive-finding count? |
-| Q2 | Previous round substantive-finding count? |
-| Q3 | Density change (% drop / hold / increase)? |
-| Q4 | If CONTINUE: what specific cognitive-mode pass hasn't been applied? what stress-test hasn't fired? what counter-bias check is unaddressed? |
-| Q5 | If STABLE: can I name the specific termination signal that fired? (BESIDES "feels done" — that's manufactured comfort) |
+### Iteration discipline
 
-Q4 unanswerable for CONTINUE → manufactured criticism territory; lean STABLE.
-Q5 unanswerable for STABLE → manufactured comfort territory; lean CONTINUE.
+- **AI-side iteration**: NOT auto-triggered; user-triggered or driven by C-conditions Layer 3
+- **User-trigger CONTINUE**: HONORED unless ALL S-conditions verified (Disguise #5 prevention: AI-judgment-override of user-trigger is structurally suspect)
+- **STABLE verdict requires structural evidence**: density decay + coverage complete + counter-stress survival + Q4 unanswerable + counter-bias checks pass
 
-### Manufactured-comfort counter-test (NEW; equal-weight to manufactured-criticism)
-
-Round-fatigue / completion-comfort biases AI toward STABLE prematurely. **Equal scrutiny required** as for manufactured-criticism bias toward CONTINUE.
-
-User-triggered CONTINUE is HONORED unless empirical density decay (Q3) clearly demonstrated. AI-judgment-override of user-trigger is structurally suspect (Disguise #5 territory: substituting AI judgment for codified rule).
-
-### Verdict criteria
-
-- **STABLE** — Q3 shows decay confirmed (≥50% drop) AND Q5 names specific termination signal AND counter-validation passes (manufactured-comfort counter-test passed)
-- **CONTINUE** — Q3 shows density holding/increasing OR user explicitly signals deeper OR Q4 names specific unaddressed pass
-
-Substantive = affects load-bearing claims, structural integrity, or reader's mental model. Cosmetic-only findings don't block STABLE.
-
-**Iteration is USER-TRIGGERED for AI-side rounds**. Don't auto-iterate after STABLE verdict — AI-self-triggered rounds drift toward manufactured criticism. When user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate; user-trigger overrides AI-judgment STABLE unless empirical decay confirmed.
-
-**Sweet spot per surface type**:
-- ARCHITECTURAL-DECISION: 2-3 rounds (per `DISCIPLINES.md` Discipline 3 empirical pattern)
-- PROCEDURE-DOCUMENT: indeterminate; density-check governs
-- SET-LEVEL AUDIT: per-cluster; density-check governs
-- META-ARCHITECTURAL: user-trigger governs
-
-Default: Round 1 surfaces structural findings; Round 2 catches what Round 1's fixes revealed; STABLE typically lands after Round 2 for architectural decisions; later for broader surfaces.
+**Iteration is USER-TRIGGERED for AI-side rounds**. Don't auto-iterate after STABLE verdict — AI-self-triggered rounds drift toward manufactured criticism. When user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate; user-trigger overrides AI-judgment STABLE unless ALL S-conditions verified.
 
 ## Anti-patterns (failure modes the skill counters)
 
@@ -178,4 +203,7 @@ Default: Round 1 surfaces structural findings; Round 2 catches what Round 1's fi
 - **Auto-iteration after STABLE** — AI-self-triggered rounds drift toward manufactured criticism; iteration is user-triggered
 - **Manufactured comfort** — AI-bias toward STABLE without empirical decay measurement; pattern-matching expected decay vs measuring actual density (canonical session-16 case: STABLE LOCK at Round 3 of procedure-sharpening when density was holding flat 9→10→9, not decaying)
 - **Pattern-matching termination signals** — applying architectural-decision decay (6→5→3→0-1) to procedure-document or set-level audit surface types; surface-type-mismatch bias
-
+- **Single-metric tunnel-vision** — using density alone OR HIGH-count alone OR Q4 alone instead of multi-signal coverage assessment
+- **Coverage-blindness** — declaring STABLE without tracking which cognitive-mode passes applied
+- **Counter-stress avoidance** — pure-extension (only adding new findings) without testing prior findings
+- **Self-validation on verdict** — confirming current STABLE/CONTINUE without independent test (counter-bias check skipped)

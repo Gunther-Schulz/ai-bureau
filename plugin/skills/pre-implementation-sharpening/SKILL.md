@@ -2,7 +2,7 @@
 name: pre-implementation-sharpening
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use at implementation-start moment for major architectural commitment (after architectural decisions are LOCKED in decision records; before implementation code is written). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including \"let's start implementing X\" / \"before we implement, what details haven't we surfaced\" / \"implementation-readiness check\" / \"solidify before implement\" / \"lock down implementation details\" / \"challenge/surface/refine before we ship\" (or original \"challenge/review/refine before we ship\") / \"verify implementation readiness\" / \"what implementation details are we missing\". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge → surface → refine → solidify cycle applied at implementation-start moment. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Output is implementation-readiness checklist + decision-record amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use drift-detection skills)."
 when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in decision records; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check" / "solidify before implement" / "challenge/surface/refine implementation readiness" / "lock down implementation details" / "before we ship X". Do NOT use for decision-formation moments — that's decision-design-sharpening.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Pre-implementation sharpening (Phase 2)
@@ -122,9 +122,9 @@ After 2-3 rounds:
 
 When pre-implementation sharpening surfaces items that aren't actionable in current scope (e.g., implementation-readiness checklist items deferred to next phase; DR amendments needed for related decisions; cross-cutting concerns spanning multiple implementation phases), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit. BACKLOG is the central work-item tracker.
 
-### Post-round self-check (v0.4.0; mandatory empirical density check + Q1-Q5 honest termination test)
+### Post-round self-check (v0.5.0; comprehensive termination framework per sharpen v0.11.0)
 
-At the end of each round, AI applies mandatory checks per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6:
+At the end of each round, AI applies comprehensive termination criteria per `plugin/skills/sharpen/SKILL.md` v0.11.0 — Layer 1 empirical signals + Layer 2 counter-bias mechanisms + Layer 3 verdict logic + Layer 4 mandatory output. Single-metric verdicts insufficient; surface-coverage is multi-signal.
 
 **Empirical density check**: count substantive findings (HIGH + MEDIUM; exclude cosmetic / NO-ACTION) current round vs previous round. ≥50% drop = decay confirmed; within ±25% = decay NOT confirmed; 25-50% drop = ambiguous.
 

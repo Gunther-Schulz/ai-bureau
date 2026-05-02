@@ -2,7 +2,7 @@
 name: coherence-audit
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including \"audit the glossary\", \"review the corpus\", \"cross-entry audit\", \"is the architecture clean\", \"are these the right primitives\", \"primitive-set audit\", \"set-level review\", \"coherence check\", \"is the vocabulary coherent\". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening)."
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.3.2
+version: 0.3.3
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -203,7 +203,7 @@ Per `feedback_judgment_and_automate.md`: don't menu the findings; commit a posit
 
 **Auto-add to BACKLOG.md** (v0.2.2): when audit surfaces items that aren't actionable in current scope (e.g., "Phase 3 ARCH resolves..." forward-references; deferred details; Lens 11-15 corpus-specific findings during Phase 2 GLOSSARY audit), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit as the audit application. BACKLOG is the central work-item tracker; coherence-audit's deferrals must surface there or risk getting lost.
 
-**Post-audit self-check (v0.3.2 update)**: at end of audit, mandatory empirical density check + Q1-Q5 honest termination test per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6.
+**Post-audit self-check (v0.3.3 update)**: at end of audit, comprehensive termination criteria per `plugin/skills/sharpen/SKILL.md` v0.11.0 — Layer 1 empirical signals + Layer 2 counter-bias mechanisms + Layer 3 verdict logic + Layer 4 mandatory output. Single-metric verdicts insufficient; surface-coverage is multi-signal.
 
 **Surface-type declaration**: coherence-audit = SET-LEVEL AUDIT. Density profile: per-cluster (audit may yield findings across many rounds without decay UNTIL specific cluster exhausted). Pattern-matching architectural-decision decay (6→5→3→0-1) onto SET-LEVEL surface = recurrent bias.
 

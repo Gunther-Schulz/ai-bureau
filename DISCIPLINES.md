@@ -271,7 +271,7 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; sweet spot per surface type) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.8.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; Round 1 termination checklist mandatory per Discipline 10; mandatory empirical density check + surface-type declaration + honest termination test (Q1-Q5) at every round termination per v0.8.0 + sharpen v0.10.0; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; sweet spot per surface type) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.9.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; Round 1 termination checklist mandatory per Discipline 10; mandatory empirical density check + surface-type declaration + honest termination test (Q1-Q5) at every round termination per v0.8.0 + sharpen v0.10.0; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
 | Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) + `profiles/INDEX.md` |
 | Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `DISCIPLINES.md` Discipline 8 |
 | Apply principle uniformly | When user states a principle/goal | `DISCIPLINES.md` Discipline 2 |
@@ -301,8 +301,8 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.2 (Step 7 REVISION/EXPANSION self-check) |
-| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.2 "Audit scaling strategies" |
+| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.3 (Step 7 REVISION/EXPANSION self-check) |
+| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.3 "Audit scaling strategies" |
 | Provenance hygiene (no audit-history breadcrumbs in canonical content) | Applying lock revisions | coherence-audit Lens 5 v0.2.1 |
 | Profile-grounded validation | Pre-validation + post-validation | `profiles/INDEX.md` |
 

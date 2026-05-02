@@ -2,7 +2,7 @@
 name: decision-design-sharpening
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including \"solidify this decision\" / \"lock down this decision\" / \"make this solid\" / \"challenge/surface/refine to solidify\" (or original \"challenge/review/refine to solidify\") / \"challenge this\" / \"review/refine\" / \"do another round\" / \"sharpen again\" / \"what did we miss\" / \"what are we surfacing\" / \"verify completeness before commit\" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead)."
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.8.0
+version: 0.9.0
 ---
 
 # Decision-design sharpening (Phase 1)
@@ -163,7 +163,7 @@ Decision-design phase COMPLETE. Propose final structure in chat before committin
 
 ## Round termination signals
 
-**MANDATORY at every round termination** (NEW v0.8.0 per session-16 META-failure on procedure-document sharpening): empirical density check + surface-type declaration + honest termination test (per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6).
+**MANDATORY at every round termination** (v0.9.0; per `plugin/skills/sharpen/SKILL.md` v0.11.0 comprehensive termination framework — Layer 1 empirical signals + Layer 2 counter-bias mechanisms + Layer 3 verdict logic + Layer 4 mandatory output). Single-metric verdicts (density alone / HIGH-count alone / Q4 alone) are insufficient. Surface-coverage is multi-signal.
 
 ### Empirical density check
 
