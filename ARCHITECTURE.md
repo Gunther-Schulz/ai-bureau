@@ -14,7 +14,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | **COMPLETE** — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship LOCKED. Phase 3.1 closed. Coherence-audit recommended before Phase 3.2 topic taxonomy. |
-| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decision 1 (taxonomy) LOCKED at 14 topics; Sub-decision 2 (file naming) LOCKED; Sub-decisions 3-4 (cross-cutting placement / ARCHITECTURE.md structure) pending |
+| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decisions 1-3 LOCKED (taxonomy / file naming / cross-cutting placement); Sub-decision 4 (ARCHITECTURE.md overview structure) pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
 | **3.5** | Per-primitive detail topics (9 primitives + axis-interactions) | Pending |
@@ -228,6 +228,34 @@ All 4 open architectural questions resolved (workflow / work-unit / deployment /
 **Round 2 expansions applied**: cross-doc consistency confirmed; flat arch/ explicit anti-pattern; slug stability noted; no arch/README explicit anti-pattern; plain .md extension; cross-doc link conventions; anchor convention; file header convention; renaming protocol via standard cascade.
 
 **Round 2 revisions tested + rejected**: bucket sub-dirs (R1); numbered prefix (R2); `+` aggregation char (R3); multi-aspect primitive sub-files (R4); generic-word slug ambiguity (R5) — all rejected.
+
+### Cross-cutting topics placement (Phase 3.2 Sub-decision 3) — LOCKED
+
+**Resolution**: cross-cutting CONCERNS vs cross-cutting TOPICS distinction codified.
+
+**Cross-cutting TOPICS** (dedicated `arch/<topic>.md` files per Sub-decisions 1+2):
+- `arch/axis-interactions.md` — 3 VISION axes interaction analysis + co-worker frame + category-collapse cross-axis force
+- `arch/scope-model.md` — workspace + Framework C / Owner B / Layer A scope categories + entity placement rules
+- `arch/quality-gate.md` — Pattern A runtime protocol observing all axes (Phase 3.6)
+
+**Cross-cutting CONCERNS** (ARCHITECTURE.md sections):
+- Pattern-A-vs-B-vs-C structural semantics
+- Cascade direction (UPSTREAM + DOWNSTREAM bidirectional per MAINTENANCE.md)
+- Scope-categorization framing (mechanism / shape / cross-cutting; framework / shape / instance)
+- Foundation-up ordering principle
+- G + D validation gate disciplines (existing "Disciplines applying to all ARCH work" section)
+
+**Distinction is load-bearing**: TOPIC = architectural content (lives in arch/); CONCERN = meta-principle (lives in ARCHITECTURE.md). Different placement, different KIND.
+
+**Reading order for cross-cutting topics**: axis-interactions + scope-model LAST in foundation-up sequence (integrate across ALL prior topics). Quality-gate after foundational protocols (Pattern A protocol; observability layer).
+
+**No content migration** between MAINTENANCE.md (Layer 0 discipline) and arch/scope-model.md (Layer 3 detail) — layer-distinction maintained; cross-refs only.
+
+**Catalog uniformity**: cross-cutting topics get one-liner in ARCHITECTURE.md catalog (same depth as Pattern A protocol topics + primitive-cluster topics; uniform treatment).
+
+**Round 2 expansions applied**: cross-cutting CONCERNS-vs-TOPICS distinction named explicit; cross-cutting principles section scope vs Disciplines section distinction; reading order for cross-cutting topics; MAINTENANCE-vs-arch/scope-model layer split (no migration); quality-gate dual nature (Pattern A primary + cross-cutting emergent); cross-references via standard relative paths; forward-reference handling per Sub-decision 1; category-collapse placement (GLOSSARY + axis-interactions; not own topic).
+
+**Round 2 revisions tested + rejected**: separate cross-cutting principles doc (R1) — DISCIPLINES.md already exists; arch/cross-cutting-principles.md as 15th topic (R2) — violates Sub-decision 1; one-liner-vs-paragraph catalog format (R3) — deferred to Sub-decision 4; explicit cross-cutting-concern-vs-topic naming (R4) — applied via E1.
 
 ## Disciplines applying to all ARCH work
 
