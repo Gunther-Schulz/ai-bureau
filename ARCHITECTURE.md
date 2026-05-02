@@ -30,7 +30,7 @@
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
-| **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
+| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter / sparring / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 1 of 8 (substrate drafted; DR `substrate-arch-topic.md`) |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
@@ -55,7 +55,7 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 
 | # | Topic file | Primary content (one-liner) | Phase |
 |---|---|---|---|
-| 1 | `arch/substrate.md` | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 |
+| 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 — DRAFTED |
 | 2 | `arch/adapter.md` | Adapter Protocol Surface + per-integration-class + lifecycle/auth | 3.4 |
 | 3 | `arch/sparring.md` | Sparring Protocol Surface + 8 sub-mechanisms + impl variations | 3.4 |
 | 4 | `arch/audit.md` | Audit Protocol Surface + audit-emission + audit-trail + event primitive | 3.4 |
@@ -246,6 +246,25 @@ Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. P
 **Why this elevates from defensibility's Condition #1 to standalone DERIVED entry**: engaged authorship is load-bearing across multiple entries (`defensibility`, `authorship preservation`, `rubber-stamping`, `quality-gate`, `claim`). Standalone entry preserves canonical definition + composition without bloating defensibility.
 
 **Full detail**: `GLOSSARY.md` engaged authorship entry. **DR**: `docs/decisions/engaged-authorship-operational-definition.md`.
+
+### Substrate ARCH topic (Phase 3.4 first canonical) — LOCKED
+
+**Resolution**: `arch/substrate.md` LOCKED as first canonical Pattern A protocol topic. Establishes 18-section template for remaining 7 Pattern A protocol topics (adapter / sparring / audit / coordination / trust / time / quality-gate at 3.6).
+
+- **Surface (architectural-conceptual)**: 7 capability categories (agent loop / MCP register+discover / permission flow / structured-output validation / hook registration / session+context management / specialist registration)
+- **Per-impl extension Protocols pattern**: typed Protocols isinstance-checked at use site; substrate-coupling impossible-by-construction
+- **Tri-aspect Pattern A**: Surface (mechanism) + Implementations (Framework C) + Running Instance (Owner B)
+- **Boundary criteria**: decision rule for Surface vs per-impl extension applied at Surface-design moment
+- **Substrate-internal vs skill-side audit emission**: dual paths converging in audit-trail (resolves MCP-gate-circularity)
+- **Boot/shutdown ordering, error categories, transport variation, deployment-tier awareness**: cross-cutting + schema-detail layer per `decision-design-sharpening` v0.6.0 layered coverage observation
+- **Pre-implementation operational concerns**: explicit Phase 6 forward-reference (cancellation / timeouts / rate-limit / health-check / per-tenant isolation / streaming / etc.)
+- **Phase routing**: Pydantic Protocol contract → Phase 6 spec; concrete substrate impls → Phase 6
+
+**Sharpening totals**: 13 EXPANSIONS / 0 REVISIONS / 3 manufactured criticisms rejected (Round 1 = 2 EXPANSIONS / Round 2 cross-cutting + schema-detail layer = 11 EXPANSIONS / Profile validation pass = 0 new findings / 4-cluster PASS reinforced).
+
+**Procedural-fidelity case**: Round 1 initially applied skill from synthesized memory; user-detected; SKILL.md re-Read; Round 2 properly executed under codified discipline. 5-location structural fix (commit `be7c8fa`) locked before Round 2 + retroactive profile-anchored validation pass. Documented as canonical session-16 case in `learnings/ai-app-development.md` Observation 28 + `drafts/execution-fidelity.md`.
+
+**Full detail**: `arch/substrate.md`. **DR**: `docs/decisions/substrate-arch-topic.md`.
 
 ### Phase 3.1 closed
 

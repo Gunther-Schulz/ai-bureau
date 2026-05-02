@@ -92,8 +92,7 @@ Foundation-up within bucket: defensibility-supporting mechanisms first.
 
 Foundation-up: substrate first (most foundational); then adapter; then 5 named protocols.
 
-- **Substrate Protocol** Surface specification (method set; tier-awareness; lifecycle events) | archived: substrate-protocol-design.md, sdk-deep-read.md
-- **substrate** per-impl detail (Claude Agent SDK, MS Agent Framework) + deployment-tier framing + eval-framework integration | archived: substrate-agentic-framework.md, sdk-deep-read.md
+- ~~**Substrate Protocol** Surface specification + per-impl detail (Claude Agent SDK / MS AF / hand-rolled) + deployment-tier framing~~ [resolved this commit] — `arch/substrate.md` LOCKED as first canonical Pattern A protocol topic. 18 sections; 7 capability categories Surface contract; per-impl extension Protocols pattern; tri-aspect Pattern A reconciliation; boot/shutdown ordering + error categories + transport variation + tier-awareness as cross-cutting + schema-detail layer; substrate-internal vs skill-side dual audit emission. Phase 6 spec lands Pydantic Protocol contract (Mode 3) + concrete impls. 13 EXPANSIONS / 0 REVISIONS / 3 manufactured criticisms rejected. DR `substrate-arch-topic.md` created. Profile-anchored validation properly executed (4/4 clusters PASS with cited content). Procedural-fidelity case for `feedback_skill_files_are_sources.md` discipline.
 - **Adapter Protocol** per-integration-class Surface specs (email, accounting, MCP-server, A2A-peer) | archived: a2a-and-gemini-pattern-emulation.md, plugin-conventions.md, backend-conventions.md
 - **adapter** lifecycle / auth-refresh / error-handling semantics; permission-flow integration
 - **Sparring Protocol** Surface + impl variations (always-on / optional / sparring-as-skill / none)

@@ -364,6 +364,46 @@ User interventions surfaced the failure: "did you do validation against the prof
 
 ---
 
+**Note 35: Substrate ARCH topic LOCKED (Phase 3.4 first canonical arch/<topic>.md)**:
+
+`arch/substrate.md` LOCKED + DR `substrate-arch-topic.md` created. First canonical Pattern A protocol topic; establishes 18-section template for remaining 7 Pattern A protocol topics.
+
+**Sharpening trajectory**:
+- Round 1 (full monty post-compact): applied skill from synthesized memory; missed `decision-design-sharpening` v0.6.0 layered coverage observation; phase-routed cross-cutting concerns to Phase 6 too aggressively. 2 EXPANSIONS surfaced; premature STABLE LOCK self-position.
+- User intervention: "btw is maintenance MD still in use?" → "did you do validation against the profiles? I believe it's part of the skill" → "you cannot rely on synthesized memory!" → forced skill re-Read.
+- Structural fix: 5-location procedural redundancy locked (commit `be7c8fa`; Note 34).
+- Round 2 (USER-TRIGGERED; cross-cutting + schema-detail layer per layered coverage observation): 11 EXPANSIONS surfaced (boot/shutdown ordering / error categories / transport variation / deployment-tier awareness / audit-event kinds enriched / specialist registration as Surface category G / session composition / lifecycle ownership / §10 retitled / substrate-coupling impossible-by-construction / W1 refined). 0 manufactured criticisms.
+- Retroactive profile-anchored validation pass (post-discipline-lock): Read `profiles/INDEX.md` + G + L5a (FULL) + L1 + L4a + L8 (skeletons-with-EXEMPLIFIES). 4/4 clusters PASS with cited profile content (not pattern-matched cluster letters). 0 architectural REVISIONS surfaced; profile content REINFORCES Round 1 + Round 2 expansions.
+
+**Sharpening totals**: 13 EXPANSIONS / 0 REVISIONS / 3 manufactured criticisms rejected.
+
+**Surface contract committed (7 capability categories)**:
+A. Agent loop entry / B. MCP server registration + discovery / C. Permission flow / D. Structured output validation / E. Hook registration / F. Session/context management / G. Specialist registration (substrate-neutral SpecialistDescriptor → substrate-native form per session-13 archive amendment).
+
+**Phase routing committed**: Pydantic Protocol contract → Phase 6 spec (Mode 3); concrete substrate impls → Phase 6; pre-implementation operational concerns (cancellation / timeouts / rate-limit / health-check / per-tenant isolation / streaming / lifecycle proactive events / compaction strategies) → Phase 6 pre-implementation sharpening explicitly NOT locked at ARCH level.
+
+**Cascade applied** (this commit):
+- `arch/substrate.md` NEW (18 sections; foundation-up Pattern A protocol topic template)
+- `docs/decisions/substrate-arch-topic.md` NEW (status ACCEPTED; sharpening provenance)
+- `ARCHITECTURE.md` updated (Phase 3.4 status; topic catalog substrate row drafted; locked decisions section)
+- `BACKLOG.md` Phase 3.4 substrate moved to Resolved with detail
+- HANDOFF.md this Note 35
+
+**User clarification (decision-vs-content surfacing discipline)**: approval needed for decisions/reasons/context — NOT verbatim content drafts in chat. Refines `feedback_propose_before_commit.md`: decision phase = framings + positions + reasons (chat); content phase = write directly without verbatim chat preview. Applied going forward.
+
+**Status**: Phase 3.4 substrate LOCKED (1 of 8 Pattern A protocol topics). Foundation established for remaining 7 topics (adapter / sparring / audit / coordination / trust / time + quality-gate at 3.6). Profile-anchored validation discipline empirically validated under just-codified procedural-fidelity rules.
+
+**Locked artifact state added**:
+- 14 GLOSSARY entries → 35 (unchanged)
+- ARCHITECTURE.md 9-section structure (unchanged) + Phase 3.4 status updated
+- 1 of 14 arch/<topic>.md files created (substrate; 13 remaining)
+- 6 DRs in docs/decisions/ (was 5; substrate-arch-topic.md NEW)
+- decision-design-sharpening v0.6.0 + coherence-audit v0.3.1 (unchanged versions; description fields prepended with READ-FIRST directive per Note 34)
+- 19 memory feedback files (unchanged; auto-memory)
+- 28 learnings observations (unchanged)
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
