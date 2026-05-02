@@ -30,7 +30,7 @@
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
-| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 2 of 8 (substrate + adapter drafted; DRs `substrate-arch-topic.md` + `adapter-arch-topic.md`) |
+| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring ✅ / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 3 of 8 (substrate + adapter + sparring drafted; DRs `substrate-arch-topic.md` + `adapter-arch-topic.md` + `sparring-arch-topic.md`) |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
@@ -57,7 +57,7 @@ Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions be
 |---|---|---|---|
 | 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 — DRAFTED |
 | 2 | `arch/adapter.md` ✅ | Adapter Protocol Surface (META + per-integration-class) + per-impl + lifecycle/auth | 3.4 — DRAFTED |
-| 3 | `arch/sparring.md` | Sparring Protocol Surface + 8 sub-mechanisms + impl variations | 3.4 |
+| 3 | `arch/sparring.md` ✅ | Sparring Protocol Surface (8 sub-mechanism categories: 4 architecturally-encoded + 4 behaviorally-enforced) + per-shape activation matrix | 3.4 — DRAFTED |
 | 4 | `arch/audit.md` | Audit Protocol Surface + audit-emission + audit-trail + event primitive | 3.4 |
 | 5 | `arch/coordination.md` | Coordination Protocol Surface + actor primitive interaction | 3.4 |
 | 6 | `arch/trust.md` | Trust Protocol Surface + authority-binding mechanism | 3.4 |
@@ -326,6 +326,24 @@ Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. P
 **GLOSSARY back-check**: clean (multi-instance-Pattern-A + auth-state-at-Owner-B already implicit in `protocol (architectural)` + Owner B scope entries). Profile-cluster validation 4/4 PASS with cited content.
 
 **Full detail**: `arch/adapter.md`. **DR**: `docs/decisions/adapter-arch-topic.md`.
+
+### Sparring ARCH topic (Phase 3.4 third Pattern A protocol) — LOCKED
+
+**Resolution**: `arch/sparring.md` LOCKED as third Pattern A protocol topic. Single-layer Surface (substrate-style) with 8 sub-mechanism capability categories. Introduces NEW per-shape activation-matrix variation (third Pattern A cardinality pattern alongside substrate's singular tier-aware + adapter's multi-instance per-class).
+
+- **8 sub-mechanism capability categories**: counter-argument / confidence calibration / visible reasoning / selective friction (architecturally-encoded; gate-dispatched per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1) + anti-sycophancy / asymmetric knowledge respect / commit-to-recommendations / what's-missing (behaviorally-enforced; AI applies at judgment time)
+- **Cardinality**: 1 Sparring Protocol Implementation per workspace; shape policy declares which sub-mechanisms active (per-shape activation matrix)
+- **Cross-axis dependency**: sparring fires AT claim granularity; sparring events ARE production-phase substrate for `engaged authorship` two-phase composite (axis-2 → axis-3 dependency)
+- **Composition with substrate Surface §D** (structured output validation): load-bearing for architecturally-encoded sub-mechanisms 1-4 (Pydantic schema enforcement; auto-retry inherited)
+- **Per-shape policy variation**: practitioner-shape mandates all 8 active + fail-closed + ≥1 sparring-event per claim; autonomous-business per business policy with fail-open + alert; personal-OS subset with fail-open
+- **Per-action audit emission**: skill-side via MCP gate (like adapter); per-sub-mechanism event-kind catalog + axis-2 failure-mode detection events (answer_machine_detected / oracle_mode_detected / validator_mode_detected)
+- **Pre-implementation operational concerns**: explicit Phase 6 forward-reference (per-sub-mechanism schemas / orchestrator retry mechanics / heuristic-detection thresholds / bypass-with-reason UX)
+
+**Sharpening totals**: 20 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected (Round 1 = 7 / Round 2 cross-cutting + schema-detail = 13).
+
+**GLOSSARY back-check**: clean (failure-mode detection events derive from already-locked answer-machine / oracle / validator AI entries; selective-friction threshold is impl-mechanic). Profile-cluster validation 4/4 PASS with cited content.
+
+**Full detail**: `arch/sparring.md`. **DR**: `docs/decisions/sparring-arch-topic.md`.
 
 ### Phase 3.1 closed
 

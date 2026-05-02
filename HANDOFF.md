@@ -482,6 +482,25 @@ Sharpened via generic `sharpen` skill v0.9.0 (2 rounds): Round 1 surfaced 3 open
 
 ---
 
+**Note 38: Sparring ARCH topic LOCKED (Phase 3.4 third Pattern A protocol topic)**:
+
+`arch/sparring.md` LOCKED + DR `sparring-arch-topic.md` per locked DR template. Third Pattern A protocol topic; first under just-locked templates. Introduces NEW per-shape activation-matrix variation (third Pattern A cardinality pattern alongside substrate's singular-tier-aware + adapter's multi-instance-per-class).
+
+Single-layer Surface with 8 sub-mechanism capability categories (4 architecturally-encoded + 4 behaviorally-enforced per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator). Composition with substrate Surface §D (structured output validation) load-bearing for architecturally-encoded sub-mechanisms 1-4. Cross-axis dependency: sparring events ARE production-phase substrate for engaged-authorship two-phase composite (axis-2 → axis-3).
+
+Sharpening totals: 20 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected (Round 1 = 7 / Round 2 cross-cutting + schema-detail = 13). GLOSSARY back-check clean (failure-mode detection events derive from already-locked answer-machine / oracle / validator AI entries). Profile-cluster validation 4/4 PASS with cited content (L5a line 128 + L5a line 67 + G line 157 + L8 line 29).
+
+DR template (per locked composite `doc-organization-templates.md`) used for first time — Sharpening provenance section IS the meta-home; ARCH topic holds pure architectural content per coherence-audit Lens 5 v0.2.1 provenance hygiene.
+
+**Status**: Phase 3.4 progress 3 of 8 Pattern A protocol topics LOCKED (substrate ✅ + adapter ✅ + sparring ✅). Remaining: audit / coordination / trust / time + quality-gate (Phase 3.6).
+
+**Locked artifact state added**:
+- 3 of 14 arch/<topic>.md files created (substrate + adapter + sparring; 11 remaining)
+- 9 DRs in docs/decisions/ (was 8; sparring-arch-topic.md NEW)
+- All other state unchanged
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
