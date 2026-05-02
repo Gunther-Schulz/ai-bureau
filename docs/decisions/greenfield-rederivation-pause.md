@@ -1,5 +1,13 @@
 # Decision record: Greenfield re-derivation pause (Phase 3 procedural-laxness response)
 
+## Executive summary (for fresh readers)
+
+Phase 3.4 work paused mid-execution after discovering procedural laxness allowed archive-cargo-cult drift in 4 already-locked Pattern A protocol topics (substrate / adapter / sparring / audit). Retroactive audit on substrate yielded 1 architectural REVISION (boot/shutdown ordering contradicted audit topic). User flagged broader concern: framework foundation may be more archive-anchored than realized. This DR documents 7-step procedure for greenfield re-derivation BEFORE continuing Phase 3.4. Procedure pauses Phase 3.4 + audits foundation (GLOSSARY + Pattern A vs B vs C framework + 8 Pattern A protocol list + topic template) per Discipline 10 greenfield-evaluation discipline. Steps 1.A-1.B audit foundation; Steps 2-4 derive from scratch; Steps 5-6 compare to current locked work + surface revisions; Step 7 commits revise-foundations vs validate-greenfield-equivalent decisions.
+
+**Status**: PROPOSED procedure (this DR captures shape) → execution log + findings populate as work proceeds → ACCEPTED-WITH-FINDINGS or ACCEPTED-VALIDATED at Step 7.
+
+**Hook + 5-location procedural fix + Discipline 10 + Round 1 termination checklist + sharpen v0.12.0 framework all apply during execution** to counter recurrence of META-failure mode.
+
 ## Status
 
 PROPOSED — procedure locked pending user approval; execution log + findings populate as work proceeds; Status amends to ACCEPTED-WITH-FINDINGS or ACCEPTED-VALIDATED upon execution completion + decision per Step 7.
@@ -119,6 +127,25 @@ Hook (`architectural_commit_gate.py`) continues firing during execution; catches
 
 **Verification**: chat output cites specific VISION line numbers + specific GLOSSARY entry sections per verdict during Step 1.B + during Steps 2-4.
 
+**Cycle-handling sub-procedure** (MS-1; per Round 6 mechanism-simulation pass): if cycle detected during composes-with cross-validation (entry A composes-with B AND B composes-with A; OR longer cycle): both/all entries flagged **PENDING-CYCLE-RESOLUTION**; verdict deferred to Step 7. Step 1.B does NOT deadlock on cycles; proceeds to next entry. Cycles surface during Step 1.B as flagged-not-resolved; Step 7 resolves them when full set of dependencies known.
+
+### "Park current ARCH content" verification mechanism (MS-2; applies to Steps 2-4)
+
+Step 2-4 require ignoring current locked ARCH topic content (substrate.md / adapter.md / sparring.md / audit.md) during greenfield derivation. Mental discipline only — can't structurally enforce.
+
+**Verification mechanism** (MS-2 per Round 6 mechanism-simulation pass): Step 2-4 derivation outputs cite ONLY:
+- VISION line numbers
+- Locked GLOSSARY entry sections (Step 1.B-validated)
+- First-principles disciplines (TOP-LEVEL DESIGN PRINCIPLES §1/§2/§3; preliminary-lock; pattern-vs-instance; etc.)
+- Implicit-VISION-derivation chains (per Round 3 R3-1 acceptable IF documented as ≥2 explicit transitive steps)
+
+**ZERO references to**:
+- substrate.md / adapter.md / sparring.md / audit.md content during derivation
+- Phase 3.0/3.1/3.2 DR claims (these are UNDER audit)
+- Archived material (archive is INPUT not template per Discipline 10)
+
+Citation pattern enforces parking. If a Step 2-4 derivation can't cite VISION/GLOSSARY/first-principles WITHOUT referring to current locked ARCH content, that's a signal of contamination — flag for user-checkpoint.
+
 ### Step 2: Greenfield-derive Pattern A vs B vs C primitive-classification framework
 
 **Action**: ignoring `MAINTENANCE.md` current TOP-LEVEL ARCHITECTURE locked Pattern A/B/C framework, derive from scratch:
@@ -159,6 +186,8 @@ For each: does it derive from VISION-axis-mechanism need OR locked GLOSSARY prim
 
 ### Step 4: Greenfield-derive Pattern A protocol topic template
 
+**Pre-condition (MS-3 per Round 6)**: Step 2 yielded Pattern A vs B vs C framework (or alternative). If alternative framework derived (e.g., 4-pattern; cardinality-based classification; lifecycle-based), Step 4 template-derivation may be **obsolete OR re-derived per alternative framework structure**. HALT Step 4 + user-decision before proceeding when alternative framework surfaces in Step 2.
+
 **Action**: From Pattern A definition (Step 2 output) + locked architectural disciplines + locked DR template + greenfield-derived protocol list (Step 3): what minimal common topic structure derives?
 
 **Stress-test current 18-section template**:
@@ -180,13 +209,26 @@ For each: does it derive from VISION-axis-mechanism need OR locked GLOSSARY prim
 
 ### Step 5: Compare to current locked work
 
-**Action**: Apply outputs from Steps 2-4 against current locked work:
-- `arch/substrate.md` + `substrate-arch-topic.md` DR (already audited; REVISION-1 applied per commit `a602dc7`)
-- `arch/adapter.md` + `adapter-arch-topic.md` DR
-- `arch/sparring.md` + `sparring-arch-topic.md` DR
-- `arch/audit.md` + `audit-arch-topic.md` DR
-- Phase 3.2 topic catalog in `ARCHITECTURE.md` §4 + `phase-3-2-doc-organization.md` DR
-- Phase 3.1 4 decisions: workflow-bipartite / work-unit-bipartite / deployment-derived / engaged-authorship-operational
+**Current locked work for comparison** (CR-4 per Round 6; explicit list):
+
+| Artifact | Path |
+|---|---|
+| substrate ARCH topic | `arch/substrate.md` (already audited; REVISION-1 applied per commit `a602dc7`) |
+| substrate DR | `docs/decisions/substrate-arch-topic.md` |
+| adapter ARCH topic | `arch/adapter.md` |
+| adapter DR | `docs/decisions/adapter-arch-topic.md` |
+| sparring ARCH topic | `arch/sparring.md` |
+| sparring DR | `docs/decisions/sparring-arch-topic.md` |
+| audit ARCH topic | `arch/audit.md` |
+| audit DR | `docs/decisions/audit-arch-topic.md` |
+| Phase 3.2 topic catalog | `ARCHITECTURE.md` §4 |
+| Phase 3.2 composite DR | `docs/decisions/phase-3-2-doc-organization.md` |
+| Phase 3.1 workflow DR | `docs/decisions/workflow-bipartite-classification.md` |
+| Phase 3.1 work-unit DR | `docs/decisions/work-unit-bipartite-classification.md` |
+| Phase 3.1 deployment DR | `docs/decisions/deployment-derived-classification.md` |
+| Phase 3.1 engaged-authorship DR | `docs/decisions/engaged-authorship-operational-definition.md` |
+
+Read each artifact before per-element comparison. Apply outputs from Steps 2-4 against this corpus.
 
 **Per element verdict**:
 - **GREENFIELD-EQUIVALENT** — locked work matches what greenfield process produces (no revision needed)
