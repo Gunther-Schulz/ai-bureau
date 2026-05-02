@@ -97,7 +97,7 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 - [answer-machine AI](#answer-machine-ai) — axis-2 failure mode (extraction direction)
 - [oracle AI](#oracle-ai) — axis-2 failure mode (declarative direction)
 - [validator AI](#validator-ai) — axis-2 failure mode (affirmation direction)
-- rubber-stamping (forthcoming) — failure mode of axis 3
+- [rubber-stamping](#rubber-stamping) — axis-3 failure mode (sign-off without engagement)
 
 **Note**: "AI runtime" is informal shorthand for substrate's tri-aspect Instance (per Pattern A) — used colloquially in docs but not a separate GLOSSARY primitive. Architectural primitive is `substrate`.
 
@@ -322,6 +322,8 @@ Negative-marker test (answer-machine NOT occurring):
 - `practitioner` — the role this axis protects
 - `practitioner-shape` — workspace shape where this axis is mandated (canonical entry forthcoming; see `shape` named-shapes catalog)
 - `claim` — the atomic unit-of-defense; defensibility test resolves at claim granularity, not at whole-work-unit granularity
+- `rubber-stamping` — axis-3 failure mode (the named failure-state contrast; preventing rubber-stamping is what authorship preservation requires)
+- `category collapse` — general force; rubber-stamping is its axis-3 manifestation
 
 **Source**: `VISION.md` line 154 ("## Authorship preservation, not rubber-stamping (axis 3)"); line 164 (the practitioner-author claim); line 191 (authorship mechanisms framing); line 82 (axis-3 robustness claim); line 191 (practitioner's "professional/legal standing" framing).
 
@@ -402,7 +404,7 @@ Negative-marker test (collapse NOT occurring):
 - `tacked-on AI` (axis-1 failure outcome)
 - `co-worker` (relational frame collapsing)
 - `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 failure outcomes
-- `rubber-stamping` (forthcoming — axis-3 failure outcome)
+- `rubber-stamping` — axis-3 failure outcome
 - ARCH Layer 3 category-collapse-detail topics (placeholder until Phase 3 — counter-mechanisms catalog; engagement-quality signals; per-archetype collapse signatures; collapse-detection observability; architectural friction patterns that resist collapse)
 
 ---
@@ -1239,6 +1241,78 @@ Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + thei
 - `adapter` (canonical Pattern A instance — workspace-activated multiple; EXTERNAL-integration counterpart)
 - `mechanism` (Protocol Surface IS a mechanism)
 - ARCH Layer 3 protocol-detail topics (placeholder until Phase 3 — per-protocol Surface specifications, per-implementation detail, selection mechanics; archived material to consult: `substrate-protocol-design.md`, `shape-extension-and-architectural-floor.md`)
+
+---
+
+## rubber-stamping
+
+- **Class**: DERIVED (axis-3 failure mode; instance shape of category collapse on axis 3)
+- **Layer**: framework-meta (operates ON framework primitives; manifestation depends on practitioner cognitive state at attestation moment)
+- **Axis**: axis-3 primary anchor; cross-axis (instance of category-collapse force)
+- **VISION usage**: directly used (`VISION.md` axis-3 framing — "authorship preservation, not rubber-stamping" — explicit failure-mode contrast to engaged authorship)
+
+**Canonical**: An axis-3 failure mode in which the practitioner-author signs off on AI-produced content without engaging the reasoning, judgment calls, or claim-by-claim defensibility. The architecture may include human-in-the-loop authority binding (signed claims, attestation events), but the practitioner's mental category of authorship has collapsed from "engaged author" to "output-approver" — at which point HITL becomes ceremonial rather than substantive.
+
+**What it is**: The axis-3 manifestation of category collapse — the failure-mode parallel to `tacked-on AI` (axis-1) and `answer-machine AI / oracle AI / validator AI` (axis-2). Where axis-1 and axis-2 failures occur DURING work production, rubber-stamping occurs AT THE ATTESTATION MOMENT when the practitioner formally authors / signs / finalizes output.
+
+Critical: axis-2 failures and rubber-stamping are INDEPENDENT dimensions. Practitioner can have strong sparring engagement during production but rubber-stamp at finalization (signs without re-engaging). Conversely, practitioner can engage substantively at finalization but had answer-machine extraction during production. Both must hold for full axis-2 + axis-3 success. Defensibility's "engaged authorship" condition (per `defensibility` entry) requires that rubber-stamping NOT occur — without engaged authorship, defensibility fails regardless of audit trail or source-grounding.
+
+**What it is NOT**:
+- Not architectural absence of human-in-the-loop — HITL can be present yet rubber-stamped; the failure is in cognitive engagement at sign-off, not in the absence of sign-off mechanism
+- Not lack of attestation events — attestation can fire performatively without engagement (events recorded; engagement absent)
+- Not pace-related — rubber-stamping isn't about quick vs slow; it's about cognitive engagement; a quick-but-engaged sign-off is not rubber-stamping
+- Not always conscious — practitioner may not realize they've shifted to rubber-stamping mode
+- Not mutually exclusive with axis-1 / axis-2 failures — same workspace can have tacked-on AI + answer-machine AI + rubber-stamping co-occurring; these are independent failure dimensions
+- Not failure of AI capability — competent AI makes rubber-stamping more dangerous (output quality looks high; engagement-failure invisible to practitioner)
+
+**Cross-archetype illustration**:
+
+*Rubber-stamping manifestations per archetype*:
+- **Practitioner-shape (planner)**: planner signs Begründung containing AI-drafted argumentation; signs without engaging the legal-interpretation claims; ceremonial signature; cannot defend specific claims if challenged on them
+- **Legal practice (lawyer)**: lawyer signs brief built on AI-suggested arguments without engaging the case-law applicability reasoning; signature attests to authorship but lawyer can't reconstruct why each cited case applies
+- **Research lab (researcher)**: researcher signs paper containing AI-drafted methodology section without engaging methodological choices; PI-as-author claim survives surface review but fails peer-review-depth scrutiny
+- **Auditor**: auditor signs audit report containing AI-summarized findings without engaging materiality assessments; sign-off attests to audit completion but auditor can't defend specific finding-classifications under regulatory examination
+
+In all archetypes: the practitioner's signature/attestation is present (HITL ceremony complete); the cognitive engagement that would make the signature substantive is absent.
+
+**Boundary test**: Three questions — rubber-stamping occurring when ALL conditions met:
+1. **Yes**: Has the practitioner formally attested to / signed off on / authored the output?
+2. **No**: Did the practitioner engage with the substantive reasoning behind the output (not just review at surface level)?
+3. **No**: Could the practitioner defend the output's specific claims under regulatory or professional challenge six months from now (per defensibility test)?
+
+If 1=yes + 2=no + 3=no → rubber-stamping occurring.
+
+Negative-marker test (rubber-stamping NOT occurring):
+- Practitioner can articulate why each claim is appropriate (defends specifics, not just the whole)
+- Sparring engagement during production left audit-trail evidence (counter-arguments engaged, alternatives considered)
+- Practitioner caught/revised AI-suggested content during production
+- Defensibility test passes per claim (the structural counter — engaged-authorship condition holds)
+
+**Composes with**:
+- `authorship preservation (axis 3)` — state being degraded; rubber-stamping is the SIGN-OFF-WITHOUT-ENGAGEMENT failure
+- `category collapse` — general force; rubber-stamping is its axis-3 manifestation (engaged-author re-categorized as output-approver)
+- `defensibility` — directly fails defensibility's engaged-authorship condition (condition 1 of three structural conditions); axis-3 failure
+- `claim` — claims rubber-stamped lack engaged-authorship; per-claim defensibility fails when rubber-stamping occurred at finalization
+- `practitioner` — the cognitive-state-bound agent in whom the failure manifests at attestation moment
+- `event` — attestation events can record sign-off without recording engagement; events insufficient evidence by themselves
+- `tacked-on AI` — axis-1 parallel failure mode (different axis; same general force)
+- `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 parallel failure modes (independent dimensions; can co-occur)
+- Authority-binding mechanism (per ARCH Layer 3) — counter-mechanism: HITL only matters if engagement is substantive; pure HITL ceremony enables rubber-stamping rather than preventing it; per-claim attestation requirements force per-claim engagement
+
+**Cardinality + lifecycle**: Cardinality N/A — failure mode shape, not instance. Manifests per practitioner per work-unit at finalization moments. **Lifecycle**: occurs per attestation event; can manifest sporadically (per work-unit) or pervasively (across all attestations); reversible via deliberate per-claim engagement before sign-off; counter-mechanisms include per-claim attestation requirements (forces per-claim engagement vs whole-output sign-off), defensibility test as pre-attestation gate, sparring-mechanisms preserved into finalization (engagement doesn't drop at sign-off boundary).
+
+**Source**:
+- VISION (`VISION.md`): axis-3 section uses "authorship preservation, not rubber-stamping" framing as explicit failure-mode contrast to engaged authorship
+- Locked GLOSSARY entries: `authorship preservation (axis 3)` (state degraded); `defensibility` (engaged-authorship condition that rubber-stamping fails); `category collapse` (general force); `tacked-on AI` (axis-1 parallel); `answer-machine AI / oracle AI / validator AI` (axis-2 parallels)
+- Synthesis: parallel-structure observation extends category-collapse pattern to axis 3 (each axis has positive-engagement state + failure-mode anti-pattern)
+
+**See**:
+- `authorship preservation (axis 3)` (state being degraded)
+- `defensibility` (the test rubber-stamping fails — engaged-authorship condition)
+- `category collapse` (general force)
+- `tacked-on AI` (axis-1 parallel failure mode)
+- `answer-machine AI` / `oracle AI` / `validator AI` (axis-2 parallel failure modes — independent dimensions)
+- ARCH Layer 3 axis-3-failure-detection topics (placeholder until Phase 3 — per-claim attestation mechanics; engagement-quality signals at finalization; quality-gate mechanism per `drafts/quality-gate.md` for pre-attestation gate design)
 
 ---
 

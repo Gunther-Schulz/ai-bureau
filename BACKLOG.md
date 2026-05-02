@@ -28,11 +28,11 @@ When resolved:
 ### Open
 
 - **pioneer instance** [origin: TOC §8 + Phase 5 ROADMAP item] — workspace as production-tool + research-lab + IP-proving-ground; meta concept
-- **rubber-stamping** [origin: VISION authorship-preservation framing + parallel-structure observation in Round 2 sharpening] — axis-3 failure mode (parallel structure: each axis has positive operational state + failure-mode anti-pattern)
 
 ### Resolved (current phase; archival at Phase 3 start)
 
-- ~~**answer-machine AI / oracle AI / validator AI**~~ [resolved this commit] — axis-2 failure modes per Ming research; locked as 3 distinct entries with parallel structure (extraction / declarative / affirmation directions); naming-collision disambiguation noted for validator AI vs validator-mode (skill-craft / sharpen vocabulary)
+- ~~**rubber-stamping**~~ [resolved this commit] — axis-3 failure mode (sign-off without engagement); parallel to tacked-on AI (axis-1) + axis-2 trio; independent dimension from axis-2 failures (can co-occur)
+- ~~**answer-machine AI / oracle AI / validator AI**~~ [resolved abc0153] — axis-2 failure modes per Ming research; locked as 3 distinct entries with parallel structure (extraction / declarative / affirmation directions); naming-collision disambiguation noted for validator AI vs validator-mode (skill-craft / sharpen vocabulary)
 - ~~**category collapse**~~ [resolved ef35933] — cross-axis force that degrades engagement regardless of architectural intent (axis-1 primary anchor; manifests on all three axes per Round 1 stress-test)
 - ~~**adapter**~~ [resolved 7d199e5] — final Pattern A primitive locked
 - ~~**work-unit**~~ [resolved 6a5dc53] — added per Round 3 audit RA2 (was missing canonical home)
