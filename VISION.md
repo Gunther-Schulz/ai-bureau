@@ -12,13 +12,9 @@ The framework as a tree:
 - **Trunk** (load-bearing; structural commitments): three axes — intertwining, sparring, authorship preservation
 - **Roots** (anchoring; what the trunk rests on): empirical and theoretical foundations — Vivienne Ming's IEP research; regulatory pressure converging on practitioner-amplification across jurisdictions; adjacent thinkers (Schön, Kahneman, Dreyfus). Detailed in "Foundations" below.
 
-When communicating about PBS, lead with the branches; trunk + roots are the supporting cast.
-
 ## The framework's shape-neutrality
 
-PBS generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms. Per-shape positioning lives in STRATEGY; per-shape architectural detail lives in ARCH.
-
-The framework's structural primitives — framework=mechanisms / shape=policies; A-B-C scope model (Framework C definitions / Owner B instances / Layer A layered content); Pattern A protocol pluggability (Surface + Implementations + Instance/binding); bipartite multi-aspect primitives — apply uniformly across shapes. The structural disciplines — cascade, pattern-vs-instance, make-wrong-shapes-impossible — protect this shape-neutrality.
+PBS generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms. Shape-neutrality is structurally protected by the framework's architectural primitives + structural disciplines (detail in ARCH). Per-shape positioning lives in STRATEGY.
 
 ## The thesis
 
@@ -206,7 +202,7 @@ Intertwined AI needs a workflow to intertwine with. Domains with rich, structure
 
 The three axes require AI participation in RUNTIME work — not as pre-computed-tooling consumer, but as the runtime executor of memory access, reasoning, claim production, sparring engagement, source verification. Axis 1 is impossible without runtime AI participation (no co-worker = no intertwining). Axis 2 is impossible without runtime engagement (no AI to spar with at the relevant moments). Axis 3 requires reasoning-chain-traceable claims that emerge from runtime AI work (post-hoc-defensible chains require capture-at-creation, not retrofit).
 
-This commits the architecture to **AI-as-runtime hybrid-shape**: AI is load-bearing at runtime, not abstracted behind deterministic-only logic. The pre-RAG-database trap (build deterministic SQL-style tooling that AI consumes) is the failure mode this commitment guards against. Memory, reasoning, claim-state, and sparring engagement are markdown-skeleton-plus-AI-reads-at-runtime, not Pydantic-models-AI-consumes.
+This commits the architecture to **AI-as-runtime hybrid-shape**: AI is load-bearing at runtime, not abstracted behind deterministic-only logic. The pre-RAG-database trap (build deterministic SQL-style tooling that AI consumes) is the failure mode this commitment guards against. Implementation-level detail in ARCH.
 
 ### Category-collapse risk (axis 1 protection)
 
