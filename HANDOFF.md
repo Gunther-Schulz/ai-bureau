@@ -643,6 +643,57 @@ Round 4 forced by user yielded 9 substantive findings (4 HIGH + 3 MEDIUM + 2 LOW
 
 ---
 
+**Note 43: Skill framework v0.11.0 → v0.12.0 + lock with empirical-evidence amendment rule + Observation 30**:
+
+User: "you are being lazy. it almost feels like you don't know what we are doing here." Diagnosis correct: was patching ANY-HIGH rule onto single-metric framework instead of re-thinking goal.
+
+**v0.11.0 comprehensive re-think** (commit `bae3b42`):
+- Goal: STABLE = evidence that surface is COVERED, NOT "no findings this round"
+- Layer 1: 7 empirical signals (cognitive-mode coverage / counter-stress survival / HIGH count + decay / total density / Pareto-acceptance / Q4 specific-concern)
+- Layer 2: 7 counter-bias mechanisms (manufactured-comfort / -criticism / surface-type-mismatch / self-validation / single-metric tunnel-vision / coverage-blindness / counter-stress avoidance)
+- Layer 3: CONTINUE if ANY of 6 C-conditions; STABLE if ALL of 8 S-conditions; USER-DECISION for mixed
+- Layer 4: 8 mandatory output items per round termination
+
+**v0.12.0 amendment** (commit `17fea9c`; this commit):
+
+User question: "how do we tune them for proper stopping points for rounds?" Surfaced gap: Round 6 found 2 HIGH (mechanics-flavored) but framework C1 said deterministic CONTINUE. Neutral judgment said STABLE-candidate (procedure-doc target = amendable in-flight; mechanics HIGH can defer).
+
+3 amendments to address systematic gap:
+1. **Target-type modifier** (LOCK-HARD vs AMENDABLE-IN-FLIGHT) declared at sharpening start
+2. **HIGH-impact magnitude tier** (STRUCTURAL-LOAD-BEARING vs MECHANICS-OPERATIONAL) per finding
+3. **Cost-benefit trajectory check** (Pareto-acceptance trend; LOW-explosion ratio) added to Layer 1
+4. **C1 conditional**: LOCK-HARD = any HIGH; AMENDABLE-IN-FLIGHT = only STRUCTURAL HIGH
+
+**NEW empirical-evidence amendment rule** (counters recursive-tuning trap):
+- Future framework amendments require pattern observed ≥2 sessions
+- Pattern must not be addressable via existing user-decision path
+- Amendment must capture systematic difference (not edge case)
+- Framework now preliminary-locked at v0.12.0
+
+**All 4 sharpening-class skills updated**:
+- sharpen v0.11.0 → v0.12.0
+- decision-design-sharpening v0.9.0 → v0.10.0 (LOCK-HARD default)
+- pre-implementation-sharpening v0.5.0 → v0.6.0 (AMENDABLE-IN-FLIGHT default; STRUCTURAL ~10-20% architectural flow-back triggers C1)
+- coherence-audit v0.3.3 → v0.3.4 (LOCK-HARD at phase-boundary; AMENDABLE-IN-FLIGHT mid-phase routine)
+
+**Observation 30 added** (this commit): Meta-framework tuning has recursive-trap risk; require empirical-evidence amendment threshold. Companion to Observation 29; round-termination JUDGMENT is META-failure (29) AND framework-AMENDMENT is META-failure at meta-meta-level (30).
+
+**Procedure-sharpening verdict applying v0.12.0 to Round 6**:
+- Target-type: PROCEDURE-DOCUMENT = AMENDABLE-IN-FLIGHT
+- Round 6 HIGH findings (MS-1 cycle-handling, MS-2 park-verification) = MECHANICS-OPERATIONAL → soft signal only
+- Cost-benefit trajectory: Pareto 70% → 45% = manufactured-criticism approaching
+- Verdict: STABLE per framework (NOT just neutral judgment)
+
+**Status**: framework recursion stopped. Procedure-sharpening at Round 6 = STABLE per v0.12.0. Apply Round 6 substantive findings (MS-1, MS-2, MS-3, CR-2, CR-4) to procedure DR. Then start procedure execution Step 1.A.
+
+**Locked artifact state added**:
+- sharpen v0.12.0 + decision-design-sharpening v0.10.0 + pre-implementation-sharpening v0.6.0 + coherence-audit v0.3.4
+- DISCIPLINES.md skill version refs current
+- learnings Observation 30 (NEW; 30 observations now; was 29)
+- Empirical-evidence amendment rule locks framework iteration
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)

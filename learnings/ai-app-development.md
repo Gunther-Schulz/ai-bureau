@@ -532,6 +532,68 @@ If 3+ sessions pass with no recurrence + no user-override needed: discipline pro
 
 ---
 
+## Observation 30: Meta-framework tuning has recursive-trap risk; require empirical-evidence amendment threshold
+
+**Date observed**: 2026-05-02 (session 16; mid-procedure-sharpening of greenfield-rederivation-pause DR; cumulative across 6 procedure-sharpening rounds + 3 framework-amendment side-quests).
+
+**Context**: While sharpening procedure document, AI's round-termination judgment failed at Round 3 (declared STABLE prematurely; pattern-matched expected decay vs measured actual density). User caught it. Side-quest 1 amended sharpening skills with surface-type-aware termination criteria (v0.10.0). Round 5 surfaced new bias mode (single-metric tunnel-vision); side-quest 2 added comprehensive 4-layer framework (v0.11.0). Round 6 surfaced ANOTHER bias mode (target-type + HIGH-magnitude not differentiated); side-quest 3 added v0.12.0 amendment.
+
+User asked sharply: "how do we tune them for proper stopping points for rounds?" recognizing the recursive trap.
+
+**What broke**: each framework amendment captured a real bias mode (genuine improvement) BUT each amendment also added complexity AND surfaced new amendment candidates. Without amendment threshold, this iterates indefinitely.
+
+**3 amendments observed in single session**:
+- v0.10.0: surface-type declaration + density check (caught: pattern-matching architectural-decision decay onto procedure-document)
+- v0.11.0: 4-layer comprehensive framework (caught: single-metric tunnel-vision; coverage-blindness)
+- v0.12.0: target-type + HIGH-magnitude + cost-benefit trajectory + amendment-rule (caught: AMENDABLE-IN-FLIGHT vs LOCK-HARD optimization difference; mechanics-vs-structural HIGH magnitude)
+
+**Each amendment was Pareto-improving** when locked. None were manufactured criticism. BUT cumulative cost was significant (multiple hours of meta-meta-discussion); marginal returns diminished by v0.12.0.
+
+**Implication — META-framework design has same biases as decision-making generally**:
+- **Manufactured-criticism at meta-level**: over-iterate framework based on hypothetical concerns / theoretical completeness
+- **Manufactured-comfort at meta-level**: declare framework done prematurely; miss systematic patterns
+- Both require equal-weight counter-tests at META-level
+
+**Counter-mechanism locked (sharpen v0.12.0)**: empirical-evidence amendment rule:
+1. Pattern must be observed across ≥2 sessions (not single-case)
+2. Pattern must NOT be addressable via existing user-decision path (Layer 3 USER-DECISION case)
+3. Amendment must capture systematic difference (not edge case)
+
+If criteria not met → log observation; don't immediately amend. After ≥2 sessions show same pattern, amend.
+
+**Why this works** (preliminary):
+- Counters recursive-trap: amendments require evidence threshold
+- Allows real systematic patterns through (3 amendments this session were systematic)
+- Preserves user-decision path for cases framework doesn't capture
+- Consistent with `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 preliminary-lock principle
+
+**Distinction from observation 29** (round-termination judgment as META-failure):
+- Observation 29: round-termination JUDGMENT is META-failure surface (pattern-matching vs measuring at AI's verdict-time)
+- Observation 30: framework AMENDMENT itself is META-failure surface at meta-meta-level (each amendment adds complexity; recursive-trap risk; amendment threshold needed)
+
+Both observations together: AI judgment at sharpening-termination is bias-prone; AI judgment about WHEN TO AMEND THE FRAMEWORK is also bias-prone. Need explicit mechanisms at both levels.
+
+**Test it against**: future sharpening sessions where mid-session bias is suspected.
+- Track: do framework amendments require empirical-evidence threshold (≥2 sessions)?
+- Track: how many amendments per session? Trending toward 0 = framework stabilizing
+- Track: do user-decision paths suffice for cases AI didn't capture? Trending toward yes = framework good-enough
+
+Promotion criteria: if amendment-rule continues counter-acting recursive-trap across 3+ subsequent sharpening sessions (no need for new amendments based on hypothetical concerns), promote framework v0.12.0 to validated-locked. If amendment-rule itself becomes obstacle to genuine improvement, revisit.
+
+**Composes with**:
+- Observation 29 (round-termination judgment): same root pattern (META-bias); different surface (verdict-time vs framework-amendment-time)
+- `drafts/execution-fidelity.md` Disguise #5 (substituting AI judgment for codified rule): manufactured-criticism + manufactured-comfort at META-level both manifestations
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 (preliminary-lock): framework is preliminary-locked; revisable on real-world evidence; THIS rule operationalizes "real-world evidence" as ≥2-session pattern
+
+**Pattern visibility for future sessions**: when AI proposes framework amendment, ask:
+- "Has this pattern been observed in ≥2 sessions?"
+- "Could user-decision path handle this case?"
+- "Is this systematic or edge case?"
+
+If amendment doesn't pass these → log observation; defer amendment until evidence threshold met.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:
