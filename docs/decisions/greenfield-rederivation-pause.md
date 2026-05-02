@@ -384,7 +384,27 @@ VISION.md (~258 lines) + GLOSSARY.md (2365 lines, 36 entries) Re-Read fresh via 
 
 ### Step 2: Greenfield-derive Pattern A vs B vs C framework
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02). Verdict: **Pattern A vs B vs C 3-pattern partition = GREENFIELD-EQUIVALENT**.
+
+**Method**: Per MS-2, derivation cited ONLY VISION line numbers + Step-1.B-validated GLOSSARY entries + first-principles disciplines (MAINTENANCE TOP-LEVEL DESIGN PRINCIPLES §1/§2/§3). Parked current MAINTENANCE TOP-LEVEL ARCHITECTURE Pattern A/B/C framework + ARCH topic content + Phase 3.0/3.1/3.2 DR claims during derivation.
+
+**Inventory of multi-aspect primitives** (those with structurally distinct manifestation across scopes; derived by reading GLOSSARY entry tags fresh): `adapter`, `practitioner`, `protocol (architectural)`, `specialist`, `substrate`, `work-unit`, `workflow`, `quality-gate`. Plus actor + event tagged single-aspect via mechanism composition (no fourth pattern surfaces).
+
+**Three orthogonal manifestation shapes** emerge from inventory + first-principles:
+1. **Pluggable Subsystem** (multiple interchangeable impls; per-deployment selection): Surface + Implementations + Instance/binding. Members: substrate (cardinality 1; workspace selects), adapter (cardinality N; workspace activates), quality-gate (cardinality 1; shape selects).
+2. **Specialist-Bundled Definition + Instance-Content** (one definition shape; instances of that definition): DEFINITION at Framework C via specialist's distributable bundle + INSTANCE-CONTENT at Owner B. Members: specialist (meta), workflow, work-unit. No impl-choice; specialist IS its definition per GLOSSARY:1886.
+3. **Human-Plus-Record bipartite** (real-world person + system representation): HUMAN cross-cutting (not "placed" in any scope) + RECORD at Owner B. Member: practitioner. Pattern-vs-instance discipline (MAINTENANCE TOP-LEVEL DESIGN PRINCIPLES §2) prohibits forcing HUMAN into a system scope.
+
+**Stress-tests** (per DR Step 2):
+- 3 patterns the right framing: each captures distinct orthogonal structural concern (pluggability / specialist-bundling / HUMAN-vs-system); concerns don't overlap.
+- 2 patterns insufficient: collapsing Pattern C into Pattern B violates pattern-vs-instance discipline at most-foundational level (HUMAN IS the instance; framework primitives must NOT anchor on instance specifics per profile L5a:129).
+- 4+ patterns unnecessary: actor + event single-aspect via mechanism composition; no fourth structural concern surfaces from first-principles.
+
+**Comparison to current locked Pattern A/B/C**: identical pattern count (3), identical scope assignments per pattern, identical multi-aspect-primitive completeness (actor + event single-aspect). Letter-naming "A/B/C" is presentational; descriptive naming ("Pluggable Subsystem" / "Specialist-Bundled Definition" / "Human-Plus-Record") clearer but not architecturally load-bearing.
+
+**Cascade implication for Step-1.B classification flags**: All 8 Step-2-pending classification claims (substrate / adapter / quality-gate as Pattern A; specialist / workflow / work-unit as Pattern B; practitioner as Pattern C; protocol-architectural as Pattern A meta) are **GREENFIELD-VALIDATED** by Step 2's GREENFIELD-EQUIVALENT verdict.
+
+**Minor revision candidate (Tier-3, presentational)**: descriptive naming over letter-arbitrary "A/B/C". Not architecturally load-bearing; downstream-refinement candidate; not a Step 2 architectural revision.
 
 ### Step 3: Greenfield-derive Pattern A protocol list
 
