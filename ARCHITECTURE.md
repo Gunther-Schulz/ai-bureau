@@ -14,7 +14,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | **COMPLETE** — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship LOCKED. Phase 3.1 closed. Coherence-audit recommended before Phase 3.2 topic taxonomy. |
-| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decision 1 (taxonomy) LOCKED at 14 topics; Sub-decisions 2-4 (naming / cross-cutting placement / ARCHITECTURE.md structure) pending |
+| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decision 1 (taxonomy) LOCKED at 14 topics; Sub-decision 2 (file naming) LOCKED; Sub-decisions 3-4 (cross-cutting placement / ARCHITECTURE.md structure) pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
 | **3.5** | Per-primitive detail topics (9 primitives + axis-interactions) | Pending |
@@ -176,6 +176,58 @@ All 4 open architectural questions resolved (workflow / work-unit / deployment /
 **Round 2 revisions tested + rejected**: Pattern A protocol/primitive splits (R1); specialist+skill split (R2); claim+defensibility split (R3); axis-interactions merge (R4); ARCHITECTURE.md as topic (R5) — all rejected as fragmenting tightly-coupled content or violating locked structural decisions.
 
 **DR deferred to Phase 3.2 synthesis pass**: per Mode-2 composite decomposition (decision-design-sharpening v0.6.0), Phase 3.2 is upfront-known composite (taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure). Single composite DR captures all 4 sub-decisions after final synthesis pass.
+
+### File naming convention (Phase 3.2 Sub-decision 2) — LOCKED
+
+**Resolution**: Plain kebab-case slug = topic name; flat `arch/` directory; no prefixes; no sub-directories.
+
+**Slug rules**:
+- Path: `arch/<slug>.md`
+- Slug: lowercase kebab-case; matches topic name in ARCHITECTURE.md catalog
+- Aggregation join: hyphen (`specialist+skill` → `specialist-skill.md`; `workflow+work-unit` → `workflow-work-unit.md`)
+- No prefix (numeric / bucket / category)
+- Plain `.md` extension
+- Flat `arch/` directory; NO sub-directories per topic-cluster
+- NO `arch/README.md` or `arch/INDEX.md` (ARCHITECTURE.md is canonical entry point)
+
+**Cross-doc link conventions**:
+- From within arch/ tree: relative paths (`adapter.md`)
+- From ARCHITECTURE.md or other Layer 1-2 docs: `arch/<slug>.md`
+- Anchor links: GitHub-flavored auto-anchor (`#section-name`)
+
+**File header convention**:
+- Minimal frontmatter (title; topic-cluster; status: drafted/locked/forthcoming)
+- H1 title = de-kebab-cased slug
+
+**Final 14 topic filenames**:
+
+| # | Slug | Filename |
+|---|---|---|
+| 1 | substrate | `arch/substrate.md` |
+| 2 | adapter | `arch/adapter.md` |
+| 3 | sparring | `arch/sparring.md` |
+| 4 | audit | `arch/audit.md` |
+| 5 | coordination | `arch/coordination.md` |
+| 6 | trust | `arch/trust.md` |
+| 7 | time | `arch/time.md` |
+| 8 | quality-gate | `arch/quality-gate.md` |
+| 9 | specialist-skill | `arch/specialist-skill.md` |
+| 10 | practitioner | `arch/practitioner.md` |
+| 11 | workflow-work-unit | `arch/workflow-work-unit.md` |
+| 12 | claim-defensibility | `arch/claim-defensibility.md` |
+| 13 | scope-model | `arch/scope-model.md` |
+| 14 | axis-interactions | `arch/axis-interactions.md` |
+
+**Why these conventions** (Round 2 expansions applied):
+- Slug stability across taxonomy refinements (no embedded ordering / bucketing in path)
+- Visual + grep parity with GLOSSARY TOC anchors (same kebab-case)
+- Flat directory simplifies navigation; no path-juggling on re-clustering
+- ARCHITECTURE.md catalog is canonical entry (no arch/README.md duplication)
+- Standard markdown link / anchor conventions (no custom resolver)
+
+**Round 2 expansions applied**: cross-doc consistency confirmed; flat arch/ explicit anti-pattern; slug stability noted; no arch/README explicit anti-pattern; plain .md extension; cross-doc link conventions; anchor convention; file header convention; renaming protocol via standard cascade.
+
+**Round 2 revisions tested + rejected**: bucket sub-dirs (R1); numbered prefix (R2); `+` aggregation char (R3); multi-aspect primitive sub-files (R4); generic-word slug ambiguity (R5) — all rejected.
 
 ## Disciplines applying to all ARCH work
 
