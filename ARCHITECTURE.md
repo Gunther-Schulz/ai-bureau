@@ -13,7 +13,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 | Sub-phase | Scope | Status |
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
-| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | IN PROGRESS — workflow LOCKED; work-unit LOCKED; deployment + engaged-authorship pending |
+| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | IN PROGRESS — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship pending |
 | **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | Pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
@@ -88,6 +88,23 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 **Full detail**: `GLOSSARY.md` work-unit entry.
 
 **DR**: `docs/decisions/work-unit-bipartite-classification.md` — decision rationale + options + Round 1 + Round 2 sharpening + cascade + revisit triggers.
+
+### Deployment definition (Phase 3.1) — LOCKED
+
+**Resolution**: `deployment` locked as **DERIVED concept** = workspace-as-bound-runtime (binding-act-aspect of workspace). 1:1 with workspace at framework primitive level.
+
+- **Class**: DERIVED (perspective on workspace; not standalone primitive)
+- **Cardinality**: 1:1 with workspace at framework level (multi-environment = N workspaces; multi-tenant = substrate-Instance level concern)
+- **Vocabulary distinction**: workspace = entity (configuration view); deployment = binding-relation (runtime view); both describe same primitive object from different angles
+- **Workspace identity** can persist across multiple deployments over time (backup→restore, substrate migration, re-activation) — workspace identity is workspace-portability concern (Phase 6 spec); deployment count is the runtime binding count
+
+**Round 1 + Round 2 sharpening**: 0 architectural REVISIONS surfaced (R1 retire-vocabulary / R2 scope-classification / R3 Pattern A all rejected); 8 EXPANSIONS applied (industry-vocabulary disambiguation; snapshot/restore semantics; substrate migration semantics; orthogonality with pioneer instance; reciprocal cross-ref to workspace; multi-environment taxonomy; quality-gate observability flow; entity-vs-relation framing).
+
+**Why DERIVED not PRIMITIVE**: deployment introduces no independent structural content beyond workspace's runtime aspect. No separate cardinality, lifecycle, observability surface, or attributes. Pervasively used across locked entries (`pioneer instance`, `Layer A scope`, `Owner B scope`, `workspace`) but always as workspace-runtime perspective. DERIVED entry preserves vocabulary utility without inflating primitive count.
+
+**Full detail**: `GLOSSARY.md` deployment entry.
+
+**DR**: `docs/decisions/deployment-derived-classification.md` — decision rationale + options + sharpening rounds + cascade + revisit triggers.
 
 ## Disciplines applying to all ARCH work
 

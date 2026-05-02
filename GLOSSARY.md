@@ -104,6 +104,7 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 
 ### 8. Meta concepts
 
+- [deployment](#deployment) — DERIVED concept; workspace-as-bound-runtime (binding-act-aspect of workspace; 1:1 with workspace at framework level)
 - [pioneer instance](#pioneer-instance) — originating deployment (production-tool + research-lab + IP-proving-ground)
 - [category collapse](#category-collapse) — cross-axis force that degrades engagement regardless of architectural intent
 - [defensibility](#defensibility) — operational test for axis 3
@@ -621,6 +622,68 @@ Questions 1-3 are practitioner/experiential tests; question 4 is the structural-
 
 ---
 
+## deployment
+
+- **Class**: DERIVED (perspective on `workspace`; not standalone primitive)
+- **Layer**: framework-meta (operates on workspace + framework without being one)
+- **Axis**: N/A — deployment is a binding-act perspective; axes operate within deployments, not on them
+- **VISION usage**: implicit (VISION's cross-archetype practitioner workspaces all imply deployments; not directly named as separate term)
+
+**Canonical**: The binding-act-aspect of `workspace` — workspace viewed as bound runtime (the active runtime instance produced when a workspace's configuration is activated against a substrate Instance). 1:1 with workspace at framework primitive level. Where `workspace` emphasizes the entity (container shape: selects shape, activates specialists, holds state), `deployment` emphasizes the binding-relation (act shape: workspace + substrate Instance + activated `workspace.md` configuration = one running deployment).
+
+**What it is**: The runtime-binding view of a workspace. When a practitioner activates their workspace (substrate process running, `workspace.md` loaded, specialists initialized, state accessible), that bound runtime IS a deployment. The same workspace, decommissioned and re-activated later, becomes a new deployment of the same workspace identity. The same workspace, restored from backup onto fresh substrate, becomes a new deployment of the same workspace identity. The same workspace, migrated from substrate-A to substrate-B, terminates one deployment and activates a new one — workspace identity preserved across deployments.
+
+**Entity-vs-relation framing**: `workspace` = entity (container shape — has attributes, lifecycle, contained instances). `deployment` = binding-relation (act shape — names the active runtime binding). Both describe the same primitive object from different angles; the vocabulary distinction is useful when discussing runtime concerns (deployment) vs configuration concerns (workspace).
+
+**Cardinality**: 1:1 with workspace at framework primitive level — exactly 1 deployment per workspace at any moment of active runtime; sequence of deployments over a workspace's identity lifetime (each activation = one deployment; decommission ends it; re-activation begins a new one). Multi-environment scenarios (dev / staging / prod) are N workspaces (each its own deployment), not 1 workspace with N deployments. Multi-tenant scenarios are substrate-Instance-level concerns (one substrate hosting multiple workspace runtimes); each hosted workspace is its own deployment at framework level.
+
+**Lifecycle**: deployment lifecycle ≈ workspace runtime lifecycle (activated → active → decommissioned). No independent lifecycle to motivate primitive-ness. Lifecycle events (activation, decommission) emit as workspace events (workspace_activated / workspace_decommissioned); deployment doesn't have separate event stream.
+
+**Multi-deployment-of-same-workspace patterns** (workspace identity preserved across deployments):
+- **Backup → restore**: workspace state restored onto fresh substrate = new deployment of same workspace identity
+- **Substrate migration**: workspace migrating from substrate-A to substrate-B = old deployment terminates + new deployment activates with same workspace identity
+- **Disaster recovery**: recovery deployment = restored workspace from backup; separate runtime = separate deployment; workspace identity preserved
+- **Re-activation after decommission**: same workspace re-activated = new deployment, same identity
+
+Workspace IDENTITY across deployments is workspace-portability concern (Phase 6 spec territory: state serialization + identity invariants). Deployment count is the runtime binding count.
+
+**What it is NOT**:
+- Not a standalone primitive — derived from workspace + substrate Instance binding; no independent structural content
+- Not a separate scope category — Framework C / Owner B / Layer A are scope-classification primitives for entity placement; deployment is a binding-act perspective
+- Not a Pattern A protocol — deployment-shape variation = workspace-shape variation (workspace selects shape; deployment inherits via 1:1); no independent Surface to extract
+- Not the same as software-industry generic "deployment" (act of pushing code/config to environment) — PBS-specific usage means workspace-as-bound-runtime; tightened from generic usage
+- Not a separate observability surface — lifecycle events emit at workspace level; quality-gate observability flows through workspace, not through deployment-as-separate-source
+
+**Cross-archetype illustration**: every locked workspace illustration is also a deployment illustration. PBS-Schulz workspace = PBS-Schulz deployment. Müller Law workspace = Müller Law deployment. Federation node X workspace = Federation node X deployment. The vocabulary chosen depends on emphasis (configuration discussion → workspace; runtime discussion → deployment).
+
+**Boundary test**: ask "are we discussing the active runtime binding or the entity-shaped container?"
+- Runtime binding (active substrate + loaded config + initialized specialists + accessible state) → deployment
+- Entity-shaped container (selects shape; activates specialists; contains work-units) → workspace
+- Configuration document → `workspace.md` (the file)
+- Static structural placement → check `Framework C` / `Owner B` / `Layer A` scope entries
+
+**Composes with**:
+- `workspace` — 1:1 at framework primitive level; deployment IS workspace's runtime aspect
+- `substrate` — deployment binds against exactly one substrate Instance (workspace selects substrate via `workspace.md`; deployment activates that selection)
+- `pioneer instance` — orthogonal DERIVED concept on workspace; deployment = runtime-binding aspect, pioneer instance = role aspect; one workspace can be BOTH simultaneously (PBS-Schulz workspace IS one deployment at any moment AND IS pioneer instance role)
+- `Layer A scope` — Layer A content "applies in deployment" = applies in workspace's bound runtime per workspace's `scope.{domains, states}` configuration
+- `Owner B scope` — "deployment-specific entities" = workspace-bound entities at Owner B (workspace-scope, specialist-instance-scope, work-unit-instance-scope)
+- `framework + shape` — deployment is the act of binding `framework + shape → workspace deployment` (per `Owner B scope` derivation): framework provides mechanisms; shape provides policies; workspace selects shape; deployment is the runtime activation of that selection
+
+**Source**:
+- Locked GLOSSARY entries: `workspace` Cardinality field hedge ("current preliminary lock is 'one git-cloned + activated workspace.md per deployment'"); `pioneer instance` ("originating **deployment** of a framework"); `Layer A scope` ("**deployment** context"); `Owner B scope` ("**deployment**-specific entities")
+- Synthesis: DERIVED-classification resolves the workspace Cardinality hedge; deployment is workspace-as-bound-runtime perspective with 1:1 cardinality at framework level; multi-environment / multi-tenant patterns resolve at workspace-count or substrate-Instance level, not at deployment-cardinality level
+
+**See**:
+- `workspace` (the entity primitive deployment is the runtime aspect of)
+- `substrate` (Pattern A protocol whose Instance deployment binds against)
+- `pioneer instance` (orthogonal DERIVED concept)
+- `Owner B scope` (where deployment-specific entities live)
+- `Layer A scope` (which scopes content per deployment context)
+- ARCH Layer 3 deployment-mechanics topics (placeholder until Phase 3 — workspace-identity invariants across deployments; substrate migration semantics; backup-restore deployment cardinality; multi-tenant substrate-Instance patterns; archived material to consult: per-substrate Instance configuration archives)
+
+---
+
 ## event
 
 - **Class**: PRIMITIVE (atomic; the audit-emission unit)
@@ -1123,6 +1186,7 @@ Negative-marker test (deployment is NOT pioneer instance):
 
 **Composes with**:
 - `workspace` — the architectural primitive that takes on the pioneer-instance role
+- `deployment` (DERIVED) — orthogonal DERIVED concept on workspace; pioneer instance = role aspect, deployment = runtime-binding aspect; one workspace can be BOTH simultaneously (PBS-Schulz workspace IS one deployment at any moment AND IS pioneer instance role). Pioneer evidence accumulates across pioneer's deployments over time (workspace identity preserved).
 - `practitioner-shape` — typical shape for pioneer instances (practitioner-anchored frameworks have practitioner-shape pioneers)
 - `framework` — what the pioneer instance pioneers; pioneer evidence validates framework claims while alternative-deployment evidence is sparse
 - VISION axes (intertwining / sparring / authorship preservation) — pioneer evidence validates / falsifies each axis claim per VISION falsification framing
@@ -2129,7 +2193,7 @@ The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at 
 
 **What it is**: The top-level deployment primitive — what gets bound when a practitioner deploys PBS for their work. A workspace is the central Owner B instance: its `workspace.md` selects shape + substrate + active specialists; its workspace-scope managed entities (practitioner-record, Actor, plus shape-policy-mandated engagement-target entities like `Client` in practitioner-shape, `Customer` in autonomous-business-shape, etc. — engagement-target entities are deliberately shape-policy-mandated rather than framework-level) live at Owner B; its layered content (references, doctypes, bausteine per Layer A) varies by domain/state context (configured via workspace's `scope.{domains, states}`).
 
-**Cardinality**: exactly 1 workspace per "deployment" (where deployment = one bound runtime: a single git-clone-instance + active substrate + workspace.md configuration; multi-deployment scenarios = multiple workspaces). "Deployment" definition flagged for Phase 3 ARCH sharpening — current preliminary lock is "one git-cloned + activated workspace.md per deployment."
+**Cardinality**: exactly 1 workspace ↔ 1 active deployment at framework level (per `deployment` entry — deployment = workspace-as-bound-runtime; 1:1 reciprocal). Multi-environment scenarios (dev / staging / prod) = N workspaces (each its own deployment). Multi-tenant scenarios (one substrate hosting multiple workspace runtimes) = substrate-Instance-level concern, not framework-level cardinality concern. Workspace IDENTITY can persist across multiple deployments over time (backup→restore, substrate migration, re-activation) — workspace identity is workspace-portability concern (Phase 6 spec); deployment count is the runtime binding count.
 
 **What it is NOT**:
 - Not the `framework` — framework is the universal mechanism layer (what's POSSIBLE); workspace is one deployment instance built from framework + shape policies
@@ -2165,6 +2229,7 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `workflow` — workspaces SUPPORT workflows; workspace's deployed specialists + state + active substrate enable workflow progression (axis-1 intertwining requires workflow to embed in); workflow_instance entities live at Owner B as workspace-scope managed entities (when codified pattern applies; ad-hoc work-units have no workflow_instance). Capability addition (adding specialist / configuring adapter / activating skill mid-flight) is workspace-scope and orthogonal to running workflow_instance state — workflow_instance doesn't gate capability changes; workspace governance (authority binding) gates them in multi-user contexts.
 - `work-unit` — workspaces CONTAIN work-units as workspace-scope managed instances (cardinality multiple per workspace); kinds defined by active specialists
 - `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
+- `deployment` (DERIVED) — workspace's runtime-binding aspect; 1:1 reciprocal at framework level; workspace = entity (configuration view), deployment = relation (runtime view); workspace identity may persist across multiple deployments over time
 
 **Source**:
 - VISION (`VISION.md`):
