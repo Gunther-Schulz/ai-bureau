@@ -1,6 +1,6 @@
 # Architecture — Phase 3 rebuild (in progress)
 
-> **Status**: Phase 3 ARCH rebuild ACTIVE. Phase 2 GLOSSARY foundational vocabulary lock COMPLETE (35 entries). Phase 3.1 closed; Phase 3.2 topic taxonomy + structure LOCKED. Per-topic detail will live in `arch/<topic-slug>.md` files as Phase 3.3+ topic content lands (directory not yet created).
+> **Status**: Phase 3 ARCH rebuild ACTIVE. Phase 2 GLOSSARY foundational vocabulary lock COMPLETE (36 entries; off-by-one corrected session 17 per `docs/decisions/greenfield-rederivation-pause.md` Step 1.A finding). Phase 3.1 closed; Phase 3.2 topic taxonomy + structure LOCKED. Per-topic detail lives in `arch/<topic-slug>.md` files as Phase 3.3+ topic content lands.
 
 ## 1. Audience + scope
 
@@ -30,7 +30,7 @@
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
-| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring ✅ / audit ✅ / coordination / trust / time / quality-gate is 3.6) | In progress — 4 of 8 (substrate + adapter + sparring + audit drafted; DRs in `docs/decisions/`) |
+| **3.4** | Per-architectural-Protocol detail (3 Pattern A protocol topics post-greenfield-rederivation: substrate ✅ / adapter ✅ / quality-gate is 3.6) | Effectively COMPLETE post session-17 cascade — substrate ✅ + adapter ✅ remain Pattern A; sparring + audit topics RETAINED but RECLASSIFIED as mechanism classes (per `docs/decisions/greenfield-rederivation-pause.md` Step 3); coordination + trust + time CANCELLED (subsumed). Quality-gate at 3.6. |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
@@ -45,49 +45,49 @@ Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions be
 | Doc | Purpose | Lines | Status |
 |---|---|---|---|
 | `ARCHITECTURE.md` (this file) | Overview + topic catalog + cross-cutting principles + how topics compose + Phase 3 status tracking | ~1-2K | Active |
-| `arch/<topic-slug>.md` × 14 | Per-topic detail | ~500 each | Not yet created (created as Phase 3.3+ produces topic content) |
+| `arch/<topic-slug>.md` × 11 | Per-topic detail | ~500 each | Active (4 of 11 drafted: substrate / adapter / sparring / audit; remaining created as Phase 3.5+3.6 produces topic content) |
 
 **Why hybrid**: pure-single (10K lines) is unwieldy + context-budget concern; pure-multi has no entry point + cross-cutting orphaning. Hybrid aligns with progressive-disclosure principle (skill-craft pattern: SKILL.md → PROCEDURE.md → references/) + sharpen's AI-executor test (cognitive iteration via structure, not gist-extraction across 10K lines).
 
-## 4. Topic catalog (Phase 3.2 LOCKED — 14 topics)
+## 4. Topic catalog (Phase 3.2 LOCKED; revised session 17 per greenfield-rederivation cascade — 11 topics)
 
-14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Per Phase 3.2 Sub-decision 1 lock; filenames per Sub-decision 2 lock.
+11 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Per Phase 3.2 Sub-decision 1 lock + session-17 greenfield-rederivation cascade (per `docs/decisions/greenfield-rederivation-pause.md` Step 3); filenames per Sub-decision 2 lock.
 
 | # | Topic file | Primary content (one-liner) | Phase |
 |---|---|---|---|
-| 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 — DRAFTED |
-| 2 | `arch/adapter.md` ✅ | Adapter Protocol Surface (META + per-integration-class) + per-impl + lifecycle/auth | 3.4 — DRAFTED |
-| 3 | `arch/sparring.md` ✅ | Sparring Protocol Surface (8 sub-mechanism categories: 4 architecturally-encoded + 4 behaviorally-enforced) + per-shape activation matrix | 3.4 — DRAFTED |
-| 4 | `arch/audit.md` ✅ | Audit Protocol Surface (6 capability categories) + audit-trail-as-canonical-source + per-shape event-kind catalog | 3.4 — DRAFTED |
-| 5 | `arch/coordination.md` | Coordination Protocol Surface + actor primitive interaction | 3.4 |
-| 6 | `arch/trust.md` | Trust Protocol Surface + authority-binding mechanism | 3.4 |
-| 7 | `arch/time.md` | Time Protocol Surface + temporal-semantics variations | 3.4 |
-| 8 | `arch/quality-gate.md` | Quality-gate Pattern A Surface + per-shape implementations + signal catalog | 3.6 |
-| 9 | `arch/specialist-skill.md` | Specialist DEFINITION + skill granularity + bundle structure + marketplace | 3.5 |
-| 10 | `arch/practitioner.md` | Practitioner Pattern C bipartite + record placement + multi-practitioner | 3.5 |
-| 11 | `arch/workflow-work-unit.md` | Workflow Pattern B + work-unit Pattern B + workflow_instance state machine + orchestration | 3.5 |
-| 12 | `arch/claim-defensibility.md` | Claim primitive + defensibility test + source-grounding + engaged-authorship + per-claim attestation | 3.5 |
-| 13 | `arch/scope-model.md` | Workspace + Framework C / Owner B / Layer A scope categories + entity placement | 3.5 |
-| 14 | `arch/axis-interactions.md` | 3 VISION axes interaction + co-worker frame + category-collapse cross-axis force | 3.5 |
+| 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction; subsumes Coordination (hooks + event-bus) + Time (temporal semantics per impl) | 3.4 — DRAFTED |
+| 2 | `arch/adapter.md` ✅ | Adapter Protocol Surface (META + per-integration-class) + per-impl + lifecycle/auth; subsumes Time (time-driven adapter operations) | 3.4 — DRAFTED |
+| 3 | `arch/sparring.md` ✅ | Sparring **mechanism class** (RECLASSIFIED session 17 — not Pattern A): 8 sub-mechanism contracts + per-shape policy declares which active + how-enforced | 3.4 — DRAFTED |
+| 4 | `arch/audit.md` ✅ | Audit **mechanism class** (RECLASSIFIED session 17 — not Pattern A): AuditEvent schema = mechanism Surface + per-shape granularity policy + substrate-mediated storage backend; subsumes Trust (authority-binding + per-shape trust policy) | 3.4 — DRAFTED |
+| 5 | `arch/quality-gate.md` | Quality-gate Pattern A Surface + per-shape implementations + signal catalog | 3.6 |
+| 6 | `arch/specialist-skill.md` | Specialist DEFINITION + skill granularity + bundle structure + marketplace | 3.5 |
+| 7 | `arch/practitioner.md` | Practitioner Pattern C bipartite + record placement + multi-practitioner | 3.5 |
+| 8 | `arch/workflow-work-unit.md` | Workflow Pattern B + work-unit Pattern B + workflow_instance state machine + orchestration | 3.5 |
+| 9 | `arch/claim-defensibility.md` | Claim primitive + defensibility test + source-grounding + engaged-authorship + per-claim attestation | 3.5 |
+| 10 | `arch/scope-model.md` | Workspace + Framework C / Owner B / Layer A scope categories + entity placement | 3.5 |
+| 11 | `arch/axis-interactions.md` | 3 VISION axes interaction + co-worker frame + category-collapse cross-axis force | 3.5 |
+
+**Cancelled topics (session-17 cascade per `docs/decisions/greenfield-rederivation-pause.md` Step 3)**: arch/coordination.md, arch/trust.md, arch/time.md — never written; subsumed into substrate/audit/adapter per the catalog above. Saves ~1500 lines of un-written ARCH content.
 
 **Aggregation discipline**: aggregate when items tightly coupled OR individually <100 lines (per coherence-audit Lens 15). Each topic targets ~500 lines avg; per-topic flex acceptable.
 
-**Foundation-up dependency**: topics 1-7 are Pattern A protocols (foundational mechanism layer); 8 quality-gate composes with all axes (observability); 9-12 are primitive clusters (operational primitives); 13-14 are cross-cutting integrators (load LAST since they reference all prior topics).
+**Foundation-up dependency**: topics 1-2 are Pattern A protocols (substrate + adapter; foundational mechanism layer); 3-4 are mechanism-class topics (sparring + audit; per-shape policy variation, not Pattern A); 5 quality-gate Pattern A composes with all axes (observability; Phase 3.6); 6-9 are primitive clusters (operational primitives); 10-11 are cross-cutting integrators (load LAST since they reference all prior topics).
 
 **Phase 3.7 cross-cutting investigations excluded** (research/strategic items, not ARCH-topic-shaped): PydanticAI substrate eval / Markdown-validation feasibility / Ming research deepening / Adjacent thinkers expansion / Multi-VISION model question. May inform topic content but aren't topics themselves.
 
-**Headroom**: 6 emergent topics may be added (14 → 20 cap) during Phase 3.3-3.6 work without taxonomy revision.
+**Headroom**: 9 emergent topics may be added (11 → 20 cap) during Phase 3.3-3.6 work without taxonomy revision.
 
 ## 5. Reading order
 
 **For new readers** orienting to framework architecture, foundation-up:
 
 1. **VISION.md** (Layer 1) — three-axis thesis; falsification framing
-2. **GLOSSARY.md** (Layer 1) — locked vocabulary (35 entries)
+2. **GLOSSARY.md** (Layer 1) — locked vocabulary (36 entries)
 3. **MAINTENANCE.md** (Layer 0) — doc-system discipline + TOP-LEVEL ARCHITECTURE (framework=mechanisms; shape=policies)
 4. **ARCHITECTURE.md** (Layer 2; this doc) — overview + topic catalog + cross-cutting principles
 5. **arch/<topic>.md** (Layer 3) — topic detail in foundation-up order:
-   - **Pattern A protocols** (mechanism layer): substrate → adapter → audit → trust → coordination → time → sparring → quality-gate
+   - **Pattern A protocols** (foundational mechanism layer; pluggable subsystems): substrate → adapter → quality-gate
+   - **Mechanism classes** (per-shape policy variation; not Pattern A): sparring → audit
    - **Primitive clusters** (operational layer): specialist-skill → practitioner → workflow-work-unit → claim-defensibility
    - **Cross-cutting integrators** (LAST; reference all prior): scope-model → axis-interactions
 6. **DRs** (Layer 4) — decision rationale for specific commits
@@ -103,7 +103,7 @@ Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions be
 
 | Pattern | Shape | Examples | Composition |
 |---|---|---|---|
-| **Pattern A** (pluggable subsystem) | Surface (interface contract) + Implementations (per-shape variation) + Selection (workspace.md / shape policy declares which impl) | Substrate / Adapter / Sparring / Audit / Coordination / Trust / Time / Quality-gate | Workspace selects exactly one impl per Pattern A slot |
+| **Pattern A** (pluggable subsystem) | Surface (interface contract) + Implementations (per-shape variation) + Selection (workspace.md / shape policy declares which impl) | Substrate / Adapter / Quality-gate | Substrate + adapter selected via workspace.md; quality-gate selected via shape-policy. (Per `docs/decisions/greenfield-rederivation-pause.md` Step 3: prior catalog included Sparring + Audit + Coordination + Trust + Time as Pattern A; greenfield re-derivation reduced to 3 — sparring + audit reclassified as mechanism classes; coordination + trust + time subsumed.) |
 | **Pattern B** (bipartite definition + instance) | DEFINITION aspect (Framework C / specialist's distributable bundle) + INSTANCE aspect (Owner B / workspace-scope managed entity) | Specialist + Workflow + Work-unit | Specialist DEFINITION declares; workspace activates → instances at Owner B |
 | **Pattern C** (cross-cutting human + record) | HUMAN aspect (cross-cutting; lives outside workspace) + RECORD aspect (Owner B / workspace-scope) | Practitioner | Human anchored cross-cutting; practitioner-record placed at Owner B per active practitioner |
 
@@ -496,7 +496,7 @@ See BACKLOG.md for actionable detail on watch-list items + Phase 4-6 forward wor
 
 - `MAINTENANCE.md` — 5-layer doc model + cascade discipline + TOP-LEVEL ARCHITECTURE
 - `VISION.md` — three-axis thesis + falsification + foundations
-- `GLOSSARY.md` — Layer 1 vocabulary (35 locked entries)
+- `GLOSSARY.md` — Layer 1 vocabulary (36 locked entries)
 - `BACKLOG.md` — Phase 3 work-item tracker
 - `HANDOFF.md` — session log (Phase 3 launch + continuation notes)
 - `profiles/INDEX.md` — usage profiles + G + D gates + 4 profile clusters
