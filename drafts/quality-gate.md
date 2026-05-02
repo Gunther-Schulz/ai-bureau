@@ -1,6 +1,10 @@
-# Quality gate — DRAFT
+# Quality gate — DRAFT (scope-locked session 16; full design pending Phase 3.6)
 
-> **STATUS: DRAFT — not locked, not final, candidate among many.** Exploratory capture of "could the sharpening spirit also be a quality-gate mechanism in the framework's product?" surfaced session 16 (2026-05-02) while building the generic `sharpen` skill. Not load-bearing yet. Lifts to ARCH (Phase 3) when the framework architecture surfaces concrete deliverables that could embed quality-gate mechanisms; OR to ROADMAP (Phase 5) as a feature commitment.
+> **STATUS: SCOPE-LOCKED, full mechanism design pending Phase 3.6.** Type classification + composition + per-shape variation approach + intervention shape locked via 2-round sharpening (session 16, 2026-05-02). Full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics deferred to Phase 3.6 ARCH topic.
+>
+> **Scope-lock outcome**: Pattern A protocol with mechanism-shaped Surface. Pluggable subsystem with structural variation per shape (practitioner-shape-gate / autonomous-business-shape-gate / personal-OS-shape-gate / extensible). See `GLOSSARY.md` quality-gate entry + `docs/decisions/quality-gate-scope-lock.md` DR for details.
+>
+> Originally exploratory capture of "could the sharpening spirit also be a quality-gate mechanism in the framework's product?" surfaced session 16 (2026-05-02) while building the generic `sharpen` skill. Now scope-locked as architectural commitment; full mechanism design happens at Phase 3.6 ARCH topic.
 
 ## Origin
 

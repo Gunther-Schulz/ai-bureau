@@ -37,6 +37,22 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 
 ## Locked architectural decisions
 
+### Quality-gate scope-lock (Phase 3.6 prerequisite) — LOCKED
+
+**Resolution**: `quality-gate` re-classified to **Pattern A protocol with mechanism-shaped Surface**:
+- Surface: common observability + emission contract; per-axis-failure-mode signal catalog
+- Implementations: structural variation per shape (practitioner-shape-gate / autonomous-business-shape-gate / personal-OS-shape-gate; extensible)
+- Selection: shape declares which implementation
+- Lifecycle per implementation: stateful vs stateless (per shape)
+- Per-shape error semantics: fail-closed (practitioner-shape; defensibility-critical) / fail-open with alert (autonomous-business) / fail-open (personal-OS)
+- Naming disambiguation: distinct from G/D validation gates (architectural-decision-time); quality-gate is runtime
+
+**Round 1 + Round 2 sharpening**: 0 architectural REVISIONS surfaced (R1 rename rejected); 7 EXPANSIONS applied (naming disambiguation; lifecycle stateful-vs-stateless; intertwining + co-worker composition; per-axis signal catalog; boot/shutdown/error semantics; authority-binding; tier-awareness).
+
+**Phase 3.6 produces**: full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration.
+
+**Full detail**: `GLOSSARY.md` quality-gate entry. **DR**: `docs/decisions/quality-gate-scope-lock.md`.
+
 ### Workflow bipartite-classification (Phase 3.1) — LOCKED
 
 **Resolution**: `workflow` re-classified to **bipartite Pattern B with optional applicability**:
@@ -145,9 +161,11 @@ Foundation-up: substrate first.
 - `arch/defensibility-mechanics.md` (conditions formalization + six-months-later test + regulatory-challenge schema)
 - `arch/axis-interactions.md` (cross-axis composition; sparring within intertwining; defensibility resolves at claim-granularity in axis-1 work-products)
 
-### Phase 3.6 — Quality-gate ARCH topic
+### Phase 3.6 — Quality-gate ARCH topic (scope-locked; full design pending)
 
-- `arch/quality-gate.md` (runtime mechanism resisting category-collapse; Surface specification + per-shape variation + observability schema + intervention mechanics)
+**Scope-lock outcome (session 16, 2026-05-02)**: quality-gate is **Pattern A protocol with mechanism-shaped Surface** — pluggable subsystem with structural variation per shape (practitioner-shape-gate / autonomous-business-shape-gate / personal-OS-shape-gate / extensible). See `docs/decisions/quality-gate-scope-lock.md` for decision rationale + sharpening rounds metadata.
+
+- `arch/quality-gate.md` (Phase 3.6 produces full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration)
 
 ### Phase 3.7 — Cross-cutting investigations (varies by outcome)
 
