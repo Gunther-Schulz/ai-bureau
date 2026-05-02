@@ -341,11 +341,46 @@ Future commits (per execution):
 
 ### Step 1.A: Full Re-read
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02; post-compact resume).
+
+VISION.md (~258 lines) + GLOSSARY.md (2365 lines, 36 entries) Re-Read fresh via Read tool — chunked GLOSSARY in 4 segments due to per-call token limits. Note: prior count "35 entries" in DR + Note 44 was off-by-one; actual entry count is **36** (alphabetical: actor / adapter / answer-machine AI / authorship preservation / category collapse / claim / co-worker / defensibility / deployment / engaged authorship / event / framework / Framework C scope / intertwined AI / intertwining / Layer A scope / mechanism / oracle AI / Owner B scope / pioneer instance / policy / practitioner / protocol (architectural) / quality-gate / rubber-stamping / session / shape / skill / sparring (axis 2) / specialist / substrate / tacked-on AI / validator AI / workflow / work-unit / workspace).
 
 ### Step 1.B: Per-entry GLOSSARY greenfield-evaluation
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02).
+
+**Method**: Pareto-disciplined evaluation per `plugin/skills/sharpen/SKILL.md` v0.12.0 Spirit + `feedback_judgment_and_automate.md` (commit positions, no menus). Per-entry Discipline 10 discriminator (4 questions) on 18 pre-flagged highest-archive-risk entries first; if all PASS, sample-validate remaining 18 for missed cargo-cult; if sample clean → corpus GREENFIELD-VALID by Pareto extension. Profile-cluster grounding via Read of `profiles/INDEX.md` + L5a (Cluster B/C anchor; FULL DETAIL) + G-composability-gate (Cluster D; FULL DETAIL) + L1 + L4a (Cluster A + Cluster B skeletons). Skill freshness via Read of `decision-design-sharpening/SKILL.md` v0.10.0.
+
+**Cluster 1 — TOP-LEVEL ARCHITECTURE atoms (4 entries)**: `mechanism` / `policy` / `framework` / `shape` — 4/4 GREENFIELD-VALID. Decisive: VISION line 17 ("compose policies over framework mechanisms") names all four primitives by name. Framework=mechanisms / shape=policies is **VISION-derived, not archive-derived**; MAINTENANCE TOP-LEVEL ARCHITECTURE merely formalizes what VISION announces. Cluster-1 archive-influence risk shifts from HIGH (DR pre-flag) to LOW (VISION-anchored).
+
+**Cluster 2 — A-B-C scope (3 entries)**: `Framework C scope` / `Owner B scope` / `Layer A scope` — 3/3 GREENFIELD-VALID. Each placement category emerges from a structural need: distributable-definitions home (G-gate consumption-mode requirement); deployment-instance home (pattern-vs-instance discipline); context-applicable-content home (archetype-and-jurisdiction multiplicity). Letter-naming "A/B/C" presentational; categories themselves architecturally derived.
+
+**Cluster 3 — Pattern A (4 entries)**: `protocol (architectural)` / `substrate` / `adapter` / `quality-gate` — 4/4 GREENFIELD-VALID at primitive-concept level. Pluggable-subsystem pattern (Surface + Implementations + Instance/binding) emerges from VISION's shape-neutrality + multi-substrate support + per-shape policy variation requirement. **Step-2-pending classification flags**: tri-aspect Pattern A classification claims for substrate / adapter / quality-gate depend on Step 2's Pattern A vs B vs C framework verdict. **Step-3-pending content-catalog flag**: 8-protocol catalog within `protocol (architectural)` body + within `framework` body line 868 is Step-3 audit territory.
+
+**Cluster 4 — Pattern B + Pattern C (4 entries)**: `specialist` / `workflow` / `work-unit` / `practitioner` — 4/4 GREENFIELD-VALID at primitive-concept level. specialist = VISION-line-7-named ("codified expertise bundled as specialists"); workflow = VISION-line-27-named (axis 1: "AI is a co-worker in the workflow itself"); work-unit = VISION-accountability-bearing-work-product framing; practitioner = VISION-axis-3-anchored as the role authorship-preservation protects. **Step-2-pending classification flags**: Pattern B (specialist / workflow / work-unit) + Pattern C (practitioner) classifications depend on Step 2 verdict. Tight coupling: specialists DEFINE workflow patterns + work-unit kinds; work-unit↔workflow always-present-vs-optional asymmetry is load-bearing.
+
+**Cluster 5 — Cross-axis substrate + axis-derived (4 entries)**: `actor` / `event` / `sparring (axis 2)` / `engaged authorship` — 4/4 GREENFIELD-VALID. All directly VISION-derived (axes 2/3 anchors + cross-axis structural substrate for audit). One Step-3-pending flag on `sparring (axis 2)` body's 8-sub-mechanism count (counter-argument / confidence calibration / visible reasoning / selective friction / asymmetric knowledge respect / anti-sycophancy / commit-to-recommendations / what's-missing) — these are not separate GLOSSARY entries per §6 of GLOSSARY navigation (they're "specific instances of the abstract `mechanism` primitive; ARCH Layer 3 detail"); the count is what Step 3 audits at ARCH-topic level, not Step 1.B GLOSSARY-entry level.
+
+**Cluster 6 — sample of remaining lower-risk (5 entries)**: `claim` / `defensibility` / `intertwining (axis 1)` / `tacked-on AI` / `category collapse` — 5/5 GREENFIELD-VALID. Sample confirms pattern: lower-risk entries are either VISION-axis-anchored, symmetric to evaluated entries, or recently-locked with extensive sharpening.
+
+**Pareto-extension to remaining 12 unevaluated entries** (`answer-machine AI` / `authorship preservation (axis 3)` / `co-worker` / `deployment` / `intertwined AI` / `oracle AI` / `pioneer instance` / `rubber-stamping` / `session` / `skill` / `validator AI` / `workspace`): all are either (a) direct VISION-axis-or-line-anchored, (b) symmetric to already-evaluated entries (3 axis-2 failure modes symmetric to tacked-on AI per Ming-research three-axis-failure-mode framing VISION line 144), OR (c) recently locked with extensive sharpening (`deployment` Phase 3.1 / `pioneer instance` Phase 2 + PIONEER.md anchor). None pre-flagged per DR Step 1.B archive-influence list. Sample-extension verdict defensible.
+
+**Branch point resolution**: All 36 entries GREENFIELD-VALID at primitive-concept level → **Proceed to Step 2-4 with confidence GLOSSARY is solid foundation**.
+
+**Step-2-pending classification flags consolidated** (8 entries; classification depends on Step 2 framework verdict, NOT primitive-concept validity):
+- Pattern A meta-primitive: `protocol (architectural)`
+- Pattern A primitive instances: `substrate`, `adapter`, `quality-gate`
+- Pattern B primitives: `specialist`, `workflow`, `work-unit`
+- Pattern C primitive: `practitioner`
+
+**Step-3-pending content-catalog flags** (within entry bodies; NOT primitive-validity issues):
+- `framework` body's 8-protocol catalog (GLOSSARY:868)
+- `sparring (axis 2)` body's 8-sub-mechanism count (GLOSSARY:1864)
+- `protocol (architectural)` body's cross-archetype protocol catalog (GLOSSARY:1488)
+
+**Verification per DR MS-2 + execution-fidelity discipline**: chat output cited specific VISION line numbers (17, 27, 92, 144, 154, 168) + specific GLOSSARY entry sections (boundary tests / cross-archetype illustrations / composes-with claims) + specific profile content (L5a line 84 audit-granularity-policy; G-gate distributable-consumption modes; INDEX cluster definitions). Pattern-matching from compacted memory ruled out by fresh Re-Read of all source files.
+
+**Significance for procedure**: archive-influence concern is **NOT** concentrated at primitive-classification level — it's concentrated at (a) the Pattern A vs B vs C framework partition (Step 2's audit) and (b) protocol/sub-mechanism catalogs (Step 3's audit). Step 2 is therefore the **load-bearing audit**; Step 1.B confirms the foundation Step 2 builds on is solid.
 
 ### Step 2: Greenfield-derive Pattern A vs B vs C framework
 
