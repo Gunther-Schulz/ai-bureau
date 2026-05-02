@@ -16,7 +16,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - **`PIONEER.md`** — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
 - **`profiles/INDEX.md`** — usage profiles for framework validation; cluster A/B/C/D structure; pre-validation + post-validation. **READ this file (not just memory of cluster names) when profile-anchored validation triggers.**
 - **`ARCHITECTURE.md`** — Layer 2 overview for Phase 3 ARCH rebuild; Phase 3 status + locked architectural decisions + active disciplines + 14-topic catalog; per-topic detail in `arch/<topic-slug>.md` (Phase 3.4+ work)
-- **`GLOSSARY.md`** — canonical term definitions (Layer 1 anchor; 35 entries locked Phase 2)
+- **`GLOSSARY.md`** — canonical term definitions (Layer 1 anchor; 36 entries locked Phase 2; per-entry bodies in `glossary/<entry>.md`, loaded on demand)
 - **`memory/`** — feedback files (lessons learned; loaded into conversation context per `MEMORY.md` index)
 - **`archive/INDEX.md`** — v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
 
@@ -128,4 +128,57 @@ Resumed per Note 44 pickup checklist. Executed greenfield-rederivation-pause pro
 
 ## Active session
 
-(Note 46+ to be appended here as session 18 cascade work proceeds.)
+---
+
+**Note 46: Session 18 — META-failure research + corpus clean-house + structural mitigations M1-M8 implemented**
+
+Session 18 began as Step 7.A-7.C cascade execution per Note 45 plan. Mid-cascade (after Step 7.A + partial Step 7.B), discovered a recurring META-failure pattern: AI under cascade-mode load reliably injected provenance-hygiene-violating breadcrumbs ("session 17", "AMENDED session", etc.) into canonical content despite reading + citing the discipline at session start. User flagged the recurrence + asked for real solutions (not guesses).
+
+**Pivot to research**: web research on field-level diagnosis + mitigations (Anthropic engineering guidance + Chroma context-rot study + AgentIF benchmark + multi-agent failure taxonomy + verification-gate research). Findings: oversized mandatory load DIRECTLY causes adherence collapse per Anthropic's own diagnostic ("Bloated CLAUDE.md files cause Claude to ignore your actual instructions!"); AgentIF measures ~0% instruction success rate at >6,000-word inputs; the corpus's mandatory load was ~5,113 lines / ~75K+ words (12x past catastrophic-failure threshold).
+
+**Plan + execution (M1-M8)**:
+- M1 mandatory-load shrink (8 sub-agents in 2 waves; field-evidenced sub-agent-first pattern applied to its own implementation):
+  - GLOSSARY.md 2365 → 163 lines + 36 per-entry files in `glossary/`
+  - DISCIPLINES.md 360 → 201 lines + 10 per-discipline files in `disciplines/`
+  - HANDOFF.md 921 → 131 lines (Notes 1-43 archived to `archive/handoffs/HANDOFF-sessions-1-17.md`)
+  - ARCHITECTURE.md 506 → 301 lines
+  - MAINTENANCE.md 473 → 347 lines
+  - **Net mandatory-load: ~5,113 → ~1,644 lines (68% reduction)**
+- M2 hook re-enabled with whole-session freshness scan bug fix + Check 4 provenance hygiene (smoke-tested 7/7 violations blocked + 6/6 good samples passed)
+- M3 sub-agent-first cascade routing codified in CLAUDE.md + `feedback_subagent_first_cascade.md`
+- M4 Writer-Reviewer pattern codified
+- M5 /clear discipline codified + `feedback_clear_discipline.md`
+- M6 HARD STOP markers codified
+- M7 Ralph Loop self-check codified + `feedback_ralph_self_check.md`
+- M8 memory consolidation + `feedback_hooks_are_structural.md` (clarification: hooks are Anthropic-endorsed deterministic enforcement, NOT bandaid)
+
+**Also completed**: arch/audit.md reclassified mechanism-class clean (no breadcrumbs); arch/sparring.md breadcrumbs stripped.
+
+**To resume next session**:
+
+1. **`/reload-plugins`** — activates the re-enabled architectural_commit_gate hook (whole-session scan + Check 4 provenance hygiene)
+2. **Read `CLAUDE.md`** (auto-loads anyway) — has new "Cascade discipline (sub-agent-first)" + "Structural enforcement" sections codifying M3-M7
+3. **Mandatory session-start reads** are now ~1,644 lines (down from ~5,113); should remain manageable per Anthropic context-budget guidance
+4. **For any cascade work**: per CLAUDE.md M3, delegate to sub-agents in fresh context. DO NOT execute multi-file Layer 0/1/2/3 cascades in main session — that's the failure mode this whole session was diagnosing + fixing
+5. **Procedure-DR Step 7.A-7.C cascade work**: SUPERSEDED by clean-house. The cascade items it specified (T3.9 GLOSSARY catalog / T3.7 MAINTENANCE template / etc.) were either completed pre-pivot OR subsumed by larger restructures (GLOSSARY split; MAINTENANCE trim; etc.). Phase 3.4 effectively COMPLETE; Phase 3.5 + 3.6 + 3.8 next per ROADMAP.
+
+**What is NOT lost**:
+- All session-17 procedure-DR verdicts persist in `docs/decisions/greenfield-rederivation-pause.md`
+- Pattern A reclassifications (8→3) persisted across cascade
+- All architectural commitments (Phase 3.1 + 3.2 + 3.4) intact in their DRs
+- VISION axes 1/2/3 unchanged
+- arch/audit.md stash (`stash@{0}`) was the dirty-with-breadcrumbs draft; sub-agent A produced a clean replacement; stash can be dropped (`git stash drop`)
+
+**Phase 3 status post-clean-house**: Phase 3.4 effectively COMPLETE. Next phases per ARCHITECTURE.md §2 sub-phase status table.
+
+**Disciplines now active** (codified for next session):
+- Sub-agent-first cascade routing (M3)
+- Writer-Reviewer pattern for architectural commits (M4)
+- /clear recommendation between cascade chunks (M5)
+- HARD STOP markers between logical units (M6)
+- Ralph Loop self-check at apparent completion (M7)
+- Hook is structural enforcement; do not disable without bug-fix (per `feedback_hooks_are_structural.md`)
+
+**Notes 44 + 45**: historical now (their procedure-DR cascade plan was executed in this session, then pivoted to clean-house when META-failure recurred). They will rotate to archive next time HANDOFF crosses ~500 lines.
+
+**Session 18 commit history** (chronological): cascade attempts → research → clean-house: 567024b (hook Check 4) → 8b8edcd (hook disable mid-research) → 3b691f6 (sparring breadcrumbs) → b10c8de (hook re-enable + bug fix) → 8f7c116 (HANDOFF rotation) → 9551ba0 (DISCIPLINES split) → 623caa3 (audit.md clean reclassify) → 4055020 (GLOSSARY split) → e9d3754 (ARCHITECTURE trim) → 5a253a1 (MAINTENANCE trim) → [this commit] (CLAUDE.md M3-M7 + memory + Note 46).
