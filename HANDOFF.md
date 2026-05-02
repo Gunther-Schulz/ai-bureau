@@ -694,6 +694,37 @@ User question: "how do we tune them for proper stopping points for rounds?" Surf
 
 ---
 
+**Note 44: NEXT-SESSION PICKUP CHECKLIST** (write-up at compaction; resume from here)
+
+Auto-compaction landed mid-Step-1.A (mid-GLOSSARY Re-Read). All work persisted: HEAD `78e2cc5`, working tree clean, pushed to origin/main. Structural defenses are file-based and survive any session boundary.
+
+**To resume next session — do these in order**:
+
+1. **Read `CLAUDE.md`** (project root; auto-loads anyway) — has mandatory-reads list + skill-invocation procedure + profile-validation procedure
+2. **Read `VISION.md` + `MAINTENANCE.md` + `DISCIPLINES.md`** (anchor-grade; especially Disciplines 1, 3, 9, 10)
+3. **Read this Note 44 + Notes 40-43** (in HANDOFF.md) — execution-fidelity defense + Phase 3.4 pause + procedure DR + framework lock
+4. **Read `docs/decisions/greenfield-rederivation-pause.md`** (full procedure DR; executive summary at top; per-step detail follows; execution log + findings to populate as work proceeds)
+5. **Read `plugin/skills/sharpen/SKILL.md` v0.12.0** (4-layer comprehensive termination framework; LOCK-HARD vs AMENDABLE-IN-FLIGHT target-type; HIGH-magnitude tier; empirical-evidence amendment rule)
+6. **Verify hook is loaded**: `/reload-plugins` (idempotent; safe to re-run); should see `architectural_commit_gate` listed
+7. **Resume Step 1.A** of procedure DR: continue Re-Read of `GLOSSARY.md` from line ~1000 onward (entries from `intertwining` through `workspace`); first half (lines 1-1000) was Re-Read in pre-compact session — but DO IT FRESH next session, since memory of prior reads is synthesis not direct evidence per global honesty-about-sources rule
+8. **Then Step 1.B**: per-entry greenfield-evaluation of all 35 GLOSSARY entries per Discipline 10 discriminator (4 verdicts: GREENFIELD-VALID / INPUT-ONLY-VALID / NEEDS-REVISION / NEEDS-REWORK); persist findings to procedure DR Step 1.B section
+9. **Then Steps 2-7**: greenfield-derive Pattern framework / protocol list / template; compare to current locked work (4 ARCH topics + 11 DRs); surface revisions; user decides whether to invalidate / keep / amend
+
+**What is NOT lost** (pre-compact concern):
+- All commits (78e2cc5 HEAD; 11 DRs; 4 ARCH topics; 35 GLOSSARY; 30 learnings observations)
+- All structural defenses (CLAUDE.md auto-load; hook; 5-location procedural redundancy; Discipline 10; Round 1 termination checklist)
+- All 4 sharpening skills at locked versions (v0.12.0 / v0.10.0 / v0.6.0 / v0.3.4)
+- Procedure DR complete with executive summary + 7-step detail + Round 6 findings applied
+- HANDOFF Notes 30-43 capture full session-16 trail
+
+**What was happening at compact moment**: Re-Read of GLOSSARY.md lines 1-1000 done in-session; lines 1000-2365 still pending. NO loss of work since Re-Read produces no artifacts; just re-do fresh next session per Discipline 1 source-grounded.
+
+**Key warning** (from session 16 lessons): Pattern-matching from this Note's pickup checklist is NOT direct evidence. Each numbered step requires actually running the Read tool — not relying on synthesis-summary of what these files contain. Same applies to skill SKILL.md files at every invocation. Hook will catch architectural-edit attempts that skip skill+profile reads (PreToolUse blocks; surfaces missing reads).
+
+**User context**: Session was tuning-heavy (sharpen v0.10.0 → v0.11.0 → v0.12.0 over 3 amendments + cascade across 4 skills); user reported tuning fatigue + asked to stop framework recursion. Empirical-evidence amendment rule (≥2 session pattern threshold) locks framework iteration. Next session should be substantive procedure-execution work, NOT meta-framework tuning.
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
