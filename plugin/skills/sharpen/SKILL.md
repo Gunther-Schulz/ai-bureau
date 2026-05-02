@@ -2,7 +2,7 @@
 name: sharpen
 description: Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", "another round", "go deeper", "what else". Single critical pass by default; iterates when user signals deeper.
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.7.0
+version: 0.8.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -49,6 +49,8 @@ Surface findings against load-bearing questions (in order — substance before s
 The questions are ordered intentionally. Surface-level findings (typos, phrasing, formatting) come AFTER substance findings — never as substitutes.
 
 Lens questions that don't apply to the target are skippable — don't manufacture findings to fill all categories.
+
+**Frame-level question (fires once per pass)**: Is this the right target? Sharpen evaluates the content as given, but the load-bearing finding sometimes isn't *in* the target — it's that the target answers the wrong question or addresses a poorly-framed underlying need. If so, surface that *before* sharpening the target itself. The user can always redirect — but they decide with that perspective surfaced, not without.
 
 ### 3. Apply Pareto discipline per finding
 
