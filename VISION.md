@@ -35,7 +35,7 @@ Three axes. Each must be served:
 | Layer | Axis | Failure mode | PBS aim |
 |---|---|---|---|
 | Surface | Workflow embedding | Tacked-on: discrete AI features in unchanged workflow | Intertwined: AI as continuous co-worker |
-| Process | Interaction mode | Answer machine: oracle / sycophant / easy answers | Sparring partner: challenger / interrogator / counter-argument |
+| Process | Interaction mode | Answer machine: oracle / sycophant / easy answers | Sparring partner: engaged critic / evidence-demanding peer / counter-argument |
 | Purpose | Outcome orientation | Rubber-stamping: AI produces, practitioner-author signs without engagement | Authorship preservation: practitioner remains defensible expert author |
 
 A system can fail on any axis independently:
@@ -70,7 +70,7 @@ Drawing the negative space sharpens the positive:
 - ❌ PBS does NOT claim audit-by-construction makes humans unnecessary — it makes their accountability defensible
 - ❌ PBS does NOT claim AI-as-co-worker means AI does the bulk of the work — could be AI handles 20% of mechanical labor, augments practitioner on the 80% where judgment matters
 - ❌ PBS does NOT claim the framework is restricted to practitioner shape — framework is shape-neutral; positioning is practitioner-focused
-- ❌ PBS does NOT claim sparring is adversarial — the mode is partnership with critical intensity (mutual evidence-demanding); the vocabulary (challenge / counter-argument / push back / interrogate) describes operational mechanism, not relationship type. Both practitioner AND AI demand evidence and refine each other's thinking; this is collaboration with rigor, not argument-as-opposition.
+- ❌ PBS does NOT claim sparring is adversarial — the mode is partnership with critical engagement; the vocabulary (challenge / counter-argument / push back / interrogate) describes operational mechanism, not relationship type. Per Ming's articulation of the third mode (per Foundations section): humans demanded evidence and interrogated assumptions; AI generated counter-arguments, surfaced doubts, resisted easy answers — both directions participated. This is collaboration with rigor, not argument-as-opposition.
 
 ## Robustness to AI capability growth
 
@@ -144,15 +144,15 @@ When auditing for drift, foundations are the reference point: are we still doing
 
 The second axis. Even an intertwined AI can fail badly if it operates in answer-machine mode. The Ming research foundation makes the claim concrete: only sparring-mode produces the value; oracle wastes the human partner; validator actively degrades.
 
-### Spirit: collaborative rigor, not adversarial
+### Spirit: collaborative engagement, not adversarial
 
-The vocabulary used for axis 2 (challenges / counter-arguments / push back / interrogate / resist easy answers) describes the OPERATIONAL MECHANISM of mutual evidence-demanding — it does not describe an adversarial relationship between practitioner and AI. The mode is partnership with critical intensity: both sides demand evidence, surface gaps, refine each other's thinking through iterative engagement. Closer to peer review or apprentice-master dialogue than to argument-as-opposition.
+The vocabulary used for axis 2 (challenges / counter-arguments / push back / interrogate / resist easy answers) describes the OPERATIONAL MECHANISM of axis-2 engagement — it does not describe an adversarial relationship between practitioner and AI. Per Ming's articulation of the third mode (per Foundations section): humans demanded evidence and interrogated assumptions; AI generated counter-arguments, surfaced doubts, resisted easy answers. Both directions participated; the productive mode requires the bidirectional engagement.
 
-Per Ming's framing: humans pushed back AND AI generated counter-arguments — the productive mode requires BOTH directions; it's collaborative, not adversarial. Future sessions describing axis 2 should preserve the collaborative wrapper around the operational vocabulary; positioning the framework as "AI that argues with you" or "AI that pushes back" misframes the mode by foregrounding the operational vocabulary without the partnership wrapper.
+Closer to peer review or apprentice-master dialogue than to argument-as-opposition. Future sessions describing axis 2 should preserve the collaborative wrapper around the operational vocabulary; positioning the framework as "AI that argues with you" or "AI that pushes back" misframes the mode by foregrounding the operational vocabulary without the partnership wrapper.
 
 ### Why text-first matters here
 
-Sparring is a text-shaped interaction. You can argue with text — push back, demand evidence, ask follow-ups, sit with a counter-argument. You cannot argue with a "summarize" button or an autocomplete suggestion. The CLI's pure text I/O is the most sparring-shaped surface possible.
+Sparring is a text-shaped interaction. You can engage with text — raise concerns, demand evidence, ask follow-ups, sit with a counter-argument. You cannot engage critically with a "summarize" button or an autocomplete suggestion. The CLI's pure text I/O is the most sparring-shaped surface possible.
 
 Speech-to-text counts (text-equivalent). GUIs that funnel through chat-shaped surfaces count. But GUIs that reduce interaction to button-presses and form-fills break sparring — they revert toward answer-machine mode by design. This is part of the category-collapse risk in frontend integrations: a host environment that doesn't support text-first discussion will collapse PBS into a tacked-on feature regardless of architectural intent.
 
