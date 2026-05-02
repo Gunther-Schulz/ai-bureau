@@ -1,37 +1,39 @@
 ---
 title: Sparring
-topic-cluster: Pattern A protocol topics (#3 of 8)
-status: drafted (Phase 3.4 Round 2; locked)
+topic-cluster: mechanism-class topics (sparring + audit; per-shape policy variation; not Pattern A)
+status: drafted (Phase 3.4 Round 2; reclassified session 17 per `docs/decisions/greenfield-rederivation-pause.md` Step 3 — body content unchanged, classification framing reshaped from Pattern A protocol to mechanism class with per-shape policy variation)
 ---
 
 # Sparring
 
-> **Layer 3 ARCH topic**. Architectural-conceptual articulation of the Sparring Protocol (Pattern A). Mode 4 development-time documentation per `ARCHITECTURE.md` §6 Logic placement modes — NOT production-runtime; Phase 6 spec lands the Pydantic Protocol contract + per-sub-mechanism schema (Mode 3).
+> **Layer 3 ARCH topic**. Architectural-conceptual articulation of the Sparring **mechanism class** with per-shape policy variation. Mode 4 development-time documentation per `ARCHITECTURE.md` §6 Logic placement modes — NOT production-runtime; Phase 6 spec lands the Pydantic schemas for the architecturally-encoded sub-mechanisms (Mode 3).
+>
+> **Reclassification note (session 17)**: This topic was originally drafted as the third Pattern A protocol topic (substrate / adapter / sparring / audit / coordination / trust / time / quality-gate). Per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict: sparring is **not** a Pattern A protocol — sub-mechanisms ARE the Surface; per-shape variation is POLICY-level (which sub-mechanisms fire / how enforced / threshold values), not IMPL-level alternative architectures. Sub-mechanism-impl variation (LLM-prompted vs rule-based vs retrieval-based) is per-mechanism, not whole-Sparring-Surface alternative architecture. Sparring is reclassified as a **mechanism class** with per-shape policy variation. VISION axis 2 (sparring) stays anchored — reclassification is at framework-mechanism layer only, not VISION layer.
 
 ## 1. Topic scope
 
-The **Sparring Protocol** is the runtime mechanism realizing axis-2 (sparring) as a load-bearing pillar in practitioner-shape workspaces. Per locked GLOSSARY `sparring (axis 2)` entry: sparring is DERIVED axis-2 success mode; the Sparring Protocol (Pattern A) is the framework primitive supporting that mode + 8 sparring sub-mechanisms (each a `mechanism` primitive — atomic interface contract).
+The **Sparring mechanism class** is the runtime mechanism set realizing axis-2 (sparring) as a load-bearing pillar in practitioner-shape workspaces. Per locked GLOSSARY `sparring (axis 2)` entry: sparring is DERIVED axis-2 success mode; this mechanism class collects the 8 sparring sub-mechanisms (each a `mechanism` primitive — atomic interface contract) under a single architectural-conceptual home, parameterized by per-shape policy.
 
-**Single-layer Surface** (substrate-style; NOT adapter-style two-layer). 8 sub-mechanisms compose within unified axis-2 concern, not heterogeneous integration classes.
+**Single Surface** (each sub-mechanism is its own atomic mechanism contract; the 8 sub-mechanisms together constitute the class). The class does NOT have multiple alternative implementations realizing one whole-class Surface differently — that's the discriminator distinguishing it from Pattern A protocols (substrate / adapter / quality-gate).
 
-**Cardinality**: 1 Sparring Protocol Implementation per workspace; shape policy declares which sub-mechanisms active + how enforced. Distinct from adapter (multi-instance) and substrate (singular forever) — per-shape variation IS the load-bearing variation.
+**Cardinality**: 8 sub-mechanism contracts; shape policy declares which sub-mechanisms active + how enforced + threshold values. Per-shape variation is POLICY-level (when sub-mechanisms fire / which active / how-enforced), NOT IMPL-level (no alternative whole-class architectures swap in/out per workspace).
 
 **Cross-axis dependency**: sparring fires AT claim granularity; sparring events ARE the production-phase substrate for `engaged authorship` two-phase composite (per locked GLOSSARY engaged-authorship entry); axis-2 → axis-3 dependency.
 
 **Composition with framework**:
-- Pattern A protocol per `protocol (architectural)` GLOSSARY entry
-- Sparring Protocol Surface IS a `mechanism` (framework-level interface contract)
-- Implementations live at `Framework C scope` as distributable definitions
-- Running instance bound to `Owner B scope` per workspace deployment
-- Per-shape policy declares which sub-mechanisms active
+- Each sub-mechanism is a `mechanism` (framework-level atomic interface contract); the Sparring class is the architectural-conceptual aggregation of the 8
+- Per-shape policy bundle declares per-sub-mechanism activation + thresholds + retry budget
+- Sub-mechanism execution lives within skill execution (skill-side); not a separately-bound runtime instance
+- Architecturally-encoded sub-mechanisms (1-4) leverage substrate Surface §D (structured output validation) for schema enforcement
+- Sparring events emitted via MCP audit gate (skill-side; per audit mechanism class emission discipline)
 
-**Phase routing**: Pydantic Protocol contract + per-sub-mechanism schema fields → Phase 6 spec (Mode 3). Per-sub-mechanism Implementation work → Phase 6.
+**Phase routing**: Pydantic schemas for architecturally-encoded sub-mechanisms 1-4 → Phase 6 spec (Mode 3). Per-sub-mechanism Implementation work (orchestrator wiring; heuristic-detection thresholds; bypass-with-reason UX) → Phase 6.
 
-## 2. Sparring Protocol Surface (architectural-level capability categories)
+## 2. Sparring sub-mechanism Surfaces (architectural-level capability categories)
 
-The Surface is the universal interface any Sparring Protocol Implementation must satisfy. **Articulated here at architectural-conceptual level** — not Pydantic Protocol typing (Phase 6 spec).
+Each sub-mechanism declares its own atomic Surface (the mechanism's interface contract). **Articulated here at architectural-conceptual level** — Pydantic schemas for architecturally-encoded sub-mechanisms 1-4 land at Phase 6 spec.
 
-Eight sub-mechanism capability categories define the Surface, split into architecturally-encoded (4) + behaviorally-enforced (4) per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator.
+Eight sub-mechanism capability categories constitute the Sparring mechanism class, split into architecturally-encoded (4) + behaviorally-enforced (4) per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator.
 
 ### Architecturally-encoded sub-mechanisms (4; gate-dispatched at every output)
 
@@ -73,56 +75,60 @@ Phase B layered review checkpoint; structural in skill body but content is judgm
 
 ### Logic placement mode
 
-Surface contract articulated here (Mode 4 conceptual) + Phase 6 spec (Mode 3 Pydantic Protocol + per-sub-mechanism schema for architecturally-encoded categories + companion docs). Mode 1 production-runtime AI (skills + specialists) reads sparring-policy mandates from active shape policy bundle at workspace boot.
+Per-sub-mechanism Surface contract articulated here (Mode 4 conceptual) + Phase 6 spec (Mode 3 Pydantic schemas for architecturally-encoded sub-mechanisms 1-4 + companion docs). Mode 1 production-runtime AI (skills + specialists) reads sparring-policy mandates from active shape policy bundle at workspace boot.
 
-## 3. Common-surface boundary criteria
+## 3. Sub-mechanism boundary criteria
 
-Decision rule for "in Sparring Protocol Surface" vs "out":
+Decision rule for "in Sparring mechanism class" vs "out":
 
 | Decision criterion | Verdict | Examples |
 |---|---|---|
-| Axis-2 sparring sub-mechanism applying across all sparring-mode skill outputs | Surface (per-sub-mechanism category) | counter-argument; confidence calibration; visible reasoning; selective friction; anti-sycophancy; asymmetric knowledge respect; commit-to-recommendations; what's-missing |
+| Axis-2 sparring sub-mechanism applying across all sparring-mode skill outputs | In class (per-sub-mechanism category) | counter-argument; confidence calibration; visible reasoning; selective friction; anti-sycophancy; asymmetric knowledge respect; commit-to-recommendations; what's-missing |
 | Per-claim attestation (axis-3 success mode) | Out (composes with `engaged authorship` per axis-3 → `arch/claim-defensibility.md` Phase 3.5) |
-| Cross-claim coordination (multiple claims in same workflow_instance) | Out (composes with `coordination` Pattern A — `arch/coordination.md`) |
-| Authority decisions (who can sign / approve) | Out (composes with `trust` Pattern A — `arch/trust.md`) |
+| Cross-claim coordination (multiple claims in same workflow_instance) | Out (subsumed into substrate hooks + event-bus per `arch/substrate.md`; per-shape policy configures coordination shape — call-shaped vs event-shaped) |
+| Authority decisions (who can sign / approve) | Out (subsumed into authority-binding mechanism per `arch/audit.md`; per-shape policy declares trust model — practitioner-judgment / budget-policy / individual) |
 | Per-shape policy declaration mechanics (which sub-mechanisms active) | Out (composes with `shape` GLOSSARY entry; declared in shape policy bundles) |
 
 Architectural-encoded vs behaviorally-enforced classification per sub-mechanism uses `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator: gate-dispatched-on-every-write → structural; AI-applies-at-judgment-time → prose convention with audit.
 
-## 4. Per-implementation aspect
+## 4. Per-sub-mechanism realization aspect
 
-Implementations live at `Framework C scope` as distributable definitions. Each impl wraps native primitives of an underlying axis-2-validation runtime to satisfy the Surface contract.
+Each sub-mechanism contract is realized at the framework-mechanism layer + parameterized by per-shape policy. Unlike Pattern A protocols (substrate / adapter / quality-gate), there is **no whole-class implementation that admits alternative architectures**; sub-mechanism realization is per-sub-mechanism, not per-class.
 
-### Pattern level
+### Per-sub-mechanism realization
 
-Any implementation satisfying the 8-sub-mechanism Surface (4 architecturally-encoded + 4 behaviorally-enforced via prose-convention skill body language) qualifies.
+Architecturally-encoded sub-mechanisms 1-4 are realized via substrate Surface §D (structured output validation; Pydantic schemas land at Phase 6). Behaviorally-enforced sub-mechanisms 5-8 are realized via prose-convention skill body language + AI-applies-at-judgment-time + heuristic-detection emission events.
 
-### Current Implementation set (CIRCA 2026)
+Per-sub-mechanism realization variation (e.g., LLM-prompted vs rule-based vs retrieval-based for a given sub-mechanism) is per-sub-mechanism implementation detail, not class-level pluggability — that's the discriminator distinguishing this class from Pattern A protocols.
 
-- **Default Sparring Protocol Implementation** (single canonical impl currently): leverages substrate Surface §D (structured output validation) for architecturally-encoded sub-mechanisms; orchestrator wiring per archived sparring-output-v1.md pattern (validate → retry-on-fail → escalate-after-N-retries → bypass-with-reason).
+### Current default realizations (CIRCA 2026)
 
-Future Implementations may emerge per shape-specific axis-2 mechanics (e.g., legal-practice may add `precedent-citation-required` sub-mechanism via shape extension; not yet locked).
+- **Architecturally-encoded sub-mechanisms 1-4**: leverage substrate Surface §D (structured output validation) for schema enforcement; orchestrator wiring per archived sparring-output-v1.md pattern (validate → retry-on-fail → escalate-after-N-retries → bypass-with-reason).
+- **Behaviorally-enforced sub-mechanisms 5-8**: AI applies at judgment time via skill body prose conventions + heuristic-detection emits events when sub-mechanism violations cluster.
 
-### Per-implementation declares
+Future shape extensions may add per-domain sub-mechanisms (e.g., legal-practice may add `precedent-citation-required` sub-mechanism; not yet locked) — those land as additional sub-mechanisms in the class, not as alternative whole-class implementations.
 
-Each Implementation declares:
+### Per-shape policy declares
+
+Each per-shape policy bundle declares:
 - **Sub-mechanism activation matrix** (which 8 sub-mechanisms enforced; per-shape variation)
-- **Per-sub-mechanism schema** (architecturally-encoded sub-mechanisms; per-field validation)
-- **Threshold declarations** (selective-friction claim-ambiguity threshold; anti-sycophancy heuristic-detection threshold per impl)
+- **Per-sub-mechanism schema enforcement** (architecturally-encoded sub-mechanisms; mandatory vs optional)
+- **Threshold values** (selective-friction claim-ambiguity threshold; anti-sycophancy heuristic-detection threshold)
 - **Retry-count + escalation** (orchestrator wiring; per-shape retry budget before bypass-with-reason path)
+- **Failure mode** (fail-closed for practitioner-shape; fail-open with alert for autonomous-business; fail-open for personal-OS)
 - **Error mapping** (validation failures → SparringValidationError categories per §10)
 
-## 5. Selection mechanics
+## 5. Per-shape policy mechanics
 
-Sparring Protocol selection bound to `shape` (NOT to workspace.md directly — practitioner-shape policy bundle declares which sparring sub-mechanisms active + which schema fields required + per-shape threshold values). Workspace inherits shape's sparring policy.
+The Sparring mechanism class is parameterized by `shape` policy bundle (NOT workspace.md directly — practitioner-shape policy bundle declares which sparring sub-mechanisms active + which schema fields required + per-shape threshold values). Workspace inherits shape's sparring policy at boot.
 
 ### Cardinality
 
 | Concern | Value | Mechanism |
 |---|---|---|
-| Sparring Protocol Implementations active per workspace | 1 | Shape policy declares; workspace inherits |
+| Sparring sub-mechanisms in the class | 8 | Fixed at framework-mechanism layer (4 architecturally-encoded + 4 behaviorally-enforced) |
 | Sub-mechanisms active per workspace | 0-8 (per shape) | Shape policy declares activation matrix |
-| Implementations per Framework C catalog | M | Currently 1 default; future per shape-specific axis-2 variations |
+| Whole-class alternative implementations | N/A (not Pattern A) | Per-sub-mechanism realization variation only; no whole-class swap |
 
 ### Per-shape activation matrices
 
@@ -134,53 +140,56 @@ Sparring Protocol selection bound to `shape` (NOT to workspace.md directly — p
 
 Validated at workspace boot:
 - Active shape's sparring policy declares activation matrix
-- Each active sub-mechanism has Implementation declaration
-- Architecturally-encoded sub-mechanisms have schema declarations Pydantic-validated
+- Each active sub-mechanism has its framework-mechanism realization available
+- Architecturally-encoded sub-mechanisms have schema declarations Pydantic-validated via substrate Surface §D
 
-## 6. Tri-aspect reconciliation
+## 6. Mechanism-class structural reconciliation
 
-Sparring Protocol as tri-aspect Pattern A primitive:
+Sparring as mechanism class with per-shape policy variation:
 
 | Aspect | Layer | What it is |
 |---|---|---|
-| **Surface** (8 sub-mechanism categories) | mechanism (framework-level) | Atomic interface contract; 4 architecturally-encoded + 4 behaviorally-enforced |
-| **Implementations** | Framework C scope | Distributable definitions wrapping native axis-2-validation primitives |
-| **Running Instance** | Owner B scope | Bound to workspace deployment via shape policy |
+| **Sub-mechanism Surfaces** (8) | mechanism (framework-level) | 8 atomic interface contracts; 4 architecturally-encoded + 4 behaviorally-enforced |
+| **Per-sub-mechanism realizations** | mechanism realization | 1-4 via substrate Surface §D structured output validation; 5-8 via skill body prose convention + heuristic-detection emission |
+| **Per-shape policy bundle** | shape (policy layer) | Activation matrix + thresholds + retry budget + failure mode declared in shape policy |
+| **Skill-side execution** | runtime | Sub-mechanisms run within skill execution; not a separately-bound runtime instance |
 
-### Sparring-coupling impossible-by-construction
+### Sparring-coupling: skill-portability
 
-Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Sparring Protocol Surface is portable across Implementations within shape; skill code reaching Implementation-internal heuristic-thresholds is impl-pinned by construction.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting sub-mechanism Surface contracts is portable across realizations within shape; skill code reaching realization-internal heuristic-thresholds is realization-pinned. Per-sub-mechanism Pydantic schemas (architecturally-encoded sub-mechanisms 1-4) enforce contract-vs-realization boundary.
 
-### Distinct from adapter / substrate Pattern A
+### Distinct from Pattern A protocols (substrate / adapter / quality-gate)
 
-- substrate = singular per workspace (1 impl; tier-aware)
-- adapter = multi-instance per workspace (N adapters; per-class Surface variation)
-- **sparring = singular per workspace (1 impl); per-sub-mechanism activation per shape policy** (cardinality variation IS shape-policy-mandated, not impl-multiplicity)
+- substrate (Pattern A) = singular per workspace (1 impl; tier-aware; alternative architectural designs realize Surface differently — Claude Agent SDK / MS AF)
+- adapter (Pattern A) = multi-instance per workspace (N adapters; per-class Surface variation; alternative impls per integration class — gmail / outlook / fastbill realize email-Surface differently)
+- quality-gate (Pattern A) = singular per workspace (1 impl per shape; alternative architectural designs realize Surface differently — practitioner-shape-gate stateful procedure / autonomous-business-shape-gate programmatic threshold / personal-OS-shape-gate light reporting)
+- **sparring = mechanism class** (8 sub-mechanism Surfaces; per-shape policy declares activation matrix + thresholds; NO whole-class alternative architectures — sub-mechanism realization variation only)
+- **audit = mechanism class** (AuditEvent schema + audit-trail composition; per-shape granularity policy + substrate-mediated storage; NO whole-class alternative architectures — see `arch/audit.md`)
 
 ## 7. Composition with framework primitives
 
 | Primitive | Composition |
 |---|---|
-| `framework` | Sparring Protocol is one mechanism category within the framework |
-| `mechanism` | Sparring Protocol Surface IS a mechanism (atomic interface contract); each sub-mechanism is its own `mechanism` (atomic) |
-| `Framework C scope` | Sparring Protocol Implementations live there as distributable definitions |
+| `framework` | Sparring is a mechanism class within the framework's mechanism layer |
+| `mechanism` | Each sub-mechanism is its own `mechanism` (atomic interface contract); the Sparring class aggregates the 8 |
 | `shape` | Shape policy declares per-sub-mechanism activation + thresholds + retry budget; load-bearing — sparring without shape policy has no policy direction |
 | `workspace` | Workspace inherits shape's sparring policy at boot |
-| `Owner B scope` | Running Sparring Protocol Instance bound to workspace deployment |
-| `protocol (architectural)` | Sparring Protocol is Pattern A protocol instance |
-| **`substrate`** | **Substrate Surface §B (hook registration) hosts sparring impl hooks. Substrate Surface §D (structured output validation) load-bearing for architecturally-encoded sub-mechanisms 1-4 (Pydantic schema enforcement; auto-retry inherited). Substrate Surface §C (permission flow) NOT used by sparring (no authority decision; sparring is pre-output validation).** |
+| `protocol (architectural)` | Sparring is **NOT** a Pattern A protocol per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (sub-mechanisms ARE the Surface; per-shape variation is POLICY-level, not IMPL-level). Distinct from substrate / adapter / quality-gate. |
+| **`substrate`** | **Substrate Surface §B (hook registration) hosts sparring sub-mechanism execution hooks. Substrate Surface §D (structured output validation) load-bearing for architecturally-encoded sub-mechanisms 1-4 (Pydantic schema enforcement; auto-retry inherited). Substrate Surface §C (permission flow) NOT used by sparring (no authority decision; sparring is pre-output validation). Coordination concerns (cross-claim sparring consistency across same work-unit) subsumed into substrate hooks + event-bus per session-17 cascade.** |
 | `claim` | Sparring fires AT claim granularity (per-claim counter-argument; per-claim confidence; per-claim selective friction) |
 | `engaged authorship` | Sparring events ARE the production-phase substrate for engaged-authorship's two-phase composite (per-claim sparring participation observed via sparring-event emissions = production-phase engagement signal) |
 | `defensibility` | Axis-2 → axis-3 dependency: sparring's production-phase engagement is one of three structural conditions defensibility tests |
-| `quality-gate` (Phase 3.6) | Quality-gate consumes sparring-event emissions for axis-2 enforcement; per-shape policy declares quality-gate enforcement of sparring requirements |
+| `quality-gate` (Phase 3.6) | Quality-gate (Pattern A protocol) consumes sparring-event emissions for axis-2 enforcement; per-shape policy declares quality-gate enforcement of sparring requirements |
 | `event` | Sparring-event kinds first-class in audit-trail (per-sub-mechanism event-kind catalog; see §8) |
-| `audit` | Sparring impl emits sparring events via MCP audit gate (skill-side per adapter-style §8 emission discipline; not substrate-internal direct emission — sparring runs within skill execution, not at substrate-architectural moments) |
-| `answer-machine AI` / `oracle AI` / `validator AI` | Axis-2 failure modes (Ming research); sparring is the success mode these degrade FROM. Sparring impl may emit failure-mode-detected events when sub-mechanism violations cluster |
+| `audit` (mechanism class; reclassified session 17) | Sparring sub-mechanisms emit sparring events via MCP audit gate (skill-side per audit mechanism class emission discipline; not substrate-internal direct emission — sparring runs within skill execution, not at substrate-architectural moments) |
+| `answer-machine AI` / `oracle AI` / `validator AI` | Axis-2 failure modes (Ming research); sparring is the success mode these degrade FROM. Sparring may emit failure-mode-detected events when sub-mechanism violations cluster |
 | `category collapse` | Cross-axis force; axis-2 manifestations are answer-machine / oracle / validator AI |
 | `workflow` (Pattern B; optional overlay) | Sparring fires within workflow_instance phases AND ad-hoc work — workflow-orthogonal at framework level |
-| `coordination` (Phase 3.4 separate topic) | Cross-claim sparring coordination (e.g., consistency across claims in same work-unit) via coordination protocol; not sparring-internal |
+| Authority binding mechanism | Subsumes prior "trust" Pattern A topic per session-17 cascade; per-shape policy declares trust model (practitioner-judgment / budget-policy / individual). Sparring is pre-output validation; no authority decision involved. |
 
-## 8. Per-action audit emission (skill-side via MCP gate)
+## 8. Per-action audit emission (skill-side via MCP gate; conditional section per template)
+
+> **Template note**: This section is one of the 6 protocol-specific-conditional sections per the restructured Pattern A template (per `MAINTENANCE.md` Pattern A protocol topic template). For mechanism-class topics like sparring, the section applies because sparring sub-mechanisms emit per-action events; documented here for cross-reference symmetry with audit mechanism class + Pattern A protocols.
 
 ### Architectural commitment
 
@@ -224,19 +233,19 @@ When user explicitly bypasses failed sparring validation (after orchestrator ret
 
 | Concern | Value | Mechanism |
 |---|---|---|
-| Sparring Protocol Implementations per workspace | 1 | Shape-policy-declared; workspace inherits |
+| Sub-mechanisms in the class | 8 (fixed at framework-mechanism layer) | 4 architecturally-encoded + 4 behaviorally-enforced |
 | Sub-mechanisms active per workspace | 0-8 | Shape policy activation matrix |
 | Sparring rounds per claim | ≥1 (practitioner-shape mandates ≥1) | Per-claim sparring fires at claim production moment |
 
 ### Lifecycle ownership
 
-- **Creator**: framework-runtime instantiates Sparring Protocol Implementation per workspace boot (selecting impl per shape policy)
-- **Owner**: workspace deployment runtime (Owner B scope)
-- **Destroyer**: framework-runtime at workspace shutdown
+- **Per-sub-mechanism schema registration**: framework-runtime registers sub-mechanism Pydantic schemas via substrate Surface §D at workspace boot (architecturally-encoded sub-mechanisms 1-4)
+- **Per-sub-mechanism execution**: skill runtime executes sub-mechanism contracts at skill output moments (skill-side; not separately-bound runtime instance)
+- **Per-sub-mechanism state**: per-claim sparring history; heuristic-detection state for anti-sycophancy persists in skill execution context + audit-trail
 
 ### Mutability
 
-- **Configuration immutable** across single sparring-impl boot (activation matrix + thresholds + retry-count loaded at boot)
+- **Configuration immutable** across single workspace boot (per-shape policy activation matrix + thresholds + retry-count loaded at boot)
 - **Runtime state** evolves during sparring rounds (per-claim sparring history; heuristic-detection state for anti-sycophancy)
 - **Cross-session persistence**: confidence calibration state persists per claim across session pauses (per-claim sparring not session-bounded; same claim resumed in later session preserves prior confidence). Visible reasoning event-trail persists in audit-trail. Selective-friction history per session may be substrate-impl-specific.
 
@@ -259,27 +268,15 @@ Per-shape error semantics:
 
 Per-class Pydantic shape → Phase 6 spec.
 
-## 11. Boot + shutdown phase ordering
+## 11. Sparring error categories (architectural-level; conditional section per template)
 
-### Boot sequence
+> **Template note**: §10 Boot + shutdown phase ordering (substrate-specific lifecycle conditional) does NOT apply to sparring — sub-mechanisms run within skill execution lifecycle (no separate sparring-impl boot/shutdown phases). Sub-mechanism schema registration happens within substrate boot per §10 of substrate topic; sparring lifecycle inheres in skill lifecycle.
+>
+> §11 sparring-specific error categories applies. Section retained from prior 18-section template for per-protocol error semantics; relocated as conditional under restructured template.
 
-1. Substrate boot completes (per `arch/substrate.md` §10)
-2. Active shape policy loaded; sparring activation matrix + thresholds + retry-count parsed
-3. Sparring Protocol Implementation instantiated per shape policy
-4. Per-sub-mechanism schemas registered (architecturally-encoded sub-mechanisms 1-4 register Pydantic schemas via substrate Surface §D)
-5. Sparring impl registers hooks via substrate Surface §B (PRE/POST skill output hooks)
-6. Sparring impl `is_ready` becomes True
-7. Skill execution can now produce sparring-mode outputs
+### Boot + shutdown ordering (subsumed under skill execution lifecycle)
 
-### Shutdown sequence
-
-1. Stop accepting new sparring rounds
-2. Drain in-flight sparring rounds (allow current claim's sparring to complete)
-3. Flush per-claim sparring state to audit-trail
-4. Sparring impl shutdown returns
-5. Substrate shutdown can proceed (per `arch/substrate.md` §10)
-
-Flush-before-substrate-shutdown ordering preserves audit-trail integrity for sparring events; in-flight sparring rounds complete cleanly rather than leaving orphan partial-sparring state.
+Per the restructured template's §10 conditional applicability rule: sparring sub-mechanism schema registration happens at workspace boot during substrate Surface §D registration (architecturally-encoded sub-mechanisms 1-4 register their Pydantic schemas). Per-skill-execution lifecycle drives sub-mechanism firing; no separate sparring-impl boot/shutdown phases. This contrasts substrate (Pattern A) which has explicit per-instance boot/shutdown ordering.
 
 ## 12. Cross-shape policy variation
 
@@ -340,13 +337,15 @@ These belong to Phase 6 pre-implementation sharpening; ARCH topic explicitly doe
 
 ## 16. Decision-design provenance
 
-This topic articulates the Sparring Protocol per locked GLOSSARY `sparring (axis 2)` entry. Source materials:
+This topic articulates the Sparring mechanism class per locked GLOSSARY `sparring (axis 2)` entry. Source materials:
 
 - `archive/docs/decisions/sparring-output-v1.md` — structural promotion of 3-of-7 axis-2 mechanisms to schema-validated output (counter-argument / confidence / visible reasoning); 4 stayed behavioral
 - VISION.md axis 2 framing (sparring partner, not answer machine; load-bearing runtime mechanism in practitioner-shape)
 - VISION.md "Vivienne Ming — sparring as the productive mode" foundation (only sparring outperforms human-alone or AI-alone; oracle/validator-mode collapse)
 
-Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-sub-mechanism architectural classification stays shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer reality (per L5a line 128 sparring as load-bearing runtime mechanism) grounds the practitioner-shape activation matrix without leaking pioneer specifics into Sparring Protocol Surface.
+**Session 17 reclassification provenance**: per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (Tier-1 finding; user-accepted), sparring was originally drafted as Pattern A protocol topic #3 of 8 (substrate / adapter / sparring / audit / coordination / trust / time / quality-gate). Greenfield re-derivation reduced Pattern A catalog to 3 (substrate / adapter / quality-gate). Sparring reclassified as **mechanism class** because: (a) sub-mechanisms ARE the Surface (not "Surface + alternative architectural impls"); (b) per-shape variation is POLICY-level (which sub-mechanisms fire / how enforced / threshold values), not IMPL-level alternative architectures; (c) sub-mechanism realization variation (LLM-prompted vs rule-based vs retrieval-based) is per-mechanism, not whole-class pluggability. Cross-validated by GLOSSARY:1842 entry tags (Class **DERIVED** + Layer **cross-cutting** — NOT multi-aspect Pattern A primitive). Body content (8 sub-mechanism Surfaces; per-shape activation matrix; audit emission; lifecycle; error categories) is largely transferable; only classification framing reshaped.
+
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-sub-mechanism architectural classification stays shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer reality (per L5a line 128 sparring as load-bearing runtime mechanism) grounds the practitioner-shape activation matrix without leaking pioneer specifics into sub-mechanism Surfaces.
 
 ## 17. Phase routing
 
@@ -365,6 +364,6 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-sub-mechanism architec
 - **GLOSSARY**: `sparring (axis 2)` (canonical entry); `mechanism`, `Framework C scope`, `Owner B scope`, `protocol (architectural)`, `substrate`, `claim`, `engaged authorship`, `defensibility`, `quality-gate`, `event`, `audit`, `answer-machine AI`, `oracle AI`, `validator AI`, `category collapse`, `workflow`, `work-unit`, `shape`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (architecturally-encoded vs behaviorally-enforced discriminator); `DISCIPLINES.md` Discipline 3 (pre-decision-sharpening; Round 1 + Round 2 layered coverage)
 - **Profiles validated**: `G-composability-gate.md` (line 157 cross-shape consumption); `L5a-planner-pbs-schulz.md` (line 128 sparring as load-bearing runtime mechanism; line 67 hybrid moments — sparring during drafting + rubber-stamp risk during send); `L1-specialist-creator.md` (specialist DEFINITION can bundle skill outputs satisfying sparring schemas); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity for sparring events surviving deployment migrations)
-- **ARCH topics composing with sparring**: `arch/substrate.md` (Surface §B hook registration + §D structured output validation; load-bearing for architecturally-encoded sub-mechanisms); `arch/audit.md` (sparring-event emission); `arch/coordination.md` (cross-claim sparring coordination); `arch/quality-gate.md` (Phase 3.6; consumes sparring events for axis-2 enforcement); `arch/claim-defensibility.md` (Phase 3.5; sparring-event-trail as axis-2 → axis-3 dependency)
+- **ARCH topics composing with sparring**: `arch/substrate.md` (Surface §B hook registration + §D structured output validation; load-bearing for architecturally-encoded sub-mechanisms; subsumes prior coordination Pattern A topic per session-17 cascade); `arch/audit.md` (sparring-event emission; mechanism class peer to sparring); `arch/quality-gate.md` (Phase 3.6; Pattern A protocol consuming sparring events for axis-2 enforcement); `arch/claim-defensibility.md` (Phase 3.5; sparring-event-trail as axis-2 → axis-3 dependency). Cancelled: `arch/coordination.md` + `arch/trust.md` + `arch/time.md` (subsumed per session-17 cascade).
 - **Phase 6 spec target**: `docs/specs/sparring.md` (Pydantic Protocol + per-sub-mechanism schemas + per-impl spec + per-shape activation matrices)
 - **Archived sources**: `archive/docs/decisions/sparring-output-v1.md`
