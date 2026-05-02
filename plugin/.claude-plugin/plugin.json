@@ -1,7 +1,7 @@
 {
   "name": "pbs",
-  "version": "0.3.0",
-  "description": "Workspace framework — source repository (architectural rebuild in progress, session 16+). Currently holds development tooling only (sharpening skills used during architecture/design work). Framework distribution mechanics + app-skill packaging surface in Phase 3+.",
+  "version": "0.4.0",
+  "description": "Workspace framework — source repository (architectural rebuild in progress, session 16+). Currently holds development tooling only (sharpening skills used during architecture/design work + architectural-commit-gate hook). Framework distribution mechanics + app-skill packaging surface in Phase 3+.",
   "author": {
     "name": "Gunther Schulz"
   },
@@ -12,5 +12,19 @@
     "workspace",
     "architecture",
     "development"
-  ]
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/architectural_commit_gate.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
