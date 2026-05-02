@@ -408,11 +408,59 @@ VISION.md (~258 lines) + GLOSSARY.md (2365 lines, 36 entries) Re-Read fresh via 
 
 ### Step 3: Greenfield-derive Pattern A protocol list
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02). **Tier-1 finding accepted by user**: Pattern A catalog reduces from 8 to 3.
+
+**Method**: Pattern A defining test (post Step 2 verdict) = alternative architectural-designs realizing the Surface differently (not just code-realization-strategies of the same contract). Per MS-2: cite ONLY VISION + Step-1.B-validated GLOSSARY + first-principles. Park current ARCH topic content + Phase 3.0/3.1/3.2/3.4 DR claims.
+
+**Per-protocol greenfield verdict**:
+
+| Current 8-protocol claim | Greenfield verdict | Reason |
+|---|---|---|
+| **substrate** | GREENFIELD-DERIVED-DISTINCT | Multi-impl-of-Surface PASS (Claude Agent SDK / MS AF distinct architectures); GLOSSARY-locked (line 1941+); VISION AI-as-runtime derivation |
+| **adapter** | GREENFIELD-DERIVED-DISTINCT | Multi-impl-of-Surface PASS per integration class (gmail / outlook / fastbill realize email-Surface against fundamentally different backend APIs); GLOSSARY-locked (line 169+); VISION axis-1 external-integration derivation |
+| **quality-gate** | GREENFIELD-DERIVED-DISTINCT | Multi-impl-of-Surface PASS (3 distinct per-shape architectural designs: practitioner-shape-gate stateful engagement procedure / autonomous-business-shape-gate programmatic threshold-based / personal-OS-shape-gate light reporting); GLOSSARY-locked (line 1526+); VISION category-collapse-resistance + structural-enforcement (MAINTENANCE TOP-LEVEL DESIGN PRINCIPLES §1) derivation |
+| **sparring** | RECLASSIFIED-AS-MECHANISM-CLASS | 8 sub-mechanisms ARE the Surface; "always-on / opt-in / sparring-as-skill / none" is POLICY-level (when sub-mechanisms fire), not IMPL-level (HOW sub-mechanisms realize their contracts). Sub-mechanism-impl variation (LLM-prompted vs rule-based vs retrieval-based) is per-mechanism, not whole-Sparring-Surface alternative architecture. **Independent cross-validation**: GLOSSARY:1842 sparring entry tagged Class **DERIVED** + Layer **cross-cutting** — NOT multi-aspect Pattern A primitive. The "Pattern A protocol" claim only appears in `protocol (architectural)` cross-archetype catalog (GLOSSARY:1488-1496) — exactly where archive-cargo-cult would hide per DR pre-flag. |
+| **audit** | RECLASSIFIED-AS-MECHANISM-CLASS | AuditEvent schema IS the Surface; per-shape granularity (claim-level / action-level / light) is explicitly POLICY language; storage backend variation (LanceDB / Postgres / file) is substrate-level, not audit-level. Subsumes to "mechanism (AuditEvent schema + audit-trail-composition + event_kind enum) configured by per-shape granularity policy + substrate-provided storage". GLOSSARY:801 event entry tagged Class **PRIMITIVE single-aspect** — not Pattern A. |
+| **coordination** | SUBSUMED-IN-SUBSTRATE | DR pre-flag confirmed: "could be substrate hook system + audit event subscription". Substrate provides hook + event-bus mechanisms; per-shape policies configure call-shape vs event-shape. No multi-impl-of-coordination-Surface evidence. No GLOSSARY entry. |
+| **trust** | SUBSUMED-IN-AUTHORITY-BINDING-MECHANISM | DR pre-flag confirmed: "could be substrate permission flow + audit". Authority-binding listed as mechanism in MAINTENANCE TOP-LEVEL ARCHITECTURE concept-by-concept table. "Practitioner-judgment vs budget-policy vs individual" is POLICY language. No GLOSSARY entry. |
+| **time** | SUBSUMED-IN-SUBSTRATE-AND-ADAPTER | DR pre-flag confirmed: "could be substrate scheduling + adapter time-driven operations". Substrate temporal semantics (turn-based / long-running) per substrate impl; adapter time-driven operations (cron / scheduled-fetch). No separate Time Protocol Surface with alternative implementations. No GLOSSARY entry. |
+
+**Greenfield-derived Pattern A list**: **3 protocols** (substrate / adapter / quality-gate).
+
+**Cascade implications**:
+- Phase 3.4 LOCKED topics audit + sparring need RE-CLASSIFICATION (not Pattern A).
+- Phase 3.4 PAUSED topics coordination + trust + time CANCELLED (subsumed; no separate Pattern A topics).
+- Phase 3.2 topic catalog (line 868 of MAINTENANCE; ARCHITECTURE.md §4 catalog) NEEDS-REVISION — protocol topic count drops from 7-8 to 3.
+- `protocol (architectural)` GLOSSARY entry cross-archetype catalog (line 1488-1496) NEEDS-REVISION — drop 5 entries (sparring/audit/coordination/trust/time); restate audit + sparring as mechanism-classes-not-protocols.
+- VISION axes 2 + 3 UNTOUCHED — sparring as VISION axis stays anchored; audit emission / source-grounding / authority binding remain locked mechanisms.
 
 ### Step 4: Greenfield-derive Pattern A protocol topic template
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02). **Tier-1 finding accepted by user**: 18-section monolithic template restructured to 12-common + 6-protocol-specific-conditional.
+
+**Pre-condition (MS-3)**: Step 2 yielded GREENFIELD-EQUIVALENT — proceeded.
+
+**Method**: From Pattern A definition (Surface + Implementations + Instance/binding) + 3 confirmed protocols (substrate / adapter / quality-gate) + locked first-principles disciplines, derive minimal common topic structure. Stress-test current 18-section template per MAINTENANCE:326-349 per-section.
+
+**Greenfield-derived structure**:
+
+**12 common-required sections** (apply to every Pattern A topic): §§ 1 (Topic scope + frontmatter), 2 (Surface contract), 4 (Per-implementation aspect), 5 (Selection mechanics), 6 (Tri-aspect reconciliation), 7 (Composition with framework primitives), 9 (Cardinality + lifecycle), 14 (Pre-implementation operational concerns / Phase 6 forward reference), 15 (Watch-list), 16 (Decision-design provenance), 17 (Phase routing), 18 (Cross-references).
+
+**6 protocol-specific-conditional sections** (apply per protocol if applicable to its nature): §§ 3 (Common-surface boundary criteria — only adapter has multi-class Surface), 8 (Substrate-internal vs skill-side audit emission — substrate-specific concept), 10 (Boot + shutdown phase ordering — substrate-specific lifecycle; quality-gate fires per checkpoint without phases), 11 (Substrate error categories — per-protocol error semantics differ), 12 (Transport variation — substrate-specific MCP transport), 13 (Deployment-tier awareness — substrate-specific Tier 1/2/3).
+
+**Per-protocol section count expectation**:
+- substrate: 12 common + 6 conditional (all apply) = 18 total
+- adapter: 12 common + ~3-4 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors) = ~15-16 total
+- quality-gate: 12 common + ~1-2 conditional (§11 fail-closed/open errors per shape) = ~13-14 total
+
+**Tier-1 finding (second one)**: 18-section monolithic template is substrate-shape-anchored. DR pre-flag confirmed verbatim: "Pattern A protocol topic 18-section template substrate-shape-anchored / 8 Pattern A protocols list inherits archive's protocol categorization". Template was derived from substrate (first-Pattern-A topic) then "validated by adapter" per MAINTENANCE:326 — but validation likely involved forcing thin sections into adapter to fit the template, rather than the template adapting to adapter's nature.
+
+**Cascade implications**:
+- MAINTENANCE TOP-LEVEL ARCHITECTURE line 326-349 NEEDS-REVISION — 18-section template → 12-common + 6-conditional restructure.
+- substrate ARCH topic (locked) GREENFIELD-EQUIVALENT — substrate IS template's shape-anchor; happens to fit. No content revision; structural reorganization only (move §§ 3, 8, 10, 11, 12, 13 from "common" to "substrate-protocol-specific" sections within the topic file).
+- adapter ARCH topic (locked) MINOR-REVISION — sections that were forced or thinly populated can be removed or relocated to per-impl-extension Protocols.
+- quality-gate ARCH topic (Phase 3.6 forthcoming) revision lands before topic is written; benefits from leaner template.
+- sparring + audit ARCH topics already NEEDS-REVISION per Step 3 reclassification; template revision consistent.
 
 ### Step 5: Compare to current locked work
 
