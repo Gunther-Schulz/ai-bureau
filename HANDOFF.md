@@ -11,6 +11,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
 - `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
 - `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
+- `profiles/INDEX.md` — usage profiles for framework validation; PRELIMINARY baseline; spans lifecycle stages × shape variations × archetypes; pre-validation (proposing primitives) + post-validation (auditing locked corpus); load specific profile on-demand per `profiles/INDEX.md` taxonomy
 - `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
@@ -19,7 +20,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
 - `drafts/` — exploratory ideas / future-candidates / brainstorm output (NOT locked, NOT load-bearing); discipline in `drafts/README.md`. Currently holds: `marketing-themes.md` (session-16 marketing-shape thinking captured during VISION clean-stance work)
 
-**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md`. Plus `GLOSSARY.md` for current vocabulary state.
+**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md` → `profiles/INDEX.md`. Plus `GLOSSARY.md` for current vocabulary state. Specific profiles loaded on-demand when relevant decision / audit / composability check requires them.
 
 ## Rebuild phases
 
@@ -130,6 +131,38 @@ This is the running session log for the **foundational rebuild** launched sessio
     - **Tooling status**: emerged as side-product through framework-development work; sharpening skills built BECAUSE we needed them, not as deliberate ship-target. Working-title status; maturity-incomplete. Product is locked-down primary; tooling is implementation-detail-becomes-shippable-eventually.
     - Cascade: MAINTENANCE.md + HANDOFF.md anchor descriptions updated; BACKLOG Phase 5+ has tooling-promotion item (TOOLING.md or unified narrative when tooling matures).
 
+## Session 16 continuation #2 (2026-05-02 — afternoon)
+
+**Note 29: Phase 3 paused for profile foundation + composability discipline**:
+
+After workflow bipartite-classification locked (Round 1 + Round 2; ad-hoc scope refinement applied per user push), user surfaced foundational concern about validation discipline. Rather than treat as "memory feedback" only, persisted as full profile foundation:
+
+- **`profiles/` directory created** with INDEX.md + 17 profiles (2 full + 15 skeleton):
+  - L1-L4 (creator + deployer stages): specialist creator / shape definer / deployment template creator / workspace deployer (solo + firm-IT) — all skeletons
+  - L5 (practitioner-user, 10 profiles): planner-PBS-Schulz (FULL ANCHOR), lawyer, researcher, auditor, autonomous-business-operator, personal-OS-knowledge-worker, medical practitioner, architect/engineer, junior-under-senior-review, multi-jurisdictional-consultant — 1 full + 9 skeletons
+  - L8 (auditor / reviewer post-hoc): skeleton
+  - L9 (shape catalog curator): skeleton
+  - G (composability gate; package consumer perspective; cross-cutting validation gate that fires FIRST before producer-side design): FULL CROSS-CUTTING profile (renamed from L13 — gate framing reflects validation-order primacy over lifecycle-order placement)
+
+- **Multi-axis validation discipline locked** (per `feedback_multi_axis_validation.md`): three orthogonal dimensions (archetype × work-type × role) + explicit non-coverage question; replaces the previous single-axis cross-archetype illustration approach that missed ad-hoc work as legitimate scope
+
+- **Composability + boundaries discipline locked** with two-step validation order: (1) G composability gate fires FIRST — does design support multi-mode consumption (consulting / firm-reuse / OSS / marketplace-future / backup-migration)? (2) If G passes, multi-axis validation across producer profiles (archetype × work-type × role). Wrong shapes can't pass G; structural composability rather than advisory
+
+- **Composability tooling deferred to Phase 5+ ROADMAP**: BACKLOG entry added; `drafts/composability-tooling.md` captures candidate tooling concepts (specialist self-containment validators; shape composition validators; workspace serializers; etc.) without committing to specific tools. Per session-16 user direction: don't engage tooling design now; capture for future phase
+
+- **Profile detail TBD**: 15 skeletons need full content drafted in subsequent session(s); 2 full profiles (L5a anchor + G composability gate) ground the format + provide initial validation cases
+
+**Status**: Phase 3.1 paused (work-unit bipartite-classification on hold) until profile foundation is sufficient for multi-axis validation. Quality-gate work also paused per user direction.
+
+**Disciplines that emerged this session**:
+- Multi-axis validation (archetype × work-type × role + non-coverage question)
+- Composability + boundaries (L1-L4 producer × G composability gate two-sided coverage; G fires first as initial gate)
+- Profile-grounded validation (replace single-axis cross-archetype with multi-axis profile-anchored)
+
+These are now part of standing PBS framework discipline (HANDOFF anchors + memory + profiles).
+
+---
+
 ## Session 16 continuation (2026-05-02)
 
 **What happened (notes 20-27)**:
@@ -219,6 +252,8 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 
 **Phase 3 starting commitment**: 3.1 first (questions before structure since question outcomes affect topic taxonomy); within 3.1, **workflow bipartite-classification first** (most-referenced; work-unit cascades from workflow; deployment + engaged-authorship follow). Round 1 + Round 2 sharpening per `sharpen` v0.9.0 + `decision-design-sharpening` v0.3.1 disciplines.
 
+**Phase 3 paused after workflow lock + multi-axis validation surfaced**: workflow bipartite-classification resolved (workflow → bipartite Pattern B with optional applicability). User push during workflow Round 2 surfaced ad-hoc work as legitimate scope outside primitive (REVISION-grade refinement). User additionally surfaced foundational concern: framework risks single-consumer-thinking drift; needs persisted usage profiles to validate against (not just feedback rule). Phase 3 paused to build profile foundation before resuming 3.1 work-unit + remaining items. See note 29 below.
+
 **Disciplines carrying forward into Phase 3**:
 - Foundation-up workflow ordering (per `feedback_foundation_up_ordering.md`)
 - 2-round sweet spot per architectural decision (per `feedback_pre_decision_sharpening.md` + sharpen v0.9.0)
@@ -227,6 +262,8 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 - Make-wrong-shapes-impossible (structural over conventional; per `feedback_wrong_shapes_impossible.md`)
 - AI-as-runtime hybrid-shape (per `feedback_ai_as_runtime.md`)
 - Provenance hygiene (no audit-history breadcrumbs in canonical content; per coherence-audit Lens 5 v0.2.1)
+- **Multi-axis validation** (per `feedback_multi_axis_validation.md` + `profiles/INDEX.md`): validate primitive proposals across archetype × work-type × role; explicit non-coverage question
+- **Composability + boundaries** (per `profiles/G-composability-gate.md` + `drafts/composability-tooling.md`): G composability gate fires FIRST as initial validation gate; L1-L4 producer levels validate against G's multi-mode consumption requirements (consulting / firm-reuse / OSS / marketplace-future / backup-migration); structural composability rather than advisory
 
 ---
 
