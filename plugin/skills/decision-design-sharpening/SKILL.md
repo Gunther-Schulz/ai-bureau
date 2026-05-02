@@ -2,7 +2,7 @@
 name: decision-design-sharpening
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including \"solidify this decision\" / \"lock down this decision\" / \"make this solid\" / \"challenge/surface/refine to solidify\" (or original \"challenge/review/refine to solidify\") / \"challenge this\" / \"review/refine\" / \"do another round\" / \"sharpen again\" / \"what did we miss\" / \"what are we surfacing\" / \"verify completeness before commit\" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead)."
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.7.0
+version: 0.8.0
 ---
 
 # Decision-design sharpening (Phase 1)
@@ -163,16 +163,60 @@ Decision-design phase COMPLETE. Propose final structure in chat before committin
 
 ## Round termination signals
 
-Lock + persist when ANY of these signals fire:
+**MANDATORY at every round termination** (NEW v0.8.0 per session-16 META-failure on procedure-document sharpening): empirical density check + surface-type declaration + honest termination test (per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6).
+
+### Empirical density check
+
+Count substantive findings (HIGH + MEDIUM impact; exclude cosmetic / NO-ACTION) for current round vs previous round:
+
+| Density behavior | Verdict signal |
+|---|---|
+| Drops ≥50% | DECAY CONFIRMED → STABLE candidate |
+| Holds within ±25% OR increases | DECAY NOT CONFIRMED → CONTINUE candidate |
+| Drops 25-50% | AMBIGUOUS → user-decision |
+
+### Surface-type declaration
+
+Different decay profiles per surface type:
+- **ARCHITECTURAL-DECISION** (per-decision; sweet spot 2-3 rounds; expected decay 6→5→3→0-1)
+- **PROCEDURE-DOCUMENT** (process docs / methodology; sweet spot may be 4-5 rounds; density-check governs)
+- **SET-LEVEL AUDIT** (corpus-level; per-cluster density)
+- **META-ARCHITECTURAL** (foundational discipline / framework rebuild; user-trigger primary)
+
+Pattern-matching architectural-decision decay onto other surface types = recurrent bias.
+
+### Honest termination test (Q1-Q5 per sharpen v0.10.0)
+
+Before declaring STABLE or CONTINUE, AI explicitly answers Q1-Q5 (count / decay / specific signal). Q5 unanswerable for STABLE → manufactured comfort territory. Q4 unanswerable for CONTINUE → manufactured criticism territory.
+
+### Lock + persist signals (revised)
+
+Lock + persist when ALL of:
+- Density check shows DECAY CONFIRMED (per Q3) for current surface type
+- Q5 names specific termination signal (not "feels done")
+- Counter-validation passes (manufactured-comfort counter-test passed)
+
+OR: User explicitly says "accept" / "lock" / "looks good, persist".
+
+### Continue signals (revised)
+
+Continue when ANY of:
+- Density check shows DECAY NOT CONFIRMED (Q3 holds/increases) AND Q4 names specific unaddressed pass
+- User explicitly signals deeper ("another round" / "go deeper" / "what else") — user-trigger overrides AI-judgment unless empirical decay confirmed
+- Surface-type is PROCEDURE-DOCUMENT / SET-LEVEL / META-ARCHITECTURAL and density holds
+
+### Other termination signals (preserved)
 
 | Signal | Action |
 |---|---|
-| User explicitly says "accept" / "lock" / "looks good, persist" | Lock immediately + persist |
-| Round surfaces 0 substantive refinements (after Pareto screen) | Strong signal proposal is solid OR next round = manufactured criticism. Default to LOCK + persist |
 | 2 rejected rounds in a row (no refinements accepted) | Suggest: "rounds are surfacing nothing accepted; either proposal is solid (lock) OR reframe needed (decompose / restart)" |
-| User requests round 4+ at decision-design phase | Respond: "round 4+ at decision-design phase signals decomposition is missing; recommend decomposing this decision into sub-decisions" (per decomposition trigger) |
-| AI surfaces only manufactured criticism (Pareto-fail refinements) | Respond: "refinements surfaced are not Pareto-improving; recommend lock OR explicit acknowledgment that we're in manufactured-criticism territory" |
-| User accepts refinements but doesn't trigger lock | Prompt: "ready to lock + persist? OR additional sharpening round?" — explicit termination prompt |
+| User requests round 4+ at decision-design phase (ARCHITECTURAL-DECISION surface only) | Respond: "round 4+ at architectural-decision phase signals decomposition is missing; recommend decomposing into sub-decisions" (per decomposition trigger). NOTE: decomposition trigger doesn't apply to PROCEDURE-DOCUMENT / SET-LEVEL / META-ARCHITECTURAL surfaces. |
+| AI surfaces only manufactured criticism (Pareto-fail refinements) | Respond: "refinements not Pareto-improving; recommend lock OR explicit manufactured-criticism territory" |
+| User accepts refinements but doesn't trigger lock | Prompt: "ready to lock + persist? OR additional round?" — explicit termination prompt |
+
+### Manufactured-comfort counter-test (NEW; equal-weight to manufactured-criticism)
+
+Round-fatigue / completion-comfort biases toward STABLE. Equal scrutiny required. AI bias toward declaring STABLE without empirical density measurement = Disguise #5 (substituting AI judgment for codified rule). Canonical session-16 case: declared STABLE LOCK at Round 3 of procedure-sharpening when density was 9→10→9 (holding flat, not decaying); pattern-matched expected decay instead of measuring actual.
 
 ## CRITICAL: Decomposition trigger
 

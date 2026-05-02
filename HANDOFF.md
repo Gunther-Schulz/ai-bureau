@@ -605,6 +605,44 @@ Anti-patterns explicitly named (counter pattern-matching from current ARCH conte
 
 ---
 
+**Note 42: Side-quest — round-termination judgment skill update + Observation 29**:
+
+User identified META-failure recursion: my STABLE LOCK at Round 3 of procedure-sharpening was Disguise #5 (substituting AI judgment for codified rule) firing AT THE ROUND-TERMINATION-JUDGMENT LEVEL. Pattern-matched Discipline 3's expected decay (6→5→3→0-1) instead of measuring actual density (Round 1-3 substantive findings: 9→10→9, holding flat).
+
+Round 4 forced by user yielded 9 substantive findings (4 HIGH + 3 MEDIUM + 2 LOW) — confirming user's prediction; density genuinely not decaying for procedure-document surface.
+
+**Root cause**: Discipline 3's empirical decay pattern was derived from ARCHITECTURAL-DECISION sharpening. Procedure-document sharpening has fundamentally different surface dynamics (broader cognitive-mode passes; cross-cutting concerns; anti-pattern-hardening territory).
+
+**Skill updates this commit**:
+
+1. `plugin/skills/sharpen/SKILL.md` v0.9.0 → v0.10.0:
+   - Mandatory empirical density check at every round termination (count current vs previous; ≥50% drop = decay confirmed)
+   - Surface-type declaration mandatory: ARCHITECTURAL-DECISION / PROCEDURE-DOCUMENT / SET-LEVEL AUDIT / META-ARCHITECTURAL
+   - Honest termination test Q1-Q5 (count / decay / specific signal; Q5 unanswerable for STABLE = manufactured comfort)
+   - NEW manufactured-comfort counter-test (equal-weight to manufactured-criticism; round-fatigue / completion-comfort biases AI toward STABLE prematurely)
+
+2. `plugin/skills/decision-design-sharpening/SKILL.md` v0.7.0 → v0.8.0:
+   - Round termination signals revised to require empirical density measurement
+   - Decomposition trigger (Round 4+ signals decomposition missing) applies to ARCHITECTURAL-DECISION surface ONLY
+
+3. `DISCIPLINES.md` Discipline 3:
+   - Surface-type sweet-spot variation explicit (architectural-decision 2-3; procedure-document 4-5+; set-level per-cluster; META-architectural user-trigger)
+   - Cross-ref skill version updates
+
+4. `learnings/ai-app-development.md` Observation 29 (NEW):
+   - Round-termination judgment is execution-fidelity META-failure surface
+   - Manufactured-comfort defined as Disguise #5 round-termination instance
+   - Promotion criteria: 3+ subsequent sharpening sessions without recurrence
+
+**Side-quest complete**. Returning to main quest: Round 5 of greenfield-rederivation-pause procedure-sharpening, applying NEW termination criteria honestly.
+
+**Locked artifact state added**:
+- sharpen v0.10.0 + decision-design-sharpening v0.8.0
+- DISCIPLINES.md Discipline 3 surface-type-aware
+- learnings Observation 29 (NEW; 29 observations now; was 28)
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)

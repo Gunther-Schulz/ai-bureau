@@ -473,6 +473,65 @@ If 3+ sessions pass with no recurrence, promote.
 
 ---
 
+## Observation 29: Round-termination judgment is itself execution-fidelity META-failure surface
+
+**Date observed**: 2026-05-02 (session 16; mid-procedure-sharpening of greenfield-rederivation-pause DR).
+
+**Context**: While sharpening procedure document for greenfield re-derivation, declared STABLE LOCK at Round 3 based on pattern-matching `DISCIPLINES.md` Discipline 3's expected decay pattern (6→5→3→0-1 substantive findings per round). User pushed back: "if we found 9 substantive findings in Round 3, wouldn't that mean plausible chance of more in Round 4?"
+
+**What broke**: my STABLE LOCK at Round 3 was Disguise #5 (substituting AI judgment for codified rule) firing AGAIN — at the round-termination-judgment level. I pattern-matched expected decay instead of measuring actual density:
+- Round 1 substantive: 9
+- Round 2 substantive: 10
+- Round 3 substantive: 9
+- Round 4 (forced by user): 9 substantive (4 HIGH + 3 MEDIUM + 2 LOW = 9)
+
+Density was holding flat (~9-10 per round), NOT decaying as architectural-decision pattern predicts.
+
+**Root cause** — surface-type mismatch:
+- Discipline 3's empirical decay pattern (6→5→3→0-1) was derived from ARCHITECTURAL-DECISION sharpening (R3a/R3b/R3c session 12)
+- Procedure-document sharpening has fundamentally different surface dynamics: more cognitive-mode passes available, broader cross-cutting concerns, more anti-pattern-hardening territory
+- Pattern-matching architectural-decision decay onto procedure-document = surface-type-mismatch bias
+
+**Sharpening rounds yielded** (cumulative across 4 rounds before user override):
+- Round 1: 9 HIGH (initial structural; counter-bias hardening)
+- Round 2: 6 HIGH + 4 MEDIUM = 10 (counter-stress R1 + new cognitive passes)
+- Round 3: 4 HIGH + 5 MEDIUM = 9 (counter-stress R2 + deeper passes)
+- Round 4: 4 HIGH + 3 MEDIUM + 2 LOW = 9 (counter-stress R3 + hook-bypass / ADD-missing-primitives / alternative-classification-frameworks / inherent-limit-honesty)
+
+**Implication — manufactured comfort** (Disguise complement to manufactured criticism):
+- Manufactured criticism (already documented): AI generates findings to extend rounds artificially
+- Manufactured comfort (NEW; this observation): AI declares STABLE prematurely to avoid round fatigue / completion comfort
+- Both biases require equal-weight counter-tests
+- Pattern-matching expected decay is MANUFACTURED COMFORT in disguise (substitutes pattern for measurement)
+
+**Skill updates persisted (this commit)**:
+- `plugin/skills/sharpen/SKILL.md` v0.9.0 → v0.10.0: mandatory empirical density check + surface-type declaration + Q1-Q5 honest termination test + manufactured-comfort counter-test (equal-weight to manufactured-criticism)
+- `plugin/skills/decision-design-sharpening/SKILL.md` v0.7.0 → v0.8.0: round termination signals revised to require density measurement (not pattern-match)
+- `DISCIPLINES.md` Discipline 3: surface-type sweet-spot variation; decomposition-trigger applies to ARCHITECTURAL-DECISION only
+
+**Surface types defined**:
+- ARCHITECTURAL-DECISION (per-decision; sweet spot 2-3 rounds; expected decay 6→5→3→0-1)
+- PROCEDURE-DOCUMENT (process docs / methodology / runbooks; sweet spot 4-5+ rounds; density-check governs)
+- SET-LEVEL AUDIT (corpus-level review; per-cluster density)
+- META-ARCHITECTURAL (foundational discipline / framework rebuild; user-trigger primary)
+
+**Promotion criteria**: if surface-type-aware termination judgment continues catching round-termination drift across 3+ subsequent sharpening sessions, promote to architectural commitment in MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES (META-discipline elevation).
+
+**Composes with**:
+- `drafts/execution-fidelity.md` Disguise #5 (substituting AI judgment for codified rule) — manufactured comfort is the round-termination instance of this disguise
+- Observation 28 (procedural-fidelity META-failure post-compact) — same META-failure mode; different application surface
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 wrong-shapes-impossible — empirical density check is structural counter-mechanism (vs convention-based "feels done")
+
+**Test it against**: every subsequent sharpening session ≥3 rounds. Track:
+- Did AI explicitly answer Q1-Q5 at each round termination?
+- Did AI declare surface-type before applying decay-expectation?
+- Did AI measure actual density vs pattern-matching expected decay?
+- Did user override AI's STABLE verdict via density-check surface?
+
+If 3+ sessions pass with no recurrence + no user-override needed: discipline promoted from preliminary observation to validated.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:

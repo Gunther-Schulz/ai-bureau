@@ -78,7 +78,13 @@ At decision-formation moments, run sharpening rounds BEFORE locking:
 4. **Fresh-context advantage**: design context is hot during sharpening; cold during audits
 5. **Greenfield-still-anchored problem**: even greenfield checks ("would we build this from scratch?") look AT existing shape; pre-decision sharpening generates alternatives directly
 
-**Sweet spot: 2 rounds** for narrow architectural surface; up to 3 for broad surface. Round 4+ at decision-design phase signals decomposition is missing.
+**Sweet spot per surface type** (NEW v0.8.0; per session-16 procedure-document META-failure):
+- ARCHITECTURAL-DECISION: 2-3 rounds; expected decay 6→5→3→0-1
+- PROCEDURE-DOCUMENT (process docs / methodology): density-check governs; sweet spot may be 4-5 rounds
+- SET-LEVEL AUDIT (corpus-level): per-cluster density; rounds continue until cluster exhausted
+- META-ARCHITECTURAL (foundational discipline / framework rebuild): user-trigger primary
+
+Pattern-matching architectural-decision decay onto procedure-document or set-level audit = recurrent bias. **Empirical density check mandatory at every round termination** (count substantive findings current vs previous; ≥50% drop = decay confirmed). Decomposition trigger (Round 4+ signals decomposition missing) applies to ARCHITECTURAL-DECISION surface only.
 
 **Two-phase pattern**:
 - **Decision-design phase**: 2-3 rounds at decision-formation moment; architectural-decision lock
@@ -265,7 +271,7 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.7.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; Round 1 termination checklist mandatory per Discipline 10; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; sweet spot per surface type) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.8.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; Round 1 termination checklist mandatory per Discipline 10; mandatory empirical density check + surface-type declaration + honest termination test (Q1-Q5) at every round termination per v0.8.0 + sharpen v0.10.0; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
 | Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) + `profiles/INDEX.md` |
 | Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `DISCIPLINES.md` Discipline 8 |
 | Apply principle uniformly | When user states a principle/goal | `DISCIPLINES.md` Discipline 2 |
