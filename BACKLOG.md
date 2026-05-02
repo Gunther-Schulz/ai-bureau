@@ -139,6 +139,14 @@ ARCH-corpus-specific lenses activate when ARCH approaches lockable state. Run be
 - **Lens 14 (DR coverage gap)** — every architectural commitment lives in ARCH OR has explanatory DR
 - **Lens 15 (Granularity match)** — per ~500-line topic budget; decomposition / merge signals
 
+This is **Checkpoint C3** in the locked audit cadence (per `DISCIPLINES.md` Discipline 9). C1 + C2 fire earlier in Phase 3 (post-3.4 + post-3.5) per below.
+
+### Coherence-audit checkpoints in Phase 3 (per `DISCIPLINES.md` Discipline 9)
+
+- **C1: Post-Phase-3.4 close** [scheduled this commit] — full corpus-set audit after all 7 Pattern A protocol topics locked (substrate ✅ / adapter ✅ / sparring ✅ / audit / coordination / trust / time). Validates Pattern A precedent set + 18-section template + per-Pattern-A cardinality variations before primitive-cluster topics extend on the pattern. 10 universal lenses + early indicators of Lens 13 (architectural protocol completeness).
+- **C2: Post-Phase-3.5 close** [scheduled this commit] — full corpus-set audit after 4 primitive cluster + 2 cross-cutting integrator topics locked. Validates primitive clusters compose cleanly with Pattern A protocols + cross-cutting integrators surface no gaps. 10 universal lenses; early indicators of Lens 11-12.
+- **C3: Phase 3.8 phase-boundary** (above) — ARCH-specific Lenses 11-15 activate; comprehensive corpus-set audit before Phase 4 starts.
+
 ---
 
 ## Phase 4 — Decision Records (selective)
@@ -146,6 +154,10 @@ ARCH-corpus-specific lenses activate when ARCH approaches lockable state. Run be
 ### Open
 
 - **DR coverage gap** items — surface from Lens 14 audit; capture decisions that need standalone DR (vs ARCH-embedded)
+
+### Coherence-audit checkpoint in Phase 4 (per `DISCIPLINES.md` Discipline 9)
+
+Phase 4 close audit subsumed into C4 (Phase 6 pre-implementation) per cadence rationale: ROADMAP + spec planning audit together at Phase 6 pre-implementation; separate Phase 4 close audit not warranted unless 5+ DR trigger fires mid-Phase-4 (per Discipline 9 trigger conditions). Lens 16 (decision-linkage / constraint-flow tracking) activates within C4.
 
 ---
 
@@ -188,6 +200,11 @@ When STRATEGY.md is created, fold these positioning claims (removed from VISION 
 - **App-skill rebuild against locked architecture** — 19 archived skills (orchestrator, draft-textteil-b/c, review-draft, validate-checklist, validate-bausteine, validate-latex-style, verify-citations, research-references, draft-cover-mail, save-baustein, record-feedback, survey-project, promote-to-skill, watch-list, audit, design-review, author-manifest, setup-office). REBUILD INTO **deployment instance** (e.g., PBS-Schulz), NOT into this repo (per TOP-LEVEL SCOPE commitment).
 - **Backend / MCP server rebuild** — Python MCP server (LanceDB + fastembed + bge-m3 + LaTeX compile wrapper). Same: deployment instance, not framework source.
 - **Single-touch refactor** (#11 from archived ROADMAP) — `department:` → `specialist:` frontmatter rename + slash-command namespacing rebuild
+
+### Coherence-audit checkpoints in Phase 6 (per `DISCIPLINES.md` Discipline 9)
+
+- **C4: Phase 6 pre-implementation** [scheduled this commit] — architectural-validation pass before implementation work begins. Per `pre-implementation-sharpening` skill timing. Catches architectural drift accumulated across Phase 4-5 specs/code planning. 10 universal lenses + Lens 17 (schema completeness) for Phase 6 spec-set.
+- **C5: Post-Phase-6 close** [scheduled this commit] — final audit before stability lock + promotion to higher-classification. Full corpus including specs + code. 10 universal lenses + Lens 18 (spec/impl divergence) activates.
 
 ---
 

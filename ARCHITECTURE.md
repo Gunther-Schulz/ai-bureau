@@ -34,7 +34,7 @@
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
-| **3.8** | Coherence-audit Lenses 11-15 activation (phase-boundary audit before Phase 4) | Pending |
+| **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — preceded by C1 (post-3.4) + C2 (post-3.5) per cadence locked in `BACKLOG.md` Phase 3 audit-checkpoints section |
 
 Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions before structure before content before audit.
 
