@@ -464,11 +464,68 @@ VISION.md (~258 lines) + GLOSSARY.md (2365 lines, 36 entries) Re-Read fresh via 
 
 ### Step 5: Compare to current locked work
 
-(pending)
+**Status**: COMPLETE (session 17, 2026-05-02).
 
-### Step 6: Surface revisions
+**Method**: Sample-read affected artifacts (arch/sparring.md / arch/audit.md / ARCHITECTURE.md §§2-6) to confirm cascade scope; commit per-artifact verdicts on remaining 11 via Step-1.B + Step-2 + Step-4 cross-validation.
 
-(pending)
+**Per-artifact verdict**:
+
+| Artifact | Path | Verdict | Reason |
+|---|---|---|---|
+| substrate ARCH topic | `arch/substrate.md` | **GREENFIELD-EQUIVALENT** + minor structural restructure per Step 4 | Pattern A confirmed Step 3; substrate IS the template's shape-anchor (template fits); REVISION-1 already applied per commit a602dc7 |
+| substrate DR | `docs/decisions/substrate-arch-topic.md` | **GREENFIELD-EQUIVALENT** | Same as topic |
+| adapter ARCH topic | `arch/adapter.md` | **MINOR-REVISION** | Pattern A confirmed Step 3; some §§3/8/10-13 thin per Step 4 template restructure |
+| adapter DR | `docs/decisions/adapter-arch-topic.md` | **GREENFIELD-EQUIVALENT** at architectural level; minor cascade refresh |
+| sparring ARCH topic | `arch/sparring.md` | **NEEDS-REVISION** (substantive content) | Frontmatter "Pattern A protocol topics (#3 of 8)" + body Pattern A claims; reclassify as mechanism class with per-shape policy variation per Step 3. Read of line 17 confirmed: "per-shape variation IS the load-bearing variation" = POLICY-level (which sub-mechanisms active per shape), not Pattern A pluggability. |
+| sparring DR | `docs/decisions/sparring-arch-topic.md` | **NEEDS-REVISION** (cascade from topic) | Same Pattern A → mechanism-class reclassification |
+| audit ARCH topic | `arch/audit.md` | **NEEDS-REVISION** (substantive content) | Frontmatter "#4 of 8" + body Pattern A claims; reclassify as mechanism class with per-shape granularity policy per Step 3. Read of line 17 confirmed: "per-shape policy declares granularity + event-kind catalog" = POLICY-level (not alternative implementations). Storage-backend variation = substrate-impl level. |
+| audit DR | `docs/decisions/audit-arch-topic.md` | **NEEDS-REVISION** (cascade from topic) | Same Pattern A → mechanism-class reclassification |
+| Phase 3.2 topic catalog | `ARCHITECTURE.md` §4 (line 52-71) | **NEEDS-REVISION** | 14 topics → 11 (cancel coordination + trust + time topics; reshape sparring + audit topics) |
+| Phase 3.2 composite DR | `docs/decisions/phase-3-2-doc-organization.md` | **NEEDS-REVISION** | Topic-catalog reduction cascades |
+| Phase 3.1 workflow DR | `docs/decisions/workflow-bipartite-classification.md` | **GREENFIELD-EQUIVALENT** | Pattern B confirmed Step 2; classification holds |
+| Phase 3.1 work-unit DR | `docs/decisions/work-unit-bipartite-classification.md` | **GREENFIELD-EQUIVALENT** | Pattern B confirmed Step 2 |
+| Phase 3.1 deployment DR | `docs/decisions/deployment-derived-classification.md` | **GREENFIELD-EQUIVALENT** | DERIVED classification confirmed Step 1.B |
+| Phase 3.1 engaged-authorship DR | `docs/decisions/engaged-authorship-operational-definition.md` | **GREENFIELD-EQUIVALENT** | DERIVED axis-3 success mode confirmed Step 1.B |
+
+Plus cascade-affected (NOT in CR-4 list but cascading from Steps 3+4):
+- `MAINTENANCE.md` line 326-349 (18-section template) → **NEEDS-REVISION** (Step 4)
+- `MAINTENANCE.md` line 868 (`framework` body's 8-protocol catalog) → **NEEDS-REVISION** (Step 3)
+- `GLOSSARY.md` `protocol (architectural)` cross-archetype catalog (line 1488-1496) → **NEEDS-REVISION** (Step 3; drop 5 protocols)
+
+### Step 6: Surface revisions (tiered)
+
+**Status**: COMPLETE (session 17, 2026-05-02).
+
+**Tier 1 — foundational (cascades affect multiple ARCH topics)**:
+- **T1.1** Pattern A protocol catalog reduction: 8 → 3 (substrate / adapter / quality-gate). Drop 5: sparring (reclassify mechanism class), audit (reclassify mechanism class), coordination (subsume into substrate hooks + per-shape policy), trust (subsume into authority-binding mechanism + per-shape policy), time (subsume into substrate-impl + adapter time-driven operations).
+- **T1.2** Pattern A topic template restructure: 18-section monolithic → 12 common-required + 6 protocol-specific-conditional. Substrate-shape-anchored template per DR pre-flag; greenfield-derived structure tested against substrate (18 sections; all conditional apply) + adapter (~15-16 sections) + quality-gate (~13-14 sections).
+
+**Tier 2 — per-topic substantive content revision**:
+- **T2.1** `arch/sparring.md` (370 lines): reclassify topic-cluster from "Pattern A #3 of 8" → "mechanism class with per-shape policy variation"; rewrite Pattern A claims (Surface + Implementations + Selection language) → mechanism-class language (8 sub-mechanism contracts + per-shape policy declares which active + how-enforced). Body content largely transferable; classification framing replaced.
+- **T2.2** `arch/audit.md` (373 lines): reclassify topic-cluster from "Pattern A #4 of 8" → "mechanism class with per-shape granularity policy"; rewrite Pattern A claims → mechanism-class language (AuditEvent schema = mechanism Surface + per-shape granularity policy + substrate-mediated storage backend). Body content largely transferable.
+- **T2.3** `arch/substrate.md` (406 lines): minor structural restructure per T1.2 template (§§3, 8, 10, 11, 12, 13 stay in topic — substrate has all 6 — but reorganize as "substrate-protocol-specific" sub-sections under common-template). Content unchanged.
+- **T2.4** `arch/adapter.md` (457 lines): minor revision per T1.2 template (§§3, 10, 11 retain adapter-relevant content; §§8, 12, 13 likely thin → either drop or retain as N/A markers); audit content likewise.
+
+**Tier 3 — Phase 3.2 + cascade**:
+- **T3.1** `ARCHITECTURE.md` §2 Phase 3 sub-phase status table (line 33): "8 Pattern A protocol topics" → "3 Pattern A protocol topics"; coordination + trust + time CANCELLED; sparring + audit RECLASSIFIED status notes.
+- **T3.2** `ARCHITECTURE.md` §4 Topic catalog (line 52-71): 14 topics → 11 topics (cancel rows 5/6/7 coordination/trust/time; reshape rows 3/4 sparring/audit); update foundation-up-dependency claim accordingly.
+- **T3.3** `ARCHITECTURE.md` §6 Cross-cutting Pattern A examples (line 106): "Substrate / Adapter / Sparring / Audit / Coordination / Trust / Time / Quality-gate" → "Substrate / Adapter / Quality-gate".
+- **T3.4** `docs/decisions/phase-3-2-doc-organization.md` (composite DR): revise per topic-catalog reduction; supersession status applied if foundational.
+- **T3.5** `docs/decisions/sparring-arch-topic.md` (DR): cascade reclassification; supersession noted.
+- **T3.6** `docs/decisions/audit-arch-topic.md` (DR): cascade reclassification; supersession noted.
+- **T3.7** `MAINTENANCE.md` line 326-349 (18-section template): restructure per T1.2 (12 common + 6 conditional).
+- **T3.8** `MAINTENANCE.md` line 868 (`framework` body's 8-protocol catalog): "Substrate, Adapter, Coordination, Audit, Sparring, Trust, Time, Quality-gate" → "Substrate, Adapter, Quality-gate" (with note that audit + sparring are mechanism classes; coordination/trust/time subsumed).
+- **T3.9** `GLOSSARY.md` `protocol (architectural)` cross-archetype catalog (line 1488-1496): drop 5 protocols (sparring/audit/coordination/trust/time); keep substrate/adapter; verify quality-gate retained.
+
+**Tier 4 — NOT REVISIONS (confirmations / unaffected)**:
+- substrate ARCH topic content GREENFIELD-EQUIVALENT (only T2.3 structural restructure per template)
+- substrate DR GREENFIELD-EQUIVALENT
+- Phase 3.1 4 DRs (workflow / work-unit / deployment / engaged-authorship) GREENFIELD-EQUIVALENT
+- VISION axes 1/2/3 unchanged (sparring as VISION axis stays anchored; reclassification is at framework-mechanism layer not VISION layer)
+- 36 GLOSSARY entries' primitive-concept validity unchanged (Step 1.B verdict)
+- Pattern A vs B vs C 3-pattern partition unchanged (Step 2 verdict)
+
+**Cascade scope estimate**: 10 file revisions; 2 substantive content rewrites (T2.1 + T2.2 sparring + audit topics; ~370 lines each); 2 minor topic restructures (T2.3 + T2.4 substrate + adapter); 1 cross-doc table update (T3.1-3.3 ARCHITECTURE); 3 DR updates (T3.4-3.6); 1 MAINTENANCE update (T3.7+T3.8); 1 GLOSSARY entry catalog update (T3.9). Plus 3 ARCH topics cancelled (coordination + trust + time saves ~1500 lines un-written).
 
 ### Step 7: Decide
 
