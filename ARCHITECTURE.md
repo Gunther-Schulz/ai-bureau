@@ -1,41 +1,177 @@
 # Architecture — Phase 3 rebuild (in progress)
 
-> **Status**: Phase 3 ARCH rebuild ACTIVE. Phase 2 GLOSSARY foundational vocabulary lock COMPLETE (34 entries). This doc is the overview; per-topic detail will live in `arch/<topic-slug>.md` files as Phase 3.3+ topic content lands (directory not yet created).
+> **Status**: Phase 3 ARCH rebuild ACTIVE. Phase 2 GLOSSARY foundational vocabulary lock COMPLETE (35 entries). Phase 3.1 closed; Phase 3.2 topic taxonomy + structure LOCKED. Per-topic detail will live in `arch/<topic-slug>.md` files as Phase 3.3+ topic content lands (directory not yet created).
 
-## What this doc is
+## 1. Audience + scope
 
-Layer 2 Overview per `MAINTENANCE.md` 5-layer doc model. Read on substantive sessions involving architectural work. Cites GLOSSARY entries (Layer 1; locked) + DRs (Layer 4; selective rebuild Phase 4) + specs (Layer 5; Phase 6 territory).
+**This doc is framework-developer documentation.** Layer 2 Overview per `MAINTENANCE.md` 5-layer doc model. Loaded at framework-development session start (along with VISION + MAINTENANCE.md + HANDOFF) for architectural orientation.
 
-Currently captures **Phase 3 progress** + **locked architectural decisions** + **active disciplines** + **provisional topic taxonomy**. Migrates toward stable architectural overview as Phase 3 completes.
+**NOT loaded at production runtime by deployed-workspace AI.** Per `feedback_ai_as_runtime.md` discipline, AI in a deployed PBS workspace doing accountability-bearing work loads runtime-relevant markdown (workspace.md / active specialist DEFINITIONs / skill SKILL.md / shape policy bundles) — not framework architecture documentation.
 
-## Phase 3 sub-phase status
+**Three consumer modes**:
+
+| Mode | Consumer | Loads ARCHITECTURE.md? |
+|---|---|---|
+| Framework development (current Phase 3+ work) | AI as framework-developer-collaborator + human framework developers | YES — orientation at session start |
+| Deployment template creation (L3) / shape composition (L4) | Template/shape creators needing framework architecture understanding | OCCASIONALLY — on-demand reference |
+| Production runtime (deployed PBS workspace) | AI runtime processing accountability-bearing work | NO — framework architecture not needed for per-claim work |
+
+**Optimization target**: human readability + framework-developer orientation. NOT optimized for AI runtime parsing (no machine-readable schema; no terse rule encoding). Per `feedback_llm_instruction_tightness.md`: instruction tightness matters most for production-runtime markdown layer (Mode 1 in §6 Logic placement modes) — that lives in skills/specialists/workspace.md, not here.
+
+**Scope**: captures **Phase 3 progress** + **topic catalog** + **reading order** + **cross-cutting principles** + **locked architectural decisions** + **active disciplines** + **watch-list**. Migrates toward stable architectural overview as Phase 3 completes.
+
+**Cites**: GLOSSARY entries (Layer 1; locked) + DRs (Layer 4; selective rebuild Phase 4) + specs (Layer 5; Phase 6 territory).
+
+## 2. Phase 3 sub-phase status
 
 | Sub-phase | Scope | Status |
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
-| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | **COMPLETE** — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship LOCKED. Phase 3.1 closed. Coherence-audit recommended before Phase 3.2 topic taxonomy. |
-| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decisions 1-3 LOCKED (taxonomy / file naming / cross-cutting placement); Sub-decision 4 (ARCHITECTURE.md overview structure) pending |
-| **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
+| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
+| **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
+| **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
-| **3.5** | Per-primitive detail topics (9 primitives + axis-interactions) | Pending |
+| **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
 | **3.8** | Coherence-audit Lenses 11-15 activation (phase-boundary audit before Phase 4) | Pending |
 
 Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): questions before structure before content before audit.
 
-## Doc structure (Phase 3.0 LOCKED)
+## 3. Doc structure (Phase 3.0 LOCKED)
 
 **Hybrid**: single overview + per-topic files.
 
 | Doc | Purpose | Lines | Status |
 |---|---|---|---|
 | `ARCHITECTURE.md` (this file) | Overview + topic catalog + cross-cutting principles + how topics compose + Phase 3 status tracking | ~1-2K | Active |
-| `arch/<topic-slug>.md` × 15-20 | Per-topic detail | ~500 each | Not yet created (created as Phase 3.3+ produces topic content) |
+| `arch/<topic-slug>.md` × 14 | Per-topic detail | ~500 each | Not yet created (created as Phase 3.3+ produces topic content) |
 
 **Why hybrid**: pure-single (10K lines) is unwieldy + context-budget concern; pure-multi has no entry point + cross-cutting orphaning. Hybrid aligns with progressive-disclosure principle (skill-craft pattern: SKILL.md → PROCEDURE.md → references/) + sharpen's AI-executor test (cognitive iteration via structure, not gist-extraction across 10K lines).
 
-## Locked architectural decisions
+## 4. Topic catalog (Phase 3.2 LOCKED — 14 topics)
+
+14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Per Phase 3.2 Sub-decision 1 lock; filenames per Sub-decision 2 lock.
+
+| # | Topic file | Primary content (one-liner) | Phase |
+|---|---|---|---|
+| 1 | `arch/substrate.md` | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 |
+| 2 | `arch/adapter.md` | Adapter Protocol Surface + per-integration-class + lifecycle/auth | 3.4 |
+| 3 | `arch/sparring.md` | Sparring Protocol Surface + 8 sub-mechanisms + impl variations | 3.4 |
+| 4 | `arch/audit.md` | Audit Protocol Surface + audit-emission + audit-trail + event primitive | 3.4 |
+| 5 | `arch/coordination.md` | Coordination Protocol Surface + actor primitive interaction | 3.4 |
+| 6 | `arch/trust.md` | Trust Protocol Surface + authority-binding mechanism | 3.4 |
+| 7 | `arch/time.md` | Time Protocol Surface + temporal-semantics variations | 3.4 |
+| 8 | `arch/quality-gate.md` | Quality-gate Pattern A Surface + per-shape implementations + signal catalog | 3.6 |
+| 9 | `arch/specialist-skill.md` | Specialist DEFINITION + skill granularity + bundle structure + marketplace | 3.5 |
+| 10 | `arch/practitioner.md` | Practitioner Pattern C bipartite + record placement + multi-practitioner | 3.5 |
+| 11 | `arch/workflow-work-unit.md` | Workflow Pattern B + work-unit Pattern B + workflow_instance state machine + orchestration | 3.5 |
+| 12 | `arch/claim-defensibility.md` | Claim primitive + defensibility test + source-grounding + engaged-authorship + per-claim attestation | 3.5 |
+| 13 | `arch/scope-model.md` | Workspace + Framework C / Owner B / Layer A scope categories + entity placement | 3.5 |
+| 14 | `arch/axis-interactions.md` | 3 VISION axes interaction + co-worker frame + category-collapse cross-axis force | 3.5 |
+
+**Aggregation discipline**: aggregate when items tightly coupled OR individually <100 lines (per coherence-audit Lens 15). Each topic targets ~500 lines avg; per-topic flex acceptable.
+
+**Foundation-up dependency**: topics 1-7 are Pattern A protocols (foundational mechanism layer); 8 quality-gate composes with all axes (observability); 9-12 are primitive clusters (operational primitives); 13-14 are cross-cutting integrators (load LAST since they reference all prior topics).
+
+**Phase 3.7 cross-cutting investigations excluded** (research/strategic items, not ARCH-topic-shaped): PydanticAI substrate eval / Markdown-validation feasibility / Ming research deepening / Adjacent thinkers expansion / Multi-VISION model question. May inform topic content but aren't topics themselves.
+
+**Headroom**: 6 emergent topics may be added (14 → 20 cap) during Phase 3.3-3.6 work without taxonomy revision.
+
+## 5. Reading order
+
+**For new readers** orienting to framework architecture, foundation-up:
+
+1. **VISION.md** (Layer 1) — three-axis thesis; falsification framing
+2. **GLOSSARY.md** (Layer 1) — locked vocabulary (35 entries)
+3. **MAINTENANCE.md** (Layer 0) — doc-system discipline + TOP-LEVEL ARCHITECTURE (framework=mechanisms; shape=policies)
+4. **ARCHITECTURE.md** (Layer 2; this doc) — overview + topic catalog + cross-cutting principles
+5. **arch/<topic>.md** (Layer 3) — topic detail in foundation-up order:
+   - **Pattern A protocols** (mechanism layer): substrate → adapter → audit → trust → coordination → time → sparring → quality-gate
+   - **Primitive clusters** (operational layer): specialist-skill → practitioner → workflow-work-unit → claim-defensibility
+   - **Cross-cutting integrators** (LAST; reference all prior): scope-model → axis-interactions
+6. **DRs** (Layer 4) — decision rationale for specific commits
+7. **Specs** (Layer 5; Phase 6) — Pydantic schemas + spec docs
+
+**For session-resumption**: read HANDOFF.md (current session log) + BACKLOG.md (forward-looking work-tracker) before substantive work.
+
+**For specific debugging / contextual entry**: experienced readers can enter at relevant `arch/<topic>.md` directly; reading order is recommendation not gate.
+
+## 6. Cross-cutting principles
+
+### Pattern-A vs Pattern-B vs Pattern-C structural semantics
+
+| Pattern | Shape | Examples | Composition |
+|---|---|---|---|
+| **Pattern A** (pluggable subsystem) | Surface (interface contract) + Implementations (per-shape variation) + Selection (workspace.md / shape policy declares which impl) | Substrate / Adapter / Sparring / Audit / Coordination / Trust / Time / Quality-gate | Workspace selects exactly one impl per Pattern A slot |
+| **Pattern B** (bipartite definition + instance) | DEFINITION aspect (Framework C / specialist's distributable bundle) + INSTANCE aspect (Owner B / workspace-scope managed entity) | Specialist + Workflow + Work-unit | Specialist DEFINITION declares; workspace activates → instances at Owner B |
+| **Pattern C** (cross-cutting human + record) | HUMAN aspect (cross-cutting; lives outside workspace) + RECORD aspect (Owner B / workspace-scope) | Practitioner | Human anchored cross-cutting; practitioner-record placed at Owner B per active practitioner |
+
+Architectural decisions classify primitives into Pattern A/B/C (or DERIVED if composing from existing primitives without independent structural content). Cross-pattern composition (e.g., specialist Pattern B containing workflow Pattern B) is locked per GLOSSARY entries.
+
+### Cascade direction (UPSTREAM + DOWNSTREAM bidirectional per `MAINTENANCE.md`)
+
+- **UPSTREAM**: GLOSSARY change → cascade to ARCH/DRs/specs (Layer 1 → 2-5)
+- **DOWNSTREAM**: ARCH/DR/spec work surfacing glossary-grade structural fact → retro-fit GLOSSARY before locking (Layer 2-5 → 1)
+
+GLOSSARY back-check fires at decision-design-sharpening Round 2 termination + ARCH topic completion + DR drafting. Prevents architectural insights from staying locked in ARCH/DR layer when they're glossary-grade.
+
+### Scope-categorization framing
+
+Three scope categories (per locked GLOSSARY entries):
+- **Framework C** — distributable definitions (specialist DEFINITIONs / shape policies / Pattern A protocols / mechanism interface contracts)
+- **Owner B** — workspace-bound instances (workspace.md / specialist instances / work-unit instances / workflow_instances / practitioner-records / Actor records / engagement-target entities per shape)
+- **Layer A** — content varying by deployment context (universal / domain-keyed / state-keyed)
+
+Detail in `arch/scope-model.md` (Phase 3.5).
+
+### Foundation-up ordering principle
+
+Lock items others depend on FIRST; downstream items composing with multiple foundations come last. Applied across:
+- Phase 3.1 sub-decisions (workflow → work-unit → deployment → engaged-authorship)
+- Topic ordering (substrate → adapter → ... → axis-interactions)
+- Within Sub-decision sharpening (Round 1 surface → Round 2 expansions per locked Round 1 position)
+
+Per `feedback_foundation_up_ordering.md` + cascade discipline.
+
+### Logic placement modes (4-mode distribution)
+
+Where actual framework logic lives, by interpretability:
+
+| Mode | Layer | Interpretability | Examples |
+|---|---|---|---|
+| **Mode 1** Production-runtime LLM-MD | Operational | AI reads + interprets at workspace activation / per-skill-trigger / per-active-specialist | Skills (`plugin/skills/<skill>/SKILL.md`) / specialist DEFINITIONs / `workspace.md` / shape policy bundles / bausteine |
+| **Mode 2** Production-runtime Python | Substrate-side | Substrate runtime executes | Substrate Instance impl / mechanism Python impls / adapter implementations / quality-gate Pattern A impls / Pydantic schema validation |
+| **Mode 3** Hybrid Phase 6 specs | Spec layer | Pydantic = Python validation; spec docs = LLM-MD reference | Phase 6 spec files (Pydantic + companion docs) |
+| **Mode 4** Development-time LLM-MD | Documentation | Loaded at framework-development session start; NOT production-runtime | ARCHITECTURE.md / arch/* / DRs / MAINTENANCE.md / VISION / GLOSSARY / profiles / learnings / DISCIPLINES.md |
+
+**Discipline implications**:
+- **Mode 1 = highest LLM-instruction tightness** required (per `feedback_llm_instruction_tightness.md`); LLMs paper over imprecise instructions silently
+- **Mode 2 = standard Python development discipline**; self-falsifying via tests + type errors
+- **Mode 3 = bridge** between modes; Pydantic enforces structural shape; spec docs explain semantic intent
+- **Mode 4 = optimize for human readability + AI-developer orientation**; NOT for production-runtime parsing
+
+**Anti-pattern**: encoding framework rules in Mode 4 (ARCHITECTURE.md / arch/) intending production AI to "follow them" — that's the SQL-DB trap (per `feedback_ai_as_runtime.md`). Production AI follows Mode 1 markdown (skills + specialists + workspace.md); Mode 4 is documentation, not runtime substrate.
+
+**Production runtime AI doesn't load Mode 4 docs** (ARCHITECTURE.md / arch/* / VISION / GLOSSARY) — vocabulary + behavior get encoded into Mode 1 skills + specialists at framework-development time. Production AI gets vocabulary via skill instruction inheritance.
+
+### How topics compose
+
+- **Mechanisms** (instances of `mechanism` primitive) are atomic interface contracts; primitives + protocols + axes COMPOSE WITH multiple mechanisms (audit-emission composes with audit-trail + event; persistent-state composes with substrate + session)
+- **Protocols** (Pattern A pluggable subsystems) bundle Surface + Implementations + Selection; topics 1-8
+- **Primitive clusters** group tightly-coupled primitives by composition (specialist contains skill; workflow attaches to work-unit; claim resolves at defensibility-granularity); topics 9-12
+- **Cross-cutting integrators** (axis-interactions; scope-model) — analyze structural composition across all prior topics; topics 13-14
+- **Composing relations between topics** explicitly cross-referenced in each arch/<topic>.md via cross-refs (e.g., arch/audit.md references arch/quality-gate.md as observability consumer)
+
+### Composability + boundaries (per G gate)
+
+Every L1-L4 producer level (specialist / shape / template / workspace) must produce packageable artifacts that support multi-mode consumption. Architectural decisions that produce non-composable artifacts fail G gate. See `profiles/G-composability-gate.md`.
+
+### Pattern-vs-instance discipline
+
+Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer-instance specifics live at workspace level (per practitioner-shape policy mandates), NOT in framework primitive definitions. See `feedback_pattern_not_instance_defers.md` + `profiles/L5a-planner-pbs-schulz.md` (anchor profile demonstrates pioneer reality).
+
+## 7. Locked architectural decisions
 
 ### Quality-gate scope-lock (Phase 3.6 prerequisite) — LOCKED
 
@@ -63,13 +199,9 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 
 **workflow_pattern question** (cross-specialist shared workflows): RESOLVED via D gate mental modeling. Shared patterns live as **Layer A reusable templates / specialist-bundled bausteine** (content, NOT framework primitive). Watch-list signal: if Layer A growth proves insufficient for genuinely-cross-archetype pattern, examine then.
 
-**Round 2 expansions applied**: vocabulary disambiguation; snapshot versioning at workflow_instance creation (preserves defensibility); composes with claim/skill/authority-binding/observability; lifecycle DEFINITION-vs-INSTANCE distinction (immutable per specialist version vs mutable-with-audit); evolution path (ad-hoc → codified through pattern recognition); failure modes (abandoned/failed/suspended) flagged for 3.5; multi-practitioner ownership flagged for 3.5.
-
 **Validated under post-lock disciplines**: Round 1 + Round 2 revisit (with G gate + multi-axis + D gate applied) confirmed lock holds. 0 architectural REVISIONS surfaced.
 
-**Full detail**: `GLOSSARY.md` workflow entry.
-
-**DR**: `docs/decisions/workflow-bipartite-classification.md` — decision rationale + options considered + sharpening rounds metadata + cascade applied + revisit triggers. Created session 16 ahead of formal Phase 4 DR rebuild (per coherence-audit Lens 14 DR coverage discipline applied early).
+**Full detail**: `GLOSSARY.md` workflow entry. **DR**: `docs/decisions/workflow-bipartite-classification.md`.
 
 ### Work-unit bipartite-classification (Phase 3.1) — LOCKED
 
@@ -81,13 +213,7 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 
 **Asymmetry vs workflow** (load-bearing): work-unit always-present + workflow optional-overlay. Together: work-unit is anchor; workflow_instance is opt-in via codified pattern existence. Two Pattern B primitives composing cleanly with reciprocal cardinality (1 work-unit ↔ N workflow_instances; 1 workflow_instance → 1 work-unit).
 
-**Round 2 expansions applied**: kind-namespace disambiguation (multiple specialists → same kind name; resolved via active-specialist + creator's specialist context); multi-workflow_instance composition against single work-unit; kind snapshot semantics on instance creation (preserves audit-trail integrity); quality-gate observability source (lifecycle events + per-claim emissions); multi-practitioner authorship (shape-policy variation; flagged for 3.5); authority-binding on lifecycle transitions; orphan-instance handling on specialist deactivation.
-
-**Round 2 revisions tested + rejected**: split kind/instance into separate primitives (R1; rejected — Pattern B keeps both under one primitive); always-present holds across all shapes including autonomous-business ephemeral batches (R2; rejected — duration ≠ presence); decouple kind from specialist (R3; rejected — kinds inseparable from competence).
-
-**Full detail**: `GLOSSARY.md` work-unit entry.
-
-**DR**: `docs/decisions/work-unit-bipartite-classification.md` — decision rationale + options + Round 1 + Round 2 sharpening + cascade + revisit triggers.
+**Full detail**: `GLOSSARY.md` work-unit entry. **DR**: `docs/decisions/work-unit-bipartite-classification.md`.
 
 ### Deployment definition (Phase 3.1) — LOCKED
 
@@ -98,13 +224,9 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 - **Vocabulary distinction**: workspace = entity (configuration view); deployment = binding-relation (runtime view); both describe same primitive object from different angles
 - **Workspace identity** can persist across multiple deployments over time (backup→restore, substrate migration, re-activation) — workspace identity is workspace-portability concern (Phase 6 spec); deployment count is the runtime binding count
 
-**Round 1 + Round 2 sharpening**: 0 architectural REVISIONS surfaced (R1 retire-vocabulary / R2 scope-classification / R3 Pattern A all rejected); 8 EXPANSIONS applied (industry-vocabulary disambiguation; snapshot/restore semantics; substrate migration semantics; orthogonality with pioneer instance; reciprocal cross-ref to workspace; multi-environment taxonomy; quality-gate observability flow; entity-vs-relation framing).
+**Why DERIVED not PRIMITIVE**: deployment introduces no independent structural content beyond workspace's runtime aspect. No separate cardinality, lifecycle, observability surface, or attributes. DERIVED entry preserves vocabulary utility without inflating primitive count.
 
-**Why DERIVED not PRIMITIVE**: deployment introduces no independent structural content beyond workspace's runtime aspect. No separate cardinality, lifecycle, observability surface, or attributes. Pervasively used across locked entries (`pioneer instance`, `Layer A scope`, `Owner B scope`, `workspace`) but always as workspace-runtime perspective. DERIVED entry preserves vocabulary utility without inflating primitive count.
-
-**Full detail**: `GLOSSARY.md` deployment entry.
-
-**DR**: `docs/decisions/deployment-derived-classification.md` — decision rationale + options + sharpening rounds + cascade + revisit triggers.
+**Full detail**: `GLOSSARY.md` deployment entry. **DR**: `docs/decisions/deployment-derived-classification.md`.
 
 ### Engaged-authorship operational definition (Phase 3.1) — LOCKED
 
@@ -121,61 +243,24 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 - **Framework-level: PRESENCE** — Y/N event-existence test (per-claim production-phase event ≥1 + per-claim attestation event)
 - **Shape-policy-level: QUALITY** — depth-of-engagement signals (substantiveness; counter-argument depth; etc.); quality-gate enforces
 
-**Framework-level enforcement** (per make-wrong-shapes-impossible): events emit per-claim per-phase; quality-gate (Pattern A) detects missing signals; per-shape intervention policy (practitioner-shape friction/block; autonomous-business programmatic block; personal-OS audit-only).
-
-**Round 2 expansions applied**: vocabulary disambiguation (engaged authorship vs engagement vs engaged); Lens 6 reciprocal asymmetry with rubber-stamping (engaged authorship is two-phase success; rubber-stamping is attestation-phase failure only); claim revision per-version semantics; quality-vs-presence two-layer model; workflow_instance composition (engagement events fire regardless of optional workflow overlay); multi-claim batch attestation handling; authority-binding orthogonal composition; pre-existing-claim ingestion; TOC §8 placement; AI-runtime-vs-practitioner engagement subject distinction.
-
-**Round 2 revisions tested + rejected**: PRIMITIVE classification (R1; rejected — DERIVED is correct, no instance-having entity); merge into defensibility entry (R2; rejected — parallel structure to rubber-stamping justifies separate entry; would bloat defensibility); single-phase unification (R3; rejected — composite catches both axis-2 + axis-3 failure modes); per-attestation-event granularity (R4; rejected — claim-granularity locked in defensibility).
-
 **Why this elevates from defensibility's Condition #1 to standalone DERIVED entry**: engaged authorship is load-bearing across multiple entries (`defensibility`, `authorship preservation`, `rubber-stamping`, `quality-gate`, `claim`). Standalone entry preserves canonical definition + composition without bloating defensibility.
 
-**Full detail**: `GLOSSARY.md` engaged authorship entry.
-
-**DR**: `docs/decisions/engaged-authorship-operational-definition.md` — decision rationale + options + Round 1 + Round 2 sharpening + cascade + revisit triggers.
+**Full detail**: `GLOSSARY.md` engaged authorship entry. **DR**: `docs/decisions/engaged-authorship-operational-definition.md`.
 
 ### Phase 3.1 closed
 
-All 4 open architectural questions resolved (workflow / work-unit / deployment / engaged-authorship). Coherence-audit recommended before Phase 3.2 topic taxonomy work begins.
+All 4 open architectural questions resolved (workflow / work-unit / deployment / engaged-authorship). Coherence-audit ran at phase boundary; 0 architectural REVISIONS; 9 cascade-fix EXPANSIONS applied.
 
 ### Topic taxonomy (Phase 3.2 Sub-decision 1) — LOCKED
 
 **Resolution**: 14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordering. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom for emergent additions during Phase 3.3-3.6 work.
-
-**Topic list** (foundation-up):
-
-| # | Topic | Cluster | Primary content |
-|---|---|---|---|
-| 1 | substrate | Pattern A | Substrate Protocol Surface + per-impl + persistent-state mechanism + session interaction |
-| 2 | adapter | Pattern A | Adapter Protocol Surface + per-integration-class + lifecycle/auth |
-| 3 | sparring | Pattern A | Sparring Protocol Surface + 8 sub-mechanisms + impl variations |
-| 4 | audit | Pattern A | Audit Protocol Surface + audit-emission + audit-trail + event primitive |
-| 5 | coordination | Pattern A | Coordination Protocol Surface + actor primitive interaction |
-| 6 | trust | Pattern A | Trust Protocol Surface + authority-binding mechanism |
-| 7 | time | Pattern A | Time Protocol Surface + temporal-semantics variations |
-| 8 | quality-gate | Pattern A | Quality-gate Protocol Surface + per-shape implementations + signal catalog (Phase 3.6) |
-| 9 | specialist+skill | Primitive-cluster | Specialist DEFINITION + skill granularity + bundle structure + marketplace mechanics |
-| 10 | practitioner | Primitive-cluster | Practitioner Pattern C bipartite + record placement + multi-practitioner mechanics |
-| 11 | workflow+work-unit | Primitive-cluster | Workflow Pattern B + work-unit Pattern B + workflow_instance state machine + orchestration mechanism + claim emission attribution |
-| 12 | claim+defensibility | Primitive-cluster | Claim primitive + defensibility test + source-grounding mechanism + engaged-authorship operational definition + per-claim attestation |
-| 13 | scope-model | Cross-cutting | Workspace primitive + Framework C / Owner B / Layer A scope categories + entity placement rules + deployment-binding |
-| 14 | axis-interactions | Cross-cutting | 3 VISION axes interaction analysis + co-worker frame + category-collapse cross-axis force |
 
 **Aggregation rationale**:
 - Pattern A protocols are natural topic anchors (Surface + per-impl + composing mechanisms + composing primitives all coherent under one topic)
 - Primitives without Pattern A home cluster by composition tightness (specialist+skill; workflow+work-unit; claim+defensibility — all tightly coupled per locked entries)
 - Cross-cutting topics for irreducibly cross-axis content (scope-model; axis-interactions)
 
-**Aggregation discipline** (per coherence-audit Lens 15): aggregate when items tightly coupled OR individually <100 lines. Each topic targets ~500 lines avg; per-topic flex acceptable (substrate may exceed; time-protocol may stay lean).
-
-**Forward-reference handling**: write topics in foundation-up dependency order; placeholder forward-refs ("forthcoming arch/<topic>.md") resolve via cascade as later topics lock. Per MAINTENANCE.md cascade discipline.
-
-**Excluded from topic count**: Phase 3.7 cross-cutting investigations (PydanticAI eval / Markdown validation / Ming research / adjacent thinkers / multi-VISION model) — research/strategic items, not ARCH-topic-shaped. Inform topics but aren't topics themselves.
-
-**Round 2 expansions applied**: foundation-up ordering codified; forward-reference handling explicit; archived corpus integration noted; topic granularity calibration confirmed; no missing topics (R6 boundary check passed).
-
-**Round 2 revisions tested + rejected**: Pattern A protocol/primitive splits (R1); specialist+skill split (R2); claim+defensibility split (R3); axis-interactions merge (R4); ARCHITECTURE.md as topic (R5) — all rejected as fragmenting tightly-coupled content or violating locked structural decisions.
-
-**DR deferred to Phase 3.2 synthesis pass**: per Mode-2 composite decomposition (decision-design-sharpening v0.6.0), Phase 3.2 is upfront-known composite (taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure). Single composite DR captures all 4 sub-decisions after final synthesis pass.
+**Full topic list**: see §4 Topic catalog above. **Composite DR**: pending Phase 3.2 final synthesis pass.
 
 ### File naming convention (Phase 3.2 Sub-decision 2) — LOCKED
 
@@ -183,81 +268,46 @@ All 4 open architectural questions resolved (workflow / work-unit / deployment /
 
 **Slug rules**:
 - Path: `arch/<slug>.md`
-- Slug: lowercase kebab-case; matches topic name in ARCHITECTURE.md catalog
+- Slug: lowercase kebab-case; matches topic name in topic catalog
 - Aggregation join: hyphen (`specialist+skill` → `specialist-skill.md`; `workflow+work-unit` → `workflow-work-unit.md`)
 - No prefix (numeric / bucket / category)
-- Plain `.md` extension
-- Flat `arch/` directory; NO sub-directories per topic-cluster
+- Plain `.md` extension; flat `arch/` directory; NO sub-directories per topic-cluster
 - NO `arch/README.md` or `arch/INDEX.md` (ARCHITECTURE.md is canonical entry point)
 
-**Cross-doc link conventions**:
-- From within arch/ tree: relative paths (`adapter.md`)
-- From ARCHITECTURE.md or other Layer 1-2 docs: `arch/<slug>.md`
-- Anchor links: GitHub-flavored auto-anchor (`#section-name`)
+**Cross-doc link conventions**: relative paths within arch/; `arch/<slug>.md` from elsewhere; GitHub-flavored anchors (`#section-name`).
 
-**File header convention**:
-- Minimal frontmatter (title; topic-cluster; status: drafted/locked/forthcoming)
-- H1 title = de-kebab-cased slug
+**File header convention**: minimal frontmatter (title; topic-cluster; status: drafted/locked/forthcoming); H1 = de-kebab-cased slug.
 
-**Final 14 topic filenames**:
-
-| # | Slug | Filename |
-|---|---|---|
-| 1 | substrate | `arch/substrate.md` |
-| 2 | adapter | `arch/adapter.md` |
-| 3 | sparring | `arch/sparring.md` |
-| 4 | audit | `arch/audit.md` |
-| 5 | coordination | `arch/coordination.md` |
-| 6 | trust | `arch/trust.md` |
-| 7 | time | `arch/time.md` |
-| 8 | quality-gate | `arch/quality-gate.md` |
-| 9 | specialist-skill | `arch/specialist-skill.md` |
-| 10 | practitioner | `arch/practitioner.md` |
-| 11 | workflow-work-unit | `arch/workflow-work-unit.md` |
-| 12 | claim-defensibility | `arch/claim-defensibility.md` |
-| 13 | scope-model | `arch/scope-model.md` |
-| 14 | axis-interactions | `arch/axis-interactions.md` |
-
-**Why these conventions** (Round 2 expansions applied):
-- Slug stability across taxonomy refinements (no embedded ordering / bucketing in path)
-- Visual + grep parity with GLOSSARY TOC anchors (same kebab-case)
-- Flat directory simplifies navigation; no path-juggling on re-clustering
-- ARCHITECTURE.md catalog is canonical entry (no arch/README.md duplication)
-- Standard markdown link / anchor conventions (no custom resolver)
-
-**Round 2 expansions applied**: cross-doc consistency confirmed; flat arch/ explicit anti-pattern; slug stability noted; no arch/README explicit anti-pattern; plain .md extension; cross-doc link conventions; anchor convention; file header convention; renaming protocol via standard cascade.
-
-**Round 2 revisions tested + rejected**: bucket sub-dirs (R1); numbered prefix (R2); `+` aggregation char (R3); multi-aspect primitive sub-files (R4); generic-word slug ambiguity (R5) — all rejected.
+**Why these conventions**: slug stability across taxonomy refinements (no embedded ordering / bucketing in path); visual + grep parity with GLOSSARY TOC anchors; flat directory simplifies navigation.
 
 ### Cross-cutting topics placement (Phase 3.2 Sub-decision 3) — LOCKED
 
 **Resolution**: cross-cutting CONCERNS vs cross-cutting TOPICS distinction codified.
 
-**Cross-cutting TOPICS** (dedicated `arch/<topic>.md` files per Sub-decisions 1+2):
-- `arch/axis-interactions.md` — 3 VISION axes interaction analysis + co-worker frame + category-collapse cross-axis force
-- `arch/scope-model.md` — workspace + Framework C / Owner B / Layer A scope categories + entity placement rules
-- `arch/quality-gate.md` — Pattern A runtime protocol observing all axes (Phase 3.6)
-
-**Cross-cutting CONCERNS** (ARCHITECTURE.md sections):
-- Pattern-A-vs-B-vs-C structural semantics
-- Cascade direction (UPSTREAM + DOWNSTREAM bidirectional per MAINTENANCE.md)
-- Scope-categorization framing (mechanism / shape / cross-cutting; framework / shape / instance)
-- Foundation-up ordering principle
-- G + D validation gate disciplines (existing "Disciplines applying to all ARCH work" section)
+- **Cross-cutting TOPICS** (dedicated `arch/<topic>.md` files): axis-interactions / scope-model / quality-gate
+- **Cross-cutting CONCERNS** (ARCHITECTURE.md sections): Pattern-A/B/C semantics / cascade direction / scope-categorization framing / foundation-up ordering / G+D gate disciplines / Logic placement modes
 
 **Distinction is load-bearing**: TOPIC = architectural content (lives in arch/); CONCERN = meta-principle (lives in ARCHITECTURE.md). Different placement, different KIND.
 
-**Reading order for cross-cutting topics**: axis-interactions + scope-model LAST in foundation-up sequence (integrate across ALL prior topics). Quality-gate after foundational protocols (Pattern A protocol; observability layer).
+**Reading order for cross-cutting topics**: axis-interactions + scope-model LAST in foundation-up sequence (integrate across ALL prior topics). Quality-gate after foundational protocols.
 
-**No content migration** between MAINTENANCE.md (Layer 0 discipline) and arch/scope-model.md (Layer 3 detail) — layer-distinction maintained; cross-refs only.
+**No content migration** between MAINTENANCE.md (Layer 0 discipline) and arch/scope-model.md (Layer 3 detail) — layer-distinction maintained.
 
-**Catalog uniformity**: cross-cutting topics get one-liner in ARCHITECTURE.md catalog (same depth as Pattern A protocol topics + primitive-cluster topics; uniform treatment).
+### ARCHITECTURE.md overview structure (Phase 3.2 Sub-decision 4) — LOCKED
 
-**Round 2 expansions applied**: cross-cutting CONCERNS-vs-TOPICS distinction named explicit; cross-cutting principles section scope vs Disciplines section distinction; reading order for cross-cutting topics; MAINTENANCE-vs-arch/scope-model layer split (no migration); quality-gate dual nature (Pattern A primary + cross-cutting emergent); cross-references via standard relative paths; forward-reference handling per Sub-decision 1; category-collapse placement (GLOSSARY + axis-interactions; not own topic).
+**Resolution**: 9-section structure (this doc's structure). Foundation-up ordered for new-reader path: orientation → Phase status → doc structure → topic catalog → reading order → cross-cutting principles → locked decisions → disciplines → watch-list.
 
-**Round 2 revisions tested + rejected**: separate cross-cutting principles doc (R1) — DISCIPLINES.md already exists; arch/cross-cutting-principles.md as 15th topic (R2) — violates Sub-decision 1; one-liner-vs-paragraph catalog format (R3) — deferred to Sub-decision 4; explicit cross-cutting-concern-vs-topic naming (R4) — applied via E1.
+**Audience + scope explicit** (Section 1): framework-developer documentation; loaded at framework-development session start; NOT production-runtime by deployed-workspace AI. Per Mode 4 placement (§6 Logic placement modes).
 
-## Disciplines applying to all ARCH work
+**Logic placement modes** (Section 6 cross-cutting principles): 4-mode distribution (Mode 1 production-runtime LLM-MD / Mode 2 production-runtime Python / Mode 3 hybrid Phase 6 specs / Mode 4 development-time LLM-MD documentation). Codifies where actual framework logic lives by interpretability mode + scopes ARCHITECTURE.md placement.
+
+**Catalog uniformity**: cross-cutting topics + Pattern A protocols + primitive clusters all get same one-liner depth in §4 Topic catalog. Topics earn detail in their own arch/<topic>.md files.
+
+**Locked decisions section growth mitigation**: each lock summary stays SHORT (resolution + 1-2 sentence rationale + cross-ref to arch/<topic>.md detail OR DR for full content). Detail lives elsewhere; ARCHITECTURE.md keeps catalog-style summaries.
+
+**Composite DR pending**: Phase 3.2 final synthesis pass produces single composite DR capturing all 4 sub-decisions per Mode-2 composite decomposition (decision-design-sharpening v0.6.0).
+
+## 8. Disciplines applying to all ARCH work
 
 These disciplines fire during architectural decision-making + validation. Codified via memory feedback rules + structural gates + sharpening skills.
 
@@ -270,7 +320,7 @@ These disciplines fire during architectural decision-making + validation. Codifi
 
 Both gates are STRUCTURAL — wrong shapes can't pass. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
 
-Gates are codified in `profiles/INDEX.md`. Decision-design-sharpening v0.4.0 references them in Round 2 stress-test list.
+Gates are codified in `profiles/INDEX.md`. Decision-design-sharpening v0.6.0 references them in Round 2 stress-test list.
 
 ### Multi-axis validation (per `feedback_multi_axis_validation.md`)
 
@@ -281,11 +331,17 @@ Validate primitive classifications across three orthogonal dimensions:
 
 Plus explicit non-coverage question: what use cases does primitive NOT cover; intentional or gap?
 
-### Profile-grounded validation (per `profiles/INDEX.md`)
+### Profile-anchored validation (per `decision-design-sharpening` v0.5.0+ + `profiles/INDEX.md` clusters)
 
-Profiles are persistent grounding for who-and-what the framework serves. Span lifecycle stages × shape variations × archetypes. Replace single-axis cross-archetype illustrations with multi-axis profile-anchored validation.
+For high-impact decisions (primitive classifications; per-mechanism / per-protocol / per-primitive-detail design — Phase 3.3-3.6 territory), test against ≥3 of 4 profile-clusters:
+- **Cluster A — Producers**: L1 specialist creator + L2 shape definer + L3 deployment template creator + L9 shape catalog curator
+- **Cluster B — Deployers**: L4a solo self-deploy + L4b IT admin at firm + L5a planner-pbs-schulz pioneer (deployer-of-self)
+- **Cluster C — Consumers**: L5a-L5j practitioner archetypes + L5e autonomous-business + L5f personal-OS
+- **Cluster D — Validators**: L8 auditor/reviewer + G + D gates
 
-17 profiles (2 full + 15 skeletons). Skeletons fleshed out on-demand when specific decisions need them.
+For routine decisions or cascade-from-established-pattern decisions, multi-axis principle-level check is sufficient. Discriminator: shape-specific or instance-specific surface → profile-anchored; purely structural cascade → multi-axis principle-level.
+
+17 profiles (2 full + 15 skeletons). Skeletons fleshed out on-demand when specific decisions need them (per coherence-audit on-demand fleshing strategy).
 
 ### Audit scaling strategy (per coherence-audit v0.3.0)
 
@@ -299,127 +355,35 @@ Don't default to full systematic. Match audit-strategy to audit-context. See coh
 
 ### Other disciplines
 
-- **Foundation-up workflow ordering** (per `feedback_foundation_up_ordering.md`): items others depend on come first; downstream items that compose with multiple foundations come last; parallel-depth items batch with shared sharpening
+- **Foundation-up workflow ordering** (per `feedback_foundation_up_ordering.md`): items others depend on come first; downstream items composing with multiple foundations come last; parallel-depth items batch with shared sharpening
 - **2-round sweet spot** per architectural decision (per `feedback_pre_decision_sharpening.md` + sharpen v0.9.0)
-- **Cascade discipline** (per `MAINTENANCE.md`): changes propagate up/down/sideways in same commit
+- **Composite-decision decomposition** (per `decision-design-sharpening` v0.6.0): two modes — emergent (>3-round drift signal) + upfront-known (3+ tightly-coupled sub-decisions visible at framing); foundation-up sub-decision sequence + per-sub-decision 2-round + final synthesis
+- **Cascade discipline** (per `MAINTENANCE.md`): UPSTREAM + DOWNSTREAM bidirectional; changes propagate up/down/sideways in same commit; GLOSSARY back-check at Round 2 termination
 - **Pattern-vs-instance** (per `feedback_pattern_not_instance_defers.md`): no instance-leakage; cross-archetype illustrations required
-- **AI-as-runtime hybrid-shape** (per `feedback_ai_as_runtime.md`): don't add rule-encoding layer
+- **AI-as-runtime hybrid-shape** (per `feedback_ai_as_runtime.md`): don't add rule-encoding layer; production AI follows Mode 1 (skills + specialists + workspace.md) not Mode 4 (documentation)
 - **Provenance hygiene** (per coherence-audit Lens 5 v0.2.1): no audit-history breadcrumbs in canonical content; provenance lives in HANDOFF + git log + commit messages
+- **Codify upfront vs wait-for-evidence** (per `learnings/ai-app-development.md` Observation 27): situational, not principled-default; 5-question discriminator (pain observability / shape ambiguity / retrofit cost / pattern maturity / overhead amortization); when deferring, add detection mechanism (self-check + watch-list naming awaited signal)
 
-## Topic catalog (Phase 3.2 PROVISIONAL — not yet locked)
+## 9. Watch-list (architectural items awaiting external evidence)
 
-Provisional topic list per BACKLOG sub-phase 3.3-3.7. To be locked at Phase 3.2 (taxonomy decision: aggregation vs 1:1 mapping; file naming convention; cross-cutting topic placement).
-
-### Phase 3.3 — Per-mechanism topics (12 mechanisms)
-
-Foundation-up: defensibility-supporting mechanisms first.
-
-- `arch/source-grounding.md` — every claim traces to source; framework-level enforcement
-- `arch/audit-emission.md` — AuditEvent Pydantic schema; event_kind catalog
-- `arch/audit-trail.md` — sequence-of-events composition; append-only discipline; retention policy
-- `arch/sparring-sub-mechanisms.md` (or split per sub-mechanism) — counter-argument; confidence calibration; visible reasoning; selective friction; asymmetric knowledge respect; anti-sycophancy; commit-to-recommendations; what's-missing
-- `arch/orchestration.md` — continuous decision layer; orchestrator skill mechanics
-- `arch/persistent-state.md` — state across sessions; cross-session-handoff schema
-- `arch/authority-binding.md` — actor_kind enum extension; authorization flow
-
-### Phase 3.4 — Per-architectural-Protocol topics (7 Pattern A protocols)
-
-Foundation-up: substrate first.
-
-- `arch/substrate-protocol.md` (Surface specification + per-impl detail)
-- `arch/adapter-protocol.md` (per-integration-class Surface specs)
-- `arch/sparring-protocol.md` (Surface + impl variations)
-- `arch/audit-protocol.md` (Surface + granularity-policy variation)
-- `arch/coordination-protocol.md` (Surface + impl variations)
-- `arch/trust-protocol.md` (Surface + trust-model variations)
-- `arch/time-protocol.md` (Surface + temporal-semantics variations)
-
-### Phase 3.5 — Primitive-detail topics + axis-interaction analysis
-
-- `arch/specialist-mechanics.md` (granularity 3-test + composability + marketplace mechanics)
-- `arch/skill-mechanics.md` (granularity 3-test + frontmatter schema + output validation)
-- `arch/practitioner-mechanics.md` (deactivation + multi-practitioner + legal-entity context)
-- `arch/workflow-mechanics.md` (representation schema + handoff + multi-session continuity + state machine + failure modes)
-- `arch/session-mechanics.md` (boundary semantics + context-handoff + persistent-state migration)
-- `arch/event-schema.md` (AuditEvent Pydantic shape + event_kind catalog)
-- `arch/actor-mechanics.md` (full actor_kind enum + A2A + identity sourcing)
-- `arch/claim-mechanics.md` (claim-event schema + revision + finalization + per-claim source-grounding)
-- `arch/defensibility-mechanics.md` (conditions formalization + six-months-later test + regulatory-challenge schema)
-- `arch/axis-interactions.md` (cross-axis composition; sparring within intertwining; defensibility resolves at claim-granularity in axis-1 work-products)
-
-### Phase 3.6 — Quality-gate ARCH topic (scope-locked; full design pending)
-
-**Scope-lock outcome (session 16, 2026-05-02)**: quality-gate is **Pattern A protocol with mechanism-shaped Surface** — pluggable subsystem with structural variation per shape (practitioner-shape-gate / autonomous-business-shape-gate / personal-OS-shape-gate / extensible). See `docs/decisions/quality-gate-scope-lock.md` for decision rationale + sharpening rounds metadata.
-
-- `arch/quality-gate.md` (Phase 3.6 produces full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration)
-
-### Phase 3.7 — Cross-cutting investigations (varies by outcome)
-
-- PydanticAI substrate evaluation outcome → may inform `arch/substrate-protocol.md` per-impl section
-- Markdown-validation feasibility → may produce `arch/markdown-validation.md` topic
-- Ming research deepening → may update VISION Foundations (or surface as separate analysis)
-- Multi-VISION model decision → STRATEGY territory or VISION update
-
-## Open architectural questions (Phase 3.1 remaining)
-
-| Question | Status | Cascades from |
-|---|---|---|
-| **work-unit bipartite-classification** | NEXT (after current discussion) | workflow's resolution likely informs |
-| "deployment" definition sharpening | Pending | workspace primitive |
-| Engaged-authorship operational definition | Pending | defensibility primitive |
-
-Resolution per Phase 3.1 protocol: Round 1 + Round 2 sharpening with G gate + multi-axis + D gate disciplines applied from start. Outcomes update GLOSSARY + may warrant Phase 4 DRs.
-
-Workspace bipartite-classification (surfaced this session as candidate): D-gate-resolved during retrospective audit (workspace stays single-aspect; template aspect handled by L3 deployment template). No separate Round needed unless Round-style rigor preferred.
-
-## Watch-list (architectural items awaiting external evidence)
-
-Per D gate + `feedback_pattern_not_instance_defers.md` no-defer principle.
+Per D gate + `feedback_pattern_not_instance_defers.md` no-defer principle. ARCHITECTURE.md captures architectural-state-relevant items; BACKLOG.md has detailed work-tracking.
 
 | Watch-list item | Awaited signal | Resolution mechanism |
 |---|---|---|
 | Shape-neutrality validation for second-shape productization | Second-shape design begins (autonomous-business OR personal-OS) | Validate primitive framings + new shape's policies handle variations cleanly; per-axis variants surface in shape policies |
 | Cross-specialist shared workflow patterns insufficient via Layer A | If Layer A growth proves insufficient for genuinely-cross-archetype pattern | Examine then; `workflow_pattern` framework primitive remains unwarranted by default per workflow Round 2 D-gate resolution |
+| 3-tier REVISION/EXPANSION discriminator codification | ≥3 borderline classifications across consecutive decisions/audits OR user pushback OR cascade-work-lag | Detection mechanisms in place: self-check at decision-design-sharpening v0.6.0 Round 2 termination + coherence-audit v0.3.1 Step 7. Codify 3-tier (or alternative shape — accumulated cases may suggest different cuts) at signal. |
 
-## Cross-cutting principles
-
-### How topics compose
-
-- **Mechanisms** (Phase 3.3) are atomic interface contracts; primitives + protocols + axes COMPOSE WITH multiple mechanisms
-- **Protocols** (Phase 3.4) are Pattern A pluggable subsystems; Surface + Implementations + Selection
-- **Primitives** (Phase 3.5) have rich detail per primitive
-- **Quality-gate** (Phase 3.6) composes with mechanisms + axes + workflow + claim observability — cross-cutting integration topic
-- **Axis-interactions** (Phase 3.5) — cross-axis composition pattern (sparring within intertwining; defensibility resolves at claim-granularity in axis-1 work-products) — cross-cutting topic
-
-### Composability + boundaries (per G gate)
-
-Every L1-L4 producer level (specialist / shape / template / workspace) must produce packageable artifacts that support multi-mode consumption. Architectural decisions that produce non-composable artifacts fail G gate. See `profiles/G-composability-gate.md`.
-
-### Pattern-vs-instance discipline
-
-Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer-instance specifics live at workspace level (per practitioner-shape policy mandates), NOT in framework primitive definitions. See `feedback_pattern_not_instance_defers.md` + `profiles/L5a-planner-pbs-schulz.md` (anchor profile demonstrates pioneer reality).
-
-## Reading order at session start (per `MAINTENANCE.md`)
-
-1. `DISCIPLINES.md` — cross-session working discipline
-2. `VISION.md` — three-axis thesis + framework anchor
-3. `MAINTENANCE.md` — doc system rules
-4. `HANDOFF.md` — session log
-5. `BACKLOG.md` — work-item tracker
-6. `profiles/INDEX.md` — usage profiles taxonomy
-7. **`ARCHITECTURE.md`** (this file) — Layer 2 overview when working in architectural area
-8. `GLOSSARY.md` — vocabulary state (Layer 1)
-
-Specific `arch/<topic>.md` files load on-demand when working in topic area.
+See BACKLOG.md for actionable detail on watch-list items + Phase 4-6 forward work.
 
 ## Cross-references
 
 - `MAINTENANCE.md` — 5-layer doc model + cascade discipline + TOP-LEVEL ARCHITECTURE
 - `VISION.md` — three-axis thesis + falsification + foundations
-- `GLOSSARY.md` — Layer 1 vocabulary (34 locked entries)
+- `GLOSSARY.md` — Layer 1 vocabulary (35 locked entries)
 - `BACKLOG.md` — Phase 3 work-item tracker
 - `HANDOFF.md` — session log (Phase 3 launch + continuation notes)
-- `profiles/INDEX.md` — usage profiles + G + D gates
-- `docs/decisions/quality-gate-scope-lock.md` — quality-gate scope-lock DR (Pattern A protocol with mechanism-shaped Surface; full design Phase 3.6)
+- `profiles/INDEX.md` — usage profiles + G + D gates + 4 profile clusters
+- `docs/decisions/` — locked DRs (Phase 3.0/3.1/3.6)
 - `drafts/composability-tooling.md` — composability tooling concepts (Phase 5+ ROADMAP)
 - `archive/INDEX.md` — v0.35 archived corpus (consult during Phase 3+)
