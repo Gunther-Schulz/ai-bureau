@@ -17,7 +17,7 @@ Future revisions test: does the change preserve honest evaluation + cognitive-mo
 
 **Self-applicability test**: this skill must remain runnable on itself. If a revision makes the skill un-self-applicable (e.g., requires external context the skill itself doesn't have, or assumes a target shape the skill isn't), the revision drifts from spirit. Run sharpen on the sharpen skill periodically to verify.
 
-**AI-executor test**: this skill is invoked by humans but executed by AI. Form should prompt mechanical AI iteration (bulleted sequential engagement; structured cognitive-mode prompts) over narrative gist-extraction. When form tradeoffs arise (compact prose vs nested bullets; flowing paragraph vs explicit checklist), default to the form that prompts iteration — not the form that reads cleanest to a human.
+**AI-executor test**: this skill is executed by AI. Form should prompt mechanical AI iteration (bulleted sequential engagement; structured cognitive-mode prompts) over narrative gist-extraction. When form tradeoffs arise (compact prose vs nested bullets; flowing paragraph vs explicit checklist), default to the form that prompts iteration — not the form that reads cleanest to a human.
 
 ## When to use
 
