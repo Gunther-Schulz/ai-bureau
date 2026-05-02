@@ -76,7 +76,7 @@ Doc-structure-shape resolved at 3.0 (hybrid). Remaining decisions:
 - ~~**ARCHITECTURE.md overview structure**~~ [Sub-decision 4 of 4 RESOLVED this commit] — locked: 9-section structure (Audience+scope / Phase status / Doc structure / Topic catalog / Reading order / Cross-cutting principles / Locked decisions / Disciplines / Watch-list). Audience+scope explicit (framework-developer documentation; Mode 4; not production-runtime). Logic placement modes 4-mode distribution (Mode 1 production-runtime LLM-MD / Mode 2 production-runtime Python / Mode 3 hybrid Phase 6 specs / Mode 4 development-time documentation) added to cross-cutting principles. Catalog uniformity (cross-cutting topics same one-liner depth as other topics). Locked decisions section growth mitigation via short summaries + cross-refs. Round 2: 8 EXPANSIONS / 0 REVISIONS / 3 REVISIONs rejected. Detail: `ARCHITECTURE.md` (this commit fully restructures to 9-section form). Foundational consumer-model question (raised mid-sharpening) drove explicit Audience+scope section + Logic placement modes codification.
 - **Phase 3.2 composite DR** [final synthesis pass — NEXT] — after all 4 sub-decisions lock (✅ all locked this commit), single composite DR captures Phase 3.2 doc-organization decisions per Mode-2 composite decomposition (decision-design-sharpening v0.6.0).
 
-### 3.3 Per-mechanism detail (12 mechanism instances)
+### 3.3 Per-mechanism detail (subsumed under Pattern A protocol topics per Phase 3.2 Sub-decision 1; mechanism content lives in respective protocol topics)
 
 Foundation-up within bucket: defensibility-supporting mechanisms first.
 
