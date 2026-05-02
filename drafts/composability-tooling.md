@@ -15,7 +15,7 @@ The framework produces packageable artifacts at multiple levels (L1 specialist; 
 - OSS distribution
 - Backup / migration / cloning
 
-Without tooling, packaging discipline is enforced manually + visually. With tooling, packaging discipline becomes **structural** (per `feedback_wrong_shapes_impossible.md` discipline).
+Without tooling, packaging discipline is enforced manually + visually. With tooling, packaging discipline becomes **structural** (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discipline).
 
 Candidate tools span L1-L4 producer-side validation + consumer-side workflows (G gate enforcement).
 
@@ -52,7 +52,7 @@ Candidate tools span L1-L4 producer-side validation + consumer-side workflows (G
 
 ## Architectural integration
 
-Per `feedback_wrong_shapes_impossible.md` discipline: prefer tooling that makes wrong shapes IMPOSSIBLE over tooling that detects them after the fact:
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discipline: prefer tooling that makes wrong shapes IMPOSSIBLE over tooling that detects them after the fact:
 
 - Specialist self-containment: best enforced via **structural constraint** at packaging time (specialist file structure prevents references to workspace-specific config)
 - License verification: best enforced via **signed manifest** at install time (cryptographic verification; no install if signature invalid)
@@ -76,6 +76,6 @@ Until graduation: stays as draft loose-thinking. Future-session reference for "w
 - `profiles/G-composability-gate.md` (consumer-side concerns this tooling addresses; initial validation gate)
 - `profiles/L1-specialist-creator.md` through `profiles/L4b-workspace-deployer-firm-it.md` (producer-side concerns)
 - `profiles/INDEX.md` "Composability + multi-axis validation discipline" section
-- `feedback_wrong_shapes_impossible.md` (structural-over-conventional discipline)
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (structural-over-conventional discipline)
 - `BACKLOG.md` Phase 5 entry: "Composability tooling — CLI / validators / linters that enforce packaging boundaries"
 - `MAINTENANCE.md` cascade discipline (tooling decisions cascade through shape catalog + specialist authoring + deployment templates)

@@ -30,31 +30,93 @@ Before asserting what a doc/DR/architectural commitment says, read the source. C
 - "From HANDOFF/MEMORY summary, X" → medium confidence (flag explicitly)
 - "Pattern-matched / inferred / my synthesis" → low confidence (flag explicitly)
 
-Pattern-matching from HANDOFF prose, memory summaries, or prior-conversation knowledge is **NOT direct evidence** per global `~/.claude/CLAUDE.md` honesty-about-sources rule.
+Pattern-matching from HANDOFF prose, memory summaries, or prior-conversation knowledge is **NOT direct evidence** per global `~/.claude/CLAUDE.md` honesty-about-sources rule. The temptation to skip source-reading because "I remember roughly what it said" is the failure mode; cost-bias is legitimate sometimes (stating a quick recollection is fine when flagged), but honesty about basis is the rule.
 
-**Skill + profile files are a first-class source class.** When invoking a sharpening / audit / validation skill (`decision-design-sharpening`, `pre-implementation-sharpening`, `coherence-audit`, `sharpen`), READ the SKILL.md file via Read tool at the moment of invocation — every time, regardless of prior usage in same session. Same for `profiles/*.md` when profile-anchored validation triggers (READ `profiles/INDEX.md` + ≥3 representative cluster members). Skills + profiles evolve frequently (decision-design-sharpening went v0.4.0 → v0.6.0 mid-session 16); compaction collapses prior Read content into synthesis-summaries; fresh sessions have no breadcrumbs at all. Pattern-matching memory of prior usage misses load-bearing discipline elements.
+**Discriminator**: am I citing or synthesizing? If I can name file:line with confidence, citing. Otherwise synthesizing (flag explicitly).
+
+**Common failure surfaces** (session 16): malformed schema examples without verifying schema; over-confident defense of locked decisions without reading source DR; attribution of quotes to wrong source files. Common mechanism: pattern-matching from inherited summaries / conventions / prior framings instead of testing against current goal.
+
+#### Re-grounding in VISION + ARCHITECTURE for substantive work
+
+For any substantive session work in pbs-bureau (architectural decisions, design discussions, commitment design, DR authorship, strategic positioning), READ `VISION.md` + `ARCHITECTURE.md` alongside `HANDOFF.md` before substantive work. Without VISION re-grounding, AI drifts toward oracle-mode or validator-mode framings (per Vivienne Ming research: only sparring-mode produces value rivaling human+AI hybrid). Without ARCHITECTURE in context, proposals re-suggest already-discarded patterns.
+
+**Re-grounding mid-session is valid** when you notice your own framing has drifted toward easy answers, or you've forgotten which architectural discipline applies, or the user pushes back on an answer that suggests oracle-mode drift.
+
+#### Skill + profile files are a first-class source class
+
+When invoking a sharpening / audit / validation skill (`decision-design-sharpening`, `pre-implementation-sharpening`, `coherence-audit`, `sharpen`), READ the SKILL.md file via Read tool at the moment of invocation — every time, regardless of prior usage in same session. Same for `profiles/*.md` when profile-anchored validation triggers (READ `profiles/INDEX.md` + ≥3 representative cluster members).
+
+Skills + profiles evolve frequently (decision-design-sharpening went v0.4.0 → v0.6.0 mid-session 16); compaction collapses prior Read content into synthesis-summaries; fresh sessions have no breadcrumbs at all. Pattern-matching memory of prior usage misses load-bearing discipline elements.
 
 **Verification (proves Read happened, not pattern-matched)**: chat output cites specific skill section names (e.g., "per layered coverage observation"; "per Lens 8") + specific profile content (not just cluster letters A/B/C/D). Without these citations, the procedure was pattern-matched, not executed.
 
 **Canonical failure (session 16)**: substrate Round 1 post-compact applied `decision-design-sharpening` from synthesized memory; missed layered coverage observation; phase-routed cross-cutting concerns to Phase 6 too aggressively; user had to force re-Read; Round 2 surfaced 11 EXPANSIONS that should have been visible at Round 2 design.
 
-Per memory: `feedback_source_grounded.md`, `feedback_vision_arch_grounding.md`, `feedback_skill_files_are_sources.md`.
-
 ### 2. Apply principle uniformly
 
-When applying any principle, enumerate all categories the principle could apply to — independent of inherited framings ("docs vs code", "active vs deprecated", "X stays per Phase Y", etc.). Test each: does the principle apply? Verify "no" boundaries are genuine, not carried-forward conventions.
+When applying any principle, enumerate all categories the principle could apply to — independent of inherited framings ("docs vs code", "active vs deprecated", "X stays per Phase Y", "we already decided X earlier"). Test each: does the principle apply? Verify "no" boundaries are genuine, not carried-forward conventions.
 
-Per memory: `feedback_apply_principle_uniformly.md`.
+**How to apply**:
+1. **Enumerate categories** the principle could apply to, INDEPENDENT of inherited framings. Write them out.
+2. **Test each**: "does the principle apply here? Yes / No / Why?"
+3. When the answer is "No because X," **verify X is a genuine boundary** of the principle — not an inherited category carried forward unexamined.
+4. **Discriminator**: would the user still draw the boundary at X if asked directly? If uncertain, surface borderline cases explicitly.
+5. **When the user has to push a second/third time** to surface a missed category, that's a signal the inherited-framings filter wasn't disabled — explicitly enumerate the remaining categories proactively.
+
+**Common failure surface** (session 16 archive proposal): user stated principle "archive everything that embodies the unlocked architecture; remove rebuild bias." AI applied to docs but missed code / plugin manifest / content directories / README — each because of inherited framing ("refactor is Phase 6", "content not code", "operational, flag for later"). User pushed three separate times to surface each missed category.
 
 ### 3. Pre-decision sharpening
 
 At decision-formation moments, run sharpening rounds BEFORE locking:
-- **Round 1** = full monty (proactive comprehensive — stress-tests + edge cases + counter-arguments)
-- **Round 2+** = user-triggered (external-perspective friction)
+- **Round 1** = full monty (proactive comprehensive — stress-tests + edge cases + counter-arguments engaged; Pareto-disciplined; reject manufactured criticism)
+- **Round 2+** = USER-TRIGGERED (external-perspective friction; AI-self-triggered rounds drift toward manufactured criticism)
 
-Pre-decision sharpening outperforms post-mortem audits because pre-decision is sparring-mode (axis 2) while audits are validator-mode anchored to existing content.
+**Pre-decision sharpening outperforms post-mortem audits** (5 mechanisms):
+1. **Anchoring bias**: post-mortem looks at WHAT IS; pre-decision can explore WHAT COULD BE
+2. **Sunk-cost protection**: post-decision reviewers protect existing investment; pre-decision has no sunk cost
+3. **Sparring vs validation mode**: sharpening = SPARRING (challenge); audits = VALIDATION (confirm). Per Vivienne Ming research: sparring outperforms validation
+4. **Fresh-context advantage**: design context is hot during sharpening; cold during audits
+5. **Greenfield-still-anchored problem**: even greenfield checks ("would we build this from scratch?") look AT existing shape; pre-decision sharpening generates alternatives directly
 
-Per memory: `feedback_pre_decision_sharpening.md`, `feedback_full_monty_upfront.md`.
+**Sweet spot: 2 rounds** for narrow architectural surface; up to 3 for broad surface. Round 4+ at decision-design phase signals decomposition is missing.
+
+**Two-phase pattern**:
+- **Decision-design phase**: 2-3 rounds at decision-formation moment; architectural-decision lock
+- **Pre-implementation phase**: additional rounds at implementation-start moment; operational/runtime details + ~10-20% architectural flow-back as DR amendments
+
+**Layered coverage observation**: each round emphasizes (but doesn't exclusively cover) different concern layer:
+- Round 1 = architectural decisions (what methods + types + abstractions)
+- Round 2 = cross-cutting + schema details (boot, errors, transport, tier-awareness, audit integration)
+- Round 3 (optional) = additional architectural patterns (broad surface only)
+- Round 4+ → defer to Phase 2 pre-implementation (operational/runtime concerns)
+
+**Decomposition trigger** (Mode 1 emergent): if a decision genuinely needs >3 rounds at decision-design phase → decompose into sub-decisions; each gets standard 2-3 rounds.
+
+**Mode 2 composite decomposition** (upfront-known; per `decision-design-sharpening` v0.6.0): when 3+ tightly-coupled sub-decisions visible at framing time with foundation-up dependencies, decompose upfront: sub-decision inventory → foundation-up ordering → per-sub-decision 2-round sharpening → final synthesis pass → composite DR.
+
+**Skills implementing this discipline**: `plugin/skills/decision-design-sharpening/` (Phase 1 decision-formation) + `plugin/skills/pre-implementation-sharpening/` (Phase 2 implementation-start) + `plugin/skills/sharpen/` (generic critical-pass) + `plugin/skills/coherence-audit/` (post-decision corpus-set audit).
+
+#### Multi-axis validation for primitive proposals
+
+When proposing or refining a primitive's classification / scope / applicability claim, validate across three orthogonal dimensions — single-axis validation misses gaps:
+
+1. **Archetypes** — does primitive work for planner / lawyer / researcher / auditor / consultant / etc.?
+2. **Work-types within an archetype** — does primitive work for codified workflow / ad-hoc exploratory / one-off communication / research-mode / maintenance / learning?
+3. **Roles** — does primitive work for practitioner / workflow-designer / specialist-author / instance-deployer / AI-runtime / multi-user-collaborator / auditor-reviewer?
+
+**Plus explicit non-coverage question**: "what use cases does this primitive NOT cover, and is that intentional or a gap?"
+
+Single-axis validation creates blind spots. Cross-archetype illustration with constant work-type = "codified workflow" makes codified case look universal when ad-hoc work is also first-class.
+
+#### Profile-anchored validation
+
+For high-impact decisions (primitive classifications; per-mechanism / per-protocol / per-primitive-detail design — Phase 3.3-3.6 territory), test against ≥3 of 4 profile-clusters in `profiles/INDEX.md`:
+- Cluster A Producers (L1+L2+L3+L9)
+- Cluster B Deployers (L4a+L4b+L5a)
+- Cluster C Consumers (L5a-L5j+L5e+L5f)
+- Cluster D Validators (L8+G+D gates)
+
+Flesh skeleton-profile if specific decision affects it (per `coherence-audit` on-demand fleshing). For routine decisions or cascade-from-established-pattern, multi-axis principle-level check sufficient. Discriminator: shape-specific or instance-specific surface → profile-anchored; purely structural cascade → multi-axis principle-level.
 
 ### 4. Cascade prevention (greenfield-draft + minimize-embedded + cascade-pass + foundation-first)
 
@@ -79,22 +141,39 @@ If mental modeling resolves → evolve answer NOW (Round 1+2 sharpening). Don't 
 
 If mental modeling genuinely cannot resolve AND tests confirm external-info-gap → surface as **watch-list entry** naming the specific external signal awaited. Watch-list entries have resolution mechanisms; defers languish.
 
-D Gate is structural per `feedback_wrong_shapes_impossible.md` (prefer structural constraints over conventions). Memory alone is insufficient as trigger — D Gate codifies the mental-modeling-first discipline as procedural enforcement at the decision moment.
+D Gate is structural per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (prefer structural constraints over conventions). Memory alone is insufficient as trigger — D Gate codifies the mental-modeling-first discipline as procedural enforcement at the decision moment.
 
-Per memory: `feedback_pattern_not_instance_defers.md` (no-defer principle, v0.34 with D Gate), `feedback_defer_instinct.md` (defer-instinct in disguises).
+Per memory: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (no-defer principle, v0.34 with D Gate), `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (defer-instinct disguises) (defer-instinct in disguises).
 
 ### 6. Anchored vs preliminary-locked
 
 - **VISION axes are anchored** — revise only on real-world falsification per VISION's own falsification criteria
 - **Everything else is preliminary-locked** — current best position derived from available reasoning; revisable when VISION ideal design demands. DRs, ARCH disciplines, meta-rules, specs, ROADMAP, code = living drafts
 
-Per memory: `feedback_preliminary_lock.md`.
+Per memory: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3.
 
 ### 7. Cascade discipline (structural consistency)
 
 When changing any concept, decision, primitive, or term in any doc: identify every other place it appears and update each in the same commit (or tightly-coupled sequence explicitly marked as completing the cascade). Changes propagate **up, down, and sideways**.
 
 Detailed mechanism: `MAINTENANCE.md` "TOP-LEVEL RULE — Cascade discipline".
+
+### 8. Foundation-up workflow ordering
+
+When ordering compositional/architectural work (GLOSSARY entries, DRs, ARCH topics, specs, layered design), default to foundation-up: items others depend on come first; downstream items come last. Parallel-depth items batch with shared sharpening passes.
+
+**Why**: locking downstream items first creates rework when their foundations land later (definitions need updating; cross-references need fixing). Foundation-up minimizes rework + ensures downstream items can cleanly reference locked foundations.
+
+**How to apply**:
+- Identify dependencies between items before ordering
+- Lock items with no dependencies (or only on already-locked items) first
+- Lock items that compose with multiple already-locked items last
+- For parallel-depth items, batch them
+
+**When NOT to apply**:
+- Independent work (bug fixes, ad-hoc tasks) without inter-dependencies
+- Chronological/event-driven order more important than dependency order
+- Stakeholder timing forces non-foundation-up sequence
 
 ---
 
@@ -122,37 +201,37 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 | Gate | Fires when | Codified at |
 |---|---|---|
 | **G — Composability Gate** | Designing any L1-L4 producer artifact (specialist / shape / template / workspace) | `profiles/G-composability-gate.md` + `profiles/INDEX.md` |
-| **D — Defer Gate** | AI considers deferring any architectural item | `profiles/INDEX.md` "D Gate procedure" + `feedback_pattern_not_instance_defers.md` |
+| **D — Defer Gate** | AI considers deferring any architectural item | `profiles/INDEX.md` "D Gate procedure" + `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 |
 
 ### Decision-design disciplines (fire during architectural decisions)
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `feedback_pre_decision_sharpening.md` + `plugin/skills/decision-design-sharpening/` v0.6.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
-| Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `feedback_multi_axis_validation.md` + `profiles/INDEX.md` |
-| Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `feedback_foundation_up_ordering.md` |
-| Apply principle uniformly | When user states a principle/goal | `feedback_apply_principle_uniformly.md` |
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.6.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
+| Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) + `profiles/INDEX.md` |
+| Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `DISCIPLINES.md` Discipline 8 |
+| Apply principle uniformly | When user states a principle/goal | `DISCIPLINES.md` Discipline 2 |
 | Decision-phase approval; content-phase no approval | Surfacing positions/framings to user | `feedback_propose_before_commit.md` + `feedback_judgment_and_automate.md` |
 
 ### Cross-session work disciplines (fire on every substantive session)
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Re-ground in VISION + ARCH | Start of substantive PBS work | `feedback_vision_arch_grounding.md` |
-| Source-grounded; cite file:line | Asserting what a doc/DR says | `feedback_source_grounded.md` |
+| Re-ground in VISION + ARCH | Start of substantive PBS work | `DISCIPLINES.md` Discipline 1 (re-grounding sub-section) |
+| Source-grounded; cite file:line | Asserting what a doc/DR says | `DISCIPLINES.md` Discipline 1 |
 | Cascade discipline | Changing concept/primitive/term in any doc | `MAINTENANCE.md` "TOP-LEVEL RULE — Cascade" |
 | Commit regularly + push after commit | Per-logical-unit work completion | `feedback_push_after_commit.md` |
-| LLM-instruction tightness for markdown layer | Authoring skill / ARCH / GLOSSARY content | `feedback_llm_instruction_tightness.md` |
+| LLM-instruction tightness for markdown layer | Authoring skill / ARCH / GLOSSARY content | `ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness" |
 
 ### Architectural commitments (anchor framework decisions)
 
 | Commitment | Codified at |
 |---|---|
-| AI as runtime, not consumer | `feedback_ai_as_runtime.md` |
-| Make wrong shapes impossible (structural over conventional) | `feedback_wrong_shapes_impossible.md` |
-| Pattern-vs-instance discipline | `feedback_pattern_not_instance_defers.md` |
-| Repo identity: framework source, not deployment instance | `feedback_dev_vs_app_skills.md` + `MAINTENANCE.md` "TOP-LEVEL SCOPE" |
-| Preliminary lock except VISION axes | `feedback_preliminary_lock.md` |
+| AI as runtime, not consumer | `ARCHITECTURE.md` cross-cutting principles "AI as runtime" |
+| Make wrong shapes impossible (structural over conventional) | `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 |
+| Pattern-vs-instance discipline | `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 |
+| Repo identity: framework source, not deployment instance | `MAINTENANCE.md` TOP-LEVEL SCOPE + `MAINTENANCE.md` "TOP-LEVEL SCOPE" |
+| Preliminary lock except VISION axes | `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 |
 
 ### Audit + coherence disciplines (fire during corpus validation)
 
@@ -170,30 +249,37 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 | Stop on block; don't work around | Hook/permission/sandbox blocks | `feedback_blocked_actions.md` |
 | Plugin reload doesn't sync marketplace clone | Stale skill list after pushing plugin changes | `feedback_plugin_marketplace_clone_sync.md` |
 
-## Memory composition (locked feedback rules)
+## Memory composition (cross-session AI behavioral preferences)
+
+Memory holds **cross-session AI behavioral preferences only** (per session-16 doc-organization composite DR). Operational disciplines (HOW we operate) absorbed into THIS doc; architectural commitments absorbed into MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES + ARCHITECTURE.md cross-cutting principles.
+
+Retained memory feedback files (5):
 
 | File | Role |
 |---|---|
-| `feedback_propose_before_commit.md` | Decision-phase approval; content-phase doesn't |
-| `feedback_judgment_and_automate.md` | Commit positions; routine work without asking |
-| `feedback_push_after_commit.md` | Commit regularly + push immediately after commit |
-| `feedback_source_grounded.md` | Cite file:line; flag synthesis vs citation |
-| `feedback_vision_arch_grounding.md` | Re-ground in VISION + ARCH for substantive work |
-| `feedback_apply_principle_uniformly.md` | Test inherited categories independently |
-| `feedback_pre_decision_sharpening.md` | 2-round sweet spot + full-monty-upfront (consolidated) |
-| `feedback_pattern_not_instance_defers.md` | Never defer; D Gate; watch-list info-gaps; defer-instinct disguises (consolidated) |
-| `feedback_preliminary_lock.md` | VISION axes anchored; everything else preliminary |
-| `feedback_blocked_actions.md` | Surface blocks; don't workaround |
-| `feedback_llm_instruction_tightness.md` | Sharpen markdown instruction layer |
-| `feedback_ai_as_runtime.md` | AI as runtime, not consumer |
-| `feedback_wrong_shapes_impossible.md` | Structural constraints over conventional solutions |
-| `feedback_dev_vs_app_skills.md` | Repo is framework source; dev skills here; app skills in deployments |
-| `feedback_plugin_marketplace_clone_sync.md` | Marketplace clone sync mechanics |
-| `feedback_foundation_up_ordering.md` | Items others depend on come first |
-| `feedback_multi_axis_validation.md` | Archetype × work-type × role + non-coverage |
-| `feedback_skill_files_are_sources.md` | Skill + profile files = first-class sources; READ at every invocation |
+| `feedback_propose_before_commit.md` | Decision phase = approval needed for positions/framings (chat surfaces decisions+reasons, NOT verbatim content); content phase = write directly |
+| `feedback_judgment_and_automate.md` | Commit positions instead of menus; routine work without asking |
+| `feedback_push_after_commit.md` | Push immediately after each commit |
+| `feedback_blocked_actions.md` | Surface hook/permission/sandbox blocks immediately; never workaround |
+| `feedback_plugin_marketplace_clone_sync.md` | Operational tool note (marketplace clone sync mechanics) |
 
 Memory location: `/home/g/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/`. Index: `MEMORY.md` in same directory.
+
+Memory feedback files migrated (14; deleted from memory dir; absorbed into structured docs):
+- `DISCIPLINES.md` Discipline 1 → DISCIPLINES.md Discipline 1
+- `DISCIPLINES.md` Discipline 1 (re-grounding sub-section) → DISCIPLINES.md Discipline 1 (sub-section)
+- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) → DISCIPLINES.md Discipline 1 (sub-section)
+- `DISCIPLINES.md` Discipline 2 → DISCIPLINES.md Discipline 2
+- `DISCIPLINES.md` Discipline 3 → DISCIPLINES.md Discipline 3
+- `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) → DISCIPLINES.md Discipline 3 (sub-section)
+- `DISCIPLINES.md` Discipline 8 → DISCIPLINES.md Discipline 8
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 → MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES §2 (no-defer + pattern-vs-instance + D Gate consolidated)
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 → MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES §1
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 → MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES §3
+- `MAINTENANCE.md` TOP-LEVEL SCOPE → MAINTENANCE.md TOP-LEVEL SCOPE
+- `ARCHITECTURE.md` cross-cutting principles "AI as runtime" → ARCHITECTURE.md cross-cutting principles
+- `ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness" → ARCHITECTURE.md cross-cutting principles (alongside Logic placement modes)
+- `DISCIPLINES.md` Discipline 3 (full-monty consolidated) → consolidated into pre_decision_sharpening (already retired session 16)
 
 ---
 

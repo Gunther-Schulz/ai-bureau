@@ -20,7 +20,7 @@
 - **Framework-level: PRESENCE** — Y/N event-existence test (per-claim production-phase event ≥1 + per-claim attestation event)
 - **Shape-policy-level: QUALITY** — depth-of-engagement signals; quality-gate (Pattern A protocol) enforces per shape policy
 
-**Framework-level enforcement** (per `feedback_wrong_shapes_impossible.md`):
+**Framework-level enforcement** (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1):
 - Events emit per-claim per-phase via audit-emission mechanism
 - `quality-gate` detects missing signals; emits drift signals at attestation moments
 - Per-shape intervention: practitioner-shape = friction/block (defensibility-critical; fail-closed); autonomous-business-shape = programmatic block; personal-OS-shape = audit-only
@@ -148,7 +148,7 @@ This DR should be revisited if:
 - **Multi-axis validation discriminator** (per decision-design-sharpening v0.5.0): shape-specific surface present (practitioner-shape vs autonomous-business-shape vs personal-OS-shape) → profile-anchored validation fired (Cluster B deployers + Cluster C consumers + per-shape mental modeling — all confirm two-phase composite holds across shapes with per-shape quality variation)
 - **GLOSSARY back-check** (per v0.5.0 + MAINTENANCE.md Bidirectional cascade): the decision IS itself glossary work; EXPANSIONS surfaced went directly into the new entry. Elevation from defensibility's Condition #1 inline to standalone DERIVED entry is the canonical example of bidirectional cascade — ARCH-territory work surfaced glossary-grade structural fact that retro-fitted (and elevated) to GLOSSARY before lock.
 
-Total: 2 rounds. Per `feedback_pre_decision_sharpening.md` 2-round sweet spot empirical pattern. Narrow architectural surface (single DERIVED concept lock + condition extraction from existing entry) → 2 rounds sufficient.
+Total: 2 rounds. Per `DISCIPLINES.md` Discipline 3 2-round sweet spot empirical pattern. Narrow architectural surface (single DERIVED concept lock + condition extraction from existing entry) → 2 rounds sufficient.
 
 ## Phase 3.1 closure
 

@@ -157,4 +157,4 @@ This DR should be revisited if:
 - **Round 2**: USER-TRIGGERED — 9 EXPANSIONS + 1 REVISION (R1 workflow_pattern resolution; user push surfaced ad-hoc scope refinement)
 - **Retrospective revisit**: under new G + multi-axis + D gate disciplines — lock holds; 0 architectural REVISIONS
 
-Total: 2 rounds + retrospective validation. Per `feedback_pre_decision_sharpening.md` 2-round sweet spot empirical pattern.
+Total: 2 rounds + retrospective validation. Per `DISCIPLINES.md` Discipline 3 2-round sweet spot empirical pattern.

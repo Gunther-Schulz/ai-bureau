@@ -129,4 +129,4 @@ This DR should be revisited if:
 - **Round 2**: USER-TRIGGERED — 7 EXPANSIONS applied (E1-E7) + 1 REVISION-candidate rejected (R1 rename)
 - **Self-check**: STABLE; 0 architectural REVISIONS; all findings EXPANSIONS or rejected manufactured criticism
 
-Total: 2 rounds. Per `feedback_pre_decision_sharpening.md` 2-round sweet spot empirical pattern. Narrow architectural surface (single primitive scope-lock) → 2 rounds sufficient.
+Total: 2 rounds. Per `DISCIPLINES.md` Discipline 3 2-round sweet spot empirical pattern. Narrow architectural surface (single primitive scope-lock) → 2 rounds sufficient.

@@ -163,6 +163,89 @@ Reading any GLOSSARY entry, the layered approach is structurally visible: founda
 
 ---
 
+## TOP-LEVEL DESIGN PRINCIPLES — META-design rules applied universally to all primitive design
+
+Three universal META-design principles fire at every architectural decision moment. They apply to ALL primitives and decisions; not specific to current architecture. Codified at TOP-LEVEL because they govern HOW we design rather than WHAT specific architecture lives in the framework.
+
+### 1. Make wrong shapes impossible, not solvable
+
+Prefer **structural constraints** (Pydantic, type system, gate enforcement, namespace separation) that make wrong shapes impossible by construction over **conventional solutions** that make wrong shapes solvable at deployment time.
+
+**Why**: every "we'll document the convention; deployments handle correctness" answer is the framework offloading work to deployment time. Each consulting client hits the same problem; some solve inconsistently. Convention-driven solutions for framework correctness produce inconsistent shapes and deferred conflicts. Structural constraints solve it once for everyone.
+
+**The discriminator**:
+
+| Concern touched by | Layer | Mechanism |
+|---|---|---|
+| Gate / Pydantic / dispatch code on every read/write | **Structural** — impossible by construction | Type system, Pydantic validators, gate enforcement, namespace separation |
+| AI at mint-time / decision-time / reasoning-time (governance check, naming, archival policy) | **Prose convention** with audit trail | Prose rule in `office-config.md` / `department.md` / conventions.md; AI applies; AuditEvent records `convention_applied: {file, section, git_sha}` |
+
+If the gate dispatches on it every read/write → structural. If AI applies at mint-time / judgment-time → prose convention is correct (impossibility-by-construction would be SQL-DB-trap rigidity per AI-as-runtime principle in `ARCHITECTURE.md` cross-cutting principles).
+
+**How to apply**: when proposing solution for framework-level correctness concern, force the question:
+1. "Does the gate / Pydantic / dispatch code touch this concern on every read/write?" If yes → MUST be structural.
+2. If yes to (1) and the proposed solution is "deployment documents the rule and AI/audit validates" → that's the offloading anti-pattern; design a structural constraint instead.
+3. If the answer is no (AI applies at mint-time / judgment-time) → prose convention with audit is correct.
+
+**Canonical exemplar**: session 11 Option C (convention-driven uniqueness for type names) rejected; Option B (department-namespaced types: `<scope-id>.<short-name>`) locked. Type names gate-dispatched on every read/write → structural required.
+
+### 2. Pattern-vs-instance — never defer; mental-modeling resolves now
+
+**Never defer.** PBS is the framework foundation for the consulting business, validated by the planning bureau — NOT a planning-bureau product. At every architectural step, do the full scalable foundational work; designed for any expert-practitioner deployment, not minimum-viable-PBS.
+
+**The no-defer rule**: if a decision cannot be made today because external information genuinely doesn't exist, surface as a **watch-list entry** naming the specific external signal awaited. Watch-list entries have resolution mechanisms (signal arrives → decision made by mechanism Y). "Defer" is removed from architectural vocabulary because it lacks a resolution mechanism and accumulates passively.
+
+**Two tests for "literally cannot decide today"** (both must pass):
+
+1. **External-information test**: Is there a SPECIFIC external signal whose absence prevents the decision? Name it precisely (Phase 1 corpus deployment data; first-bind real workflow performance; regulatory ruling X; second-domain deployment feedback; community-built shape extension). Generic "we don't know yet" / "haven't done it yet" / "downstream isn't locked when we could lock it now" — fail the test.
+2. **Effort-asymmetry test**: Could we do the design work today if we chose to? If yes — even if the design might be wrong — NOT a chronological gap. Wrong design today is cheaper to revise (per Preliminary-lock principle below) than missing design accumulating downstream cost.
+
+**Watch-list entry format**: `**W<N>: <Concrete decision currently un-makeable>** — awaiting **<specific external signal>**. Resolution: when signal arrives, decision X made by mechanism Y.`
+
+**Invalid defer reasons** (look like chronological-defer; aren't): "We haven't done the design work yet" / "It would take more sessions" / "Premature abstraction" / "YAGNI" / "PBS doesn't need it yet" / "Downstream consumer's shape isn't locked" / "Already-implemented parts work as-is" / "Speculation about future X" — all rejected.
+
+**Defer-instinct disguises** (recurring across sessions): every session surfaces a new mask. Session 5 = "won't matter for months / YAGNI / trivial cost so we can add later"; Session 11 = "PBS doesn't need it yet / only planning exists today"; Session 15 = "speculation about future framework primitives is up-front-cost defer territory" (chronological-defer-as-YAGNI mask). The signal: defense feels abstract or principled rather than naming a specific external signal. Honest watch-list framing names a SPECIFIC EXTERNAL EVENT; defer-instinct cites a CATEGORY of caution.
+
+**D Gate** (procedural enforcement at decision moment; per `profiles/INDEX.md`): fires whenever AI considers deferring; blocks until mental modeling within profile grounding attempted.
+
+D Gate procedure:
+1. Identify the item being considered for defer
+2. Attempt mental modeling within profile grounding (multi-axis validation across L1-L9 profiles + G consumer gate)
+3. Construct hypothetical scenarios within profile constraints
+4. Check whether primitive's classification holds across mental scenarios
+5. Defer ONLY IF mental modeling genuinely cannot resolve
+6. If mental modeling resolves → evolve answer NOW (Round 1+2 sharpening)
+
+**Pattern-vs-instance discipline (broader)**: framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer-instance specifics (Bauleitplanung; B-Plan-Begründung; UNB; DACH-EU regulatory specifics; German Begründung naming) live at workspace level (per practitioner-shape policy mandates), NOT in framework primitive definitions. Per `profiles/L5a-planner-pbs-schulz.md` line 129: "PBS-Schulz specifics like Begründung / Stellungnahme / UNB / DACH-EU need to NOT leak into framework primitives."
+
+### 3. Preliminary-lock — every decision revisable except VISION axes
+
+Every architectural decision in pbs-bureau is **PRELIMINARY-LOCKED**. The "locked" vocabulary in HANDOFF / DRs / ARCH means current best position derived from available reasoning — NOT permanent. Decisions are revisable when VISION ideal design demands it.
+
+**Why**: false stability anchors against re-examination. When a session reads "locked" and treats decision as non-revisable, defer-instinct uses it as polite excuse to compound around wrong locks ("we already decided X, so we work around it"). PBS is in deep design + exploratory phase; specs / DRs / ARCH / code are all living drafts.
+
+**How to apply**:
+- Treat every "Status: ACCEPTED" DR, every ARCH version, every meta-rule, every spec rule, every ROADMAP commitment, every backend code module as preliminary-locked.
+- When prior decision is treated as constraint on current work, run the **preliminary-lock test**:
+  1. Is the decision the IDEAL design per VISION lens, or past compromise / up-front-cost defer / scope limitation?
+  2. Has subsequent reasoning surfaced reasons to revise?
+  3. Would treating as fixed produce a worse outcome than re-examining?
+  - If any answer suggests revision → re-examine. The cost of revising a preliminary-lock now is much smaller than the cost of compounding around a wrong lock.
+
+**Vocabulary discipline**:
+- "Locked" = preliminary-locked (current best position)
+- "Anchored" = VISION axes only (high-bar revision via real-world falsification)
+- "Settled" = avoid; suggests false permanence
+- "Decided" = preliminary-decided (revisable)
+
+**What's anchored, NOT preliminary**:
+- VISION axes (revise only on real-world falsification per VISION's own criteria — load-bearing real-world signal required; extremely high bar)
+- Memory feedback principles + user-stated working-style preferences (user-codified explicitly; user revises directly)
+
+**Composition with no-defer**: the two compose. Never defer NEW decisions, AND prior locks aren't excuses to defer revision. A "permanently-locked" decision used to block re-examination is just a defer of revision.
+
+---
+
 ## TOP-LEVEL SCOPE — Repo identity: framework source, not deployment instance
 
 This repo is **the framework + dev tooling source — the starting point for deployments**, NOT a deployment instance itself.
@@ -181,7 +264,7 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Why this matters**:
 - **Distribution clarity**: anyone can clone this repo as a clean starting point for their own deployment without inheriting another deployment's instance state
-- **Pattern-vs-instance discipline applied to repo structure**: per `feedback_pattern_not_instance_defers.md`, framework = pattern-level; PBS-Schulz = pioneer instance. The repo embodying both was a session-12-era conflation that the rebuild corrects.
+- **Pattern-vs-instance discipline applied to repo structure**: per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2, framework = pattern-level; PBS-Schulz = pioneer instance. The repo embodying both was a session-12-era conflation that the rebuild corrects.
 - **Rebuild-bias prevention**: app skills encode v0.35 vocabulary; restoring them mid-rebuild contaminates locked-architecture work. Phase 6 doesn't rebuild app skills INTO this repo — it rebuilds them as part of deploying the pioneer instance separately.
 
 **Cascade implications**:
@@ -190,8 +273,8 @@ This repo is **the framework + dev tooling source — the starting point for dep
 - Future tooling decisions test against: "is this dev tooling for working ON the framework, OR app/domain logic for a deployment?" — only the former lives here.
 
 **See**:
-- `feedback_dev_vs_app_skills.md` (memory) — archive/restore criteria for plugin skills under this distinction
-- `feedback_pattern_not_instance_defers.md` (memory) — pattern-vs-instance discipline (broader)
+- `MAINTENANCE.md` TOP-LEVEL SCOPE (memory) — archive/restore criteria for plugin skills under this distinction
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (memory) — pattern-vs-instance discipline (broader)
 - `archive/INDEX.md` — archived app skills + rationale (don't restore)
 
 ---
@@ -236,23 +319,73 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 ### Layer 3 — Architecture detail (topical)
 
-`docs/architecture/<topic>.md` — one file per major architectural concern.
-
-Each file: motivation + structural shape + how it composes with other primitives/disciplines + decisions made (linking to Layer 4 DRs) + specs needed (linking to Layer 5).
+`arch/<topic>.md` — one file per major architectural concern (per Phase 3.2 doc-organization decisions: kebab-case slug; flat directory; no prefixes).
 
 **Single abstraction level per file**: structural mechanisms for primitives; decisional reasoning for disciplines.
 
+#### Pattern A protocol topic template (LOCKED)
+
+For ARCH topics describing Pattern A protocols (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry), use this 18-section template (established by `arch/substrate.md` + validated by `arch/adapter.md`):
+
+| § | Section | Purpose |
+|---|---|---|
+| 1 | Topic scope + frontmatter | Topic identity; Pattern classification; cardinality; cross-axis claim; composition with framework primitives |
+| 2 | Surface contract (architectural-level) | Capability categories; per-class Surfaces if multi-class (two-layer Surface variant); explicit "NOT in Surface" exclusions; logic placement mode (Mode 4 here + Mode 3 spec at Phase 6) |
+| 3 | Common-surface boundary criteria | Decision rule for Surface vs per-impl extension |
+| 4 | Per-implementation aspect | Pattern level + current Implementation set + per-impl extension Protocols pattern |
+| 5 | Selection mechanics | workspace.md selection field; cardinality; validation at boot; re-binding semantics |
+| 6 | Tri-aspect reconciliation | Surface + Implementations + Running Instance; coupling-impossible-by-construction |
+| 7 | Composition with framework primitives | Cross-references to all primitives this topic composes with |
+| 8 | Substrate-internal vs skill-side audit emission | Architectural-event kinds enumeration; dual emission path resolution if applicable |
+| 9 | Cardinality + lifecycle | Creator / owner / destroyer; mutability; cross-session persistence |
+| 10 | Boot + shutdown phase ordering (architectural-level) | Per-instance lifecycle ordering; flush-before-release invariants |
+| 11 | Substrate error categories (architectural-level) | Cross-class architectural categories + per-class refinements; per-shape error semantics |
+| 12 | Transport variation + per-tier mapping (where applicable) | Multi-transport mapping; per-tier deployment behavior |
+| 13 | Deployment-tier awareness | Tier 1/2/3; per-tier behavior in impl, not Surface |
+| 14 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details |
+| 15 | Watch-list | Items awaiting external evidence; resolution mechanisms |
+| 16 | Decision-design provenance | Archived sources; pattern-vs-instance discipline application |
+| 17 | Phase routing | Architectural shape (locked here) vs Pydantic spec vs concrete impls (Phase 6) |
+| 18 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing / Phase 6 spec target |
+
+Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic).
+
+#### Provenance hygiene (per coherence-audit Lens 5 v0.2.1)
+
+ARCH topics hold **pure architectural content** — provenance lives in HANDOFF + git log + commit messages + DRs (Layer 4 Sharpening provenance section). No "Pattern note (meta)" / sharpening trajectory / procedural narrative in ARCH topics.
+
+Each topic file: minimal frontmatter (title; topic-cluster; status: drafted/locked/forthcoming); H1 = de-kebab-cased slug.
+
 ### Layer 4 — Decision records
 
-`docs/decisions/<decision>.md` — ONE narrow decision per DR.
+`docs/decisions/<decision>.md` — ONE narrow decision per DR (or composite DR for upfront-known decomposition per `decision-design-sharpening` v0.6.0 Mode-2 composite decomposition pattern).
 
-Format: context + decision + rationale + alternatives considered + composition with disciplines + revisit triggers.
+#### DR template (LOCKED)
 
-If work decomposes into multiple decisions, write multiple DRs — never Sub-DR A + Sub-DR B in same file.
+Sections in order:
 
-Referenced FROM Layer 3 topics; not standalone reading.
+1. **Status** — ACCEPTED / SUPERSEDED-BY-X; sharpening rounds metadata (e.g., "2-round sharpening per `decision-design-sharpening` v0.6.0")
+2. **Owner** — Phase / commitment number / responsible work tracker
+3. **Related** — Composes-with DRs / GLOSSARY entries / archived sources / disciplines applied
+4. **Context** — what motivated the decision; what was missing; what the decision-design phase needed to resolve
+5. **Decision** — what was locked; concrete shape (no prose narrative; structured per content's nature)
+6. **Sharpening provenance** — **the meta-home for sharpening trajectory**:
+   - Round-by-Round summary (Round 1 EXPANSIONS / Round 2 EXPANSIONS / Round 3 if applicable)
+   - REVISIONS surfaced (if any)
+   - Manufactured-criticism rejections (compact list)
+   - GLOSSARY back-check verdict (what was considered; clean or retro-fit fired)
+   - Profile-anchored validation (which clusters tested; which profile content cited; verdict per cluster)
+   - Decomposition mode if applicable (Mode 1 emergent / Mode 2 upfront-known composite)
+7. **Composition with existing architecture** — how this decision interacts with prior decisions
+8. **Constraints flowing to downstream commitments** — per Phase / per file / per primitive impacts
+9. **Files touched** (this DR's commit) — list of artifacts modified
+10. **Revisit triggers** — specific external signals OR architectural events that warrant re-examination
 
-Supersession via header notes when a DR is superseded by a later one (existing pattern).
+If work decomposes into multiple decisions, write multiple DRs OR composite DR with explicit sub-decision sections — never Sub-DR A + Sub-DR B in same file unless Mode-2 composite decomposition applies.
+
+Supersession via header notes when a DR is superseded by a later one.
+
+**Sharpening provenance section IS the meta-home** (resolves where process narrative belongs per coherence-audit Lens 5 v0.2.1: provenance in HANDOFF + git log + commit messages + DRs; NOT in ARCH topics or canonical content).
 
 ### Layer 5 — Specs
 
@@ -309,11 +442,16 @@ This doc is Layer 0 — it governs the doc system itself. Changes to MAINTENANCE
 
 ---
 
-## Memory composition
+## Composition
 
-This doc composes with memory feedback files in `memory/`:
-- `feedback_apply_principle_uniformly.md` — when applying any principle (including cascade), test all categories independently rather than letting inherited framings narrow the scope
-- `feedback_vision_arch_grounding.md` — when assertions about doc content are needed, re-ground in source rather than pattern-matching from summaries
-- `feedback_pattern_not_instance_defers.md` — never defer; if a cascade is uncertain because external info is missing, surface as watch-list entry naming the specific external signal
-- `feedback_preliminary_lock.md` — every architectural decision is preliminary-locked; cascade applies even when revisiting "locked" prior decisions
-- `feedback_propose_before_commit.md` — at decision phases (changing structure, primitives, disciplines), propose first; at content phases (filling in topic detail), persist directly
+This doc holds TOP-LEVEL META-design principles (cascade / architecture / scope / design-principles / 5-layer model + templates). Operational disciplines (HOW we operate) live in `DISCIPLINES.md`. Memory feedback files in `memory/` hold cross-session AI behavioral preferences only:
+
+- `feedback_propose_before_commit.md` — at decision phases propose first (decisions+reasons in chat); at content phases write directly without verbatim chat preview
+- `feedback_judgment_and_automate.md` — commit positions instead of menus; routine work without asking
+- `feedback_push_after_commit.md` — push immediately after each commit
+- `feedback_blocked_actions.md` — surface hook/permission/sandbox blocks immediately; never workaround
+- `feedback_plugin_marketplace_clone_sync.md` — operational tool note (marketplace clone sync mechanics)
+
+Disciplines previously in memory (source-grounded / apply-principle-uniformly / pre-decision-sharpening / foundation-up-ordering / multi-axis-validation / vision-arch-grounding / skill-files-are-sources / llm-instruction-tightness) are absorbed into `DISCIPLINES.md` per session-16 doc-organization composite DR.
+
+Architectural commitments previously in memory (wrong-shapes-impossible / pattern-not-instance / preliminary-lock / dev-vs-app-skills) are absorbed into MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES + TOP-LEVEL SCOPE sections. The `feedback_ai_as_runtime` content is absorbed into `ARCHITECTURE.md` cross-cutting principles.

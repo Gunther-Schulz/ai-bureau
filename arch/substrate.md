@@ -76,7 +76,7 @@ These primitives accessible at use site via isinstance check on typed extension 
 
 ### Logic placement mode
 
-The Surface contract is articulated here (Mode 4 conceptual; this topic) and encoded structurally in Phase 6 spec (Mode 3 Pydantic Protocol + companion docs). Mode 1 production-runtime AI doesn't load this topic — production AI loads Mode 1 markdown (skills + specialists + workspace.md) above the Surface abstraction. Per `feedback_ai_as_runtime.md`: substrate Surface is Mode-2 Python-side runtime contract; the conceptual articulation here is for framework-developer orientation.
+The Surface contract is articulated here (Mode 4 conceptual; this topic) and encoded structurally in Phase 6 spec (Mode 3 Pydantic Protocol + companion docs). Mode 1 production-runtime AI doesn't load this topic — production AI loads Mode 1 markdown (skills + specialists + workspace.md) above the Surface abstraction. Per `ARCHITECTURE.md` cross-cutting principles "AI as runtime": substrate Surface is Mode-2 Python-side runtime contract; the conceptual articulation here is for framework-developer orientation.
 
 ## 3. Common-surface boundary criteria
 
@@ -129,7 +129,7 @@ else:
     # fall back to in-orchestrator execution OR raise NotSupportedError
 ```
 
-This is structural: skill code using only Surface methods is substrate-portable by construction; skill code reaching extension Protocols is substrate-pinned by construction (per `feedback_wrong_shapes_impossible.md` — wrong shapes impossible).
+This is structural: skill code using only Surface methods is substrate-portable by construction; skill code reaching extension Protocols is substrate-pinned by construction (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 — wrong shapes impossible).
 
 Validated by `profiles/L1-specialist-creator.md` "Cross-substrate compatibility (specialist substrate-agnostic vs substrate-pinned)" + `profiles/G-composability-gate.md` "Cross-substrate composition rules: specialist must be substrate-agnostic OR explicitly substrate-pinned; consumer must verify before install" (lines 155-156).
 
@@ -166,7 +166,7 @@ Substrate as tri-aspect Pattern A primitive (per locked GLOSSARY entry):
 
 ### Substrate-coupling impossible-by-construction
 
-Per `feedback_wrong_shapes_impossible.md`: Surface-typed skill code structurally cannot reach native primitives without explicit isinstance check on extension Protocol. The architectural commitment makes substrate-coupling-by-accident impossible — wrong shapes don't compile.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: Surface-typed skill code structurally cannot reach native primitives without explicit isinstance check on extension Protocol. The architectural commitment makes substrate-coupling-by-accident impossible — wrong shapes don't compile.
 
 This is one of the canonical examples of structural-over-conventional discipline applied at framework primitive design.
 
@@ -380,7 +380,7 @@ This topic articulates substrate as Pattern A protocol per locked GLOSSARY entry
 - `archive/docs/decisions/substrate-agentic-framework.md` — substrate evaluation; 4-survivor recommendation (Claude Agent SDK + MS AF + Strands + hand-rolled); pattern-vs-instance reframing of Tier 3
 - `archive/docs/decisions/sdk-deep-read.md` — SDK code-level verification; substrate Protocol surface refinement; per-substrate extension Protocols pattern formalization
 
-Per `feedback_pattern_not_instance_defers.md`: substrate Surface stays shape-neutral / archetype-neutral / pioneer-neutral. Pioneer (PBS-Schulz / Claude Agent SDK) reality grounds the substrate primitive (per `profiles/L5a-planner-pbs-schulz.md` line 88, 126) without leaking pioneer specifics into the Surface contract.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays shape-neutral / archetype-neutral / pioneer-neutral. Pioneer (PBS-Schulz / Claude Agent SDK) reality grounds the substrate primitive (per `profiles/L5a-planner-pbs-schulz.md` line 88, 126) without leaking pioneer specifics into the Surface contract.
 
 ## 17. Phase routing
 
@@ -396,7 +396,7 @@ Per `feedback_pattern_not_instance_defers.md`: substrate Surface stays shape-neu
 ## 18. Cross-references
 
 - **GLOSSARY**: `substrate` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `adapter`, `audit`, `event`, `session`, `specialist`, `deployment`
-- **Disciplines**: `feedback_wrong_shapes_impossible.md` (substrate-coupling impossible-by-construction); `feedback_pattern_not_instance_defers.md` (pioneer-neutrality of Surface); `feedback_ai_as_runtime.md` (Mode-2 Python runtime); `feedback_skill_files_are_sources.md` (procedural fidelity at session-16 substrate Round 1)
+- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (substrate-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pioneer-neutrality of Surface); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity at session-16 substrate Round 1)
 - **Profiles validated**: `G-composability-gate.md` (lines 155-156, 159, 168) + `L5a-planner-pbs-schulz.md` (lines 88, 126, 129) + `L1-specialist-creator.md` (line 27) + `L4a-workspace-deployer-solo.md` (lines 22, 38) + `L8-auditor-reviewer-posthoc.md` (lines 29, 32)
 - **ARCH topics composing with substrate**: `arch/adapter.md` (Pattern A protocol; integrates external systems); `arch/audit.md` (substrate-emitted vs skill-emitted dual-emission paths); `arch/coordination.md`, `arch/trust.md`, `arch/time.md` (Pattern A protocols composing with substrate); `arch/quality-gate.md` (substrate-agnostic; observability infrastructure)
 - **Phase 6 spec target**: `docs/specs/substrate.md` (Pydantic Protocol + supporting types + per-substrate-impl spec)

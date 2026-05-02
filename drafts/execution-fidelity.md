@@ -46,10 +46,10 @@ Disguises 1+2 are the recurring/structurally-induced ones; 3-10 are situational.
 
 ## Composition with existing disciplines
 
-- **`feedback_llm_instruction_tightness.md`** (Mode 1 markdown layer): execution-fidelity is the META-concern that makes instruction-tightness load-bearing. Tight instructions don't help if AI silently shortcuts past them.
-- **`feedback_wrong_shapes_impossible.md`** (structural over conventional): procedural guards (read-at-session-start; cite-section-names; etc.) are convention; structural guards (PreToolUse hooks; gates; type-system enforcement) are wrong-shape-impossible. Execution-fidelity work selects among these for each disguise.
-- **`feedback_ai_as_runtime.md`** (SQL-DB-trap): encoding rules in prose intending AI to "follow them" fails when AI silently shortcuts. Execution-fidelity is the precondition for AI-as-runtime to work at all.
-- **`feedback_source_grounded.md`** (cite file:line): direct evidence vs synthesis is one execution-fidelity criterion. Pattern-matching from memory ≠ direct evidence.
+- **`ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness"** (Mode 1 markdown layer): execution-fidelity is the META-concern that makes instruction-tightness load-bearing. Tight instructions don't help if AI silently shortcuts past them.
+- **`MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1** (structural over conventional): procedural guards (read-at-session-start; cite-section-names; etc.) are convention; structural guards (PreToolUse hooks; gates; type-system enforcement) are wrong-shape-impossible. Execution-fidelity work selects among these for each disguise.
+- **`ARCHITECTURE.md` cross-cutting principles "AI as runtime"** (SQL-DB-trap): encoding rules in prose intending AI to "follow them" fails when AI silently shortcuts. Execution-fidelity is the precondition for AI-as-runtime to work at all.
+- **`DISCIPLINES.md` Discipline 1** (cite file:line): direct evidence vs synthesis is one execution-fidelity criterion. Pattern-matching from memory ≠ direct evidence.
 - **Sparring (axis 2)**: mechanism survives only if AI faithfully executes the counter-argument-validation procedure
 - **Engaged authorship (axis 3)**: mechanism survives only if AI faithfully executes per-claim attestation procedure (not aggregated to whole-output sign-off)
 - **Quality-gate (Pattern A)**: mechanism survives only if shape policy's enforcement procedure is faithfully executed at runtime
@@ -61,7 +61,7 @@ Connects to all three axes — execution-fidelity is the **precondition** for ea
 - Axis 2 (sparring): counter-argument validation degenerates to "I considered alternatives" without actually doing it
 - Axis 3 (authorship preservation): per-claim attestation degenerates to whole-output approval
 
-Per `feedback_preliminary_lock.md`: VISION axes are anchored; everything else preliminary. Execution fidelity may rise to anchor-grade if axes' falsification criteria depend on it (open question).
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3: VISION axes are anchored; everything else preliminary. Execution fidelity may rise to anchor-grade if axes' falsification criteria depend on it (open question).
 
 ## Mechanism candidates (not yet locked; framework-level)
 
@@ -124,6 +124,6 @@ Until then, this is exploratory — captures the framework concern without prema
 
 - `learnings/ai-app-development.md` Observation 28 — single-session instance documentation (canonical session-16 case)
 - `memory/feedback_skill_files_are_sources.md` — primary procedural mechanism (5-location redundancy first applied)
-- `feedback_wrong_shapes_impossible.md` — escalation framework
-- `feedback_ai_as_runtime.md` — SQL-DB-trap as related disguise pattern
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 — escalation framework
+- `ARCHITECTURE.md` cross-cutting principles "AI as runtime" — SQL-DB-trap as related disguise pattern
 - `VISION.md` — three-axis thesis (this concern is precondition for each axis mechanism)

@@ -376,7 +376,7 @@ Circuit-breaker state-changes emit `adapter_circuit_opened` / `adapter_circuit_c
 
 ### Adapter Implementation versioning
 
-Semver-like (per archived `feedback_preliminary_lock.md` discipline + GLOSSARY-grade locked policy on versioning):
+Semver-like (per archived `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 discipline + GLOSSARY-grade locked policy on versioning):
 - **Major**: breaking changes to per-class Surface satisfaction OR auth model OR config schema
 - **Minor**: new capabilities; backward-compatible
 - **Patch**: bug fixes; no API changes
@@ -433,7 +433,7 @@ This topic articulates adapter as Pattern A protocol per locked GLOSSARY entry. 
 - `archive/docs/plugin-conventions.md` — MCP-tool integration; Anthropic plugin manifest patterns
 - `archive/docs/backend-conventions.md` — MCP-corpus adapter pattern (LanceDB backend); request/response sync
 
-Per `feedback_pattern_not_instance_defers.md`: per-class Adapter Surfaces stay shape-neutral / archetype-neutral / pioneer-neutral. Pioneer reality (PBS-Schulz / outlook + LaTeX + signing) grounds the adapter primitive without leaking pioneer specifics into Surface contracts.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces stay shape-neutral / archetype-neutral / pioneer-neutral. Pioneer reality (PBS-Schulz / outlook + LaTeX + signing) grounds the adapter primitive without leaking pioneer specifics into Surface contracts.
 
 ## 17. Phase routing
 
@@ -450,7 +450,7 @@ Per `feedback_pattern_not_instance_defers.md`: per-class Adapter Surfaces stay s
 ## 18. Cross-references
 
 - **GLOSSARY**: `adapter` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `substrate`, `skill`, `specialist`, `audit`, `event`, `coordination`, `trust`, `time`, `shape`
-- **Disciplines**: `feedback_wrong_shapes_impossible.md` (adapter-coupling impossible-by-construction); `feedback_pattern_not_instance_defers.md` (per-class Surface neutrality); `feedback_ai_as_runtime.md` (Mode-2 Python runtime); `feedback_skill_files_are_sources.md` (procedural fidelity)
+- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (adapter-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (per-class Surface neutrality); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity)
 - **Profiles validated**: `G-composability-gate.md` (line 157 cross-shape consumption); `L5a-planner-pbs-schulz.md` (line 90 active adapters; line 66 ad-hoc communication via adapter); `L1-specialist-creator.md` (line 23 specialist DEFINITION boundary; specialist may bundle adapter Implementations); `L4a-workspace-deployer-solo.md` (line 23 adapter configuration: email integration; document-signing; LaTeX compile); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity across deployments)
 - **ARCH topics composing with adapter**: `arch/substrate.md` (Surface §B MCP registration + §C permission flow + §8 dual audit emission); `arch/coordination.md` (cross-adapter coordination); `arch/trust.md` (federation trust handshake); `arch/time.md` (scheduled adapter operations); `arch/audit.md` (per-action audit emission); `arch/quality-gate.md` (observability via adapter audit + quota metrics)
 - **Phase 6 spec target**: `docs/specs/adapter.md` (META-Surface + 5 per-class Pydantic Protocols + per-impl spec)

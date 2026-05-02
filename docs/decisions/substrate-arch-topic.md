@@ -7,7 +7,7 @@
 **Related**: 
 - Per locked GLOSSARY substrate entry (Pattern A tri-aspect; cross-axis; multi-aspect classification)
 - Per `phase-3-2-doc-organization.md` (composite Phase 3.2 lock; topic catalog Sub-decision 1; arch/<slug>.md naming Sub-decision 2; cross-cutting placement Sub-decision 3; ARCHITECTURE.md structure Sub-decision 4)
-- Per `feedback_skill_files_are_sources.md` (procedural discipline applied during this DR's Round 2; canonical session-16 case)
+- Per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural discipline applied during this DR's Round 2; canonical session-16 case)
 - Archived sources: `archive/docs/decisions/substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`
 
 ## Context
@@ -77,7 +77,7 @@ After user prompted skill check ("do check our specialised sharpening skills") +
 7. Composition with `session` primitive (added to §7)
 8. Lifecycle ownership clarification in §9 (creator / mutability / cross-session-persistence)
 9. §14 retitled "Pre-implementation operational concerns (Phase 6 forward reference)"
-10. Substrate-coupling impossible-by-construction (added to §6 tri-aspect; per `feedback_wrong_shapes_impossible.md`)
+10. Substrate-coupling impossible-by-construction (added to §6 tri-aspect; per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1)
 11. Watch-list W1: substrate-pluggability discipline-section promotion at Phase 3.8 (refined from archived W7)
 
 **Round 2 manufactured criticisms rejected (0; all 11 surfaced were Pareto-improving)**.
@@ -170,4 +170,4 @@ This DR's sharpening was **paused mid-Round-1** by user-detected procedural-fide
 3. Round 2 properly executed under just-codified discipline
 4. Retroactive profile-anchored validation under just-codified discipline (≥3 cluster representatives Read; cited profile content)
 
-The DR thus serves as canonical session-16 case for `feedback_skill_files_are_sources.md` discipline. The pattern note belongs in DR provenance because the procedural-fidelity work was load-bearing for this DR's correctness.
+The DR thus serves as canonical session-16 case for `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) discipline. The pattern note belongs in DR provenance because the procedural-fidelity work was load-bearing for this DR's correctness.

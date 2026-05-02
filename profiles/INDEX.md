@@ -44,7 +44,7 @@ Single "user" framing collapses these into one. Multiple "usage profiles" preser
 | **G** | **Composability Gate** — designing any L1-L4 producer artifact | Multi-mode consumption requirements satisfied (consulting / internal-firm-reuse / OSS / marketplace-future / backup-migration). If G fails, reshape design. | [G-composability-gate.md](G-composability-gate.md) |
 | **D** | **Defer Gate** — considering deferring any architectural item | Mental modeling within profile grounding attempted; defer only valid if mental modeling genuinely cannot resolve (truly awaits real-world evidence the framework doesn't yet have access to). | (cross-cutting; no separate profile — discipline embedded in sharpening / decision-design-sharpening / coherence-audit invocations) |
 
-**Both gates are STRUCTURAL.** Wrong shapes can't pass — composability + non-defer-instinct are not advisory. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
+**Both gates are STRUCTURAL.** Wrong shapes can't pass — composability + non-defer-instinct are not advisory. Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: prefer structural constraints that make wrong shapes impossible.
 
 **Why gates, not stages**: G + D are not sequential lifecycle stages (L1-L9 cover those). They're cross-cutting validation gates that fire BEFORE design proceeds (G) or defer is accepted (D). Lifecycle order is L1-L4-produce → consumers-consume; validation order puts G + D first — design with the end (consumption) in mind; defer only when mental modeling fails.
 
@@ -57,7 +57,7 @@ Single "user" framing collapses these into one. Multiple "usage profiles" preser
 6. Defer ONLY IF mental modeling genuinely cannot resolve — name the specific external evidence awaited (e.g., "second-archetype deployment data"; "Phase 1 measurement"; "regulatory ruling")
 7. If mental modeling resolves → evolve answer NOW (Round 1+2 sharpening on resolved framing); don't defer
 
-**D Gate composes with**: `feedback_pattern_not_instance_defers.md` (no-defer principle; D gate is structural enforcement); `feedback_defer_instinct.md` (defer-instinct sticky across sessions; D gate is counter-mechanism).
+**D Gate composes with**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (no-defer principle; D gate is structural enforcement); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (defer-instinct disguises) (defer-instinct sticky across sessions; D gate is counter-mechanism).
 
 ### Lifecycle stages — framework participants (L0-L10)
 
@@ -178,7 +178,7 @@ Before defer is accepted, attempt mental modeling:
 
 If mental modeling resolves → evolve answer now (Round 1+2 sharpening). Don't defer when tools are sufficient.
 
-### Step 3: Multi-axis validation across producer profiles (per `feedback_multi_axis_validation.md`)
+### Step 3: Multi-axis validation across producer profiles (per `DISCIPLINES.md` Discipline 3 (multi-axis sub-section))
 
 After G passes (and after D gate considered if any defer arises), validate primitive classifications across three orthogonal dimensions:
 - **Archetype**: planner / lawyer / researcher / auditor / etc.
@@ -196,7 +196,7 @@ Plus explicit non-coverage question: what use cases does primitive NOT cover; in
 
 ### Why structural gates (not advisory)
 
-"Design with the end in mind" (G). "Defer only when truly awaited evidence" (D). If composability concerns aren't gated at the start, producer-side design can produce non-composable artifacts. If defer-instinct isn't gated at decision moments, architectural questions get punted on speculative grounds rather than resolved through mental modeling. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
+"Design with the end in mind" (G). "Defer only when truly awaited evidence" (D). If composability concerns aren't gated at the start, producer-side design can produce non-composable artifacts. If defer-instinct isn't gated at decision moments, architectural questions get punted on speculative grounds rather than resolved through mental modeling. Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: prefer structural constraints that make wrong shapes impossible.
 
 ## Profile fleshing priority queue
 
@@ -236,8 +236,8 @@ For substantive PBS work involving primitive classification or composability con
 
 ## Cross-references
 
-- `feedback_multi_axis_validation.md` (the discipline profiles ground)
-- `feedback_foundation_up_ordering.md` (ordering principle complementary to profile validation)
+- `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) (the discipline profiles ground)
+- `DISCIPLINES.md` Discipline 8 (ordering principle complementary to profile validation)
 - `MAINTENANCE.md` (profiles added to Layer-0 anchors)
 - `HANDOFF.md` (session log captures profile creation + evolution)
 - `BACKLOG.md` (composability tooling Phase 5+ entry; references profiles for grounding)

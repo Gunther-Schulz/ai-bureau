@@ -50,7 +50,7 @@ Pattern-matching from synthesized memory of skill / profile usage **is NOT direc
 
 **Canonical failure (session 16)**: substrate Round 1 post-compact applied `decision-design-sharpening` from synthesized memory; missed layered coverage observation; phase-routed cross-cutting concerns to Phase 6 too aggressively. User had to force re-Read; Round 2 surfaced 11 EXPANSIONS that should have been visible at Round 2 design.
 
-Per memory: `feedback_skill_files_are_sources.md`, `feedback_source_grounded.md`, `feedback_vision_arch_grounding.md`.
+Per `DISCIPLINES.md` Discipline 1 (source-grounded; re-grounding sub-section + skill+profile sub-section).
 
 Per learnings: `learnings/ai-app-development.md` Observation 28.
 
@@ -58,7 +58,7 @@ Per drafts: `drafts/execution-fidelity.md` (META-framework concern; AI faithful 
 
 ## Repository identity (load-bearing)
 
-**This repo = framework source, not a deployment instance.** Per `MAINTENANCE.md` TOP-LEVEL SCOPE + `feedback_dev_vs_app_skills.md`:
+**This repo = framework source, not a deployment instance.** Per `MAINTENANCE.md` TOP-LEVEL SCOPE:
 
 - Dev skills (sharpening / audit / validation) live here permanently in `plugin/skills/`
 - App skills (per-deployment workspace skills; specialist DEFINITIONs; per-shape policy bundles) NEVER live here — they belong in deployed workspaces

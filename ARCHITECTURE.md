@@ -6,7 +6,7 @@
 
 **This doc is framework-developer documentation.** Layer 2 Overview per `MAINTENANCE.md` 5-layer doc model. Loaded at framework-development session start (along with VISION + MAINTENANCE.md + HANDOFF) for architectural orientation.
 
-**NOT loaded at production runtime by deployed-workspace AI.** Per `feedback_ai_as_runtime.md` discipline, AI in a deployed PBS workspace doing accountability-bearing work loads runtime-relevant markdown (workspace.md / active specialist DEFINITIONs / skill SKILL.md / shape policy bundles) — not framework architecture documentation.
+**NOT loaded at production runtime by deployed-workspace AI.** Per `ARCHITECTURE.md` cross-cutting principles "AI as runtime" discipline, AI in a deployed PBS workspace doing accountability-bearing work loads runtime-relevant markdown (workspace.md / active specialist DEFINITIONs / skill SKILL.md / shape policy bundles) — not framework architecture documentation.
 
 **Three consumer modes**:
 
@@ -16,7 +16,7 @@
 | Deployment template creation (L3) / shape composition (L4) | Template/shape creators needing framework architecture understanding | OCCASIONALLY — on-demand reference |
 | Production runtime (deployed PBS workspace) | AI runtime processing accountability-bearing work | NO — framework architecture not needed for per-claim work |
 
-**Optimization target**: human readability + framework-developer orientation. NOT optimized for AI runtime parsing (no machine-readable schema; no terse rule encoding). Per `feedback_llm_instruction_tightness.md`: instruction tightness matters most for production-runtime markdown layer (Mode 1 in §6 Logic placement modes) — that lives in skills/specialists/workspace.md, not here.
+**Optimization target**: human readability + framework-developer orientation. NOT optimized for AI runtime parsing (no machine-readable schema; no terse rule encoding). Per `ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness": instruction tightness matters most for production-runtime markdown layer (Mode 1 in §6 Logic placement modes) — that lives in skills/specialists/workspace.md, not here.
 
 **Scope**: captures **Phase 3 progress** + **topic catalog** + **reading order** + **cross-cutting principles** + **locked architectural decisions** + **active disciplines** + **watch-list**. Migrates toward stable architectural overview as Phase 3 completes.
 
@@ -36,7 +36,7 @@
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
 | **3.8** | Coherence-audit Lenses 11-15 activation (phase-boundary audit before Phase 4) | Pending |
 
-Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): questions before structure before content before audit.
+Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions before structure before content before audit.
 
 ## 3. Doc structure (Phase 3.0 LOCKED)
 
@@ -132,7 +132,7 @@ Lock items others depend on FIRST; downstream items composing with multiple foun
 - Topic ordering (substrate → adapter → ... → axis-interactions)
 - Within Sub-decision sharpening (Round 1 surface → Round 2 expansions per locked Round 1 position)
 
-Per `feedback_foundation_up_ordering.md` + cascade discipline.
+Per `DISCIPLINES.md` Discipline 8 + cascade discipline.
 
 ### Logic placement modes (4-mode distribution)
 
@@ -146,14 +146,54 @@ Where actual framework logic lives, by interpretability:
 | **Mode 4** Development-time LLM-MD | Documentation | Loaded at framework-development session start; NOT production-runtime | ARCHITECTURE.md / arch/* / DRs / MAINTENANCE.md / VISION / GLOSSARY / profiles / learnings / DISCIPLINES.md |
 
 **Discipline implications**:
-- **Mode 1 = highest LLM-instruction tightness** required (per `feedback_llm_instruction_tightness.md`); LLMs paper over imprecise instructions silently
+- **Mode 1 = highest LLM-instruction tightness** required (per `ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness"); LLMs paper over imprecise instructions silently
 - **Mode 2 = standard Python development discipline**; self-falsifying via tests + type errors
 - **Mode 3 = bridge** between modes; Pydantic enforces structural shape; spec docs explain semantic intent
 - **Mode 4 = optimize for human readability + AI-developer orientation**; NOT for production-runtime parsing
 
-**Anti-pattern**: encoding framework rules in Mode 4 (ARCHITECTURE.md / arch/) intending production AI to "follow them" — that's the SQL-DB trap (per `feedback_ai_as_runtime.md`). Production AI follows Mode 1 markdown (skills + specialists + workspace.md); Mode 4 is documentation, not runtime substrate.
+**Anti-pattern**: encoding framework rules in Mode 4 (ARCHITECTURE.md / arch/) intending production AI to "follow them" — that's the SQL-DB trap (see "AI as runtime, not AI as consumer" below). Production AI follows Mode 1 markdown (skills + specialists + workspace.md); Mode 4 is documentation, not runtime substrate.
 
 **Production runtime AI doesn't load Mode 4 docs** (ARCHITECTURE.md / arch/* / VISION / GLOSSARY) — vocabulary + behavior get encoded into Mode 1 skills + specialists at framework-development time. Production AI gets vocabulary via skill instruction inheritance.
+
+### AI as runtime, not AI as consumer
+
+When user names AI capability as *the mechanism* / *pillar* of an architecture (not as a feature being added on), the architectural shape mirrors how Claude already operates in PBS infrastructure: minimal structured skeleton (identity, cross-refs, persistence) + markdown body (semantics, rules, domain process) + AI reads at runtime.
+
+**Do NOT add an "encoded rules" layer** — even one that uses prose instead of code. That's the SQL-DB trap in disguise.
+
+**Why**: framework relies on AI loading markdown at runtime to interpret semantics + rules + domain process. Treating prose-rule-encoding as "the format" rather than as a structural claim about how AI offices are built misses the point. Memories work because Claude IS the runtime — no memory engine. Same pattern applies to managed entities, specialist DEFINITIONs, doctype manifests, anything where domain semantics live.
+
+**How to apply**: when designing PBS infrastructure where AI does the reasoning, ask: "would a memory work here?" If yes, the right shape is frontmatter + markdown body, period — NOT an additional tier for rules. Specifically:
+- **Structured for**: interfaces / identity / persistence
+- **Markdown for**: semantics / rules / domain process
+- **AI is the runtime** that fuses them
+
+The question "where do the rules live?" is itself a tell that you're about to over-structure.
+
+When the user names AI processing as a "pillar" or "the only way," read that as a *load-bearing structural claim*, not an enhancement — design FROM that, not AROUND it.
+
+### LLM-instruction tightness for Mode 1 markdown layer
+
+LLMs paper over imprecise markdown instructions by inference — they're smart enough to guess at proper course of action even when SKILL.md / specialist DEFINITION / workspace.md instructions aren't spot-on. But that guessing:
+- **Is brittle** (changes when model, context, or surrounding instructions shift)
+- **Has more overhead** (each session re-derives the constraint)
+- **Drifts silently** (no failure signal when guess differs from intent)
+- **Compounds** (one shaky instruction seeds shakier downstream inferences)
+
+Deterministic Python doesn't have this property — wrong-shape Python surfaces fast (compile error / type error / test failure); wrong-shape markdown surfaces only when behavior diverges from intent and someone notices.
+
+**Asymmetric review effort follows**: heavier on Mode 1 markdown (skill instructions; specialist DEFINITIONs; workspace.md; shape policy bundles); lighter on Mode 2 Python (self-falsifying via tests + type errors).
+
+**How to apply** — bias toward sharpening (vs feature-forward) when:
+- The system is pre-launch or pre-deployment-multiplication
+- The thing being sharpened is markdown / instructions / VISION / ARCHITECTURE / skill-body conventions (LLM-consumed Mode 1/4 layer)
+- Current state is "LLM is inferring the right answer most of the time" — that's the warning sign, NOT the comfortable state it sounds like
+- A coupling between layers (VISION → ARCH; ARCH → skills; meta-rule → audit) is asserted but not made structural
+
+Bias toward feature-forward when:
+- The thing being sharpened is deterministic Python (it self-fails on ambiguity)
+- The system is post-launch and changes are expensive to propagate
+- The instruction layer is concrete and well-coupled already
 
 ### How topics compose
 
@@ -169,7 +209,7 @@ Every L1-L4 producer level (specialist / shape / template / workspace) must prod
 
 ### Pattern-vs-instance discipline
 
-Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer-instance specifics live at workspace level (per practitioner-shape policy mandates), NOT in framework primitive definitions. See `feedback_pattern_not_instance_defers.md` + `profiles/L5a-planner-pbs-schulz.md` (anchor profile demonstrates pioneer reality).
+Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. PBS-Schulz pioneer-instance specifics live at workspace level (per practitioner-shape policy mandates), NOT in framework primitive definitions. See `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 + `profiles/L5a-planner-pbs-schulz.md` (anchor profile demonstrates pioneer reality).
 
 ## 7. Locked architectural decisions
 
@@ -358,11 +398,11 @@ These disciplines fire during architectural decision-making + validation. Codifi
 | **G — Composability Gate** | Designing any L1-L4 producer artifact | Multi-mode consumption requirements satisfied (consulting / firm-reuse / OSS / marketplace-future / backup-migration) |
 | **D — Defer Gate** | AI considers deferring any architectural item | Mental modeling within profile grounding attempted; defer only valid if mental modeling genuinely cannot resolve |
 
-Both gates are STRUCTURAL — wrong shapes can't pass. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
+Both gates are STRUCTURAL — wrong shapes can't pass. Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: prefer structural constraints that make wrong shapes impossible.
 
 Gates are codified in `profiles/INDEX.md`. Decision-design-sharpening v0.6.0 references them in Round 2 stress-test list.
 
-### Multi-axis validation (per `feedback_multi_axis_validation.md`)
+### Multi-axis validation (per `DISCIPLINES.md` Discipline 3 (multi-axis sub-section))
 
 Validate primitive classifications across three orthogonal dimensions:
 - **Archetype**: planner / lawyer / researcher / auditor / etc.
@@ -395,18 +435,18 @@ Don't default to full systematic. Match audit-strategy to audit-context. See coh
 
 ### Other disciplines
 
-- **Foundation-up workflow ordering** (per `feedback_foundation_up_ordering.md`): items others depend on come first; downstream items composing with multiple foundations come last; parallel-depth items batch with shared sharpening
-- **2-round sweet spot** per architectural decision (per `feedback_pre_decision_sharpening.md` + sharpen v0.9.0)
+- **Foundation-up workflow ordering** (per `DISCIPLINES.md` Discipline 8): items others depend on come first; downstream items composing with multiple foundations come last; parallel-depth items batch with shared sharpening
+- **2-round sweet spot** per architectural decision (per `DISCIPLINES.md` Discipline 3 + sharpen v0.9.0)
 - **Composite-decision decomposition** (per `decision-design-sharpening` v0.6.0): two modes — emergent (>3-round drift signal) + upfront-known (3+ tightly-coupled sub-decisions visible at framing); foundation-up sub-decision sequence + per-sub-decision 2-round + final synthesis
 - **Cascade discipline** (per `MAINTENANCE.md`): UPSTREAM + DOWNSTREAM bidirectional; changes propagate up/down/sideways in same commit; GLOSSARY back-check at Round 2 termination
-- **Pattern-vs-instance** (per `feedback_pattern_not_instance_defers.md`): no instance-leakage; cross-archetype illustrations required
-- **AI-as-runtime hybrid-shape** (per `feedback_ai_as_runtime.md`): don't add rule-encoding layer; production AI follows Mode 1 (skills + specialists + workspace.md) not Mode 4 (documentation)
+- **Pattern-vs-instance** (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2): no instance-leakage; cross-archetype illustrations required
+- **AI-as-runtime hybrid-shape** (per `ARCHITECTURE.md` cross-cutting principles "AI as runtime"): don't add rule-encoding layer; production AI follows Mode 1 (skills + specialists + workspace.md) not Mode 4 (documentation)
 - **Provenance hygiene** (per coherence-audit Lens 5 v0.2.1): no audit-history breadcrumbs in canonical content; provenance lives in HANDOFF + git log + commit messages
 - **Codify upfront vs wait-for-evidence** (per `learnings/ai-app-development.md` Observation 27): situational, not principled-default; 5-question discriminator (pain observability / shape ambiguity / retrofit cost / pattern maturity / overhead amortization); when deferring, add detection mechanism (self-check + watch-list naming awaited signal)
 
 ## 9. Watch-list (architectural items awaiting external evidence)
 
-Per D gate + `feedback_pattern_not_instance_defers.md` no-defer principle. ARCHITECTURE.md captures architectural-state-relevant items; BACKLOG.md has detailed work-tracking.
+Per D gate + `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 no-defer principle. ARCHITECTURE.md captures architectural-state-relevant items; BACKLOG.md has detailed work-tracking.
 
 | Watch-list item | Awaited signal | Resolution mechanism |
 |---|---|---|

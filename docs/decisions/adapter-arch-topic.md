@@ -1,6 +1,6 @@
 # Decision record: Adapter ARCH topic (Phase 3.4 second Pattern A protocol topic)
 
-**Status**: ACCEPTED — session 16 (2026-05-02); 2-round sharpening (Round 1 full monty + Round 2 cross-cutting + schema-detail per `decision-design-sharpening` v0.6.0 layered coverage observation) under just-codified procedural-fidelity discipline (`feedback_skill_files_are_sources.md`).
+**Status**: ACCEPTED — session 16 (2026-05-02); 2-round sharpening (Round 1 full monty + Round 2 cross-cutting + schema-detail per `decision-design-sharpening` v0.6.0 layered coverage observation) under just-codified procedural-fidelity discipline (`DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).
 
 **Owner**: Phase 3.4 Per-architectural-Protocol detail rebuild; second Pattern A protocol topic (substrate first; adapter second per foundation-up ordering).
 
@@ -8,7 +8,7 @@
 - Locked GLOSSARY adapter entry (Pattern A tri-aspect; cross-axis; multi-instance; internal-vs-external axis distinction from substrate)
 - `arch/substrate.md` (substrate Surface §B MCP registration + §C permission flow + §8 dual audit emission compose with adapter operations)
 - `phase-3-2-doc-organization.md` (composite Phase 3.2 lock; topic catalog Sub-decision 1; arch/<slug>.md naming Sub-decision 2)
-- `feedback_skill_files_are_sources.md` (procedural discipline applied throughout)
+- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural discipline applied throughout)
 - Archived sources: `a2a-and-gemini-pattern-emulation.md`, `plugin-conventions.md`, `backend-conventions.md`
 
 ## Context
@@ -168,4 +168,4 @@ All 20 EXPANSIONS classified additive coverage; none REVISION-flavored. 2-tier c
 
 Adapter as second Pattern A protocol topic VALIDATES substrate-established 18-section template AND introduces two-layer Surface variation (META + per-class). Pattern: ARCH topics for Pattern A protocols with per-instance-class semantic variation can adopt two-layer Surface; ARCH topics for singular-shape Pattern A protocols use single-layer Surface (substrate). Decision criterion: does per-instance-class admit semantic coherence within class but heterogeneity across classes? If yes → two-layer; if no → single-layer.
 
-This DR also serves as second canonical execution of the just-codified procedural fidelity discipline (`feedback_skill_files_are_sources.md`) post-substrate-Round-2-retroactive-pass — chat output cited specific skill section names (layered coverage observation; Round 2 cross-cutting + schema-detail layer; GLOSSARY back-check at Round 2 termination; REVISION/EXPANSION self-check; profile-anchored validation cluster citations) per verification discipline.
+This DR also serves as second canonical execution of the just-codified procedural fidelity discipline (`DISCIPLINES.md` Discipline 1 (skill+profile sub-section)) post-substrate-Round-2-retroactive-pass — chat output cited specific skill section names (layered coverage observation; Round 2 cross-cutting + schema-detail layer; GLOSSARY back-check at Round 2 termination; REVISION/EXPANSION self-check; profile-anchored validation cluster citations) per verification discipline.

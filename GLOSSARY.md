@@ -723,7 +723,7 @@ Workspace IDENTITY across deployments is workspace-portability concern (Phase 6 
 
 Two layers are intentional: framework guarantees minimum (presence) without dictating per-shape quality semantics. Per-shape policy extends framework with quality refinement.
 
-**Framework-level enforcement** (per `feedback_wrong_shapes_impossible.md` make-wrong-shapes-impossible discipline):
+**Framework-level enforcement** (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 make-wrong-shapes-impossible discipline):
 - Events emit per-claim across both phases (audit-emission mechanism)
 - `quality-gate` (Pattern A protocol) detects missing signals; emits drift signals at attestation moments
 - Per-shape intervention policy: practitioner-shape = friction/block (defensibility-critical; fail-closed); autonomous-business-shape = programmatic block (operator-attestation programmatic); personal-OS-shape = audit-only
@@ -1538,7 +1538,7 @@ Both involve "gate" but operate at different layers + lifecycle moments. Disambi
 
 **Canonical**: A Pattern A architectural Protocol that fires at runtime checkpoints (pre-send, pre-claim-finalization, pre-decision-lock, per-edit, drift-audit) to monitor for category-collapse manifestations across all three VISION axes, surface drift signals, and intervene with friction / re-engagement nudges / blocks per shape policy. Pattern A pluggability allows structural variation per shape; mechanism-shaped Surface ensures cross-implementation observability + emission compatibility.
 
-**What it is**: A runtime mechanism converting category-collapse-resistance from ENABLED architecturally (sparring sub-mechanisms exist) to ENFORCED at gate-firing moments. Per `feedback_wrong_shapes_impossible.md`: structural enforcement over conventional reliance on practitioner discipline. Quality-gate IS the structural counter to category-collapse drift at checkpoint moments.
+**What it is**: A runtime mechanism converting category-collapse-resistance from ENABLED architecturally (sparring sub-mechanisms exist) to ENFORCED at gate-firing moments. Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: structural enforcement over conventional reliance on practitioner discipline. Quality-gate IS the structural counter to category-collapse drift at checkpoint moments.
 
 **Per-shape implementations** (Pattern A pluggability):
 - `practitioner-shape-gate`: full engagement procedure (sparring composition + friction + practitioner attestation + re-engagement nudges); fail-closed; stateful (cumulative engagement signals across session)
@@ -1598,7 +1598,7 @@ Both involve "gate" but operate at different layers + lifecycle moments. Disambi
 
 **Source**:
 - `docs/decisions/quality-gate-scope-lock.md` (decision rationale + sharpening rounds metadata; original exploratory draft removed on graduation per drafts discipline)
-- VISION (`VISION.md`): not directly named; derives from category-collapse + axis-failure-mode framings + `feedback_wrong_shapes_impossible.md` structural-enforcement principle
+- VISION (`VISION.md`): not directly named; derives from category-collapse + axis-failure-mode framings + `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 structural-enforcement principle
 - Locked GLOSSARY entries: `category collapse` / `protocol (architectural)` / `sparring (axis 2)` / axis-failure modes / `claim` / `workflow_instance` / `session` / `event`
 - Synthesis: Pattern A protocol with mechanism-shaped Surface (hybrid resolution from Round 1 + Round 2 sharpening; structural variation per shape; mechanism-shaped Surface for cross-implementation compatibility)
 

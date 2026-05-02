@@ -1,6 +1,6 @@
 ---
 name: coherence-audit
-description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `feedback_skill_files_are_sources.md`).** Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including \"audit the glossary\", \"review the corpus\", \"cross-entry audit\", \"is the architecture clean\", \"are these the right primitives\", \"primitive-set audit\", \"set-level review\", \"coherence check\", \"is the vocabulary coherent\". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening)."
+description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including \"audit the glossary\", \"review the corpus\", \"cross-entry audit\", \"is the architecture clean\", \"are these the right primitives\", \"primitive-set audit\", \"set-level review\", \"coherence check\", \"is the vocabulary coherent\". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening)."
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
 version: 0.3.1
 ---
@@ -99,7 +99,7 @@ Schema + discipline check across entries (was Lens 4 + Lens 6 in v0.1.0; merged 
 - Class tags drawn from declared enumeration; no ad-hoc values
 - Layer / Axis / VISION-usage tags consistent
 - Boundary-test format roughly parallel where applicable (don't force standardization that costs more than it saves)
-- Source sections cite file:line where claims have file:line basis (per `feedback_source_grounded.md`)
+- Source sections cite file:line where claims have file:line basis (per `DISCIPLINES.md` Discipline 1)
 - Synthesis flagged distinctly from citation
 - "Pattern-matched / inferred" basis flagged at low confidence
 - **Provenance hygiene** (v0.2.1): entries should NOT contain audit/revision history breadcrumbs ("per RA4 Round 3 audit", "per A1 — primitive-set lens, applied session 16", "per Phase 1.75 + feedback_X resolution"). Provenance lives in HANDOFF.md notes + git log + commit messages. Discriminator:
@@ -136,7 +136,7 @@ For each primitive, ask:
 
 **Test for leakage**: would this primitive work for a hypothetical legal-practice / research-paper-review / engineering-doc workspace? Or does the definition embed pioneer-instance specifics (PBS-Schulz, planning bureau, German Begründungen)?
 
-**Composes with**: `feedback_pattern_not_instance_defers.md` (the no-defer principle protecting framework purity).
+**Composes with**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (the no-defer principle protecting framework purity).
 
 **Why this is a separate lens** (not just within Lens 1): merge/split/add/remove operations don't catch this — a primitive can be the right primitive (no merge needed) but its DEFINITION leaks instance-specifics. Different fault mode.
 
@@ -151,7 +151,7 @@ For each primitive, test:
 
 **Why this is a separate lens**: counter-mechanism to scope-creep — primitives can accumulate organically over conversations without each one's VISION grounding being explicit. Periodic VISION-grounding check ensures the primitive set stays anchored to the thesis VISION articulates rather than drifting.
 
-**Composes with**: VISION's preliminary-lock principle (per `feedback_preliminary_lock.md`); only VISION axes are anchored — every other primitive is preliminary AND should be VISION-grounded.
+**Composes with**: VISION's preliminary-lock principle (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3); only VISION axes are anchored — every other primitive is preliminary AND should be VISION-grounded.
 
 ### Lens 10: Cardinality + lifecycle
 
@@ -251,7 +251,7 @@ Empirical signal threshold: ≥3 borderline classifications across consecutive a
 | User says "lock" / "apply" / "looks good" | Apply revisions in cascade-aware order |
 | Lens 1 + 8 + 9 collectively yield zero REVISIONS after honest run | Strong signal corpus is set-coherent OR you're skipping load-bearing lenses. Force re-run with explicit prompts. |
 | Lens 5 or Lens 7 yields most of the findings | Self-validation bias triggered; you defaulted to mechanical compliance / within-entry contradictions. Re-run load-bearing lenses (1, 8, 9) explicitly. |
-| Lens 8 catches instance-leakage on locked primitive | High-priority cascade — affects framework purity per `feedback_pattern_not_instance_defers.md`. Lock immediately. |
+| Lens 8 catches instance-leakage on locked primitive | High-priority cascade — affects framework purity per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2. Lock immediately. |
 | Lens 9 surfaces ungrounded primitive | Either lift framing into VISION (if load-bearing) OR reconsider whether primitive belongs. Don't leave ungrounded. |
 | Lens 10 surfaces cardinality ambiguity | Sharpen the entry's cardinality statement; "typically N" is a smell — name the mechanism that determines N. |
 | Found findings are all Pareto-fail | Manufactured criticism territory; lock corpus as-is |
@@ -360,7 +360,7 @@ This skill is unusually vulnerable to self-validation bias because:
 
 **Counter-mechanism**: every coherence-audit run MUST produce a Lens 1 + Lens 8 + Lens 9 collective finding count. If the count is zero, treat as suspicious — either the corpus is genuinely set-coherent (rare for early-stage corpora) OR the load-bearing lenses weren't actually run.
 
-**User-trigger advantage**: per `feedback_pre_decision_sharpening.md`, user-triggered passes outperform AI-self-triggered. Coherence-audit IS user-triggered by definition (the skill fires on user signal, not AI auto-run). Counter-bias is partially built-in.
+**User-trigger advantage**: per `DISCIPLINES.md` Discipline 3, user-triggered passes outperform AI-self-triggered. Coherence-audit IS user-triggered by definition (the skill fires on user signal, not AI auto-run). Counter-bias is partially built-in.
 
 ## Concrete invocation example
 

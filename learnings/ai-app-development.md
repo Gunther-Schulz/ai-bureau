@@ -24,7 +24,7 @@
 
 **Evidence (session 16)**: AI repeatedly asserted what session-14 DRs said, what schema shapes looked like, what Option B floor enforced — without re-reading the actual DRs. User caught this multiple times. Specific failures: malformed `groupings` schema example; over-confident defense of Option B as "universal"; quote attribution to wrong source file.
 
-**Implication**: source-grounded discipline (`feedback_source_grounded.md`) is mandatory for AI-mediated architecture work. Cite `file:line`. Flag synthesis vs citation. Calibrate confidence by basis. The discipline itself is non-trivial to maintain — it requires explicit attention.
+**Implication**: source-grounded discipline (`DISCIPLINES.md` Discipline 1) is mandatory for AI-mediated architecture work. Cite `file:line`. Flag synthesis vs citation. Calibrate confidence by basis. The discipline itself is non-trivial to maintain — it requires explicit attention.
 
 **Test it against**: asserting things without cite-by-line; observe whether assertions hold up to verification.
 
@@ -46,7 +46,7 @@
 
 **Pattern**: For Python apps, write-then-test-then-fix is efficient because tests catch problems mechanically. For AI apps with markdown architecture, post-mortem audits are validator-mode (LLM anchored to existing content; manufactured criticism risk) while pre-decision sharpening is sparring-mode (LLM not yet committed; fresh perspective generates real refinements). Same architectural decisions get vastly better outcomes when sparred at formation moment.
 
-**Evidence (session 16)**: multi-round sharpening on framework/shape/A-B-C surfaced 19 refinements with high quality; subsequent audit-style passes mostly produced noise. Memory `feedback_pre_decision_sharpening.md` documents the empirical pattern.
+**Evidence (session 16)**: multi-round sharpening on framework/shape/A-B-C surfaced 19 refinements with high quality; subsequent audit-style passes mostly produced noise. Memory `DISCIPLINES.md` Discipline 3 documents the empirical pattern.
 
 **Implication**: build sharpening into decision-formation flow (round 1 full monty + user-triggered rounds 2+); don't rely on post-mortem audits as primary quality mechanism. Audits remain useful for drift-detection, but pre-decision sharpening is where the value compounds.
 
@@ -322,7 +322,7 @@ The structural mechanism is the same (rigorous critical engagement); the framing
 
 **Pattern**: Even with locked memory feedback explicitly stating "2-round sweet spot" + recent-session evidence demonstrating multi-round value, AI proposes "80/20 Round 1 sufficient" framings on next iteration. This drift is silent + invisible to AI self-review; user pushback is the only catch mechanism. The drift seems to come from: AI conserves user-time-perceived → understates needed iteration depth → hard to self-detect because the framing sounds Pareto-disciplined ("we found the structural finding; further rounds = manufactured criticism").
 
-**Evidence (session 16, 2026-05-02)**: After Round 1 audit on skill-craft surfaced 4 structural findings, AI proposed "80/20: 80% chance Round 1 was sufficient; 20% chance Round 2 surfaces something valuable" — direct contradiction with `feedback_pre_decision_sharpening.md` which says "2 disciplined rounds before committing yields more genuine refinements." User pushback: *"From experience two rounds (of running the sharpening skill) is sweet spot, not one... When do we hit the 80%? I think we already include some signals although I don't remember what those signals were."* Locked sharpen v0.9.0 to surface 2-round-sweet-spot explicitly + cut misleading "different angle per pass" parenthetical that AI was misreading as prescriptive.
+**Evidence (session 16, 2026-05-02)**: After Round 1 audit on skill-craft surfaced 4 structural findings, AI proposed "80/20: 80% chance Round 1 was sufficient; 20% chance Round 2 surfaces something valuable" — direct contradiction with `DISCIPLINES.md` Discipline 3 which says "2 disciplined rounds before committing yields more genuine refinements." User pushback: *"From experience two rounds (of running the sharpening skill) is sweet spot, not one... When do we hit the 80%? I think we already include some signals although I don't remember what those signals were."* Locked sharpen v0.9.0 to surface 2-round-sweet-spot explicitly + cut misleading "different angle per pass" parenthetical that AI was misreading as prescriptive.
 
 **Implication**: Empirical iteration patterns need to be EXPLICIT in skill text + memory + procedures, not just inferred from history. AI's drift toward shortcutting iteration is structural; no amount of recent evidence prevents the next-iteration drift unless rules are written down. Counter: explicit Pareto + iteration-default rules in skill text; user-trigger discipline preventing AI-self-shortcutting; cross-skill alignment (specialized sharpening skills had 2-round, generic sharpen didn't until corrected).
 
@@ -405,7 +405,7 @@ Same session, same review-step, opposite verdicts justified. Discriminator has d
 
 **Composes with**:
 - D-gate-logic-transposed-to-toolkit-level: D Gate is "wait-for-evidence when external info genuinely doesn't exist; otherwise mental modeling resolves now." This learning EXTENDS that to internal methodology decisions: same logic applies but "wait-for-evidence" can also mean "wait for accumulated own-cases to shape codification" (not just external info).
-- `feedback_preliminary_lock.md`: codified rules are still preliminary-locked; can revise on real-world falsification. Reduces cost-of-wrong-rule for codifications that DO happen.
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3: codified rules are still preliminary-locked; can revise on real-world falsification. Reduces cost-of-wrong-rule for codifications that DO happen.
 - Sharpen Spirit "don't add discipline ahead of need" — this learning operationalizes that with concrete discriminators.
 
 **Test it against**: future toolkit/methodology decisions in this project (e.g., when Phase 3.3-3.7 surfaces new sharpening patterns; when DR-ARCH-spec layering refines). Apply 5-question test; observe whether discriminator continues to produce calibrated verdicts.
@@ -455,12 +455,12 @@ PreToolUse hook deferred (user direction: "no need for a hook yet; proper proced
 9. Selective adherence (apply rules where convenient, skip where inconvenient)
 10. Cross-session forgetting
 
-**Promotion criteria** (for moving from learnings → memory): if the 5-location procedural redundancy continues to prevent the failure mode across 3+ additional sessions including post-compact + fresh-start scenarios, promote `feedback_skill_files_are_sources.md` from preliminary-loaded to validated-locked. If the pattern still recurs despite redundancy, escalate to structural enforcement (PreToolUse hook gating writes to architectural artifacts).
+**Promotion criteria** (for moving from learnings → memory): if the 5-location procedural redundancy continues to prevent the failure mode across 3+ additional sessions including post-compact + fresh-start scenarios, promote `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) from preliminary-loaded to validated-locked. If the pattern still recurs despite redundancy, escalate to structural enforcement (PreToolUse hook gating writes to architectural artifacts).
 
 **Composes with**:
-- `feedback_source_grounded.md`: extends source-grounded rule to skill+profile files explicitly
-- `feedback_wrong_shapes_impossible.md`: procedural redundancy is convention; structural enforcement (hook) is wrong-shape-impossible escalation if procedural fails
-- `feedback_vision_arch_grounding.md`: same pattern (Read at session start) extended to per-invocation Read of skill+profile files
+- `DISCIPLINES.md` Discipline 1: extends source-grounded rule to skill+profile files explicitly
+- `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: procedural redundancy is convention; structural enforcement (hook) is wrong-shape-impossible escalation if procedural fails
+- `DISCIPLINES.md` Discipline 1 (re-grounding sub-section): same pattern (Read at session start) extended to per-invocation Read of skill+profile files
 - `drafts/execution-fidelity.md`: META-concern that this observation manifests
 
 **Test it against**: every subsequent session 17+. Track:
@@ -476,7 +476,7 @@ If 3+ sessions pass with no recurrence, promote.
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:
-- Behavioral rule → memory feedback file (e.g., `feedback_source_grounded.md` was promoted from observation 2's repeated occurrence)
+- Behavioral rule → memory feedback file (e.g., `DISCIPLINES.md` Discipline 1 was promoted from observation 2's repeated occurrence)
 - Architectural commitment → MAINTENANCE.md / GLOSSARY / DR (e.g., cascade discipline was promoted from observation 3)
 - Methodological pattern → eventual AI-app-development-facilitation skill
 

@@ -117,4 +117,4 @@ This DR should be revisited if:
 - **Multi-axis validation discriminator** (per decision-design-sharpening v0.5.0): shape-specific surface present (federation / multi-tenant / multi-environment) → profile-anchored validation fired (Cluster B deployers + Cluster A producers + Cluster C consumers + federation profile mental modeling — all confirm 1:1 cardinality at framework level)
 - **GLOSSARY back-check** (per v0.5.0 + MAINTENANCE.md Bidirectional cascade): the decision IS itself glossary work; EXPANSIONS surfaced went directly into the new entry. No retro-fit gap.
 
-Total: 2 rounds. Per `feedback_pre_decision_sharpening.md` 2-round sweet spot empirical pattern. Narrow architectural surface (single DERIVED concept lock + cardinality cleanup) → 2 rounds sufficient.
+Total: 2 rounds. Per `DISCIPLINES.md` Discipline 3 2-round sweet spot empirical pattern. Narrow architectural surface (single DERIVED concept lock + cardinality cleanup) → 2 rounds sufficient.

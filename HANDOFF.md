@@ -18,7 +18,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - **`memory/`** — feedback files (lessons learned; loaded into conversation context per `MEMORY.md` index)
 - **`archive/INDEX.md`** — v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
 
-**Specialized skill invocation** (mandatory at every invocation; per `feedback_skill_files_are_sources.md`):
+**Specialized skill invocation** (mandatory at every invocation; per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)):
 - `plugin/skills/decision-design-sharpening/SKILL.md` — pre-decision sharpening (architectural decisions; 2-3 round sweet spot)
 - `plugin/skills/pre-implementation-sharpening/SKILL.md` — implementation-start sharpening
 - `plugin/skills/coherence-audit/SKILL.md` — cross-decision corpus audit
@@ -53,11 +53,11 @@ READ the SKILL.md via Read tool at every invocation regardless of prior usage. P
 
 **What happened this session**:
 1. Calibration clarifications surfaced 7 findings, all converging on one root: foundational vocabulary not crisply defined → layered approach named (session 14) but not permeated → instance-anchoring leakage in 5 different primitives (Art-25 naming, EU/DACH substrate-level additions, `project` enum, `groupings` primitive, practitioner = solo-human, vocabulary itself).
-2. Strategy decision: archive everything (radical rebuild) rather than incremental patching. Rationale: pre-launch deprecation is essentially free per Maintenance discipline; `feedback_full_monty_upfront.md` says do comprehensive refinement upfront; preliminary-lock principle (v0.33) explicitly authorizes wholesale revision.
+2. Strategy decision: archive everything (radical rebuild) rather than incremental patching. Rationale: pre-launch deprecation is essentially free per Maintenance discipline; `DISCIPLINES.md` Discipline 3 (full-monty consolidated) says do comprehensive refinement upfront; preliminary-lock principle (v0.33) explicitly authorizes wholesale revision.
 3. Archive complete: ARCH + ROADMAP + HANDOFF + docs/ (30 DRs + conventions + audits + design-reviews + strategic-positioning + rag-pipeline + plugin-conventions + backend-conventions + what-this-is + audit-pre-rag + office-config.schema) + extensions/framework/ (session-15 prototype) + backend/ (MCP server code) + plugin/ (19 skill bundles + templates) + .claude-plugin/ (plugin manifest) + extensions/{universal,domain,state}/ (PBS content; structure embodies scope-model decisions) + README.md. Code + content archived to remove rebuild bias per user direction; Phase 6 rebuilds against locked architecture. Memory/ + VISION + .claude/ + dev-link.sh + .gitignore stay as anchors / operational infrastructure.
 4. `archive/INDEX.md` written with one-line purpose summary per piece + status note documenting known issues.
 5. New HANDOFF.md (this file) written as rebuild log skeleton.
-6. **Dev skills resurrected from archive (post-Phase-1) + repo-identity commitment locked**: `plugin/skills/decision-design-sharpening/` v0.3.0 + `plugin/skills/pre-implementation-sharpening/` restored along with `.claude-plugin/marketplace.json` + `plugin/.claude-plugin/plugin.json`. **Categorical distinction surfaced + locked in `MAINTENANCE.md` "TOP-LEVEL SCOPE — Repo identity: framework source, not deployment instance" section**: this repo is the **framework source** (starting point for deployments), NOT a deployment instance. Dev skills (sharpening, framing, etc.) live here permanently — they're for working ON the framework. App skills (orchestrator, draft-textteil-b, validate-checklist, etc.) **never live in this repo** — they belong to deployment instances (Phase 6 builds PBS-Schulz pioneer instance separately, not into this repo). Archive history bundled both because v0.35 conflated framework with pioneer instance; the rebuild reverses that. Skipped during restore: `archive/plugin/CLAUDE.md` + `archive/plugin/.mcp.json` (PBS-domain references). Plugin manifest descriptions cleaned (PBS-domain references removed; neutral placeholder describing framework-source role + dev-tooling-only state — full positioning rewrite when framework-distribution mechanics surface in Phase 3+). Memory: `feedback_dev_vs_app_skills.md` updated to reference TOP-LEVEL SCOPE commitment.
+6. **Dev skills resurrected from archive (post-Phase-1) + repo-identity commitment locked**: `plugin/skills/decision-design-sharpening/` v0.3.0 + `plugin/skills/pre-implementation-sharpening/` restored along with `.claude-plugin/marketplace.json` + `plugin/.claude-plugin/plugin.json`. **Categorical distinction surfaced + locked in `MAINTENANCE.md` "TOP-LEVEL SCOPE — Repo identity: framework source, not deployment instance" section**: this repo is the **framework source** (starting point for deployments), NOT a deployment instance. Dev skills (sharpening, framing, etc.) live here permanently — they're for working ON the framework. App skills (orchestrator, draft-textteil-b, validate-checklist, etc.) **never live in this repo** — they belong to deployment instances (Phase 6 builds PBS-Schulz pioneer instance separately, not into this repo). Archive history bundled both because v0.35 conflated framework with pioneer instance; the rebuild reverses that. Skipped during restore: `archive/plugin/CLAUDE.md` + `archive/plugin/.mcp.json` (PBS-domain references). Plugin manifest descriptions cleaned (PBS-domain references removed; neutral placeholder describing framework-source role + dev-tooling-only state — full positioning rewrite when framework-distribution mechanics surface in Phase 3+). Memory: `MAINTENANCE.md` TOP-LEVEL SCOPE updated to reference TOP-LEVEL SCOPE commitment.
 
 7. **GLOSSARY coherence audit (post-lock cross-entry pass)**: ran 9-lens primitive-set + sharpening pass on locked GLOSSARY (22 entries). Surfaced + applied:
    - **Within-entry sharpening** (R1, R2, R3, E4-E9): protocol entry promoted to META-PRIMITIVE (named architectural Protocols + substrate + adapter are the PRIMITIVE Pattern A instances); practitioner canonical fixed (natural-or-legal-person → natural person; legal-entity context lives at workspace level); framework architectural-protocols enumeration completed (added Substrate + Adapter); skill canonical "behavioral protocol" → "behavioral procedure" (terminology clash fix); STUB added as 5th Class value; axis entries got file:line citations to VISION; actor axis tag noted axis-3 lean; skill's specialist-context constraint flagged as PBS architectural commitment (vs Anthropic bare-skill convention); substrate canonical neutralized SDK-specific vocabulary.
@@ -84,7 +84,7 @@ READ the SKILL.md via Read tool at every invocation regardless of prior usage. P
     - **RA4 "Client" instance-leakage at framework level fixed** (Lens 8 Pattern-vs-instance LOAD-BEARING): "Client" was enumerated as universal workspace-scope managed entity in Owner B scope members + workspace entry — but Client is practitioner-shape-anchored (engagement-target), not universal (personal-OS-shape has no clients; research-lab has funders/co-authors not clients; etc.). Same failure-mode shape as session-16 `project` enum tied to planning-domain. Corrected: engagement-target managed entities are shape-policy-mandated (practitioner-shape mandates Client; autonomous-business-shape mandates Customer; research-lab-shape mandates Funder/Co-author/Institution; etc.), NOT framework-level. Same applies to workspace entry's "What it is" section.
     - **EA1-EA5 cardinality + lifecycle clarifications** (Lens 10 NEW): added explicit cardinality + lifecycle paragraphs to specialist (instance-content lifecycle: persists across activation/deactivation cycles), workflow (specialist-defined; cardinality = sum across active specialists), actor (1 ai_runtime + 1+ humans + N external; per-shape variation), practitioner (record lifecycle: created at workspace setup or per-practitioner addition; mutable-with-audit), workspace ("deployment" preliminary-defined as one git-clone-instance + active substrate + workspace.md).
     - **Lens 1 + 8 + 9 collective REVISION count**: 2 (RA1 candidate + RA4) — non-zero counter-validation passes. Lens 10 (NEW) earned its place with 5 EXPANSIONS surfaced.
-    - **RA1 (ADD `claim` primitive)**: surfaced in Lens 1 as load-bearing missing primitive (atomic accountability-bearing-assertion within work-unit output; cross-archetype). Held for separate Round 1 + Round 2 sharpening per `feedback_full_monty_upfront.md` discipline (new architectural addition deserves full pre-decision sharpening, not bundled with cleanup batch).
+    - **RA1 (ADD `claim` primitive)**: surfaced in Lens 1 as load-bearing missing primitive (atomic accountability-bearing-assertion within work-unit output; cross-archetype). Held for separate Round 1 + Round 2 sharpening per `DISCIPLINES.md` Discipline 3 (full-monty consolidated) discipline (new architectural addition deserves full pre-decision sharpening, not bundled with cleanup batch).
 
 12. **`claim` primitive locked + Round 4 cleanup batch + skill v0.2.1 provenance discipline**:
     - **`claim` entry locked** (Round 1 full-monty + Round 2 sharpening — 4 refinements applied: boundary test disambiguates claim vs assertion vs statement via 3 distinguishing properties; axis tags explicitly mapped axis-3 primary + axis-2 sparring-target connection; source-grounding mechanism cross-reference added; audit-granularity policy clarified — claim-level / action-level / light distinction explained as shape-policy values configuring the audit-emission mechanism). Cardinality + lifecycle paragraph included. Cascade-pass added claim reciprocals to: work-unit, authorship preservation, sparring, event, practitioner Composes-with sections.
@@ -154,7 +154,7 @@ After workflow bipartite-classification locked (Round 1 + Round 2; ad-hoc scope 
   - L9 (shape catalog curator): skeleton
   - G (composability gate; package consumer perspective; cross-cutting validation gate that fires FIRST before producer-side design): FULL CROSS-CUTTING profile (renamed from L13 — gate framing reflects validation-order primacy over lifecycle-order placement)
 
-- **Multi-axis validation discipline locked** (per `feedback_multi_axis_validation.md`): three orthogonal dimensions (archetype × work-type × role) + explicit non-coverage question; replaces the previous single-axis cross-archetype illustration approach that missed ad-hoc work as legitimate scope
+- **Multi-axis validation discipline locked** (per `DISCIPLINES.md` Discipline 3 (multi-axis sub-section)): three orthogonal dimensions (archetype × work-type × role) + explicit non-coverage question; replaces the previous single-axis cross-archetype illustration approach that missed ad-hoc work as legitimate scope
 
 - **Composability + boundaries discipline locked** with two-step validation order: (1) G composability gate fires FIRST — does design support multi-mode consumption (consulting / firm-reuse / OSS / marketplace-future / backup-migration)? (2) If G passes, multi-axis validation across producer profiles (archetype × work-type × role). Wrong shapes can't pass G; structural composability rather than advisory
 
@@ -179,10 +179,10 @@ These are now part of standing PBS framework discipline (HANDOFF anchors + memor
 
 After profile foundation + multi-axis discipline locked (note 29), substantial framework infrastructure work landed before resuming Phase 3.1:
 
-**D Gate (Defer Gate) codification** — user surfaced that memory feedback alone insufficient as trigger; AI drifts back to defer-default during decision moments even with `feedback_pattern_not_instance_defers.md` loaded. Codified D Gate as structural enforcement parallel to G Composability Gate:
+**D Gate (Defer Gate) codification** — user surfaced that memory feedback alone insufficient as trigger; AI drifts back to defer-default during decision moments even with `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 loaded. Codified D Gate as structural enforcement parallel to G Composability Gate:
 - D Gate fires when AI considers deferring any architectural item; blocks until mental modeling within profile grounding attempted; defer only valid if mental modeling genuinely cannot resolve
 - Procedure: identify item → mental model within profile grounding (multi-axis + G gate) → check primitive classification holds across mental scenarios → defer ONLY IF cannot resolve → if resolves, evolve answer NOW
-- Codified at: `profiles/INDEX.md` (paired with G Gate); `DISCIPLINES.md §5` (procedural enforcement); `decision-design-sharpening` v0.4.0 (Round 2 stress-test list); `feedback_pattern_not_instance_defers.md` v0.34
+- Codified at: `profiles/INDEX.md` (paired with G Gate); `DISCIPLINES.md §5` (procedural enforcement); `decision-design-sharpening` v0.4.0 (Round 2 stress-test list); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 v0.34
 - Empirical demonstration applied retrospectively: workflow_pattern was prematurely deferred during workflow Round 2 ST9. Mental modeling resolved as Layer A reusable templates / specialist-bundled bausteine (NOT framework primitive). D Gate prevents this failure mode going forward.
 
 **ARCHITECTURE.md created (Layer 2 overview)** — compact-survival anchor for Phase 3 work. Captures sub-phase status + locked architectural decisions + active disciplines + provisional topic catalog + open questions + watch-list + cross-cutting principles + reading order. Phase 3 work was scattered across HANDOFF + BACKLOG + GLOSSARY + profiles/INDEX.md; ARCHITECTURE.md gives single doc for state + decisions. arch/<topic-slug>.md files emerge organically at Phase 3.3+.
@@ -192,8 +192,8 @@ After profile foundation + multi-axis discipline locked (note 29), substantial f
 **Audit scaling strategies** (coherence-audit v0.2.2 → v0.3.0) — codified 5 strategies (cluster compression / audit deltas / on-demand fleshing / sampling representatives / full systematic) with when-to-use matrix. Combination approach for ongoing work; full systematic RESERVED for phase boundaries + new-discipline introductions. Anti-pattern flagged: defaulting to full systematic introduces self-validation bias.
 
 **Memory consolidation** (22 → 18 files; 4-file reduction):
-- Merged `feedback_full_monty_upfront.md` into `feedback_pre_decision_sharpening.md` (decision-shape-lock disciplines)
-- Merged `feedback_defer_instinct.md` into `feedback_pattern_not_instance_defers.md` (no-defer + D Gate canonical)
+- Merged `DISCIPLINES.md` Discipline 3 (full-monty consolidated) into `DISCIPLINES.md` Discipline 3 (decision-shape-lock disciplines)
+- Merged `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (defer-instinct disguises) into `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (no-defer + D Gate canonical)
 - Retired `feedback_refine_pareto.md` (sharpen Spirit canonical for Pareto principle)
 - Purged `feedback_links_plain_text.md` → moved to global CLAUDE.md (URL formatting; not project-specific)
 
@@ -408,7 +408,7 @@ A. Agent loop entry / B. MCP server registration + discovery / C. Permission flo
 
 `arch/adapter.md` LOCKED + DR `adapter-arch-topic.md` created. Second Pattern A protocol topic; validates substrate-established 18-section template AND introduces **two-layer Surface variation** for Pattern A protocols with per-instance-class semantic coherence.
 
-**Sharpening trajectory** (executed under just-codified `feedback_skill_files_are_sources.md` discipline):
+**Sharpening trajectory** (executed under just-codified `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) discipline):
 - Round 1 (full monty; architectural decisions layer): 8 EXPANSIONS surfaced. 3 manufactured criticisms rejected (per-class granularity over-engineering / merge into substrate as "external substrate" / audit-via-MCP-gate creates substrate dependency).
 - User triggered Round 2 explicitly (sanity-checked GLOSSARY back-check is part of process).
 - Round 2 (cross-cutting + schema-detail layer per layered coverage observation): 12 EXPANSIONS surfaced (auth + lifecycle architectural / per-class error categories / multi-instance lifecycle / quota + rate-limit / circuit-breaker / per-action audit-event kinds / permission flow composition / cross-shape policy variation / state separation / hot-swap re-binding / versioning / bidirectional-vs-unidirectional shape detail). 2 manufactured criticisms rejected (multi-instance Pattern A as new META-classification / hot-swap defer to Phase 6).
@@ -456,6 +456,32 @@ A. Agent loop entry / B. MCP server registration + discovery / C. Permission flo
 
 ---
 
+**Note 37: Doc-organization templates + memory consolidation (composite DR)**:
+
+User direction: clear interconnected docs over memory; meta-information (sharpening provenance) goes in DRs.
+
+Composite DR `doc-organization-templates.md` locks 3 decisions:
+- **arch/<topic>.md template**: 18-section Pattern A protocol topic template; persisted in MAINTENANCE.md Layer 3 description
+- **DR template**: includes Sharpening provenance section as the meta-home; persisted in MAINTENANCE.md Layer 4 description
+- **Memory consolidation**: 14 of 19 files migrated to absorbed homes (DISCIPLINES.md / MAINTENANCE.md / ARCHITECTURE.md); 5 retained as cross-session AI behavioral preferences
+
+NEW MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES section (3 principles: wrong-shapes-impossible / pattern-vs-instance + no-defer + D Gate / preliminary-lock). NEW DISCIPLINES.md Discipline 8 (foundation-up workflow ordering). EXPANDED Discipline 1 (re-grounding + skill+profile sub-sections). EXPANDED Discipline 3 (multi-axis validation + profile-anchored validation sub-sections). ARCHITECTURE.md cross-cutting principles absorb ai-as-runtime + llm-instruction-tightness.
+
+Cascade-scan executed via `git grep "feedback_<name>.md"` + batch sed across 25+ affected files. Zero broken references remaining.
+
+Sharpened via generic `sharpen` skill v0.9.0 (2 rounds): Round 1 surfaced 3 open questions; Round 2 self-corrected the "hybrid pattern" overclaim (only MEMORY.md INDEX auto-loads, not feedback file content; plain consolidation suffices); cascade-scan procedural step added per mechanism-simulation pass.
+
+**Status**: Doc-organization foundation locked. Sparring / audit / coordination / trust / time ARCH topics next under leaner discipline (Pattern A 18-section template + DR template with Sharpening provenance section).
+
+**Locked artifact state added**:
+- 19 → 5 memory feedback files (14 migrated; 13 deleted from memory dir; full-monty was already retired)
+- 7 → 8 DRs in docs/decisions/ (doc-organization-templates.md NEW)
+- MAINTENANCE.md sharpened (NEW TOP-LEVEL DESIGN PRINCIPLES + Layer 3/4 templates)
+- DISCIPLINES.md sharpened (8 disciplines now; was 7)
+- ARCHITECTURE.md cross-cutting principles expanded
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
@@ -490,7 +516,7 @@ A. Agent loop entry / B. MCP server registration + discovery / C. Permission flo
     - **OBSERVATIONS.md observation 15**: documents bildhauer as the originating incident; traces root cause to "Naked judgment call" anti-pattern's overgeneralization across skill types
     - Round 2 surfaced cross-reference symmetry fix (Writing judgment procedures section now references back to Layer 1.5)
 
-23. **Foundation-up workflow ordering memory persisted** — `feedback_foundation_up_ordering.md` captures: when work items have dependencies (compositional/architectural work — GLOSSARY entries, DRs, ARCH topics, specs), lock items others depend on first; downstream items that compose with multiple foundations come last; parallel-depth items batch with shared sharpening passes. Why: minimizes rework; downstream items reference locked foundations cleanly. Discovered in current session when ordering remaining 6 GLOSSARY entries.
+23. **Foundation-up workflow ordering memory persisted** — `DISCIPLINES.md` Discipline 8 captures: when work items have dependencies (compositional/architectural work — GLOSSARY entries, DRs, ARCH topics, specs), lock items others depend on first; downstream items that compose with multiple foundations come last; parallel-depth items batch with shared sharpening passes. Why: minimizes rework; downstream items reference locked foundations cleanly. Discovered in current session when ordering remaining 6 GLOSSARY entries.
 
 24. **Phase 2 GLOSSARY completion: 6 entries locked per foundation-up ordering**:
     - **category collapse** (force-level meta-concept; cross-axis, axis-1 primary anchor): the force that degrades practitioner's mode of engaging with AI from higher-engagement state to lower-engagement state regardless of architectural intent. Round 1 stress-test surfaced cross-axis generalization (manifests on all three axes — not just axis-1 as BACKLOG framed). Operates in practitioner's mental category, not architecture
@@ -552,14 +578,14 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 **Phase 3 paused after workflow lock + multi-axis validation surfaced**: workflow bipartite-classification resolved (workflow → bipartite Pattern B with optional applicability). User push during workflow Round 2 surfaced ad-hoc work as legitimate scope outside primitive (REVISION-grade refinement). User additionally surfaced foundational concern: framework risks single-consumer-thinking drift; needs persisted usage profiles to validate against (not just feedback rule). Phase 3 paused to build profile foundation before resuming 3.1 work-unit + remaining items. See note 29 below.
 
 **Disciplines carrying forward into Phase 3**:
-- Foundation-up workflow ordering (per `feedback_foundation_up_ordering.md`)
-- 2-round sweet spot per architectural decision (per `feedback_pre_decision_sharpening.md` + sharpen v0.9.0)
+- Foundation-up workflow ordering (per `DISCIPLINES.md` Discipline 8)
+- 2-round sweet spot per architectural decision (per `DISCIPLINES.md` Discipline 3 + sharpen v0.9.0)
 - Cascade discipline (MAINTENANCE.md)
-- Pattern-vs-instance (cross-archetype illustrations required; per `feedback_pattern_not_instance_defers.md`)
-- Make-wrong-shapes-impossible (structural over conventional; per `feedback_wrong_shapes_impossible.md`)
-- AI-as-runtime hybrid-shape (per `feedback_ai_as_runtime.md`)
+- Pattern-vs-instance (cross-archetype illustrations required; per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2)
+- Make-wrong-shapes-impossible (structural over conventional; per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1)
+- AI-as-runtime hybrid-shape (per `ARCHITECTURE.md` cross-cutting principles "AI as runtime")
 - Provenance hygiene (no audit-history breadcrumbs in canonical content; per coherence-audit Lens 5 v0.2.1)
-- **Multi-axis validation** (per `feedback_multi_axis_validation.md` + `profiles/INDEX.md`): validate primitive proposals across archetype × work-type × role; explicit non-coverage question
+- **Multi-axis validation** (per `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) + `profiles/INDEX.md`): validate primitive proposals across archetype × work-type × role; explicit non-coverage question
 - **Composability + boundaries** (per `profiles/G-composability-gate.md` + `drafts/composability-tooling.md`): G composability gate fires FIRST as initial validation gate; L1-L4 producer levels validate against G's multi-mode consumption requirements (consulting / firm-reuse / OSS / marketplace-future / backup-migration); structural composability rather than advisory
 
 ---

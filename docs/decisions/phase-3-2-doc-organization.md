@@ -96,15 +96,15 @@ Mid-sharpening user question ("is ARCHITECTURE.md purely documentation or drawn 
 8. Disciplines applying to all ARCH work (validation gates + multi-axis + profile-anchored + audit scaling + procedural rules)
 9. Watch-list (open architectural questions awaiting evidence; cross-refs BACKLOG for actionable detail)
 
-**Audience + scope explicit (Section 1)**: ARCHITECTURE.md is framework-developer documentation; loaded at framework-development session start; NOT production-runtime by deployed-workspace AI. Per `feedback_ai_as_runtime.md` discipline, AI in deployed PBS workspace loads runtime-relevant markdown (workspace.md / specialist DEFINITIONs / skill SKILL.md / shape policy bundles), not framework architecture documentation. Three consumer modes documented (framework-development / template+shape composition / production-runtime).
+**Audience + scope explicit (Section 1)**: ARCHITECTURE.md is framework-developer documentation; loaded at framework-development session start; NOT production-runtime by deployed-workspace AI. Per `ARCHITECTURE.md` cross-cutting principles "AI as runtime" discipline, AI in deployed PBS workspace loads runtime-relevant markdown (workspace.md / specialist DEFINITIONs / skill SKILL.md / shape policy bundles), not framework architecture documentation. Three consumer modes documented (framework-development / template+shape composition / production-runtime).
 
 **Logic placement modes — 4-mode distribution (Section 6 cross-cutting principles)**:
-- **Mode 1**: Production-runtime LLM-MD (operational layer — skills + specialist DEFINITIONs + workspace.md + shape policy bundles + bausteine; AI reads + interprets at runtime; highest LLM-instruction tightness required per `feedback_llm_instruction_tightness.md`)
+- **Mode 1**: Production-runtime LLM-MD (operational layer — skills + specialist DEFINITIONs + workspace.md + shape policy bundles + bausteine; AI reads + interprets at runtime; highest LLM-instruction tightness required per `ARCHITECTURE.md` cross-cutting principles "LLM-instruction tightness")
 - **Mode 2**: Production-runtime Python (substrate-side — substrate Instance impl + mechanism Python impls + adapter implementations + quality-gate Pattern A impls + Pydantic schema validation; substrate runtime executes; standard Python development discipline; self-falsifying via tests + type errors)
 - **Mode 3**: Hybrid Phase 6 specs (spec layer — Pydantic = Python validation; spec docs = LLM-MD reference; bridges Modes 1+2)
 - **Mode 4**: Development-time LLM-MD (documentation — ARCHITECTURE.md / arch/* / DRs / MAINTENANCE.md / VISION / GLOSSARY / profiles / learnings / DISCIPLINES.md; loaded at framework-development session start; NOT production-runtime; optimize for human readability + AI-developer orientation)
 
-**Anti-pattern named**: encoding framework rules in Mode 4 docs intending production AI to follow them = SQL-DB trap per `feedback_ai_as_runtime.md`. Production AI follows Mode 1; Mode 4 is documentation, not runtime substrate.
+**Anti-pattern named**: encoding framework rules in Mode 4 docs intending production AI to follow them = SQL-DB trap per `ARCHITECTURE.md` cross-cutting principles "AI as runtime". Production AI follows Mode 1; Mode 4 is documentation, not runtime substrate.
 
 **Catalog uniformity**: cross-cutting topics + Pattern A protocols + primitive clusters all get same one-liner depth in Section 4 Topic catalog. Topics earn detail in their own arch/<topic>.md files.
 
@@ -167,4 +167,4 @@ This composite DR should be revisited if:
 
 **GLOSSARY back-check**: no glossary-grade structural facts surfaced (Phase 3.2 is doc-organization decisions; vocabulary already locked). Logic placement modes is meta-principle, not vocabulary; lives in ARCHITECTURE.md cross-cutting principles.
 
-Total: 4 sub-decisions × 2 rounds = 8 sharpening rounds + 1 final synthesis (this DR). Per `feedback_pre_decision_sharpening.md` Mode-2 sweet spot: per-sub-decision 2-round + final synthesis pass. Phase 3.2 closed.
+Total: 4 sub-decisions × 2 rounds = 8 sharpening rounds + 1 final synthesis (this DR). Per `DISCIPLINES.md` Discipline 3 Mode-2 sweet spot: per-sub-decision 2-round + final synthesis pass. Phase 3.2 closed.
