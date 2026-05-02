@@ -30,7 +30,7 @@
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | ✅ COMPLETE — all 4 LOCKED. Phase 3.1 closed. Coherence-audit ran at phase boundary; 0 architectural REVISIONS. |
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | ✅ COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md` created. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
-| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring ✅ / audit / coordination / trust / time / quality-gate is 3.6) | In progress — 3 of 8 (substrate + adapter + sparring drafted; DRs `substrate-arch-topic.md` + `adapter-arch-topic.md` + `sparring-arch-topic.md`) |
+| **3.4** | Per-architectural-Protocol detail (8 Pattern A protocol topics: substrate ✅ / adapter ✅ / sparring ✅ / audit ✅ / coordination / trust / time / quality-gate is 3.6) | In progress — 4 of 8 (substrate + adapter + sparring + audit drafted; DRs in `docs/decisions/`) |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
@@ -58,7 +58,7 @@ Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions be
 | 1 | `arch/substrate.md` ✅ | Substrate Protocol Surface + per-impl + persistent-state + session interaction | 3.4 — DRAFTED |
 | 2 | `arch/adapter.md` ✅ | Adapter Protocol Surface (META + per-integration-class) + per-impl + lifecycle/auth | 3.4 — DRAFTED |
 | 3 | `arch/sparring.md` ✅ | Sparring Protocol Surface (8 sub-mechanism categories: 4 architecturally-encoded + 4 behaviorally-enforced) + per-shape activation matrix | 3.4 — DRAFTED |
-| 4 | `arch/audit.md` | Audit Protocol Surface + audit-emission + audit-trail + event primitive | 3.4 |
+| 4 | `arch/audit.md` ✅ | Audit Protocol Surface (6 capability categories) + audit-trail-as-canonical-source + per-shape event-kind catalog | 3.4 — DRAFTED |
 | 5 | `arch/coordination.md` | Coordination Protocol Surface + actor primitive interaction | 3.4 |
 | 6 | `arch/trust.md` | Trust Protocol Surface + authority-binding mechanism | 3.4 |
 | 7 | `arch/time.md` | Time Protocol Surface + temporal-semantics variations | 3.4 |
@@ -344,6 +344,24 @@ Framework primitives stay shape-neutral / archetype-neutral / pioneer-neutral. P
 **GLOSSARY back-check**: clean (failure-mode detection events derive from already-locked answer-machine / oracle / validator AI entries; selective-friction threshold is impl-mechanic). Profile-cluster validation 4/4 PASS with cited content.
 
 **Full detail**: `arch/sparring.md`. **DR**: `docs/decisions/sparring-arch-topic.md`.
+
+### Audit ARCH topic (Phase 3.4 fourth Pattern A protocol) — LOCKED
+
+**Resolution**: `arch/audit.md` LOCKED as fourth Pattern A protocol topic. Single-layer Surface (substrate-style) with 6 capability categories. Consolidates emission paths from substrate §8 + adapter §8 + sparring §8 into unified architectural commitment. Introduces NEW deployment-tier-driven cardinality variation (fourth Pattern A pattern alongside substrate's singular tier-aware + adapter's multi-instance per-class + sparring's per-shape activation matrix).
+
+- **6 Surface capability categories**: emission API + actor declaration / append-only persistence / query for reasoning-chain reconstruction / integrity verification / event-kind catalog management / state-rendering-from-events
+- **Audit-trail-as-canonical-source** (load-bearing architectural commitment per archived audit-trail-v2): single-write architecture; state rendered FROM events; append-only discipline; never rewritten
+- **Append-only enforcement architectural-level** per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator (gate-dispatched on every write → structural)
+- **Per-shape event-kind catalog**: practitioner-shape claim-level (claim_made / source_grounded / sparring_round / per_claim_attestation / signature_applied) + autonomous-business action-level + personal-OS light
+- **Boot/shutdown ordering**: audit boots BEFORE substrate; shuts down AFTER substrate (preserves invariant: every emitted event is persisted before workspace shutdown)
+- **Hash-chain integrity verification** at architectural-level (specific algorithm Phase 6); cross-deployment migration verifies hash-chain unbroken
+- **Cross-deployment evidence + external-format export** (per L8 line 33 external-format requirements): jsonl raw + PDF reports + CSV event logs
+
+**Sharpening totals**: 21 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected (Round 1 = 8 / Round 2 cross-cutting + schema-detail = 13).
+
+**GLOSSARY back-check**: clean (append-only-discipline + state-rendering-from-events already implicit in `event` GLOSSARY entry per archived audit-trail-v2 schema). Profile-cluster validation 4/4 PASS with cited content (G line 159 + G line 168 + L5a line 41 + L8 lines 29/32/33).
+
+**Full detail**: `arch/audit.md`. **DR**: `docs/decisions/audit-arch-topic.md`.
 
 ### Phase 3.1 closed
 

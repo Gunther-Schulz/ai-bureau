@@ -501,6 +501,34 @@ DR template (per locked composite `doc-organization-templates.md`) used for firs
 
 ---
 
+**Note 39: Audit ARCH topic LOCKED (Phase 3.4 fourth Pattern A protocol topic) + coherence-audit cadence locked**:
+
+`arch/audit.md` LOCKED + DR `audit-arch-topic.md` per locked DR template. Fourth Pattern A protocol topic; first that primarily INTEGRATES other Pattern A protocols (consolidates emission paths from substrate §8 + adapter §8 + sparring §8 into unified architectural commitment) vs being primarily-new-mechanism.
+
+NEW Pattern A cardinality variation: deployment-tier-driven impl variation (substrate = singular tier-aware; adapter = multi-instance per-class; sparring = singular per-shape activation; audit = singular deployment-tier-driven). Fourth Pattern A cardinality pattern.
+
+Single-layer Surface with 6 capability categories: emission API + actor declaration / append-only persistence / query for reasoning-chain reconstruction / integrity verification / event-kind catalog management / state-rendering-from-events.
+
+Audit-trail-as-canonical-source load-bearing architectural commitment (per archived audit-trail-v2 single-write architecture). Append-only enforcement gate-dispatched-structural per MAINTENANCE.md TOP-LEVEL DESIGN PRINCIPLES §1.
+
+Boot-before-substrate / shutdown-after-substrate ordering establishes Audit Protocol as foundational Pattern A — substrate composes ABOVE audit at runtime layering.
+
+Per-shape event-kind catalog: practitioner-shape claim-level (per L5a line 41) + autonomous-business action-level + personal-OS light. Per-shape audit error semantics: fail-closed practitioner / fail-open-with-alert autonomous-business / fail-open personal-OS.
+
+Sharpening totals: 21 EXPANSIONS / 0 REVISIONS / 5 manufactured criticisms rejected (Round 1 = 8 / Round 2 cross-cutting + schema-detail = 13). GLOSSARY back-check clean (append-only-discipline + state-rendering-from-events already implicit in event GLOSSARY entry). Profile-cluster validation 4/4 PASS with cited content.
+
+**Coherence-audit cadence locked** (commit `9918c1e`): NEW DISCIPLINES.md Discipline 9 codifies 5 hard checkpoints (C1 post-Phase-3.4 / C2 post-Phase-3.5 / C3 Phase 3.8 / C4 Phase 6 pre-implementation / C5 post-Phase-6) + 3 trigger conditions (5+ DRs / composite-DR-lock / pre-promotion). BACKLOG.md per-Phase audit checkpoints scheduled. ARCHITECTURE.md §2 sub-phase 3.8 row sharpened with Discipline 9 cross-ref.
+
+**Status**: Phase 3.4 progress 4 of 8 Pattern A protocol topics LOCKED (substrate ✅ + adapter ✅ + sparring ✅ + audit ✅). Remaining: coordination / trust / time + quality-gate (Phase 3.6). C1 audit fires after all 7 Pattern A protocol topics locked.
+
+**Locked artifact state added**:
+- 4 of 14 arch/<topic>.md files created (substrate + adapter + sparring + audit; 10 remaining)
+- 10 DRs in docs/decisions/ (was 9; audit-arch-topic.md NEW)
+- DISCIPLINES.md Discipline 9 NEW (coherence-audit cadence)
+- All other state unchanged
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
