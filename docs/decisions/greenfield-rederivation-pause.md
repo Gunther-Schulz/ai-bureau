@@ -10,7 +10,7 @@ Phase 3.4 work paused mid-execution after discovering procedural laxness allowed
 
 ## Status
 
-PROPOSED — procedure locked pending user approval; execution log + findings populate as work proceeds; Status amends to ACCEPTED-WITH-FINDINGS or ACCEPTED-VALIDATED upon execution completion + decision per Step 7.
+**ACCEPTED-WITH-FINDINGS** (session 17, 2026-05-02). Procedure executed Steps 1.A-7 in single session post-Note-44-resume; user-confirmed at decision phases (Step 3 Tier-1 finding "accepted"; Step 4 Tier-1 finding "yes"; Step 7 cascade decision "yes"). Cascade execution (Step 7.A-7.C) deferred to next session per context-budget discipline; cascade is mechanical given verdicts persisted in this DR's Findings + Decisions sections.
 
 ## Owner
 
@@ -533,8 +533,52 @@ Plus cascade-affected (NOT in CR-4 list but cascading from Steps 3+4):
 
 ## Findings
 
-(populated at execution end; per-Tier verdict per element)
+**Step 1.B verdict**: corpus GLOSSARY (36 entries; off-by-one corrected from earlier "35") GREENFIELD-VALID at primitive-concept level. Archive-influence concern NOT at primitive-classification level — concentrated at Pattern A vs B vs C framework partition (Step 2's audit) and at protocol/sub-mechanism catalogs (Step 3's audit). 24 entries directly evaluated; 12 by Pareto-extension; 0 NEEDS-REVISION at primitive-concept; 8 Step-2-pending classification flags + 3 Step-3-pending content-catalog flags isolated.
+
+**Step 2 verdict**: Pattern A vs B vs C 3-pattern partition GREENFIELD-EQUIVALENT. Three orthogonal manifestation shapes (Pluggable Subsystem / Specialist-Bundled Definition+Instance-Content / Human-Plus-Record bipartite) survive greenfield derivation. Each captures distinct structural concern; collapsing to 2 violates pattern-vs-instance discipline; expanding to 4+ doesn't surface new concerns from first-principles. All 8 Step-1.B classification flags GREENFIELD-VALIDATED.
+
+**Step 3 verdict (Tier-1 finding; user-accepted)**: Pattern A protocol catalog reduces 8 → 3.
+- 3 GREENFIELD-DERIVED-DISTINCT (substrate / adapter / quality-gate) — multi-impl-of-Surface PASS (alternative architectural-designs realizing Surface differently)
+- 2 RECLASSIFIED-AS-MECHANISM-CLASS (sparring / audit) — sub-mechanisms ARE the Surface; per-shape variation is POLICY-level not impl-level. Cross-validated by GLOSSARY tags (sparring = DERIVED, event = single-aspect — neither tagged Pattern A in own entries)
+- 3 SUBSUMED (coordination → substrate hooks + per-shape policy; trust → authority-binding mechanism + per-shape policy; time → substrate-impl + adapter time-driven operations) — DR pre-flags confirmed verbatim
+
+**Step 4 verdict (Tier-1 finding; user-accepted)**: 18-section monolithic topic template substrate-shape-anchored; restructured to 12 common-required + 6 protocol-specific-conditional. Greenfield-derived structure tested against substrate (18 total — anchor-fit) + adapter (~15-16) + quality-gate (~13-14).
+
+**Step 5 verdict**: 17 per-artifact verdicts (14 listed in CR-4 + 3 cascade-affected). 4 GREENFIELD-EQUIVALENT (substrate topic + DR; Phase 3.1 4 DRs); 1 minor refresh (adapter DR); 4 substantive NEEDS-REVISION (sparring + audit topics + DRs); 4 minor revisions (substrate + adapter topics structural; ARCHITECTURE 3 tables); 4 cascade revisions (Phase 3.2 catalog + composite DR; MAINTENANCE template + 8-protocol catalog; GLOSSARY protocol-architectural catalog).
+
+**Step 6 verdict**: revisions tiered (T1×2 foundational; T2×4 per-topic; T3×9 cascade; T4 confirms unaffected). Cascade scope ~10 file revisions; 3 ARCH topics cancelled (coordination/trust/time saves ~1500 lines un-written).
+
+**VISION + foundational layer untouched**: VISION axes 1/2/3 unchanged; sparring as VISION axis stays anchored (reclassification is at framework-mechanism layer, not VISION layer); 36 GLOSSARY entries' primitive-concept validity unchanged; Pattern A vs B vs C 3-pattern partition unchanged.
 
 ## Decisions
 
-(populated at execution end; revise-foundations vs validate-greenfield-equivalent per Tier)
+**Step 7 decision (user-committed session 17)**: REVISE FOUNDATIONS + CASCADE per Tier 1-3 revisions list.
+
+**Cascade sequencing** (foundation-up per `DISCIPLINES.md` Discipline 8 + cascade discipline per `MAINTENANCE.md` TOP-LEVEL RULE):
+
+### Step 7.A — Foundational (Tier 1 + Tier 3 foundational; tightly-coupled commits)
+
+1. **T3.9** `GLOSSARY.md` `protocol (architectural)` cross-archetype catalog (line 1488-1496): drop 5 protocols (sparring/audit/coordination/trust/time); keep substrate + adapter + verify quality-gate retained
+2. **T3.7** `MAINTENANCE.md` template restructure (line 326-349): 18-section monolithic → 12 common-required + 6 protocol-specific-conditional
+3. **T3.8** `MAINTENANCE.md` 8-protocol catalog (line 868 — `framework` body): "Substrate, Adapter, Coordination, Audit, Sparring, Trust, Time, Quality-gate" → "Substrate, Adapter, Quality-gate" (with reclassification note for audit + sparring as mechanism classes; subsumption note for coordination/trust/time)
+4. **T3.1** `ARCHITECTURE.md` §2 Phase 3 sub-phase status table (line 33): "8 Pattern A protocol topics" → "3"; coordination/trust/time CANCELLED; sparring/audit RECLASSIFIED status notes
+5. **T3.2** `ARCHITECTURE.md` §4 Topic catalog (line 52-71): 14 topics → 11 (cancel rows 5/6/7 coordination/trust/time; reshape rows 3/4 sparring/audit)
+6. **T3.3** `ARCHITECTURE.md` §6 Pattern A examples (line 106): 8-protocol list → 3-protocol list
+7. **T3.4** `docs/decisions/phase-3-2-doc-organization.md` amendment per topic-catalog reduction
+
+### Step 7.B — Per-topic content (Tier 2)
+
+1. **T2.1** `arch/sparring.md` substantive reclassification: frontmatter "Pattern A protocol topics (#3 of 8)" → "mechanism class with per-shape policy variation"; body Pattern A claims (Surface + Implementations + Selection) → mechanism-class language (8 sub-mechanism contracts + per-shape policy declares which active + how-enforced); body content largely transferable
+2. **T3.5** `docs/decisions/sparring-arch-topic.md` DR cascade per T2.1 reclassification; supersession noted
+3. **T2.2** `arch/audit.md` substantive reclassification: frontmatter "#4 of 8" → mechanism class; body Pattern A claims → mechanism-class language (AuditEvent schema = mechanism Surface + per-shape granularity policy + substrate-mediated storage backend)
+4. **T3.6** `docs/decisions/audit-arch-topic.md` DR cascade per T2.2 reclassification; supersession noted
+5. **T2.3** `arch/substrate.md` structural restructure per new template (move §§3, 8, 10, 11, 12, 13 from "common" sections to "substrate-protocol-specific" sub-sections within topic file); content unchanged
+6. **T2.4** `arch/adapter.md` minor revision per new template (§§3, 10, 11 retain adapter-relevant content; §§8, 12, 13 likely thin → drop or retain as N/A markers)
+
+### Step 7.C — Closure
+
+- HANDOFF Note 46 capturing cascade complete
+- Phase 3.4 effectively COMPLETE post-cascade (substrate + adapter remain Pattern A; sparring + audit reclassified as mechanism classes; coordination/trust/time cancelled — 3 ARCH topics never need writing)
+- Phase 3.5 + Phase 3.6 (quality-gate) + Phase 3.8 (C3 phase-boundary audit) follow per ROADMAP under strengthened discipline (Discipline 10 + hook + Round 1 termination checklist + sharpen v0.12.0)
+
+**Hook compliance reminder**: cascade execution targets architectural artifacts (arch/* / docs/decisions/* / ARCHITECTURE / MAINTENANCE / GLOSSARY). Hook (`plugin/hooks/architectural_commit_gate.py`) requires in last 100 tool calls: Read of `plugin/skills/decision-design-sharpening/SKILL.md` + `profiles/INDEX.md` + ≥3 profile cluster members. Re-Read prep files at session-resume before any architectural Edit/Write.

@@ -725,6 +725,51 @@ Auto-compaction landed mid-Step-1.A (mid-GLOSSARY Re-Read). All work persisted: 
 
 ---
 
+**Note 45: Session 17 — full procedure execution Steps 1.A-7; ACCEPTED-WITH-FINDINGS; cascade deferred to next session** (write-up at session-17 closure):
+
+Resumed per Note 44 pickup checklist. Executed greenfield-rederivation-pause procedure Steps 1.A through 7 in single session post-compact-resume. All findings + decisions persisted to procedure DR.
+
+**Verdicts summary** (full detail in `docs/decisions/greenfield-rederivation-pause.md` Findings + Decisions sections):
+- Step 1.A: full GLOSSARY re-read fresh (36 entries; off-by-one corrected from earlier "35")
+- Step 1.B: corpus GLOSSARY GREENFIELD-VALID (24 directly evaluated + 12 Pareto-extension; 0 NEEDS-REVISION at primitive-concept level)
+- Step 2: Pattern A vs B vs C 3-pattern partition GREENFIELD-EQUIVALENT
+- Step 3: **Tier-1 finding** Pattern A catalog 8→3 (substrate/adapter/quality-gate retained; sparring + audit reclassified mechanism-class; coordination + trust + time subsumed)
+- Step 4: **Tier-1 finding** 18-section template → 12 common + 6 conditional (substrate-shape-anchored)
+- Step 5: 17 per-artifact verdicts
+- Step 6: revisions tiered (T1×2 + T2×4 + T3×9 + T4 confirms)
+- Step 7: **REVISE FOUNDATIONS + CASCADE** decided
+
+**Procedure DR status**: PROPOSED → **ACCEPTED-WITH-FINDINGS**.
+
+**To resume next session — execute Step 7.A-7.C cascade** (mechanical given verdicts):
+
+1. **Read CLAUDE.md** (auto-loads anyway) — has mandatory-reads list + skill-invocation procedure + profile-validation procedure
+2. **Read this Note 45** for orientation
+3. **Read procedure DR Findings + Decisions sections** (`docs/decisions/greenfield-rederivation-pause.md`) — verdicts persist; resume from there
+4. **Read prep files for hook compliance BEFORE writing to architectural artifacts**:
+   - `plugin/skills/decision-design-sharpening/SKILL.md` (skill freshness)
+   - `profiles/INDEX.md` (profile cluster structure)
+   - ≥3 profile cluster members (e.g., L5a-planner-pbs-schulz.md + G-composability-gate.md + L1-specialist-creator.md or L4a-workspace-deployer-solo.md)
+5. **Step 7.A foundational cascade** (tightly-coupled commits): T3.9 GLOSSARY catalog + T3.7 MAINTENANCE template + T3.8 MAINTENANCE 8-protocol catalog + T3.1-3.3 ARCHITECTURE.md §§2/4/6 + T3.4 Phase 3.2 composite DR amendment
+6. **Step 7.B per-topic cascade** (per-topic commits): T2.1 + T3.5 sparring topic + DR reclassification; T2.2 + T3.6 audit topic + DR reclassification; T2.3 substrate template restructure; T2.4 adapter minor revision
+7. **Step 7.C closure**: HANDOFF Note 46 capturing cascade complete
+
+**What is NOT lost** (pre-Step-7.A concern):
+- All Steps 1.A-7 verdicts persisted in procedure DR (Findings + Decisions sections)
+- Procedure DR status ACCEPTED-WITH-FINDINGS preserves user-decision boundary
+- Pattern A vs B vs C framework GREENFIELD-VALIDATED (Step 2)
+- 36 GLOSSARY entries' primitive-concepts GREENFIELD-VALIDATED (Step 1.B)
+- VISION axes 1/2/3 unchanged; sparring as VISION axis stays anchored
+- Cancellation of 3 ARCH topics (coordination/trust/time) saves ~1500 lines un-written
+
+**Phase 3.4 status post-cascade**: effectively COMPLETE (substrate + adapter remain Pattern A; sparring + audit reclassified as mechanism classes; coordination/trust/time cancelled). Phase 3.5 + Phase 3.6 + Phase 3.8 follow per ROADMAP.
+
+**Key warning** (per session 16+17 lessons): pattern-matching from this Note + procedure DR is NOT direct evidence per global honesty-about-sources rule. Each cascade-target file (arch/sparring.md / arch/audit.md / arch/substrate.md / arch/adapter.md / ARCHITECTURE.md / MAINTENANCE.md / GLOSSARY.md) requires fresh Read at execution time. Hook will block architectural-artifact writes if skill + profile prep reads aren't in last 100 tool calls.
+
+**User context**: Session 17 was procedure-execution-heavy (Steps 1.A-7 in single session) with two Tier-1 findings (Pattern A catalog 8→3 reduction; 18-section template restructure). User actively authorized cascade at three decision phases. Next session is mechanical cascade work; should be lighter-touch and faster than session 17.
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
