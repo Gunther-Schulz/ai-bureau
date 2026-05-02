@@ -13,7 +13,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 | Sub-phase | Scope | Status |
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
-| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | IN PROGRESS — workflow LOCKED; work-unit NEXT; deployment + engaged-authorship pending |
+| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | IN PROGRESS — workflow LOCKED; work-unit LOCKED; deployment + engaged-authorship pending |
 | **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | Pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
@@ -70,6 +70,24 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 **Full detail**: `GLOSSARY.md` workflow entry.
 
 **DR**: `docs/decisions/workflow-bipartite-classification.md` — decision rationale + options considered + sharpening rounds metadata + cascade applied + revisit triggers. Created session 16 ahead of formal Phase 4 DR rebuild (per coherence-audit Lens 14 DR coverage discipline applied early).
+
+### Work-unit bipartite-classification (Phase 3.1) — LOCKED
+
+**Resolution**: `work-unit` re-classified to **bipartite Pattern B with always-present container**:
+- KIND DEFINITION aspect: contained in specialist's distributable bundle (specialist DEFINITION at Framework C declares supported `work-unit kind`s + per-kind structural conventions; not standalone Framework C primitive)
+- INSTANCE aspect: `work-unit instance` entity at Owner B (per workspace per active kind)
+- **Always-present container** (reciprocal to workflow's optional applicability): every accountability-bearing piece of work IS a work-unit; no opt-out path. Workflow_instance is the optional structural overlay that ATTACHES to a work-unit; ad-hoc work-units have no workflow_instance but still exist as work-unit instances.
+- Vocabulary disambiguation: `work-unit` = the primitive; `work-unit kind` = DEFINITION aspect; `work-unit instance` = INSTANCE aspect (entity-md per Owner B convention)
+
+**Asymmetry vs workflow** (load-bearing): work-unit always-present + workflow optional-overlay. Together: work-unit is anchor; workflow_instance is opt-in via codified pattern existence. Two Pattern B primitives composing cleanly with reciprocal cardinality (1 work-unit ↔ N workflow_instances; 1 workflow_instance → 1 work-unit).
+
+**Round 2 expansions applied**: kind-namespace disambiguation (multiple specialists → same kind name; resolved via active-specialist + creator's specialist context); multi-workflow_instance composition against single work-unit; kind snapshot semantics on instance creation (preserves audit-trail integrity); quality-gate observability source (lifecycle events + per-claim emissions); multi-practitioner authorship (shape-policy variation; flagged for 3.5); authority-binding on lifecycle transitions; orphan-instance handling on specialist deactivation.
+
+**Round 2 revisions tested + rejected**: split kind/instance into separate primitives (R1; rejected — Pattern B keeps both under one primitive); always-present holds across all shapes including autonomous-business ephemeral batches (R2; rejected — duration ≠ presence); decouple kind from specialist (R3; rejected — kinds inseparable from competence).
+
+**Full detail**: `GLOSSARY.md` work-unit entry.
+
+**DR**: `docs/decisions/work-unit-bipartite-classification.md` — decision rationale + options + Round 1 + Round 2 sharpening + cascade + revisit triggers.
 
 ## Disciplines applying to all ARCH work
 
