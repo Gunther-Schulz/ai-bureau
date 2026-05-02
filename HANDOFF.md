@@ -199,6 +199,34 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 - skill-craft skill (separate repo) Layer 1.5 + Layer 2 annotations + judgment-skill anti-pattern (resolves validator-mode bias that drove bildhauer rigidity)
 - foundation-up workflow ordering memory persisted
 
+28. **Phase 3 launch — sub-phase structure locked (2026-05-02)**:
+
+**Phase 3 = ARCH rebuild against locked vocabulary** (Layer 3 in 5-layer doc model). MAINTENANCE budget: 15-20 topics × ~500 lines = ~10,000 lines. ~30 BACKLOG items across mechanism / protocol / primitive / cross-cutting buckets. Likely multi-session work.
+
+**Sub-phase ordering (foundation-up applied)**:
+
+| Sub-phase | Scope | Why this order |
+|---|---|---|
+| **3.1** | Open architectural questions (workflow + work-unit bipartite-classification; deployment definition; engaged-authorship operational definition) | Foundational decisions shape topic taxonomy; outcomes affect every topic referencing them |
+| **3.2** | ARCH structure + organization (decide topic outline + doc structure: single ARCH.md vs topic-per-file vs hybrid; locks granularity-match Lens 15 target) | Lock containers before writing 10K lines of content |
+| **3.3** | Per-mechanism detail (12 mechanisms: source-grounding + audit emission + audit trail foundational; then 8 sparring sub-mechanisms; then orchestration / persistent state / authority binding) | Within-bucket foundation-up: mechanisms underlying defensibility first |
+| **3.4** | Per-architectural-Protocol detail (7 Pattern A Protocols: Substrate first; Adapter; Sparring; Audit; Coordination; Trust; Time) + Per-Pattern-A primitive detail (substrate per-impl; adapter lifecycle) | Substrate is most foundational; Pattern A trio details follow |
+| **3.5** | Primitive-detail topics (9 primitives: specialist / skill / practitioner / workflow / session / event / actor / claim / defensibility) + axis-interaction analysis | Per-primitive richer detail; axis-interaction cross-cutting topic |
+| **3.6** | Quality-gate ARCH topic (per drafts/quality-gate.md; prerequisites met after Phase 2 lock) | Runtime mechanism integrating axis-failure-mode taxonomy |
+| **3.7** | Cross-cutting investigations (PydanticAI substrate re-eval; markdown-validation feasibility; Ming research deepening; adjacent thinkers expansion; multi-VISION model decision) | When relevant context is loaded |
+| **3.8** | Coherence-audit Lenses 11-15 activation (ARCH-specific lenses: inter-layer consistency / specs traceability / architectural protocol completeness / DR coverage gap / granularity match) | Phase-boundary audit before Phase 4 DR rebuild |
+
+**Phase 3 starting commitment**: 3.1 first (questions before structure since question outcomes affect topic taxonomy); within 3.1, **workflow bipartite-classification first** (most-referenced; work-unit cascades from workflow; deployment + engaged-authorship follow). Round 1 + Round 2 sharpening per `sharpen` v0.9.0 + `decision-design-sharpening` v0.3.1 disciplines.
+
+**Disciplines carrying forward into Phase 3**:
+- Foundation-up workflow ordering (per `feedback_foundation_up_ordering.md`)
+- 2-round sweet spot per architectural decision (per `feedback_pre_decision_sharpening.md` + sharpen v0.9.0)
+- Cascade discipline (MAINTENANCE.md)
+- Pattern-vs-instance (cross-archetype illustrations required; per `feedback_pattern_not_instance_defers.md`)
+- Make-wrong-shapes-impossible (structural over conventional; per `feedback_wrong_shapes_impossible.md`)
+- AI-as-runtime hybrid-shape (per `feedback_ai_as_runtime.md`)
+- Provenance hygiene (no audit-history breadcrumbs in canonical content; per coherence-audit Lens 5 v0.2.1)
+
 ---
 
 **Phase 1.5 outcome (locked session 16)**:

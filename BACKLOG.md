@@ -47,41 +47,51 @@ When resolved:
 
 ---
 
-## Phase 3 — ARCHITECTURE rebuild
+## Phase 3 — ARCHITECTURE rebuild (in progress)
 
-### Open — primitive resolution (open questions deferred from Phase 2)
+Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: questions first, then structure, then content, then audit.
 
-- **workflow bipartite-classification** [origin: workflow entry hedge] — currently single-aspect cross-cutting; resolve whether bipartite Pattern B is correct (DEFINITION at Framework C / Layer A vs INSTANCE at Owner B) | refs: GLOSSARY#workflow
-- **work-unit bipartite-classification** [origin: work-unit entry hedge, RA3 Round 3] — same shape as workflow; KIND DISCRIMINATOR in specialist DEFINITION + INSTANCE at Owner B | refs: GLOSSARY#work-unit
+### 3.1 Open architectural questions (foundational; resolve before topic content)
+
+- **workflow bipartite-classification** [origin: workflow entry hedge] — currently single-aspect cross-cutting; resolve whether bipartite Pattern B is correct (DEFINITION at Framework C / Layer A vs INSTANCE at Owner B) | refs: GLOSSARY#workflow | **STARTING POINT for Phase 3**
+- **work-unit bipartite-classification** [origin: work-unit entry hedge, RA3 Round 3] — same shape as workflow; KIND DISCRIMINATOR in specialist DEFINITION + INSTANCE at Owner B; cascades from workflow resolution | refs: GLOSSARY#work-unit
 - **"deployment" definition sharpening** [origin: EA5 Round 3 + workspace entry] — current preliminary lock: "one git-clone + activated workspace.md per deployment"; sharpen mechanically | refs: GLOSSARY#workspace
 - **Engaged-authorship operational definition** [origin: defensibility entry] — what counts as "engaged" vs rubber-stamped at framework level | refs: GLOSSARY#defensibility
 
-### Open — per-mechanism detail (specific instances of `mechanism` primitive)
+### 3.2 ARCH structure + organization (lock containers before content)
 
-- **audit trail** detail — sequence-of-events composition; append-only discipline; retention policy; ARCH Layer 3 topic | archived: `audit-trail-v2.md`
-- **source-grounding** detail — every claim traces to source; framework-level enforcement; cited-source schema | archived: relevant per archived corpus
-- **persistent state** detail — state across sessions; cross-session-handoff schema | archived: relevant per substrate-protocol-design.md
-- **orchestration** detail — continuous decision layer; orchestrator skill mechanics | archived: orchestrator skill in archived plugin
+- **ARCH topic outline + doc structure decision** — decide: single ARCH.md (~10K lines) vs topic-per-file (~15-20 files) vs hybrid (overview + per-topic detail files). Outcome locks granularity-match Lens 15 target.
+- **Topic taxonomy** — ~30 BACKLOG items across 6 buckets (mechanism / protocol / primitive / primitive-detail / quality-gate / cross-cutting). Decide: 1:1 mapping (28+ topics, over budget) vs aggregation (e.g., "audit + event mechanisms" combines audit-trail + audit-emission + event-related). Per MAINTENANCE budget: 15-20 topics × ~500 lines.
+
+### 3.3 Per-mechanism detail (12 mechanism instances)
+
+Foundation-up within bucket: defensibility-supporting mechanisms first.
+
+- **source-grounding** detail — every claim traces to source; framework-level enforcement; cited-source schema | foundational for defensibility | archived: relevant per archived corpus
+- **audit emission** mechanism detail — AuditEvent Pydantic schema; event_kind catalog | foundational for audit-trail | archived: audit-trail-v2.md
+- **audit trail** detail — sequence-of-events composition; append-only discipline; retention policy | composes from audit-emission | archived: `audit-trail-v2.md`
 - **8 sparring sub-mechanisms** detail — counter-argument; confidence calibration; visible reasoning; selective friction; asymmetric knowledge respect; anti-sycophancy; commit-to-recommendations; what's-missing — per-mechanism Surface + composition | archived: relevant
+- **orchestration** detail — continuous decision layer; orchestrator skill mechanics | archived: orchestrator skill in archived plugin
+- **persistent state** detail — state across sessions; cross-session-handoff schema | archived: relevant per substrate-protocol-design.md
 - **authority binding** mechanism detail — `actor_kind` enum extension; authorization flow | archived: governance-and-identity-sourcing.md
-- **audit emission** mechanism detail — AuditEvent Pydantic schema; event_kind catalog | archived: audit-trail-v2.md
 
-### Open — per-architectural-Protocol detail (named Pattern A protocols)
+### 3.4 Per-architectural-Protocol + Per-Pattern-A primitive detail
+
+Foundation-up: substrate first (most foundational); then adapter; then 5 named protocols.
 
 - **Substrate Protocol** Surface specification (method set; tier-awareness; lifecycle events) | archived: substrate-protocol-design.md, sdk-deep-read.md
+- **substrate** per-impl detail (Claude Agent SDK, MS Agent Framework) + deployment-tier framing + eval-framework integration | archived: substrate-agentic-framework.md, sdk-deep-read.md
 - **Adapter Protocol** per-integration-class Surface specs (email, accounting, MCP-server, A2A-peer) | archived: a2a-and-gemini-pattern-emulation.md, plugin-conventions.md, backend-conventions.md
+- **adapter** lifecycle / auth-refresh / error-handling semantics; permission-flow integration
 - **Sparring Protocol** Surface + impl variations (always-on / optional / sparring-as-skill / none)
 - **Audit Protocol** Surface + granularity-policy variation (claim-level / action-level / light)
 - **Coordination Protocol** Surface + impl variations (event-shaped vs call-shaped)
 - **Trust Protocol** Surface + trust-model variations (practitioner-judgment / budget-policy / individual)
 - **Time Protocol** Surface + temporal-semantics variations (turn-based / long-running / heartbeat-based)
 
-### Open — per-Pattern-A primitive detail
+### 3.5 Primitive-detail topics + axis-interaction analysis
 
-- **substrate** per-impl detail (Claude Agent SDK, MS Agent Framework) + deployment-tier framing + eval-framework integration | archived: substrate-agentic-framework.md, sdk-deep-read.md
-- **adapter** lifecycle / auth-refresh / error-handling semantics; permission-flow integration
-
-### Open — primitive-detail topics
+Per-primitive deeper detail; cross-cutting axis-interactions.
 
 - **specialist** granularity 3-test + composability axes + two-tier classification + marketplace mechanics + instance-content destruction semantics | archived: terminology-and-specialist-primitive.md, entity-md-scope-model-restructure.md
 - **skill** granularity 3-test + frontmatter schema + output validation | archived: skill-expert-agent-and-domain-knowledge.md
@@ -92,34 +102,25 @@ When resolved:
 - **actor** full `actor_kind` enum + A2A actor support + identity sourcing | archived: a2a-and-gemini-pattern-emulation.md, governance-and-identity-sourcing.md
 - **claim** claim-event schema + claim-revision semantics + finalization mechanics + source-grounding requirements per claim + sparring-target mechanics + audit-trail attribution per work-unit | archived: audit-trail-v2.md
 - **defensibility** conditions formalization + six-months-later test mechanics + regulatory-challenge schema + structural enforcement mechanisms + defensibility-on-claim-revision semantics
+- **Axis-interactions explicit articulation** [origin: VISION sanity check, Lens 3] — VISION sketches axis interactions through examples (sparring within intertwining; tacked-on sparring is axis-1 failure; defensibility resolves at claim-granularity in axis-1 work-products) but doesn't articulate them systematically. Dedicated axis-interactions analysis as architectural pattern.
 
-### Open — substrate evaluation revisit
+### 3.6 Quality-gate ARCH topic (runtime mechanism)
 
-- **PydanticAI substrate evaluation** (#7) — re-examine #18 substrate eval + #20 PydanticAI eval against locked vocabulary | archived: substrate-agentic-framework.md, permission-abstraction.md
+- **Quality-gate mechanism for runtime** [origin: session 16, while building generic `sharpen` skill; refined session 16 after category-collapse lock] — runtime mechanism to monitor for category-collapse manifestations across all three axes (axis-1 tacked-on; axis-2 answer-machine/oracle/validator; axis-3 rubber-stamping), surface drift signals, intervene with friction or re-engagement nudges. Fires at checkpoints (pre-send, pre-claim-finalization, pre-decision-lock, per-edit, drift-audit). Converts category-collapse-resistance from ENABLED-architecturally to ENFORCED-at-gate-firing-moments. Prerequisites: ✅ category collapse locked; ✅ axis-2 failure mode trio + rubber-stamping locked; Phase 3 architectural decisions still pending: mechanism vs Pattern A protocol; per-shape variation; observability schema; intervention mechanics. Detail in `drafts/quality-gate.md`.
 
-### Open — markdown-validation feasibility
+### 3.7 Cross-cutting investigations
 
+Investigations that surface during ARCH work; not blocking core sub-phases.
+
+- **PydanticAI substrate evaluation** (#7) — re-examine #18 substrate eval + #20 PydanticAI eval against locked vocabulary | archived: substrate-agentic-framework.md, permission-abstraction.md | composes with 3.4 Substrate Protocol detail
 - **Markdown-validation feasibility analysis** (#8) — distinguish structural validation (frontmatter / required-sections — feasible; libraries exist) from semantic procedure validation (impossible-by-nature; LLM-judged eval territory). Inform what kind of structural enforcement ARCH builds.
-
-### Open — quality-gate as runtime feature (exploratory; from session 16)
-
-- **Quality-gate mechanism for runtime** [origin: session 16, while building generic `sharpen` skill; refined session 16 after category-collapse lock] — runtime mechanism to monitor for category-collapse manifestations across all three axes (axis-1 tacked-on; axis-2 answer-machine/oracle/validator; axis-3 rubber-stamping), surface drift signals, intervene with friction or re-engagement nudges. Fires at checkpoints (pre-send, pre-claim-finalization, pre-decision-lock, per-edit, drift-audit). Converts category-collapse-resistance from ENABLED-architecturally to ENFORCED-at-gate-firing-moments. Prerequisites: ✅ category collapse locked; ⏳ axis-2 failure mode trio + rubber-stamping (locking next); Phase 3 architectural decisions: mechanism vs Pattern A protocol; per-shape variation; observability schema; intervention mechanics. Detail in `drafts/quality-gate.md`.
-
-### Open — axis-interaction analysis (surfaced in VISION sanity check)
-
-- **Axis-interactions explicit articulation** [origin: VISION sanity check, Lens 3] — VISION sketches axis interactions through examples (sparring within intertwining; tacked-on sparring is axis-1 failure; defensibility resolves at claim-granularity in axis-1 work-products) but doesn't articulate them systematically. Add as Phase 3 ARCH topic: dedicated axis-interactions analysis as architectural pattern. Avoids bloating VISION's anchored-foundation role; richer detail belongs at ARCH layer.
-
-### Open — Foundations deepening (Ming + adjacent thinkers)
-
 - **Ming research deeper investigation** [origin: session 16 reframing — Ming is spirit-anchor for proper-AI-work, not framework identity] — Vivienne Ming's primary work beyond the WSJ article + Robot-Proof book reference. Investigate her IEP framing in detail; her cognitive-science background; other empirical work on hybrid human-AI teams. Goal: deeper understanding of WHAT Ming actually claims vs. what we've inferred. Inform whether VISION's axis-2 anchor is correctly stated.
-
 - **Adjacent thinkers expansion** [origin: session 16 — currently Schön, Kahneman, Dreyfus listed as adjacent; user noted "maybe we should draw on other thinkers"] — investigate other thinkers whose work grounds proper-AI-work / collaborative-rigor / capacity-preservation: Hubert Dreyfus deeper (skill acquisition; embodied expertise); Etienne Wenger (communities of practice); maybe Christopher Alexander (pattern languages applied to AI architecture); maybe Stafford Beer (cybernetics of management systems). Determine which deserve promotion to anchor status alongside Ming.
-
-### Open — multi-VISION model decision (lifted from VISION Phase 1.85)
-
 - **Multi-VISION model question** [origin: VISION Phase 1.85 clean-stance restructure] — VISION used to claim "this document remains the practitioner-shape articulation; when second-shape productization happens, that shape gets its own per-shape VISION." Removed during Phase 1.85 (VISION is now shape-neutral). Open architectural decision: when second-shape productization happens, does (a) each shape get its own per-shape VISION; (b) VISION expand to multi-shape unified articulation; (c) VISION stays shape-neutral and per-shape positioning lives in STRATEGY only? Decision deferred to Phase 3 ARCH or Phase 5 STRATEGY (whichever surfaces it first).
 
-### Open — coherence-audit corpus-specific lens activation
+### 3.8 Coherence-audit Lenses 11-15 activation (phase-boundary audit)
+
+ARCH-corpus-specific lenses activate when ARCH approaches lockable state. Run before Phase 4 transition.
 
 - **Lens 11 (Inter-layer consistency)** — formalize ARCH ↔ GLOSSARY ↔ DR ↔ spec citation health checks
 - **Lens 12 (Specs traceability)** — every ARCH topic with implementation contract has corresponding spec OR explicit deferral
