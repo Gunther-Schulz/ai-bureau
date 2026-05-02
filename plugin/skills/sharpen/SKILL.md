@@ -2,7 +2,7 @@
 name: sharpen
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including \"sharpen this\", \"sharpen the {target}\", \"review this critically\", \"what would you push back on\", \"challenge this\", \"what's load-bearing vs decorative\", \"what should I cut\", \"tighten this\", \"where are the gaps\", \"be ruthless on this\", \"another round\", \"go deeper\", \"what else\". Single critical pass by default; iterates when user signals deeper."
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.11.0
+version: 0.12.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -103,11 +103,20 @@ Before declaring STABLE: the lens questions in Step 2 are categorical (each test
 
 Simulate honestly across all passes — don't manufacture findings the simulation wouldn't actually produce.
 
-## Termination criteria — comprehensive framework (v0.11.0)
+## Termination criteria — comprehensive framework (v0.12.0)
 
 **Goal**: STABLE = evidence that surface is COVERED, NOT "no findings this round." Density / surface-type / Q-test are INSTRUMENTATION verifying the goal — never substitutes for the goal.
 
 Single-metric verdicts (density alone / HIGH-count alone / Q4 alone) are insufficient. Surface-coverage is multi-signal.
+
+**Target-type modifier (v0.12.0)**: declared at sharpening start; affects framework verdict logic.
+
+| Target type | Examples | Behavior |
+|---|---|---|
+| **LOCK-HARD** | Architectural decisions; foundational primitives; locked-vocabulary entries; spec contracts | Pre-execution sharpening must be exhaustive (downstream cascade cost high if revised). Any HIGH → C1 fires regardless of magnitude. |
+| **AMENDABLE-IN-FLIGHT** | Procedure docs; methodology; process documents; runbooks (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 preliminary-lock — amendable per execution evidence) | Pre-execution sharpening optimized for "good enough to start." Only STRUCTURAL-LOAD-BEARING HIGH → C1 fires; MECHANICS-OPERATIONAL HIGH → soft signal (user-decision). |
+
+User declares target-type at sharpening start. Default: LOCK-HARD (conservative). AMENDABLE-IN-FLIGHT requires explicit declaration.
 
 ### Layer 1 — Empirical evidence signals (positive coverage indicators)
 
@@ -118,7 +127,9 @@ Track at each round termination:
 | **Cognitive-mode pass coverage** | Per-round track which passes applied (categorical lens / non-categorical / cold-read / mechanism-simulation) | All applicable applied = surface explored |
 | **Counter-stress survival** | % of prior-round findings that survive Round N stress-test (vs being revised/withdrawn) | Trending toward 100% = surface stabilizing |
 | **HIGH-finding count** | HIGH count current round | 0 in current round = load-bearing rigor saturating |
+| **HIGH-impact magnitude classification (v0.12.0)** | Per HIGH finding: STRUCTURAL-LOAD-BEARING (affects target's fundamental shape) vs MECHANICS-OPERATIONAL (refinement; doesn't change shape; amendable in-flight) | LOCK-HARD targets: any HIGH triggers C1; AMENDABLE-IN-FLIGHT targets: only STRUCTURAL-LOAD-BEARING HIGH triggers C1 |
 | **HIGH-finding decay** | HIGH count trend across rounds | Trending toward 0 = saturating |
+| **Cost-benefit trajectory (v0.12.0)** | Pareto-acceptance ratio trend (last 2 rounds); LOW-finding count vs HIGH+MEDIUM ratio | Pareto-acceptance dropping ≥30% in last 2 rounds OR LOW > 2x HIGH+MEDIUM = manufactured-criticism territory approaching; STABLE-candidate signal even if C-conditions hold |
 | **Total substantive density** | (HIGH+MEDIUM) count current vs previous | ≥50% drop = decay; ≥25% drop = partial decay; <25% = holding |
 | **Pareto-acceptance ratio** | Accepted findings / surfaced findings (per round) | Dropping = manufactured-criticism territory approaching |
 | **Q4 specific-concern test** | Specific Round-N+1 concern nameable with substance | Unanswerable when forced = manufactured criticism territory |
@@ -147,8 +158,8 @@ Every termination verdict requires explicit counter-bias check:
 
 ### Layer 3 — Verdict logic
 
-**CONTINUE when ANY of**:
-- C1: Round N has HIGH findings (load-bearing concerns surfaced; surface not yet covered) — load-bearing signal of remaining substance
+**CONTINUE when ANY of** (v0.12.0 target-type aware):
+- **C1**: Round N has HIGH findings — for LOCK-HARD targets, ANY HIGH fires C1; for AMENDABLE-IN-FLIGHT targets, only STRUCTURAL-LOAD-BEARING HIGH fires C1; MECHANICS-OPERATIONAL HIGH on amendable targets is soft signal (user-decision via Layer 3 USER-DECISION path)
 - C2: Cognitive-mode passes incomplete (specific pass not yet applied per Layer 1 coverage)
 - C3: Specific Round-N+1 concern nameable with substance (Q4 answerable)
 - C4: Counter-stress survival incomplete (Round N extends rather than tests prior; pure-add bias)
@@ -190,6 +201,25 @@ AI surfaces in chat (NOT skipped; NOT pattern-matched):
 - **STABLE verdict requires structural evidence**: density decay + coverage complete + counter-stress survival + Q4 unanswerable + counter-bias checks pass
 
 **Iteration is USER-TRIGGERED for AI-side rounds**. Don't auto-iterate after STABLE verdict — AI-self-triggered rounds drift toward manufactured criticism. When user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate; user-trigger overrides AI-judgment STABLE unless ALL S-conditions verified.
+
+## Empirical-evidence amendment rule (v0.12.0; counters recursive-tuning trap)
+
+This skill's termination framework is preliminary-locked at v0.12.0. Future framework amendments require **observed-pattern evidence threshold**:
+
+1. **Pattern observed across ≥2 sessions** (not single-case)
+2. **Pattern can't be addressed via existing user-decision path** (Layer 3 USER-DECISION case)
+3. **Amendment captures systematic difference**, not edge case
+
+**Why this rule exists**: session 16 surfaced 3 systematic patterns requiring framework amendment (v0.10.0 surface-type; v0.11.0 multi-signal; v0.12.0 target-type + magnitude + trajectory). Each was Pareto-improving when locked. BUT: each meta-iteration also has diminishing marginal value AND risks recursive-tuning trap (endlessly amending framework based on theoretical concerns).
+
+**Counter to recursion**: amendments require observed evidence, not pre-emptive imagination. If a future round-termination case feels mishandled by current framework, log as observation; don't immediately amend. After ≥2 sessions show same pattern, amend.
+
+**What's NOT covered by amendment rule**:
+- Edge cases (single-occurrence; no systematic pattern)
+- Hypothetical concerns (not observed)
+- Theoretical completeness (framework can never be perfectly complete)
+
+User-decision path always available for cases framework doesn't capture. Don't reach for amendment when user-decision suffices.
 
 ## Anti-patterns (failure modes the skill counters)
 
