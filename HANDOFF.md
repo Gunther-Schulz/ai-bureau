@@ -207,8 +207,9 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 
 | Sub-phase | Scope | Why this order |
 |---|---|---|
+| **3.0** ✅ | Doc structure: HYBRID locked (single `ARCHITECTURE.md` overview ~1-2K lines + `arch/<topic-slug>.md` × 15-20 per-topic files ~500 lines each) | Structure decision affects where 3.1 outcomes get persisted; pure-single (10K lines unwieldy + context-budget concern) and pure-multi (no entry point) both rejected; hybrid aligns with progressive-disclosure principle |
 | **3.1** | Open architectural questions (workflow + work-unit bipartite-classification; deployment definition; engaged-authorship operational definition) | Foundational decisions shape topic taxonomy; outcomes affect every topic referencing them |
-| **3.2** | ARCH structure + organization (decide topic outline + doc structure: single ARCH.md vs topic-per-file vs hybrid; locks granularity-match Lens 15 target) | Lock containers before writing 10K lines of content |
+| **3.2** | Topic taxonomy (REVISED — doc-structure-shape resolved at 3.0): which 15-20 topics exactly? Aggregate or 1:1 with BACKLOG buckets? File naming convention. Cross-cutting topics placement (axis-interactions, quality-gate) | Lock topic identities before writing content |
 | **3.3** | Per-mechanism detail (12 mechanisms: source-grounding + audit emission + audit trail foundational; then 8 sparring sub-mechanisms; then orchestration / persistent state / authority binding) | Within-bucket foundation-up: mechanisms underlying defensibility first |
 | **3.4** | Per-architectural-Protocol detail (7 Pattern A Protocols: Substrate first; Adapter; Sparring; Audit; Coordination; Trust; Time) + Per-Pattern-A primitive detail (substrate per-impl; adapter lifecycle) | Substrate is most foundational; Pattern A trio details follow |
 | **3.5** | Primitive-detail topics (9 primitives: specialist / skill / practitioner / workflow / session / event / actor / claim / defensibility) + axis-interaction analysis | Per-primitive richer detail; axis-interaction cross-cutting topic |

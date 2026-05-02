@@ -49,7 +49,11 @@ When resolved:
 
 ## Phase 3 — ARCHITECTURE rebuild (in progress)
 
-Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: questions first, then structure, then content, then audit.
+Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: structure shape first, then questions, then topic taxonomy, then content, then audit.
+
+### 3.0 Doc structure ✅ LOCKED
+
+- **Hybrid structure** — single `ARCHITECTURE.md` overview (~1-2K lines: topic catalog + cross-cutting principles + how topics compose) + `arch/<topic-slug>.md` per-topic files (~500 lines each; 15-20 topics). Pure-single (10K lines unwieldy + context-budget concern) and pure-multi (no entry point + cross-cutting orphaning) both rejected. Hybrid aligns with progressive-disclosure principle (skill-craft pattern: SKILL.md → PROCEDURE.md → references/) + sharpen's AI-executor test (cognitive iteration via structure, not gist-extraction across 10K lines).
 
 ### 3.1 Open architectural questions (foundational; resolve before topic content)
 
@@ -58,10 +62,14 @@ Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: qu
 - **"deployment" definition sharpening** [origin: EA5 Round 3 + workspace entry] — current preliminary lock: "one git-clone + activated workspace.md per deployment"; sharpen mechanically | refs: GLOSSARY#workspace
 - **Engaged-authorship operational definition** [origin: defensibility entry] — what counts as "engaged" vs rubber-stamped at framework level | refs: GLOSSARY#defensibility
 
-### 3.2 ARCH structure + organization (lock containers before content)
+### 3.2 Topic taxonomy (lock topic identities before content)
 
-- **ARCH topic outline + doc structure decision** — decide: single ARCH.md (~10K lines) vs topic-per-file (~15-20 files) vs hybrid (overview + per-topic detail files). Outcome locks granularity-match Lens 15 target.
+Doc-structure-shape resolved at 3.0 (hybrid). Remaining decisions:
+
 - **Topic taxonomy** — ~30 BACKLOG items across 6 buckets (mechanism / protocol / primitive / primitive-detail / quality-gate / cross-cutting). Decide: 1:1 mapping (28+ topics, over budget) vs aggregation (e.g., "audit + event mechanisms" combines audit-trail + audit-emission + event-related). Per MAINTENANCE budget: 15-20 topics × ~500 lines.
+- **File naming convention** — `arch/<topic-slug>.md`? Slug rules (kebab-case; how to name aggregated topics; how to disambiguate Pattern A protocol topics vs primitive-detail topics for substrate / adapter)?
+- **Cross-cutting topics placement** — where do axis-interactions, quality-gate, scope-model live? In `ARCHITECTURE.md` overview, in dedicated `arch/<topic>.md`, or hybrid (overview summary + dedicated detail file)?
+- **ARCHITECTURE.md overview structure** — sections it should contain (topic catalog with one-line summaries; cross-cutting principles; how topics compose; reading order recommendation; etc.)
 
 ### 3.3 Per-mechanism detail (12 mechanism instances)
 
