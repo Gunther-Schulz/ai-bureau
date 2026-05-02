@@ -14,6 +14,32 @@ The sharpening spirit (challenge → surface → refine → commit position) cur
 
 If yes, deployments would have built-in critical-pass capability — not just AI generating content, but AI generating content + critical-pass-against-it before commit / send / publication.
 
+## What it gates against (locked-concept-anchored, session 16)
+
+After `category collapse` locked in GLOSSARY: quality-gate's purpose is now precisely articulable. The gate would monitor for **category collapse manifestations** — the cross-axis force degrading practitioner engagement from higher-engagement state to lower-engagement state regardless of architectural intent.
+
+Per-axis manifestations (what the gate would watch for):
+
+| Axis | Higher-engagement state | Failure mode (collapse outcome) |
+|---|---|---|
+| Axis 1 | intertwined AI | tacked-on AI |
+| Axis 2 | sparring | answer-machine / oracle / validator AI (Ming-research distinction) |
+| Axis 3 | engaged authorship | rubber-stamping |
+
+Without quality-gate (current state): category-collapse-resistance is ENABLED architecturally but not ENFORCED. Sparring sub-mechanisms are available; whether they fire at meaningful moments is practitioner-cognitive-state-dependent.
+
+With quality-gate: sparring becomes structurally checkpointed at specific moments (per "Possible mappings" below) — converting enablement to partial enforcement at gate-firing moments. Per category collapse entry: *"architecture enables but doesn't enforce mental category."* Quality-gate would change that — at least at gate-firing moments.
+
+## Prerequisites for Phase 3 ARCH development
+
+Quality-gate ARCH topic development depends on:
+- ✅ `category collapse` (locked session 16 — the force the gate gates against)
+- ⏳ `answer-machine AI` / `oracle AI` / `validator AI` (axis-2 failure mode taxonomy; locking next per foundation-up)
+- ⏳ `rubber-stamping` (axis-3 failure mode; locking after axis-2 trio)
+- Phase 3 architectural decisions: mechanism vs Pattern A protocol; per-shape variation; observability schema; intervention mechanics
+
+Until prerequisites land: quality-gate stays as draft.
+
 ## Possible mappings
 
 What runtime checkpoints could quality-gate fire at?
