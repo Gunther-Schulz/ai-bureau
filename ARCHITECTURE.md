@@ -85,6 +85,16 @@ Profiles are persistent grounding for who-and-what the framework serves. Span li
 
 17 profiles (2 full + 15 skeletons). Skeletons fleshed out on-demand when specific decisions need them.
 
+### Audit scaling strategy (per coherence-audit v0.3.0)
+
+Audit cost grows multiplicatively (profiles × entries). Pure systematic at every invocation unsustainable as corpus grows. Combination approach:
+- **Cluster compression** for routine health-checks (group profiles into 4-7 clusters; audit per-cluster)
+- **Audit deltas** for incremental decisions (re-audit only what changed since last)
+- **On-demand fleshing** for high-impact decisions (flesh skeleton profiles for affected scope; systematic within affected scope)
+- **Full systematic** RESERVED for phase boundaries + new-discipline introductions (rare; high-stakes)
+
+Don't default to full systematic. Match audit-strategy to audit-context. See coherence-audit v0.3.0 "Audit scaling strategies" section for full pattern.
+
 ### Other disciplines
 
 - **Foundation-up workflow ordering** (per `feedback_foundation_up_ordering.md`): items others depend on come first; downstream items that compose with multiple foundations come last; parallel-depth items batch with shared sharpening

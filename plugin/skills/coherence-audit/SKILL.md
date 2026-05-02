@@ -2,7 +2,7 @@
 name: coherence-audit
 description: Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including "audit the glossary", "review the corpus", "cross-entry audit", "is the architecture clean", "are these the right primitives", "primitive-set audit", "set-level review", "coherence check", "is the vocabulary coherent". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening).
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.2.2
+version: 0.3.0
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -246,6 +246,28 @@ Anti-pattern caught by Lens 5 provenance-hygiene check: AI applying a revision f
 | Lens 10 surfaces cardinality ambiguity | Sharpen the entry's cardinality statement; "typically N" is a smell — name the mechanism that determines N. |
 | Found findings are all Pareto-fail | Manufactured criticism territory; lock corpus as-is |
 | Round 2 of audit yields nothing new | Audit complete |
+
+## Audit scaling strategies (v0.3.0 — when to use which)
+
+Audit cost grows multiplicatively with profile count × entry count. Pure systematic audit at every invocation is unsustainable as corpus grows. Combination approach scales sustainably.
+
+| Strategy | Cost | Rigor | When to use |
+|---|---|---|---|
+| **Cluster compression** | Low | Medium (cluster-level coverage; risks within-cluster gaps) | Routine periodic health-checks. Group profiles into 4-7 clusters by shared concerns; audit per-cluster against entries; spot-check intra-cluster variation. |
+| **Audit deltas** | Very low | High (for affected scope) | Incremental work where baseline audit exists. Re-audit only profiles + entries affected by recent decision; assume rest unchanged. |
+| **On-demand fleshing** | Medium | High (within affected scope) | High-impact specific decisions. Flesh out skeleton profiles for primitives the decision touches; full systematic within fleshed scope; skeleton-level for others. |
+| **Sampling representative profiles** | Low-Medium | Medium-High (depends on rep selection) | Quick corpus-health-check. Pick 1-2 representatives per cluster covering shared concerns; audit fully against representatives; assume cluster-coverage. |
+| **Full systematic** (every profile × every entry) | High | Maximum | Phase boundary audits + introducing new discipline corpus-wide. Reserve for these high-stakes moments; not default. |
+
+**Combination approach** (recommended for ongoing work):
+- Cluster compression for routine periodic health-checks
+- Audit deltas for incremental decisions (most common)
+- On-demand fleshing for high-impact decisions
+- Full systematic ONLY at phase boundaries or new-discipline introductions
+
+**Anti-pattern**: defaulting to full systematic for every audit invocation. Becomes expensive AND introduces self-validation bias (large effort → seeking findings to justify effort). Match audit-strategy to audit-context.
+
+**Cluster split when needed**: if cluster-internal heterogeneity becomes load-bearing for a specific decision (e.g., L1 specialist creator vs L3 template composer concerns diverge sharply), split the cluster temporarily. Don't pre-split; pre-split adds cost without proportional benefit.
 
 ## Corpus-kind awareness (lens activation per target)
 
