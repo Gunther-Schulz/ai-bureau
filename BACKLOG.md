@@ -70,10 +70,11 @@ Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: st
 
 Doc-structure-shape resolved at 3.0 (hybrid). Remaining decisions:
 
-- **Topic taxonomy** — ~30 BACKLOG items across 6 buckets (mechanism / protocol / primitive / primitive-detail / quality-gate / cross-cutting). Decide: 1:1 mapping (28+ topics, over budget) vs aggregation (e.g., "audit + event mechanisms" combines audit-trail + audit-emission + event-related). Per MAINTENANCE budget: 15-20 topics × ~500 lines.
-- **File naming convention** — `arch/<topic-slug>.md`? Slug rules (kebab-case; how to name aggregated topics; how to disambiguate Pattern A protocol topics vs primitive-detail topics for substrate / adapter)?
-- **Cross-cutting topics placement** — where do axis-interactions, quality-gate, scope-model live? In `ARCHITECTURE.md` overview, in dedicated `arch/<topic>.md`, or hybrid (overview summary + dedicated detail file)?
-- **ARCHITECTURE.md overview structure** — sections it should contain (topic catalog with one-line summaries; cross-cutting principles; how topics compose; reading order recommendation; etc.)
+- ~~**Topic taxonomy**~~ [Sub-decision 1 of 4 RESOLVED this commit] — locked at 14 ARCH topics in protocol-centric aggregation with primitive-cluster topics: 8 Pattern A protocol topics (substrate / adapter / sparring / audit / coordination / trust / time / quality-gate) + 4 primitive-cluster topics (specialist+skill / practitioner / workflow+work-unit / claim+defensibility) + 2 cross-cutting topics (scope-model / axis-interactions). Foundation-up ordered. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom. Aggregation discipline: tightly-coupled OR individually <100 lines. Phase 3.7 cross-cutting investigations excluded (research/strategic, not ARCH-topic-shaped). Round 2: 10 EXPANSIONS / 0 REVISIONS / 6 manufactured-criticism revisions rejected. Detail: `ARCHITECTURE.md` Topic taxonomy section.
+- **File naming convention** [Sub-decision 2 of 4 — NEXT] — `arch/<topic-slug>.md`? Slug rules (kebab-case; how to name aggregated topics; how to disambiguate Pattern A protocol topics vs primitive-detail topics for substrate / adapter)? Builds on locked taxonomy.
+- **Cross-cutting topics placement** [Sub-decision 3 of 4] — where do axis-interactions, quality-gate, scope-model live? In `ARCHITECTURE.md` overview, in dedicated `arch/<topic>.md`, or hybrid (overview summary + dedicated detail file)? Builds on locked taxonomy + naming.
+- **ARCHITECTURE.md overview structure** [Sub-decision 4 of 4] — sections it should contain (topic catalog with one-line summaries; cross-cutting principles; how topics compose; reading order recommendation; etc.). Builds on all prior sub-decisions.
+- **Phase 3.2 composite DR** [final synthesis pass] — after all 4 sub-decisions lock, single composite DR captures Phase 3.2 doc-organization decisions per Mode-2 composite decomposition (decision-design-sharpening v0.6.0).
 
 ### 3.3 Per-mechanism detail (12 mechanism instances)
 

@@ -14,7 +14,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
 | **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | **COMPLETE** — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship LOCKED. Phase 3.1 closed. Coherence-audit recommended before Phase 3.2 topic taxonomy. |
-| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | Pending |
+| **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | IN PROGRESS — Sub-decision 1 (taxonomy) LOCKED at 14 topics; Sub-decisions 2-4 (naming / cross-cutting placement / ARCHITECTURE.md structure) pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
 | **3.5** | Per-primitive detail topics (9 primitives + axis-interactions) | Pending |
@@ -136,6 +136,46 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 ### Phase 3.1 closed
 
 All 4 open architectural questions resolved (workflow / work-unit / deployment / engaged-authorship). Coherence-audit recommended before Phase 3.2 topic taxonomy work begins.
+
+### Topic taxonomy (Phase 3.2 Sub-decision 1) — LOCKED
+
+**Resolution**: 14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordering. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom for emergent additions during Phase 3.3-3.6 work.
+
+**Topic list** (foundation-up):
+
+| # | Topic | Cluster | Primary content |
+|---|---|---|---|
+| 1 | substrate | Pattern A | Substrate Protocol Surface + per-impl + persistent-state mechanism + session interaction |
+| 2 | adapter | Pattern A | Adapter Protocol Surface + per-integration-class + lifecycle/auth |
+| 3 | sparring | Pattern A | Sparring Protocol Surface + 8 sub-mechanisms + impl variations |
+| 4 | audit | Pattern A | Audit Protocol Surface + audit-emission + audit-trail + event primitive |
+| 5 | coordination | Pattern A | Coordination Protocol Surface + actor primitive interaction |
+| 6 | trust | Pattern A | Trust Protocol Surface + authority-binding mechanism |
+| 7 | time | Pattern A | Time Protocol Surface + temporal-semantics variations |
+| 8 | quality-gate | Pattern A | Quality-gate Protocol Surface + per-shape implementations + signal catalog (Phase 3.6) |
+| 9 | specialist+skill | Primitive-cluster | Specialist DEFINITION + skill granularity + bundle structure + marketplace mechanics |
+| 10 | practitioner | Primitive-cluster | Practitioner Pattern C bipartite + record placement + multi-practitioner mechanics |
+| 11 | workflow+work-unit | Primitive-cluster | Workflow Pattern B + work-unit Pattern B + workflow_instance state machine + orchestration mechanism + claim emission attribution |
+| 12 | claim+defensibility | Primitive-cluster | Claim primitive + defensibility test + source-grounding mechanism + engaged-authorship operational definition + per-claim attestation |
+| 13 | scope-model | Cross-cutting | Workspace primitive + Framework C / Owner B / Layer A scope categories + entity placement rules + deployment-binding |
+| 14 | axis-interactions | Cross-cutting | 3 VISION axes interaction analysis + co-worker frame + category-collapse cross-axis force |
+
+**Aggregation rationale**:
+- Pattern A protocols are natural topic anchors (Surface + per-impl + composing mechanisms + composing primitives all coherent under one topic)
+- Primitives without Pattern A home cluster by composition tightness (specialist+skill; workflow+work-unit; claim+defensibility — all tightly coupled per locked entries)
+- Cross-cutting topics for irreducibly cross-axis content (scope-model; axis-interactions)
+
+**Aggregation discipline** (per coherence-audit Lens 15): aggregate when items tightly coupled OR individually <100 lines. Each topic targets ~500 lines avg; per-topic flex acceptable (substrate may exceed; time-protocol may stay lean).
+
+**Forward-reference handling**: write topics in foundation-up dependency order; placeholder forward-refs ("forthcoming arch/<topic>.md") resolve via cascade as later topics lock. Per MAINTENANCE.md cascade discipline.
+
+**Excluded from topic count**: Phase 3.7 cross-cutting investigations (PydanticAI eval / Markdown validation / Ming research / adjacent thinkers / multi-VISION model) — research/strategic items, not ARCH-topic-shaped. Inform topics but aren't topics themselves.
+
+**Round 2 expansions applied**: foundation-up ordering codified; forward-reference handling explicit; archived corpus integration noted; topic granularity calibration confirmed; no missing topics (R6 boundary check passed).
+
+**Round 2 revisions tested + rejected**: Pattern A protocol/primitive splits (R1); specialist+skill split (R2); claim+defensibility split (R3); axis-interactions merge (R4); ARCHITECTURE.md as topic (R5) — all rejected as fragmenting tightly-coupled content or violating locked structural decisions.
+
+**DR deferred to Phase 3.2 synthesis pass**: per Mode-2 composite decomposition (decision-design-sharpening v0.6.0), Phase 3.2 is upfront-known composite (taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure). Single composite DR captures all 4 sub-decisions after final synthesis pass.
 
 ## Disciplines applying to all ARCH work
 
