@@ -273,6 +273,39 @@ The discipline composes with cascade discipline (changes propagate across docs i
 
 ---
 
+## Observation 20: Research-grounding ≠ research-identity (Ming-as-spirit-anchor not Ming-as-app)
+
+**Pattern**: When grounding a framework in published research (Ming's IEP work, Dreyfus on expertise, etc.), distinguish RESEARCH AS SPIRIT-ANCHOR from RESEARCH AS APP-IDENTITY. The framework's value-claims may be inspired by the research, but the framework is NOT a productization of the research — it's a workspace app that facilitates a way-of-working the research describes. Conflating these drifts the framework's identity toward the researcher's brand rather than the framework's own contribution.
+
+**Evidence (session 16)**: AI initially proposed marketing-shape taglines that centered "AI that argues with you" / "AI that pushes back" / "AI that disagrees" — adversarial framings derived from Ming's "sparring partner" mode. User pushback: "I do not want an AI that argues with you... If our app seems like to have this goal to be the 'Ming AI' then that is wrong framing. The reason for grounding with her is that simple fact of the studies she conducted... it's a workspace app that would facilitate... to transport existing businesses flows... into the intertwining with AI." The framework grounds in Ming's empirical observation that proper AI work = critical engagement (vs typical AI usage = passive acceptance), but the FRAMEWORK ITSELF is not "Ming's app" — it's a workspace facilitator for which Ming's work happens to be the clearest articulation of why proper-AI-work matters.
+
+**Implication**: Two-part discipline:
+- Research-grounding: cite the research; let it anchor specific claims (axis 2 anchored in Ming's IEP).
+- Research-identity-avoidance: don't let the research's terminology / metaphors / brand colonize the framework's marketing identity. The framework's identity is about what the framework DOES (facilitates intertwining-with-AI for businesses + entrepreneurs); the research is one of several anchors for WHY this matters.
+
+Practical signal: if marketing copy reads as "implementing X researcher's framework," that's research-identity-drift. If it reads as "for [practitioner type], using AI [in a way grounded by X researcher's findings]," that's correct grounding without identity-conflation.
+
+**Test it against**: any framework grounded in published research. Does the marketing copy / positioning lead with the framework's user-outcome (workspace, capability, transformation), or with the researcher's framing? If the latter, drift toward research-identity has happened.
+
+---
+
+## Observation 21: Adversarial-vocabulary drift in AI-collaboration frameworks
+
+**Pattern**: When describing collaborative-rigor (mutual evidence-demanding; iterative refinement; both sides pushing back), AI naturally drifts toward ADVERSARIAL vocabulary ("argue" / "push back" / "challenge" / "disagree"). This vocabulary is technically accurate but misframes the underlying mode — what's actually happening is COLLABORATION with rigor, where both sides engage as partners.
+
+**Evidence (session 16)**: AI proposed multiple tagline candidates centering "argue" / "push back" / "earn signature" / "doesn't tell you what you want to hear" — all adversarial-flavored. User clarification: "I do not want an AI that argues with you... it's more in the spirit as I push back with you. As the skills we have written do rigorous questioning of what was done the first round. of requiring evidence from you instead of guessing. but and that is how I understand Ming mostly it a COLLABORATION." The mode is partnership where both sides demand evidence; not adversarial.
+
+**Implication**: When describing the AI-co-worker relationship, prefer collaborative-rigor vocabulary over adversarial-vocabulary:
+- COLLABORATIVE: partnership, engagement, rigor, evidence-grounded, mutual challenge, productive friction, iterative refinement
+- ADVERSARIAL (drift): argue, push back, fight, disagree, challenge (when used negatively), adversary
+- Even "sparring" (Ming's term) reads collaboratively when paired with "partnership" but drifts adversarial when paired with "argues" or "fights"
+
+The structural mechanism is the same (rigorous critical engagement); the framing matters because adversarial vocabulary suggests the framework positions practitioner-against-AI rather than practitioner-and-AI-together.
+
+**Test it against**: any tagline / description / positioning copy proposing for an AI-collaboration framework. Read it as if the practitioner were the audience: does it sound like the framework's AI is on their side (collaborative) or oppositional (adversarial)? If oppositional, vocabulary has drifted; reframe.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:

@@ -59,6 +59,51 @@ Identity-led / contrarian variants (interesting but more risky):
 - "AI for the expert who hasn't outsourced their thinking."
 - "The AI that takes you seriously."
 
+## Collaboration-not-argument framing (session 16 reframing)
+
+User clarification surfaced an important distinction:
+
+- **Wrong framing**: "AI that argues with you" — adversarial connotation; reads as the AI fighting the practitioner; not what Ming describes either
+- **Right framing**: COLLABORATIVE RIGOR — mutual gap-pointing-out; both sides demand evidence; both sides have opinions; iterative refinement (Round 1 / Round 2 / convergence)
+
+What we DO is collaborative-with-rigor sparring (per Ming's third mode where humans pushed back AND AI generated counter-arguments — both directions). Not adversarial.
+
+Marketing implication: avoid "argue with AI" / "AI that pushes back" / "AI that disagrees" framings even at trunk level — they misframe the actual relationship. The mode is partnership-with-rigor, not adversarial-engagement.
+
+Better-pattern: anything that signals collaborative-rigor without adversarial overtone — "AI that engages with your work" / "rigorous AI partnership" / "AI that demands evidence (and gives it)" / "AI partnership that doesn't shortcut your judgment."
+
+## "Transport existing flows into intertwining" — candidate positioning angle (session 16)
+
+User surfaced strong positioning angle:
+
+> "It's a workspace app that would facilitate, among other things, to transport existing businesses flows to any degree desired, or single-entrepreneurs into the intertwining with AI."
+
+Why this is a powerful frame:
+
+- **Concrete**: "your existing flow" — practitioner sees what they have today (their workflow, their tools, their processes)
+- **Outcome-led**: "into intertwining with AI" — what they get (axis-1 deep integration)
+- **Inclusive**: serves established businesses (transport their flow) AND single-entrepreneurs (start intertwined from the beginning)
+- **Axis-1 dominant**: intertwining IS the central claim; sparring + authorship-preservation are supporting mechanisms
+
+Candidate taglines centering this angle:
+
+- "Transport your work into AI partnership."
+- "Your existing flow. Now intertwined with AI."
+- "AI partnership that adopts your existing work."
+- "PBS — workspace where existing flow meets AI co-work."
+- "Where your work intertwines with AI."
+
+Counter-position vs current locked tagline ("A framework for AI partnership that cultivates expert craft"):
+
+| Aspect | Locked tagline | Transport angle |
+|---|---|---|
+| Outcome focus | Cultivation (axis-2/3 outcome) | Intertwining (axis-1 outcome) |
+| Audience | Expert practitioner | Existing businesses + entrepreneurs |
+| Concreteness | Abstract ("expert craft") | Concrete ("existing flow") |
+| Time orientation | Long-term ("compounds over time") | Onboarding ("transport into") |
+
+Both are honest framings. Different emphasis. Could combine in different marketing surfaces (cultivation = long-term value; transport = onboarding pitch).
+
 ## Counter-positioning vs AI-product landscape
 
 Marketing claims should differentiate against the typical AI-product positioning:
