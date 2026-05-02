@@ -306,6 +306,73 @@ The structural mechanism is the same (rigorous critical engagement); the framing
 
 ---
 
+## Observation 22: Validator-mode bias propagates through skill-design tools
+
+**Pattern**: When a skill-design framework (e.g., skill-craft) defaults to validator-mode conventions universally — "CANNOT proceed" blocking logic, forcing functions, observable checkpoints, mechanical criteria — downstream skills written under that guidance inherit rigid framing even when their own VISION envisions integral/sparring rhythm. The propagation is invisible until traced — the skill author doesn't realize they're absorbing validator-mode framing from the design tool, and the design tool's "Writing judgment procedures" subsection (acknowledging judgment skills are different) comes too late in reading order to override the absorbed default.
+
+**Evidence (session 16, 2026-05-02)**: Bildhauer skill (coarse-to-fine refinement discipline, judgment-mode) had its PROCEDURE.md framed as *"Mandatory checkpoints that interrupt default behavior"* — direct stylistic inheritance from skill-craft's Layer 2 vocabulary. This framing fought bildhauer's own VISION which says *"this checking is not separate from the work — it IS the work"*. Performance was "mixed bag" until the procedure was refactored around the dual-rhythm structure VISION actually describes (Stance + Checkpoints rather than Mandatory checkpoints). Tracing root cause: skill-craft's "Naked judgment call" anti-pattern (distilled from observation about workflow-skill failure) was generalized to "any control-flow decision point lacks mechanical criteria → naked judgment call" — but for judgment skills, judgment-without-mechanical-criteria is the design intent.
+
+**Implication**: Skill-design tools must distinguish skill types early (validator vs judgment vs sparring) so authors don't inherit wrong-shape conventions. Fix applied to skill-craft this session: Layer 1.5 added (skill-type identification before Layer 2 conventions); Layer 2 conventions tagged with applicability (validator-mode, workflow-mode, universal); "Naked judgment call" anti-pattern scope-qualified; new "Validator conventions applied to judgment skill" anti-pattern added.
+
+**Test it against**: any skill-design framework. Does its Layer 2 / protocol-conventions section distinguish skill types? Are mechanical-enforcement conventions tagged with applicability? If not, skills authored under that guidance will silently inherit validator-mode framing regardless of their own purpose.
+
+---
+
+## Observation 23: AI drifts toward "Round 1 sufficient" framing despite memory + empirical evidence to contrary
+
+**Pattern**: Even with locked memory feedback explicitly stating "2-round sweet spot" + recent-session evidence demonstrating multi-round value, AI proposes "80/20 Round 1 sufficient" framings on next iteration. This drift is silent + invisible to AI self-review; user pushback is the only catch mechanism. The drift seems to come from: AI conserves user-time-perceived → understates needed iteration depth → hard to self-detect because the framing sounds Pareto-disciplined ("we found the structural finding; further rounds = manufactured criticism").
+
+**Evidence (session 16, 2026-05-02)**: After Round 1 audit on skill-craft surfaced 4 structural findings, AI proposed "80/20: 80% chance Round 1 was sufficient; 20% chance Round 2 surfaces something valuable" — direct contradiction with `feedback_pre_decision_sharpening.md` which says "2 disciplined rounds before committing yields more genuine refinements." User pushback: *"From experience two rounds (of running the sharpening skill) is sweet spot, not one... When do we hit the 80%? I think we already include some signals although I don't remember what those signals were."* Locked sharpen v0.9.0 to surface 2-round-sweet-spot explicitly + cut misleading "different angle per pass" parenthetical that AI was misreading as prescriptive.
+
+**Implication**: Empirical iteration patterns need to be EXPLICIT in skill text + memory + procedures, not just inferred from history. AI's drift toward shortcutting iteration is structural; no amount of recent evidence prevents the next-iteration drift unless rules are written down. Counter: explicit Pareto + iteration-default rules in skill text; user-trigger discipline preventing AI-self-shortcutting; cross-skill alignment (specialized sharpening skills had 2-round, generic sharpen didn't until corrected).
+
+**Test it against**: any procedural skill that involves iteration. Is the empirical iteration default explicitly stated? Does the AI default to fewer iterations than experience supports? If so, the skill text needs the empirical default surfaced — implicit memory isn't enough.
+
+---
+
+## Observation 24: Self-applied sharpening passes surface findings normal review misses
+
+**Pattern**: Running sharpen on the sharpen skill itself (multiple iterations) surfaces findings careful normal review would miss — prescriptive parentheticals that read descriptively; coverage asymmetries between bias-counters; AI-executor optimization concerns; framing-test failures. Self-application is a different cognitive mode than review-from-outside, and produces different findings. Specifically aligned with sharpen's own Spirit: "force cognitive-mode shifts the default mode misses."
+
+**Evidence (session 16, 2026-05-02)**: Sharpen v0.6.0 → v0.9.0 evolution drove primarily by self-applied sharpening passes (running sharpen on sharpen). Findings surfaced this way: F4 (cold-read pass) — author-context-blindness; F2 (mechanism-simulation pass) — text-coherent-surface masks procedural gaps; misleading "different angle per pass" parenthetical (caught only when applying procedure mentally); validator-mode framing collision with bildhauer (caught only when parallel comparison attempted). Each iteration revealed something the prior iteration's structure had hidden.
+
+**Implication**: For procedural skills (skills that prescribe a procedure), running the procedure on itself periodically is a quality-check mechanism the skill should include. Sharpen v0.6.0+ has explicit "Self-applicability test" in Spirit: *"this skill must remain runnable on itself. If a revision makes the skill un-self-applicable... the revision drifts from spirit."* The test is mechanical: would running the procedure on the skill text produce useful findings? If not, the procedure is broken in some way.
+
+**Test it against**: any procedural skill. Could the procedure be applied to the skill text itself? If yes, does it surface useful findings? If no, the procedure may not be self-coherent.
+
+---
+
+## Observation 25: Hybrid engagement for adjacent concepts (capture-but-defer)
+
+**Pattern**: When concept-X is conceptually adjacent to concept-Y being actively worked on, but X belongs in a different phase per architecture/scope discipline, three options exist:
+- **Full engagement now**: scope creep; violates phase discipline
+- **Skip / pure defer**: capture loss; conceptual links established now will be lost
+- **Hybrid**: update X's draft with connections established by Y's work + name explicit phase transition triggers; full development deferred but conceptual coherence preserved
+
+The hybrid option avoids both failure modes (scope creep + capture loss) while honoring phase discipline.
+
+**Evidence (session 16, 2026-05-02)**: Quality-gate concept (runtime mechanism that resists category-collapse) is naturally adjacent to category-collapse + axis-failure-mode work being completed in Phase 2. Full quality-gate development belongs in Phase 3 ARCH (specific mechanism instances → ARCH per session-16 A1 decision). Pure defer would lose the now-clear conceptual mapping (gate watches for category-collapse manifestations across all 3 axes per Ming-research-distinguished failure modes). Hybrid applied: drafts/quality-gate.md updated with "What it gates against" section explicitly mapping to all 3 axis manifestations + "Prerequisites for Phase 3 ARCH development" listing required upstream locks; BACKLOG entry strengthened with category-collapse anchoring + explicit prerequisite list.
+
+**Implication**: Phase discipline doesn't require pure-defer of adjacent work — it requires development-discipline. Capturing connections at the moment they're clearest (while Y is being worked on) into X's draft is different from developing X — the former preserves coherence; the latter is scope creep. Test: are the connections being NAMED (with reference to Y's locked structure) or being DEVELOPED (with new architectural commitments)? Naming is hybrid-acceptable; developing is scope creep.
+
+**Test it against**: any phase-bounded work where adjacent-concept work could sprawl. Is there a draft / BACKLOG entry that could absorb the connections without sprawling into full development? If yes, hybrid; if no, evaluate whether the adjacent concept genuinely belongs in current phase.
+
+---
+
+## Observation 26: Coherence-audit at phase-boundary catches cascade asymmetries per-entry audits miss
+
+**Pattern**: When a batch of new entries (~5-10) is added to an existing locked corpus, per-entry sharpening of each new entry verifies the entry's internal coherence + composes-with claims, but doesn't verify reciprocal references in pre-existing entries. The pre-existing entries' Composes-with sections were locked before the new entries existed; they have no automatic reason to reference newly-locked entries unless cascade-pass is run.
+
+Per-entry sharpening catches forward-references from new entries to existing entries. It misses forward-references from existing entries to new entries — those references didn't exist when the existing entries were locked. Phase-boundary coherence-audit (Lens 6 Symmetry specifically) is designed to catch this asymmetry.
+
+**Evidence (session 16, 2026-05-02)**: Phase 2 GLOSSARY adds 6 new entries (category collapse + axis-2 trio + rubber-stamping + pioneer instance) all of which compose with defensibility / claim / practitioner / event (pre-existing entries). Each new entry referenced these pre-existing entries; per-entry sharpening verified those references. But defensibility / claim / practitioner / event Composes-with sections didn't reference the new entries — pre-existing locks pre-dated the additions. Coherence-audit Round 1 Lens 6 (Symmetry) caught this; R6.1 finding added 4 reciprocal references (1 line each).
+
+**Implication**: Phase-boundary coherence-audit is the right moment to verify cascade reciprocity. Specifically Lens 6 (Symmetry) — for every new-to-existing reference established during the phase, check the reverse. Don't rely on per-entry sharpening alone for cross-entry coherence; pre-existing entries' content drifts toward "frozen at lock time, missing new connections" without explicit cascade-pass.
+
+**Test it against**: any phase-completion moment in a layered/compositional corpus. Have the existing entries' Composes-with sections been verified against new additions? Or are they frozen at their original lock state?
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:

@@ -30,8 +30,8 @@ This is the running session log for the **foundational rebuild** launched sessio
 | 1.75 | VISION tightening pass (structure) | ✅ Done session 16 (1069 → 255 lines; content moved out lives in `archive/VISION.md`) |
 | 1.8 | VISION terminology audit (term-level) | ✅ Done session 16 (15 candidates across 6 families; 2 inline tightenings; rest deferred to Phase 2 GLOSSARY) |
 | 1.85 | VISION sanity check + clean-stance restructure | ✅ Done session 16 (4 sanity-check fixes against locked GLOSSARY; clean-stance restructure removed positioning + comparing language; new tagline + tree analogy with branches/trunk/roots; 2 new Implications — AI-as-runtime + pattern-vs-instance discipline; PIONEER.md created for pioneer-instance content; drafts/ pattern established for exploratory ideas) |
-| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | In progress — 28 locked entries; ~6 remaining per BACKLOG Phase 2 (pioneer instance; category collapse; axis-2 failure modes batch — answer-machine / oracle / validator AI; rubber-stamping) |
-| 3 | Rebuild ARCH against locked vocabulary | Pending |
+| 2 | Lock foundational vocabulary (`GLOSSARY.md`) | ✅ Done session 16 (34 locked entries; coherence-audited Round 1 — Lens 1+8+9 yielded 0 REVISIONS, corpus set-coherent; STABLE) |
+| 3 | Rebuild ARCH against locked vocabulary | Pending — starts next session |
 | 4 | Rebuild DRs selectively (collapse where possible) | Pending |
 | 5 | Rebuild ROADMAP lean | Pending |
 | 6 | Rebuild specs + code refactor (per existing #11 single-touch refactor) | Pending |
@@ -129,6 +129,77 @@ This is the running session log for the **foundational rebuild** launched sessio
       - `MAINTENANCE.md` — structural disciplines (cascade, etc.) + TOP-LEVEL ARCHITECTURE
     - **Tooling status**: emerged as side-product through framework-development work; sharpening skills built BECAUSE we needed them, not as deliberate ship-target. Working-title status; maturity-incomplete. Product is locked-down primary; tooling is implementation-detail-becomes-shippable-eventually.
     - Cascade: MAINTENANCE.md + HANDOFF.md anchor descriptions updated; BACKLOG Phase 5+ has tooling-promotion item (TOOLING.md or unified narrative when tooling matures).
+
+## Session 16 continuation (2026-05-02)
+
+**What happened (notes 20-27)**:
+
+20. **Sharpen skill multi-iteration v0.4.0 → v0.9.0 with self-applied passes** — generic critical-pass skill iteratively refined through self-application:
+    - **v0.4.0**: F1+F2+F3 + S1-S5 + non-categorical pass as STABLE-blocker (synthesis-vs-citation in Step 1; scope-fit 8th sub-question; iteration USER-TRIGGERED; skip-if-N/A; trivial-cosmetic rejectable; substantive defined; CUT-without-rationale also bias; cite feedback_judgment_and_automate)
+    - **v0.5.0**: Spirit/mission section + Step 6 cognitive-mode passes (cold-read + mechanism-simulation added alongside non-categorical)
+    - **v0.6.0**: Self-applicability test + AI-executor test in Spirit; Step 6 nested bullets restore AI-iteration prompting (vs prose gist-extraction); Anti-patterns expanded with 3 new failure modes
+    - **v0.7.0**: cut "Why this skill earns its place" (redundant with Spirit + Anti-patterns); Step 4 wording tightened
+    - **v0.8.0**: frame-level question added to Step 2 (lifted from bildhauer commission-questioning principle — "is this the right target?")
+    - **v0.9.0**: 2-round sweet spot surfaced explicitly (was implicit in specialized skills only); cut misleading "different angle per pass" parenthetical (same procedure each pass — Pareto catches what matters; findings naturally drift as earlier-fixed surfaces stabilize)
+    - User feedback drove key corrections: AI was framing "80/20 Round 1 sufficient" until user pushed back citing 2-round empirical pattern + memory; AI was misreading prescriptive parenthetical as descriptive
+
+21. **Bildhauer evaluation + refactor** (separate repo `~/dev/Gunther-Schulz/bildhauer/`):
+    - Identified VISION/PROCEDURE structural tension: VISION says "checking IS the work" (continuous rhythm); PROCEDURE was framed as "Mandatory checkpoints that interrupt default behavior" (discrete interrupts)
+    - PROCEDURE refactored: 5 checkpoints → 3 Stance items + 8 Checkpoints (11 elements). All VISION-grounded. New: Whole-piece coherence at any resolution; coarse-to-fine refinement; verify-with-eyes-not-hands; commission-questioning (at request-receipt); symptom-vs-root (when something feels off); vision-questioning at transitions
+    - Stance honestly framed for AI: not always-on background processes (AI doesn't have those); orienting frames re-instantiated per engagement
+    - Round 2 sharpen on bildhauer: 1 borderline finding correctly Pareto-rejected as trivial-cosmetic. STABLE
+    - SKILL.md framing fix: validator-mode → sparring-mode language ("audit adherence" → "audit behavior change"; "did it fire?" → "did it shift behavior?"); portable update-plugin.sh path
+    - Bumped 0.5.0 → 0.6.0
+
+22. **Skill-craft validator-mode-bias correction** (separate repo `~/dev/Gunther-Schulz/skill-craft/`):
+    - Traced bildhauer's old rigid framing back to skill-craft's Layer 2 dominant validator-mode vocabulary ("Mandatory checkpoints that interrupt default behavior" was direct stylistic inheritance from skill-craft's "CANNOT proceed" / "Forcing functions" / "Blocking logic" framing)
+    - Sharpen Round 1 + Round 2 surfaced 4 structural findings (F1-F4) + 1 cleanup (cross-reference symmetry from Round 2)
+    - **Layer 1.5 (NEW)**: skill-type identification as load-bearing structural decision before Layer 2 conventions are applied; 5 skill types listed with classifying question ("can this skill's checks be satisfied mechanically without understanding?")
+    - **Layer 2 annotations**: tagged "Judgment calls as design risk" / "Forcing functions" / "Blocking logic" with `(validator-mode)`; "Menus" with `(workflow-mode)`; "Observable checkpoints" with universal-but-form-adapts note
+    - **Anti-patterns**: "Naked judgment call" scope-qualified to validator-mode skills; NEW anti-pattern "Validator conventions applied to judgment skill" added (symptoms include "Mandatory checkpoints" framing, vision/procedure tone mismatch, performative-fire-without-behavior-change)
+    - **OBSERVATIONS.md observation 15**: documents bildhauer as the originating incident; traces root cause to "Naked judgment call" anti-pattern's overgeneralization across skill types
+    - Round 2 surfaced cross-reference symmetry fix (Writing judgment procedures section now references back to Layer 1.5)
+
+23. **Foundation-up workflow ordering memory persisted** — `feedback_foundation_up_ordering.md` captures: when work items have dependencies (compositional/architectural work — GLOSSARY entries, DRs, ARCH topics, specs), lock items others depend on first; downstream items that compose with multiple foundations come last; parallel-depth items batch with shared sharpening passes. Why: minimizes rework; downstream items reference locked foundations cleanly. Discovered in current session when ordering remaining 6 GLOSSARY entries.
+
+24. **Phase 2 GLOSSARY completion: 6 entries locked per foundation-up ordering**:
+    - **category collapse** (force-level meta-concept; cross-axis, axis-1 primary anchor): the force that degrades practitioner's mode of engaging with AI from higher-engagement state to lower-engagement state regardless of architectural intent. Round 1 stress-test surfaced cross-axis generalization (manifests on all three axes — not just axis-1 as BACKLOG framed). Operates in practitioner's mental category, not architecture
+    - **answer-machine AI / oracle AI / validator AI** (axis-2 failure modes per Ming research): batch-locked with parallel structure; each captures distinct direction of practitioner-AI dynamic (extraction / declarative / affirmation). Naming collision flagged + disambiguated for validator AI vs validator-mode (skill-craft / sharpen vocabulary)
+    - **rubber-stamping** (axis-3 failure mode): sign-off without engagement at attestation/finalization moment. Independent dimension from axis-2 failures (can co-occur). Fails defensibility's engaged-authorship condition
+    - **pioneer instance** (originating-deployment role): triple-purpose framing — production-tool + research-lab + IP-proving-ground. PBS-Schulz is pioneer per PIONEER.md. Final Phase 2 entry
+    - GLOSSARY: 28 → 34 locked entries
+
+25. **Quality-gate draft + BACKLOG anchored to category-collapse + axis-failure-mode taxonomy** — hybrid approach (minimal engagement now since context is hot; full ARCH development deferred to Phase 3 after prerequisites lock). drafts/quality-gate.md updated with "What it gates against" section explicitly mapping to all three axis manifestations of category collapse. BACKLOG entry strengthened with category-collapse anchoring + explicit Phase 3 prerequisites list
+
+26. **Coherence-audit Round 1 on full GLOSSARY (34 entries)** before Phase 3 transition:
+    - Lens 1 (Set composition) LOAD-BEARING: 0 substantive findings after honest run (tested MERGE / SPLIT / ADD / REMOVE / REDEFINE BOUNDARIES; all cleanly partitioned)
+    - Lens 8 (Pattern-vs-instance) LOAD-BEARING: 0 leakage (cross-archetype illustrations cover legal/research/auditor; PBS-Schulz references properly scoped)
+    - Lens 9 (VISION-grounding) LOAD-BEARING: 0 ungrounded (all derivations valid; pioneer instance via falsification framing + PIONEER.md is intentional dual-doc setup)
+    - Lens 5 (Mechanical compliance): R5.1 — provenance pollution in Source sections (5 entries with session-16 / Round-N / Phase-1.85 markers stripped; synthesis content preserved)
+    - Lens 6 (Symmetry): R6.1 — added reciprocal Composes-with references in 4 entries (defensibility / claim / practitioner / event) for the 6 entries locked this session
+    - Net: 0 REVISIONS / 2 EXPANSIONS (cleanup-grade). Corpus set-coherent at architectural level
+
+27. **STABLE called after Round 1** by user judgment: accumulated audit history (older entries had Round 2/3/4 audits earlier in session 16) + cleanup-grade-only findings → forcing Round 2 purely to satisfy "2-round default" would be validator-mode procedural conformance over honest judgment. Per sharpen v0.9.0: 2-round is sweet-spot default, not mandate; legitimate exception when historical audit + Pareto signal converge
+
+**Phase 2 outcome (locked session 16, 2026-05-02)**:
+
+GLOSSARY foundational vocabulary lock COMPLETE — 34 locked entries; coherence-audited at corpus level; STABLE before Phase 3 ARCH transition.
+
+Final entry breakdown:
+- 14 atoms + Pattern A primitives (workspace, practitioner, specialist, skill, actor, event, substrate, adapter, shape, protocol, session, workflow, mechanism, policy, claim, work-unit, framework)
+- 3 scope classifications (Layer A / Owner B / Framework C)
+- 3 axes (intertwining / sparring / authorship preservation)
+- 9 derived/meta concepts (defensibility / category collapse / co-worker / intertwined AI / tacked-on AI / answer-machine + oracle + validator AI / rubber-stamping / pioneer instance)
+
+Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance discipline holds; VISION-grounded; clean naming with documented disambiguations.
+
+**Side outcomes (dev skill ecosystem)**:
+- sharpen skill (pbs-bureau) v0.6.0 → v0.9.0 with multi-iteration sharpening + 2-round-sweet-spot self-fix
+- bildhauer skill (separate repo) v0.5.0 → v0.6.0 with PROCEDURE refactor + SKILL framing fix
+- skill-craft skill (separate repo) Layer 1.5 + Layer 2 annotations + judgment-skill anti-pattern (resolves validator-mode bias that drove bildhauer rigidity)
+- foundation-up workflow ordering memory persisted
+
+---
 
 **Phase 1.5 outcome (locked session 16)**:
 
