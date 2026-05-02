@@ -70,7 +70,6 @@ Drawing the negative space sharpens the positive:
 - ❌ PBS does NOT claim audit-by-construction makes humans unnecessary — it makes their accountability defensible
 - ❌ PBS does NOT claim AI-as-co-worker means AI does the bulk of the work — could be AI handles 20% of mechanical labor, augments practitioner on the 80% where judgment matters
 - ❌ PBS does NOT claim the framework is restricted to practitioner shape — framework is shape-neutral; positioning is practitioner-focused
-- ❌ PBS does NOT claim sparring is adversarial — the mode is partnership with critical engagement; the vocabulary (challenge / counter-argument / push back / interrogate) describes operational mechanism, not relationship type. Per Ming's articulation of the third mode (per Foundations section): humans and AI played DIFFERENT roles — humans demanded evidence and interrogated assumptions (critical-evaluator role); AI generated counter-arguments, surfaced doubts, resisted easy answers (alternative-position-generator role). The roles are asymmetric — partnership with role-distinction, not symmetric demanding. This is collaboration with rigor, not argument-as-opposition.
 
 ## Robustness to AI capability growth
 
@@ -144,13 +143,7 @@ When auditing for drift, foundations are the reference point: are we still doing
 
 The second axis. Even an intertwined AI can fail badly if it operates in answer-machine mode. The Ming research foundation makes the claim concrete: only sparring-mode produces the value; oracle wastes the human partner; validator actively degrades.
 
-### Spirit: collaborative engagement, not adversarial
-
-The vocabulary used for axis 2 (challenges / counter-arguments / push back / interrogate / resist easy answers) describes the OPERATIONAL MECHANISM of axis-2 engagement — it does not describe an adversarial relationship between practitioner and AI. Per Ming's articulation of the third mode (per Foundations section): humans and AI played DIFFERENT roles — humans demanded evidence and interrogated assumptions (critical-evaluator role); AI generated counter-arguments, surfaced doubts, resisted easy answers (alternative-position-generator role). The roles are asymmetric: human is the critical evaluator; AI is the productive interlocutor that offers alternatives and refuses to shortcut.
-
-This asymmetry is load-bearing — it's what makes the partnership functional. If both played the same role (e.g., both demanded evidence symmetrically), the mode would collapse to debate-club; nothing would get produced. Productive partnership requires DIFFERENT roles engaging in complementary ways.
-
-Closer to peer review or apprentice-master dialogue than to argument-as-opposition. Future sessions describing axis 2 should preserve both (a) the collaborative wrapper around the operational vocabulary and (b) the role-asymmetry — positioning the framework as "AI that argues with you" or "AI that pushes back" misframes the mode by foregrounding the operational vocabulary without the partnership wrapper, and erases the role-distinction (which framing as symmetric debate-club also fails).
+Per Ming's third mode: humans and AI played different roles — humans critically evaluated (demanded evidence; interrogated assumptions); AI generated alternatives (counter-arguments; doubts; resisted shortcuts). Partnership with role-distinction, not symmetric demanding.
 
 ### Why text-first matters here
 
