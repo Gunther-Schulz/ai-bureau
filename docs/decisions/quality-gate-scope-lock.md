@@ -113,7 +113,7 @@ This decision flows constraints into:
 - `GLOSSARY.md` framework entry's architectural-protocols list (quality-gate added)
 - `ARCHITECTURE.md` Locked architectural decisions section (quality-gate scope-lock added; Phase 3.6 entry updated)
 - `BACKLOG.md` Phase 3.6 entry (scope-lock complete; full design Phase 3.6)
-- `drafts/quality-gate.md` (status updated to scope-locked)
+- `drafts/quality-gate.md` (REMOVED on graduation per drafts discipline; provenance lives here in DR + git log)
 
 ## Revisit triggers
 

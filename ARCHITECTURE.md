@@ -234,6 +234,6 @@ Specific `arch/<topic>.md` files load on-demand when working in topic area.
 - `BACKLOG.md` — Phase 3 work-item tracker
 - `HANDOFF.md` — session log (Phase 3 launch + continuation notes)
 - `profiles/INDEX.md` — usage profiles + G + D gates
-- `drafts/quality-gate.md` — quality-gate exploratory draft (Phase 3.6 prerequisite)
+- `docs/decisions/quality-gate-scope-lock.md` — quality-gate scope-lock DR (Pattern A protocol with mechanism-shaped Surface; full design Phase 3.6)
 - `drafts/composability-tooling.md` — composability tooling concepts (Phase 5+ ROADMAP)
 - `archive/INDEX.md` — v0.35 archived corpus (consult during Phase 3+)

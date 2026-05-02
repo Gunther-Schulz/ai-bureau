@@ -292,7 +292,7 @@ Negative-marker test (answer-machine NOT occurring):
 - `oracle AI` (sibling axis-2 failure mode — declarative direction)
 - `validator AI` (sibling axis-2 failure mode — affirmation direction)
 - `tacked-on AI` (axis-1 parallel failure mode)
-- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3 — query-pattern signals indicating extraction-shape; counter-mechanism designs that surface challenges regardless of query shape; quality-gate mechanism per `drafts/quality-gate.md`)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3 — query-pattern signals indicating extraction-shape; counter-mechanism designs that surface challenges regardless of query shape; `quality-gate` Pattern A protocol per GLOSSARY entry; Phase 3.6 ARCH topic forthcoming)
 
 ---
 
@@ -1027,7 +1027,7 @@ Negative-marker test (oracle NOT occurring):
 - `answer-machine AI` (sibling — extraction direction)
 - `validator AI` (sibling — affirmation direction)
 - `tacked-on AI` (axis-1 parallel)
-- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; quality-gate mechanism per `drafts/quality-gate.md`)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; `quality-gate` Pattern A protocol per GLOSSARY entry; Phase 3.6 ARCH topic forthcoming)
 
 ---
 
@@ -1417,14 +1417,13 @@ Both involve "gate" but operate at different layers + lifecycle moments. Disambi
 - **Error semantics**: per-implementation (fail-closed for defensibility-critical practitioner-shape; fail-open with alert for autonomous-business; fail-open for personal-OS)
 
 **Source**:
-- `drafts/quality-gate.md` (exploratory draft; scope-locked session 16 via 2-round sharpening)
-- `docs/decisions/quality-gate-scope-lock.md` (decision rationale + sharpening rounds metadata)
+- `docs/decisions/quality-gate-scope-lock.md` (decision rationale + sharpening rounds metadata; original exploratory draft removed on graduation per drafts discipline)
 - VISION (`VISION.md`): not directly named; derives from category-collapse + axis-failure-mode framings + `feedback_wrong_shapes_impossible.md` structural-enforcement principle
 - Locked GLOSSARY entries: `category collapse` / `protocol (architectural)` / `sparring (axis 2)` / axis-failure modes / `claim` / `workflow_instance` / `session` / `event`
 - Synthesis: Pattern A protocol with mechanism-shaped Surface (hybrid resolution from Round 1 + Round 2 sharpening; structural variation per shape; mechanism-shaped Surface for cross-implementation compatibility)
 
 **See**:
-- ARCH Layer 3 quality-gate topic (placeholder until Phase 3.6 — full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration; archived material to consult: `drafts/quality-gate.md`)
+- ARCH Layer 3 quality-gate topic (placeholder until Phase 3.6 — full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration)
 - `profiles/G-composability-gate.md` (DISTINCT — G is architectural-decision-time validation gate)
 - `profiles/INDEX.md` D Gate section (DISTINCT — D is architectural-decision-time validation gate)
 - `category collapse` (force quality-gate exists to resist)
@@ -1501,7 +1500,7 @@ Negative-marker test (rubber-stamping NOT occurring):
 - `category collapse` (general force)
 - `tacked-on AI` (axis-1 parallel failure mode)
 - `answer-machine AI` / `oracle AI` / `validator AI` (axis-2 parallel failure modes — independent dimensions)
-- ARCH Layer 3 axis-3-failure-detection topics (placeholder until Phase 3 — per-claim attestation mechanics; engagement-quality signals at finalization; quality-gate mechanism per `drafts/quality-gate.md` for pre-attestation gate design)
+- ARCH Layer 3 axis-3-failure-detection topics (placeholder until Phase 3 — per-claim attestation mechanics; engagement-quality signals at finalization; `quality-gate` Pattern A protocol per GLOSSARY entry handles pre-attestation gate design at Phase 3.6)
 
 ---
 
@@ -1940,7 +1939,7 @@ Negative-marker test (validator NOT occurring):
 - `oracle AI` (sibling — declarative direction)
 - `tacked-on AI` (axis-1 parallel)
 - Anti-sycophancy mechanism (ARCH Layer 3 forthcoming)
-- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; quality-gate mechanism per `drafts/quality-gate.md`)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; `quality-gate` Pattern A protocol per GLOSSARY entry; Phase 3.6 ARCH topic forthcoming)
 
 ---
 
@@ -2027,7 +2026,7 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 - `claim` (claims attribute to workflow_instance during execution)
 - ARCH Layer 3 workflow-detail topics (placeholder until Phase 3.5 — workflow definition representation schema; workflow_instance state machine; phase transitions + authority requirements; multi-session continuity; failure modes; multi-practitioner attribution; archived material to consult: workflow descriptions in archived plugin/skills/)
 - Cross-specialist shared workflow patterns: resolved via mental modeling (D gate) — shared patterns live as Layer A reusable templates / specialist-bundled bausteine (content, not framework primitive). If specialists develop genuinely-cross-archetype pattern not yet in Layer A, extend Layer A content. Watch-list signal: if Layer A growth proves insufficient for a pattern that's structurally cross-cutting (not just content-shaped), examine then; not a framework primitive by default.
-- `drafts/quality-gate.md` (quality-gate runtime mechanism that composes with workflow_instance observability)
+- `quality-gate` (Pattern A runtime protocol that composes with workflow_instance observability; per GLOSSARY entry)
 
 ---
 

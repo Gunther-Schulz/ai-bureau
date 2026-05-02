@@ -164,6 +164,64 @@ These are now part of standing PBS framework discipline (HANDOFF anchors + memor
 
 ---
 
+## Session 16 continuation #3 (2026-05-02 — evening; compact-approaching prep)
+
+**Note 30: Late-day session work (post-note-29 to compact-prep)**:
+
+After profile foundation + multi-axis discipline locked (note 29), substantial framework infrastructure work landed before resuming Phase 3.1:
+
+**D Gate (Defer Gate) codification** — user surfaced that memory feedback alone insufficient as trigger; AI drifts back to defer-default during decision moments even with `feedback_pattern_not_instance_defers.md` loaded. Codified D Gate as structural enforcement parallel to G Composability Gate:
+- D Gate fires when AI considers deferring any architectural item; blocks until mental modeling within profile grounding attempted; defer only valid if mental modeling genuinely cannot resolve
+- Procedure: identify item → mental model within profile grounding (multi-axis + G gate) → check primitive classification holds across mental scenarios → defer ONLY IF cannot resolve → if resolves, evolve answer NOW
+- Codified at: `profiles/INDEX.md` (paired with G Gate); `DISCIPLINES.md §5` (procedural enforcement); `decision-design-sharpening` v0.4.0 (Round 2 stress-test list); `feedback_pattern_not_instance_defers.md` v0.34
+- Empirical demonstration applied retrospectively: workflow_pattern was prematurely deferred during workflow Round 2 ST9. Mental modeling resolved as Layer A reusable templates / specialist-bundled bausteine (NOT framework primitive). D Gate prevents this failure mode going forward.
+
+**ARCHITECTURE.md created (Layer 2 overview)** — compact-survival anchor for Phase 3 work. Captures sub-phase status + locked architectural decisions + active disciplines + provisional topic catalog + open questions + watch-list + cross-cutting principles + reading order. Phase 3 work was scattered across HANDOFF + BACKLOG + GLOSSARY + profiles/INDEX.md; ARCHITECTURE.md gives single doc for state + decisions. arch/<topic-slug>.md files emerge organically at Phase 3.3+.
+
+**Workflow lock retrospective revisit + GLOSSARY audit under new disciplines** — workflow bipartite-classification re-validated under G + multi-axis + D gate disciplines (lock holds; 0 architectural REVISIONS). Full GLOSSARY systematic intent-level audit (18 profiles × 34 entries via 6-cluster compression) — STABLE corpus; 1 known-future-work gap (shape-neutrality validation for second-shape productization) added to BACKLOG watch-list; 0 architectural REVISIONS surfaced.
+
+**Audit scaling strategies** (coherence-audit v0.2.2 → v0.3.0) — codified 5 strategies (cluster compression / audit deltas / on-demand fleshing / sampling representatives / full systematic) with when-to-use matrix. Combination approach for ongoing work; full systematic RESERVED for phase boundaries + new-discipline introductions. Anti-pattern flagged: defaulting to full systematic introduces self-validation bias.
+
+**Memory consolidation** (22 → 18 files; 4-file reduction):
+- Merged `feedback_full_monty_upfront.md` into `feedback_pre_decision_sharpening.md` (decision-shape-lock disciplines)
+- Merged `feedback_defer_instinct.md` into `feedback_pattern_not_instance_defers.md` (no-defer + D Gate canonical)
+- Retired `feedback_refine_pareto.md` (sharpen Spirit canonical for Pareto principle)
+- Purged `feedback_links_plain_text.md` → moved to global CLAUDE.md (URL formatting; not project-specific)
+
+**Gap fixes** (5 gaps from session-16 framework infrastructure review):
+- Workflow DR created at `docs/decisions/workflow-bipartite-classification.md` (per coherence-audit Lens 14 DR coverage discipline; load-bearing decision warrants standalone capture)
+- Discipline map in DISCIPLINES.md (6 categories: Validation gates / Decision-design / Cross-session work / Architectural commitments / Audit + coherence / Operational; each with "fires when" + "codified at")
+- Profile fleshing priority queue in profiles/INDEX.md (HIGH/MEDIUM/LOW tied to upcoming Phase 3 sub-phases; flesh on-demand)
+- Memory consolidation (above)
+- Gate-firing checklist partially addressed via decision-design-sharpening v0.4.0
+
+**Quality-gate scope-lock** (pre-Phase-3.6; brought forward to inform Phase 3.3-3.5 work):
+- 2-round sharpening with G + multi-axis + D gate disciplines applied
+- Resolution: `quality-gate` is **Pattern A protocol with mechanism-shaped Surface**
+- Per-shape implementations (Pattern A pluggability): practitioner-shape-gate (full engagement; fail-closed; stateful) / autonomous-business-shape-gate (programmatic; fail-open; stateless) / personal-OS-shape-gate (light; fail-open; stateful but lightweight) / extensible
+- Naming disambiguated: quality-gate (runtime) vs G/D gates (architectural-decision-time validation per profiles/INDEX.md)
+- GLOSSARY entry added (Pattern A primitive); ARCHITECTURE.md + BACKLOG updated; DR at `docs/decisions/quality-gate-scope-lock.md`
+- Phase 3.6 produces full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics
+- GLOSSARY: 34 → 35 locked entries
+
+**Drafts graduation discipline + draft removal** — codified rule in drafts/README.md: when draft graduates, it's REMOVED entirely (not retained as historical record); provenance lives in HANDOFF + git log + commit messages + DR. Per provenance hygiene (coherence-audit Lens 5 v0.2.1). Applied: `drafts/quality-gate.md` removed on graduation (content captured in GLOSSARY entry + DR).
+
+**Phase 3 ARCH-decision locks tally**:
+- 3.0 doc structure (hybrid: ARCHITECTURE.md + arch/<topic-slug>.md) ✅
+- 3.1 workflow bipartite-classification ✅ (with workflow_pattern → Layer A resolution + DR)
+- 3.6 quality-gate scope-lock ✅ (brought forward; full design at 3.6 proper; DR)
+- Pending: 3.1 work-unit bipartite-classification (NEXT) → deployment definition → engaged-authorship operational definition → 3.2 topic taxonomy → 3.3-3.5 → 3.6 full design → 3.7 → 3.8
+
+**Memory state**: 18 feedback files (was 22). Compact-survival anchor: ARCHITECTURE.md captures Phase 3 state + decisions + disciplines.
+
+**Status**: ready for compact. All Phase 3 work documented in canonical homes (GLOSSARY entries + DRs + ARCHITECTURE.md + BACKLOG + HANDOFF). Profile foundation in place. Discipline infrastructure mature. Phase 3.1 work-unit bipartite-classification stands ready as next active sharpening.
+
+---
+
+## Session 16 continuation #2 (2026-05-02 — afternoon)
+
+(Note: existing #2 section follows; this section is below the new #3)
+
 ## Session 16 continuation (2026-05-02)
 
 **What happened (notes 20-27)**:
@@ -247,7 +305,7 @@ Coherence verified: all entries cross-archetype illustrated; pattern-vs-instance
 | **3.3** | Per-mechanism detail (12 mechanisms: source-grounding + audit emission + audit trail foundational; then 8 sparring sub-mechanisms; then orchestration / persistent state / authority binding) | Within-bucket foundation-up: mechanisms underlying defensibility first |
 | **3.4** | Per-architectural-Protocol detail (7 Pattern A Protocols: Substrate first; Adapter; Sparring; Audit; Coordination; Trust; Time) + Per-Pattern-A primitive detail (substrate per-impl; adapter lifecycle) | Substrate is most foundational; Pattern A trio details follow |
 | **3.5** | Primitive-detail topics (9 primitives: specialist / skill / practitioner / workflow / session / event / actor / claim / defensibility) + axis-interaction analysis | Per-primitive richer detail; axis-interaction cross-cutting topic |
-| **3.6** | Quality-gate ARCH topic (per drafts/quality-gate.md; prerequisites met after Phase 2 lock) | Runtime mechanism integrating axis-failure-mode taxonomy |
+| **3.6** | Quality-gate ARCH topic (scope-locked session 16 as Pattern A protocol with mechanism-shaped Surface; per GLOSSARY entry + `docs/decisions/quality-gate-scope-lock.md` DR; full design pending) | Runtime mechanism integrating axis-failure-mode taxonomy |
 | **3.7** | Cross-cutting investigations (PydanticAI substrate re-eval; markdown-validation feasibility; Ming research deepening; adjacent thinkers expansion; multi-VISION model decision) | When relevant context is loaded |
 | **3.8** | Coherence-audit Lenses 11-15 activation (ARCH-specific lenses: inter-layer consistency / specs traceability / architectural protocol completeness / DR coverage gap / granularity match) | Phase-boundary audit before Phase 4 DR rebuild |
 
