@@ -865,7 +865,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 
 The framework includes:
 - **mechanisms** (audit emission, source-grounding, sparring Protocol surface, etc.)
-- **architectural protocols** (Pattern A pluggable subsystems with multiple implementations): Substrate, Adapter, Coordination, Audit, Sparring, Trust, Time, Quality-gate. Substrate + Adapter + Quality-gate additionally classified as PRIMITIVE primitives (per their canonical entries); the rest are named architectural Protocols (forthcoming entries). All share Pattern A shape per `protocol (architectural)` entry.
+- **architectural protocols** (Pattern A pluggable subsystems with multiple implementations): Substrate, Adapter, Quality-gate. Each is a PRIMITIVE primitive per its canonical GLOSSARY entry; all share Pattern A shape per `protocol (architectural)` entry. (Per session-17 greenfield re-derivation per `docs/decisions/greenfield-rederivation-pause.md` Step 3: prior catalog included Sparring + Audit + Coordination + Trust + Time as Pattern A protocols; greenfield re-derivation reclassified Sparring + Audit as mechanism classes with per-shape policy variation, and subsumed Coordination → substrate hook system + event-bus, Trust → authority-binding mechanism with per-shape policy, Time → substrate-impl temporal semantics + adapter time-driven operations.)
 - **architectural disciplines** (cascade discipline, no-defer principle, preliminary-lock principle, make-wrong-shapes-impossible, AI-as-runtime hybrid-shape, pattern-vs-instance, glue-not-replacement)
 
 **What it is NOT**:
@@ -1466,7 +1466,7 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - **Axis**: cross-axis (different protocols serve different axes — Sparring Protocol = axis 2; Audit Protocol = cross-axis; etc.)
 - **VISION usage**: implicit (architectural concept underlying mechanisms across all axes; not directly named in current VISION)
 
-**Canonical**: The Pattern A architectural shape — pluggable subsystem with Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). META-PRIMITIVE (the pattern itself); specific instances of this pattern are PRIMITIVEs: `substrate` (locked), `adapter` (locked), plus named architectural Protocols (Sparring, Audit, Coordination, Trust, Time — per-protocol detail in ARCH Layer 3, NOT separate GLOSSARY entries). Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
+**Canonical**: The Pattern A architectural shape — pluggable subsystem with Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). META-PRIMITIVE (the pattern itself); specific instances of this pattern are PRIMITIVEs: `substrate` (locked), `adapter` (locked), `quality-gate` (locked). Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
 
 **What it is**: The Pattern A architectural shape made concrete. Each protocol-instance has:
 1. **Surface** (mechanism; framework-level): an abstract Protocol contract defining what the subsystem provides
@@ -1476,8 +1476,7 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 Different selection levels exist across instances:
 - **Substrate Protocol**: workspace selects (one running instance per workspace via `workspace.md substrate:` field)
 - **Adapter Protocol**: workspace activates instances (multiple may run; per workspace.md adapter bindings)
-- **Sparring Protocol**: shape selects (practitioner-shape mandates `always-on-sparring` impl; personal-OS-shape may use `sparring-as-skill` impl) — selection lives in shape-policy
-- **Audit Protocol**: shape policy + workspace overrides (granularity, retention)
+- **Quality-gate Protocol**: shape selects (practitioner-shape selects `practitioner-shape-gate` impl; autonomous-business-shape selects `autonomous-business-shape-gate`; personal-OS-shape selects `personal-OS-shape-gate`) — selection lives in shape-policy
 
 **What it is NOT**:
 - Not **Pydantic Protocol** — Pydantic Protocol is the Python typing concept (`typing.Protocol`); architectural Protocol is the broader pluggable-subsystem pattern. Architectural Protocols may USE Pydantic Protocol for their Surface implementation, but the pattern is independent of Python.
@@ -1485,14 +1484,16 @@ Different selection levels exist across instances:
 - Not itself a primitive — protocol is the META-PRIMITIVE pattern; specific Pattern A instances (`substrate`, `adapter`, named architectural Protocols) are the PRIMITIVEs
 - Not a workflow or session — protocols are framework-level architectural primitives; workflows + sessions are runtime/work-pattern concepts
 
-**Cross-archetype catalog (named architectural protocols; archived corpus + locked Pattern A members)**:
+**Cross-archetype catalog (named architectural protocols)**:
 - **Substrate Protocol** (locked) — runtime contract; workspace selects one
 - **Adapter Protocol** (locked; per `adapter` GLOSSARY entry) — pattern instance per integration class (email adapter, accounting adapter, MCP adapter, etc.)
-- **Sparring Protocol** — axis-2 support; shape selects implementation (always-on / optional / sparring-as-skill / none)
-- **Audit Protocol** — cross-axis emission; shape policy determines granularity (claim-level / action-level / light)
-- **Coordination Protocol** — cross-specialist / cross-actor coordination shape (event-shaped vs call-shaped per shape policy)
-- **Trust Protocol** — trust model (practitioner-judgment vs budget-policy vs individual)
-- **Time Protocol** — temporal semantics (turn-based vs long-running vs heartbeat-based)
+- **Quality-gate Protocol** (locked; per `quality-gate` GLOSSARY entry) — runtime checkpoint mechanism for category-collapse resistance; shape selects implementation (practitioner-shape-gate / autonomous-business-shape-gate / personal-OS-shape-gate; extensible)
+
+**Reclassifications + subsumptions** (per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict; cascade per session 17): the prior 8-protocol catalog inherited from archive included Sparring + Audit + Coordination + Trust + Time as Pattern A protocols; greenfield re-derivation reduced the Pattern A catalog to the 3 protocols above. Specifically:
+- **Sparring** + **Audit** are **mechanism classes** with per-shape policy variation, NOT Pattern A protocols. Sub-mechanisms ARE the Surface; per-shape variation is POLICY-level (which sub-mechanisms active / granularity / how-enforced), not IMPL-level alternative architectures. Sparring still anchors VISION axis 2; reclassification is at framework-mechanism layer only.
+- **Coordination** is subsumed into substrate (hook system + event-bus mechanisms; per-shape policy configures call-shape vs event-shape).
+- **Trust** is subsumed into the authority-binding mechanism (per-shape policy declares trust model: practitioner-judgment / budget-policy / individual).
+- **Time** is subsumed into substrate-impl temporal semantics + adapter time-driven operations (no separate Time Protocol Surface with alternative implementations).
 
 Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + their surfaces; shapes provide policies selecting implementations + parameterizing them.
 

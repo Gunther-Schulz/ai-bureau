@@ -323,30 +323,46 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Single abstraction level per file**: structural mechanisms for primitives; decisional reasoning for disciplines.
 
-#### Pattern A protocol topic template (LOCKED)
+#### Pattern A protocol topic template (LOCKED — restructured session 17 per `docs/decisions/greenfield-rederivation-pause.md` Step 4)
 
-For ARCH topics describing Pattern A protocols (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry), use this 18-section template (established by `arch/substrate.md` + validated by `arch/adapter.md`):
+For ARCH topics describing Pattern A protocols (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry), use this two-tier template:
+- **12 common-required sections** apply to every Pattern A topic
+- **6 protocol-specific-conditional sections** apply per protocol if applicable to its nature
+
+Established by `arch/substrate.md` (anchor; all 6 conditional sections apply) + validated by `arch/adapter.md` (some conditional sections thin or N/A) + greenfield-tested against quality-gate at template-derivation time. Prior 18-section monolithic template was substrate-shape-anchored; greenfield re-derivation surfaced the common-vs-conditional split.
+
+**12 common-required sections** (every Pattern A topic):
 
 | § | Section | Purpose |
 |---|---|---|
 | 1 | Topic scope + frontmatter | Topic identity; Pattern classification; cardinality; cross-axis claim; composition with framework primitives |
 | 2 | Surface contract (architectural-level) | Capability categories; per-class Surfaces if multi-class (two-layer Surface variant); explicit "NOT in Surface" exclusions; logic placement mode (Mode 4 here + Mode 3 spec at Phase 6) |
-| 3 | Common-surface boundary criteria | Decision rule for Surface vs per-impl extension |
 | 4 | Per-implementation aspect | Pattern level + current Implementation set + per-impl extension Protocols pattern |
-| 5 | Selection mechanics | workspace.md selection field; cardinality; validation at boot; re-binding semantics |
+| 5 | Selection mechanics | workspace.md selection field OR shape-policy selection; cardinality; validation at boot; re-binding semantics |
 | 6 | Tri-aspect reconciliation | Surface + Implementations + Running Instance; coupling-impossible-by-construction |
 | 7 | Composition with framework primitives | Cross-references to all primitives this topic composes with |
-| 8 | Substrate-internal vs skill-side audit emission | Architectural-event kinds enumeration; dual emission path resolution if applicable |
 | 9 | Cardinality + lifecycle | Creator / owner / destroyer; mutability; cross-session persistence |
-| 10 | Boot + shutdown phase ordering (architectural-level) | Per-instance lifecycle ordering; flush-before-release invariants |
-| 11 | Substrate error categories (architectural-level) | Cross-class architectural categories + per-class refinements; per-shape error semantics |
-| 12 | Transport variation + per-tier mapping (where applicable) | Multi-transport mapping; per-tier deployment behavior |
-| 13 | Deployment-tier awareness | Tier 1/2/3; per-tier behavior in impl, not Surface |
 | 14 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details |
 | 15 | Watch-list | Items awaiting external evidence; resolution mechanisms |
 | 16 | Decision-design provenance | Archived sources; pattern-vs-instance discipline application |
 | 17 | Phase routing | Architectural shape (locked here) vs Pydantic spec vs concrete impls (Phase 6) |
 | 18 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing / Phase 6 spec target |
+
+**6 protocol-specific-conditional sections** (apply per protocol if applicable to its nature; document N/A explicitly when section is omitted):
+
+| § | Section | Applicability |
+|---|---|---|
+| 3 | Common-surface boundary criteria | Applies when protocol has multi-class Surface (e.g., adapter's per-integration-class Surfaces); skip if single-layer Surface |
+| 8 | Substrate-internal vs skill-side audit emission | Substrate-specific (substrate registers MCP gate; other protocols emit skill-side only) |
+| 10 | Boot + shutdown phase ordering (architectural-level) | Substrate-specific lifecycle (per-instance ordering; flush-before-release invariants); other protocols document lifecycle in §9 cardinality + lifecycle without separate phase ordering |
+| 11 | Substrate error categories (architectural-level) | Per-protocol error semantics differ; document per-protocol error categories when load-bearing distinct from §9 lifecycle treatment |
+| 12 | Transport variation + per-tier mapping | Substrate-specific (MCP transport variation); skip when no multi-transport surface |
+| 13 | Deployment-tier awareness | Substrate-specific (Tier 1/2/3 per-tier behavior in impl, not Surface); skip when protocol is tier-uniform |
+
+**Per-protocol section count expectation**:
+- substrate: 12 common + 6 conditional (anchor; all apply) = 18 total
+- adapter: 12 common + ~3-4 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors) = ~15-16 total
+- quality-gate: 12 common + ~1-2 conditional (§11 fail-closed / fail-open errors per shape) = ~13-14 total
 
 Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic).
 
