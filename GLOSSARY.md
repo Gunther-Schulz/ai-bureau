@@ -457,6 +457,7 @@ In all archetypes: claim = atomic-defensible-assertion. Cross-archetype shape co
 - `rubber-stamping` — claims rubber-stamped at attestation lack engaged-authorship; per-claim defensibility fails when rubber-stamping occurred at finalization
 - `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 failure modes degrade per-claim sparring rigor; claims produced under axis-2 collapse less defensible per claim
 - `category collapse` — general force; manifestations on any axis cascade into per-claim defensibility failure
+- `workflow` — claims emitted during workflow_instance execution attribute to that workflow_instance; per-claim audit composes into workflow_instance audit context. Ad-hoc work claims attribute to work-unit + session without workflow_instance attribution.
 
 **Cardinality + lifecycle**: Cardinality = N claims per work-unit (typically dozens-to-hundreds for substantive accountability-bearing outputs). Lifecycle = claims are CREATED during workflow execution (drafting fires `claim_made` events as claims are produced); claims may be REVISED during review (revision emits new event preserving prior claim state per append-only audit); claims are FINALIZED at send/sign moment (signed-claim_made event; practitioner authorship binding). Mutability = append-only at audit level (claim revision = new event, not rewriting previous); content mutability lives at draft level until finalization.
 
@@ -657,6 +658,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 - `work-unit` — events are emitted scoped to work-units; each event records its work-unit attribution per archived audit-trail-v2 schema (every event traceable to the work-unit it concerns)
 - `claim` — claims emit `claim_made` events (the structured emission recording that an accountability-bearing assertion was made; claim is the content, event is the audit-trail emission)
 - `rubber-stamping` — attestation events can fire performatively without engagement; events alone don't prevent rubber-stamping (events record sign-off, not the engagement that would make sign-off substantive); per-claim attestation requirements are the counter-mechanism
+- `workflow` — workflow_instance lifecycle emits events (workflow_started, phase_transitioned, workflow_completed, suspended, abandoned, failed); events emitted during workflow_instance execution carry workflow_instance attribution; event_kind catalog includes workflow lifecycle events (Phase 3.5 schema)
 
 **Source**:
 - Locked GLOSSARY entries: `mechanism` (lists "AuditEvent schema (Pydantic model contract for audit emission)" as canonical mechanism example); `actor` (events are emitted by actors)
@@ -850,7 +852,7 @@ All three resolving "intertwined-side" = axis 1 succeeding.
 - `intertwined AI` — positive mode (the success state of this axis)
 - `co-worker` — relational claim about AI's mode of participation
 - `trust mechanisms` — class of axis-1 mechanisms (collective term; per-mechanism detail in ARCH Layer 3)
-- `workflow` — what intertwining intertwines WITH
+- `workflow` — what intertwining intertwines WITH (codified workflow_instance; or ad-hoc work-unit when no codified pattern); axis-1 integration applies whether work follows a codified workflow or runs ad-hoc
 - `category collapse` — risk to axis 1
 
 **Source**: `VISION.md` line 23 ("## The thesis"); line 49 (axis-1 contrast table); line 60 (deep-end intertwining claim); line 199 ("Workflow as precondition (axis 1)" implication); line 203 ("Category-collapse risk (axis 1 protection)").
@@ -1445,7 +1447,7 @@ Negative-marker test (rubber-stamping NOT occurring):
 - `substrate` — substrate manages session lifecycle (start/end, context, persistence handoff)
 - `event` — events fire within sessions; session bounds emission timing
 - `actor` — actors operate within sessions
-- `workflow` — sessions execute parts of broader workflows
+- `workflow` — sessions execute parts of broader workflow_instance executions (one workflow_instance can span many sessions); workflow_instance state persists across session boundaries via persistent-state mechanism. Sessions outside workflow_instance context (ad-hoc work) carry session + work-unit + skill firings without workflow primitive engagement.
 
 **Source**:
 - VISION (`VISION.md`) implicit reference: persistent-state-across-sessions is part of axis-1 architectural support
@@ -1648,6 +1650,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - `shape` — shape policies may mandate certain specialists or constrain what's permitted (e.g., practitioner-shape may mandate sparring-relevant specialists)
 - `adapter` — specialists may bundle adapter implementations as part of their package (per locked `adapter` entry)
 - `work-unit` — specialists DEFINE work-unit kinds (the kind discriminator lives in specialist DEFINITION at Framework C); workspace's active specialists determine which work-unit kinds are available in that deployment
+- `workflow` — specialists DEFINE workflow patterns (workflow definitions live in specialist's distributable bundle at Framework C; workflow inherits Framework C placement via specialist composition rather than as standalone framework primitive)
 
 **Source**:
 - VISION (`VISION.md`):
@@ -1853,22 +1856,41 @@ Negative-marker test (validator NOT occurring):
 
 ## workflow
 
-- **Class**: PRIMITIVE (atomic; the work-pattern unit)
-- **Layer**: cross-cutting — bipartite-candidacy under examination. The DEFINITION aspect (the pattern itself: "how does B-Plan-Begründung drafting actually proceed?") could be Framework C OR Layer A (domain-keyed); the INSTANCE aspect (workflow execution in a specific workspace) is realized through sessions over time. Phase 3 ARCH resolves whether workflow is single-aspect cross-cutting (current) or bipartite Pattern B (DEFINITION + INSTANCE-CONTENT, parallel to specialist).
+- **Class**: PRIMITIVE (atomic; the work-pattern unit) — **bipartite multi-aspect Pattern B** (DEFINITION in specialist's distributable bundle; INSTANCE-CONTENT at Owner B as workflow_instance entity). Optional structural overlay: workflow_instance engages only when work follows a codified pattern; ad-hoc work outside workflow primitive scope.
+- **Layer**: multi-aspect — DEFINITION aspect inherits Framework C placement via specialist's bundle (specialists DEFINE workflow patterns; not standalone Framework C entries); INSTANCE aspect at Owner B (workflow_instance per workspace per work-unit when codified pattern applies)
 - **Axis**: axis-1 (primary anchor — workflow is what intertwined AI intertwines WITH); cross-axis (workflows span all axes during execution)
 - **VISION usage**: directly used (`VISION.md` thesis line 7: "interactive practitioner workflows"; line 27 axis 1: "AI is a co-worker in the workflow itself"; "Workflow as precondition" implication retained in current VISION)
 
-**Canonical**: A pattern of work in a domain — sequence of activities, artifacts, decisions, and handoffs that defines how a practitioner produces accountability-bearing output. Per VISION axis 1: workflow is what intertwined AI intertwines WITH; without a workflow, axis 1 has nothing to embed in.
+**Vocabulary disambiguation**:
+- **`workflow`** — the primitive (the abstraction; bipartite Pattern B)
+- **`workflow definition`** — the DEFINITION aspect (reusable pattern in a specialist's bundle)
+- **`workflow_instance`** — the INSTANCE aspect (specific run-through; entity-md per Owner B convention)
 
-**What it is**: A domain-specific structure of work. Workflows are pattern-level concepts: "how does B-Plan-Begründung drafting actually proceed?" or "how does a legal brief get from intake to filing?" Workflows include activities (drafting, reviewing, sending), artifacts (Begründung, Stellungnahme, signed brief), decisions (which argumentation type, which authorities to address), and handoffs (between sessions, between humans, between AI and human). Sessions execute parts of workflows; specialists provide the skills that progress workflow steps; the architecture's intertwining requirements (persistent state, orchestration, audit, etc.) are what allow AI to participate in workflows as co-worker rather than as discrete-feature-tool.
+When unambiguous from context, just "workflow" works. When ambiguous, qualify.
 
-**Cardinality + lifecycle**: Workflows are SPECIALIST-DEFINED — each specialist DEFINITION declares the workflow patterns it supports for its competence area (e.g., `planning-document-work` specialist defines the B-Plan-Begründung drafting workflow). Cardinality per workspace = sum of workflows defined across active specialists. Lifecycle = workflow patterns are immutable (defined in specialist DEFINITION at Framework C); workflow EXECUTIONS run against work-units over time and span many sessions. ARCH Layer 3 settles workflow representation schema + handoff semantics + multi-session continuity.
+**Canonical**: A pattern of work in a domain — sequence of activities, artifacts, decisions, and handoffs that defines how a practitioner produces accountability-bearing output. Per VISION axis 1: workflow is what intertwined AI intertwines WITH. The primitive is bipartite: a `workflow definition` is the reusable pattern (specialist-bundled); a `workflow_instance` is a specific execution against a work-unit (Owner B). The primitive engages OPTIONALLY — only when work follows a codified pattern; ad-hoc work without codified pattern engages session + work-unit + skill + claim + event WITHOUT workflow.
+
+**What it is**: A domain-specific structure of work. Workflow definitions are pattern-level concepts: "how does B-Plan-Begründung drafting actually proceed?" or "how does a legal brief get from intake to filing?" They include activities (drafting, reviewing, sending), artifacts (Begründung, Stellungnahme, signed brief), decisions (which argumentation type, which authorities to address), and handoffs (between sessions, between humans, between AI and human). When a practitioner begins work that maps to a codified definition, a `workflow_instance` is created — it carries state, phase, work-unit attribution, audit-trail context across the run-through. Workflow_instance can span multiple sessions; specialists provide the skills that progress phases; the architecture's intertwining requirements (persistent state, orchestration, audit, etc.) are what allow AI to participate as co-worker rather than as discrete-feature-tool.
+
+**Optional applicability**: Not all work engages the workflow primitive. Practitioner-driven ad-hoc work (start with task in mind; use deployment capabilities; produce artifact) is a legitimate first-class case. Ad-hoc work-units have NO workflow_instance — they're carried by session(s) + work-unit + skill firings + claim emissions + events alone. Workflow primitive engagement is opt-in via codified pattern existence.
+
+**Evolution path (ad-hoc → codified)**: A practitioner doing ad-hoc work repeatedly may notice patterns. When pattern crystallizes, it can be abstracted into a workflow definition + added to a specialist's bundle. Future similar work then follows the codified pattern (workflow_instance engages). This evolution is part of the framework's value proposition — capacity-building manifests partly through practitioner expertise crystallizing into reusable codified patterns.
+
+**Cardinality + lifecycle**:
+
+**workflow definition** cardinality: N per specialist (each specialist DEFINITION declares the workflow patterns it supports). Per workspace = sum across active specialists.
+**workflow definition** lifecycle: immutable per specialist version (specialist version bump may include workflow definition changes); distributed via specialist's Framework C placement.
+
+**workflow_instance** cardinality: N per workspace per active specialist (instances created per work-unit when codified pattern applies; absent for ad-hoc work-units).
+**workflow_instance** lifecycle: created at workflow-start with snapshot of definition (preserves defensibility — execution reproducible per original definition); transitions through phases via state machine (per ARCH Layer 3 schema); terminal states completed / abandoned / failed; non-terminal pause state suspended; mutable-with-audit (state transitions, phase changes, artifact accumulation all audited); persists across sessions via persistent-state mechanism; retains for audit per workspace's audit-retention policy.
 
 **What it is NOT**:
-- Not a `session` — session is one execution unit; workflow is the broader pattern that sessions execute parts of
-- Not a `skill` — skill is atomic work logic that fires on a trigger; workflow is the broader pattern of work in which many skills fire
-- Not a `specialist` — specialist bundles skills + entities for a competence area; workflow is domain-pattern that may span multiple specialists' contributions
-- Not a `workspace` — workspace is the deployment container; workflow is the work-pattern the workspace supports
+- Not a `session` — session is one bounded interaction; workflow_instance can span many sessions
+- Not a `skill` — skill is atomic work logic that fires on a trigger; workflow_instance is the broader execution context within which skills fire
+- Not a `specialist` — specialist bundles skills + entities + workflow definitions; workflow is one of several primitives composed into specialist's bundle
+- Not a `workspace` — workspace is the deployment container; workflow_instance is at Owner B within the workspace
+- Not required for all work — ad-hoc work engages session + work-unit + skill + claim + event WITHOUT workflow_instance; workflow primitive is OPTIONAL structural overlay
+- Not constraint on capability addition — practitioner adding adapters / activating new specialists / configuring new skills mid-flight is workspace-scope (orthogonal to workflow_instance state); workflow_instance doesn't gate capability changes
 
 **Cross-archetype illustration**: workflows differ per archetype (the discriminator is what kind of accountability-bearing output gets produced and how):
 - Planning bureau: B-Plan-Begründung drafting workflow (intake → research → draft → review → send → response handling)
@@ -1876,20 +1898,26 @@ Negative-marker test (validator NOT occurring):
 - Research lab: manuscript workflow (research → drafting → peer review → revision → submission)
 - Auditor: audit engagement workflow (planning → fieldwork → finding → report)
 
-Per VISION's "Workflow as precondition" implication: domains with rich, structured workflows are natural fits for axis-1 intertwining. Generic "knowledge work" without explicit workflow is much harder.
+In each archetype, the practitioner ALSO does ad-hoc work outside these codified workflows (research notes, exploratory analysis, one-off communications) — those run as session + work-unit + skill + claim without workflow_instance.
+
+Per VISION's "Workflow as precondition" implication: domains with rich, structured workflows are natural fits for axis-1 intertwining. Generic "knowledge work" without explicit workflow is much harder — but ad-hoc work is still framework-supported via the optional-overlay design.
 
 **Boundary test**: Three questions:
-1. Is this a domain-specific pattern of work (sequence + artifacts + decisions + handoffs)? → it's a workflow
-2. Is this one bounded execution unit? → it's a `session`
-3. Is this an atomic work-logic unit? → it's a `skill`
+1. Is this a domain-specific pattern of work (sequence + artifacts + decisions + handoffs)? → it's a `workflow definition`
+2. Is this a specific run-through of a codified pattern? → it's a `workflow_instance`
+3. Is this work without a codified pattern? → ad-hoc; engages session + work-unit + skill without workflow_instance
 
 **Composes with**:
 - `intertwining (axis 1)` — workflow is what axis-1 AI intertwines WITH; "Workflow as precondition" implication
-- `session` — sessions execute parts of workflows (one workflow may span many sessions)
-- `skill` — skills are atomic work-logic units that progress workflow steps
-- `specialist` — specialists provide bundles of skills relevant to specific workflow stages
-- `workspace` — workspaces SUPPORT workflows (workspace's deployed specialists + state enable workflow progression)
-- `work-unit` — workflows EXECUTE AGAINST work-units; one workflow may progress one work-unit through stages, or multiple workflows in sequence may progress the same work-unit (drafting workflow → review workflow → send workflow against same project)
+- `specialist` — specialists' DEFINITIONS contain workflow definitions (workflow inherits Framework C placement via specialist's bundle)
+- `session` — sessions execute parts of workflow_instance executions (one workflow_instance may span many sessions); persistent-state mechanism carries workflow_instance state across session boundaries
+- `skill` — skills are consumed BY workflow definitions (workflow definition references skills by name; skills fire within workflow phases when triggers match); composition direction: workflow → skill
+- `workspace` — workspaces SUPPORT workflow_instances at Owner B (workspace's deployed specialists provide workflow definitions; workspace state enables workflow_instance persistence)
+- `work-unit` — workflow_instance attaches to work-unit; one workflow_instance ↔ one work-unit when codified pattern applies; ad-hoc work-units have no workflow_instance
+- `claim` — claims emitted during workflow_instance execution attribute to that workflow_instance; per-claim audit composes into workflow audit context
+- `event` — workflow_instance emits lifecycle events (workflow_started, phase_transitioned, workflow_completed, suspended, abandoned, failed); audit-emission mechanism captures these
+- `mechanism` — composes with multiple framework-level mechanisms: persistent state (workflow_instance state across sessions); audit emission (lifecycle events); authority binding (phase transitions may require specific authority; workflow definition declares per-phase authority requirements)
+- `category collapse` / `quality-gate` (forthcoming ARCH topic) — workflow_instance execution is observability source for quality-gate's drift detection (e.g., practitioner approving phase transitions without engaging review content → axis-3 rubber-stamping signal)
 
 **Source**:
 - VISION (`VISION.md`):
@@ -1898,12 +1926,17 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
   - "Workflow as precondition" implication subsection retained in tightened VISION
 - `intertwining (axis 1)` GLOSSARY entry: "workflow — what intertwining intertwines WITH (axis 1 needs a workflow to intertwine with)"
 - `session` GLOSSARY entry: "sessions execute parts of broader workflows"
+- `specialist` GLOSSARY entry: specialist's DEFINITION includes workflow definitions
+- Synthesis: bipartite Pattern B classification with optional-overlay applicability resolves the single-aspect-vs-bipartite hedge; ad-hoc work is first-class (carried by session + work-unit + skill + claim + event without workflow primitive engagement)
 
 **See**:
 - `intertwining (axis 1)` (which intertwines with workflow)
-- `session` (which executes parts of workflow)
-- `work-unit` (the deployment-bound artifact one workflow execution produces / progresses)
-- ARCH Layer 3 workflow-detail topics (placeholder until Phase 3 — workflow representation, handoff semantics, multi-session workflow continuity; archived material to consult: workflow descriptions in archived plugin/skills/)
+- `specialist` (which contains workflow definitions in its bundle)
+- `session` (which executes parts of workflow_instance)
+- `work-unit` (the deployment-bound artifact workflow_instance attaches to)
+- `claim` (claims attribute to workflow_instance during execution)
+- ARCH Layer 3 workflow-detail topics (placeholder until Phase 3.5 — workflow definition representation schema; workflow_instance state machine; phase transitions + authority requirements; multi-session continuity; failure modes; multi-practitioner attribution; cross-specialist shared patterns; archived material to consult: workflow descriptions in archived plugin/skills/)
+- `drafts/quality-gate.md` (quality-gate runtime mechanism that composes with workflow_instance observability)
 
 ---
 
@@ -1945,7 +1978,7 @@ The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at 
 
 **Composes with**:
 - `specialist` — specialists DEFINE work-unit kinds; the kind discriminator lives in specialist DEFINITION (Framework C); workspace's active specialists determine which kinds are available
-- `workflow` — workflows EXECUTE AGAINST work-units (one workflow progresses one work-unit through stages; or multiple workflows in sequence)
+- `workflow` — workflow_instance executes AGAINST work-unit when codified pattern applies (one workflow_instance progresses one work-unit through stages; or multiple workflow_instances in sequence). Ad-hoc work-units have no workflow_instance attribution — they're produced by session(s) + skill firings + claim emissions without workflow primitive engagement. Workflow primitive is OPTIONAL structural overlay; work-unit is always present when accountability-bearing work happens. Work-unit's own bipartite-candidacy hedge (Phase 3.1 next item) cascades from workflow's resolution.
 - `workspace` — workspace CONTAINS work-units as workspace-scope managed instances at Owner B; cardinality multiple per workspace
 - `Owner B scope` — work-unit instances live there as workspace-scope managed entities (per `Owner B scope` members list — already cross-referenced)
 - `event` — events are emitted scoped to work-units (each event records its work-unit attribution per archived audit-trail-v2 schema)
@@ -2010,7 +2043,7 @@ All workspaces are built from the same framework; they differ in selected shape 
 - `practitioner` — workspace serves practitioner(s); records at Owner B (bipartite primitive: human cross-cutting, record at Owner B)
 - `substrate` — workspace runs on exactly one substrate (selected via `workspace.md` `substrate` field)
 - `session` — interaction units occur within a workspace
-- `workflow` — workspaces SUPPORT workflows; workspace's deployed specialists + state + active substrate enable workflow progression (axis-1 intertwining requires workflow to embed in)
+- `workflow` — workspaces SUPPORT workflows; workspace's deployed specialists + state + active substrate enable workflow progression (axis-1 intertwining requires workflow to embed in); workflow_instance entities live at Owner B as workspace-scope managed entities (when codified pattern applies; ad-hoc work-units have no workflow_instance). Capability addition (adding specialist / configuring adapter / activating skill mid-flight) is workspace-scope and orthogonal to running workflow_instance state — workflow_instance doesn't gate capability changes; workspace governance (authority binding) gates them in multi-user contexts.
 - `work-unit` — workspaces CONTAIN work-units as workspace-scope managed instances (cardinality multiple per workspace); kinds defined by active specialists
 - `Layer A scope` — workspace's `scope.{domains, states}` configuration determines which Layer A content (references, doctypes, bausteine) applies
 

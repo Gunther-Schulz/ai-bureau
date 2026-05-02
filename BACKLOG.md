@@ -57,10 +57,15 @@ Sub-phase ordering per HANDOFF Phase 3 launch entry (note 28). Foundation-up: st
 
 ### 3.1 Open architectural questions (foundational; resolve before topic content)
 
-- **workflow bipartite-classification** [origin: workflow entry hedge] — currently single-aspect cross-cutting; resolve whether bipartite Pattern B is correct (DEFINITION at Framework C / Layer A vs INSTANCE at Owner B) | refs: GLOSSARY#workflow | **STARTING POINT for Phase 3**
-- **work-unit bipartite-classification** [origin: work-unit entry hedge, RA3 Round 3] — same shape as workflow; KIND DISCRIMINATOR in specialist DEFINITION + INSTANCE at Owner B; cascades from workflow resolution | refs: GLOSSARY#work-unit
+#### Open
+
+- **work-unit bipartite-classification** [origin: work-unit entry hedge, RA3 Round 3] — same shape as workflow; KIND DISCRIMINATOR in specialist DEFINITION + INSTANCE at Owner B; cascades from workflow resolution | refs: GLOSSARY#work-unit | **NEXT** (workflow resolved per Round 1 + Round 2 sharpening; work-unit follows similar pattern)
 - **"deployment" definition sharpening** [origin: EA5 Round 3 + workspace entry] — current preliminary lock: "one git-clone + activated workspace.md per deployment"; sharpen mechanically | refs: GLOSSARY#workspace
 - **Engaged-authorship operational definition** [origin: defensibility entry] — what counts as "engaged" vs rubber-stamped at framework level | refs: GLOSSARY#defensibility
+
+#### Resolved
+
+- ~~**workflow bipartite-classification**~~ [resolved this commit] — re-classified to bipartite Pattern B with optional applicability: DEFINITION in specialist's distributable bundle (specialist-bundled, not standalone Framework C); INSTANCE = workflow_instance entity at Owner B. Critical refinement (Round 2 + user push): workflow_instance is OPTIONAL structural overlay — engages only when work follows codified pattern; ad-hoc work-units have no workflow_instance and run via session + work-unit + skill + claim + event without workflow primitive. Round 2 surfaced 9 EXPANSIONS (vocabulary disambiguation; versioning snapshot semantics; claim/skill/authority-binding composition; observability for quality-gate; mutability semantics DEFINITION-vs-INSTANCE; failure modes; multi-practitioner ownership) + 1 REVISION (scope clarification per user push: ad-hoc work outside primitive scope, not "degenerate Pattern B case" as Round 1 ST4 had it). Cascade applied to specialist / workspace / session / claim / event / intertwining / work-unit entries.
 
 ### 3.2 Topic taxonomy (lock topic identities before content)
 
