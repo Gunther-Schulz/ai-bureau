@@ -287,6 +287,44 @@ C deferred via detection mechanism — 3-tier REVISION/EXPANSION discriminator N
 
 ---
 
+**Note 33: Phase 3.2 CLOSED — doc-organization composite**:
+
+Mode-2 composite decomposition (decision-design-sharpening v0.6.0) — 4 sub-decisions in foundation-up dependency order, each with standard 2-round sweet spot, final composite synthesis pass:
+
+1. **Topic taxonomy LOCKED** (commit 99e62d9): 14 ARCH topics in protocol-centric aggregation — 8 Pattern A protocol topics (substrate / adapter / sparring / audit / coordination / trust / time / quality-gate) + 4 primitive-cluster topics (specialist+skill / practitioner / workflow+work-unit / claim+defensibility) + 2 cross-cutting integrators (scope-model / axis-interactions). Foundation-up ordered. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom.
+
+2. **File naming convention LOCKED** (commit 77d8532): `arch/<slug>.md` flat directory; lowercase kebab-case slug = topic name; aggregation join via hyphen; no prefixes / sub-directories / arch-README.
+
+3. **Cross-cutting topics placement LOCKED** (commit c50041a): TOPICS-vs-CONCERNS distinction codified. Cross-cutting TOPICS (axis-interactions / scope-model / quality-gate) get dedicated arch/ files; cross-cutting CONCERNS (Pattern-A/B/C semantics / cascade direction / scope framing / foundation-up / Logic placement modes) live in ARCHITECTURE.md sections.
+
+4. **ARCHITECTURE.md overview structure LOCKED** (commit 983845c) + composite DR: 9-section structure with foundation-up reader-orientation order. Audience+scope (NEW Section 1; framework-developer documentation; Mode 4; NOT production-runtime) + Logic placement modes (NEW; 4-mode distribution: Mode 1 production-runtime LLM-MD / Mode 2 production-runtime Python / Mode 3 hybrid Phase 6 specs / Mode 4 development-time documentation). Composite DR `phase-3-2-doc-organization.md` captures all 4 sub-decisions. ARCHITECTURE.md restructured 449 → 389 lines.
+
+**Foundational consumer-model question** (raised mid-Sub-decision-4): drove Audience+scope section + Logic placement modes codification — canonical bidirectional cascade example (ARCH-territory work surfaced glossary-grade structural fact; codified before lock).
+
+**Pre-Phase-3.2 toolkit adjustments** (commit 896ee4b + f5f1e89):
+- Adjustment A: Mode-2 composite-decomposition pattern (decision-design-sharpening v0.5.0 → v0.6.0)
+- Adjustment B: Profile-cluster formalization (4 clusters in profiles/INDEX.md)
+- Adjustment C deferred via M1+M2 detection mechanism (3-tier REVISION/EXPANSION discriminator) — added BACKLOG watch-list entry + self-check at decision-design-sharpening Round 2 termination + coherence-audit Step 7
+
+**Meta-learning persisted** (commit 54e6baa): `learnings/ai-app-development.md` Observation 27 — codify-upfront vs wait-for-evidence is SITUATIONAL not principled-default; 5-question discriminator (pain observability / shape ambiguity / retrofit cost / pattern maturity / overhead amortization). Same toolkit-review session produced opposite verdicts on adjacent decisions (bidirectional cascade discipline codified upfront mid-session; 3-tier discriminator deferred). Initially placed in memory/ — corrected to learnings/ per discipline boundary (memory = locked across sessions; learnings = single-session-validated; promotion criterion 3+ sessions).
+
+**Post-Phase-3.2 sharpening pass** (commit 9fef2ed): 10-lens scan over Phase 3.2 closure work. 0 architectural REVISIONS; 1 cascade-fix EXPANSION applied (BACKLOG sub-phase 3.3 header updated to reflect mechanism subsumption under Pattern A protocol topics per Sub-decision 1 aggregation). LOAD-BEARING lenses (1, 8, 9) all clean. REVISION/EXPANSION self-check: 2-tier holds; signal hasn't materialized for 3-tier codification.
+
+**Mode-2 composite-decomposition pattern empirically validated**: 4 sub-decisions × 2 rounds each = 8 sharpening rounds + 1 final synthesis. 35 total EXPANSIONS / 0 architectural REVISIONS / 18 manufactured-criticism revisions rejected. Foundation-up dependency held cleanly. Mid-decomposition foundational question handled via bidirectional cascade. First canonical application of upfront-known composite mode.
+
+**Status**: Phase 3.2 CLOSED. Phase 3.3 per-mechanism subsumed under Pattern A protocol topics; Phase 3.4 per-protocol detail (8 topics, foundation-up: substrate first) ready to begin. Natural pause point — substrate Round 1 requires archived-source consultation (substrate-protocol-design.md / sdk-deep-read.md / substrate-agentic-framework.md) which warrants fresh context window. Recommend opening next session with archived-source reading + substrate Round 1.
+
+**Locked architecture state**:
+- 35 GLOSSARY entries
+- ARCHITECTURE.md 9-section structure (locked)
+- 14 arch/<topic>.md files identified (none yet created)
+- 5 DRs in docs/decisions/: quality-gate-scope-lock + workflow-bipartite-classification + work-unit-bipartite-classification + deployment-derived-classification + engaged-authorship-operational-definition + phase-3-2-doc-organization
+- 4 profile clusters (A/B/C/D) formalized
+- decision-design-sharpening v0.6.0 + coherence-audit v0.3.1
+- 18 memory feedback files + 27 learnings observations
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
