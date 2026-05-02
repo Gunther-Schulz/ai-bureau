@@ -397,7 +397,7 @@ Negative-marker test (collapse NOT occurring):
 - VISION (`VISION.md`): structurally implied by axis-failure-mode framings (axis-1 tacked-on; axis-2 sycophantic modes; axis-3 rubber-stamping)
 - Locked GLOSSARY entries: `intertwining (axis 1)` (composes with category collapse); `tacked-on AI` (axis-1 failure outcome); `co-worker` (relational frame)
 - Lakoff (cognitive linguistics): analogical anchor — "category collapse" terminology imported from category-structure literature where higher-detail categories collapse into adjacent simpler categories under cognitive load
-- Synthesis: cross-axis generalization from session-16 axis-1 trio Round 2 parallel-structure observation — each axis has a positive operational state + failure-mode anti-pattern; category collapse is the GENERAL force; per-axis failure modes are MANIFESTATIONS
+- Synthesis: cross-axis generalization from parallel-structure observation across all three axes — each axis has a positive operational state + failure-mode anti-pattern; category collapse is the GENERAL force; per-axis failure modes are MANIFESTATIONS
 
 **See**:
 - `intertwining (axis 1)` (state being degraded, axis-1 primary)
@@ -454,6 +454,9 @@ In all archetypes: claim = atomic-defensible-assertion. Cross-archetype shape co
 - `event` — claims emit `claim_made` events (specific event-kind; ARCH Layer 3 detail); the audit trail records claim emission per shape's audit-granularity policy
 - `mechanism` — composes with TWO framework-level mechanisms: (1) audit-emission mechanism captures claim emission via `claim_made` event-kind; (2) source-grounding mechanism requires every claim trace to source (no unsourced claims at framework level)
 - `policy` — audit granularity policy (per shape) determines emission frequency: **claim-level** = one event per claim (practitioner-shape standard; finest granularity; mandates by axis-3 defensibility); **action-level** = one event per workflow action (drafting_started, review_completed, send_authorized — not per claim; autonomous-business-shape default; coarser); **light** = minimal events for memory/replay only (personal-OS-shape default; no external accountability requirement)
+- `rubber-stamping` — claims rubber-stamped at attestation lack engaged-authorship; per-claim defensibility fails when rubber-stamping occurred at finalization
+- `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 failure modes degrade per-claim sparring rigor; claims produced under axis-2 collapse less defensible per claim
+- `category collapse` — general force; manifestations on any axis cascade into per-claim defensibility failure
 
 **Cardinality + lifecycle**: Cardinality = N claims per work-unit (typically dozens-to-hundreds for substantive accountability-bearing outputs). Lifecycle = claims are CREATED during workflow execution (drafting fires `claim_made` events as claims are produced); claims may be REVISED during review (revision emits new event preserving prior claim state per append-only audit); claims are FINALIZED at send/sign moment (signed-claim_made event; practitioner authorship binding). Mutability = append-only at audit level (claim revision = new event, not rewriting previous); content mutability lives at draft level until finalization.
 
@@ -593,6 +596,9 @@ Questions 1-3 are practitioner/experiential tests; question 4 is the structural-
 - `mechanism` — defensibility composes with three framework-level mechanisms collectively: source-grounding (every claim traces to source), audit emission (reasoning chain captured), authority binding (practitioner authorship structurally bound)
 - `sparring (axis 2)` — sparring mechanisms structurally enable defensibility's engaged-authorship condition (sparring forces practitioner engagement; rubber-stamping fails sparring discipline → fails defensibility)
 - `policy` — practitioner-shape policies mandate the conditions defensibility requires (claim-level audit granularity; source-grounding required for every claim; human authority required somewhere in chain)
+- `rubber-stamping` — the axis-3 failure mode that fails defensibility's engaged-authorship condition; rubber-stamping at attestation moment makes output indefensible regardless of audit trail / source-grounding completeness
+- `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 failure modes that fail defensibility's engaged-authorship condition via collapsed sparring (no engagement during reasoning → no engaged authorship → defensibility fails)
+- `category collapse` — general force; manifestations on any axis (rubber-stamping, axis-2 failure modes, tacked-on AI) cascade into defensibility failure
 
 **Cardinality + lifecycle**: Cardinality N/A — defensibility is a property/test, not an instance-having entity. **Lifecycle**: the test applies whenever the practitioner is challenged on produced output, but the structural conditions (engaged authorship + reconstructible reasoning + source-grounding) must be in place AT PRODUCTION TIME, not retrofitted. Architectures must STRUCTURALLY ENSURE the conditions hold (per make-wrong-shapes-impossible discipline) rather than relying on practitioner discipline alone. The test is **re-run-able**: six months / years later, when challenged, the reasoning chain is reconstructed via audit trail. Defensibility doesn't expire; the structural conditions, captured at production time, persist as audit records and remain testable indefinitely (subject to audit-trail retention policy).
 
@@ -650,6 +656,7 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 - `defensibility` — events are the structural substrate enabling axis-3 defensibility (reconstructible reasoning chain)
 - `work-unit` — events are emitted scoped to work-units; each event records its work-unit attribution per archived audit-trail-v2 schema (every event traceable to the work-unit it concerns)
 - `claim` — claims emit `claim_made` events (the structured emission recording that an accountability-bearing assertion was made; claim is the content, event is the audit-trail emission)
+- `rubber-stamping` — attestation events can fire performatively without engagement; events alone don't prevent rubber-stamping (events record sign-off, not the engagement that would make sign-off substantive); per-claim attestation requirements are the counter-mechanism
 
 **Source**:
 - Locked GLOSSARY entries: `mechanism` (lists "AuditEvent schema (Pydantic model contract for audit emission)" as canonical mechanism example); `actor` (events are emitted by actors)
@@ -745,7 +752,7 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 - `mechanism`, `substrate`, `protocol`, `specialist` (DEFINITION) — all live in Framework C
 - `Owner B scope` — where INSTANCES of Framework C definitions get deployed
 
-**Source**: derived from session-15 entity-md scope model restructure; refined session 16 under `framework = mechanisms` / `shape = policies` framing.
+**Source**: derived from entity-md scope model under `framework = mechanisms` / `shape = policies` architectural framing.
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
@@ -891,7 +898,7 @@ All three resolving "intertwined-side" = axis 1 succeeding.
 - `workspace` — workspace's scope configuration (active domains, active states) determines which Layer A content applies
 - references / doctypes / bausteine / prose conventions — content kinds that live at Layer A
 
-**Source**: predates session-16 rebuild (3-axis scope orthogonality from earlier ARCH); refined session 16 to clarify orthogonal-to-framework/shape status.
+**Source**: 3-axis scope orthogonality (Layer A / Owner B / Framework C); orthogonal-to-framework/shape per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE.
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
@@ -1055,7 +1062,7 @@ Negative-marker test (oracle NOT occurring):
 - `practitioner` — record at Owner B; human itself cross-cutting
 - `Framework C scope` — where the DEFINITIONS that get instantiated live
 
-**Source**: derived from session-15 entity-md scope model restructure; refined session 16 (practitioner-record added per practitioner dual-aspect; orthogonal-Layer-A clarified).
+**Source**: derived from entity-md scope model; practitioner-record at Owner B per practitioner dual-aspect; orthogonal-to-Layer-A.
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
@@ -1135,8 +1142,8 @@ Negative-marker test (deployment is NOT pioneer instance):
 For PBS: currently in active phase — PBS-Schulz is primary evidence base; second/third deployments not yet accumulated.
 
 **Source**:
-- `PIONEER.md` (pioneer-instance identity-anchor for PBS-Schulz; locked Phase 1.85 as separate Layer-0 doc to keep VISION clean of pioneer-instance specifics)
-- `MAINTENANCE.md` "TOP-LEVEL SCOPE — Repo identity" section (this repo = framework source; pioneer instance = separate deployment; commitment locked session 16)
+- `PIONEER.md` (pioneer-instance identity-anchor for PBS-Schulz; separate Layer-0 doc keeping VISION clean of pioneer-instance specifics)
+- `MAINTENANCE.md` "TOP-LEVEL SCOPE — Repo identity" section (this repo = framework source; pioneer instance = separate deployment)
 - VISION (`VISION.md`): falsification framing (axes 1-3) implicitly depends on deployment evidence; pioneer instance provides that evidence base
 - Locked GLOSSARY entries: `workspace` (the primitive that takes on pioneer-instance role); `framework` (what's pioneered); `practitioner` (the pioneer-anchor role); `defensibility` (tested via pioneer regulatory-challenge experience); `category collapse` (surfaced via pioneer experience)
 - Synthesis: pioneer-instance concept generalizes from PBS-Schulz example to applicable-framework-pattern across domains
@@ -1249,6 +1256,8 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - `defensibility` — operational test of axis 3; the test asks "will the practitioner be able to defend this six months from now?"
 - `work-unit` — practitioners are the human authors signing work-unit outputs; defensibility test asks "will the practitioner defend THIS work-unit's outputs?" (the work-unit is the bounded artifact per which defensibility is judged)
 - `claim` — practitioners are accountable for individual claims they author; the defensibility test resolves at claim granularity (practitioner defends each claim under regulatory/professional challenge)
+- `category collapse` — the cognitive-state-bound force operating IN the practitioner; degrades practitioner's mental category of the AI from higher-engagement to lower-engagement state regardless of architectural intent
+- `rubber-stamping` / `answer-machine AI` / `oracle AI` / `validator AI` / `tacked-on AI` — axis-failure modes that manifest in the practitioner's engagement state at different moments (workflow integration / reasoning / attestation)
 
 **Source**:
 - VISION (`VISION.md`):
