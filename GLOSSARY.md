@@ -94,6 +94,10 @@ Eight named mechanisms supporting sparring mode: counter-argument, confidence ca
 - [co-worker](#co-worker) — relational claim about AI's mode of participation
 - [intertwined AI](#intertwined-ai) — positive axis-1 mode
 - [tacked-on AI](#tacked-on-ai) — failure mode of axis 1
+- [answer-machine AI](#answer-machine-ai) — axis-2 failure mode (extraction direction)
+- [oracle AI](#oracle-ai) — axis-2 failure mode (declarative direction)
+- [validator AI](#validator-ai) — axis-2 failure mode (affirmation direction)
+- rubber-stamping (forthcoming) — failure mode of axis 3
 
 **Note**: "AI runtime" is informal shorthand for substrate's tri-aspect Instance (per Pattern A) — used colloquially in docs but not a separate GLOSSARY primitive. Architectural primitive is `substrate`.
 
@@ -220,6 +224,77 @@ Skills invoke adapters at runtime (e.g., draft-cover-mail skill invokes email-ad
 
 ---
 
+## answer-machine AI
+
+- **Class**: DERIVED (axis-2 failure mode; instance shape of category collapse on axis 2)
+- **Layer**: framework-meta (operates ON framework primitives; manifestation depends on practitioner cognitive state)
+- **Axis**: axis-2 primary anchor; cross-axis (instance of category-collapse force)
+- **VISION usage**: directly used (`VISION.md` line 144 — Ming research distinguishes 3 axis-2 failure modes; axis-2 sparring framing throughout)
+
+**Canonical**: An axis-2 failure mode in which the AI provides whatever output the practitioner asks for, without sparring resistance — counter-arguments, alternatives, or challenges to the request's framing. The practitioner extracts output; the AI does not engage. Architecturally there may still be sparring mechanisms in place (counter-argument capability, what's-missing prompts), but the practitioner's mental category of the AI is "answer source," and queries are shaped to extract answers rather than provoke challenge.
+
+**What it is**: One of three Ming-research-distinguished axis-2 failure modes (alongside `oracle AI` and `validator AI`). Each represents a different shape of how axis-2 sparring degrades. Answer-machine specifically captures the EXTRACTION shape — practitioner asks, AI delivers, no challenge offered.
+
+The failure mode is recognizable by the absence of counter-arguments in produced output. Even when the workspace has counter-argument mechanisms available, queries shaped purely to extract answers don't invoke them. The AI behaves like a sophisticated search engine or text generator — providing what's asked, when asked, without the unbidden challenge that defines sparring.
+
+**What it is NOT**:
+- Not axis-2 architectural absence — sparring mechanisms can be present yet category-collapsed into answer-machine mode
+- Not a property of the AI's capabilities — any AI can be category-collapsed by practitioner cognitive state
+- Not static — drift force (per category collapse); can shift back via deliberate re-engagement
+- Not mutually exclusive with oracle / validator — same workspace can experience different failure modes at different moments / different work-units
+- Not failure of axis 2 alone — answer-machine outputs typically also lack the rigor needed for axis-3 defensibility, cascading axis-2 failure into axis-3 failure
+
+**Cross-archetype illustration**:
+
+*Answer-machine manifestations per archetype*:
+- **Practitioner-shape (planner)**: planner asks "what should the Festsetzungstext for this Bebauungsplan say about Art-25 compliance?" — AI provides a plausible draft; planner accepts without engaging counter-arguments about whether the draft adequately addresses competing interpretations
+- **Legal practice (lawyer)**: lawyer asks "what's the strongest argument for our position?" — AI provides one strong argument; lawyer doesn't ask "what's the strongest counter-argument we'd face?" — single-direction extraction bypasses sparring
+- **Research lab (researcher)**: researcher asks "what's the consensus on hypothesis X?" — AI provides consensus summary; researcher doesn't ask "what's the strongest evidence AGAINST consensus?" — extraction without challenge
+- **Auditor**: auditor asks "is this control adequate per regulatory requirement Y?" — AI confirms or denies; auditor doesn't ask "what conditions would make this control inadequate?" — single-direction inquiry
+
+In all archetypes: the failure shape is extraction without challenge. Architecture may permit challenges; query patterns don't invoke them.
+
+**Boundary test**: Three questions — answer-machine occurring when ALL resolve favorably:
+1. Are practitioner queries shaped to extract specific outputs (rather than to provoke challenge or surface alternatives)?
+2. Does the AI's output track the query's request without surfacing unbidden counter-arguments / alternatives / framing-challenges?
+3. Is the practitioner accepting AI output without engaging counter-arguments, even when the workspace has counter-argument capability?
+
+Negative-marker test (answer-machine NOT occurring):
+- Queries explicitly invite challenge ("what's wrong with this?", "what counter-argument would beat this?", "what am I missing?")
+- AI surfaces unbidden challenges even when not directly asked
+- Practitioner engages with surfaced challenges (responds to AI's counter-arguments with revised position or strengthened argument)
+
+**Composes with**:
+- `sparring (axis 2)` — state being degraded; answer-machine is the EXTRACTION-shape failure
+- `category collapse` — general force; answer-machine is its axis-2 extraction-direction manifestation
+- `practitioner` — cognitive-state-bound agent; query patterns reveal the answer-machine category
+- `intertwining (axis 1)` — possible composition: practitioner intertwined-with-AI but using as answer-machine = workspace deeply integrated yet axis-2 collapsed
+- `defensibility` — answer-machine outputs typically fail defensibility's engaged-authorship condition (no sparring engagement → no engaged authorship → axis-3 failure cascade)
+- `claim` — claims produced via answer-machine extraction lack sparring rigor; less defensible per claim
+- `oracle AI` — sibling failure mode (declarative-direction shape vs extractive-direction shape)
+- `validator AI` — sibling failure mode (affirmation-direction shape vs extractive-direction shape)
+- `tacked-on AI` — axis-1 parallel failure mode; both manifest category collapse on different axes
+
+**Cardinality + lifecycle**: Cardinality N/A — failure mode shape, not instance. The mode manifests per practitioner per workspace per work-unit, in moments where query patterns shift to extraction-only. **Lifecycle**: occurs in moments rather than persistent states; can manifest sporadically or pervasively depending on workload + ROI-perception drift; reversible via deliberate re-engagement (sparring-shaped queries) or architectural friction (mechanisms that surface unbidden challenges regardless of query shape).
+
+**Source**:
+- VISION (`VISION.md`):
+  - Line 144 (axis-2 framing): Ming research distinguishes 3 axis-2 failure modes; answer-machine is one of them
+  - Axis-2 sparring framing throughout — failure modes negate the sparring commitment
+- Locked GLOSSARY entries: `sparring (axis 2)` (state degraded); `category collapse` (general force); `tacked-on AI` (axis-1 parallel failure mode)
+- Ming research: cognitive-science background distinguishing AI failure modes that look productive but fail to deliver hybrid-team value (referenced via VISION line 144)
+- Synthesis: explicit per-shape boundary distinguishing answer-machine from oracle and validator
+
+**See**:
+- `sparring (axis 2)` (state being degraded)
+- `category collapse` (general force; this is axis-2 manifestation)
+- `oracle AI` (sibling axis-2 failure mode — declarative direction)
+- `validator AI` (sibling axis-2 failure mode — affirmation direction)
+- `tacked-on AI` (axis-1 parallel failure mode)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3 — query-pattern signals indicating extraction-shape; counter-mechanism designs that surface challenges regardless of query shape; quality-gate mechanism per `drafts/quality-gate.md`)
+
+---
+
 ## authorship preservation (axis 3)
 
 - **Class**: DERIVED (claim/mode defined in VISION)
@@ -326,7 +401,7 @@ Negative-marker test (collapse NOT occurring):
 - `intertwining (axis 1)` (state being degraded, axis-1 primary)
 - `tacked-on AI` (axis-1 failure outcome)
 - `co-worker` (relational frame collapsing)
-- `answer-machine AI / oracle AI / validator AI` (forthcoming — axis-2 failure outcomes)
+- `answer-machine AI` / `oracle AI` / `validator AI` — axis-2 failure outcomes
 - `rubber-stamping` (forthcoming — axis-3 failure outcome)
 - ARCH Layer 3 category-collapse-detail topics (placeholder until Phase 3 — counter-mechanisms catalog; engagement-quality signals; per-archetype collapse signatures; collapse-detection observability; architectural friction patterns that resist collapse)
 
@@ -875,6 +950,75 @@ If a candidate fails test 2 (it IS shape-specific), it doesn't belong as a frame
 
 ---
 
+## oracle AI
+
+- **Class**: DERIVED (axis-2 failure mode; instance shape of category collapse on axis 2)
+- **Layer**: framework-meta (operates ON framework primitives; manifestation depends on practitioner cognitive state)
+- **Axis**: axis-2 primary anchor; cross-axis (instance of category-collapse force)
+- **VISION usage**: directly used (`VISION.md` line 144 — Ming research distinguishes 3 axis-2 failure modes)
+
+**Canonical**: An axis-2 failure mode in which the AI takes authoritative positions and the practitioner accepts them without engaging the reasoning. Distinct from `answer-machine AI`: the oracle gives MORE than asked — recommendations, judgments, declared positions — but the practitioner outsources judgment to the AI's authority rather than sparring with the reasoning. Result: the practitioner becomes a transcriber of AI conclusions.
+
+**What it is**: One of three Ming-research-distinguished axis-2 failure modes. Oracle specifically captures the TRANSCRIPTION shape — AI declares; practitioner records without engaging. Where answer-machine fails by giving exactly what's asked without challenge, oracle fails by giving more than asked (declarative authority) without practitioner engagement on the reasoning.
+
+The failure mode is recognizable by the practitioner's transcription-pattern — accepting AI's positions/recommendations/judgments and incorporating them into produced output without engaging the reasoning chain that produced them. The practitioner's cognitive role becomes "amanuensis to AI authority" rather than "sparring partner with AI."
+
+**What it is NOT**:
+- Not axis-2 architectural absence — sparring mechanisms can be present yet category-collapsed into oracle mode
+- Not a property of the AI declaring positions — AI declaring positions is fine in axis 2 (sparring includes generating alternatives + arguments); the failure is in practitioner non-engagement
+- Not static — drift force; can shift back via deliberate re-engagement
+- Not failure of AI competence — competent AI declarations make ORACLE mode worse (more authoritative-seeming positions to passively accept)
+- Not mutually exclusive with answer-machine / validator — same workspace can experience different failure modes at different moments
+
+**Cross-archetype illustration**:
+
+*Oracle manifestations per archetype*:
+- **Practitioner-shape (planner)**: AI declares "the Festsetzungstext should specify Art-25 compliance via mechanism Y because of precedent Z" — planner incorporates the recommendation without engaging whether mechanism Y vs alternative mechanism is appropriate for this specific Bebauungsplan
+- **Legal practice (lawyer)**: AI declares "given case-law X, the strongest argument is Y" — lawyer drafts the brief around Y without engaging whether X actually supports Y as strongest, or whether case-law X is genuinely controlling
+- **Research lab (researcher)**: AI declares "the methodologically-cleanest interpretation of finding F is hypothesis H" — researcher writes paper around H without engaging the alternative interpretations the AI didn't surface
+- **Auditor**: AI declares "control inadequacy in process P" — auditor records the finding without engaging whether the AI's framing of "inadequacy" matches the regulatory standard
+
+In all archetypes: AI declarations get transcribed into produced output. The transcription-direction is the failure shape.
+
+**Boundary test**: Three questions — oracle occurring when ALL resolve favorably:
+1. Does the AI take authoritative positions / recommendations / judgments?
+2. Does the practitioner incorporate those positions into produced output?
+3. Does the practitioner accept those positions WITHOUT engaging the reasoning chain (without challenging assumptions, asking for alternatives, or pressure-testing the position)?
+
+Negative-marker test (oracle NOT occurring):
+- Practitioner challenges the AI's declared positions with counter-arguments
+- Practitioner asks for alternatives that the AI didn't surface
+- Practitioner traces the reasoning chain and identifies weak links
+- Practitioner accepts only after engagement, not on AI's authority
+
+**Composes with**:
+- `sparring (axis 2)` — state being degraded; oracle is the TRANSCRIPTION-shape failure
+- `category collapse` — general force; oracle is its axis-2 declarative-direction manifestation
+- `practitioner` — cognitive-state-bound agent; transcription-pattern reveals the oracle category
+- `defensibility` — oracle outputs typically fail defensibility's engaged-authorship condition (transcription is not engagement); axis-3 failure cascade
+- `claim` — claims produced via oracle transcription bear AI's reasoning that the practitioner can't reconstruct under challenge
+- `answer-machine AI` — sibling failure mode (extractive-direction shape vs declarative-direction shape)
+- `validator AI` — sibling failure mode (affirmation-direction shape vs declarative-direction shape)
+- `tacked-on AI` — axis-1 parallel failure mode
+
+**Cardinality + lifecycle**: Cardinality N/A — failure mode shape. Manifests per practitioner per workspace per work-unit, in moments where the practitioner shifts from sparring-with-AI to transcribing-AI-positions. **Lifecycle**: occurs in moments; can manifest sporadically or pervasively; reversible via deliberate sparring-engagement or architectural friction (mechanisms that force engagement with AI declarations rather than passive transcription — e.g., requiring practitioner to articulate counter-arguments before accepting AI position).
+
+**Source**:
+- VISION (`VISION.md`): Line 144 (Ming research distinction); axis-2 sparring framing throughout
+- Locked GLOSSARY entries: `sparring (axis 2)`; `category collapse`; `tacked-on AI`
+- Ming research: distinguishing AI authority-deferred mode from genuine sparring (referenced via VISION line 144)
+- Synthesis: per-shape boundary distinguishing oracle from answer-machine and validator
+
+**See**:
+- `sparring (axis 2)`
+- `category collapse`
+- `answer-machine AI` (sibling — extraction direction)
+- `validator AI` (sibling — affirmation direction)
+- `tacked-on AI` (axis-1 parallel)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; quality-gate mechanism per `drafts/quality-gate.md`)
+
+---
+
 ## Owner B scope
 
 - **Class**: SCOPE-CLASSIFICATION
@@ -1271,12 +1415,14 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 
 **Cross-archetype illustration**: legal practice sparring on legal arguments; research lab sparring on methodology + manuscript claims; planning bureau sparring on Begründung argumentation choices; auditor sparring on audit-finding interpretations — same axis applies wherever practitioner faces nontrivial judgment calls.
 
-**Boundary test**: ask "does the AI challenge / generate counter-arguments / surface uncertainty, or deliver easy answers?" If easy-answers → answer-machine failure mode (axis 2 failure).
+**Boundary test**: ask "does the AI challenge / generate counter-arguments / surface uncertainty, or deliver easy answers?" If easy-answers → axis-2 failure mode — specifically `answer-machine AI` (extraction direction), `oracle AI` (declarative direction), or `validator AI` (affirmation direction) per Ming-research distinction.
 
 **Composes with**:
 - 8 sparring sub-mechanisms (specific instances of the abstract `mechanism` primitive; ARCH Layer 3 detail, NOT separate GLOSSARY entries): `counter-argument`, `confidence calibration`, `visible reasoning`, `selective friction`, `asymmetric knowledge respect`, `anti-sycophancy`, `commit-to-recommendations`, `what's-missing`
 - `sparring mechanisms` — class of axis-2 mechanisms (collective term; per-mechanism detail in ARCH Layer 3)
 - `claim` — sparring fires AT claim granularity (counter-arguments target individual claims; confidence calibration applies per claim; selective friction triggers per claim ambiguity)
+- `answer-machine AI` / `oracle AI` / `validator AI` — Ming-research-distinguished axis-2 failure modes; sparring is the state these mode-failures degrade FROM
+- `category collapse` — general force; axis-2 failure modes are its axis-2 manifestations
 
 **Source**: `VISION.md` line 142 ("## Sparring partner, not answer machine (axis 2)"); line 100 ("### Vivienne Ming — sparring as the productive mode (axis 2 anchor)"); line 81 (axis-2 robustness claim — sparring becomes MORE valuable as AI accuracy increases); line 190 (sparring-mechanisms framing).
 
@@ -1458,6 +1604,79 @@ Any "tacked-on-side" answer = axis 1 at risk; all three = full tacked-on failure
 - `co-worker` (relational frame failed)
 - `category collapse` (the force that produces tacked-on regardless of intent)
 - ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
+
+---
+
+## validator AI
+
+- **Class**: DERIVED (axis-2 failure mode; instance shape of category collapse on axis 2)
+- **Layer**: framework-meta (operates ON framework primitives; manifestation depends on practitioner cognitive state)
+- **Axis**: axis-2 primary anchor; cross-axis (instance of category-collapse force)
+- **VISION usage**: directly used (`VISION.md` line 144 — Ming research distinguishes 3 axis-2 failure modes)
+
+**Canonical**: An axis-2 failure mode in which the AI's role degenerates to confirming what the practitioner already believes. The practitioner brings a position; the AI affirms — sycophantically, or via selective evidence-marshaling, or via agreement-defaulting. Distinct from `answer-machine AI` and `oracle AI`: the validator's output is BOUND TO the practitioner's input as confirming-or-denying, rather than independent. Result: the practitioner uses the AI as an echo chamber.
+
+**Naming clarification**: `validator AI` (this entry) is distinct from "validator-mode" (used in `sharpen` Spirit and `skill-craft` to denote conformance-checking against declared rules). Validator AI is a failure mode for axis-2 sparring; validator-mode is a design orientation for skill construction. Both involve the word "validator" but operate in different conceptual spaces — validator AI = sycophantic confirmation; validator-mode = checklist-conformance. Disambiguate by context.
+
+**What it is**: One of three Ming-research-distinguished axis-2 failure modes. Validator specifically captures the AFFIRMATION-SEEKING shape — practitioner brings position; AI confirms. Where answer-machine fails by extraction without challenge, and oracle fails by AI declaring without practitioner engagement, validator fails by output being bound to input as confirming-or-denying.
+
+The failure mode is recognizable by the practitioner-AI agreement pattern. Even when the workspace has anti-sycophancy mechanisms (per axis-2 sub-mechanisms), the practitioner's queries pre-encode their position, and AI responses tend toward agreement. Sparring fails because there's no genuine alternative-generation; the AI's role is reduced to "confirms my view (with elaboration)" or "doesn't confirm my view (rare)."
+
+**What it is NOT**:
+- Not axis-2 architectural absence — anti-sycophancy mechanisms can be present yet category-collapsed; query shape pre-encodes affirmation-seeking
+- Not always sycophancy — can also manifest as selective-evidence-marshaling (AI presents evidence supporting practitioner's view while omitting countervailing evidence) or agreement-defaulting (AI defaults to agreement when answer is uncertain)
+- Not failure of AI alignment with truth — AI may be technically correct in each individual response but consistently aligned with practitioner's pre-existing position
+- Not static — drift force; reversible via re-engagement
+- Not mutually exclusive with answer-machine / oracle — same workspace can experience different modes at different moments
+
+**Cross-archetype illustration**:
+
+*Validator manifestations per archetype*:
+- **Practitioner-shape (planner)**: planner asks "is my interpretation of Art-25 correct?" — AI elaborates supporting evidence; planner takes confirmation as validation, doesn't ask "what would refute my interpretation?"
+- **Legal practice (lawyer)**: lawyer asks "doesn't this case-law support our position?" — AI confirms with case citations; lawyer takes affirmation, doesn't ask "what's the strongest opposing-counsel argument against my position?"
+- **Research lab (researcher)**: researcher asks "is hypothesis H supported by the data?" — AI elaborates supporting analysis; researcher takes confirmation, doesn't ask "what would falsify H?" or "what alternative hypotheses also fit the data?"
+- **Auditor**: auditor asks "is control C adequate?" — AI confirms with control-design analysis; auditor takes affirmation, doesn't ask "what conditions would make C inadequate?"
+
+In all archetypes: queries pre-encode the desired confirmation; AI's output elaborates affirmation. The bound-to-input dynamic is the failure shape.
+
+**Boundary test**: Three questions — validator occurring when ALL resolve favorably:
+1. Do practitioner queries pre-encode the desired conclusion (asking "is X correct?" rather than "what's wrong with X?")?
+2. Does the AI's output predominantly confirm (or selectively support) the practitioner's pre-existing position?
+3. Is the practitioner-AI agreement rate suspiciously high (e.g., the AI rarely surfaces objections or alternatives that conflict with practitioner's position)?
+
+Negative-marker test (validator NOT occurring):
+- Queries are open-ended ("what should I think about X?", "what could go wrong here?")
+- AI surfaces objections / alternatives even when not directly asked
+- Practitioner-AI disagreement is genuine and frequent
+- Practitioner engages with AI objections rather than seeking re-affirmation
+
+**Composes with**:
+- `sparring (axis 2)` — state being degraded; validator is the AFFIRMATION-shape failure
+- `category collapse` — general force; validator is its axis-2 affirmation-direction manifestation
+- `practitioner` — cognitive-state-bound agent; query-pattern reveals the validator category
+- `defensibility` — validator outputs fail defensibility's engaged-authorship condition (sycophantic confirmation is not engagement); axis-3 cascade
+- `claim` — claims produced via validator confirmation lack the rigor sparring would have provided
+- `answer-machine AI` — sibling failure mode (extractive direction)
+- `oracle AI` — sibling failure mode (declarative direction)
+- `tacked-on AI` — axis-1 parallel failure mode
+- Anti-sycophancy mechanism (per ARCH Layer 3 sparring sub-mechanisms) — counter-mechanism specifically designed to resist validator-mode failure
+
+**Cardinality + lifecycle**: Cardinality N/A — failure mode shape. Manifests per practitioner per workspace per work-unit. **Lifecycle**: occurs in moments; can manifest sporadically or pervasively; reversible via deliberate engagement with disconfirming evidence + open-ended query reformulation. Anti-sycophancy mechanisms (axis-2 sub-mechanism) are the specific counter-mechanism.
+
+**Source**:
+- VISION (`VISION.md`): Line 144 (Ming research distinction)
+- Locked GLOSSARY entries: `sparring (axis 2)`; `category collapse`; `tacked-on AI`
+- Ming research: distinguishing AI sycophancy mode from genuine sparring (referenced via VISION line 144)
+- Synthesis: per-shape boundary; explicit disambiguation from "validator-mode" (skill-craft / sharpen vocabulary)
+
+**See**:
+- `sparring (axis 2)`
+- `category collapse`
+- `answer-machine AI` (sibling — extraction direction)
+- `oracle AI` (sibling — declarative direction)
+- `tacked-on AI` (axis-1 parallel)
+- Anti-sycophancy mechanism (ARCH Layer 3 forthcoming)
+- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; quality-gate mechanism per `drafts/quality-gate.md`)
 
 ---
 
