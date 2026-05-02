@@ -12,5 +12,19 @@
     "workspace",
     "architecture",
     "development"
-  ]
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/architectural_commit_gate.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
 }

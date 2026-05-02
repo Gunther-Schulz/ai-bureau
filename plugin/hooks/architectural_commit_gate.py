@@ -33,6 +33,14 @@ Honest limitations:
   cannot catch semantic narrative without keywords; AI can perturb to
   evade at cost of unnatural language
 
+Freshness-window strategy: whole-session scan. Claude Code's
+transcript_path is per-session per the hooks API (verified: each
+transcript JSONL has a single sessionId across all events). We scan ALL
+events in the transcript — no call-count window. This avoids the
+cascade-load failure mode where prep Reads done at session start get
+pushed out of a fixed-size window before a long architectural cascade
+(Edits + Bash + Reads + sub-agent calls) completes.
+
 Per session-16 (commit 55c016c) escalation from procedural redundancy
 (B+C: Discipline 10 + Round 1 checklist) to structural enforcement (A:
 this hook) due to recurrent META-failure pattern.
@@ -94,9 +102,6 @@ BREADCRUMB_PATTERNS: list[tuple["re.Pattern[str]", str]] = [
     (re.compile(r"\bearlier in (?:the )?session\b", re.IGNORECASE),
      "earlier-in-session reference"),
 ]
-
-# Look back this many tool calls when checking freshness.
-FRESHNESS_WINDOW = 100
 
 # Minimum profile cluster members read for high-impact decisions.
 MIN_PROFILE_READS = 3
@@ -165,11 +170,18 @@ def read_transcript_events(transcript_path: str) -> list[dict]:
     return events
 
 
-def extract_read_paths(events: Iterable[dict], window: int) -> list[str]:
-    """Scan recent events for Read tool_use; extract file_path arguments."""
+def extract_read_paths(events: Iterable[dict]) -> list[str]:
+    """Scan ALL events for Read tool_use; extract file_path arguments.
+
+    Whole-session scan: Claude Code's transcript_path is per-session per
+    the hooks API (each transcript JSONL has a single sessionId across
+    all events), so the entire transcript IS one session. No call-count
+    window needed; this avoids the cascade-load failure mode where prep
+    Reads done at session start get pushed out of a fixed-size window
+    before a long architectural cascade completes.
+    """
     read_paths = []
-    recent = list(events)[-window:] if window > 0 else list(events)
-    for event in recent:
+    for event in events:
         msg = event.get("message", {}) if isinstance(event, dict) else {}
         content = msg.get("content", []) if isinstance(msg, dict) else []
         if not isinstance(content, list):
@@ -224,16 +236,19 @@ def main() -> int:
         return 0
 
     # This is an architectural-artifact write. Check preparatory Reads.
+    # Whole-session scan: transcript_path is per-session per Claude Code
+    # hooks API; we look at ALL events in the transcript (no call-count
+    # window — avoids cascade-load eviction of prep Reads).
     events = read_transcript_events(transcript_path) if transcript_path else []
-    recent_reads = extract_read_paths(events, FRESHNESS_WINDOW)
+    session_reads = extract_read_paths(events)
 
     blocks: list[str] = []
 
     # Check 1: skill freshness
-    if not any(path_matches(rp, REQUIRED_SKILL) for rp in recent_reads):
+    if not any(path_matches(rp, REQUIRED_SKILL) for rp in session_reads):
         blocks.append(
-            f"BLOCK: decision-design-sharpening SKILL.md not Read in last "
-            f"{FRESHNESS_WINDOW} tool calls.\n"
+            f"BLOCK: decision-design-sharpening SKILL.md not Read in current "
+            f"session.\n"
             f"  Required: Read tool on `{REQUIRED_SKILL}` before architectural "
             f"commit.\n"
             f"  Per: DISCIPLINES.md Discipline 1 (skill+profile sub-section)."
@@ -246,13 +261,13 @@ def main() -> int:
         for _ in [0]
     )
     if is_high_impact:
-        profile_reads = [rp for rp in recent_reads if PROFILE_GLOB_PATTERN.search(rp)]
-        index_read = any(path_matches(rp, REQUIRED_PROFILE_INDEX) for rp in recent_reads)
+        profile_reads = [rp for rp in session_reads if PROFILE_GLOB_PATTERN.search(rp)]
+        index_read = any(path_matches(rp, REQUIRED_PROFILE_INDEX) for rp in session_reads)
         if len(profile_reads) < MIN_PROFILE_READS or not index_read:
             blocks.append(
                 f"BLOCK: profile-anchored validation requires Read of "
                 f"`{REQUIRED_PROFILE_INDEX}` + ≥{MIN_PROFILE_READS} cluster "
-                f"members in last {FRESHNESS_WINDOW} tool calls. "
+                f"members in current session. "
                 f"Found: {len(profile_reads)} profile reads, "
                 f"INDEX={'yes' if index_read else 'no'}.\n"
                 f"  Per: DISCIPLINES.md Discipline 3 profile-anchored validation."
@@ -264,7 +279,7 @@ def main() -> int:
         cited_archive_paths = set(ARCHIVE_PATH_PATTERN.findall(write_content))
         unread_citations = []
         for cited in cited_archive_paths:
-            if not any(rp.endswith(cited) or rp.endswith("/" + cited) for rp in recent_reads):
+            if not any(rp.endswith(cited) or rp.endswith("/" + cited) for rp in session_reads):
                 unread_citations.append(cited)
         if unread_citations:
             citations_list = "\n".join(f"    - {c}" for c in sorted(unread_citations))
