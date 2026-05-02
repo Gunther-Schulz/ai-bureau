@@ -136,6 +136,23 @@ Other shapes (federation, hybrid, etc.) per VISION shape catalog — covered as 
 | L8 | Auditor / reviewer — post-hoc defensibility test | n/a (evaluator stage) | Skeleton (full content TBD) |
 | L9 | Shape catalog curator | n/a (ecosystem stage) | Skeleton (full content TBD) |
 
+## Profile clusters (for audit-scaling cluster compression)
+
+Per `coherence-audit` v0.3.0 audit-scaling strategies + `decision-design-sharpening` v0.5.0 profile-anchored validation, profiles group into 4 functional clusters. Cluster compression is the routine audit strategy (≤5 cluster-level audits vs 17+ per-profile audits); profile-anchored validation requires "≥3 profile-clusters" coverage.
+
+| Cluster | Profiles | Functional concern | When relevant for validation |
+|---|---|---|---|
+| **A — Producers** | L1 specialist creator + L2 shape definer + L3 deployment template creator (+ L9 shape catalog curator as ecosystem-level producer) | Build distributable framework artifacts | Producer-side design decisions (Pattern A protocols; specialist DEFINITION; shape policy bundles); G Gate fires here |
+| **B — Deployers** | L4a solo self-deploy + L4b IT admin at firm + L5a planner-pbs-schulz pioneer (deployer-of-self) | Bind framework + shape + content into running workspace | Deployment-mechanics decisions (workspace.md schema; substrate selection; specialists_active configuration); pioneer evidence anchored here |
+| **C — Consumers** | L5a-L5j practitioner archetypes (planner / lawyer / researcher / auditor / medical / architect / junior / multi-jurisdiction) + L5e autonomous-business + L5f personal-OS | Use deployed workspace for accountability-bearing work | Per-claim / per-work-unit operational decisions; per-archetype work-type variation; shape-policy variation observable here |
+| **D — Validators** | L8 auditor/reviewer (post-hoc defensibility) + G + D gates (cross-cutting validation) | Test architectural commitments + decisions | Validation-side decisions (defensibility test mechanics; coherence-audit lens activations; gate enforcement) |
+
+**Cluster boundaries are functional-role-shaped, not lifecycle-stage-shaped.** Profile L5a (planner-pbs-schulz pioneer) is BOTH Cluster B (deployer of own workspace) AND Cluster C (consumer using workspace for B-Plan work) — multi-cluster membership when role-overlap is real. G + D gates are Cluster D members because they validate (despite being structural mechanisms, not human profiles).
+
+**Profile-anchored validation discipline** (per decision-design-sharpening v0.5.0): for high-impact decisions (primitive classifications; per-mechanism / per-protocol / per-primitive-detail design), test against ≥3 of the 4 clusters. Cluster A (Producers) testing for distributable artifacts; Cluster B (Deployers) testing for binding mechanics; Cluster C (Consumers) for operational fit; Cluster D (Validators) for defensibility / audit-trail. If decision touches all 4 → all 4 clusters; if narrow → 3 sufficient.
+
+**Skeleton fleshing on-demand**: when specific decision needs cluster-level evidence + the relevant skeleton profiles aren't fleshed, flesh THEN audit (per coherence-audit on-demand fleshing strategy). Don't audit against unfleshed skeletons (insufficient evidence).
+
 ## Validation discipline (gated)
 
 Profiles ground a structural validation discipline that fires for architectural decisions:

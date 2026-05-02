@@ -2,7 +2,7 @@
 name: decision-design-sharpening
 description: Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including "solidify this decision" / "lock down this decision" / "make this solid" / "challenge/surface/refine to solidify" (or original "challenge/review/refine to solidify") / "challenge this" / "review/refine" / "do another round" / "sharpen again" / "what did we miss" / "what are we surfacing" / "verify completeness before commit" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead).
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Decision-design sharpening (Phase 1)
@@ -169,6 +169,37 @@ Lock + persist when ANY of these signals fire:
 **Pareto + decomposition interaction**: if a refinement is genuinely not Pareto-improving (real tradeoff) AND isn't manufactured criticism, that's a SIGNAL that decomposition may be missing. The trade-off should be evaluated at sub-decision granularity, not at current-decision granularity.
 
 After decomposition: each sub-decision gets full 2-3 round treatment + final synthesis pass.
+
+### Two decomposition modes (v0.6.0)
+
+Decomposition fires in two distinct modes — distinguish at start:
+
+**Mode 1: Emergent decomposition** (organic; >3 rounds signal):
+- Round count grows past sweet spot during sharpening of a single decision framing
+- Decomposition emerges as the fix for round-count drift
+- Trigger: rounds 4+ feel like manufactured criticism OR genuinely-not-Pareto-improving refinements surface
+- Procedure: stop current decision; decompose into sub-decisions; each gets fresh 2-3 rounds
+
+**Mode 2: Upfront-known composite decomposition** (planned; multiple tightly-coupled sub-decisions known at start):
+- Decision has 3+ tightly-coupled sub-decisions identifiable at framing time (not emergent from drift)
+- Examples: doc-structure decisions touching taxonomy + naming + placement + structure simultaneously; multi-primitive cascade locks; any decision with declared dependency graph between sub-parts
+- Trigger: at decision framing, if ≥3 sub-decisions visible AND they have foundation-up dependencies
+- Procedure:
+  1. **Sub-decision inventory**: list sub-decisions explicitly at start (before Round 1)
+  2. **Foundation-up dependency ordering**: lock dependency-free sub-decisions first; downstream sub-decisions follow
+  3. **Per-sub-decision sharpening**: each sub-decision gets standard 2-round sweet spot independently
+  4. **Synthesis pass at end**: after all sub-decisions lock, run a final coherence-pass examining cross-sub-decision consistency (mini coherence-audit scoped to the composite decision's surface)
+  5. **Single composite DR or N sub-DRs**: if sub-decisions are independently meaningful, separate DRs; if only meaningful as composite, single DR with sub-decision sections
+
+**Distinction matters because**:
+- Emergent mode = error correction (stopping a drift)
+- Upfront mode = planned discipline (better than entering as composite and discovering need to decompose mid-flight)
+- Upfront mode preserves cognitive efficiency by not forcing AI to hold all sub-decisions simultaneously during early rounds
+
+**Composite decomposition criteria** (when to choose Mode 2 upfront):
+- Sub-decisions have visible dependency edges (foundation-up identifiable)
+- Sub-decisions are individually small enough for 2-round sweet spot
+- Total scope would otherwise produce >3 rounds OR force shallow per-aspect treatment in single decision
 
 ## Layered coverage observation (Phase 1 specific)
 
