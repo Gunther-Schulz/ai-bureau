@@ -7,6 +7,8 @@ version: 0.2.2
 
 # Coherence audit (Phase 3 dev skill)
 
+> **Extends `sharpen`** (the generic critical-pass skill) with formality specific to cross-decision corpus audit: 10 universal lenses (set composition / tag corrections / vocabulary coherence / cross-ref cascade health / mechanical compliance / symmetry / definition contradictions / pattern-vs-instance / VISION-grounding / cardinality+lifecycle) + corpus-specific lenses (ARCH 11-15; DR-set 16; spec-set 17-18) + cascade-aware revision application. The core mechanic (read → critical lens → Pareto-graded positions → counter-validation → self-check) is inherited from `sharpen`; this skill adds the context-specific lenses + corpus-level procedure.
+
 Cross-decision audit applied AFTER multiple architectural decisions are locked. Operates on the corpus as a SET — different from per-decision sharpening which operates on one decision pre-commit.
 
 ## Why this skill exists (vs the other two sharpening skills)

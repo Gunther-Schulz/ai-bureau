@@ -7,6 +7,8 @@ version: 0.3.1
 
 # Pre-implementation sharpening (Phase 2)
 
+> **Extends `sharpen`** (the generic critical-pass skill) with formality specific to implementation-start moment: operational/runtime-detail surfacing + DR-amendment flow-back (~10-20% architectural findings) + implementation-readiness checklist output. The core mechanic (read → critical lens → Pareto-graded positions → counter-validation → self-check) is inherited from `sharpen`; this skill adds the context-specific procedure.
+
 Disciplined sharpening protocol applied at implementation-start moment, AFTER architectural decisions are LOCKED in decision records but BEFORE implementation code is written. Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred.
 
 ## Why this skill exists (vs relying on Claude's native sharpening behavior)

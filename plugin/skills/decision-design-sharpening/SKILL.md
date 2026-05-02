@@ -7,6 +7,8 @@ version: 0.3.1
 
 # Decision-design sharpening (Phase 1)
 
+> **Extends `sharpen`** (the generic critical-pass skill) with formality specific to decision-record-grade architectural commitments at pre-commit moment: Round-1-full-monty + Round-2 user-triggered + decomposition trigger + persistence-shape output. The core mechanic (read → critical lens → Pareto-graded positions → counter-validation → self-check) is inherited from `sharpen`; this skill adds the context-specific procedure.
+
 Disciplined sharpening protocol applied at decision-formation moment, BEFORE commit to file. Operates UPSTREAM of drift-detection / soundness-review skills (which serve POST-decision purposes).
 
 ## Why this skill exists (vs relying on Claude's native sharpening behavior)
