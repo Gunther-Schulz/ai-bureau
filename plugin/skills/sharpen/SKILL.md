@@ -1,131 +1,137 @@
 ---
 name: sharpen
-description: Use to apply critical-pass sharpening discipline to ANY content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries. The generic version of the sharpening-skill spirit (challenge → surface → refine → commit position) applicable to anything not covered by the three specialized sharpening skills (`decision-design-sharpening` for pre-commit decisions; `pre-implementation-sharpening` for implementation-start; `coherence-audit` for cross-decision corpus). Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", or any request to evaluate content rigorously without phase / artifact-type formality. Default: single critical pass with KEEP / REVISE / CUT positions per finding. Iterates if user signals "another round" / "go deeper".
-when_to_use: User has content (any kind — draft, proposal, plan, reasoning, writeup, idea, summary, message draft, review note, brainstorm output) and wants critical evaluation. Applies the sharpening spirit lightly — no formal Round-1-full-monty / Round-2 structure unless target is decision-record-grade (in which case defer to `decision-design-sharpening`). Catches everything the specialized skills don't. Composes naturally with other skills: defer to specialized skills when target fits their scope; use `sharpen` as catch-all critical-pass.
-version: 0.1.0
+description: Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", "another round", "go deeper", "what else". Single critical pass by default; iterates when user signals deeper.
+when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
+version: 0.2.0
 ---
 
-# Sharpen — generic critical-pass skill
+# Sharpen — critical-pass discipline
 
-The sharpening-skill spirit applied to anything. Different from the three specialized skills because:
+Rigorous critical evaluation applied to content. The procedure is generalizable: read → critical lens → Pareto-graded positions → counter-validation → self-check. Works on drafts, proposals, plans, reasoning chains, writeups, decisions, sketches — anything that benefits from one honest critical pass before commit / send / lock.
 
-- **Not phase-anchored** (any time)
-- **Not artifact-anchored** (any content)
-- **Lightweight by default** — single critical pass; iterate only if user signals
-- **No formal output** — findings list with positions; user adjusts/challenges/confirms
+## When to use
 
-## When to use this skill vs specialized
+- After producing content (your own or under review)
+- When tempted to ship something but want one more honest pass
+- When user asks "sharpen this" / "what would you push back on" / "what should I cut" / "tighten this" / "be ruthless"
+- When AI's default is "looks good" — that's the moment to engage this skill, not skip it
 
-| Target | Skill |
-|---|---|
-| One decision, pre-commit (decision-record-grade architectural commitment) | `decision-design-sharpening` |
-| One decision at implementation-start moment (locked DR; before code) | `pre-implementation-sharpening` |
-| Cross-decision corpus / SET of locked decisions (GLOSSARY, ARCH, DR-set, spec-set) | `coherence-audit` |
-| Anything else (drafts, proposals, plans, writeups, reasoning, ideas, summaries, message drafts, review notes) | **`sharpen`** (this skill) |
+## The procedure
 
-The specialized skills bring formal procedure (Round 1 + Round 2; per-corpus lenses; phase-specific output). `sharpen` brings the same SPIRIT without the formal scaffolding.
+### 1. Read the target fully
 
-## The sharpening spirit (universal)
+Source-grounded: cite the content; don't pattern-match from memory of similar things. Pattern-matching produces fake findings about content that isn't there.
 
-What stays consistent across all four skills:
+### 2. Apply critical lens
 
-1. **Read the target fully** — context-grounded, not pattern-matched. Per `feedback_source_grounded.md`: cite content; flag synthesis vs citation.
-2. **Critical lens** — surface what's wrong, weak, missing, redundant, unclear, contradictory. Default questions:
-   - **Load-bearing vs decorative**: what's actually doing work vs what's fluff?
-   - **Overclaim vs grounded**: what's stated more strongly than evidence supports?
-   - **Redundant**: what could be cut without loss?
-   - **Missing / gap**: what should be there but isn't?
-   - **Unclear / could be sharper**: what reads ambiguously?
-   - **Internal contradiction**: does the content contradict itself?
-   - **External contradiction**: does it contradict locked vocabulary, established commitments, source material?
-3. **Pareto discipline per finding** — Pareto-improving means better in some dimension WITHOUT being worse in others. If not Pareto-improving, force the "why?" challenge — could be manufactured criticism. Reject manufactured criticism.
-4. **Commit positions per finding** — KEEP / REVISE / CUT (with rationale citing the specific reason). Per `feedback_judgment_and_automate.md`: don't menu the findings; commit positions; user adjusts/challenges/confirms.
-5. **Counter self-validation bias** — actively look for what could be wrong, not what confirms current state. Especially: refining-by-CUT is harder than refining-by-ADD; force the cut question.
-6. **Post-pass self-check** — STABLE or CONTINUE position with rationale citing specific signal:
-   - **STABLE**: zero substantive findings; counter-validation passed; surface size doesn't warrant another round
-   - **CONTINUE**: real gaps remain; specific lens (load-bearing question) underexplored; user signals deeper
+Surface findings against load-bearing questions (in order — substance before surface):
 
-## Procedure (single-pass default)
+- **Load-bearing vs decorative**: what's actually doing work vs fluff?
+- **Overclaim vs grounded**: what's stated more strongly than evidence supports?
+- **Redundant**: what could be cut without loss?
+- **Missing / gap**: what should be there but isn't?
+- **Unclear / could be sharper**: what reads ambiguously?
+- **Internal contradiction**: does the content contradict itself?
+- **External contradiction**: does it contradict source material, locked vocabulary, established commitments?
 
-1. Read the target. Source-grounded discipline applies (cite content; don't pattern-match from summaries).
-2. Apply critical lens. Surface findings with brief description per finding.
-3. Commit positions (KEEP / REVISE / CUT) with rationale per finding.
-4. Self-check: STABLE or CONTINUE? Cite specific signal.
-5. Output: findings list with positions in chat. User confirms / adjusts / challenges.
+The questions are ordered intentionally. Surface-level findings (typos, phrasing, formatting) come AFTER substance findings — never as substitutes.
 
-If user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate. Same procedure; usually different angle (e.g., first pass: structure + cuts; second pass: substance + clarity; third pass: cross-references + dependencies).
+### 3. Apply Pareto discipline per finding
 
-## Anti-patterns
+Pareto-improving = better in some dimension WITHOUT being worse in others. If a finding isn't Pareto-improving, force the "why?" challenge — could be manufactured criticism. Reject manufactured criticism.
 
-- **Pattern-matching from memory of similar content** — read the actual target. Per source-grounded discipline.
-- **Validator-mode** — checking conformance to declared rules vs sparring-mode (challenge assumptions, generate alternatives). Per `feedback_pre_decision_sharpening.md`: sparring outperforms validator-mode for surfacing genuine refinements.
-- **Manufactured criticism** — refinements that aren't Pareto-improving. Force the "why?" challenge.
-- **Defending content because user just wrote it** — sycophancy / self-validation bias on user's recent work. The sharpen skill exists BECAUSE this defensive instinct is the default; counter-mechanism: if your first impulse is "looks good," that IS the bias triggering — re-engage critically.
-- **Refining-by-add only** — easier direction; add suggestions feel productive. Force the symmetric: what could be CUT? what's REDUNDANT? what's BLOAT?
-- **Skipping the load-bearing questions** — the structural ones (load-bearing vs decorative; overclaim; missing) are uncomfortable because they point at substance, not surface. Don't default to mechanical-compliance findings (typo / formatting / phrasing) when load-bearing questions are unanswered.
+### 4. Commit positions per finding
 
-## Composition with other skills
+Each finding gets a verdict with rationale:
 
-| Skill | Composition |
-|---|---|
-| `decision-design-sharpening` | Defer when target IS a decision-record-grade architectural commitment pre-commit; that skill brings formal Round-1 + Round-2 + decomposition trigger structure |
-| `pre-implementation-sharpening` | Defer at implementation-start moment; that skill brings operational/runtime-detail surfacing + DR-amendment flow-back |
-| `coherence-audit` | Defer when target is a SET of locked decisions; that skill brings 10 universal lenses + corpus-specific lenses |
-| Cascade discipline (MAINTENANCE.md) | When sharpening surfaces revisions affecting multiple docs, cascade applies — update affected docs in same commit |
-| Source-grounded discipline (`feedback_source_grounded.md`) | Always: cite target content; flag synthesis vs citation |
+- **KEEP** — "this is solid because X" (explicit; not silent omission)
+- **REVISE** — specific revision proposed
+- **CUT** — rationale citing what's redundant / overclaim / decorative
 
-## Self-validation bias warning
+Don't menu the findings. Commit positions. User adjusts / challenges / confirms.
 
-Like the specialized sharpening skills, this one is vulnerable to:
+### 5. Counter self-validation bias
 
-1. **Defending recent content** — sycophancy on user's recent work
-2. **Mechanical-compliance findings dominating** — surface findings (typo / phrasing) that feel productive without actually challenging substance
-3. **Refining-by-add bias** — easier to suggest additions than cuts
-4. **Avoiding the load-bearing questions** — "what's wrong with the substance?" is harder than "what could be added?"
+The bias triggers in two predictable directions:
 
-**Counter-mechanism**: every sharpen pass MUST produce at least one of:
-- A KEEP position with rationale (explicit "this is solid because X")
+- **Defending the content** — sycophancy on recent work; "looks good" defaults
+- **Refining-by-add only** — easy direction; addition-suggestions feel productive
+
+Counter-mechanism: force the cut-questions explicitly. What's redundant? What's overclaim? What's decorative? What could be removed without loss? If the pass produces only addition-suggestions or only "looks good," bias triggered — re-engage with cut-questions.
+
+### 6. Post-pass self-check
+
+Commit STABLE or CONTINUE position with rationale citing specific signal:
+
+- **STABLE** — zero substantive findings after honest run; counter-validation passed; surface size doesn't warrant another round
+- **CONTINUE** — real gaps remain; specific lens underexplored; user signaled deeper
+
+If user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate. Same procedure; typically different angle (first pass: structure + cuts; second pass: substance + clarity; third pass: cross-references + dependencies).
+
+## Mandatory output
+
+Every sharpen pass MUST produce at least one of:
+
+- A KEEP position with explicit rationale (not silent omission)
 - A REVISE position with specific revision
 - A CUT position with rationale
 
-If pass produces only "looks good" or only addition-suggestions, self-validation bias triggered. Force re-engagement with cut-questions: what's redundant? what's overclaim? what's decorative? what could be removed without loss?
+If a pass produces only "looks good" without explicit KEEP-rationale, OR produces only addition-suggestions without any CUT or REVISE, **self-validation bias triggered**. Re-engage with cut-questions.
 
-## Concrete invocation example
+## Anti-patterns (failure modes the skill counters)
+
+- **Pattern-matching from memory** — produces fake findings about content that isn't there
+- **Validator-mode** — checking conformance to declared rules vs sparring-mode (challenging assumptions, generating alternatives)
+- **Manufactured criticism** — Pareto-fail refinements
+- **Defending recent content** — sycophancy / self-validation bias
+- **Refining-by-add only** — addition-bias; force the symmetric cut-questions
+- **Skipping load-bearing questions** — surface findings (typos, phrasing) defaulting because they feel productive while substance questions stay unasked
+- **Silent KEEP** — not stating "this is solid because X" leaves implicit-acceptance; explicit rationale matters
+
+## Concrete invocation
 
 ```
-1. User: "sharpen this draft" / "review this critically" / "what would you cut here"
+1. User: "sharpen this" / "review this critically" / "what would you cut" / "be ruthless"
 
-2. AI activates skill.
-   Reads target.
-   Applies critical lens.
-   Surfaces findings:
-   - F1: [load-bearing observation] → REVISE / CUT / KEEP with rationale
-   - F2: [overclaim observation] → REVISE with specific suggestion
-   - F3: [redundant observation] → CUT with reasoning
-   - ...
+2. Read target fully (source-grounded).
+   Apply critical lens (substance questions first; surface questions after).
+   Pareto-grade each finding.
+   Commit KEEP / REVISE / CUT position per finding with rationale.
 
-3. Self-check: STABLE (zero substantive REVISE/CUT findings) or CONTINUE (more gaps to explore)?
-   Commit position with cited signal.
+3. Surface findings list in chat:
+   F1: [observation] → KEEP / REVISE / CUT (rationale)
+   F2: [observation] → KEEP / REVISE / CUT (rationale)
+   ...
 
-4. User: confirms / adjusts / challenges per finding.
-   AI applies confirmed positions.
+4. Self-check: STABLE (cite zero-substantive-findings + counter-validation-passed) or CONTINUE (cite specific gap)?
 
-5. (Optional) User signals another round → iterate same procedure with different angle.
+5. User: confirms / adjusts / challenges per finding.
+   Apply confirmed positions.
+
+6. (Optional) User signals another round → iterate same procedure; different angle.
 ```
 
-## Why this skill earns its place (vs ad-hoc critical evaluation)
+## Why this skill earns its place
 
-Without this skill:
-- Critical evaluation happens implicitly when user asks
-- AI defaults vary by mood / context
-- Counter-validation discipline applied inconsistently
-- Pareto check skipped / manufactured-criticism not flagged
+Without explicit critical-pass discipline:
 
-With this skill:
-- Explicit critical-pass discipline (read fully, lens, positions, self-check)
-- Counter-validation built into procedure
-- Pareto discipline mechanical (every finding gets verdict)
-- Stable-vs-continue self-check at end
-- Composes cleanly with specialized skills (defer when scope-fit)
+- Evaluation happens implicitly; varies by mood / context
+- Pareto check skipped; manufactured criticism unflagged
+- Counter-validation applied inconsistently
+- Refine-by-add dominates; refine-by-cut neglected
+- "Looks good" sycophancy on recent work goes unchallenged
+- Surface findings (typos, phrasing) substitute for substance findings
 
-The skill applies the spirit of the three specialized skills to everything else — generic `sharpen` is the catch-all sharpening tool.
+With this skill: the procedure is mechanical and repeatable. Discipline survives mood / context / sycophancy pressure. Cut-questions get explicit airtime.
+
+## Composition with more-formal contexts
+
+For most content, the procedure above is sufficient. Specific contexts may benefit from added formality:
+
+| Context | Extension |
+|---|---|
+| Decision-record-grade architectural commitment, pre-commit | `decision-design-sharpening` adds Round-1-full-monty + Round-2 user-triggered + decomposition trigger + persistence shape |
+| Implementation-start moment, post-decision-lock | `pre-implementation-sharpening` adds operational/runtime-detail surfacing + DR-amendment flow-back |
+| Cross-decision corpus / SET of locked decisions | `coherence-audit` adds 10 universal lenses + corpus-specific lenses |
+
+The extensions preserve the same core mechanic (read → lens → Pareto-positions → counter-validation → self-check) and add context-specific lenses / formal output. The core mechanic does most of the work; extensions add formality where context warrants.
