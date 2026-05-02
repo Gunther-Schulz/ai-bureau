@@ -30,6 +30,33 @@ Changes propagate **down, up, and sideways** as needed:
   - Layer 3 `framework.md` and Layer 3 `shape.md` both describe the framework-vs-shape boundary; moving the boundary in one requires updating the other
   - Two DRs that compose architecturally (e.g., one adopts a Protocol pattern, another defines a specific Protocol implementation) update together when the pattern shifts
 
+### Bidirectional cascade with GLOSSARY (UPSTREAM + DOWNSTREAM)
+
+The UP / DOWN / SIDEWAYS direction above covers most cases, but the GLOSSARY layer (Layer 1 foundational vocabulary) has a special bidirectional relationship that warrants explicit attention:
+
+- **UPSTREAM** (already covered above): GLOSSARY change → propagates to ARCH (Layer 2-3) + DRs (Layer 4) + specs (Layer 5)
+- **DOWNSTREAM** (often missed): ARCH / DR / spec work surfaces a **glossary-grade** structural fact, named distinction, or vocabulary refinement → must retro-fit GLOSSARY before locking the ARCH/DR/spec commit
+
+**What "glossary-grade" means** (decision rule for the back-check):
+- Structural fact about a primitive's nature (always-present / optional / bipartite / cross-cutting / etc.)
+- Reciprocal symmetry between two primitives (Lens 6 territory)
+- Vocabulary distinction load-bearing across multiple entries
+- Cross-axis interaction not currently captured
+
+**What's NOT glossary-grade** (stays in ARCH/DR/spec):
+- Schema details (field types, enum values)
+- Per-implementation mechanics
+- Operational procedures
+- Per-shape-policy variations
+
+**Trigger points for the back-check**:
+- End of Round 2 sharpening (per `decision-design-sharpening` v0.5.0+ procedure)
+- At ARCH topic completion before commit
+- At DR drafting before lock
+- During coherence-audit corpus-set passes (already covered by Lens 1 + Lens 8 + Lens 9)
+
+**Canonical exemplar**: session 16 work-unit bipartite-classification surfaced "always-present container" (reciprocal to workflow's optional applicability) during Round 2 — glossary-grade structural fact that retro-fitted into work-unit + workflow GLOSSARY entries before lock. Without the back-check, it would have lived only in ARCH/DR and the GLOSSARY entries would silently have been incomplete.
+
 ### How to find cascades
 
 Before committing any non-trivial doc change:
@@ -37,7 +64,8 @@ Before committing any non-trivial doc change:
 1. **Grep the affected concept name** across all docs (`git grep <term>`). Every hit is a candidate cascade target.
 2. **Review each hit** — does the change shift this hit's meaning? If yes, update. If no, explicitly verify in commit message ("verified consistent: <hit>")
 3. **Cross-check the layer above and below** — does the change require ARCH overview update (up) or Layer 3 topic update (down)?
-4. **When uncertain**, surface the cascade question explicitly to the user during the change rather than committing partial cascade
+4. **GLOSSARY back-check** (per Bidirectional cascade section above): does this work surface a glossary-grade structural fact / reciprocal symmetry / vocabulary distinction that should retro-fit into GLOSSARY?
+5. **When uncertain**, surface the cascade question explicitly to the user during the change rather than committing partial cascade
 
 ### Anti-patterns (what cascade prevents)
 
