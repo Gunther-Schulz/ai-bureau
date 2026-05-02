@@ -100,6 +100,10 @@ When resolved:
 
 - **Markdown-validation feasibility analysis** (#8) — distinguish structural validation (frontmatter / required-sections — feasible; libraries exist) from semantic procedure validation (impossible-by-nature; LLM-judged eval territory). Inform what kind of structural enforcement ARCH builds.
 
+### Open — quality-gate as runtime feature (exploratory; from session 16)
+
+- **Quality-gate mechanism for runtime** [origin: session 16, while building generic `sharpen` skill] — exploratory question: could the sharpening spirit (currently dev tooling) become a PRODUCT-SIDE runtime mechanism — quality-gate that fires at checkpoints (pre-send, pre-claim-finalization, pre-decision-lock, per-edit, drift-audit)? Would extend axis-2 sparring from runtime mode to structural feature. Architectural questions open: mechanism vs Pattern A protocol; per-shape variation; composition with existing primitives. Trigger for graduation: Phase 3 ARCH work on axis-2 encoding surfaces whether gate is sub-mechanism or distinct primitive; OR pioneer-deployment data shows whether axis-2 runtime sparring is sufficient. Detail in `drafts/quality-gate.md`.
+
 ### Open — axis-interaction analysis (surfaced in VISION sanity check)
 
 - **Axis-interactions explicit articulation** [origin: VISION sanity check, Lens 3] — VISION sketches axis interactions through examples (sparring within intertwining; tacked-on sparring is axis-1 failure; defensibility resolves at claim-granularity in axis-1 work-products) but doesn't articulate them systematically. Add as Phase 3 ARCH topic: dedicated axis-interactions analysis as architectural pattern. Avoids bloating VISION's anchored-foundation role; richer detail belongs at ARCH layer.
