@@ -12,6 +12,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
 - `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
 - `profiles/INDEX.md` — usage profiles for framework validation; PRELIMINARY baseline; spans lifecycle stages × shape variations × archetypes; pre-validation (proposing primitives) + post-validation (auditing locked corpus); load specific profile on-demand per `profiles/INDEX.md` taxonomy
+- `ARCHITECTURE.md` — Layer 2 overview for Phase 3 ARCH rebuild; Phase 3 status + locked architectural decisions + active disciplines + provisional topic catalog; per-topic detail in `arch/<topic-slug>.md` (created as Phase 3.3+ produces topic content; not yet created)
 - `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
 - `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
 - `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
@@ -20,7 +21,7 @@ This is the running session log for the **foundational rebuild** launched sessio
 - `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
 - `drafts/` — exploratory ideas / future-candidates / brainstorm output (NOT locked, NOT load-bearing); discipline in `drafts/README.md`. Currently holds: `marketing-themes.md` (session-16 marketing-shape thinking captured during VISION clean-stance work)
 
-**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md` → `profiles/INDEX.md`. Plus `GLOSSARY.md` for current vocabulary state. Specific profiles loaded on-demand when relevant decision / audit / composability check requires them.
+**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md` → `profiles/INDEX.md` → `ARCHITECTURE.md` (Layer 2; read when working in architectural area). Plus `GLOSSARY.md` for current vocabulary state. Specific profiles + per-topic `arch/<topic>.md` files load on-demand.
 
 ## Rebuild phases
 
