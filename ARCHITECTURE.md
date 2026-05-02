@@ -13,7 +13,7 @@ Currently captures **Phase 3 progress** + **locked architectural decisions** + *
 | Sub-phase | Scope | Status |
 |---|---|---|
 | **3.0** | Doc structure (single ARCHITECTURE.md vs topic-per-file vs hybrid) | ✅ LOCKED — hybrid |
-| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | IN PROGRESS — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship pending |
+| **3.1** | Open architectural questions (workflow / work-unit / deployment / engaged-authorship) | **COMPLETE** — workflow LOCKED; work-unit LOCKED; deployment LOCKED; engaged-authorship LOCKED. Phase 3.1 closed. Coherence-audit recommended before Phase 3.2 topic taxonomy. |
 | **3.2** | Topic taxonomy (which 15-20 topics; aggregation vs 1:1 mapping) | Pending |
 | **3.3** | Per-mechanism detail (12 mechanisms) | Pending |
 | **3.4** | Per-architectural-Protocol detail (7 protocols + Pattern A primitives) | Pending |
@@ -105,6 +105,37 @@ Foundation-up ordering applied (per `feedback_foundation_up_ordering.md`): quest
 **Full detail**: `GLOSSARY.md` deployment entry.
 
 **DR**: `docs/decisions/deployment-derived-classification.md` — decision rationale + options + sharpening rounds + cascade + revisit triggers.
+
+### Engaged-authorship operational definition (Phase 3.1) — LOCKED
+
+**Resolution**: `engaged authorship` locked as **DERIVED axis-3 success mode** with two-phase composite operational definition:
+
+1. **Production-phase engagement** (axis-2-anchored): per-claim sparring participation observed via sparring-event emissions
+2. **Attestation-phase engagement** (axis-3-anchored): per-claim attestation event emitted at finalization (NOT whole-output sign-off)
+
+**Both phases independent + both must structurally complete** (per locked rubber-stamping entry — axis-2 failures and rubber-stamping are INDEPENDENT dimensions).
+
+**Granularity**: per-claim per-version (revised claim = new engagement test cycle).
+
+**Two layers of operationalization**:
+- **Framework-level: PRESENCE** — Y/N event-existence test (per-claim production-phase event ≥1 + per-claim attestation event)
+- **Shape-policy-level: QUALITY** — depth-of-engagement signals (substantiveness; counter-argument depth; etc.); quality-gate enforces
+
+**Framework-level enforcement** (per make-wrong-shapes-impossible): events emit per-claim per-phase; quality-gate (Pattern A) detects missing signals; per-shape intervention policy (practitioner-shape friction/block; autonomous-business programmatic block; personal-OS audit-only).
+
+**Round 2 expansions applied**: vocabulary disambiguation (engaged authorship vs engagement vs engaged); Lens 6 reciprocal asymmetry with rubber-stamping (engaged authorship is two-phase success; rubber-stamping is attestation-phase failure only); claim revision per-version semantics; quality-vs-presence two-layer model; workflow_instance composition (engagement events fire regardless of optional workflow overlay); multi-claim batch attestation handling; authority-binding orthogonal composition; pre-existing-claim ingestion; TOC §8 placement; AI-runtime-vs-practitioner engagement subject distinction.
+
+**Round 2 revisions tested + rejected**: PRIMITIVE classification (R1; rejected — DERIVED is correct, no instance-having entity); merge into defensibility entry (R2; rejected — parallel structure to rubber-stamping justifies separate entry; would bloat defensibility); single-phase unification (R3; rejected — composite catches both axis-2 + axis-3 failure modes); per-attestation-event granularity (R4; rejected — claim-granularity locked in defensibility).
+
+**Why this elevates from defensibility's Condition #1 to standalone DERIVED entry**: engaged authorship is load-bearing across multiple entries (`defensibility`, `authorship preservation`, `rubber-stamping`, `quality-gate`, `claim`). Standalone entry preserves canonical definition + composition without bloating defensibility.
+
+**Full detail**: `GLOSSARY.md` engaged authorship entry.
+
+**DR**: `docs/decisions/engaged-authorship-operational-definition.md` — decision rationale + options + Round 1 + Round 2 sharpening + cascade + revisit triggers.
+
+### Phase 3.1 closed
+
+All 4 open architectural questions resolved (workflow / work-unit / deployment / engaged-authorship). Coherence-audit recommended before Phase 3.2 topic taxonomy work begins.
 
 ## Disciplines applying to all ARCH work
 
