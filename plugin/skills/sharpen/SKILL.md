@@ -2,7 +2,7 @@
 name: sharpen
 description: Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", "another round", "go deeper", "what else". Single critical pass by default; iterates when user signals deeper.
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.6.0
+version: 0.7.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -58,7 +58,7 @@ Trivial cosmetic findings — even if Pareto-improving — count as low-value ch
 
 ### 4. Commit positions per finding (mandatory output)
 
-Each finding gets a verdict with rationale. Every pass MUST produce at least one of:
+Each finding requires explicit verdict with rationale — silent acceptance is not allowed. The verdict types:
 
 - **KEEP** — explicit "this is solid because X" (not silent omission)
 - **REVISE** — specific revision proposed
@@ -121,13 +121,3 @@ Substantive = affects load-bearing claims, structural integrity, or reader's men
 - **CUT-without-rationale** — refine-by-cut momentum bias; "this feels verbose" isn't a cut rationale
 - **Auto-iteration after STABLE** — AI-self-triggered rounds drift toward manufactured criticism; iteration is user-triggered
 
-## Why this skill earns its place
-
-Without explicit critical-pass discipline:
-
-- Evaluation happens implicitly; varies by mood / context
-- Pareto check skipped; manufactured criticism unflagged
-- Counter-validation applied inconsistently
-- Refine-by-add dominates; refine-by-cut neglected
-- "Looks good" sycophancy on recent work goes unchallenged
-- Surface findings (typos, phrasing) substitute for substance findings
