@@ -1,27 +1,36 @@
 # Session handoff — pbs-bureau (rebuild)
 
-> **🔴 At session start, read `DISCIPLINES.md` FIRST** — working procedure + cross-session disciplines + memory composition. Then `VISION.md`, `MAINTENANCE.md`, this file.
+> **🔴 Bootstrap procedure for fresh session** (covers compacted-resume too): see `CLAUDE.md` at project root — auto-loaded every session — for canonical session-start procedure (mandatory reads + skill invocation procedure + profile-anchored validation procedure). At minimum: `VISION.md` → `MAINTENANCE.md` → `DISCIPLINES.md` → this file → `BACKLOG.md` → `ARCHITECTURE.md` (when working architectural).
 
 This is the running session log for the **foundational rebuild** launched session 16 (2026-05-01). The previous multi-session running handoff (sessions 1-15) is at `archive/HANDOFF.md` for reference.
 
-## Anchors (carry forward, never rebuilt)
+## Bootstrap pointers (fresh session — load-bearing reads)
 
-- **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition). **Read FIRST.**
-- `VISION.md` — three-axis thesis (intertwining + sparring + authorship preservation) + framework's structural primitives + shape-neutrality + foundations + falsification; PURE STANCE ABOUT THE PRODUCT (tooling lives in DISCIPLINES + plugin/skills + memory); preliminary-lock anchor; the ground truth the rebuild serves
-- `MAINTENANCE.md` — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification); read at session start
-- `BACKLOG.md` — Phase-tagged work-item tracker; pending items across phases; read at session start
-- `PIONEER.md` — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
-- `profiles/INDEX.md` — usage profiles for framework validation; PRELIMINARY baseline; spans lifecycle stages × shape variations × archetypes; pre-validation (proposing primitives) + post-validation (auditing locked corpus); load specific profile on-demand per `profiles/INDEX.md` taxonomy
-- `ARCHITECTURE.md` — Layer 2 overview for Phase 3 ARCH rebuild; Phase 3 status + locked architectural decisions + active disciplines + provisional topic catalog; per-topic detail in `arch/<topic-slug>.md` (created as Phase 3.3+ produces topic content; not yet created)
-- `GLOSSARY.md` — canonical term definitions (Layer 1 anchor; in-progress as of session 16 Phase 2)
-- `memory/` — feedback files (lessons learned across sessions) + bausteine + universal prose; the actual user knowledge
-- `archive/INDEX.md` — index of v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
+- **`CLAUDE.md`** (project root; auto-loaded every session) — canonical session-start procedure + skill invocation procedure + profile-anchored validation procedure. Read FIRST if not already auto-loaded.
+- **`DISCIPLINES.md`** — cross-session working discipline; how we operate (procedure + 7 disciplines + memory composition + skill+profile = first-class source class)
+- **`VISION.md`** — three-axis thesis (intertwining + sparring + authorship preservation) + framework's structural primitives + shape-neutrality + foundations + falsification; PURE STANCE ABOUT THE PRODUCT; preliminary-lock anchor; the ground truth the rebuild serves
+- **`MAINTENANCE.md`** — doc system rules (5-layer model + cascade discipline + TOP-LEVEL ARCHITECTURE: framework=mechanisms / shape=policies + A-B-C scope model + GLOSSARY entry classification)
+- **`BACKLOG.md`** — Phase-tagged work-item tracker; pending items across phases
+- **`PIONEER.md`** — pioneer-instance (PBS-Schulz) identity-anchor; current deployment status + relation to framework; consult when working on pioneer-instance-specific content
+- **`profiles/INDEX.md`** — usage profiles for framework validation; cluster A/B/C/D structure; pre-validation + post-validation. **READ this file (not just memory of cluster names) when profile-anchored validation triggers.**
+- **`ARCHITECTURE.md`** — Layer 2 overview for Phase 3 ARCH rebuild; Phase 3 status + locked architectural decisions + active disciplines + 14-topic catalog; per-topic detail in `arch/<topic-slug>.md` (Phase 3.4+ work)
+- **`GLOSSARY.md`** — canonical term definitions (Layer 1 anchor; 35 entries locked Phase 2)
+- **`memory/`** — feedback files (lessons learned; loaded into conversation context per `MEMORY.md` index)
+- **`archive/INDEX.md`** — v0.35 corpus + code + content archived at rebuild launch; consult during Phase 3+
+
+**Specialized skill invocation** (mandatory at every invocation; per `feedback_skill_files_are_sources.md`):
+- `plugin/skills/decision-design-sharpening/SKILL.md` — pre-decision sharpening (architectural decisions; 2-3 round sweet spot)
+- `plugin/skills/pre-implementation-sharpening/SKILL.md` — implementation-start sharpening
+- `plugin/skills/coherence-audit/SKILL.md` — cross-decision corpus audit
+- `plugin/skills/sharpen/SKILL.md` — generic critical-pass
+
+READ the SKILL.md via Read tool at every invocation regardless of prior usage. Pattern-matching from memory FAILS load-bearing discipline elements.
 
 **Consult when relevant** (not session-start required):
-- `learnings/` — preliminary methodological observations about AI-app development; growing folder; consult during methodological reflection or when the AI-app-dev skill (per future ROADMAP) is being designed
-- `drafts/` — exploratory ideas / future-candidates / brainstorm output (NOT locked, NOT load-bearing); discipline in `drafts/README.md`. Currently holds: `marketing-themes.md` (session-16 marketing-shape thinking captured during VISION clean-stance work)
+- `learnings/ai-app-development.md` — preliminary methodological observations; growing folder; consult during methodological reflection
+- `drafts/` — exploratory ideas / future-candidates / brainstorm output (NOT locked, NOT load-bearing); discipline in `drafts/README.md`. Holds: `marketing-themes.md`, `composability-tooling.md`, `execution-fidelity.md` (session-16 META-framework concern about AI faithful execution of prescribed procedures)
 
-**Session-start reading order**: `DISCIPLINES.md` → `VISION.md` → `MAINTENANCE.md` → `HANDOFF.md` (this file) → `BACKLOG.md` → `profiles/INDEX.md` → `ARCHITECTURE.md` (Layer 2; read when working in architectural area). Plus `GLOSSARY.md` for current vocabulary state. Specific profiles + per-topic `arch/<topic>.md` files load on-demand.
+**Session-start reading order** (substantive work): `CLAUDE.md` → `VISION.md` → `MAINTENANCE.md` → `DISCIPLINES.md` → `HANDOFF.md` (this file) → `BACKLOG.md` → `profiles/INDEX.md` → `ARCHITECTURE.md` (Layer 2; read when working in architectural area) → `GLOSSARY.md` (vocabulary state). Specific profiles + per-topic `arch/<topic>.md` files load on-demand.
 
 ## Rebuild phases
 
@@ -322,6 +331,36 @@ Mode-2 composite decomposition (decision-design-sharpening v0.6.0) — 4 sub-dec
 - 4 profile clusters (A/B/C/D) formalized
 - decision-design-sharpening v0.6.0 + coherence-audit v0.3.1
 - 18 memory feedback files + 27 learnings observations
+
+---
+
+**Note 34: Execution-fidelity META-framework concern surfaced + structural fix applied (5-location procedural redundancy)**:
+
+Substrate Round 1 began post-compact in Phase 3.4. AI applied `decision-design-sharpening` from synthesized memory of prior usage WITHOUT Reading SKILL.md first. Same for profile-anchored validation (cited cluster A/B/C/D names from memory; never opened profile files). Result: missed skill's **layered coverage observation** (R1 = arch / R2 = cross-cutting + schema-detail); phase-routed cross-cutting concerns to Phase 6 too aggressively; Round 1 termination-position leaned STABLE LOCK.
+
+User interventions surfaced the failure: "did you do validation against the profiles? I believe it's part of the skill" → "you cannot rely on synthesized memory! we get the same shortcomings every time after compacting!" → "compacting was actually the easy case. would have been worse in a fresh session even."
+
+**5-location procedural redundancy applied** (this commit):
+1. NEW `memory/feedback_skill_files_are_sources.md` — primary persistence; loaded via MEMORY.md per auto-memory; covers compaction + fresh-session failure modes; canonical session-16 case documented
+2. `MEMORY.md` index entry added (concise pointer with directive language)
+3. `DISCIPLINES.md` Discipline 1 sharpened — explicit "skill + profile files = first-class source class; READ at every invocation" + skill version housekeeping (decision-design-sharpening v0.4.0 → v0.6.0; coherence-audit v0.3.0 → v0.3.1)
+4. 4 SKILL.md description fields prepended with READ-FIRST directive (decision-design-sharpening / pre-implementation-sharpening / coherence-audit / sharpen) — visible in available-skills listing post-compact
+5. NEW `CLAUDE.md` at project root — auto-loaded fresh session; explicit session-start reads + skill invocation procedure + profile-anchored validation procedure + canonical failure documented + working procedure cross-ref
+
+**Per user direction**: PreToolUse hook deferred ("no need for a hook yet; proper procedure documentation that survives compacting and has proper and comprehensive procedure documented in a way that it cannot be mistaken"). Procedural enforcement first; structural enforcement (hook) is escalation if procedural fails repeatedly.
+
+**HANDOFF.md "Bootstrap pointers" section** (replaces "Anchors") — restructured to make fresh-session bootstrap explicit; cross-refs CLAUDE.md as primary auto-loaded entry; lists all session-start reads + specialized skill invocation + on-demand profile loading.
+
+**META-framework concern surfaced** (`drafts/execution-fidelity.md` NEW): AI faithful execution of prescribed procedures as load-bearing precondition for every per-axis mechanism (sparring / engaged authorship / source-grounding / quality-gate). Pattern-matching shortcuts break per-axis mechanisms by short-circuiting the procedure those mechanisms depend on. 10 disguises catalogued; mechanism candidates (procedural + structural + verification + skill-side + AI-side) named; open questions on Pattern A vs cross-cutting CONCERN classification + relationship to quality-gate + per-shape policy variation. Maturity test for graduation defined.
+
+**Single-session learnings observation** (`learnings/ai-app-development.md` Observation 28): single-session instance documentation; promotion criterion 3+ sessions of validated procedural redundancy preventing recurrence before lifting to memory feedback proper. Composes with Observations 26-27 + execution-fidelity drafts.
+
+**Status**: 5-location structural fix locked + pushed before resuming substrate Round 2. Substrate work resumes under just-codified discipline (Read SKILL.md + Read profile files; cite specific section names + specific profile content).
+
+**Locked artifact state added**:
+- 19 memory feedback files (was 18) + 28 learnings observations (was 27)
+- NEW: `CLAUDE.md` project root + `drafts/execution-fidelity.md`
+- HANDOFF.md restructured with explicit bootstrap pointers
 
 ---
 

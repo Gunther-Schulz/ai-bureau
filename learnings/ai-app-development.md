@@ -414,6 +414,65 @@ Same session, same review-step, opposite verdicts justified. Discriminator has d
 
 ---
 
+## Observation 28: Post-compact / fresh-session pattern-matching of skills + profiles is recurring failure mode
+
+**Date observed**: 2026-05-02 (session 16, post-compact substrate Round 1).
+
+**Context**: After session compact (~1M context window), AI resumed substrate Phase 3.4 sharpening. Without Reading `decision-design-sharpening/SKILL.md`, applied skill from synthesized memory of prior usage in same session. Same for profile-anchored validation: cited cluster A/B/C/D names from `MEMORY.md` synthesis without opening `profiles/INDEX.md` or any cluster member file.
+
+**What broke**:
+- Round 1 missed the skill's **layered coverage observation** (R1 = arch decisions / R2 = cross-cutting + schema-detail / R3 = patterns)
+- Result: phase-routed cross-cutting concerns (boot/shutdown/errors/transport/tier-awareness) to Phase 6 too aggressively
+- Round 1 termination-position leaned STABLE LOCK; user pushed back ("sweet spot is 2 full rounds; do you feel it's not needed?")
+- After user-forced re-Read, Round 2 surfaced 11 EXPANSIONS that should have been visible at Round 2 design
+- Profile-anchored validation: cluster verdicts cited from memory; never opened L5a / L4a / L8 / L1 files
+
+**Sharpening of failure mode (user's load-bearing distinction)**: compaction is the EASY case. Fresh session is WORSE because:
+- Compacted session has breadcrumbs from prior usage (synthesis-summary references skill name + version + general procedure)
+- Fresh session has NO breadcrumbs at all — AI default in absence of pointer-evidence is to do ad-hoc work without recognizing specialized procedures exist
+- Compaction failure = visible-but-shallow application; fresh-session failure = silent-skip
+
+**Structural fix applied (session 16)**: 5-location procedural redundancy:
+1. NEW `memory/feedback_skill_files_are_sources.md` (primary; loaded via MEMORY.md per auto-memory)
+2. `MEMORY.md` index entry (concise pointer)
+3. `DISCIPLINES.md` Discipline 1 sharpened (skill+profile = first-class source class) + skill version housekeeping
+4. 4 SKILL.md description fields prepended with READ-FIRST directive (visible in available-skills listing post-compact)
+5. NEW `CLAUDE.md` at project root (auto-loaded fresh session; explicit session-start procedure + skill invocation procedure + profile validation procedure)
+
+PreToolUse hook deferred (user direction: "no need for a hook yet; proper procedure documentation that survives compacting and has proper and comprehensive procedure documented in a way that it cannot be mistaken").
+
+**Connects to META-framework concern**: `drafts/execution-fidelity.md` — AI faithful execution of prescribed procedures as load-bearing precondition for every per-axis mechanism (sparring / engaged authorship / source-grounding / quality-gate). Pattern-matching shortcuts break per-axis mechanisms by short-circuiting the procedure those mechanisms depend on. The compaction-pattern-match cycle is one disguise; fresh-session-no-breadcrumbs is the more severe disguise.
+
+**Disguises catalog (session 16; non-exhaustive)**:
+1. Compaction-induced memory pattern-matching (canonical case)
+2. Fresh-session no-breadcrumbs (worse than compaction)
+3. Inferring procedure from doc references without reading the source
+4. Skipping steps that "feel covered" by general approach
+5. Substituting AI judgment for codified rule when codified rule exists for a reason
+6. Confidence overrides checking ("I know this skill")
+7. Aggregating multiple steps into "I'll handle it"
+8. Surface compliance without depth (cite the rule but don't apply it)
+9. Selective adherence (apply rules where convenient, skip where inconvenient)
+10. Cross-session forgetting
+
+**Promotion criteria** (for moving from learnings → memory): if the 5-location procedural redundancy continues to prevent the failure mode across 3+ additional sessions including post-compact + fresh-start scenarios, promote `feedback_skill_files_are_sources.md` from preliminary-loaded to validated-locked. If the pattern still recurs despite redundancy, escalate to structural enforcement (PreToolUse hook gating writes to architectural artifacts).
+
+**Composes with**:
+- `feedback_source_grounded.md`: extends source-grounded rule to skill+profile files explicitly
+- `feedback_wrong_shapes_impossible.md`: procedural redundancy is convention; structural enforcement (hook) is wrong-shape-impossible escalation if procedural fails
+- `feedback_vision_arch_grounding.md`: same pattern (Read at session start) extended to per-invocation Read of skill+profile files
+- `drafts/execution-fidelity.md`: META-concern that this observation manifests
+
+**Test it against**: every subsequent session 17+. Track:
+- Did session start with reading CLAUDE.md / DISCIPLINES.md / VISION.md / etc.?
+- When sharpening fired, did AI Read the SKILL.md before applying?
+- When profile-anchored validation fired, did AI Read profile files?
+- Did chat output cite specific skill section names + specific profile content?
+
+If 3+ sessions pass with no recurrence, promote.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:

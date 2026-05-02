@@ -32,7 +32,13 @@ Before asserting what a doc/DR/architectural commitment says, read the source. C
 
 Pattern-matching from HANDOFF prose, memory summaries, or prior-conversation knowledge is **NOT direct evidence** per global `~/.claude/CLAUDE.md` honesty-about-sources rule.
 
-Per memory: `feedback_source_grounded.md`, `feedback_vision_arch_grounding.md`.
+**Skill + profile files are a first-class source class.** When invoking a sharpening / audit / validation skill (`decision-design-sharpening`, `pre-implementation-sharpening`, `coherence-audit`, `sharpen`), READ the SKILL.md file via Read tool at the moment of invocation — every time, regardless of prior usage in same session. Same for `profiles/*.md` when profile-anchored validation triggers (READ `profiles/INDEX.md` + ≥3 representative cluster members). Skills + profiles evolve frequently (decision-design-sharpening went v0.4.0 → v0.6.0 mid-session 16); compaction collapses prior Read content into synthesis-summaries; fresh sessions have no breadcrumbs at all. Pattern-matching memory of prior usage misses load-bearing discipline elements.
+
+**Verification (proves Read happened, not pattern-matched)**: chat output cites specific skill section names (e.g., "per layered coverage observation"; "per Lens 8") + specific profile content (not just cluster letters A/B/C/D). Without these citations, the procedure was pattern-matched, not executed.
+
+**Canonical failure (session 16)**: substrate Round 1 post-compact applied `decision-design-sharpening` from synthesized memory; missed layered coverage observation; phase-routed cross-cutting concerns to Phase 6 too aggressively; user had to force re-Read; Round 2 surfaced 11 EXPANSIONS that should have been visible at Round 2 design.
+
+Per memory: `feedback_source_grounded.md`, `feedback_vision_arch_grounding.md`, `feedback_skill_files_are_sources.md`.
 
 ### 2. Apply principle uniformly
 
@@ -122,7 +128,7 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot) | Substantive architectural decisions | `feedback_pre_decision_sharpening.md` + `plugin/skills/decision-design-sharpening/` v0.4.0 |
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `feedback_pre_decision_sharpening.md` + `plugin/skills/decision-design-sharpening/` v0.6.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
 | Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `feedback_multi_axis_validation.md` + `profiles/INDEX.md` |
 | Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `feedback_foundation_up_ordering.md` |
 | Apply principle uniformly | When user states a principle/goal | `feedback_apply_principle_uniformly.md` |
@@ -152,8 +158,8 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.0 |
-| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.0 "Audit scaling strategies" |
+| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.1 (Step 7 REVISION/EXPANSION self-check) |
+| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.1 "Audit scaling strategies" |
 | Provenance hygiene (no audit-history breadcrumbs in canonical content) | Applying lock revisions | coherence-audit Lens 5 v0.2.1 |
 | Profile-grounded validation | Pre-validation + post-validation | `profiles/INDEX.md` |
 
@@ -185,6 +191,7 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 | `feedback_plugin_marketplace_clone_sync.md` | Marketplace clone sync mechanics |
 | `feedback_foundation_up_ordering.md` | Items others depend on come first |
 | `feedback_multi_axis_validation.md` | Archetype × work-type × role + non-coverage |
+| `feedback_skill_files_are_sources.md` | Skill + profile files = first-class sources; READ at every invocation |
 
 Memory location: `/home/g/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/`. Index: `MEMORY.md` in same directory.
 
