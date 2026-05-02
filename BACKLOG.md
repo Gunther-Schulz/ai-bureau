@@ -23,15 +23,16 @@ When resolved:
 
 ---
 
-## Phase 2 — GLOSSARY (in progress)
+## Phase 2 — GLOSSARY (COMPLETE — pending Phase 3 transition)
 
 ### Open
 
-- **pioneer instance** [origin: TOC §8 + Phase 5 ROADMAP item] — workspace as production-tool + research-lab + IP-proving-ground; meta concept
+(none — all Phase 2 entries locked)
 
 ### Resolved (current phase; archival at Phase 3 start)
 
-- ~~**rubber-stamping**~~ [resolved this commit] — axis-3 failure mode (sign-off without engagement); parallel to tacked-on AI (axis-1) + axis-2 trio; independent dimension from axis-2 failures (can co-occur)
+- ~~**pioneer instance**~~ [resolved this commit] — originating deployment role (production-tool + research-lab + IP-proving-ground); cross-references PIONEER.md as identity-anchor; final Phase 2 entry — vocabulary lock complete
+- ~~**rubber-stamping**~~ [resolved 0f172a5] — axis-3 failure mode (sign-off without engagement); parallel to tacked-on AI (axis-1) + axis-2 trio; independent dimension from axis-2 failures (can co-occur)
 - ~~**answer-machine AI / oracle AI / validator AI**~~ [resolved abc0153] — axis-2 failure modes per Ming research; locked as 3 distinct entries with parallel structure (extraction / declarative / affirmation directions); naming-collision disambiguation noted for validator AI vs validator-mode (skill-craft / sharpen vocabulary)
 - ~~**category collapse**~~ [resolved ef35933] — cross-axis force that degrades engagement regardless of architectural intent (axis-1 primary anchor; manifests on all three axes per Round 1 stress-test)
 - ~~**adapter**~~ [resolved 7d199e5] — final Pattern A primitive locked
