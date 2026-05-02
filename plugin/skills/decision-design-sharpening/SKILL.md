@@ -2,7 +2,7 @@
 name: decision-design-sharpening
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when an architectural decision needs disciplined sharpening BEFORE commit to file (decision record, architecture doc, vision/strategy doc, roadmap, or other load-bearing artifact). Triggers via natural-language prompts including \"solidify this decision\" / \"lock down this decision\" / \"make this solid\" / \"challenge/surface/refine to solidify\" (or original \"challenge/review/refine to solidify\") / \"challenge this\" / \"review/refine\" / \"do another round\" / \"sharpen again\" / \"what did we miss\" / \"what are we surfacing\" / \"verify completeness before commit\" — all after AI proposes architectural decision. Phase 1 of two-phase pattern (Phase 2 = pre-implementation-sharpening). AKA the challenge → surface → refine → solidify cycle — this skill IS that operation, formalized as 2-3 disciplined rounds. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Empirically validated to outperform post-mortem audits/reviews because pre-decision is sparring-mode (per Vivienne Ming research on AI-human hybrid teams) while audits are validator-mode anchored to existing content. NOT for trivial decisions, pure-implementation work, or implementation-start moments (use pre-implementation-sharpening instead)."
 when_to_use: After AI proposes architectural decision (decision-record-grade); user wants to solidify / lock down / challenge-surface-refine before commit. Fires AT DECISION-FORMATION MOMENT. Natural triggers: "solidify" / "lock down" / "challenge" / "surface" / "review/refine" / "another round" / "sharpen" / "what did we miss". Do NOT use for implementation-start sharpening — that's pre-implementation-sharpening.
-version: 0.6.0
+version: 0.7.0
 ---
 
 # Decision-design sharpening (Phase 1)
@@ -81,6 +81,23 @@ When AI proposes the architectural decision, the proposal includes:
 - **Decision shape** (final structure + persistence target)
 
 Do FULL refinement upfront in initial proposal; don't fragment into multiple rounds where user prompts each refinement separately.
+
+### Round 1 termination checklist (mandatory; per session-16 procedural-fidelity META-failure)
+
+Before declaring Round 1 complete, AI MUST explicitly verify each item:
+
+- [ ] **Skill SKILL.md Read at THIS invocation** (Read tool used in current Round, not pattern-matched from earlier session usage). Per `DISCIPLINES.md` Discipline 1 skill+profile sub-section.
+- [ ] **Profile files Read for THIS validation** (≥3 cluster members; current Round 1; not reused-citation from earlier topic in same session). Per `DISCIPLINES.md` Discipline 3 profile-anchored validation.
+- [ ] **Each archived-source citation greenfield-evaluated** (per `DISCIPLINES.md` Discipline 10): re-validated against locked GLOSSARY + ARCHITECTURE; stress-tested against profiles; pattern-vs-instance check; greenfield-derived. NOT transcribed as template.
+- [ ] **Pattern-vs-instance stress-test applied** per primitive (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2): no instance-leakage; cross-archetype illustration valid.
+- [ ] **G Gate fired** (if L1-L4 producer artifact): multi-mode consumption requirements satisfied (per `profiles/G-composability-gate.md`).
+- [ ] **D Gate fired** (if any defer considered): mental modeling within profile grounding attempted; defer ONLY if mental modeling cannot resolve. Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 + `profiles/INDEX.md` D Gate procedure.
+
+If ANY item unchecked: do not declare Round 1 complete. Address gap before proceeding.
+
+**Why this checklist**: per `drafts/execution-fidelity.md` Disguise #4 (skipping steps that "feel covered" by general approach) + Disguise #5 (substituting AI judgment for codified rule) + Disguise #8 (surface compliance without depth — cite the rule but don't apply it). Procedural-redundancy fix (5-location) addressed compaction-pattern-matching only; this checklist addresses the remaining disguises.
+
+**Failure mode this catches** (canonical session-16 case): arch/coordination.md Round 1 cargo-cult'd archived event-coordination protocol without explicit greenfield-evaluation per element. Checklist item 3 (greenfield-evaluation) would have caught this at Round 1 termination.
 
 ### WAIT for user signal to run further rounds
 

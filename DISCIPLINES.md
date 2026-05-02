@@ -207,6 +207,32 @@ When `coherence-audit` skill fires across Phase 3-6 work. Codifies WHEN audits r
 
 **Persistence target**: BACKLOG.md scheduled audit checkpoints per Phase. ARCHITECTURE.md §2 sub-phase status table (Phase 3.8 row already present; C1 + C2 cross-ref BACKLOG).
 
+### 10. Greenfield evaluation of archived material
+
+When ARCH topic / DR / spec work cites archived material (`archive/docs/decisions/*` / `archive/extensions/*` / archived ARCHITECTURE / etc.), each cited element MUST be greenfield-evaluated against current locked vocabulary — NOT transcribed as template.
+
+**Why**: Archive embodies session-1-15 architectural commitments — much of which was unlocked / instance-anchored / contradiction-bearing per session-16 rebuild rationale. Cargo-cult adoption of archived elements re-introduces the failure modes the rebuild was designed to fix. Per `MAINTENANCE.md` rebuild context: "the prior v0.35 corpus grew beyond easy handling... contained internal contradictions... arose because cascade discipline was implicit."
+
+**Failure surface (canonical session-16 case)**: arch/coordination.md Round 1 cargo-cult'd archived event-coordination protocol (capability categories + 3 failure modes + no-direct-call discipline directly transcribed) without explicit greenfield-evaluation per element. User caught the drift.
+
+**Discriminator** (per cited archived element):
+- Was element re-validated against locked GLOSSARY entries that exist NOW (not the v0.35 vocabulary)?
+- Was element stress-tested against profile clusters in current `profiles/INDEX.md`?
+- Pattern-vs-instance check: does archived element embed pioneer-instance / archetype-instance / regulatory-instance assumptions that current architecture rejected?
+- Greenfield derivation: would we design THIS element THIS WAY today, ignoring archive?
+
+If any check yields NO → element needs revision OR archive-citation is INPUT-ONLY (informs current design but doesn't transfer structure directly).
+
+**How to apply**:
+
+1. **At Round 1 sharpening**, when archive citation considered: surface the cited element + greenfield-evaluation result per criterion above. NOT "per archived X" as terminating evidence.
+2. **At Round 2 sharpening termination**, run greenfield-citation self-check: every "per archived X" claim → was X greenfield-evaluated, or transcribed?
+3. **Coherence-audit Lens 5 v0.2.1 provenance hygiene** extends: ARCH topics + DRs hold greenfield-evaluated content; archive citations live in §16 "Decision-design provenance" sections naming SOURCE (where input came from), NOT TEMPLATE (where structure transferred).
+
+**Recognition-pattern bias**: stress-testing pressure DECREASES when archived material "fits" the topic shape — exactly when greenfield-evaluation is MOST important (high archive-fit = highest cargo-cult risk). Counter-bias: when archive seems to fit well, increase stress-testing rigor.
+
+**Composition**: per `DISCIPLINES.md` Discipline 1 source-grounded rule extended to archive (archived material is a source class; cite specifically; flag synthesis vs citation; greenfield-evaluation is the synthesis-not-citation step). Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 preliminary-lock: archived "locked" decisions are NOT preliminary-locked relative to current rebuild — they're archived UNlocked (rebuild rejected v0.35 corpus per session-16 launch). Greenfield evaluation re-establishes locked status.
+
 ---
 
 ## Architectural foundation (current rebuild — see `MAINTENANCE.md` for detail)
@@ -239,7 +265,7 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.6.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
+| Pre-decision sharpening (Round 1 full monty + Round 2 user-triggered; 2-round sweet spot; up to 3 for broad surface) | Substantive architectural decisions | `DISCIPLINES.md` Discipline 3 + `plugin/skills/decision-design-sharpening/` v0.7.0 (Mode 1 emergent + Mode 2 upfront-known composite decomposition; layered coverage observation: R1 arch decisions / R2 cross-cutting + schema-detail / R3 patterns; Round 1 termination checklist mandatory per Discipline 10; GLOSSARY back-check + REVISION/EXPANSION self-check at Round 2 termination) |
 | Multi-axis validation (archetype × work-type × role + non-coverage) | Primitive classification proposals | `DISCIPLINES.md` Discipline 3 (multi-axis sub-section) + `profiles/INDEX.md` |
 | Foundation-up workflow ordering | Compositional/architectural work (GLOSSARY, DRs, ARCH, specs) | `DISCIPLINES.md` Discipline 8 |
 | Apply principle uniformly | When user states a principle/goal | `DISCIPLINES.md` Discipline 2 |
