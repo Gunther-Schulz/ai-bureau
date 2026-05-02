@@ -271,6 +271,22 @@ Post-compact continuation completing Phase 3.1 (4 architectural locks landed in 
 
 ---
 
+**Note 32: Pre-Phase-3.2 toolkit refinements + meta-learning persisted**:
+
+Before starting Phase 3.2, ran past-experience review of validation/audit toolkit. Three adjustments:
+
+A — Composite-decision decomposition pattern (decision-design-sharpening v0.5.0 → v0.6.0): added Mode 2 (upfront-known) alongside existing Mode 1 (emergent >3-round drift). For decisions with 3+ tightly-coupled sub-decisions visible at framing time (foundation-up dependencies). Procedure: sub-decision inventory → foundation-up ordering → per-sub-decision 2-round → final synthesis pass. Phase 3.2 IS the canonical Mode-2 case (taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure). Commit 896ee4b.
+
+B — Profile-cluster formalization (profiles/INDEX.md): formalized 4 functional clusters that profile-anchored validation references. Cluster A Producers (L1+L2+L3+L9) / B Deployers (L4a+L4b+L5a) / C Consumers (L5a-L5j+L5e+L5f) / D Validators (L8+G+D). Multi-cluster membership when role-overlap is real. ≥3 clusters threshold for high-impact decisions per profile-anchored validation. Commit 896ee4b.
+
+C deferred via detection mechanism — 3-tier REVISION/EXPANSION discriminator NOT codified now; added M1 (self-check question in decision-design-sharpening v0.6.0 Round 2 termination + coherence-audit v0.3.1 Step 7) + M2 (BACKLOG watch-list entry). User-confirmed approach: real cases shape eventual codification better than anticipatory analysis. Commit f5f1e89.
+
+**Meta-learning persisted (learnings/, NOT memory/)**: `learnings/ai-app-development.md` Observation 27 — codify-upfront vs wait-for-evidence is SITUATIONAL not principled-default. 5-question discriminator (pain observability / shape ambiguity / retrofit cost / pattern maturity / overhead amortization). Same toolkit-review session produced OPPOSITE verdicts on adjacent decisions: bidirectional cascade discipline codified upfront mid-session (5 discriminators favored codification — pain JUST observed, low overhead, clear shape); 3-tier REVISION/EXPANSION discriminator deferred (5 discriminators favored wait — pain theoretical, alternatives plausible, per-finding overhead). Single-session validation only; placed in learnings/ per discipline boundary (memory = locked across sessions; learnings = preliminary single-session observations earning promotion across 3+ sessions). When deferring, ALWAYS add detection mechanism (self-check + watch-list naming awaited signal).
+
+**Placement correction (this commit)**: initially wrote `feedback_codify_vs_wait_for_evidence.md` to memory/ — wrong placement per learnings/README discipline (memory = locked behavioral rules; learnings = preliminary observations). User corrected; moved to learnings/ as Observation 27 with promotion criterion (3+ sessions of validation). Memory file removed; MEMORY.md index reverted.
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)

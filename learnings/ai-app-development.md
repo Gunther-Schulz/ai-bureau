@@ -373,6 +373,47 @@ Per-entry sharpening catches forward-references from new entries to existing ent
 
 ---
 
+## Observation 27: Codify upfront vs wait-for-evidence is situational, not principled-default
+
+**Pattern**: When deciding whether to codify a methodology rule / discipline / taxonomy / classification system NOW vs deferring with detection mechanism, neither direction is principled default. Both directions have failure modes; the right call depends on cost asymmetries.
+
+**5-question discriminator** (run before deciding):
+1. **Pain observability**: Is operational pain observable NOW, or theoretical from internal edge-case analysis? (Theoretical → wait. Observed → codify.)
+2. **Shape ambiguity**: Are alternative codification shapes visibly equally-plausible, or is one shape clearly right? (Multiple plausible → wait; let cases discriminate. Clear shape → codify.)
+3. **Retrofit cost**: Is retrofit LOW (internal taxonomy/methodology) or HIGH (committed contracts, schema migrations, security policies)? (HIGH → codify upfront because retrofit expensive. LOW → can wait safely.)
+4. **Pattern maturity**: Is the pattern well-known elsewhere (adopt convention) or novel/emerging (need own cases)? (Well-known → codify; adopt convention. Novel → wait; let cases shape.)
+5. **Overhead amortization**: Does ceremonial overhead scale with finding-count (paid each use), or pay-once-use-many-times? (Per-finding scaling → wait unless clear need. Pay-once → codify cheaply.)
+
+**Codify-upfront triggers (any 2+ favorable)**: Pain observable now / pattern well-known / retrofit expensive / overhead pays-once / external contracts / multiple stakeholders need shared expectation / safety-critical or compliance.
+
+**Wait-for-evidence triggers (any 2+ favorable)**: Pain theoretical / alternatives visibly plausible / overhead per-finding nontrivial / novel pattern / internal methodology with single owner / reversibility low.
+
+**Detection mechanism for waited-on items**: When deferring, ALWAYS add lightweight detection — self-check question in skill + watch-list entry naming awaited signal. Don't just defer; codify the trigger threshold for revisiting (typically: ≥3 cases / user pushback / cascade-work-lag for methodology-shaping decisions).
+
+**Anti-patterns in both directions**:
+- *Codify-upfront anti-pattern*: ceremonial precision masquerading as productive sharpening; locks one shape when alternatives are equally plausible; pays overhead for unconfirmed need.
+- *Wait-for-evidence anti-pattern*: indefinite deferral; missed signals; "we'll see if it becomes a problem" while it already IS a problem.
+
+**Evidence (session 16, 2026-05-02)**: Same toolkit-review meta-step produced OPPOSITE verdicts on adjacent decisions, both validated by the discriminator:
+
+- **Bidirectional cascade discipline → CODIFIED upfront mid-session**: pain JUST observed (work-unit always-present container had been missed without it); one-paragraph addition (low overhead); pattern shape unambiguous (UPSTREAM + DOWNSTREAM); high reuse (pays-once-use-many-times). 5 discriminators favored codification.
+- **3-tier REVISION/EXPANSION discriminator → DEFERRED with detection mechanism**: pain theoretical (~3 borderline cases noticed by internal analysis; no operational drift); per-finding overhead nontrivial (classification per finding); alternative shapes visibly plausible (3-tier vs 4-tier-by-cascade-implication vs different cut entirely); novel pattern (couldn't adopt convention from elsewhere); reversibility moderate (vocabulary churn would propagate). 5 discriminators favored wait.
+
+Same session, same review-step, opposite verdicts justified. Discriminator has discriminating power.
+
+**Implication**: when shaping methodology/disciplines/taxonomies, run the 5-question test before codifying. The principle "real cases shape eventual codification better than anticipatory analysis" is TRUE for some cases (Tier 2 wait verdicts) but FALSE for others (Tier 1 codify verdicts). Conflating into single default ("always codify" OR "always wait") misses 50% of cases. The discriminating principle IS the learning.
+
+**Composes with**:
+- D-gate-logic-transposed-to-toolkit-level: D Gate is "wait-for-evidence when external info genuinely doesn't exist; otherwise mental modeling resolves now." This learning EXTENDS that to internal methodology decisions: same logic applies but "wait-for-evidence" can also mean "wait for accumulated own-cases to shape codification" (not just external info).
+- `feedback_preliminary_lock.md`: codified rules are still preliminary-locked; can revise on real-world falsification. Reduces cost-of-wrong-rule for codifications that DO happen.
+- Sharpen Spirit "don't add discipline ahead of need" — this learning operationalizes that with concrete discriminators.
+
+**Test it against**: future toolkit/methodology decisions in this project (e.g., when Phase 3.3-3.7 surfaces new sharpening patterns; when DR-ARCH-spec layering refines). Apply 5-question test; observe whether discriminator continues to produce calibrated verdicts.
+
+**Promotion criteria** (for moving from learnings → memory): if the discriminator continues to produce calibrated verdicts across 3+ additional sessions/projects, promote to memory feedback file. Until then, this stays as preliminary observation here.
+
+---
+
 ## Promotion path
 
 When an observation here holds across multiple sessions + multiple contexts, it earns promotion:
