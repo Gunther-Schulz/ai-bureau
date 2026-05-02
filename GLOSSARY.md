@@ -1935,7 +1935,8 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 - `session` (which executes parts of workflow_instance)
 - `work-unit` (the deployment-bound artifact workflow_instance attaches to)
 - `claim` (claims attribute to workflow_instance during execution)
-- ARCH Layer 3 workflow-detail topics (placeholder until Phase 3.5 — workflow definition representation schema; workflow_instance state machine; phase transitions + authority requirements; multi-session continuity; failure modes; multi-practitioner attribution; cross-specialist shared patterns; archived material to consult: workflow descriptions in archived plugin/skills/)
+- ARCH Layer 3 workflow-detail topics (placeholder until Phase 3.5 — workflow definition representation schema; workflow_instance state machine; phase transitions + authority requirements; multi-session continuity; failure modes; multi-practitioner attribution; archived material to consult: workflow descriptions in archived plugin/skills/)
+- Cross-specialist shared workflow patterns: resolved via mental modeling (D gate) — shared patterns live as Layer A reusable templates / specialist-bundled bausteine (content, not framework primitive). If specialists develop genuinely-cross-archetype pattern not yet in Layer A, extend Layer A content. Watch-list signal: if Layer A growth proves insufficient for a pattern that's structurally cross-cutting (not just content-shaped), examine then; not a framework primitive by default.
 - `drafts/quality-gate.md` (quality-gate runtime mechanism that composes with workflow_instance observability)
 
 ---

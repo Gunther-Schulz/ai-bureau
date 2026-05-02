@@ -37,13 +37,27 @@ Single "user" framing collapses these into one. Multiple "usage profiles" preser
 
 ## Taxonomy
 
-### Validation gate (fires FIRST)
+### Validation gates (structural; fire BEFORE design proceeds OR defer is accepted)
 
-| Role | Description | Profile |
-|---|---|---|
-| **G** | **Composability Gate (package consumer perspective)** — cross-cutting validation gate; fires FIRST when designing any L1-L4 producer artifact. Validates against multi-mode consumption (consulting / internal-firm-reuse / OSS / marketplace-future / backup-migration). If G fails, reshape design. If G passes, proceed to multi-axis validation across producer profiles. | [G-composability-gate.md](G-composability-gate.md) |
+| Gate | Fires when | Blocks until | Profile |
+|---|---|---|---|
+| **G** | **Composability Gate** — designing any L1-L4 producer artifact | Multi-mode consumption requirements satisfied (consulting / internal-firm-reuse / OSS / marketplace-future / backup-migration). If G fails, reshape design. | [G-composability-gate.md](G-composability-gate.md) |
+| **D** | **Defer Gate** — considering deferring any architectural item | Mental modeling within profile grounding attempted; defer only valid if mental modeling genuinely cannot resolve (truly awaits real-world evidence the framework doesn't yet have access to). | (cross-cutting; no separate profile — discipline embedded in sharpening / decision-design-sharpening / coherence-audit invocations) |
 
-**Why a gate, not a stage**: G is not a sequential lifecycle stage (L1-L9 cover those). It's the initial composability check that fires before any producer-side design proceeds. Lifecycle order is L1-L4-produce → consumers-consume; validation order puts G first — design with the end (consumption) in mind.
+**Both gates are STRUCTURAL.** Wrong shapes can't pass — composability + non-defer-instinct are not advisory. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
+
+**Why gates, not stages**: G + D are not sequential lifecycle stages (L1-L9 cover those). They're cross-cutting validation gates that fire BEFORE design proceeds (G) or defer is accepted (D). Lifecycle order is L1-L4-produce → consumers-consume; validation order puts G + D first — design with the end (consumption) in mind; defer only when mental modeling fails.
+
+**D Gate procedure** (when AI considers deferring):
+1. Identify the item being considered for defer
+2. Attempt mental modeling within profile grounding (multi-axis validation across relevant profiles)
+3. Construct hypothetical scenarios within profile constraints
+4. Apply G gate to mental scenarios (does proposed resolution support multi-mode consumption?)
+5. Check whether primitive's classification holds across mental scenarios
+6. Defer ONLY IF mental modeling genuinely cannot resolve — name the specific external evidence awaited (e.g., "second-archetype deployment data"; "Phase 1 measurement"; "regulatory ruling")
+7. If mental modeling resolves → evolve answer NOW (Round 1+2 sharpening on resolved framing); don't defer
+
+**D Gate composes with**: `feedback_pattern_not_instance_defers.md` (no-defer principle; D gate is structural enforcement); `feedback_defer_instinct.md` (defer-instinct sticky across sessions; D gate is counter-mechanism).
 
 ### Lifecycle stages — framework participants (L0-L10)
 
@@ -122,11 +136,11 @@ Other shapes (federation, hybrid, etc.) per VISION shape catalog — covered as 
 | L8 | Auditor / reviewer — post-hoc defensibility test | n/a (evaluator stage) | Skeleton (full content TBD) |
 | L9 | Shape catalog curator | n/a (ecosystem stage) | Skeleton (full content TBD) |
 
-## Validation discipline (two-step order)
+## Validation discipline (gated)
 
-Profiles ground a two-step validation discipline that fires for any architectural decision affecting L1-L4 producer artifacts:
+Profiles ground a structural validation discipline that fires for architectural decisions:
 
-### Step 1: G — Composability Gate (fires FIRST)
+### Gate 1: G — Composability Gate (fires when designing any L1-L4 producer artifact)
 
 Before producer-side design proceeds, validate against G consumer profile:
 - Does this design support consulting deliverable distribution?
@@ -135,11 +149,21 @@ Before producer-side design proceeds, validate against G consumer profile:
 - Does it support marketplace distribution (future-conditional)?
 - Does it support backup / migration / cloning?
 
-If G fails for any consumption mode, reshape the design. Don't proceed to multi-axis validation until G is satisfied. Wrong shapes can't pass — composability is structural, not advisory.
+If G fails for any consumption mode, reshape the design. Don't proceed to producer-side validation until G is satisfied.
 
-### Step 2: Multi-axis validation across producer profiles (per `feedback_multi_axis_validation.md`)
+### Gate 2: D — Defer Gate (fires when AI considers deferring)
 
-After G passes, validate primitive classifications across three orthogonal dimensions:
+Before defer is accepted, attempt mental modeling:
+- Construct hypothetical scenarios within profile grounding (across relevant L1-L9 profiles)
+- Apply multi-axis validation (archetype × work-type × role) to mental scenarios
+- Check primitive's classification holds; check G gate on mental resolutions
+- Defer only valid if mental modeling genuinely cannot resolve (truly awaiting real-world evidence)
+
+If mental modeling resolves → evolve answer now (Round 1+2 sharpening). Don't defer when tools are sufficient.
+
+### Step 3: Multi-axis validation across producer profiles (per `feedback_multi_axis_validation.md`)
+
+After G passes (and after D gate considered if any defer arises), validate primitive classifications across three orthogonal dimensions:
 - **Archetype**: planner / lawyer / researcher / auditor / etc.
 - **Work-type within archetype**: codified workflow / ad-hoc exploratory / one-off communication / research-mode / maintenance / learning
 - **Role**: practitioner / workflow-designer / specialist-author / instance-deployer / AI-runtime / multi-user-collaborator
@@ -150,11 +174,12 @@ Plus explicit non-coverage question: what use cases does primitive NOT cover; in
 
 - **G profile** grounds consumer side (single cross-cutting profile)
 - **L1-L4 profiles** each have "Packaging boundary" section grounding producer side
-- Both must pass for design to proceed
+- **D gate** prevents defer-instinct shortcuts on architectural questions
+- All must pass for design to proceed without defer
 
-### Why G first
+### Why structural gates (not advisory)
 
-"Design with the end in mind." If consumption-side concerns aren't gated at the start, producer-side design can produce non-composable artifacts that require expensive rework. G-first makes composability structural rather than advisory. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
+"Design with the end in mind" (G). "Defer only when truly awaited evidence" (D). If composability concerns aren't gated at the start, producer-side design can produce non-composable artifacts. If defer-instinct isn't gated at decision moments, architectural questions get punted on speculative grounds rather than resolved through mental modeling. Per `feedback_wrong_shapes_impossible.md`: prefer structural constraints that make wrong shapes impossible.
 
 ## Persistence + evolution
 
