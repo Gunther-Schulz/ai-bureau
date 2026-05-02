@@ -28,12 +28,12 @@ When resolved:
 ### Open
 
 - **pioneer instance** [origin: TOC §8 + Phase 5 ROADMAP item] — workspace as production-tool + research-lab + IP-proving-ground; meta concept
-- **category collapse** [origin: TOC §8 + intertwining Composes-with + tacked-on AI Composes-with] — biggest risk to axis 1; meta concept; force that degrades intertwined → tacked-on regardless of architectural intent
 - **answer-machine AI / oracle AI / validator AI** [origin: VISION line 144 — Ming research distinguishes 3 axis-2 failure modes; surfaced in Round 2 sharpening of axis-1 trio] — axis-2 failure modes (parallel structure to tacked-on AI for axis 1; only sparring produces value per Ming research)
 - **rubber-stamping** [origin: VISION authorship-preservation framing + parallel-structure observation in Round 2 sharpening] — axis-3 failure mode (parallel structure: each axis has positive operational state + failure-mode anti-pattern)
 
 ### Resolved (current phase; archival at Phase 3 start)
 
+- ~~**category collapse**~~ [resolved this commit] — cross-axis force that degrades engagement regardless of architectural intent (axis-1 primary anchor; manifests on all three axes per Round 1 stress-test)
 - ~~**adapter**~~ [resolved 7d199e5] — final Pattern A primitive locked
 - ~~**work-unit**~~ [resolved 6a5dc53] — added per Round 3 audit RA2 (was missing canonical home)
 - ~~**claim**~~ [resolved 480bfaa] — added per Round 3 audit RA1 (atomic accountability-bearing-assertion)
