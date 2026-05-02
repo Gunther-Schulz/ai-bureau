@@ -301,8 +301,8 @@ Disciplines compose. Different disciplines fire at different decision moments. T
 
 | Discipline | Fires when | Codified at |
 |---|---|---|
-| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.1 (Step 7 REVISION/EXPANSION self-check) |
-| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.1 "Audit scaling strategies" |
+| Coherence-audit 10 universal lenses + corpus-specific | Cross-decision corpus validation | `plugin/skills/coherence-audit/` v0.3.2 (Step 7 REVISION/EXPANSION self-check) |
+| Audit scaling strategies (cluster compression / deltas / on-demand fleshing / sampling / full systematic) | Audit-load-management decisions | `plugin/skills/coherence-audit/` v0.3.2 "Audit scaling strategies" |
 | Provenance hygiene (no audit-history breadcrumbs in canonical content) | Applying lock revisions | coherence-audit Lens 5 v0.2.1 |
 | Profile-grounded validation | Pre-validation + post-validation | `profiles/INDEX.md` |
 

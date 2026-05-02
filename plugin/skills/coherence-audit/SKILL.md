@@ -2,7 +2,7 @@
 name: coherence-audit
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including \"audit the glossary\", \"review the corpus\", \"cross-entry audit\", \"is the architecture clean\", \"are these the right primitives\", \"primitive-set audit\", \"set-level review\", \"coherence check\", \"is the vocabulary coherent\". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening)."
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.3.1
+version: 0.3.2
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -203,12 +203,26 @@ Per `feedback_judgment_and_automate.md`: don't menu the findings; commit a posit
 
 **Auto-add to BACKLOG.md** (v0.2.2): when audit surfaces items that aren't actionable in current scope (e.g., "Phase 3 ARCH resolves..." forward-references; deferred details; Lens 11-15 corpus-specific findings during Phase 2 GLOSSARY audit), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit as the audit application. BACKLOG is the central work-item tracker; coherence-audit's deferrals must surface there or risk getting lost.
 
-**Post-audit self-check (v0.2.2)**: at the end of the audit (after surfacing findings + Pareto verdicts across all 10 lenses), AI explicitly evaluates against termination signals + Lens 1+8+9 collective REVISION count and commits a position:
+**Post-audit self-check (v0.3.2 update)**: at end of audit, mandatory empirical density check + Q1-Q5 honest termination test per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6.
 
-- **STABLE — corpus is set-coherent** with reasons (cite: "Lens 1+8+9 collective REVISION count = 0", "all findings are mechanical EXPANSIONS not architectural REVISIONS", "previous audit run yielded similar low-yield findings")
-- **CONTINUE — Round N+1 warranted** with reasons (cite specific lens that surfaced load-bearing gaps; or new architectural decisions locked since last audit warrant another pass)
+**Surface-type declaration**: coherence-audit = SET-LEVEL AUDIT. Density profile: per-cluster (audit may yield findings across many rounds without decay UNTIL specific cluster exhausted). Pattern-matching architectural-decision decay (6→5→3→0-1) onto SET-LEVEL surface = recurrent bias.
 
-User confirms or overrides. Counters self-validation bias in BOTH directions. Don't override signals with vague "feels stable" — name the specific termination signal.
+**Empirical density check**: count substantive findings (HIGH + MEDIUM; exclude cosmetic / NO-ACTION) current audit-pass vs previous. ≥50% drop = decay confirmed; within ±25% = decay NOT confirmed.
+
+**Lens-coverage check** (specific to SET-LEVEL AUDIT): even if density drops, verify ALL 10 universal lenses applied (Lens 1+8+9 LOAD-BEARING required). Per cluster: verify lens applied per-cluster, not just corpus-wide. Lens-coverage incomplete → CONTINUE regardless of density.
+
+**Honest termination test (Q1-Q5)**:
+- Q1: Current pass substantive count?
+- Q2: Previous pass substantive count?
+- Q3: Density change (%)?
+- Q4: If CONTINUE: which specific lens surfaced load-bearing gaps? OR new architectural decisions locked since last audit warrant another pass? OR specific cluster not yet audited?
+- Q5: If STABLE: can I name specific termination signal? (e.g., "Lens 1+8+9 collective REVISION count = 0 AND density decay confirmed AND all clusters audited")
+
+**Verdict criteria**:
+- STABLE: density decay confirmed AND Lens 1+8+9 REVISIONs = 0 AND all clusters covered AND Q5 cites specific signal
+- CONTINUE: density holds OR Lens-coverage incomplete OR Q4 names specific gap OR user explicit signal
+
+Manufactured-criticism counter-test + manufactured-comfort counter-test BOTH applied (per `sharpen` v0.10.0). Pattern-matching expected decay onto SET-LEVEL audit surface = manufactured comfort.
 
 ### Step 5: Apply revisions in cascade-aware order
 

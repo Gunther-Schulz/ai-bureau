@@ -2,7 +2,7 @@
 name: pre-implementation-sharpening
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use at implementation-start moment for major architectural commitment (after architectural decisions are LOCKED in decision records; before implementation code is written). Surfaces operational/runtime/deployment details that decision-design phase intentionally deferred. Triggers via natural-language prompts including \"let's start implementing X\" / \"before we implement, what details haven't we surfaced\" / \"implementation-readiness check\" / \"solidify before implement\" / \"lock down implementation details\" / \"challenge/surface/refine before we ship\" (or original \"challenge/review/refine before we ship\") / \"verify implementation readiness\" / \"what implementation details are we missing\". Phase 2 of two-phase pattern (Phase 1 = decision-design-sharpening). AKA the challenge → surface → refine → solidify cycle applied at implementation-start moment. Applies Pareto discipline (refine for Pareto improvement, not for change) per round. Output is implementation-readiness checklist + decision-record amendments for ~10-20% architectural flow-back. NOT for decision-formation moments (use decision-design-sharpening instead) or post-implementation drift detection (use drift-detection skills)."
 when_to_use: At IMPLEMENTATION-START MOMENT for major commitment. After architectural decisions are LOCKED in decision records; before implementation code is written. Fires when user signals "start implementing X" / "implementation-readiness check" / "solidify before implement" / "challenge/surface/refine implementation readiness" / "lock down implementation details" / "before we ship X". Do NOT use for decision-formation moments — that's decision-design-sharpening.
-version: 0.3.1
+version: 0.4.0
 ---
 
 # Pre-implementation sharpening (Phase 2)
@@ -104,9 +104,12 @@ Run when implementation surface is complex (e.g., implementing a foundational ar
 
 Surfaces additional implementation concerns that round 2 missed.
 
-**Empirical sweet-spot pattern**:
-- Narrow implementation surface (single bundle): 2-round sweet spot; round 3 yields diminishing returns
-- Broad implementation surface (foundational commitment spanning multiple surfaces): up to 3-round sweet spot
+**Empirical sweet-spot pattern (per surface type; v0.4.0 update)**:
+- Narrow implementation surface (single bundle): typically 2-round sweet spot
+- Broad implementation surface (foundational commitment spanning multiple surfaces): typically 3-round
+- BUT: density-check governs — empirical density measurement (not pattern-match) determines termination per `plugin/skills/sharpen/SKILL.md` v0.10.0 + `decision-design-sharpening` v0.8.0
+
+Surface-type declaration: pre-implementation-sharpening is typically PROCEDURE-DOCUMENT-adjacent (operational-detail surfacing) for a specific architectural commitment. Density profile: starts dense (operational gaps) → tapers as readiness completes.
 
 ### Output: Implementation-readiness checklist + decision-record amendments
 
@@ -119,16 +122,29 @@ After 2-3 rounds:
 
 When pre-implementation sharpening surfaces items that aren't actionable in current scope (e.g., implementation-readiness checklist items deferred to next phase; DR amendments needed for related decisions; cross-cutting concerns spanning multiple implementation phases), add corresponding entries to `BACKLOG.md` under the relevant phase section in same commit. BACKLOG is the central work-item tracker.
 
-### Post-round self-check (v0.3.1)
+### Post-round self-check (v0.4.0; mandatory empirical density check + Q1-Q5 honest termination test)
 
-At the end of each round (after surfacing findings + applying Pareto verdicts), AI explicitly evaluates against termination signals + sweet-spot pattern + flow-back rate (architectural-finding percentage) and commits a position:
+At the end of each round, AI applies mandatory checks per `plugin/skills/sharpen/SKILL.md` v0.10.0 Step 6:
 
-- **STABLE — implementation-readiness is sufficient** with reasons (cite: "Round N yielded 0 substantive refinements", "narrow implementation surface = 2-round sweet spot", "flow-back rate within expected ~10-20% range")
-- **CONTINUE — Round N+1 warranted** with reasons (cite specific category that surfaced incomplete coverage: lifecycle gaps, transport unspecified, error-handling deferred, deployment-tier ambiguity)
+**Empirical density check**: count substantive findings (HIGH + MEDIUM; exclude cosmetic / NO-ACTION) current round vs previous round. ≥50% drop = decay confirmed; within ±25% = decay NOT confirmed; 25-50% drop = ambiguous.
 
-User confirms or overrides. Counters self-validation bias in BOTH directions: defaulting to "continue" because more rounds feel productive (manufactured-criticism risk) vs defaulting to "stable" because shipping is comfortable (premature-implementation risk). Forcing explicit position with rationale makes the self-check observable.
+**Surface-type declaration**: pre-implementation-sharpening = PROCEDURE-DOCUMENT-adjacent. Density-check governs (not pattern-match against architectural-decision decay).
 
-The check is mechanical — termination signals from the next section are the discriminator. Don't override signals with vague "feels stable" or "could go deeper" — name the specific signal.
+**Honest termination test (Q1-Q5)**:
+- Q1: Current round substantive count?
+- Q2: Previous round substantive count?
+- Q3: Density change (%)?
+- Q4: If CONTINUE: what specific operational-concern category hasn't been covered? (lifecycle / transport / error-handling / deployment-tier / multi-tenant / observability / compliance / etc.)
+- Q5: If STABLE: can I name the specific termination signal beyond "feels done"? (flow-back rate within expected; density decay confirmed; specific gap closed)
+
+Q4 unanswerable for CONTINUE = manufactured criticism; lean STABLE.
+Q5 unanswerable for STABLE = manufactured comfort; lean CONTINUE.
+
+**Verdict criteria**:
+- STABLE: density decay confirmed AND Q5 names specific signal AND counter-validation passes
+- CONTINUE: density holds OR user explicit signal OR Q4 names specific unaddressed category
+
+Manufactured-criticism counter-test + manufactured-comfort counter-test BOTH applied. User-triggered CONTINUE honored unless empirical decay confirmed.
 
 ## Round termination signals
 
@@ -139,7 +155,8 @@ Lock + persist when ANY of these signals fire:
 | User explicitly says "ready to implement" / "checklist accepted" / "lock" | Lock immediately + persist checklist + DR amendments |
 | Round surfaces 0 substantive refinements (after Pareto screen) | Strong signal implementation-readiness is sufficient OR next round = manufactured criticism. Default to LOCK |
 | 2 rejected rounds in a row (no refinements accepted) | Suggest: "rounds are surfacing nothing accepted; either implementation-readiness is sufficient (lock) OR scope needs reframing (decompose implementation phase)" |
-| User requests round 4+ at pre-implementation phase | Respond: "round 4+ at pre-implementation phase signals implementation phase is too large; recommend decomposing this implementation into sub-implementations" |
+| User requests round 4+ at pre-implementation phase WITH density holding | HONOR user-trigger; pre-implementation-sharpening is PROCEDURE-DOCUMENT-adjacent surface; density-check governs (per v0.4.0). Don't pattern-match architectural-decision decomposition trigger onto procedure-document surface. |
+| User requests round 4+ AND density decay confirmed | Suggest: "decay confirmed; lock checklist OR scope-decomposition signal — name specific gap before continuing" |
 | AI surfaces only manufactured criticism (Pareto-fail refinements) | Respond: "refinements surfaced are not Pareto-improving; recommend lock OR explicit acknowledgment of manufactured-criticism territory" |
 
 ## CRITICAL: Architectural finding flow-back
