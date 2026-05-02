@@ -2,7 +2,7 @@
 name: coherence-audit
 description: Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including "audit the glossary", "review the corpus", "cross-entry audit", "is the architecture clean", "are these the right primitives", "primitive-set audit", "set-level review", "coherence check", "is the vocabulary coherent". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening).
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.3.0
+version: 0.3.1
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -233,6 +233,16 @@ Anti-pattern caught by Lens 5 provenance-hygiene check: AI applying a revision f
 | Position per finding | Committed recommendation, not menu |
 | Cascade-aware revision order | Sequence stated before applying |
 | Diff per entry touched | Single commit (or coupled-sequence) per cascade |
+
+### Step 7 (v0.3.1): REVISION/EXPANSION classification self-check
+
+Detection mechanism for awaited 3-tier discriminator codification (per BACKLOG watch-list "3-tier discriminator codification"). At audit completion, before locking findings, ask explicitly:
+
+> Any finding classified as EXPANSION that on second look would reclassify as REVISION? Any EXPANSION whose cascade-implications feel REVISION-flavored — load-bearing reciprocal asymmetry / structural elevation of implicit-to-explicit / glossary-grade distinction?
+
+If yes repeatedly across audits → signal that 2-tier (REVISION/EXPANSION) is producing under-precision; revisit per BACKLOG watch-list. If consistently no → 2-tier holds; signal hasn't materialized; defer codification.
+
+Empirical signal threshold: ≥3 borderline classifications across consecutive audits OR user pushback that classifications feel under-precise OR cascade-work-lag (Lens-6-style reciprocal gaps caught at audit-time that should have been caught at sharpening-time).
 
 ## Termination signals
 
