@@ -2,7 +2,7 @@
 name: sharpen
 description: Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", "another round", "go deeper", "what else". Single critical pass by default; iterates when user signals deeper.
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.8.0
+version: 0.9.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -110,7 +110,9 @@ Commit STABLE or CONTINUE position with rationale citing specific signal:
 
 Substantive = affects load-bearing claims, structural integrity, or reader's mental model. Cosmetic-only findings don't block STABLE.
 
-**Iteration is USER-TRIGGERED.** Don't auto-iterate after STABLE verdict — AI-self-triggered rounds drift toward manufactured criticism (per `feedback_pre_decision_sharpening`). When user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate. Same procedure; typically different angle (first pass: structure + cuts; second pass: substance + clarity; third pass: cross-references + dependencies).
+**Iteration is USER-TRIGGERED.** Don't auto-iterate after STABLE verdict — AI-self-triggered rounds drift toward manufactured criticism (per `feedback_pre_decision_sharpening`). When user signals "another round" / "go deeper" / "what else" / "be more ruthless": iterate. Same procedure each pass — Pareto catches what matters; findings naturally drift across passes as earlier-fixed surfaces stabilize and reveal what was masked.
+
+**Sweet spot: 2 rounds** (Round 1 full procedure + Round 2 sharpening). Per `feedback_pre_decision_sharpening` empirical pattern. Round 3+ only when specific signal warrants — broad surface (large unified target), cross-content integration (multi-doc dependencies), or user explicitly signals deeper. Default expectation: Round 1 surfaces structural findings; Round 2 catches what Round 1's fixes revealed; STABLE typically lands after Round 2.
 
 ## Anti-patterns (failure modes the skill counters)
 
