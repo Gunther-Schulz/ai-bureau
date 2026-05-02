@@ -2,7 +2,7 @@
 name: sharpen
 description: Apply rigorous critical evaluation to any content — drafts, proposals, plans, reasoning chains, writeups, ideas, summaries, decisions, architectural sketches, message drafts. Surfaces load-bearing vs decorative, overclaim vs grounded, redundant vs essential, gaps vs covered. Default output: KEEP / REVISE / CUT positions per finding, with rationale, with explicit counter-validation against self-validation bias. Forces refine-by-cut alongside refine-by-add. Triggers via natural prompts including "sharpen this", "sharpen the {target}", "review this critically", "what would you push back on", "challenge this", "what's load-bearing vs decorative", "what should I cut", "tighten this", "where are the gaps", "be ruthless on this", "another round", "go deeper", "what else". Single critical pass by default; iterates when user signals deeper.
 when_to_use: User has content and wants critical evaluation with explicit discipline (Pareto check, counter-validation, refine-by-cut). Anti-pattern signal: AI defaulting to "looks good" or to addition-suggestions only — that's self-validation bias triggered; this skill counters it.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Sharpen — critical-pass discipline
@@ -14,6 +14,10 @@ Rigorous critical evaluation applied to content. The procedure is generalizable:
 Honest critical evaluation that counters self-validation bias by forcing **cognitive-mode shifts** the default mode misses (categorical → non-categorical; writer → reader; text-reader → procedure-runner). **Sparring-mode**, not validator-mode: challenges assumptions, generates alternatives, attacks content — doesn't check conformance to declared rules. **Pareto-disciplined**: rejects manufactured criticism alongside refine-by-add bias; trivial-but-Pareto-improving findings count as low-value churn. **Commits positions**, doesn't menu options.
 
 Future revisions test: does the change preserve honest evaluation + cognitive-mode-shifting + sparring-orientation + Pareto discipline + position-committing? Or does it drift toward validator-mode / consensus-seeking / completeness-for-its-own-sake / rate-and-rank scoring?
+
+**Self-applicability test**: this skill must remain runnable on itself. If a revision makes the skill un-self-applicable (e.g., requires external context the skill itself doesn't have, or assumes a target shape the skill isn't), the revision drifts from spirit. Run sharpen on the sharpen skill periodically to verify.
+
+**AI-executor test**: this skill is invoked by humans but executed by AI. Form should prompt mechanical AI iteration (bulleted sequential engagement; structured cognitive-mode prompts) over narrative gist-extraction. When form tradeoffs arise (compact prose vs nested bullets; flowing paragraph vs explicit checklist), default to the form that prompts iteration — not the form that reads cleanest to a human.
 
 ## When to use
 
@@ -77,11 +81,23 @@ Counter-mechanism: force the cut-questions explicitly. What's redundant? What's 
 
 ### 6. Post-pass self-check
 
-Before declaring STABLE: the lens questions in Step 2 are categorical (each tests for content matching a category). Run additional **cognitive-mode passes** — defaults the categorical lens misses:
+Before declaring STABLE: the lens questions in Step 2 are categorical (each tests for content matching a category). Run additional **cognitive-mode passes** — each prompts a different default the categorical lens misses:
 
-- **Non-categorical pass**: what's implicit but unstated? Where is coverage asymmetric (e.g., one bias guarded but its inverse unguarded)? What edge case is unguarded? What assumption is smuggled in? Catches findings that fall *between* the structured categories.
-- **Cold-read pass**: simulate a reader without the author's context — would they parse this correctly? Where would they stumble? What unstated assumptions need surfacing? Catches author-context-blindness. (Author-context only; domain-knowledge gaps are usually intentional scope decisions, not failures.)
-- **Mechanism-simulation pass** (procedural targets only — skills, prompts, runbooks, rules, checklists, decision-trees): mentally execute the procedure. Does it produce the intended output, or does the text-coherent surface mask procedural gaps (missing termination, ambiguous branching, steps depending on outputs not produced)?
+- **Non-categorical pass** — catches findings that fall *between* the structured categories:
+  - What's implicit but unstated?
+  - Where is coverage asymmetric? (e.g., one bias guarded but its inverse unguarded)
+  - What edge case is unguarded?
+  - What assumption is smuggled in?
+- **Cold-read pass** — simulate a reader without the author's context; catches author-context-blindness:
+  - Would they parse this correctly?
+  - Where would they stumble?
+  - What unstated assumptions need surfacing?
+  - (Author-context only; domain-knowledge gaps are usually intentional scope decisions, not failures.)
+- **Mechanism-simulation pass** (applies to procedural targets or procedural sections of mixed-content targets — skills, prompts, runbooks, rules, checklists, decision-trees, or procedure-blocks within a larger doc) — mentally execute the procedure; catches procedural gaps masked by text-coherent surface:
+  - Does it produce the intended output?
+  - Missing termination conditions?
+  - Ambiguous branching?
+  - Steps depending on outputs not produced?
 
 Simulate honestly across all passes — don't manufacture findings the simulation wouldn't actually produce.
 
@@ -99,8 +115,11 @@ Substantive = affects load-bearing claims, structural integrity, or reader's men
 - **Pattern-matching from memory** — produces fake findings about content that isn't there
 - **Validator-mode** — checking conformance to declared rules vs sparring-mode (challenging assumptions, generating alternatives)
 - **Manufactured criticism** — Pareto-fail refinements
+- **Manufactured findings to fill all categories** — surfacing one finding per lens question even when the question doesn't apply to the target
 - **Skipping load-bearing questions** — surface findings (typos, phrasing) defaulting because they feel productive while substance questions stay unasked
 - **Silent KEEP** — not stating "this is solid because X" leaves implicit-acceptance; explicit rationale matters
+- **CUT-without-rationale** — refine-by-cut momentum bias; "this feels verbose" isn't a cut rationale
+- **Auto-iteration after STABLE** — AI-self-triggered rounds drift toward manufactured criticism; iteration is user-triggered
 
 ## Why this skill earns its place
 
@@ -112,5 +131,3 @@ Without explicit critical-pass discipline:
 - Refine-by-add dominates; refine-by-cut neglected
 - "Looks good" sycophancy on recent work goes unchallenged
 - Surface findings (typos, phrasing) substitute for substance findings
-
-With this skill: the procedure is mechanical and repeatable. The documented discipline is stable across contexts; mechanical procedure resists drift better than implicit evaluation.
