@@ -18,12 +18,20 @@ Failure modes covered (per drafts/execution-fidelity.md):
   Read at write boundary
 - Disguise #5 Substituting AI judgment for codified rule: hook is the
   rule; AI judgment can't bypass
+- Provenance hygiene drift: Check 4 blocks narrative-breadcrumb regex
+  matches in canonical content (Layer 0/1/2/3) — structural enforcement
+  upgrade for coherence-audit Lens 5 v0.2.1 prose discipline that kept
+  recurring across sessions
 
 Honest limitations:
 - Detects FILE-READ-HAPPENED, not GREENFIELD-EVALUATION-HAPPENED
 - AI could Read perfunctorily; quality remains convention-grade
 - Hook fires at write-boundary; doesn't gate Round 2 sharpening
   semantically (no per-Round mechanical signal)
+- Check 4 regex catches highest-frequency narrative patterns (session-N
+  / AMENDED session / this-commit / this-session / earlier-in-session);
+  cannot catch semantic narrative without keywords; AI can perturb to
+  evade at cost of unnatural language
 
 Per session-16 (commit 55c016c) escalation from procedural redundancy
 (B+C: Discipline 10 + Round 1 checklist) to structural enforcement (A:
@@ -47,11 +55,45 @@ ARCHITECTURAL_PATTERNS = [
     re.compile(r"(^|/)DISCIPLINES\.md$"),
 ]
 
+# Canonical-content paths where provenance breadcrumbs are forbidden
+# (Check 4). Subset of ARCHITECTURAL_PATTERNS — EXCLUDES docs/decisions/*
+# because Layer 4 DRs are the explicit narrative-home per MAINTENANCE.md
+# DR template Sharpening provenance section. Also excludes DISCIPLINES.md
+# (Layer 0 anchor; may legitimately reference canonical exemplars per
+# Discipline 10 wording).
+CANONICAL_CONTENT_PATTERNS = [
+    re.compile(r"(^|/)arch/[^/]+\.md$"),
+    re.compile(r"(^|/)ARCHITECTURE\.md$"),
+    re.compile(r"(^|/)GLOSSARY\.md$"),
+    re.compile(r"(^|/)MAINTENANCE\.md$"),
+]
+
 # Required reads per architectural commit.
 REQUIRED_SKILL = "plugin/skills/decision-design-sharpening/SKILL.md"
 REQUIRED_PROFILE_INDEX = "profiles/INDEX.md"
 PROFILE_GLOB_PATTERN = re.compile(r"(^|/)profiles/[A-Z]\d?[a-z]?-[^/]+\.md$")
 ARCHIVE_PATH_PATTERN = re.compile(r"archive/[^\s\"'`)]+\.md")
+
+# High-signal narrative-breadcrumb regex patterns. Forbidden in canonical
+# content (Layer 0/1/2/3) per ARCHITECTURE.md cross-cutting principle
+# "Provenance hygiene" + coherence-audit Lens 5 v0.2.1. Provenance lives
+# in HANDOFF + git log + commit messages + DRs — not canonical content.
+#
+# Iterative pattern set: tune as real false-positives surface. Initial
+# scope = highest-frequency natural-failure-mode patterns from session-16
+# substrate cargo-cult + session-18 cascade pollution.
+BREADCRUMB_PATTERNS: list[tuple["re.Pattern[str]", str]] = [
+    (re.compile(r"\bsession[\s\-]\d+\b", re.IGNORECASE),
+     "session-N reference"),
+    (re.compile(r"\bAMENDED session\b", re.IGNORECASE),
+     "AMENDED session marker"),
+    (re.compile(r"\b(?:in )?this commit\b", re.IGNORECASE),
+     "this-commit reference"),
+    (re.compile(r"\b(?:in )?this session\b", re.IGNORECASE),
+     "this-session reference"),
+    (re.compile(r"\bearlier in (?:the )?session\b", re.IGNORECASE),
+     "earlier-in-session reference"),
+]
 
 # Look back this many tool calls when checking freshness.
 FRESHNESS_WINDOW = 100
@@ -62,6 +104,47 @@ MIN_PROFILE_READS = 3
 
 def is_architectural_artifact(path: str) -> bool:
     return any(p.search(path) for p in ARCHITECTURAL_PATTERNS)
+
+
+def is_canonical_content(path: str) -> bool:
+    """Layer 0/1/2/3 canonical content where provenance breadcrumbs are
+    forbidden. Excludes docs/decisions/* (Layer 4 DRs)."""
+    return any(p.search(path) for p in CANONICAL_CONTENT_PATTERNS)
+
+
+def extract_write_content(tool_input: dict) -> str:
+    """Extract content being written/edited. Supports Edit (new_string),
+    Write (content), and MultiEdit (edits[].new_string)."""
+    if not isinstance(tool_input, dict):
+        return ""
+    content = tool_input.get("content")
+    if isinstance(content, str):
+        return content
+    new_string = tool_input.get("new_string")
+    if isinstance(new_string, str):
+        return new_string
+    edits = tool_input.get("edits")
+    if isinstance(edits, list):
+        parts = []
+        for edit in edits:
+            if isinstance(edit, dict):
+                ns = edit.get("new_string")
+                if isinstance(ns, str):
+                    parts.append(ns)
+        return "\n".join(parts)
+    return ""
+
+
+def find_breadcrumbs(content: str) -> list[tuple[str, str]]:
+    """Scan content for narrative-breadcrumb patterns. Return list of
+    (matched_text, pattern_label) tuples (deduplicated by caller)."""
+    if not isinstance(content, str) or not content:
+        return []
+    found = []
+    for pattern, label in BREADCRUMB_PATTERNS:
+        for m in pattern.finditer(content):
+            found.append((m.group(0), label))
+    return found
 
 
 def read_transcript_events(transcript_path: str) -> list[dict]:
@@ -176,8 +259,8 @@ def main() -> int:
             )
 
     # Check 3: archive-citation cross-check (greenfield evaluation)
-    write_content = tool_input.get("content") or tool_input.get("new_string") or ""
-    if isinstance(write_content, str) and write_content:
+    write_content = extract_write_content(tool_input)
+    if write_content:
         cited_archive_paths = set(ARCHIVE_PATH_PATTERN.findall(write_content))
         unread_citations = []
         for cited in cited_archive_paths:
@@ -189,6 +272,41 @@ def main() -> int:
                 f"BLOCK: archive sources cited but not Read in current session "
                 f"(greenfield-evaluation requires direct Read per "
                 f"DISCIPLINES.md Discipline 10):\n{citations_list}"
+            )
+
+    # Check 4: provenance hygiene on canonical content (Layer 0/1/2/3).
+    # Per ARCHITECTURE.md cross-cutting principle "Provenance hygiene" +
+    # coherence-audit Lens 5 v0.2.1 + MAINTENANCE.md 5-layer doc model:
+    # narrative breadcrumbs (session-N / AMENDED session / this-commit /
+    # this-session / earlier-in-session) belong in HANDOFF + git log +
+    # commit messages + DRs, NOT canonical content.
+    #
+    # Honest limitations: pattern-based regex catches highest-frequency
+    # natural-failure-mode (numeric session/round/commit refs). Cannot
+    # catch semantic narrative without keywords. AI can perturb to evade
+    # ("session seventeen") at cost of unnatural language. Tune patterns
+    # as real false-positives surface during work.
+    if is_canonical_content(target) and write_content:
+        breadcrumbs = find_breadcrumbs(write_content)
+        if breadcrumbs:
+            unique = sorted({(text.lower(), label, text) for text, label in breadcrumbs})
+            details = "\n".join(
+                f"    - \"{original}\" ({label})"
+                for _, label, original in unique
+            )
+            blocks.append(
+                f"BLOCK: provenance breadcrumbs in canonical content "
+                f"(Layer 0/1/2/3) violate provenance-hygiene discipline.\n"
+                f"  Per: ARCHITECTURE.md cross-cutting principle "
+                f"\"Provenance hygiene\" + MAINTENANCE.md 5-layer doc "
+                f"model (provenance lives in HANDOFF + git log + commit "
+                f"messages + DRs — NOT canonical content).\n"
+                f"  Found in write content:\n{details}\n"
+                f"  Fix: move narrative to HANDOFF / git commit message / "
+                f"DR Layer 4 (Sharpening provenance section). Keep DR "
+                f"cross-references for rationale anchoring (e.g., \"per "
+                f"`docs/decisions/<X>.md` Step Y\") — those are "
+                f"legitimate references, not breadcrumbs."
             )
 
     if blocks:
