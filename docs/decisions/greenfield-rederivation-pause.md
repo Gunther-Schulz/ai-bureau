@@ -62,15 +62,62 @@ Hook (`architectural_commit_gate.py`) continues firing during execution; catches
 
 ## Procedure (7 steps)
 
-### Step 1: Re-read VISION + locked GLOSSARY in entirety
+### Step 1: Re-read VISION + GLOSSARY in entirety + per-entry greenfield-evaluation
+
+**Per foundation-up discipline (Discipline 8)**: GLOSSARY is Layer 1 foundation for Pattern A vs B vs C framework + Pattern A protocol list (Step 2-4). If GLOSSARY itself has cargo-cult drift, Step 2-4 derivation rests on potentially-drifted foundation (circular validation). Step 1 expanded to two sub-steps to evaluate foundation BEFORE deriving from it.
+
+**Why expansion** (added during procedure-locking; user-flagged circularity bug):
+- Phase 2 GLOSSARY audit applied Coherence-audit Lens 1 (set composition) + Lens 8 (pattern-vs-instance) + Lens 9 (VISION-grounding) at corpus level → 0 REVISIONS
+- BUT: Phase 2 audit did NOT apply per-element-with-archive-citation evaluation (Discipline 10's specific discriminator; codified later session 16)
+- GLOSSARY entries reframing archived primitives qualify as archive-influenced; need per-entry greenfield-evaluation
+
+#### Step 1.A: Full Re-read
 
 **Action**: full Read of `VISION.md` (~255 lines; anchored thesis; 3 axes; falsification) + `GLOSSARY.md` (~2300 lines; 35 locked entries).
 
-**No summary-pattern-matching.** Per `DISCIPLINES.md` Discipline 1 source-grounded rule + Discipline 10 (archive is INPUT not template — applies at corpus level): VISION + GLOSSARY are first-class sources that ground every subsequent derivation.
-
-**Verification**: chat output cites specific VISION line numbers + specific GLOSSARY entry sections during Steps 2-4.
+**No summary-pattern-matching.** Per `DISCIPLINES.md` Discipline 1 source-grounded rule.
 
 **Output**: full VISION + GLOSSARY content in working context; no derivation done yet.
+
+#### Step 1.B: Per-entry GLOSSARY greenfield-evaluation per Discipline 10 discriminator
+
+**Action**: per each of 35 GLOSSARY entries, apply Discipline 10 discriminator:
+1. Was element re-validated against locked architectural commitments that exist NOW (TOP-LEVEL DESIGN PRINCIPLES + 5-layer doc model + Pattern A vs B vs C framework — but stress-test the framework itself, since Step 2 audits it)?
+2. Was element stress-tested against profile clusters in current `profiles/INDEX.md`?
+3. Pattern-vs-instance check: does entry embed pioneer-instance / archetype-instance / regulatory-instance assumptions that current architecture rejected?
+4. Greenfield derivation: would we identify THIS primitive THIS WAY today, working from VISION + first-principles, ignoring archive?
+
+**Per-entry verdict**:
+- **GREENFIELD-VALID** — entry derives from VISION axes / first-principles / locked architectural disciplines without archive-cargo-cult; current shape passes greenfield-derivation chain
+- **NEEDS-REVISION** — minor cargo-cult or ambiguity; specific revision identified (rename / re-classify / sharpen boundary / fix instance-leakage)
+- **NEEDS-REWORK** — foundational drift; substantial redo required (could re-open Phase 2 partially)
+
+**Source-grounded evidence required per verdict**: cite VISION line / first-principles derivation / archived source path the entry was influenced by / current GLOSSARY line numbers.
+
+**Pre-flagged candidates for scrutiny** (highest-risk archive-influence per session-16 stock-taking):
+- `framework` / `shape` / `mechanism` / `policy` (TOP-LEVEL ARCHITECTURE entries; archive-derived terminology session 14 → 16)
+- `Framework C scope` / `Owner B scope` / `Layer A scope` (A-B-C scope model; archive-derived framing)
+- `protocol (architectural)` (Pattern A meta-primitive)
+- `substrate` / `adapter` (tri-aspect Pattern A entries; archive-influenced)
+- `specialist` / `workflow` / `work-unit` (Pattern B entries; reframings of archived primitives)
+- `practitioner` (Pattern C entry)
+- `actor` / `event` (cross-axis structural substrate; archived audit-trail-v2 influence)
+- `sparring (axis 2)` (DERIVED VISION axis; sub-mechanism count from archive)
+- `engaged authorship` (DERIVED axis-3; locked Phase 3.1)
+- `substrate` Composes-with claims about MCP / hooks / permission flow (archive-derived)
+
+**Output**: 35-entry verdict table + cited evidence per verdict.
+
+#### Branch points
+
+| If Step 1.B finds | Action |
+|---|---|
+| All 35 entries GREENFIELD-VALID | Proceed to Step 2-4 with confidence GLOSSARY is solid foundation |
+| Some entries NEEDS-REVISION (1-5; isolated) | Revise in cascade-aware sequence; re-validate; THEN proceed Step 2-4 |
+| Many entries NEEDS-REVISION (5-15; broader cascade) | Pause Step 2-4; revise GLOSSARY entries; cascade to ARCH topics; re-evaluate; THEN proceed |
+| Any entry NEEDS-REWORK (foundational drift) | STOP Step 2-4 work entirely; pause shifts to GLOSSARY redo (much bigger scope; could be Phase 2 partial re-execution); Step 7 decisions may include re-opening Phase 2 |
+
+**Verification**: chat output cites specific VISION line numbers + specific GLOSSARY entry sections per verdict during Step 1.B + during Steps 2-4.
 
 ### Step 2: Greenfield-derive Pattern A vs B vs C primitive-classification framework
 
@@ -250,7 +297,11 @@ Future commits (per execution):
 
 (populated as work proceeds)
 
-### Step 1: Re-read VISION + locked GLOSSARY
+### Step 1.A: Full Re-read
+
+(pending)
+
+### Step 1.B: Per-entry GLOSSARY greenfield-evaluation
 
 (pending)
 
