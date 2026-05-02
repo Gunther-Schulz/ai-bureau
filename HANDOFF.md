@@ -566,6 +566,45 @@ Hook deployed + activated (`/reload-plugins`). Smoke tests pass: arch/* writes b
 
 ---
 
+**Note 41: Phase 3.4 PAUSED — greenfield re-derivation procedure documented**:
+
+User direction after Phase 2.1 audit (substrate REVISION-1 + audit-topic clean): "this is very important! I mean really greenfield! we are trying to build the framework from scratch treating the archive as a loose resource. I feel like this whole process has been too much relying on the archive in the past, otherwise this situation wouldn't have arisen. let's take stock for a moment before continuing... if you look what we have as a whole (full ARCH set, full glossary) what would you do different? what are the gaps? really take your time here. there is a chance we need to invalidate all work, do not consider sunk-cost."
+
+**AI honest stock-taking response** surfaced 4 tiers of concern:
+
+- **Tier 1 HIGH RISK FOUNDATIONAL** (could invalidate substantial work): Pattern A protocol topic 18-section template substrate-shape-anchored / 8 Pattern A protocols list inherits archive's protocol categorization / Pattern A vs B vs C three-pattern framework may be archive-influenced / Phase 3.2 topic taxonomy locked predates Discipline 10
+- **Tier 2 MEDIUM RISK STRUCTURAL** (cascade fixes): Phase 3.1 4 decisions may have cross-topic-cascade-miss / Sparring 8-sub-mechanism count from archive / Profile validation depth shallow / GLOSSARY entries lack per-element greenfield-evaluation
+- **Tier 3 PROCESS** (improvements): Discipline 10 should have been Discipline 1 / Hook should have deployed at session-16 launch / Archive cross-references should flag consult-with-skepticism
+- **Tier 4 GAPS**: orchestrator mechanics / onboarding pathway / federation specifics / Multi-VISION model / Markdown-validation / marketplace mechanics / per-shape policy bundle SCHEMA
+
+**Committed position**: pause Phase 3.4; greenfield re-derivation procedure executes BEFORE continuing. User authorized; pause locked.
+
+**NEW DR `docs/decisions/greenfield-rederivation-pause.md`** (status PROPOSED; this commit):
+
+7-step procedure:
+1. Re-read VISION + locked GLOSSARY in entirety (no summary-pattern-matching)
+2. Greenfield-derive Pattern A vs B vs C framework (ignoring MAINTENANCE.md current TOP-LEVEL ARCHITECTURE)
+3. Greenfield-derive Pattern A protocol list (which protocols emerge from VISION + GLOSSARY without archive)
+4. Greenfield-derive Pattern A protocol topic template (minimal common + per-protocol-extended)
+5. Compare to current locked work (substrate / adapter / sparring / audit + Phase 3.2 + Phase 3.1)
+6. Surface revisions (per Tier)
+7. Decide: revise foundations + cascade OR validate greenfield-equivalent
+
+Anti-patterns explicitly named (counter pattern-matching from current ARCH content; counter self-validation bias on greenfield-equivalent verdicts; counter shortcut-to-validation; counter confirmation bias from prior 0-REVISION metrics).
+
+**Hook continues firing during execution**; catches drift on architectural-artifact writes in real-time.
+
+**Phase 3.4 paused**: 5 remaining Pattern A protocol topics + arch/coordination.md Round 1 redo all paused until Step 7 decisions committed.
+
+**Status**: greenfield-rederivation-pause DR PROPOSED; awaiting user approval to execute Step 1.
+
+**Locked artifact state added**:
+- 11 DRs in docs/decisions/ (was 10; greenfield-rederivation-pause.md NEW)
+- arch/coordination.md NOT locked (Round 1 was proposed; pending pause-resolution + redo)
+- Phase 3.4 progress 4 of 8 frozen pending greenfield audit outcome
+
+---
+
 ## Session 16 continuation #2 (2026-05-02 — afternoon)
 
 (Note: existing #2 section follows; this section is below the new #3 + #4)
