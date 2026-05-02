@@ -181,4 +181,36 @@ Session 18 began as Step 7.A-7.C cascade execution per Note 45 plan. Mid-cascade
 
 **Notes 44 + 45**: historical now (their procedure-DR cascade plan was executed in this session, then pivoted to clean-house when META-failure recurred). They will rotate to archive next time HANDOFF crosses ~500 lines.
 
-**Session 18 commit history** (chronological): cascade attempts → research → clean-house: 567024b (hook Check 4) → 8b8edcd (hook disable mid-research) → 3b691f6 (sparring breadcrumbs) → b10c8de (hook re-enable + bug fix) → 8f7c116 (HANDOFF rotation) → 9551ba0 (DISCIPLINES split) → 623caa3 (audit.md clean reclassify) → 4055020 (GLOSSARY split) → e9d3754 (ARCHITECTURE trim) → 5a253a1 (MAINTENANCE trim) → [this commit] (CLAUDE.md M3-M7 + memory + Note 46).
+**Session 18 commit history** (chronological): cascade attempts → research → clean-house: 567024b (hook Check 4) → 8b8edcd (hook disable mid-research) → 3b691f6 (sparring breadcrumbs) → b10c8de (hook re-enable + bug fix) → 8f7c116 (HANDOFF rotation) → 9551ba0 (DISCIPLINES split) → 623caa3 (audit.md clean reclassify) → 4055020 (GLOSSARY split) → e9d3754 (ARCHITECTURE trim) → 5a253a1 (MAINTENANCE trim) → 66dbc8a (CLAUDE.md M3-M7 + memory + Note 46) → [this commit] (Note 47 — v2 greenfield-rederivation skill plan).
+
+---
+
+**Note 47: Decision — archive v1 procedure DR + create v2 greenfield-rederivation as skill (next-session priority)**
+
+**Context**: post-clean-house, user surfaced the META-failure-of-prior-work concern: ALL architectural work in sessions 1-17 was done by AI under the same cascade-load conditions that today's clean-house diagnosed + fixed. The session-17 procedure DR (`docs/decisions/greenfield-rederivation-pause.md`) was the right pattern (audit foundation before continuing) but it was ALSO executed by single-AI under cascade load — same META-failure conditions it was designed to detect. The Tier-1 findings (Pattern A catalog 8→3; template restructure 18→12+6) are real evidence that the original work HAD errors, but the audit itself can't credibly claim it caught all errors (self-praise bias; same agent did the work + the audit).
+
+**Decision** (user-approved this session): archive v1 + create v2 as a skill + per-execution-DR shape.
+
+**Shape**:
+- **v1 stays in `docs/decisions/greenfield-rederivation-pause.md`** but gets marked superseded with header note: procedure executed under META-failure conditions; findings preserved as HISTORICAL INPUTS to v2 audit, NOT as authoritative verdicts; v2 may confirm or diverge.
+- **v2 skill at `plugin/skills/greenfield-rederivation/SKILL.md`**: codifies the procedure with M3-M7 baked in — per-artifact sub-agent dispatch (M3); per-artifact Reviewer sub-agent (M4); parallel-batched waves; per-batch /clear (M5); Ralph Loop per artifact (M7); HARD STOP per wave (M6); hook protection (M2).
+- **Per-execution DR at `docs/decisions/greenfield-rederivation-<date>-instance.md`**: each v2 execution produces a new DR capturing verdicts using standard DR template.
+
+**Design choices accepted (user-approved)**:
+- Audit scope per execution: SINGLE-CLUSTER (smaller scope = better adherence per Anthropic guidance). Each execution audits one cluster (e.g., Phase 3.1 DRs in one; Phase 3.4 ARCH topics in another).
+- Verdict reconciliation when v2 diverges from v1: USER-DECISION per divergent finding (decision phase = user approval; routine auto-apply would violate architectural authority).
+- Frequency: ON-DEMAND initially; cadence may emerge if divergence rate predictable.
+- v1 findings inventory: stays in v1 archive; v2 instance DRs reference v1 findings as input.
+
+**Next-session priority** (overrides Note 46 "next session pickup #5 substantive Phase 3.5/3.6 work"):
+
+1. `/reload-plugins` — activate hook
+2. Read CLAUDE.md (auto) + new "Cascade discipline (sub-agent-first)" section
+3. **First substantive task**: draft v2 greenfield-rederivation SKILL.md per Note 47 design. This is itself a methodology-design task — apply the same disciplines it's about to enforce (sub-agent-first if the skill draft has multiple cohesive sections; Writer-Reviewer pattern; Ralph self-check at completion).
+4. Mark v1 procedure DR superseded (header note per Note 47 above).
+5. **Second substantive task**: run v2 against ONE cluster (recommend: Phase 3.1 4 DRs as first execution — smallest cluster; foundational; high-load-bearing-error risk if any).
+6. THEN consider Phase 3.5 / 3.6 work, post-audit confidence.
+
+**Honest scope**: full audit of all prior architectural work is ~12 DRs + ~4 ARCH topics + GLOSSARY entry-body re-pass. With per-cluster execution + sub-agent + Reviewer pattern, probably 3-5 sessions. Each session bounded; main session orchestrates; sub-agents do the work.
+
+**Per M6**: HARD STOP for session 18 holds; v2 drafting begins fresh next session per the M3 discipline (drafting a methodology-skill warrants fresh context).
