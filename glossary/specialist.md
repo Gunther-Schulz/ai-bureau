@@ -64,4 +64,4 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - [Framework C scope](framework-c-scope.md) (where specialist definitions live)
 - [Owner B scope](owner-b-scope.md) (where specialist instance content lives)
 - [workspace](workspace.md) (which activates specialists)
-- ARCH Layer 3 specialist-detail topics (placeholder until Phase 3 — specialist granularity 3-test, composability axes, two-tier classification, marketplace mechanics; archived material to consult: `terminology-and-specialist-primitive.md`, `entity-md-scope-model-restructure.md`)
+- `arch/specialist-skill.md` (Phase 3.5 first primitive-cluster ARCH topic; Pattern B + atomic-primitive anchor for 12+5 primitive-cluster topic template; specialist DEFINITION as Framework C bundle with manifest schema + specialist-namespace mechanic for work-unit kinds + workflow definitions; skill atomic structure + substrate Surface §G mid-session hot-activation re-binding; cross-specialist composition rules; granularity 3-tests + two-tier classification (domain-anchored vs cross-archetype); marketplace deferred per W1; archival-as-default destruction semantics)
