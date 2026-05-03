@@ -214,3 +214,53 @@ Session 18 began as Step 7.A-7.C cascade execution per Note 45 plan. Mid-cascade
 **Honest scope**: full audit of all prior architectural work is ~12 DRs + ~4 ARCH topics + GLOSSARY entry-body re-pass. With per-cluster execution + sub-agent + Reviewer pattern, probably 3-5 sessions. Each session bounded; main session orchestrates; sub-agents do the work.
 
 **Per M6**: HARD STOP for session 18 holds; v2 drafting begins fresh next session per the M3 discipline (drafting a methodology-skill warrants fresh context).
+
+---
+
+**Note 48: Session 19 — v2 greenfield-rederivation skill v0.1.0 written + v1 procedure DR marked SUPERSEDED**
+
+Executed Note 47 plan in single session. v2 is now the active audit-pattern artifact; v1 stays in repo as historical input.
+
+**Outputs**:
+- `plugin/skills/greenfield-rederivation/SKILL.md` v0.1.0 created (~352 lines; per-cluster audit pattern with M3-M7 baked in: per-artifact Writer + Reviewer sub-agent dispatch in parallel-batched Waves; per-execution DR shape; user-decision verdict reconciliation; HARD STOP per Wave; Ralph self-check per sub-agent + per main-session)
+- `docs/decisions/greenfield-rederivation-pause.md` SUPERSEDED header note added (procedure NOT to be executed as written; findings preserved as HISTORICAL INPUT not authoritative verdicts)
+- Commits: `a1b4c1b` (skill creation) + `4c3557c` (v1 supersede); pushed to origin/main
+
+**Methodology applied (M3-M7 self-application)**:
+- M3 sub-agent-first: Writer sub-agent A drafted SKILL.md in fresh context with focused brief (Note 47 design + 11 required reads + skill shape conventions). Returned draft + change-summary + 5 open questions.
+- M4 Writer-Reviewer: separate Reviewer sub-agent B audited the diff before push (4 lenses: provenance hygiene + pattern-vs-instance + cascade-miss + self-applicability; M3-M7 explicitness; verdict-scheme integrity; SUPERSEDED-note honesty). Verdict: READY-TO-COMMIT with 2 non-blocking MINOR-ISSUEs (anti-pattern table mild duplication; T4 tier scope clarity — both deferred to v0.1.1 per empirical-evidence rule)
+- M7 Ralph self-check: Writer + Reviewer + main-session each performed self-check at completion
+
+**5 open questions resolved** (sub-agent surfaced; main-session committed positions per `feedback_judgment_and_automate.md`):
+1. v1 archive reference framing → STAY ABSTRACT (no hardcoded path; timeless-stance per Spirit)
+2. Cluster sweet-spot 2-6 / 3-4 → KEEP AS STARTING POSITIONS (empirical-evidence rule; ≥2 sessions threshold for amendment)
+3. GLOSSARY entry-body decomposition → LEAVE TO PER-EXECUTION (cluster-agnostic shape per Spirit's self-applicability test)
+4. Cascade-execution depth → LIGHT TOUCH (canonical cascade rules in MAINTENANCE.md + CLAUDE.md M3; don't duplicate)
+5. Preliminary-lock status note → ADD (Status section near top; matches `sharpen` v0.12.0 convention)
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + new skill `plugin/skills/greenfield-rederivation/SKILL.md` if invoking it
+3. **First cluster execution** recommended: Phase 3.1 4 DRs (workflow / work-unit / deployment / engaged-authorship). Smallest cluster; foundational; high-load-bearing-error risk if any. Per skill's "When to use" cluster-examples list.
+4. Execution shape per skill Procedure: Pre-execution (define cluster + Wave + per-execution DR stub) → Per-Wave (4 Writer sub-agents in parallel; 4 Reviewer sub-agents in parallel; aggregate findings) → Post-cluster (user-reconciliation per divergence) → Cascade if revisions
+5. Per-execution DR will be `docs/decisions/greenfield-rederivation-<execution-date>-phase-3-1-drs.md`
+
+**What is NOT lost**:
+- v1's 7-step procedure detail + Findings + Decisions sections preserved in `docs/decisions/greenfield-rederivation-pause.md` body (header marks them HISTORICAL INPUT, not authoritative)
+- Tier-1 findings from v1 (Pattern A catalog 8→3; template restructure) already cascaded into ARCHITECTURE.md / MAINTENANCE.md / GLOSSARY catalog during session-17 + session-18 work; downstream artifacts re-anchor on those restructures
+- All sharpening skills + 36 GLOSSARY entries + Phase 3.1-3.4 DRs intact
+
+**Honest scope** (per Note 47 estimate refined): full audit campaign is now ~5-8 cluster-executions across the corpus (Phase 3.1 4 DRs + Phase 3.2 composite DR + 4 ARCH topic clusters + 3+ GLOSSARY entry-body clusters). Each cluster = 1-2 sessions. Total: ~6-10 sessions for stable-corpus signal. Each session bounded; main session orchestrates; sub-agents do the work.
+
+**Disciplines validated this session** (M3-M7 applied to skill-drafting itself):
+- Sub-agent-first cascade routing (M3): Writer sub-agent in fresh context produced higher-quality + faster draft than main-session would have
+- Writer-Reviewer pattern (M4): caught 2 minor issues (deferred to v0.1.1) without blocking commit
+- HARD STOP per logical unit (M6): user authorized "no need for confirmation" but session structure still respected commit-and-push boundary
+- Ralph self-check (M7): main-session self-check before committing (did I read every prep file before edit; did I dispatch Reviewer; did I commit positions per Q1-Q5 not menu)
+
+**Per-skill amendment governance** (per Status section in skill v0.1.0): single-execution evidence does NOT justify skill amendment; ≥2 cluster-executions of pattern threshold required. v0.1.1 amendments waiting on first cluster-execution evidence.
+
+**Notes 44 + 45 + 46 + 47**: superseded by this Note 48 + the v2 skill itself. Will rotate to archive next time HANDOFF crosses ~500 lines.
+
+---
