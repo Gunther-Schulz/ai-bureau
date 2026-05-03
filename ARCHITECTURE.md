@@ -31,7 +31,7 @@
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md`. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
 | **3.4** | Per-architectural-Protocol detail (3 Pattern A protocol topics: substrate / adapter; quality-gate at 3.6) | Effectively COMPLETE — substrate + adapter remain Pattern A; sparring + audit RECLASSIFIED as mechanism classes per `docs/decisions/greenfield-rederivation-pause.md` Step 3; coordination + trust + time CANCELLED (subsumed). |
-| **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | Pending |
+| **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | ACTIVE — first primitive-cluster topic LOCKED (specialist-skill); 5 primitive-cluster + cross-cutting integrator topics remain |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
 | **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — preceded by C1 (post-3.4) + C2 (post-3.5) per cadence in `BACKLOG.md` Phase 3 audit-checkpoints |
@@ -247,6 +247,10 @@ Each lock = 1-line resolution + cross-ref to DR/GLOSSARY for full content.
 ### Audit ARCH topic (Phase 3.4 fourth — RECLASSIFIED mechanism class) — LOCKED
 
 **Resolution**: `arch/audit.md` LOCKED. 7 Surface capability categories (emission / persistence / query / integrity / event-kind catalog / state-rendering / cross-deployment external-format export); **audit-trail-as-canonical-source** (single-write architecture; state rendered FROM events; append-only); append-only enforced architecturally per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1; per-shape event-kind catalog; boot-before-substrate / shutdown-after-substrate ordering; hash-chain integrity; §14 Cross-shape policy variation (per shape-policy granularity / event-kind catalog / trust model / error semantics). Audit composes with authority-binding mechanism (independent framework primitive per TOP-LEVEL ARCHITECTURE concept-by-concept table); per-shape trust policy lives at shape-policy declaring trust model. Trust as Pattern A protocol CANCELLED per `docs/decisions/greenfield-rederivation-pause.md` Step 3. Full detail: `arch/audit.md` + `docs/decisions/audit-arch-topic.md`.
+
+### Specialist-skill ARCH topic (Phase 3.5 first primitive-cluster) — LOCKED
+
+**Resolution**: `arch/specialist-skill.md` LOCKED as first canonical primitive-cluster ARCH topic. Anchors **12+5 primitive-cluster topic template** (12 common-required + 5 cluster-conditional per `MAINTENANCE.md` Layer 3 Primitive-cluster topic template subsection); 6 sub-decisions per Mode 2 upfront-known composite decomposition. Specialist DEFINITION as Framework C bundle (manifest schema enumerated; specialist-namespace mechanic for work-unit kinds + workflow definitions per per-specialist scoping). Skill atomic structure + substrate Surface §G integration + mid-session hot-activation re-binding semantics. Cross-specialist composition rules (skill invocation via `specialist-name:skill-name`; cross-specialist entity reads permitted; entity writes prohibited at framework level). Specialist + skill granularity 3-tests + two-tier classification (domain-anchored vs cross-archetype). Marketplace deferred per W1; destruction semantics archival-as-default per axis-3 reasoning. Composes with substrate Surface §G + §C + §D + audit Surface + adapter + claim primitive + authority-binding mechanism. Full detail: `arch/specialist-skill.md` + `docs/decisions/specialist-skill-arch-topic.md`.
 
 ### Phase 3.1 closed
 

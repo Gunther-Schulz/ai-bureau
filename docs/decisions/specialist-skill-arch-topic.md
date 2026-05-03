@@ -333,16 +333,33 @@ This decision composes with prior locked architecture:
 
 ## 9. Files touched
 
-This DR commit covers:
-- `arch/specialist-skill.md` (NEW; primitive-cluster 12+5 ARCH topic; ~440 lines)
+Wave 1 (this DR commit + ARCH topic; locked at commit `f6bab6e`):
+- `arch/specialist-skill.md` (NEW; primitive-cluster 12+5 ARCH topic; ~470 lines)
 - `docs/decisions/specialist-skill-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
 
-Cascade Wave 2 (separate tightly-coupled commit per `MAINTENANCE.md` cascade discipline):
-- `glossary/specialist.md` (specialist-namespace anchor + cross-specialist composition rules pointer)
-- `glossary/work-unit.md` (specialist-namespace replaces prior "kind-namespace" reference)
-- `glossary/skill.md` (specialist-namespace for cross-specialist skill identification + cross-specialist write boundary pointer)
-- `MAINTENANCE.md` (primitive-cluster 12+5 template codification under Layer 3 §3)
-- `ARCHITECTURE.md` §7 Locked architectural decisions (NEW lock entry: "Specialist-skill ARCH topic — primitive-cluster 12+5 template anchor")
+Cascade Wave 2 (single tightly-coupled commit per `MAINTENANCE.md` cascade discipline; expanded per Reviewer-1 F2 Lens 6 reciprocal-symmetry gap + F1 cleanup; Option A reconciliation — expand Wave-2 scope, no revision-Writer for ARCH topic itself):
+
+**A. GLOSSARY back-check (Round 2 R-N-1 specialist-namespace reciprocal closure)**:
+- `glossary/specialist.md` (specialist-namespace anchor for work-unit kinds + workflow definitions; composes-with rows amended for Lens 6 reciprocal symmetry)
+- `glossary/work-unit.md` (composes-with specialist row: specialist-namespace mention; fully-qualified kind reference `specialist-name:kind-name`)
+- `glossary/workflow.md` (composes-with specialist row: specialist-namespace mention; fully-qualified workflow reference `specialist-name:workflow-name`)
+
+**B. MAINTENANCE.md primitive-cluster topic template codification**:
+- `MAINTENANCE.md` Layer 3 (NEW subsection: "Primitive-cluster topic template" — 12 common-required + 5 cluster-conditional + per-pattern conditional applicability + §12-as-N/A-parity convention + per-topic count expectation block)
+
+**C. ARCHITECTURE.md §7 lock entry**:
+- `ARCHITECTURE.md` §7 (NEW lock entry: "Specialist-skill ARCH topic — Phase 3.5 first primitive-cluster"); §2 Phase 3 sub-phase status table row 3.5 updated (Pending → ACTIVE)
+
+**D. Lens 6 peer ARCH §19 reciprocal back-mentions** (per Reviewer-1 F2):
+- `arch/substrate.md` §19 (added `arch/specialist-skill.md` reference — substrate Surface §G specialist registration is the integration point)
+- `arch/audit.md` §19 (added `arch/specialist-skill.md` reference — specialist-lifecycle event-kind catalog emits via audit Surface)
+- `arch/adapter.md` §19 (added `arch/specialist-skill.md` reference — specialists may bundle adapter implementations per `arch/specialist-skill.md` §10 bundle composition)
+- `arch/sparring.md` §19 (added `arch/specialist-skill.md` reference — sparring sub-mechanisms invoked from skills within specialists composing with substrate Surface §D)
+
+**E. F1 mechanical cleanup** (per Reviewer-1 T3):
+- `arch/specialist-skill.md` line 452 (stale cross-reference fix: `§10 framework-baseline-vs-shape-extension` → `§3 framework-baseline-vs-shape-extension`; adapter's partition lives at adapter §3)
+
+**F. DR §9 Files touched amendment** (THIS section): explicit enumeration of Wave-2 cascade scope for auditability per cascade discipline.
 
 ## 10. Revisit triggers
 

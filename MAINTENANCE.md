@@ -281,6 +281,60 @@ Established by `arch/substrate.md` (Pattern A anchor; 6 of 7 conditional section
 
 Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic; sparring + audit extended template to Pattern D mechanism-class). Future Pattern A or Pattern D 8th-conditional candidates lock when first instance surfaces (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
 
+#### Primitive-cluster topic template (LOCKED; established by `arch/specialist-skill.md` per `docs/decisions/specialist-skill-arch-topic.md` SD-1)
+
+For ARCH topics describing **primitive clusters** (tightly-coupled primitive groupings — typically a container primitive + atomic-unit primitive, OR Pattern B nesting partners, OR PRIMITIVE + DERIVED partner), use this two-tier template:
+- **12 common-required sections** apply to every primitive-cluster topic
+- **5 cluster-conditional sections** apply per topic if its primitive set's discriminators warrant them (per applicability rules below)
+
+Established by `arch/specialist-skill.md` (Pattern B + atomic-primitive anchor; all 5 conditional sections apply, partial or full). Downstream Phase 3.5 primitive-cluster topics (`arch/practitioner.md` / `arch/workflow-work-unit.md` / `arch/claim-defensibility.md`) inherit this template; per-topic conditional applicability varies per primitive-set discriminators.
+
+**12 common-required sections** (every primitive-cluster topic):
+
+| § | Section | Purpose |
+|---|---|---|
+| 1 | Topic scope + frontmatter | Cluster identity; primitives covered; cross-axis claim; cardinality at cluster level |
+| 2 | Per-primitive structural overview | One sub-section per primitive in cluster; cites GLOSSARY canonical body; bundle/instance structure articulation |
+| 3 | Cross-primitive composition within the cluster | How cluster primitives compose with each other; container/atomic-unit relationships; cross-references within cluster |
+| 4 | Composition with framework primitives outside the cluster | Cross-cluster composition; cross-references to substrate / audit / adapter / authority-binding / etc. |
+| 5 | Cardinality + lifecycle (per primitive in cluster) | Per-primitive cardinality + per-primitive lifecycle (creator/owner/destructor; persistence semantics) |
+| 6 | Logic placement mode | Mode 4 development-time per `ARCHITECTURE.md` §6; per-primitive mode-distribution (DEFINITIONs / instances / schemas) |
+| 7 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details (error categories; lifecycle event-kind catalog; deferred mechanics) |
+| 14 | Watch-list | Items awaiting external evidence; resolution mechanisms |
+| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.1 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
+| 16 | Phase routing | Architectural shape (locked here) vs Pydantic spec (Phase 6) vs concrete deployment (Phase 6 workspace) |
+| 17 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing with this cluster / Phase 6 spec target / archived sources |
+| 18 | Composition table | Per-composing-primitive table showing how each cluster primitive composes (one column per cluster primitive) |
+
+**5 cluster-conditional sections** (apply per topic if primitive-set discriminators warrant; document N/A explicitly when section is omitted):
+
+| § | Section | Applicability |
+|---|---|---|
+| 8 | Cross-shape policy variation | Applies when primitive behavior is shape-policy-mediated (per `arch/adapter.md` §14 + Pattern A template §14 conditional precedent); document partial-application explicitly when cluster has shape-uniform parts + shape-policy-mediated parts |
+| 9 | Granularity tests | Applies when primitives have granularity discriminators (e.g., specialist + skill 3-tests; two-tier classification; per-archetype boundary tests). N/A when primitives have no granularity discriminator surface |
+| 10 | Bundle composition | Applies when a primitive in the cluster BUNDLES other artifacts (specialist BUNDLES skills + entity-kinds + workflows + work-unit-kinds + adapter implementations). N/A when cluster has no bundling primitive |
+| 11 | Marketplace + distribution mechanics | Applies when a primitive in the cluster is canonical distributable (specialist as canonical distributable per `glossary/specialist.md`). N/A when no cluster primitive is independently distributable |
+| 13 | Per-primitive lifecycle ordering | Applies when boot/shutdown/activation has load-bearing ordering distinct from §5 cardinality + lifecycle treatment (specialist activation cycles + mid-session re-binding; future cluster lifecycle ordering). N/A when primitive lifecycle has no boot/shutdown/activation ordering distinct from §5 |
+
+**§-numbering convention** (template-anchoring per `arch/specialist-skill.md` anchor): common-required §§1-7 + cluster-conditional interleaved §§8-13 + common-tail §§14-18. **§12 reserved as N/A-parity slot** (parity with substrate's §12 Transport variation N/A — preserves visual numbering parity across topic-templates; downstream primitive-cluster topic Writers MUST keep §12 reserved as N/A-parity rather than omit-§12 or fill-§12-with-content; prevents template drift).
+
+**Per-pattern conditional applicability** (which conditional sections likely apply per primitive-cluster pattern type):
+
+- **Pattern B + atomic-primitive clusters** (specialist-skill anchor): granularity tests + bundle composition + marketplace + per-primitive lifecycle ordering all likely apply; cross-shape policy variation typically partial
+- **Pattern C bipartite clusters** (practitioner): granularity / bundle / marketplace likely N/A; cross-shape policy variation + per-primitive lifecycle ordering likely apply
+- **Two Pattern B clusters** (workflow-work-unit): granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace likely N/A (workflow + work-unit are bundled IN specialist, not bundlers themselves)
+- **PRIMITIVE + DERIVED clusters** (claim-defensibility): granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace / cross-shape likely N/A
+
+**Per-topic section count expectation** (primitive-cluster topics):
+- specialist-skill (Pattern B + atomic-primitive; ANCHOR): 12 common + 5 conditional applies (all 5 partial or full per anchor) = ~17-18 total → ~470 lines
+- practitioner (Pattern C bipartite): expected 12 common + ~2-3 conditional (granularity / bundle / marketplace likely N/A; cross-shape policy variation + per-primitive lifecycle ordering likely apply) = ~14-15 total
+- workflow-work-unit (two Pattern B): expected 12 common + ~3-4 conditional (granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace likely N/A) = ~15-16 total
+- claim-defensibility (PRIMITIVE + DERIVED): expected 12 common + ~2-3 conditional (granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace / cross-shape likely N/A) = ~14-15 total
+
+**Why 12+5 not 12+7** (rationale): primitive-clusters lack Pattern A pluggability that justifies §3 multi-class boundaries / §10 substrate-specific lifecycle / §12 transport variation / §13 deployment-tier (Pattern A specifics). Conditional count drops to 5 reflecting genuine shape difference, not template-copy. Future primitive-cluster topics may surface 6th conditional candidates per cascade discipline (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
+
+Future cross-cutting integrator topic templates (axis-interactions / scope-model) lock when first instance lands per foundation-up + per per-pattern instance-driven trigger pattern.
+
 #### Provenance hygiene
 
 ARCH topics hold **pure architectural content** — provenance lives in HANDOFF + git log + commit messages + DRs (Layer 4 Sharpening provenance section). No "Pattern note (meta)" / sharpening trajectory / procedural narrative in ARCH topics.

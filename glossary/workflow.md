@@ -63,7 +63,7 @@ Per VISION's "Workflow as precondition" implication: domains with rich, structur
 
 **Composes with**:
 - [intertwining (axis 1)](intertwining.md) — workflow is what axis-1 AI intertwines WITH; "Workflow as precondition" implication
-- [specialist](specialist.md) — specialists' DEFINITIONS contain workflow definitions (workflow inherits Framework C placement via specialist's bundle)
+- [specialist](specialist.md) — specialists' DEFINITIONS contain workflow definitions (workflow inherits Framework C placement via specialist's bundle). Workflow definition names scoped under specialist-namespace = specialist-name (per `glossary/specialist.md` composes-with workflow row); fully-qualified workflow reference is `specialist-name:workflow-name`.
 - [session](session.md) — sessions execute parts of workflow_instance executions (one workflow_instance may span many sessions); persistent-state mechanism carries workflow_instance state across session boundaries
 - [skill](skill.md) — skills are consumed BY workflow definitions (workflow definition references skills by name; skills fire within workflow phases when triggers match); composition direction: workflow → skill
 - [workspace](workspace.md) — workspaces SUPPORT workflow_instances at Owner B (workspace's deployed specialists provide workflow definitions; workspace state enables workflow_instance persistence)
