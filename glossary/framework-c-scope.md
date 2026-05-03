@@ -41,4 +41,4 @@ vision_usage: implicit
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
-- ARCH Layer 3 entity-md spec (placeholder until Phase 3)
+- `arch/scope-model.md` (Phase 3.5 forthcoming — Workspace + Framework C / Owner B / Layer A scope categories + entity placement)

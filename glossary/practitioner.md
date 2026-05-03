@@ -50,6 +50,7 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - [claim](claim.md) — practitioners are accountable for individual claims they author; the defensibility test resolves at claim granularity (practitioner defends each claim under regulatory/professional challenge)
 - [category collapse](category-collapse.md) — the cognitive-state-bound force operating IN the practitioner; degrades practitioner's mental category of the AI from higher-engagement to lower-engagement state regardless of architectural intent
 - [rubber-stamping](rubber-stamping.md) / [answer-machine AI](answer-machine-ai.md) / [oracle AI](oracle-ai.md) / [validator AI](validator-ai.md) / [tacked-on AI](tacked-on-ai.md) — axis-failure modes that manifest in the practitioner's engagement state at different moments (workflow integration / reasoning / attestation)
+- [authority-binding](authority-binding.md) — practitioner-record IS the human authority bound to claim_made / signature_applied events per axis-3 attribution chain; the mechanism enforces every accountability-bearing event records emitting actor identity (human actor = practitioner-record per `glossary/authority-binding.md`)
 
 **Source**:
 - VISION (`VISION.md`):

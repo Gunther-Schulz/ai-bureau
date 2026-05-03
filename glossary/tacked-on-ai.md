@@ -66,4 +66,4 @@ Any "tacked-on-side" answer = axis 1 at risk; all three = full tacked-on failure
 - [intertwined AI](intertwined-ai.md) (positive contrast)
 - [co-worker](co-worker.md) (relational frame failed)
 - [category collapse](category-collapse.md) (the force that produces tacked-on regardless of intent)
-- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
+- `arch/substrate.md` (Phase 3.4 locked — substrate Surface mechanisms whose absence underwrites tacked-on shape); `arch/workflow-work-unit.md` + `arch/axis-interactions.md` (Phase 3.5 forthcoming — workflow precondition + axis interactions enabling intertwining contrast)

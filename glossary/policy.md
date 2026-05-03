@@ -51,6 +51,7 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - [workspace](workspace.md) — selects a shape and inherits its policies
 - `adapter` (Pattern A protocol per `arch/adapter.md`) — shape-extension class concept lives at policy bundle layer (per `arch/adapter.md` §3 framework-baseline-vs-shape-extension partition); shape-extension classes are additive policy bundle elements beyond framework-baseline
 - `sparring` (mechanism class per `arch/sparring.md`) — shape-extension sub-mechanism concept lives at policy bundle layer (per `arch/sparring.md` §4 framework-baseline-vs-shape-extension partition); shape-extension sub-mechanisms are additive policy bundle elements beyond framework-baseline
+- [authority-binding](authority-binding.md) — per-shape trust policy lives at policy layer; authority-binding mechanism is shape-neutral framework primitive that policy declares trust-model variation over (practitioner-judgment / budget-policy / individual per `audit` class §14 cross-shape policy variation)
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section: "policy is the atom — a single configured value; requirement/default/constraint"
@@ -60,4 +61,4 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section (atom-vs-container relationship + concept-by-concept worked examples)
 - Other foundational meta-primitives + atoms: [mechanism](mechanism.md), [framework](framework.md), [shape](shape.md)
 - [Framework C scope](framework-c-scope.md) — where shape definitions (containing policy bundles) live
-- ARCH Layer 3 per-shape policy-detail topics (placeholder until Phase 3)
+- `arch/sparring.md` §4 + `arch/audit.md` §14 + `arch/adapter.md` §3+§14 (Phase 3.4 locked — framework-baseline-vs-shape-extension partition lives at policy bundle layer); `arch/scope-model.md` (Phase 3.5 forthcoming — entity placement composing with policy bundles)

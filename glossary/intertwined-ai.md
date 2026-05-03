@@ -67,4 +67,4 @@ All three resolving "intertwined-side" = axis 1 succeeding.
 - [tacked-on AI](tacked-on-ai.md) (failure-mode contrast)
 - [co-worker](co-worker.md) (relational frame)
 - [workflow](workflow.md) (what gets intertwined with)
-- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
+- `arch/substrate.md` (Phase 3.4 locked — substrate Surface §B hooks + §F session/context realize cross-session axis-1 intertwining mechanisms); `arch/axis-interactions.md` + `arch/workflow-work-unit.md` (Phase 3.5 forthcoming — axis-1 within work-production + axis-1/axis-2 interaction)

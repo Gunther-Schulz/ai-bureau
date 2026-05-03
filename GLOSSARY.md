@@ -118,7 +118,7 @@ The primitives that compose into a workspace deployment.
 - [event](glossary/event.md) — audit emission unit
 - [authority-binding](glossary/authority-binding.md) — actor-attribution mechanism (every accountability-bearing event records emitting actor; load-bearing for axis-3 defensibility + axis-1 trust)
 
-**Note**: specific mechanism instances (audit trail = sequence of events; source-grounding = traceability claim; persistent state = cross-session state; orchestration = continuous decision layer) are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (placeholder until Phase 3). Same applies to the 8 sparring sub-mechanisms (see §6 below). GLOSSARY locks SHAPE primitives (mechanism, policy, framework, shape, etc.); specific mechanism instances are ARCH territory.
+**Note**: specific mechanism instances (audit trail = sequence of events; source-grounding = traceability claim; persistent state = cross-session state; orchestration = continuous decision layer) are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (`arch/audit.md` + `arch/substrate.md` Phase 3.4 locked; `arch/claim-defensibility.md` + primitive-cluster topics Phase 3.5 forthcoming). Same applies to the 8 sparring sub-mechanisms (see §6 below; canonical home `arch/sparring.md` Phase 3.4 locked). GLOSSARY locks SHAPE primitives (mechanism, policy, framework, shape, etc.); specific mechanism instances are ARCH territory.
 
 ### 5. Pattern A primitives (Protocol pluggability)
 
@@ -133,7 +133,7 @@ Surface + Implementations + Instance/binding. See `MAINTENANCE.md` "TOP-LEVEL AR
 
 Eight named mechanisms supporting sparring mode: counter-argument, confidence calibration, visible reasoning, selective friction, asymmetric knowledge respect, anti-sycophancy, commit-to-recommendations, what's-missing.
 
-**Note**: these are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (placeholder until Phase 3).
+**Note**: these are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** `arch/sparring.md` (Phase 3.4 locked — 8 sub-mechanism categories, framework-baseline-vs-shape-extension partition, per-shape activation matrix).
 
 ### 7. Modes & relations (conversational vocabulary)
 

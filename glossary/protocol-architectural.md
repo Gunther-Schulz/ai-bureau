@@ -10,7 +10,7 @@ vision_usage: implicit
 
 - **Class**: META-PRIMITIVE (the Pattern A architectural shape itself; named architectural Protocols + `substrate` + `adapter` are specific PRIMITIVE instances of this pattern)
 - **Layer**: multi-aspect (Surface = framework-mechanism; Implementations = Framework C; Instance/binding = workspace-bound or shape-policy-selected)
-- **Axis**: cross-axis (different protocols serve different axes — Sparring Protocol = axis 2; Audit Protocol = cross-axis; etc.)
+- **Axis**: cross-axis (different Pattern A protocols serve different axes — Substrate Protocol = cross-axis; Adapter Protocol = cross-axis; Quality-gate Protocol = cross-axis. Sparring + audit are Pattern D mechanism classes — NOT Pattern A protocols — per Reclassifications subsection below; sparring still anchors VISION axis 2 at the mechanism-class layer)
 - **VISION usage**: implicit (architectural concept underlying mechanisms across all axes; not directly named in current VISION)
 
 **Canonical**: The Pattern A architectural shape — pluggable subsystem with Surface (interface-contract mechanism) + multiple Implementations (Framework C definitions) + Instance/binding (the active implementation, selected per workspace or shape-policy). META-PRIMITIVE (the pattern itself); specific instances of this pattern are PRIMITIVEs: `substrate` (locked), `adapter` (locked), `quality-gate` (locked). Disambiguated from **Pydantic Protocol** (the Python typing concept; PEP 544 structural typing) — though architectural Protocols often USE Pydantic Protocol as their Surface implementation technique, the architectural concept is broader.
@@ -59,7 +59,7 @@ Per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE: framework provides protocols + thei
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Recurring patterns: Protocol pluggability" — defines Pattern A; lists known instances (substrate, adapter, protocol meta)
-- Locked GLOSSARY entries: [substrate](substrate.md) (Pattern A instance; tri-aspect explicitly described); [mechanism](mechanism.md) (Protocol Surface listed as mechanism example: "Sparring Protocol surface")
+- Locked GLOSSARY entries: [substrate](substrate.md) (Pattern A instance; tri-aspect explicitly described); [mechanism](mechanism.md) (Protocol Surface listed as mechanism example: "Substrate Protocol Surface")
 - Archived corpus for full per-protocol detail (Phase 3 ARCH territory): `substrate-protocol-design.md`, `shape-extension-and-architectural-floor.md`
 
 **See**:

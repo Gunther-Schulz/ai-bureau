@@ -45,10 +45,10 @@ Critical architectural distinctions from substrate (load-bearing for the topic's
 13. Deployment-tier awareness — N/A (substrate-specific; adapter behavior is shape-class-shape + integration-class-shape, not tier-shape; per-impl tier-compatibility declared in §4)
 14. Cross-shape policy variation (per Pattern A template 7th conditional per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` — applies per shape-policy-mediated nature: per-shape audit emission / permission flow / error escalation)
 15. Pre-implementation operational concerns (Phase 6 forward reference)
-15. Watch-list (W1-W5)
-16. Decision-design provenance
-17. Phase routing
-18. Cross-references
+16. Watch-list (W1-W5)
+17. Decision-design provenance
+18. Phase routing
+19. Cross-references
 
 **Section count**: 12 common-required + 7 protocol-specific-conditional sections per Pattern A / mechanism-class topic template (per `MAINTENANCE.md` Layer 3 description post `pattern-a-template-7th-conditional-cross-shape-variation.md`). Adapter applies §3 (multi-class Surface) + §10 (multi-instance lifecycle phase ordering + auth-refresh) + §11 (per-impl errors + per-class audit catalog) + §14 (cross-shape policy variation per shape-policy-mediated nature); §8 + §12 + §13 N/A explicitly per template applicability rules.
 

@@ -51,6 +51,7 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - [actor](actor.md) — substrate's running Instance IS the `actor_kind: ai_runtime` (1:1 cardinality: 1 ai_runtime actor per workspace = 1 substrate Instance per workspace)
 - [session](session.md) — substrate Surface §F (session/context management) implements `session` primitive's runtime aspect
 - [specialist](specialist.md) — substrate Surface §G (specialist registration) translates substrate-neutral SpecialistDescriptor into substrate-native form at boot-time
+- [authority-binding](authority-binding.md) — substrate Surface §C permission flow integration emits actor-bound events that authority-binding mechanism enforces (HITL approval moments record human-actor identity for the binding per `glossary/authority-binding.md` three sub-aspects)
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" — substrate listed as Framework C definition member + framework-mechanism category

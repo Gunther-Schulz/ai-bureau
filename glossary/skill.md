@@ -45,6 +45,7 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 - [workflow](workflow.md) — skills participate in broader workflows (sequence of skill firings + decisions)
 - [actor](actor.md) — skills emit AuditEvents via the AI runtime that fires them (`actor_kind: ai_runtime`); the enum value is deliberately NOT `skill` to avoid naming collision with this primitive
 - [adapter](adapter.md) — skills invoke adapters at runtime to interact with external systems (e.g., draft-cover-mail invokes email-adapter; verify-citations invokes MCP-corpus-adapter); the adapter is the integration boundary, the skill is the work-logic unit firing it
+- [authority-binding](authority-binding.md) — skill emissions record `actor_kind: ai_runtime` + skill identifier per authority-binding mechanism Surface (per `glossary/authority-binding.md` per-event actor declaration); chain of attribution composes into per-claim defensibility (the enum value is `ai_runtime` not `skill` to avoid naming collision per [actor](actor.md))
 
 **Source**:
 - VISION (`VISION.md`) line 7 (thesis): "codified expertise bundled as specialists" — skills implicit as the atomic units of expertise

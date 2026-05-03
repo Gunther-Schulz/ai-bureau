@@ -22,7 +22,7 @@ vision_usage: implicit
 - `actor_kind` enum (declared on every audit event; framework-level guarantee)
 - Pydantic gate (validator function dispatched on every contract-bearing write)
 - Specialist conformity manifest schema (declaring a specialist's conformity surface as a Pydantic schema)
-- Sparring Protocol surface (the architectural-protocol's interface contract, before any specific implementation)
+- Substrate Protocol Surface (the architectural-Protocol's interface contract, before any specific implementation; canonical Pattern A instance per `arch/substrate.md`)
 - Source-grounding capability (every claim traceable to source; framework-level enforcement)
 - Visible reasoning capability (Pydantic field on outputs requiring reasoning chain)
 

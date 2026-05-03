@@ -41,4 +41,5 @@ vision_usage: directly-used
 
 **See**:
 - VISION's "Authorship preservation, not rubber-stamping (axis 3)" section for full claim
-- ARCH Layer 3 axis-3-mechanism topic (placeholder until Phase 3)
+- `arch/audit.md` + `arch/sparring.md` (Phase 3.4 mechanism-class topics; production-phase + attestation-phase mechanism support per `engaged authorship` two-phase composite)
+- `arch/claim-defensibility.md` + `arch/axis-interactions.md` (Phase 3.5 forthcoming — per-claim attestation mechanics + cross-axis interactions)

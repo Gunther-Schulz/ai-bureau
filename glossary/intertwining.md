@@ -40,4 +40,4 @@ vision_usage: directly-used
 **See**:
 - VISION "The thesis" axis 1 + tacked-on/intertwined contrast table
 - VISION "Implications" → "Workflow as precondition" + "Category-collapse risk"
-- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3)
+- `arch/substrate.md` (Phase 3.4 locked — substrate Surface §B hooks + §F session/context realize cross-session axis-1 mechanisms); `arch/workflow-work-unit.md` + `arch/axis-interactions.md` (Phase 3.5 forthcoming — what intertwining intertwines WITH + axis interactions)
