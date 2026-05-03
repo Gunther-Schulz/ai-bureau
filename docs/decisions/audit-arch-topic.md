@@ -2,9 +2,9 @@
 
 ## Status
 
-ACCEPTED — session 16 (2026-05-02); 2-round sharpening per `decision-design-sharpening` v0.6.0 layered coverage observation. Persisted under DR template locked in `MAINTENANCE.md` Layer 4 (per `doc-organization-templates.md` composite DR).
+ACCEPTED. Persisted under DR template locked in `MAINTENANCE.md` Layer 4 (per `doc-organization-templates.md` composite DR).
 
-**AMENDED 2026-05-03** per Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit (per `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-4-sparring-audit.md`): (a) §14 Cross-shape policy variation added to `arch/audit.md` + §14-§18 → §15-§19 renumbering applied; (b) Trust subsumption framing reframed as "audit composes with authority-binding mechanism (independent framework primitive)"; (c) Capability category count 6 → 7 (external-format export promoted to G); (d) Pattern-A self-description scrub. Cascade per per-execution DR's user-decisions; ARCHITECTURE.md §7 line 219-221 reframed in same cascade.
+**AMENDED** per Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit (per `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-4-sparring-audit.md`): (a) §14 Cross-shape policy variation added to `arch/audit.md` + §14-§18 → §15-§19 renumbering applied; (b) Trust subsumption framing reframed as "audit composes with authority-binding mechanism (independent framework primitive)"; (c) Capability category count 6 → 7 (external-format export promoted to G); (d) Pattern-A self-description scrub. Cascade per per-execution DR's user-decisions; ARCHITECTURE.md §7 cascade applied in same execution.
 
 ## Owner
 
@@ -24,7 +24,7 @@ Phase 3.4 Per-architectural-Protocol detail rebuild; fourth Phase 3.4 ARCH topic
 
 ## Context
 
-Audit is the fourth Phase 3.4 ARCH topic in sequence (foundation-up: substrate → adapter → sparring → audit → 4 remaining). Validates Pattern A 18-section template (4th application). Consolidates emission paths from substrate (dual: internal direct + skill-side via MCP gate) + adapter (skill-side via MCP gate) + sparring (skill-side via MCP gate) into unified architectural commitment.
+Audit is the fourth Phase 3.4 ARCH topic in sequence (foundation-up: substrate → adapter → sparring → audit → 4 remaining). Validates Pattern A / mechanism-class 12+7 topic template (4th application; 12 common-required + 7 protocol-specific-conditional with per-pattern applicability rules per `MAINTENANCE.md` Layer 3 description). Consolidates emission paths from substrate (dual: internal direct + skill-side via MCP gate) + adapter (skill-side via MCP gate) + sparring (skill-side via MCP gate) into unified architectural commitment.
 
 Critical architectural distinctions:
 - **Single-layer Surface** (substrate-style; like sparring); audit-trail concerns unified across emission/persistence/query/integrity/catalog/state-rendering
@@ -34,9 +34,9 @@ Critical architectural distinctions:
 
 ## Decision
 
-`arch/audit.md` LOCKED with 19 sections per Pattern A protocol topic template applied to mechanism-class topic (12 common-required + 7 protocol-specific-conditional including §14 Cross-shape policy variation).
+`arch/audit.md` LOCKED with 12 common-required + 7 protocol-specific-conditional sections per Pattern A / mechanism-class topic template (mechanism-class per-pattern applicability rules: §3 N/A per single-layer Surface convention; §10 applies per audit storage-realization boot-before-substrate / shutdown-after-substrate ordering invariants; §14 mandatory per mechanism-class definition; §12 + §13 N/A per audit Surface tier-uniformity).
 
-Surface = 6 capability categories: emission API + actor declaration / append-only persistence / query for reasoning-chain reconstruction / integrity verification / event-kind catalog management / state-rendering-from-events.
+Surface = 7 capability categories: emission API + actor declaration / append-only persistence / query for reasoning-chain reconstruction / integrity verification / event-kind catalog management / state-rendering-from-events / cross-deployment external-format export.
 
 Per-shape event-kind catalog: practitioner-shape claim-level (claim_made / source_grounded / sparring_round / per_claim_attestation / signature_applied) + autonomous-business action-level + personal-OS light.
 
@@ -49,7 +49,7 @@ Architectural shape locked; AuditEvent Pydantic schema + concrete Audit Protocol
 8 EXPANSIONS surfaced:
 1. Single-layer Surface (substrate-style; audit-trail concerns unified)
 2. Cardinality: 1 impl per workspace; per-shape granularity declared
-3. 6 Surface capability categories (emission/persistence/query/integrity/catalog/state-rendering)
+3. 7 Surface capability categories (emission/persistence/query/integrity/catalog/state-rendering/cross-deployment-external-format-export — last category promoted to G per Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit cascade)
 4. Audit-trail-as-canonical-source architectural commitment (load-bearing per archived audit-trail-v2)
 5. Per-shape granularity policy (claim-level / action-level / light per locked event entry)
 6. Composition with substrate / adapter / sparring (consolidates emission paths)
@@ -151,7 +151,7 @@ Mode 1 (single-decision; not composite). 21 EXPANSIONS within 2-round sweet spot
 
 ## Files touched
 
-- `arch/audit.md` (NEW; 19 sections per Pattern A protocol topic template applied to mechanism-class topic)
+- `arch/audit.md` (NEW; 12 common-required + 7 protocol-specific-conditional sections per Pattern A / mechanism-class topic template; mechanism-class per-pattern applicability rules applied)
 - `docs/decisions/audit-arch-topic.md` (this file; NEW; status ACCEPTED per locked DR template)
 - `ARCHITECTURE.md` (cascade-update: Phase 3.4 progress 4 of 8; topic catalog audit row drafted; locked decisions section)
 - `BACKLOG.md` (cascade-update: Phase 3.4 audit Resolved; remaining 4 Pattern A protocol topics pending)

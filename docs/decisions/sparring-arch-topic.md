@@ -1,14 +1,14 @@
-# Decision record: Sparring ARCH topic (Phase 3.4 — RECLASSIFIED session 17 from Pattern A protocol → mechanism class)
+# Decision record: Sparring ARCH topic (Phase 3.4 — RECLASSIFIED from Pattern A protocol → mechanism class)
 
 ## Status
 
-ACCEPTED — session 16 (2026-05-02); 2-round sharpening per `decision-design-sharpening` v0.6.0 layered coverage observation. Persisted under DR template locked in `MAINTENANCE.md` Layer 4 (per `doc-organization-templates.md` composite DR).
+ACCEPTED. 2-round sharpening per `decision-design-sharpening` v0.6.0 layered coverage observation. Persisted under DR template locked in `MAINTENANCE.md` Layer 4 (per `doc-organization-templates.md` composite DR).
 
-**AMENDED session 17 (2026-05-02)** per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (Tier-1 finding; user-accepted): sparring **RECLASSIFIED** from Pattern A protocol topic #3 of 8 → **mechanism class with per-shape policy variation** (not Pattern A). VISION axis 2 (sparring) stays anchored — reclassification is at framework-mechanism layer only, not VISION layer. Body content of `arch/sparring.md` (8 sub-mechanism Surfaces; per-shape activation matrix; audit emission; lifecycle; error categories; 18-section coverage) largely transferable; classification framing reshaped. See "Session 17 reclassification amendment" section at end of this DR.
+**AMENDED** per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (Tier-1 finding; user-accepted): sparring **RECLASSIFIED** from Pattern A protocol topic #3 of 8 → **mechanism class with per-shape policy variation** (not Pattern A). VISION axis 2 (sparring) stays anchored — reclassification is at framework-mechanism layer only, not VISION layer. Body content of `arch/sparring.md` (8 sub-mechanism Surfaces; per-shape activation matrix; audit emission; lifecycle; error categories) largely transferable; classification framing reshaped. See "Reclassification amendment" section at end of this DR.
 
 ## Owner
 
-Phase 3.4 Per-architectural-Protocol detail rebuild; originally drafted as third Pattern A protocol topic (substrate first; adapter second; sparring third per foundation-up ordering); reclassified session 17 as mechanism class peer to audit (also reclassified).
+Phase 3.4 Per-architectural-Protocol detail rebuild; originally drafted as third Pattern A protocol topic (substrate first; adapter second; sparring third per foundation-up ordering); reclassified as mechanism class peer to audit (also reclassified).
 
 ## Related
 
@@ -23,7 +23,7 @@ Phase 3.4 Per-architectural-Protocol detail rebuild; originally drafted as third
 
 ## Context
 
-Sparring is the third Pattern A protocol topic in Phase 3.4 sequence (foundation-up: substrate → adapter → sparring → 5 remaining). Validates Pattern A 18-section template + introduces NEW per-shape activation-matrix variation (substrate = singular tier-aware; adapter = multi-instance per-class; sparring = singular per-shape-policy-driven sub-mechanism activation).
+Sparring is the third Pattern A protocol topic in Phase 3.4 sequence (foundation-up: substrate → adapter → sparring → 5 remaining). Validates the Pattern A / mechanism-class topic template (12 common-required + 7 protocol-specific-conditional per `MAINTENANCE.md` Layer 3 description; per-pattern applicability rules for mechanism-class topics) + introduces NEW per-shape activation-matrix variation (substrate = singular tier-aware; adapter = multi-instance per-class; sparring = singular per-shape-policy-driven sub-mechanism activation).
 
 Critical architectural distinctions:
 - **Single-layer Surface** (substrate-style; NOT adapter's two-layer META + per-class)
@@ -33,9 +33,9 @@ Critical architectural distinctions:
 
 ## Decision
 
-**As locked session 16**: `arch/sparring.md` LOCKED with 18 sections per (then-current) Pattern A protocol topic template. Surface = 8 sub-mechanism capability categories: counter-argument / confidence calibration / visible reasoning / selective friction (architecturally-encoded); anti-sycophancy / asymmetric knowledge respect / commit-to-recommendations / what's-missing (behaviorally-enforced).
+**As initially locked**: `arch/sparring.md` LOCKED with sections per the (then-current) Pattern A protocol topic template; subsequently restructured per mechanism-class topic template (12 common-required + 7 protocol-specific-conditional applied per per-pattern rules; §3 + §8 + §10 + §12 + §13 N/A per single-layer Surface convention + skill-side execution; §14 mandatory per mechanism-class definition). Surface = 8 sub-mechanism capability categories: counter-argument / confidence calibration / visible reasoning / selective friction (architecturally-encoded); anti-sycophancy / asymmetric knowledge respect / commit-to-recommendations / what's-missing (behaviorally-enforced).
 
-**As amended session 17 per greenfield-rederivation cascade**: classification framing reshaped from Pattern A protocol → mechanism class with per-shape policy variation. 8 sub-mechanism contracts retained as the class's Surfaces; per-shape policy declares activation matrix + thresholds + retry budget + failure mode (no whole-class alternative architectures — per-sub-mechanism realization variation only). Pydantic schemas for architecturally-encoded sub-mechanisms 1-4 → Phase 6 spec (Mode 3).
+**As amended per greenfield-rederivation cascade**: classification framing reshaped from Pattern A protocol → mechanism class with per-shape policy variation. 8 sub-mechanism contracts retained as the class's Surfaces; per-shape policy declares activation matrix + thresholds + retry budget + failure mode (no whole-class alternative architectures — per-sub-mechanism realization variation only). Pydantic schemas for architecturally-encoded sub-mechanisms 1-4 → Phase 6 spec (Mode 3).
 
 ## Sharpening provenance
 
@@ -109,8 +109,8 @@ Mode 1 (single-decision; not composite). 20 EXPANSIONS within 2-round sweet spot
 
 ## Composition with existing architecture
 
-- 18-section Pattern A protocol topic template (per `MAINTENANCE.md` Layer 3 description; established by substrate; validated by adapter; reinforced by sparring) holds across third Pattern A protocol topic. Template is robust.
-- NEW per-shape activation matrix variation (sparring) introduces third Pattern A cardinality pattern alongside substrate (singular tier-aware) + adapter (multi-instance per-class). Cardinality variation IS the architectural distinction across Pattern A protocols at this layer.
+- Pattern A / mechanism-class topic template (per `MAINTENANCE.md` Layer 3 description; 12 common-required + 7 protocol-specific-conditional with per-pattern applicability rules; established by substrate; validated by adapter; extended to mechanism-class by sparring + audit) holds across reclassified-mechanism-class topic. Template is robust.
+- NEW per-shape activation matrix variation (sparring) introduces third Pattern A / mechanism-class cardinality pattern alongside substrate (singular tier-aware) + adapter (multi-instance per-class). Cardinality variation IS the architectural distinction across Pattern A protocols + mechanism-class topics at this layer.
 - Sparring's load-bearing composition with substrate Surface §D (structured output validation) for architecturally-encoded sub-mechanisms 1-4 demonstrates substrate's foundational role for axis-2 enforcement.
 - Sparring's load-bearing composition with `claim` + `engaged authorship` GLOSSARY entries demonstrates per-claim granularity discipline + axis-2 → axis-3 dependency chain.
 - Sparring + workflow_instance composition (workflow-orthogonal) validates `workflow` GLOSSARY entry's optional-overlay design + `work-unit` GLOSSARY entry's always-present container claim.
@@ -119,7 +119,7 @@ Mode 1 (single-decision; not composite). 20 EXPANSIONS within 2-round sweet spot
 
 ### → Phase 3.4 remaining ARCH topics (audit / coordination / trust / time / quality-gate at 3.6)
 
-- Pattern A 18-section template precedent reinforced (3 topics now use it: substrate / adapter / sparring)
+- Pattern A / mechanism-class 12+7 template precedent reinforced (4 topics now use it: substrate / adapter as Pattern A; sparring / audit as mechanism class)
 - Sparring's per-shape activation-matrix variation establishes precedent for per-shape Pattern A variation in remaining topics where applicable
 - Sparring's skill-side MCP-gate emission discipline (like adapter) is the default for Pattern A protocols where architecturally-encoded sub-mechanisms run within skill execution
 
@@ -142,7 +142,7 @@ Mode 1 (single-decision; not composite). 20 EXPANSIONS within 2-round sweet spot
 
 ## Files touched
 
-- `arch/sparring.md` (NEW; 18 sections per Pattern A protocol topic template)
+- `arch/sparring.md` (NEW; 12 common-required + 7 protocol-specific-conditional sections per Pattern A / mechanism-class topic template; mechanism-class per-pattern applicability rules applied)
 - `docs/decisions/sparring-arch-topic.md` (this file; NEW; status ACCEPTED)
 - `ARCHITECTURE.md` (cascade-update: Phase 3.4 progress 3 of 8; topic catalog sparring row drafted; locked decisions section)
 - `BACKLOG.md` (cascade-update: Phase 3.4 sparring Resolved; remaining 5 Pattern A protocol topics pending)
@@ -157,7 +157,7 @@ Mode 1 (single-decision; not composite). 20 EXPANSIONS within 2-round sweet spot
 - Phase 6 pre-implementation sharpening surfaces architectural flow-back (~10-20% per `pre-implementation-sharpening` skill)
 - VISION axis-2 framing refinement (Ming research deepening per Phase 3.7 cross-cutting investigations)
 
-## Session 17 reclassification amendment
+## Reclassification amendment
 
 **Source**: `docs/decisions/greenfield-rederivation-pause.md` Step 3 (Tier-1 finding; Pattern A protocol catalog reduction 8 → 3; user-accepted at procedure DR Step 7 decision phase).
 
@@ -165,16 +165,16 @@ Mode 1 (single-decision; not composite). 20 EXPANSIONS within 2-round sweet spot
 1. **Sub-mechanisms ARE the Surface** — there is no "whole-Sparring-Surface" interface contract that admits alternative architectural designs realizing it differently. Each of the 8 sub-mechanisms (counter-argument / confidence calibration / visible reasoning / selective friction / anti-sycophancy / asymmetric knowledge respect / commit-to-recommendations / what's-missing) is its own atomic mechanism contract.
 2. **Per-shape variation is POLICY-level, not IMPL-level** — "always-on / opt-in / sparring-as-skill / none" describes WHEN sub-mechanisms fire, not HOW sub-mechanisms realize their contracts. Activation matrix + thresholds + retry budget all live in shape policy bundle, not in alternative whole-class implementations.
 3. **Sub-mechanism realization variation is per-mechanism, not whole-class** — for a given sub-mechanism (e.g., counter-argument), realization can vary (LLM-prompted vs rule-based vs retrieval-based) but that's per-sub-mechanism implementation detail, not class-level pluggability that would warrant Pattern A treatment.
-4. **GLOSSARY tag confirmation** (independent cross-validation): GLOSSARY:1842 sparring entry tagged Class **DERIVED** + Layer **cross-cutting** — NOT multi-aspect Pattern A primitive. The "Pattern A protocol" claim only appeared in `protocol (architectural)` cross-archetype catalog (GLOSSARY:1488-1496) — the archive-cargo-cult site flagged in DR Step 1.B.
+4. **GLOSSARY tag confirmation** (independent cross-validation): per `glossary/sparring.md` lines 11-14 sparring entry tagged Class **DERIVED** + Layer **cross-cutting** — NOT multi-aspect Pattern A primitive. The "Pattern A protocol" claim only appeared in `glossary/protocol-architectural.md` lines 34-37 cross-archetype catalog — the archive-cargo-cult site flagged in DR Step 1.B (per `GLOSSARY.md:5-6` per-entry per-file split discipline; canonical body lives in `glossary/<slug>.md`).
 
 **Body-content preservation**: 8 sub-mechanism contracts unchanged. Per-shape activation matrix unchanged. Per-action audit emission via MCP gate unchanged. Lifecycle ownership unchanged (modulo "skill execution lifecycle vs separately-bound sparring-impl boot/shutdown" framing). Error categories unchanged. Section §10 (boot/shutdown phase ordering) reframed under restructured template's conditional-section rule (substrate-specific lifecycle conditional doesn't apply to sparring; per-skill execution lifecycle drives sub-mechanism firing).
 
-**Cross-validation with audit reclassification**: audit also RECLASSIFIED session 17 as mechanism class (peer pattern). Two mechanism-class topics now exist (sparring + audit) alongside 3 Pattern A protocols (substrate / adapter / quality-gate). Both reclassifications cite the same DR Step 3 verdict.
+**Cross-validation with audit reclassification**: audit also RECLASSIFIED as mechanism class (peer pattern). Two mechanism-class topics now exist (sparring + audit) alongside 3 Pattern A protocols (substrate / adapter / quality-gate). Both reclassifications cite the same DR Step 3 verdict.
 
 **Phase 3.4 status post-reclassification**: substrate ✅ + adapter ✅ remain Pattern A protocols + sparring + audit retained as mechanism-class topics + coordination + trust + time CANCELLED (subsumed) + quality-gate at Phase 3.6. Phase 3.4 effectively COMPLETE.
 
 **Files cascading from this reclassification**:
-- `arch/sparring.md` (this DR's topic) — frontmatter + §§1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 16, 18 reframing edits per session-17 cascade
+- `arch/sparring.md` (this DR's topic) — frontmatter + §§1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 16, 18 reframing edits per reclassification cascade
 - `ARCHITECTURE.md` §§2, 4, 6 — Phase 3.4 status + topic catalog + Pattern A examples updated
 - `docs/decisions/phase-3-2-doc-organization.md` — composite DR amended per topic-catalog reduction
 - `GLOSSARY.md` — `protocol (architectural)` cross-archetype catalog + `framework` body's 8-protocol catalog updated

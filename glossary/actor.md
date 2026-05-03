@@ -40,6 +40,7 @@ vision_usage: implicit
 
 **Composes with**:
 - [event](event.md) — events are emitted by actors
+- [authority-binding](authority-binding.md) — authority-binding mechanism enforces actor declaration on every accountability-bearing emission; actor is the entity being bound; authority-binding records WHICH actor emitted each event
 - [mechanism](mechanism.md) — `actor_kind` enum is a framework-level mechanism (interface contract requiring every event to declare its actor)
 - [Owner B scope](owner-b-scope.md) — actor records live as workspace-scope managed entities
 - [practitioner](practitioner.md) — practitioner-record is one specific actor kind (human-practitioner-author)
@@ -56,4 +57,5 @@ vision_usage: implicit
 - [event](event.md) — what actors emit
 - [practitioner](practitioner.md) — one actor kind (human)
 - [mechanism](mechanism.md) — `actor_kind` is a framework-mechanism
-- ARCH Layer 3 actor-detail topics (placeholder until Phase 3 — full actor_kind enum, A2A actor support per archived `a2a-and-gemini-pattern-emulation.md`, actor identity sourcing per archived `governance-and-identity-sourcing.md`)
+- `arch/audit.md` (mechanism class composing actor declaration into AuditEvent emission via Surface §A; per-shape trust model parameterizes how authority-binding satisfies shape-specific accountability)
+- `arch/substrate.md` (substrate's running Instance IS `actor_kind: ai_runtime`; substrate Surface §C permission flow integrates with authority-binding for authority-decision moments)

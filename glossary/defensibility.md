@@ -58,6 +58,7 @@ Questions 1-3 are practitioner/experiential tests; question 4 is the structural-
 
 **Composes with**:
 - [authorship preservation (axis 3)](authorship-preservation.md) — defensibility IS the operational test for this axis; axis 3 expresses the architectural commitment, defensibility expresses how to test whether the commitment is met
+- [authority-binding](authority-binding.md) — reconstructible attribution chain (per-event actor declaration + per-claim author attribution + authority-decision binding) is a precondition for defensibility's reconstructible-reasoning-chain condition; without authority-binding the test cannot answer "who emitted each claim?" — load-bearing axis-3 dependency
 - [practitioner](practitioner.md) — defensibility tests apply TO practitioner-authored output; the test asks "will THIS practitioner defend THIS output?"
 - [claim](claim.md) — the defensibility test resolves at claim granularity; one indefensible claim taints the output
 - [work-unit](work-unit.md) — defensibility composes from per-claim tests across the work-unit's outputs

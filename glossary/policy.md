@@ -49,6 +49,8 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - [mechanism](mechanism.md) — counterpart atom in the framework=mechanisms / shape=policies framing (mechanism = framework atom; policy = shape atom)
 - [framework](framework.md) — contains mechanisms over which policies are LAYERED (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
 - [workspace](workspace.md) — selects a shape and inherits its policies
+- `adapter` (Pattern A protocol per `arch/adapter.md`) — shape-extension class concept lives at policy bundle layer (per `arch/adapter.md` §3 framework-baseline-vs-shape-extension partition); shape-extension classes are additive policy bundle elements beyond framework-baseline
+- `sparring` (mechanism class per `arch/sparring.md`) — shape-extension sub-mechanism concept lives at policy bundle layer (per `arch/sparring.md` §4 framework-baseline-vs-shape-extension partition); shape-extension sub-mechanisms are additive policy bundle elements beyond framework-baseline
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section: "policy is the atom — a single configured value; requirement/default/constraint"

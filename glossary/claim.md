@@ -44,6 +44,7 @@ In all archetypes: claim = atomic-defensible-assertion. Cross-archetype shape co
 
 **Composes with**:
 - [work-unit](work-unit.md) — claims compose into work-unit output; work-unit contains N claims
+- [authority-binding](authority-binding.md) — every `claim_made` event records the authoring actor (per-claim author attribution; chain-of-defense per axis-3); per-claim attribution chain is one of three architectural sub-aspects of authority-binding
 - [practitioner](practitioner.md) — practitioner is the author who must defend claims (axis-3 anchor)
 - [authorship preservation (axis 3)](authorship-preservation.md) — defensibility test resolves at claim granularity
 - [defensibility](defensibility.md) — claim is the unit-of-defense per the defensibility test; one indefensible claim taints the work-unit's output

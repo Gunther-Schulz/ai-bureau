@@ -234,11 +234,11 @@ Each lock = 1-line resolution + cross-ref to DR/GLOSSARY for full content.
 
 ### Substrate ARCH topic (Phase 3.4 first canonical) — LOCKED
 
-**Resolution**: `arch/substrate.md` LOCKED as first canonical Pattern A protocol topic. Establishes 18-section template; 7 capability categories on Surface; Tri-aspect Pattern A (Surface + Implementations + Running Instance); per-impl extension Protocols pattern; substrate-internal vs skill-side audit emission dual paths. Full detail: `arch/substrate.md` + `docs/decisions/substrate-arch-topic.md`.
+**Resolution**: `arch/substrate.md` LOCKED as first canonical Pattern A protocol topic. Establishes 12+7-section template (12 common-required + 7 protocol-specific-conditional per `MAINTENANCE.md` Pattern A / mechanism-class topic template); 7 capability categories on Surface; Tri-aspect Pattern A (Surface + Implementations + Running Instance); per-impl extension Protocols pattern; substrate-internal vs skill-side audit emission dual paths. Full detail: `arch/substrate.md` + `docs/decisions/substrate-arch-topic.md`.
 
 ### Adapter ARCH topic (Phase 3.4 second Pattern A protocol) — LOCKED
 
-**Resolution**: `arch/adapter.md` LOCKED. Validates 18-section template + introduces **two-layer Surface variation** (META-Surface conventions + per-integration-class Surfaces — 5 currently: Email / Accounting / MCP-Server / A2A-Peer / File-Sync). Multi-instance cardinality; hot-swap re-binding; per-class auth + lifecycle; per-shape audit + circuit-breaker policies. Full detail: `arch/adapter.md` + `docs/decisions/adapter-arch-topic.md`.
+**Resolution**: `arch/adapter.md` LOCKED. Validates 12+7-section template + introduces **two-layer Surface variation** (META-Surface conventions + per-integration-class Surfaces — 5 currently: Email / Accounting / MCP-Server / A2A-Peer / File-Sync). Multi-instance cardinality; hot-swap re-binding; per-class auth + lifecycle; per-shape audit + circuit-breaker policies; §14 Cross-shape policy variation applies per shape-policy-mediated nature. Full detail: `arch/adapter.md` + `docs/decisions/adapter-arch-topic.md`.
 
 ### Sparring ARCH topic (Phase 3.4 third — RECLASSIFIED mechanism class) — LOCKED
 

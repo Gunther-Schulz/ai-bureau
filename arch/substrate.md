@@ -6,7 +6,7 @@ status: locked
 
 # Substrate
 
-> **Layer 3 ARCH topic**. Architectural-conceptual articulation of the substrate Pattern A protocol. Mode 4 development-time documentation per `ARCHITECTURE.md` §6 Logic placement modes — NOT production-runtime; Phase 6 spec lands the Pydantic Protocol contract (Mode 3). Foundation-up dependency: Pattern A protocol topics 2-7 (adapter / sparring / audit / coordination / trust / time) compose with substrate's Surface contract.
+> **Layer 3 ARCH topic**. Architectural-conceptual articulation of the substrate Pattern A protocol. Mode 4 development-time documentation per `ARCHITECTURE.md` §6 Logic placement modes — NOT production-runtime; Phase 6 spec lands the Pydantic Protocol contract (Mode 3). Foundation-up dependency: Pattern A protocol topic adapter + mechanism-class topics sparring + audit compose with substrate's Surface contract (per `ARCHITECTURE.md` §4 topic catalog post `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — coordination + trust + time CANCELLED, subsumed into substrate hooks + event-bus / authority-binding mechanism / substrate-impl temporal semantics + adapter time-driven operations).
 
 ## 1. Topic scope
 
@@ -185,10 +185,12 @@ Specialist Pattern B = bipartite (DEFINITION + INSTANCE). Substrate Pattern A = 
 | `event` | Substrate-emitted events are first-class events in audit-trail (architectural-event kinds: see §8) |
 | `session` | Substrate's session/context-management capability (Surface §F) implements `session` primitive's runtime aspect |
 | `specialist` | Substrate's specialist-registration capability (Surface §G) translates substrate-neutral SpecialistDescriptor into substrate-native form |
-| `coordination` | Coordination Protocol (separate ARCH topic) composes with substrate's actor/session primitives |
-| `trust` | Trust Protocol (separate ARCH topic) composes with substrate's permission flow + audit emission |
-| `time` | Time Protocol (separate ARCH topic) composes with substrate's session activity timestamps + scheduled-task primitives |
+| `coordination` (CANCELLED) | Subsumed into substrate hooks + event-bus per `docs/decisions/greenfield-rederivation-pause.md` Step 3; per-shape policy configures call-shape vs event-shape coordination via substrate Surface §E |
+| `trust` (CANCELLED) | Subsumed into authority-binding mechanism per `docs/decisions/greenfield-rederivation-pause.md` Step 3; authority-binding is its own framework primitive (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table); per-shape trust policy declares trust model on the authority-binding mechanism |
+| `time` (CANCELLED) | Subsumed into substrate-impl temporal semantics + adapter time-driven operations per `docs/decisions/greenfield-rederivation-pause.md` Step 3 |
 | `quality-gate` | Quality-gate Pattern A protocol (Phase 3.6 ARCH topic) is substrate-agnostic — shape policy declares enforcement; substrate provides observability infrastructure (audit emission + permission flow) |
+| `category collapse` | Cross-axis force quality-gate guards against; substrate Surface §C (permission flow) + §E (hooks + event-bus) + §D (structured output validation) are the structural anchors quality-gate consumes for cross-axis collapse-resistance — substrate provides the observability + intervention substrate quality-gate uses to detect + intervene against axis-1/2/3 manifestations |
+| `engaged authorship` | Substrate Surface §F (session/context management) is production-phase substrate for engaged-authorship two-phase composite — production-phase events (sparring + per-claim source-grounding) flow through substrate-mediated session/context infrastructure |
 
 ## 8. Substrate-internal vs skill-level audit emission
 
@@ -256,36 +258,36 @@ Per-impl session-store Protocol exposed via Surface §F session-management categ
 
 ## 10. Boot + shutdown phase ordering (architectural-level)
 
-The substrate has explicit boot phase + shutdown phase with ordered stages. Ordering is architectural commitment — deviations break audit-trail invariants. **Audit Protocol owns audit-trail persistence + integrity** (per `arch/audit.md` §2.B + §11); substrate composes WITH Audit Protocol but does NOT itself flush the audit-trail.
+The substrate has explicit boot phase + shutdown phase with ordered stages. Ordering is architectural commitment — deviations break audit-trail invariants. **Audit mechanism class owns audit-trail persistence + integrity** (per `arch/audit.md` §2.B + §10); substrate composes WITH the audit mechanism class but does NOT itself flush the audit-trail. Canonical step-by-step composite ordering across audit + substrate + adapter lives in `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence" subsection.
 
 ### Boot sequence (architectural ordering)
 
-**Precondition**: Audit Protocol must already be booted (per `arch/audit.md` §11 boot-before-substrate ordering) so that substrate's own architectural events (`mcp_server_registered`, `boot_complete`, etc.) have an emission destination.
+**Precondition**: Audit storage realization must already be ready (per `arch/audit.md` §10 boot-before-substrate ordering + `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence" — audit-phase precedes substrate-phase) so that substrate's own architectural events (`mcp_server_registered`, `boot_complete`, etc.) have an emission destination.
 
 1. Load substrate configuration (per workspace.md + per-impl config schema)
 2. Determine deployment tier from configuration (Tier 1 / Tier 2 / Tier 3)
 3. Instantiate substrate Implementation: `substrate = await ChosenSubstrate.from_config(config)`
-4. Register configured MCP servers (per config.mcp_servers list); emit `mcp_server_registered` events via Audit Protocol per §8 dual-emission
+4. Register configured MCP servers (per config.mcp_servers list); emit `mcp_server_registered` events via audit Surface per §8 dual-emission
 5. Register lifecycle hooks (substrate-level + skill-level)
 6. Register specialists (per active specialists list; substrate-native materialization per Surface §G)
 7. Activate substrate: `await substrate.is_ready` becomes True
-8. Emit `boot_complete` audit event via Audit Protocol per §8 substrate-internal direct emission path
+8. Emit `boot_complete` audit event via audit Surface per §8 substrate-internal direct emission path
 9. Begin agent loop: `result = await substrate.run_agent(...)`
 
 ### Shutdown sequence (architectural ordering)
 
-Substrate shuts down BEFORE Audit Protocol (per `arch/audit.md` §11 audit-shuts-down-LAST ordering). Substrate releases its own runtime resources; audit-trail flush + integrity verification happen later in Audit Protocol's shutdown.
+Substrate shuts down BEFORE the audit storage realization (per `arch/audit.md` §10 audit-shuts-down-LAST ordering + `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence"). Substrate releases its own runtime resources; audit-trail flush + integrity verification happen later in the audit storage realization shutdown.
 
-1. Emit `shutdown_initiated` audit event via Audit Protocol
+1. Emit `shutdown_initiated` audit event via audit Surface
 2. Wait for in-flight agent runs to complete OR cancel per cancellation policy (pre-implementation forward-reference)
 3. Stop accepting new run_agent calls
 4. Drain pending permission requests
 5. Stop MCP servers (subprocess MCP servers gracefully terminate)
 6. Release substrate-internal runtime resources (substrate impl runtime; MCP server subprocess handles; per-impl session-state per Surface §F)
-7. Emit `shutdown_complete` audit event via Audit Protocol
+7. Emit `shutdown_complete` audit event via audit Surface
 8. `await substrate.shutdown()` returns
 
-**Note**: substrate does NOT flush audit-trail at shutdown. Audit Protocol's shutdown sequence (per `arch/audit.md` §11 steps 4-7) handles: drain pending events from adapter / sparring / coordination Pattern A protocols → flush audit-trail to disk → verify hash-chain integrity → emit `audit_trail_integrity_verified` (final event). This composition preserves the invariant that every emitted event is persisted before workspace shutdown completes.
+**Note**: substrate does NOT flush audit-trail at shutdown. Audit mechanism class shutdown sequence (per `arch/audit.md` §10 steps 4-7) handles: drain pending events from adapter + sparring (mechanism class peer) → flush audit-trail to disk → verify hash-chain integrity → emit `audit_trail_integrity_verified` (final event). This composition preserves the invariant that every emitted event is persisted before workspace shutdown completes. See `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence" for the canonical step-by-step composite ordering across audit + substrate + adapter resolving substrate §10 + audit §10 step-numbering ambiguity.
 
 ## 11. Substrate error categories (architectural-level)
 
@@ -401,6 +403,6 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays sh
 - **GLOSSARY**: `substrate` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `adapter`, `audit`, `event`, `session`, `specialist`, `deployment`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (substrate-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pioneer-neutrality of Surface); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)
 - **Profiles validated**: `G-composability-gate.md` (lines 155-156, 159, 168) + `L5a-planner-pbs-schulz.md` (lines 88, 126, 129) + `L1-specialist-creator.md` (line 27) + `L4a-workspace-deployer-solo.md` (lines 22, 38) + `L8-auditor-reviewer-posthoc.md` (lines 29, 32)
-- **ARCH topics composing with substrate**: `arch/adapter.md` (Pattern A protocol; integrates external systems); `arch/audit.md` (substrate-emitted vs skill-emitted dual-emission paths); `arch/coordination.md`, `arch/trust.md`, `arch/time.md` (Pattern A protocols composing with substrate); `arch/quality-gate.md` (substrate-agnostic; observability infrastructure)
+- **ARCH topics composing with substrate**: `arch/adapter.md` (Pattern A protocol; integrates external systems); `arch/audit.md` (mechanism class; substrate-emitted vs skill-emitted dual-emission paths); `arch/sparring.md` (mechanism class peer; sub-mechanisms leverage substrate Surface §D structured output validation + §B hook registration); `arch/quality-gate.md` (Pattern A protocol; substrate-agnostic; observability infrastructure). Cancelled per `docs/decisions/greenfield-rederivation-pause.md` Step 3: `arch/coordination.md` (subsumed into substrate hooks + event-bus per §2.E) + `arch/trust.md` (subsumed into authority-binding mechanism — independent framework primitive) + `arch/time.md` (subsumed into substrate-impl temporal semantics + adapter time-driven operations).
 - **Phase 6 spec target**: `docs/specs/substrate.md` (Pydantic Protocol + supporting types + per-substrate-impl spec)
 - **Archived sources**: `archive/docs/decisions/substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`

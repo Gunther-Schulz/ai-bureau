@@ -37,8 +37,13 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 
 **Composes with**:
 - [actor](actor.md) — every event declares its emitting actor (`actor_kind` field; framework-level guarantee)
+- [authority-binding](authority-binding.md) — AuditEvent's `actor_kind` field is the carrier authority-binding enforces; authority-binding ENFORCES per-event actor declaration at emission
 - `audit trail` — events compose into the audit trail; audit trail = sequence of events (specific mechanism instance; canonical detail in ARCH Layer 3)
 - [mechanism](mechanism.md) — the AuditEvent schema IS a framework-mechanism (atomic interface contract)
+- [substrate](substrate.md) — substrate emits substrate-internal architectural events (registration / permission decision / boot complete / shutdown initiated) directly to audit-trail per substrate Surface §8 dual-emission; substrate's running Instance IS `actor_kind: ai_runtime`
+- [adapter](adapter.md) — adapter operations emit per-action events via MCP audit gate (skill-side; per-class event-kind catalog per `arch/adapter.md` §11) into audit-trail
+- `sparring` (mechanism class per `arch/sparring.md`) — sparring sub-mechanisms emit per-sub-mechanism events (counter_argument_produced / confidence_calibrated / etc.) via MCP audit gate skill-side
+- `audit` (mechanism class per `arch/audit.md`) — audit class consumes events via Surface §A emission API; audit-trail is the COMPOSITION of events the class manages
 - [skill](skill.md) — skills emit events via the AI runtime that fires them (`actor_kind: ai_runtime`)
 - [defensibility](defensibility.md) — events are the structural substrate enabling axis-3 defensibility (reconstructible reasoning chain)
 - [work-unit](work-unit.md) — events are emitted scoped to work-units; each event records its work-unit attribution per archived audit-trail-v2 schema (every event traceable to the work-unit it concerns)
@@ -56,4 +61,5 @@ The framework provides the AuditEvent schema (mechanism); shapes determine which
 - [actor](actor.md) — events are emitted by actors
 - `audit trail` (ARCH Layer 3) — composition of events
 - [mechanism](mechanism.md) — AuditEvent schema as framework-mechanism
-- ARCH Layer 3 event-schema topics (placeholder until Phase 3 — full AuditEvent Pydantic shape, event_kind catalog, append-only discipline; archived material to consult: `audit-trail-v2.md`)
+- `arch/audit.md` (mechanism class consuming events; AuditEvent schema as Surface; per-shape event-kind catalog; append-only persistence; query primitives; integrity verification)
+- `arch/substrate.md` (substrate emits substrate-internal architectural events; substrate Surface §8 dual-emission paths; Surface §F provides storage realization for audit class)

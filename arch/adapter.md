@@ -16,7 +16,7 @@ status: locked
 
 **Cross-axis**: different adapters serve different axes — email-adapter primarily axis-3 (sending semantics; engaged-authorship attestation moments at send); accounting-adapter cross-cutting business operations; MCP-adapter cross-axis tooling.
 
-**Cardinality**: typically MULTIPLE adapter instances per workspace. Pioneer (PBS-Schulz per `profiles/L5a-planner-pbs-schulz.md` line 90): "Active adapters: email (Outlook); LaTeX compile; document signing (qualified electronic signature for sent docs)" — three adapters concurrently active in single workspace.
+**Cardinality**: multi-instance per workspace (bounded by `workspace.md` adapter bindings list; per-shape policy may declare maximum); cardinality variation IS the architectural distinction from substrate's structural-singularity. Pioneer (PBS-Schulz per `profiles/L5a-planner-pbs-schulz.md` line 90): "Active adapters: email (Outlook); LaTeX compile; document signing (qualified electronic signature for sent docs)" — three adapters concurrently active in single workspace illustrate the multi-instance shape (instance count not architecturally fixed; bound by workspace declaration).
 
 **Composition with framework**:
 - One mechanism category within `framework`
@@ -64,7 +64,7 @@ Per-class Surfaces are NOT extension Protocols — every implementation in a cla
 The following are NOT in any per-class Surface; they're cross-class architectural concerns handled at META-Surface level OR via composition:
 - Substrate-coupling (handled via composition; adapter runs within substrate per §7)
 - Specialist composition (handled via specialist Pattern B bundling per `specialist` GLOSSARY entry)
-- Cross-adapter coordination (handled via coordination Pattern A protocol — separate ARCH topic)
+- Cross-adapter coordination (handled via substrate hooks + event-bus per `arch/substrate.md` §2.E; coordination Pattern A protocol CANCELLED per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade)
 
 ### Logic placement mode
 
@@ -175,8 +175,8 @@ Per-class architectural shape determines lifecycle (when to drain inbound on shu
 
 | Concern | Value | Mechanism |
 |---|---|---|
-| Adapter Implementations active per workspace | N (typically 3-10) | workspace.md adapter bindings list; per-binding entry |
-| Adapters per integration class per workspace | Typically 1, sometimes N | Workspace can bind multiple email-adapters (e.g., personal + work email); typically 1 per class |
+| Adapter Implementations active per workspace | bounded by `workspace.md` adapter bindings list (no architectural cap; per-shape policy may declare maximum) | workspace.md adapter bindings list; per-binding entry; shape policy bundle may impose cap |
+| Adapters per integration class per workspace | 1 by default; multi-account mechanics deferred to W4 watch-list resolution per §16 | Workspace can bind multiple instances when W4 multi-account mechanics resolve (e.g., personal + work email); shape policy may declare per-class cardinality constraints |
 | Implementations per Framework C catalog | M per class | Multiple distributable definitions per class; current set named in §4 |
 | Per-class Surfaces in framework | 5 currently; future per ecosystem | Email / Accounting / MCP-Server / A2A-Peer / File-Sync |
 
@@ -246,10 +246,11 @@ The cardinality variation IS the architectural distinction between substrate Pat
 | `specialist` | Specialists may bundle adapter Implementations as part of their package (per locked specialist entry composes-with) |
 | `audit` | Adapter actions emit audit events via MCP audit gate (per-class event-kind catalog; see §8) |
 | `event` | Adapter-emitted events first-class in audit-trail (per integration class) |
-| `coordination` | Cross-adapter coordination via separate Pattern A protocol (`arch/coordination.md`) |
-| `trust` | Trust handshake (especially A2A federation) via separate Pattern A protocol (`arch/trust.md`) |
-| `time` | Time-driven adapter operations (scheduled email send; periodic accounting sync) compose with `arch/time.md` |
+| `coordination` (CANCELLED) | Cross-adapter coordination subsumed into substrate hooks + event-bus per `docs/decisions/greenfield-rederivation-pause.md` Step 3; per-shape policy configures coordination shape (call-shaped vs event-shaped) via substrate Surface §E |
+| `trust` (CANCELLED) | Trust handshake (especially A2A federation) subsumed into authority-binding mechanism per `docs/decisions/greenfield-rederivation-pause.md` Step 3; authority-binding is its own framework primitive (per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table); per-shape trust policy declares trust model |
+| `time` (CANCELLED) | Time-driven adapter operations (scheduled email send; periodic accounting sync) subsumed into substrate-impl temporal semantics + adapter time-driven operations themselves (no separate Time Pattern A topic) per `docs/decisions/greenfield-rederivation-pause.md` Step 3 |
 | `quality-gate` | Quality-gate observability via adapter's audit-event emission + per-class quota/rate-limit metrics; shape policy declares per-shape adapter-action enforcement |
+| `category collapse` | Cross-axis force quality-gate guards against; adapter operations participate in axis-3 send-class moments where rubber-stamping risk applies (per L5a hybrid moments line 67); adapter audit-event emission feeds quality-gate's cross-axis collapse-detection |
 
 ## 8. Substrate-internal vs skill-side audit emission
 
@@ -265,8 +266,8 @@ Adapter follows multi-instance cardinality (distinct from substrate's singular p
 
 (Per §5 Selection mechanics; restated here for template-fidelity.)
 
-- N adapter Instances active per workspace (typically 3-10)
-- Typically 1 per integration class (occasionally N when multi-account scenarios apply per W4)
+- N adapter Instances active per workspace (bounded by `workspace.md` adapter bindings list; per-shape policy may declare maximum)
+- 1 per integration class by default (multi-account mechanics deferred to W4 watch-list resolution per §16)
 - M Implementations per class in Framework C catalog
 - 5 per-class Surfaces in framework (Email / Accounting / MCP-Server / A2A-Peer / File-Sync; future per ecosystem)
 
@@ -510,6 +511,6 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces
 - **GLOSSARY**: `adapter` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `substrate`, `skill`, `specialist`, `audit`, `event`, `coordination`, `trust`, `time`, `shape`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 "make wrong shapes impossible, not solvable" (per-class Surface typing + isinstance check on Implementation make impl-coupling-by-accident impossible); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (per-class Surface neutrality); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity)
 - **Profiles validated**: `G-composability-gate.md` (line 157 cross-shape consumption); `L5a-planner-pbs-schulz.md` (line 90 active adapters; line 66 ad-hoc communication via adapter); `L1-specialist-creator.md` (line 23 specialist DEFINITION boundary; specialist may bundle adapter Implementations); `L4a-workspace-deployer-solo.md` (line 23 adapter configuration: email integration; document-signing; LaTeX compile); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity across deployments)
-- **ARCH topics composing with adapter**: `arch/substrate.md` (Surface §B MCP registration + §C permission flow + §8 dual audit emission); `arch/coordination.md` (cross-adapter coordination); `arch/trust.md` (federation trust handshake); `arch/time.md` (scheduled adapter operations); `arch/audit.md` (per-action audit emission); `arch/quality-gate.md` (observability via adapter audit + quota metrics)
+- **ARCH topics composing with adapter**: `arch/substrate.md` (Surface §B MCP registration + §C permission flow + §8 dual audit emission); `arch/audit.md` (mechanism class; per-action audit emission via MCP gate skill-side); `arch/sparring.md` (mechanism class peer; sub-mechanisms emit per same skill-side discipline as adapter); `arch/quality-gate.md` (Pattern A protocol; observability via adapter audit + quota metrics). Cancelled per `docs/decisions/greenfield-rederivation-pause.md` Step 3: `arch/coordination.md` (cross-adapter coordination subsumed into substrate hooks + event-bus) + `arch/trust.md` (federation trust handshake subsumed into authority-binding mechanism) + `arch/time.md` (scheduled adapter operations subsumed into substrate-impl temporal semantics + adapter's own time-driven operations).
 - **Phase 6 spec target**: `docs/specs/adapter.md` (META-Surface + 5 per-class Pydantic Protocols + per-impl spec)
 - **Archived sources**: `archive/docs/a2a-and-gemini-pattern-emulation.md`, `archive/docs/plugin-conventions.md`, `archive/docs/backend-conventions.md`

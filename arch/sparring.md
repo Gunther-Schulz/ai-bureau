@@ -1,7 +1,7 @@
 ---
 title: Sparring
 topic-cluster: mechanism-class topics (sparring + audit; per-shape policy variation; not Pattern A)
-status: drafted (Phase 3.4 Round 2; reclassified per `docs/decisions/greenfield-rederivation-pause.md` Step 3 — mechanism class with per-shape policy variation)
+status: locked
 ---
 
 # Sparring

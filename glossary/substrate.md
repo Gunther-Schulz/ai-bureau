@@ -44,6 +44,13 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 - [workspace](workspace.md) — workspace selects exactly one substrate via `workspace.md`
 - [Owner B scope](owner-b-scope.md) — running substrate instance is bound to workspace deployment (Owner B)
 - [protocol (architectural)](protocol-architectural.md) — substrate Protocol surface is one of the framework's architectural Protocols
+- [adapter](adapter.md) — counterpart Pattern A primitive (substrate INTERNAL runtime contract; adapter EXTERNAL integration boundary); adapters run WITHIN substrate's execution per Surface convention
+- `audit` (mechanism class per `arch/audit.md`) — substrate emits substrate-internal architectural events directly + skill-side emits via MCP audit gate; both paths converge in audit-trail per substrate Surface §8 dual-emission
+- `sparring` (mechanism class per `arch/sparring.md`) — sparring sub-mechanisms compose with substrate Surface §B (hook registration) + §D (structured output validation; load-bearing for architecturally-encoded sub-mechanisms 1-4)
+- [event](event.md) — substrate's running Instance IS the `actor_kind: ai_runtime` (per `glossary/actor.md` Naming note); substrate-emitted events are first-class in audit-trail
+- [actor](actor.md) — substrate's running Instance IS the `actor_kind: ai_runtime` (1:1 cardinality: 1 ai_runtime actor per workspace = 1 substrate Instance per workspace)
+- [session](session.md) — substrate Surface §F (session/context management) implements `session` primitive's runtime aspect
+- [specialist](specialist.md) — substrate Surface §G (specialist registration) translates substrate-neutral SpecialistDescriptor into substrate-native form at boot-time
 
 **Source**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" — substrate listed as Framework C definition member + framework-mechanism category

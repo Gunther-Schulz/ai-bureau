@@ -43,14 +43,14 @@ Critical architectural distinctions from substrate (load-bearing for the topic's
 11. Per-integration-class error categories + audit event-kind catalog (adapter-conditional; cross-class architectural categories + per-class refinements + per-shape error semantics + quota / rate-limit / circuit-breaker semantics + per-class audit event-kind catalog relocated from §8)
 12. Transport variation + per-tier mapping — N/A (substrate-specific; adapter operates over per-class transports declared per Implementation; transport choice impl-internal per per-class Surface satisfaction)
 13. Deployment-tier awareness — N/A (substrate-specific; adapter behavior is shape-class-shape + integration-class-shape, not tier-shape; per-impl tier-compatibility declared in §4)
-13a. Cross-shape policy variation (adapter-specific appendix; load-bearing content for adapter that doesn't fit a Pattern A template numbered section — substrate's tier-shape variation is template §13; adapter's shape-class variation is adapter-specific)
-14. Pre-implementation operational concerns (Phase 6 forward reference)
+14. Cross-shape policy variation (per Pattern A template 7th conditional per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` — applies per shape-policy-mediated nature: per-shape audit emission / permission flow / error escalation)
+15. Pre-implementation operational concerns (Phase 6 forward reference)
 15. Watch-list (W1-W5)
 16. Decision-design provenance
 17. Phase routing
 18. Cross-references
 
-**Section count**: 18 numbered sections + 1 appendix slot (§13a) = 19 total. Per `MAINTENANCE.md` Pattern A protocol section count expectation (adapter: 12 common + ~3-4 conditional = ~15-16): adapter has §3 active (multi-class Surface) + §10 active (multi-instance lifecycle phase ordering + auth-refresh) + §11 active (per-impl errors + per-class audit catalog) + §8/§12/§13 N/A (substrate-specific) + §13a appendix (adapter-specific cross-shape). Active conditional count = 3 active + 3 N/A = 6 conditional total addressed; aligned with template applicability rules.
+**Section count**: 12 common-required + 7 protocol-specific-conditional sections per Pattern A / mechanism-class topic template (per `MAINTENANCE.md` Layer 3 description post `pattern-a-template-7th-conditional-cross-shape-variation.md`). Adapter applies §3 (multi-class Surface) + §10 (multi-instance lifecycle phase ordering + auth-refresh) + §11 (per-impl errors + per-class audit catalog) + §14 (cross-shape policy variation per shape-policy-mediated nature); §8 + §12 + §13 N/A explicitly per template applicability rules.
 
 ## Sharpening provenance
 
@@ -106,7 +106,7 @@ All 20 EXPANSIONS classified additive coverage; none REVISION-flavored. 2-tier c
 - **Cluster A (L1)**: "Specialist DEFINITION boundary (Framework C)" + composes-with bundling adapter implementations — DIRECTLY validates §4 + §7 specialist composition
 - **Cluster B (L4a + L5a)**: L5a line 90 "Active adapters: email (Outlook); LaTeX compile; document signing" + L4a line 23 "Adapter configuration: email integration; document-signing; LaTeX compile" — DIRECTLY validates §5 multi-instance + per-archetype adapter set
 - **Cluster C (L5a)**: L5a line 66 "ad-hoc: communication (one-off email to municipality coordinator)" — adapter cross workflow_instance ↔ ad-hoc — validates §1 cross-axis + adapter operations during both modes
-- **Cluster D (G + L8)**: G line 157 "Cross-shape consumption ... Shape's policy bundle determines if specialist activates fully or partially" — DIRECTLY validates §13a cross-shape policy variation; L8 line 29 audit-trail integrity validates §11 + §10
+- **Cluster D (G + L8)**: G line 157 "Cross-shape consumption ... Shape's policy bundle determines if specialist activates fully or partially" — DIRECTLY validates §14 cross-shape policy variation; L8 line 29 audit-trail integrity validates §11 + §10
 
 ### Sharpening totals
 
@@ -131,7 +131,7 @@ Subsequent greenfield-rederivation cluster execution (per `docs/decisions/greenf
 - Two-layer Surface pattern (META + per-class) establishes precedent for ARCH topics where Pattern A protocol has per-instance-class semantic variation. Future Pattern A protocol topics may adopt this pattern if per-class semantic coherence applies.
 - Internal-vs-external axis (substrate vs adapter) introduces architectural-axis vocabulary potentially useful for other Pattern A protocols (audit = INTERNAL emission; trust = EXTERNAL handshakes; coordination = MIXED). Not formalized as cross-cutting yet; may surface at Phase 3.5 cross-cutting integrators.
 - Adapter operations compose with substrate's permission flow (Surface §C) + MCP server registration (Surface §B) + dual audit emission (§8). Substrate is foundational; adapter is layered above.
-- Cross-shape policy variation (§13a) anchors shape-policy-mediated adapter behavior — sets pattern for how shape policies modulate Pattern A protocol behavior. Quality-gate ARCH topic (Phase 3.6) will compose with adapter audit emission + quota metrics for observability.
+- Cross-shape policy variation (§14 per Pattern A template 7th conditional) anchors shape-policy-mediated adapter behavior — sets pattern for how shape policies modulate Pattern A protocol behavior. Quality-gate ARCH topic (Phase 3.6) will compose with adapter audit emission + quota metrics for observability.
 
 ## Constraints flowing to downstream commitments
 
@@ -152,7 +152,7 @@ Subsequent greenfield-rederivation cluster execution (per `docs/decisions/greenf
 ### → Phase 3.6 quality-gate ARCH topic
 
 - Quality-gate observability via adapter audit-event emission + per-class quota/rate-limit metrics
-- Per-shape quality-gate enforcement composes with adapter cross-shape policy variation (§13a)
+- Per-shape quality-gate enforcement composes with adapter cross-shape policy variation (§14)
 - Shape policy declares per-shape adapter-action enforcement at workspace boot
 
 ### → Phase 6 spec

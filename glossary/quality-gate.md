@@ -64,6 +64,7 @@ Both involve "gate" but operate at different layers + lifecycle moments. Disambi
 - [session](session.md) — gate fires at session boundaries; cumulative engagement signal source
 - [event](event.md) — gate emits gate-fired events to audit trail
 - `audit` protocol — gate emissions follow audit protocol granularity per shape
+- [authority-binding](authority-binding.md) — quality-gate may verify authority-binding completeness as a gate condition (e.g., refuse send if authority-binding chain incomplete per shape policy); intervention authority composes with the binding mechanism
 - [mechanism](mechanism.md) (audit-emission, authority-binding) — composes for output emission + intervention authority
 - [shape](shape.md) — shape declares which Pattern A gate implementation activates
 - [specialist](specialist.md) — specialist may declare per-skill gate-firing requirements

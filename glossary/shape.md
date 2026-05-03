@@ -43,14 +43,13 @@ vision_usage: directly-used
 - [workspace](workspace.md) — deploys exactly one shape via `workspace.md`
 - [Framework C scope](framework-c-scope.md) — where shape DEFINITIONS live as distributable framework primitives
 - [mechanism](mechanism.md) — what shape policies configure (which active / mandatory / defaults; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE)
+- `adapter` (Pattern A protocol per `arch/adapter.md`) — shape policy bundles host shape-extension classes (per `arch/adapter.md` §3 framework-baseline-vs-shape-extension class partition); shape-extension classes live in introducing shape's distributable policy bundle as additive layer beyond framework-baseline
+- `sparring` (mechanism class per `arch/sparring.md`) — shape policy bundles host shape-extension sub-mechanisms (per `arch/sparring.md` §4 framework-baseline-vs-shape-extension sub-mechanism partition); shape-extension sub-mechanisms live in introducing shape's distributable policy bundle as additive layer beyond framework-baseline
 
 **Source**:
 - VISION (`VISION.md`):
-  - Line 11: "any practitioner workspace shape (legal practice, research lab, creative studio, etc.)"
-  - Line 17: "Framework primitives support multiple workspace shapes via shape-extension pattern"
-  - Line 19: "this document remains the practitioner-shape articulation"
-  - Line 21: "framework breadth (which shapes the framework supports + how the framework structurally encodes value claims) is ARCH territory"
-  - Line 72: "framework is restricted to practitioner shape — framework is shape-neutral"
+  - Line 17: "PBS generalizes across any shape that adopts it. Specific shapes — practitioner, autonomous-business, personal-OS, knowledge-graph, federation, hybrid — compose policies over framework mechanisms."
+  - Line 68: "framework is restricted to practitioner shape — framework is shape-neutral; positioning is practitioner-focused"
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section
 
 **See**:

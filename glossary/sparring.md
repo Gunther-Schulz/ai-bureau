@@ -13,7 +13,7 @@ vision_usage: directly-used
 - **Axis**: axis-2
 - **VISION usage**: directly used (`VISION.md` axis 2 — second interlocking principle)
 
-**Canonical**: An interaction mode (axis 2) where AI challenges, generates counter-arguments, names uncertainty, and resists giving easy answers. VISION axis 2 frames sparring as "load-bearing runtime mechanism" (using "mechanism" colloquially — meaning load-bearing AT RUNTIME, distinct from the locked architectural primitive `mechanism` = atomic interface contract). Architecturally, the framework supports the axis via the Sparring Protocol (Pattern A primitive; surface + impls + selection) + 8 sparring sub-mechanisms (each a framework-level interface contract per locked `mechanism` vocabulary).
+**Canonical**: An interaction mode (axis 2) where AI challenges, generates counter-arguments, names uncertainty, and resists giving easy answers. VISION axis 2 frames sparring as "load-bearing runtime mechanism" (using "mechanism" colloquially — meaning load-bearing AT RUNTIME, distinct from the locked architectural primitive `mechanism` = atomic interface contract). Architecturally, the framework supports the axis via the Sparring **mechanism class** (Pattern D per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE Pattern D row — fixed Surface + per-shape policy variation + per-sub-mechanism realization variation; NOT Pattern A pluggability) collecting 8 sparring sub-mechanisms (each a framework-level interface contract per locked `mechanism` vocabulary) under a single architectural-conceptual home parameterized by per-shape policy.
 
 **What it is**: The second VISION axis. AI participates in sparring-mode interaction, distinct from oracle-mode (humans submit AI's answer as their own; performance same as AI alone) or validator-mode (humans ask AI to support preconceptions; sycophancy loop; performance worse than AI alone). Per Vivienne Ming's research, only sparring-mode produces value rivaling or beating prediction markets. Sparring keeps the practitioner critically engaged.
 
@@ -39,4 +39,4 @@ vision_usage: directly-used
 
 **See**:
 - VISION "Sparring partner, not answer machine (axis 2)" section + Foundations Vivienne Ming subsection
-- ARCH Layer 3 axis-2-mechanism topic (placeholder until Phase 3)
+- `arch/sparring.md` (Layer 3 mechanism-class topic; 8 sub-mechanism Surfaces; per-shape activation matrix; per-sub-mechanism event-kind catalog; per-shape policy variation)

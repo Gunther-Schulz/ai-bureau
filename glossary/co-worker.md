@@ -52,6 +52,7 @@ Same role-shape across archetypes; differs by what work is produced.
 - [category collapse](category-collapse.md) — the force that breaks the co-worker frame regardless of architectural intent (host environment can collapse co-worker to tool-shape)
 - [practitioner](practitioner.md) — the human side of the co-worker pairing
 - [substrate](substrate.md) (Instance aspect) — the runtime that occupies the co-worker role
+- [authority-binding](authority-binding.md) — co-worker still operates under practitioner-authority gates (colleague-grade autonomy, not unrestricted); authority-binding mechanism makes the practitioner-authority chain structurally observable in audit-trail per axis-3
 - [mechanism](mechanism.md) — co-worker frame requires axis-1 mechanisms (persistent state, orchestration, source-grounding, audit emission, authority binding)
 
 **Source**:

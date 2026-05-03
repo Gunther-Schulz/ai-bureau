@@ -2,7 +2,7 @@
 
 ## Status
 
-ACCEPTED. 2-round sharpening (Round 1 full monty + Round 2 cross-cutting + schema-detail layer per `decision-design-sharpening` v0.6.0 layered coverage observation) + retroactive profile-anchored validation pass + retroactive greenfield-pass amendment (REVISION-1 applied to §10 boot/shutdown ordering — substrate.md §10 was archive-anchored with substrate-flushes-audit-trail; corrected to align with `arch/audit.md` §11 audit Protocol owns audit-trail flush; shuts down AFTER substrate).
+ACCEPTED. Substantive sharpening provenance + amendments preserved in §Sharpening provenance below (Round 1 + Round 2 EXPANSIONS; profile-anchored validation; greenfield-pass REVISION-1 to §10 boot/shutdown ordering aligning with audit mechanism class §10 ordering; greenfield-rederivation v2 cascade amendments).
 
 ## Owner
 

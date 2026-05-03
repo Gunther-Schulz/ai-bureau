@@ -55,6 +55,7 @@ All three resolving "intertwined-side" = axis 1 succeeding.
 - [workflow](workflow.md) — what intertwined AI intertwines WITH (intertwining requires workflow to embed in)
 - [practitioner](practitioner.md) — the human side of the co-worker pairing
 - [substrate](substrate.md) (Instance aspect) — the runtime that operates intertwined
+- [authority-binding](authority-binding.md) — axis-1 trust requires no anonymous-actor / silent-AI-action; intertwined AI participates in real production with attributed-emission via authority-binding mechanism (distinct from tacked-on AI's invisible-feature pattern)
 - [mechanism](mechanism.md) — intertwined AI requires axis-1 mechanisms (persistent state, orchestration, source-grounding, audit emission, authority binding)
 
 **Source**:
