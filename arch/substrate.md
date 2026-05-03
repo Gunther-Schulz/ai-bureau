@@ -342,7 +342,11 @@ The Surface contract is tier-neutral — same Surface methods at all tiers. Per-
 
 Substrate selection per workspace.md may be tier-constrained — per-tier-compatibility declared by Impl.
 
-## 14. Pre-implementation operational concerns (Phase 6 forward reference)
+## 14. Cross-shape policy variation
+
+**N/A** — per Pattern A template `MAINTENANCE.md` Layer 3 description, §14 cross-shape-policy-variation applies when protocol behavior is shape-policy-mediated. Substrate Surface is shape-uniform — substrate-emitted events + Surface contracts are shape-neutral; shape policy interprets substrate-emitted events at shape primitive's domain (per `glossary/shape.md`), not at substrate's. No per-shape behavioral variation in substrate Surface.
+
+## 15. Pre-implementation operational concerns (Phase 6 forward reference)
 
 Operational/runtime concerns NOT locked at ARCH level — surfaced here as forward-reference for Phase 6 pre-implementation sharpening (per `pre-implementation-sharpening` skill). These are explicitly NOT decision-design-phase concerns; the ARCH topic deliberately stops at architectural-conceptual articulation.
 
@@ -360,7 +364,7 @@ Concerns surfaced from archived material (`substrate-protocol-design.md` round 3
 
 These are per-implementation operational concerns — locked at Phase 6 implementation-start. ARCH topic explicitly does NOT lock these (per layered coverage observation in `decision-design-sharpening` v0.6.0: R1 = arch decisions; R2 = cross-cutting + schema-detail; R3 = patterns; operational concerns belong to Phase 6 pre-implementation sharpening).
 
-## 15. Watch-list
+## 16. Watch-list
 
 | W# | Item | Awaited signal | Resolution mechanism |
 |---|---|---|---|
@@ -369,7 +373,7 @@ These are per-implementation operational concerns — locked at Phase 6 implemen
 | W3 | SDK API drift triggering Surface revision | Claude Agent SDK / MS AF major-version release affecting Surface composition | Re-validate Surface contract against new SDK shape; update affected Surface category if needed; trigger DR amendment per cascade discipline |
 | W4 | Tier 3 substrate-determines-deployment-platform reframing | First Tier 3 enterprise deployment with concrete platform constraints (Gemini Enterprise / Azure AI Foundry / AWS AgentCore) | Per-platform deployment-detail decisions land at deployment time; reframing per pattern-vs-instance discipline (Tier 3 = enterprise multi-agent A2A platform; Gemini Enterprise = canonical exemplar but not only valid instance) |
 
-## 16. Decision-design provenance
+## 17. Decision-design provenance
 
 This topic articulates substrate as Pattern A protocol per locked GLOSSARY entry. Source materials (archived for Phase 6 implementation reference):
 
@@ -379,7 +383,7 @@ This topic articulates substrate as Pattern A protocol per locked GLOSSARY entry
 
 Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays shape-neutral / archetype-neutral / pioneer-neutral. Pioneer (PBS-Schulz / Claude Agent SDK) reality grounds the substrate primitive (per `profiles/L5a-planner-pbs-schulz.md` line 88, 126) without leaking pioneer specifics into the Surface contract.
 
-## 17. Phase routing
+## 18. Phase routing
 
 | Concern | Phase | Notes |
 |---|---|---|
@@ -390,7 +394,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays sh
 | Per-impl extension Protocols (ClaudeAgentSDKExtensions / MSAgentFrameworkExtensions) | 6 | Designed alongside Substrate Protocol; each impl satisfies Surface + declares extension Protocols |
 | Substrate identity portability across migrations | 6 | Workspace identity portability spec; backup/restore/migration mechanics |
 
-## 18. Cross-references
+## 19. Cross-references
 
 - **GLOSSARY**: `substrate` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `adapter`, `audit`, `event`, `session`, `specialist`, `deployment`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (substrate-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pioneer-neutrality of Surface); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity at session-16 substrate Round 1)

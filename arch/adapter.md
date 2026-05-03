@@ -206,7 +206,7 @@ The cardinality variation IS the architectural distinction between substrate Pat
 | `framework` | Adapter is one mechanism category within the framework (parallel to substrate; internal-vs-external axis) |
 | `mechanism` | Each per-class Adapter Protocol Surface IS a mechanism (atomic interface contract per class) |
 | `Framework C scope` | Adapter Implementations live there as distributable definitions |
-| `shape` | Shapes declare adapter compatibility / mandates / restrictions per shape policy bundle (see §11) |
+| `shape` | Shapes declare adapter compatibility / mandates / restrictions per shape policy bundle (see §14 cross-shape policy variation; per-shape error semantics in §11) |
 | `workspace` | Workspace activates one-or-more adapter Instances via `workspace.md` adapter bindings |
 | `Owner B scope` | Running adapter Instances bound to workspace deployment; multiple simultaneous; instance-state at Owner B |
 | `protocol (architectural)` | Adapter is Pattern A protocol instance; META-PRIMITIVE Protocol describes Pattern A pattern shape |
@@ -410,11 +410,9 @@ Per-class Pydantic shape (errors + quota + circuit-breaker) → Phase 6 spec.
 
 **N/A** — per Pattern A template `MAINTENANCE.md:260`, tier-awareness §13 is substrate-specific (substrate is tier-uniform Surface with per-tier behavior in impl). Adapter behavior is shape-class-shape (per §14 cross-shape policy variation) + integration-class-shape, NOT tier-shape. Per-impl tier-compatibility declared in §4 (Tier 1 / Tier 2 / Tier 3 compatibility per Implementation), but per-class Surface contracts themselves are tier-uniform.
 
-## 13a. Cross-shape policy variation (adapter-specific appendix)
+## 14. Cross-shape policy variation
 
-Per `profiles/G-composability-gate.md` line 157: "Cross-shape consumption: practitioner-shape specialist (mandates audit-emission) used in personal-OS-shape workspace (light audit). Shape's policy bundle determines if specialist activates fully or partially."
-
-Adapter behavior is shape-policy-mediated. (Appendix-slot: this content is load-bearing for adapter but doesn't fit a Pattern A template numbered section — substrate's tier-shape variation is template §13; adapter's shape-class variation is adapter-specific. Surfaced as §13a appendix per `MAINTENANCE.md` cascade discipline + per-execution DR A5 finding.)
+Per Pattern A template `MAINTENANCE.md` Layer 3 description §14 conditional applicability: applies when protocol behavior is shape-policy-mediated. Adapter behavior is shape-policy-mediated per `profiles/G-composability-gate.md` line 157 cross-shape consumption framing ("practitioner-shape specialist mandates audit-emission used in personal-OS-shape workspace; shape's policy bundle determines if specialist activates fully or partially").
 
 | Shape | Adapter audit emission | Adapter permission flow | Adapter error escalation |
 |---|---|---|---|
@@ -425,7 +423,7 @@ Adapter behavior is shape-policy-mediated. (Appendix-slot: this content is load-
 
 Shape policy declares per-shape adapter-action enforcement at workspace boot. Adapter Implementations themselves are shape-neutral; shape policy interprets architectural events + decisions per shape's mandate.
 
-## 14. Pre-implementation operational concerns (Phase 6 forward reference)
+## 15. Pre-implementation operational concerns (Phase 6 forward reference)
 
 Operational/runtime concerns NOT locked at ARCH level — surfaced for Phase 6 pre-implementation sharpening:
 
@@ -442,7 +440,7 @@ Operational/runtime concerns NOT locked at ARCH level — surfaced for Phase 6 p
 
 Per layered coverage observation in `decision-design-sharpening` v0.6.0: these belong to Phase 6 pre-implementation sharpening, not decision-design phase. ARCH topic explicitly does NOT lock these.
 
-## 15. Watch-list
+## 16. Watch-list
 
 | W# | Item | Awaited signal | Resolution mechanism |
 |---|---|---|---|
@@ -452,7 +450,7 @@ Per layered coverage observation in `decision-design-sharpening` v0.6.0: these b
 | W4 | Multi-account same-class binding patterns | Multi-account workspaces (personal + work email common) surface integration friction | §5 Selection mechanics may need explicit multi-account-per-class semantics; Phase 6 spec impl |
 | W5 | Cross-adapter operation atomicity | Workflows involving multiple adapter writes (invoice + email) surface failure-recovery friction | May require coordination protocol amendment OR adapter-side compensation patterns; defer to coordination ARCH topic + cross-decision audit |
 
-## 16. Decision-design provenance
+## 17. Decision-design provenance
 
 This topic articulates adapter as Pattern A protocol per locked GLOSSARY entry.
 
@@ -464,7 +462,7 @@ This topic articulates adapter as Pattern A protocol per locked GLOSSARY entry.
 
 Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces stay shape-neutral / archetype-neutral / pioneer-neutral. Pioneer reality (PBS-Schulz / outlook + LaTeX + signing) grounds the adapter primitive without leaking pioneer specifics into Surface contracts.
 
-## 17. Phase routing
+## 18. Phase routing
 
 | Concern | Phase | Notes |
 |---|---|---|
@@ -476,7 +474,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces
 | Multi-account scenarios | 6 (potentially with W4 watch-list trigger earlier) | Architectural shape covers multi-instance; per-class multi-account refinement at Phase 6 |
 | New per-class Surface additions (Watch-list W1, W3) | TBD per signal | Cascade discipline: DR amendment + new per-class Surface added |
 
-## 18. Cross-references
+## 19. Cross-references
 
 - **GLOSSARY**: `adapter` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `substrate`, `skill`, `specialist`, `audit`, `event`, `coordination`, `trust`, `time`, `shape`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 "make wrong shapes impossible, not solvable" (per-class Surface typing + isinstance check on Implementation make impl-coupling-by-accident impossible); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (per-class Surface neutrality); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity)

@@ -99,6 +99,10 @@ Foundation-up: substrate first (most foundational); then adapter; then 5 named p
 - **Coordination Protocol** Surface + impl variations (event-shaped vs call-shaped)
 - **Trust Protocol** Surface + trust-model variations (practitioner-judgment / budget-policy / individual)
 - **Time Protocol** Surface + temporal-semantics variations (turn-based / long-running / heartbeat-based)
+- **Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit** [origin: HANDOFF Note 52 step 5 + Note 53 deferred §14 bundle] — re-derive `arch/sparring.md` + `arch/audit.md` + their DRs (`sparring-arch-topic.md` + `audit-arch-topic.md`) from primitives via v2 greenfield-rederivation; closes Phase 3.4 v2-audit campaign. Bundled deferred work for this v2-audit:
+  - **(a) §14 cross-shape policy variation application + §14-§18 → §15-§19 renumbering** per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` REV-1 deferred path (c). For each topic: apply §14 if shape-policy-mediated OR document N/A explicitly (same discipline as 6 prior conditionals); cascade renumbering to §15-§19 + internal cross-references. Note: `arch/sparring.md` currently has cross-shape-variation content at OLD slot §12 + custom §13 workflow_instance section — both template-divergences to reconcile during v2-audit re-derivation.
+  - **(b) `arch/substrate.md:42` §5 mis-reference fix** [pre-existing bug; surfaced by Cascade-Reviewer Note 53] — line says "see §5 Transport variation" but substrate.md §5 is "Selection mechanics"; transport variation is at §12. Pre-dates this cascade. Trivial 1-line fix; bundle into v2-audit cleanup.
+  - **(c) `arch/substrate.md:396` residual breadcrumb** [origin: HANDOFF Note 52 NB-1] — `(procedural fidelity at session-16 substrate Round 1)` qualifier on Discipline 1 cross-reference; pattern-equivalent to S7 cleanup; strip during v2-audit cascade.
 
 ### 3.5 Primitive-detail topics + axis-interaction analysis
 

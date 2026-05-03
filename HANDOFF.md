@@ -182,3 +182,62 @@ Executed Note 51 step 4 next-cluster: ran v2 greenfield-rederivation skill again
 **Notes 44-51**: stay as historical session-log; will rotate to archive next time HANDOFF crosses ~500 lines (currently ~570 after Note 52 expansion — rotation now warranted at next session start; Notes 44-49 + 50 ready for `archive/handoffs/HANDOFF-sessions-1-22.md` rotation).
 
 ---
+
+**Note 53: Session 24 — 7th-conditional Pattern A template amendment (Cross-shape policy variation §14); cascade applied across DR + MAINTENANCE + substrate + adapter + glossary; ACCEPTED-WITH-FINDINGS; cascade-miss on already-existing arch/audit.md + arch/sparring.md deferred to scheduled Phase 3.4 sub-cluster v2-audit**
+
+Resolved Note 52 NON-BLOCKING #2 (§13a appendix-slot precedent question for Phase 3.6 quality-gate) by ESCALATE-TEMPLATE-AMENDMENT path: added 7th protocol-specific-conditional section §14 "Cross-shape policy variation" to Lock 1's Pattern A protocol topic template. This is a SINGLE-DR template-amendment commit (not a v2 greenfield-rederivation cluster-execution); methodology composition demonstrates skill-skill-pattern composability beyond v2 greenfield-rederivation.
+
+**Outputs**:
+- `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` (NEW DR; ACCEPTED; status preserves Lock 1 composite-historical-integrity rather than amending in place)
+- `MAINTENANCE.md` Layer 3 description: Pattern A protocol topic template amended 12+6 → 12+7; new §14 conditional definition + applicability framing; per-protocol section count expectation block updated
+- `arch/substrate.md`: NEW §14 documenting N/A explicitly per shape-uniform substrate Surface; §14-§18 → §15-§19 renumbering + internal cross-reference updates
+- `arch/adapter.md`: §13a appendix-slot promoted to canonical §14 with cleaned Lens 5 v0.2.1 framing (drops appendix-slot meta-language); §14-§18 → §15-§19 renumbering + §7 shape-row reference updated + internal cross-reference updates
+- `glossary/shape.md`: cross-reference added pointing to MAINTENANCE.md Layer 3 §14 conditional + new DR
+- Commits: (main session fills hash); pushed to origin/main
+
+**Decision-design-sharpening Round 1 outcome**: option (b) ESCALATE-TEMPLATE-AMENDMENT chosen over (a) reference-link-from-§7 + (c) accept-§13a-appendix-slot-as-precedent. 13 refinements surfaced (12 EXPANSIONS + 1 REVISION-flavored re: persistence-target chose new DR over Lock 1 in-place amendment to preserve Lock 1 composite-historical-integrity); user-locked en bloc ("Iagreed"). Profile-anchored validation per `decision-design-sharpening` v0.6.0+ Round 2: ≥3 cluster representatives read fresh (G-composability-gate.md + L5a-planner-pbs-schulz.md + L8-auditor-reviewer-posthoc.md = Clusters A Producers + C Consumers + D Validators); 3/3 PASS with cited content.
+
+**Methodology applied (M3-M7 self-applied)**:
+- M3 sub-agent-first: dispatched Wave-1 Writer + Wave-1 Reviewer for 5-file cascade execution + Cascade-Writer (this session's 3-edit finalization) + final Cascade-Reviewer (next dispatch); main session as orchestrator only
+- M4 Writer-Reviewer pattern: applied per artifact-set (Wave-1 + finalization Wave); Reviewer findings retained
+- M5 single-Wave (no /clear mid-execution warranted; cluster scope = single template-amendment commit); /clear recommendation at HARD STOP this Note
+- M6 HARD STOP at this Note + commit + push
+- M7 Ralph self-check: each sub-agent confirmed at completion + main-session check at Wave + cluster boundaries
+
+**Reviewer findings retained** (Wave-1 Cascade-Reviewer ACCEPTED-WITH-FINDINGS): 7 CONFIRMS-LOCKED + 3 NON-BLOCKING + 1 REVISION RECOMMENDED + 0 BLOCKING.
+
+- **NB-1 substrate.md:42 §5 mis-reference** — line says "see §5 Transport variation" but substrate.md §5 is "Selection mechanics" (transport is §12). Pre-existing bug pre-dating this cascade. Bundled into Phase 3.4 sub-cluster v2-audit per `BACKLOG.md` Phase 3.4.
+- **NB-2 BACKLOG.md L96 stale prose** — pre-existing cosmetic stale prose; deferred as cosmetic.
+- **NB-3 this Note** — surfaces NB-1/NB-2 + REV-1 disposition for next-session pickup.
+- **REV-1 cascade-miss on arch/audit.md + arch/sparring.md** — both files RECLASSIFIED-mechanism-class per `ARCHITECTURE.md` §6 + §4 catalog rows 3-4 (DRAFTED), so they are already-existing topics in-corpus (NOT future-creation). §14 application + §14-§18 → §15-§19 renumbering DEFERRED to scheduled Phase 3.4 sparring+audit sub-cluster v2-audit per path (c) (per-execution v2-audit will re-derive both topics from primitives + bundle §14 application during re-derivation). DR §Composition section tightened to acknowledge already-in-corpus state + name the v2-audit as deferral target (not "apply at creation" forward-looking framing).
+
+**Cross-execution pattern signal**: this is a SINGLE-DR template-amendment commit (not a v2 greenfield-rederivation cluster-execution per Notes 50/51/52). Methodology composition (`decision-design-sharpening` Round 1 → Wave-1 Writer + Reviewer → user-reconciliation → Cascade-Writer + Cascade-Reviewer → commit) demonstrates skill-skill-pattern composability beyond v2 greenfield-rederivation. Validates that M3 sub-agent-first + M4 Writer-Reviewer compose with Phase 1 sharpening as well as Phase 3 audit family.
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 53
+3. **Recommend `/clear`** between sessions — main session has accumulated decision-design-sharpening Round 1 + 4-sub-agent cascade dispatch context; fresh session for next substantive work
+4. **Three NON-BLOCKING follow-ups still available from Note 52** (carried forward; any priority order):
+   - `arch/substrate.md:396` residual breadcrumb (1-line; now bundled into Phase 3.4 sub-cluster v2-audit per BACKLOG)
+   - `architectural_commit_gate` hook session-isolation bug in `plugin/hooks/architectural_commit_gate.py` `extract_read_paths` (small-scope dev-tooling fix)
+   - Note 52's own NON-BLOCKINGs (§13a precedent now RESOLVED via this Note's template amendment)
+   Plus from this session BACKLOG-bundled (now in Phase 3.4 v2-audit sub-cluster):
+   - `arch/audit.md` + `arch/sparring.md` §14 application + §14-§18 → §15-§19 renumbering (will execute as part of v2-audit re-derivation)
+   - `arch/substrate.md:42` §5 mis-reference fix (1-line; bundled into v2-audit cleanup)
+5. **Next substantive options unchanged from Note 52 step 5**:
+   - **Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit** (4 artifacts; bundles deferred §14 work + substrate.md:42 mis-ref + substrate.md:396 breadcrumb) — natural follow-up; closes Phase 3.4 v2-audit campaign
+   - Phase 3.5 substantive primitive-cluster work
+   - Phase 3.6 quality-gate ARCH topic (now has §14 slot ready at template-creation moment per this Note's template amendment — no §13a appendix-slot retrofit needed)
+
+**What is NOT lost**:
+- 7th-conditional template amendment fully landed; substantive Pattern A template architecture extended from 12+6 to 12+7 across canonical surface (`MAINTENANCE.md` Layer 3 description + DR + already-written Pattern A topics substrate + adapter + glossary cross-ref)
+- Lock 1 composite-historical-integrity preserved (new DR + MAINTENANCE.md cascade rather than in-place amendment)
+- Quality-gate ARCH topic (Phase 3.6) inherits §14 slot at template-creation moment — no retrofit
+- Foundation-up audit + sparring v2-audit work scheduled with deferred §14 application bundled in (per BACKLOG Phase 3.4 sub-cluster entry)
+
+**Phase 3 status post-this-amendment**: unchanged from Note 52 + 7th-conditional adds to Pattern A template machinery. Phase 3.1 + 3.2 + 3.4-substrate+adapter v2-audited and CONFIRMS-LOCKED on architecture. Phase 3.4 effectively COMPLETE per Note 48 with sparring + audit RECLASSIFIED mechanism-class. Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit will reconcile the deferred §14 application + §14-§18 → §15-§19 renumbering on next execution.
+
+**Notes 44-52**: rotation now warranted (HANDOFF currently ~570 lines pre-Note-53; will exceed ~600 with Note 53 expansion). Flag for next session start: rotate Notes 44-52 to `archive/handoffs/HANDOFF-sessions-1-23.md` (or analogous span name) — DO NOT rotate this commit; keep finalization scope tight to the 3-edit cascade.
+
+---

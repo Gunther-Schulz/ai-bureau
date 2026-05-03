@@ -223,13 +223,13 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Single abstraction level per file**: structural mechanisms for primitives; decisional reasoning for disciplines.
 
-#### Pattern A protocol topic template (LOCKED; revised per `docs/decisions/greenfield-rederivation-pause.md` Step 4)
+#### Pattern A protocol topic template (LOCKED; revised per `docs/decisions/greenfield-rederivation-pause.md` Step 4 + `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md`)
 
 For ARCH topics describing Pattern A protocols (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry), use this two-tier template:
 - **12 common-required sections** apply to every Pattern A topic
-- **6 protocol-specific-conditional sections** apply per protocol if applicable to its nature
+- **7 protocol-specific-conditional sections** apply per protocol if applicable to its nature
 
-Established by `arch/substrate.md` (anchor; all 6 conditional sections apply) + validated by `arch/adapter.md` (some conditional sections thin or N/A) + greenfield-tested against quality-gate at template-derivation time.
+Established by `arch/substrate.md` (anchor; 6 of 7 conditional sections apply, §14 N/A per shape-uniform Surface) + validated by `arch/adapter.md` (some conditional sections thin or N/A; §14 applies per shape-policy-mediated nature) + greenfield-tested against quality-gate at template-derivation time.
 
 **12 common-required sections** (every Pattern A topic):
 
@@ -242,13 +242,13 @@ Established by `arch/substrate.md` (anchor; all 6 conditional sections apply) + 
 | 6 | Tri-aspect reconciliation | Surface + Implementations + Running Instance; coupling-impossible-by-construction |
 | 7 | Composition with framework primitives | Cross-references to all primitives this topic composes with |
 | 9 | Cardinality + lifecycle | Creator / owner / destroyer; mutability; cross-session persistence |
-| 14 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details |
-| 15 | Watch-list | Items awaiting external evidence; resolution mechanisms |
-| 16 | Decision-design provenance | Archived sources; pattern-vs-instance discipline application |
-| 17 | Phase routing | Architectural shape (locked here) vs Pydantic spec vs concrete impls (Phase 6) |
-| 18 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing / Phase 6 spec target |
+| 15 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details |
+| 16 | Watch-list | Items awaiting external evidence; resolution mechanisms |
+| 17 | Decision-design provenance | Archived sources; pattern-vs-instance discipline application |
+| 18 | Phase routing | Architectural shape (locked here) vs Pydantic spec vs concrete impls (Phase 6) |
+| 19 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing / Phase 6 spec target |
 
-**6 protocol-specific-conditional sections** (apply per protocol if applicable to its nature; document N/A explicitly when section is omitted):
+**7 protocol-specific-conditional sections** (apply per protocol if applicable to its nature; document N/A explicitly when section is omitted):
 
 | § | Section | Applicability |
 |---|---|---|
@@ -258,13 +258,14 @@ Established by `arch/substrate.md` (anchor; all 6 conditional sections apply) + 
 | 11 | Substrate error categories (architectural-level) | Per-protocol error semantics differ; document per-protocol error categories when load-bearing distinct from §9 lifecycle treatment |
 | 12 | Transport variation + per-tier mapping | Substrate-specific (MCP transport variation); skip when no multi-transport surface |
 | 13 | Deployment-tier awareness | Substrate-specific (Tier 1/2/3 per-tier behavior in impl, not Surface); skip when protocol is tier-uniform |
+| 14 | Cross-shape policy variation | Applies when protocol behavior is shape-policy-mediated (audit emission per shape; permission flow per shape; error escalation per shape; or other axes where shape policy bundle declares per-shape variation); document N/A explicitly when behavior is shape-uniform |
 
 **Per-protocol section count expectation**:
-- substrate: 12 common + 6 conditional (anchor; all apply) = 18 total
-- adapter: 12 common + ~3-4 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors) = ~15-16 total
-- quality-gate: 12 common + ~1-2 conditional (§11 fail-closed / fail-open errors per shape) = ~13-14 total
+- substrate: 12 common + 7 conditional (anchor; 6 of 7 apply; §14 N/A per shape-uniform substrate Surface) = ~18-19 total (depending on counting N/A documentation)
+- adapter: 12 common + ~5 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors, §14 cross-shape variation; §8 + §12 + §13 N/A) = ~17 total
+- quality-gate: 12 common + ~3-4 conditional (§11 fail-closed / fail-open per shape, §14 cross-shape variation expected per shape-policy-mediated nature; others TBD per topic creation) = ~15-16 total
 
-Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic).
+Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic). Future Pattern A 8th-conditional candidates lock when first instance surfaces (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
 
 #### Provenance hygiene
 
