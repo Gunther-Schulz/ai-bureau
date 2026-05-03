@@ -2,9 +2,27 @@
 
 ## Status
 
-ACCEPTED-WITH-FINDINGS — 2026-05-03. Wave-1 complete (2 Writer-pairs + 2 Reviewers in fresh sub-agent contexts per skill §Per-Wave). User-reconciliation complete: all 12 findings (5 sparring + 7 audit) accepted en bloc. Cascade execution pending (delegated to fresh-context Cascade-Writer + Cascade-Reviewer per skill §Cascade execution + `CLAUDE.md` M3+M4).
+ACCEPTED-WITH-FINDINGS — 2026-05-03. Wave-1 + user-reconciliation + cascade execution + Cascade-Reviewer pass + Cleanup-Writer follow-up all complete. Per skill §Per-execution DR shape: status finalized.
 
-**Findings summary**: 0 T1 (framework-shape-changing) + 3 T2 (topic-rewriting; all in audit pair) + 8 T3 (mechanical edits; 5 sparring + 3 audit) + 21 T4 (confirms-locked). Cross-execution pattern signal continues per Notes 50/51/52: substantive architecture survives greenfield re-derivation; drift = Lens 5 v0.2.1 retro-application + cascade-miss legacy + 1 substantive REVISION (audit's Trust-subsumption framing reframe to audit-composes-with-authority-binding).
+**Execution timeline**:
+1. PROPOSED — DR stub commit `7dfdfa5` (cluster definition + Wave decomposition; per skill §Pre-execution step 5)
+2. Wave-1 — 4 sub-agents in fresh contexts (2 Writers + 2 Reviewers); main session orchestrator-only per `CLAUDE.md` M3
+3. ACCEPTED-WITH-FINDINGS — DR commit `69f944e` (12 findings + 5 bundled deferred items aggregated; user-reconciliation en bloc)
+4. Cascade execution — commit `0d53e1e` (Cascade-Writer in fresh sub-agent; 5 files; 70 insertions / 67 deletions)
+5. Cascade-Reviewer pass — surfaced 3 T3 cascade-miss + 1 borderline-T3 scope-question; NON-BLOCKING verdict
+6. Cleanup-Writer follow-up — commit `f327e6f` (3 T3 cascade-miss + 5 audit-arch-topic.md Pattern-A scrub broadening per user sign-off; 17 insertions / 17 deletions)
+
+**Findings summary** (Wave-1 aggregate):
+- 0 T1 (framework-shape-changing)
+- 3 T2 (topic-rewriting; all in audit pair: Trust framing reframe + §14 addition + §14-§18 renumber)
+- 8 T3 (mechanical edits; 5 sparring + 3 audit)
+- 21 T4 (confirms-locked)
+- + 3 Cascade-Reviewer follow-up T3 (post-cascade cascade-miss: capability-count cross-refs + 2 error-mapping §-refs)
+- + 1 user-broadened T3 (5 audit-arch-topic.md Pattern-A self-references)
+
+**Cross-execution pattern signal continues** per Notes 50/51/52: 4th cluster-execution; substantive architecture survives greenfield re-derivation; drift = Lens 5 v0.2.1 retro-application + cascade-miss legacy + 1 substantive REVISION (audit's Trust-subsumption framing reframed to audit-composes-with-authority-binding-mechanism). Cross-execution pattern across all 4 cluster-executions stable: 0 T1 across all clusters; T2/T3 drift attributable to Lens 5 v0.2.1 retro-application + cascade-miss to upstream/downstream artifacts predating M1-M8 + (newly surfaced this execution) substantive-framing-debt accumulated under prior cascade-load conditions.
+
+**Skill v0.1.0 empirical-evidence threshold**: maintained at ≥2-execution; this is 4th consecutive successful cluster-execution validating orchestration shape end-to-end. No amendment-warranting patterns surfaced this execution; skill stays preliminary-locked at v0.1.0.
 
 ## Owner
 
