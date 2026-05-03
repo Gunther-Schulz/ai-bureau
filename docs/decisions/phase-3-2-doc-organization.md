@@ -27,9 +27,9 @@ Per-sub-decision sharpening sequence (foundation-up dependency):
 
 Mid-sharpening user question ("is ARCHITECTURE.md purely documentation or drawn from during production?") surfaced the foundational consumer-model question that drove explicit codification of Logic placement modes (4-mode distribution) + Audience+scope section in Sub-decision 4. This is the canonical example of bidirectional cascade per `MAINTENANCE.md`: ARCH-territory work surfaced glossary-grade structural fact about logic-distribution; codified into ARCHITECTURE.md before lock.
 
-## Sub-decision 1: Topic taxonomy — 14 topics, protocol-centric aggregation
+## Sub-decision 1: Topic taxonomy — 11 topics, protocol-centric aggregation
 
-**Resolution**: 14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom for emergent additions during Phase 3.3-3.6 work.
+**Resolution**: 11 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Under MAINTENANCE budget (15-20 cap) with 9-topic headroom for emergent additions during Phase 3.3-3.6 work.
 
 **Topic structure**:
 - **3 Pattern A protocol topics** (substrate / adapter / quality-gate); plus **2 mechanism-class topics retained as ARCH topics** (sparring / audit — per-shape policy variation, not Pattern A pluggability); coordination + trust + time CANCELLED (subsumed into substrate hooks + audit authority-binding + substrate-impl temporal semantics + adapter time-driven operations respectively)
@@ -90,7 +90,7 @@ Total: **11 topics**.
 1. Audience + scope (framework-developer documentation; Mode 4; NOT production-runtime)
 2. Phase 3 sub-phase status (current progress table)
 3. Doc structure (Phase 3.0 hybrid pattern + line budget)
-4. Topic catalog (locked 14 topics + filenames + one-liners)
+4. Topic catalog (locked 11 topics + filenames + one-liners)
 5. Reading order (recommended foundation-up path for new readers)
 6. Cross-cutting principles (Pattern-A/B/C semantics + cascade direction + scope-categorization framing + foundation-up ordering + Logic placement modes + how topics compose + composability + pattern-vs-instance discipline)
 7. Locked architectural decisions (Phase 3.0/3.1/3.2/3.6 lock summaries; short with cross-refs to detail)
