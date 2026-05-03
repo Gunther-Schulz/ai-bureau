@@ -1,4 +1,4 @@
-# Decision record: Audit ARCH topic (Phase 3.4 fourth Pattern A protocol topic)
+# Decision record: Audit ARCH topic (Phase 3.4 fourth ARCH topic — RECLASSIFIED mechanism class)
 
 ## Status
 
@@ -34,7 +34,7 @@ Critical architectural distinctions:
 
 ## Decision
 
-`arch/audit.md` LOCKED with 18 sections per Pattern A protocol topic template.
+`arch/audit.md` LOCKED with 19 sections per Pattern A protocol topic template applied to mechanism-class topic (12 common-required + 7 protocol-specific-conditional including §14 Cross-shape policy variation).
 
 Surface = 6 capability categories: emission API + actor declaration / append-only persistence / query for reasoning-chain reconstruction / integrity verification / event-kind catalog management / state-rendering-from-events.
 
@@ -119,7 +119,7 @@ Mode 1 (single-decision; not composite). 21 EXPANSIONS within 2-round sweet spot
 - Audit Protocol consolidates emission paths from substrate §8 + adapter §8 + sparring §8 into unified architectural commitment — first ARCH topic that primarily INTEGRATES other ARCH topics' emission paths (vs being primarily-new-mechanism like prior 3)
 - Audit-trail-as-canonical-source commitment is foundational for axis-3 defensibility (reconstructible reasoning chain) — composes load-bearingly with claim-defensibility ARCH topic (Phase 3.5)
 - Append-only enforcement at architectural level (gate-dispatched-structural per TOP-LEVEL DESIGN PRINCIPLES §1) sets precedent for similar enforcement decisions in remaining Pattern A topics
-- Boot-before-substrate / shutdown-after-substrate ordering establishes Audit Protocol as foundational Pattern A protocol — substrate composes ABOVE audit at runtime layering
+- Boot-before-substrate / shutdown-after-substrate ordering establishes the Audit mechanism class as foundational cross-axis structural substrate — substrate composes ABOVE audit at runtime layering
 
 ## Constraints flowing to downstream commitments
 
@@ -151,11 +151,11 @@ Mode 1 (single-decision; not composite). 21 EXPANSIONS within 2-round sweet spot
 
 ## Files touched
 
-- `arch/audit.md` (NEW; 18 sections per Pattern A protocol topic template)
+- `arch/audit.md` (NEW; 19 sections per Pattern A protocol topic template applied to mechanism-class topic)
 - `docs/decisions/audit-arch-topic.md` (this file; NEW; status ACCEPTED per locked DR template)
 - `ARCHITECTURE.md` (cascade-update: Phase 3.4 progress 4 of 8; topic catalog audit row drafted; locked decisions section)
 - `BACKLOG.md` (cascade-update: Phase 3.4 audit Resolved; remaining 4 Pattern A protocol topics pending)
-- `HANDOFF.md` (Note 39: audit ARCH topic locked; fourth Pattern A protocol topic; deployment-tier-driven cardinality variation introduced)
+- `HANDOFF.md` (Note 39: audit ARCH topic locked; fourth Phase 3.4 ARCH topic; mechanism class with per-shape policy variation; deployment-tier-driven cardinality variation introduced)
 
 ## Revisit triggers
 

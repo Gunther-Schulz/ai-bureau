@@ -19,7 +19,7 @@ The **Audit mechanism class** formalizes the audit-trail-as-canonical-source arc
 **Cross-axis foundation**: events are cross-axis structural substrate per locked GLOSSARY TOC §4. Audit-trail enables axis-3 defensibility (reconstructible reasoning chain) primarily; plus axis-1 trust + axis-2 sparring records.
 
 **Composition with framework**:
-- AuditEvent schema IS a `mechanism` (framework-level interface contract per locked event entry); audit-trail composition + 6 capability categories constitute the class
+- AuditEvent schema IS a `mechanism` (framework-level interface contract per locked event entry); audit-trail composition + 7 capability categories constitute the class
 - Per-shape policy declares granularity + mandatory event kinds + error semantics. Authority-binding trust model (per-shape policy on practitioner-judgment / budget-policy / individual) lives at authority-binding mechanism per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table; audit composes with authority-binding (records emitting actor via AuditEvent).
 - Storage backend mediated via substrate Surface §F (jsonl / LanceDB / Postgres / cloud-backed all substrate-impl-pinned, NOT audit-class-level)
 - Architectural-event emission paths (substrate-internal direct + skill-side via MCP gate) converge in audit-trail; both validated against AuditEvent schema
@@ -78,7 +78,7 @@ Decision rule for "in Audit mechanism class" vs "out":
 
 | Decision criterion | Verdict | Examples |
 |---|---|---|
-| Emission / persistence / query / integrity / catalog management for AuditEvent stream | In class | Six capability categories above |
+| Emission / persistence / query / integrity / catalog management for AuditEvent stream | In class | Seven capability categories above |
 | Per-shape mandatory event-kind declarations | Out (composes with `shape` GLOSSARY entry; declared in shape policy bundles) |
 | Per-claim attestation events (axis-3 success mode) | Out (composes with `engaged authorship` per axis-3 → `arch/claim-defensibility.md` Phase 3.5) |
 | Cross-claim audit coordination (multiple claims in same workflow_instance share audit-trail context) | Out (subsumed into substrate hooks + event-bus per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — see `arch/substrate.md`; per-shape policy configures coordination shape — call-shaped vs event-shaped). Prior `coordination` Pattern A topic CANCELLED per same DR. |
@@ -89,7 +89,7 @@ Decision rule for "in Audit mechanism class" vs "out":
 
 ## 4. Per-substrate-impl realization aspect
 
-The Audit mechanism class is realized at framework-mechanism layer (AuditEvent schema + audit-trail composition + 6 capability categories) + parameterized by per-shape policy (granularity + event-kind catalog + error semantics + trust model). Storage-backend variation is **per-substrate-impl** (not class-level pluggability) — that's the discriminator distinguishing this class from Pattern A protocols.
+The Audit mechanism class is realized at framework-mechanism layer (AuditEvent schema + audit-trail composition + 7 capability categories) + parameterized by per-shape policy (granularity + event-kind catalog + error semantics + trust model). Storage-backend variation is **per-substrate-impl** (not class-level pluggability) — that's the discriminator distinguishing this class from Pattern A protocols.
 
 ### Per-substrate-impl storage realization
 
@@ -100,7 +100,7 @@ Substrate Surface §F (session + context management) provides the storage substr
 - **Cloud-backed substrate impls** (future per Tier 2 deployment): cloud-storage-backed audit-trail; cross-region replication; integrity-verifiable across cloud boundaries
 - **Federation-aware substrate impls** (future per Tier 3): cross-node audit-trail coordination; per-tenant isolation
 
-In every case, the AuditEvent schema + audit-trail composition + 6 capability categories are the same — only the storage realization varies per substrate-impl. There are no alternative whole-class architectures realizing one Audit Surface differently; that's why this is a mechanism class rather than a Pattern A protocol.
+In every case, the AuditEvent schema + audit-trail composition + 7 capability categories are the same — only the storage realization varies per substrate-impl. There are no alternative whole-class architectures realizing one Audit Surface differently; that's why this is a mechanism class rather than a Pattern A protocol.
 
 ### Per-shape policy declares
 
@@ -110,7 +110,7 @@ Each per-shape policy bundle declares:
 - **Error semantics** (fail-closed for practitioner-shape; fail-open with alert for autonomous-business; fail-open with retry for personal-OS)
 - **Trust model** (per-shape authority-binding policy: practitioner-judgment / budget-policy / individual)
 - **Append-only enforcement reference** (gate-dispatched-structural per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1; substrate-impl provides the gate)
-- **Error mapping** (substrate-native errors → AuditError categories per §10)
+- **Error mapping** (substrate-native errors → AuditError categories per §11)
 
 ## 5. Per-shape policy mechanics
 
@@ -125,7 +125,7 @@ The Audit mechanism class is **always present** in every workspace (not selectab
 |---|---|---|
 | Audit class Surface per workspace | 1 | Always present at framework-mechanism layer; not selectable |
 | Audit-trails per workspace | 1 (logical; substrate-impl may use multiple files for rotation/archival but logically unified) | Always present; not selectable |
-| Whole-class alternative implementations | N/A (not Pattern A) | AuditEvent schema + 6 capability categories fixed at framework-mechanism layer; storage variation is per-substrate-impl |
+| Whole-class alternative implementations | N/A (not Pattern A) | AuditEvent schema + 7 capability categories fixed at framework-mechanism layer; storage variation is per-substrate-impl |
 | Per-shape policy variants | Per-shape | Shape policy declares granularity + catalog + error semantics + trust model |
 
 ### Validation at workspace boot
@@ -146,7 +146,7 @@ Audit as mechanism class with per-shape granularity policy + per-substrate-impl 
 
 | Aspect | Layer | What it is |
 |---|---|---|
-| **Class Surface** (AuditEvent schema + 6 capability categories) | mechanism (framework-level) | Framework-level interface contract; AuditEvent schema + emission/persistence/query/integrity/catalog/state-rendering categories — same across all substrate-impls |
+| **Class Surface** (AuditEvent schema + 7 capability categories) | mechanism (framework-level) | Framework-level interface contract; AuditEvent schema + emission/persistence/query/integrity/catalog/state-rendering categories — same across all substrate-impls |
 | **Per-substrate-impl realization** | substrate Surface §F | Storage backend (jsonl / Postgres / cloud / federation) inherits from selected substrate Implementation; audit class Surface unchanged |
 | **Per-shape policy bundle** | shape (policy layer) | Granularity + mandatory event-kind catalog + error semantics + trust model declared in shape policy bundle |
 | **Skill-side + substrate-internal emission** | runtime | Substrate emits architectural events directly; skills emit via MCP audit gate; both validated against AuditEvent schema; both land in same audit-trail |
@@ -157,14 +157,14 @@ Per archived audit-trail-v2 single-write architecture: audit-trail is single sou
 
 ### Audit-class skill-portability
 
-Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Audit class Surface (AuditEvent schema + 6 capability categories) is portable across substrate-impls (storage backend swap doesn't break skill); skill code reaching substrate-impl-internal primitives (file-format / hash-algorithm / query-implementation) is substrate-impl-pinned by construction.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Audit class Surface (AuditEvent schema + 7 capability categories) is portable across substrate-impls (storage backend swap doesn't break skill); skill code reaching substrate-impl-internal primitives (file-format / hash-algorithm / query-implementation) is substrate-impl-pinned by construction.
 
 ### Distinct from Pattern A protocols (substrate / adapter / quality-gate)
 
 - substrate (Pattern A) = singular per workspace; tier-aware; alternative architectural designs (Claude Agent SDK / MS AF) realize Surface differently
 - adapter (Pattern A) = multi-instance; per-class Surface variation; alternative impls per integration class realize Surface differently
 - quality-gate (Pattern A) = singular per workspace per shape; alternative architectural designs (practitioner-shape-gate stateful procedure / autonomous-business-shape-gate programmatic threshold / personal-OS-shape-gate light reporting) realize Surface differently
-- **audit = mechanism class** (AuditEvent schema + 6 capability categories fixed at framework-mechanism layer; per-shape granularity policy + per-substrate-impl storage realization vary; NO whole-class alternative architectures)
+- **audit = mechanism class** (AuditEvent schema + 7 capability categories fixed at framework-mechanism layer; per-shape granularity policy + per-substrate-impl storage realization vary; NO whole-class alternative architectures)
 - **sparring = mechanism class** (8 sub-mechanism Surfaces; per-shape activation matrix; NO whole-class alternative architectures — see `arch/sparring.md`; sister mechanism class peer)
 
 ## 7. Composition with framework primitives
@@ -172,7 +172,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Audit
 | Primitive | Composition |
 |---|---|
 | `framework` | Audit is a mechanism class within the framework's mechanism layer |
-| `mechanism` | AuditEvent schema IS a mechanism (framework-level interface contract per locked entry); query primitives + 6 capability categories are mechanisms; the Audit class aggregates them |
+| `mechanism` | AuditEvent schema IS a mechanism (framework-level interface contract per locked entry); query primitives + 7 capability categories are mechanisms; the Audit class aggregates them |
 | `shape` | Shape policy declares per-shape mandatory event-kind catalog + audit error semantics + trust model (per-shape authority-binding policy: practitioner-judgment / budget-policy / individual) |
 | `workspace` | Workspace inherits audit class Surface always (not selectable); shape policy provides granularity + catalog + trust |
 | `protocol (architectural)` | Audit is **NOT** a Pattern A protocol per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (AuditEvent schema IS the Surface; per-shape granularity is POLICY-level; storage backend variation is substrate-impl level). Distinct from substrate / adapter / quality-gate. |
@@ -236,7 +236,7 @@ Per G line 159 backup-restore-migration round-trip: substrate-specific metadata 
 
 ### Mutability
 
-- **Class Surface immutable** at framework-mechanism layer (AuditEvent schema + 6 capability categories fixed)
+- **Class Surface immutable** at framework-mechanism layer (AuditEvent schema + 7 capability categories fixed)
 - **Per-shape policy immutable** across single workspace boot (granularity + catalog + error semantics + trust model loaded at boot)
 - **Audit-trail content append-only** (events never rewritten; per §2.B)
 - **Cross-session persistence**: audit-trail persists across sessions (workspace lifetime); session_id field on events identifies session boundaries; session resumption preserves prior audit-trail state per substrate Surface §F

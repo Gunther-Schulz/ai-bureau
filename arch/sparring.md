@@ -114,7 +114,7 @@ Each per-shape policy bundle declares:
 - **Threshold values** (selective-friction claim-ambiguity threshold; anti-sycophancy heuristic-detection threshold)
 - **Retry-count + escalation** (orchestrator wiring; per-shape retry budget before bypass-with-reason path)
 - **Failure mode** (fail-closed for practitioner-shape; fail-open with alert for autonomous-business; fail-open for personal-OS)
-- **Error mapping** (validation failures → SparringValidationError categories per §10)
+- **Error mapping** (validation failures → SparringValidationError categories per §11)
 
 ## 5. Per-shape policy mechanics
 
