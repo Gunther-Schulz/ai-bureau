@@ -384,45 +384,63 @@ User confirmed all en bloc.
 
 ---
 
-**Note 51: Session 22 — Phase 3.2 cluster follow-up applied (14→11 header sync) + M3 violation incident → new memory `feedback_read_disciplines_before_planning.md`**
+**Note 51: Session 22 — Phase 3.2 cluster follow-up applied (14→11 header sync); two META-incidents about plan-time discipline-positioning; memory-rule attempt falsified same-session → user-pushback remains correction mechanism**
 
-Brief follow-up session: applied the 14→11 header sync flagged by Cascade-Reviewer in Note 50. Cleanup ran cleanly; META-incident mid-session about pattern-matching disciplines from session-loaded context (auto-loaded CLAUDE.md) rather than reading them fresh per Discipline 1.
+Brief follow-up session: applied the 14→11 header sync flagged by Cascade-Reviewer in Note 50. Cleanup ran cleanly. Two META-incidents about plan-time pattern-matching of CLAUDE.md disciplines from session-loaded context. Memory-rule attempted as fix; falsified within ~10 min same-session; removed.
 
 **Outputs**:
 - `docs/decisions/phase-3-2-doc-organization.md` Sub-decision 1 §header + Resolution + Sub-decision 4's description of ARCHITECTURE.md §4 catalog: 14 → 11; headroom 6 → 9 topics for body-header consistency (matches ARCHITECTURE.md line 78). §Amendments narrative + Status line + Round 2 historical metadata preserved per Lens 5 v0.2.1.
 - Cascade-Reviewer's flag at "ARCHITECTURE.md §4 catalog reference (line 93)" was a FALSE POSITIVE — that file's §4 already correctly says 11; reviewer likely meant the analogous line 94 in `phase-3-2-doc-organization.md` (Sub-decision 4's description of ARCHITECTURE.md §4).
 - Commit `2a6a2d2`; pushed origin/main.
-- Memory: `feedback_read_disciplines_before_planning.md` added (proactive read-before-planning rule; counters retroactive read-before-judging anti-pattern).
 
-**META-incident** (worked example of why the new memory entry):
+**META-incident A** (initial M3 violation; mid-session):
 - Task framed as "5-line cascade across `phase-3-2-doc-organization.md` + `ARCHITECTURE.md`" — the word "cascade" + 2 architectural-dir names = direct M3 trigger signals at plan time
 - Main-session pattern: committed "no sub-agent dispatch warranted" → self-corrected toward sub-agent dispatch (still without reading M3 fresh) → user interrupted ("continue" = main-session execution OK) → completed work → closing message re-justified ("M3 was codified for cascade-mode-load-failure conditions; tiny pre-validated mechanical cleanups don't replicate that risk profile") — STILL without reading M3 fresh
 - 3 wrong positions on M3 in a row, all from session-loaded-context pattern-match rather than Read-tool fresh read
 - User pushed: "Read CLAUDE.md M3 before committing the position"
 - Re-reading immediately surfaced: plan-time framing WAS a violation (plan was 2-file involving both `docs/decisions/*` + `ARCHITECTURE.md` → M3 triggers per "any cascade involving GLOSSARY / ARCHITECTURE / MAINTENANCE / arch/* / docs/decisions/*" condition; M3 doesn't carve out "tiny" or "pre-validated"); execution-time scope reduction to 1-file doesn't retroactively fix the plan-time violation
-- M4 (Writer-Reviewer): AMBIGUOUS — text says "Layer 0/1/2/3" but DRs in `docs/decisions/*` may be Layer 4 per MAINTENANCE.md 5-layer doc model; not verified this session (open thread for Note-52-or-later if relevant)
-- User flagged: my first proposed memory entry was retroactive ("when about to say I violated X, read X first"); real fix is proactive ("read X before deciding what to do, not before judging what you did") — second draft accepted
+- M4 (Writer-Reviewer): AMBIGUOUS — text says "Layer 0/1/2/3" but DRs in `docs/decisions/*` may be Layer 4 per MAINTENANCE.md 5-layer doc model; not verified this session
+
+**Memory-rule attempted as fix** (then falsified within ~10 min):
+- After incident A, codified `feedback_read_disciplines_before_planning.md` (proactive read-before-planning rule; user flagged first draft was retroactive; second draft accepted).
+- File written to `~/.claude/projects/<project>/memory/`; index pointer added to MEMORY.md.
+
+**META-incident B** (same-session re-failure; ~10 min later):
+- Drafted next-session kickoff message marking M4 layer-scope check as "**Optional** pickup" before Phase 3.4 cluster work. User pushed: "why optional?"
+- Phase 3.4 cluster will produce architectural commits (DRs to `docs/decisions/*` ×5 + `arch/*` ×2) — guaranteed M4 trigger condition. Marking M4 prep as optional was the SAME failure pattern as incident A: plan-time chat-output positioning around a discipline trigger without reading the discipline fresh.
+- Memory rule was loaded in MEMORY.md auto-load context when the M4-as-optional draft was produced. Presence-in-context did NOT prevent re-failure.
+
+**Memory rule removed** (this Note write):
+- Per `feedback_hooks_are_structural.md`: hooks structural, memory advisory. Same-session re-failure with the rule loaded is worst-case test of advisory mechanism; advisory failed.
+- Working correction mechanism for BOTH META-incidents this session was user-pushback, not memory.
+- Removed `feedback_read_disciplines_before_planning.md` + MEMORY.md index pointer.
+- Honest gap: plan-time chat-output positioning has no PreToolUse trigger to hook (existing `architectural_commit_gate` catches edit-time but not plan-time). Until structural mechanism exists, user-pushback IS the correction mechanism for this failure mode.
 
 **To resume next session**:
 
 1. `/reload-plugins` — activates hook (architectural_commit_gate)
-2. Read CLAUDE.md (auto) + this Note 51 + new memory entry surfaces in MEMORY.md auto-load
-3. **Optional pickup**: M4 layer-scope ambiguity — read MAINTENANCE.md 5-layer doc model to resolve whether Layer 4 DRs are within or outside M4's "Layer 0/1/2/3" scope. Fold into Phase 3.4 cluster prep OR defer.
+2. Read CLAUDE.md (auto) + this Note 51
+3. **REQUIRED prep before cluster start** (per META-incidents A+B: Phase 3.4 = guaranteed M3 + M4 trigger; do NOT mark optional):
+   - Read MAINTENANCE.md 5-layer doc model — resolve whether Layer 4 DRs are within or outside M4's "Layer 0/1/2/3" Writer-Reviewer scope
+   - Read CLAUDE.md M3 + M4 fresh (NOT pattern-match from auto-loaded context)
+   - Read `plugin/skills/greenfield-rederivation/SKILL.md` fresh
 4. **Next cluster** (per Note 50 deferred): Phase 3.4 substrate+adapter sub-cluster — `arch/substrate.md` + `arch/adapter.md` + `docs/decisions/substrate-arch-topic.md` + `docs/decisions/adapter-arch-topic.md` = 4 artifacts; sweet-spot fit per skill §Status; foundation-up natural after Phase 3.1 + 3.2 v2-audited. Sparring + audit reclassified-mechanism-class as natural follow-up sub-cluster after that.
-5. v2 greenfield-rederivation procedure: per-execution DR stub → 2 Writer + 2 Reviewer sub-agents in parallel → user-reconciliation → cascade if revisions
+5. v2 greenfield-rederivation procedure: per-execution DR stub → 2 Writer + 2 Reviewer sub-agents in parallel → user-reconciliation per divergence → cascade if revisions
 
 **What is NOT lost**:
 - Phase 3.2 cluster work intact; this session was small follow-up only
-- META-incident captured in memory (won't be re-derived from "remember when we discussed M3" — proactive read-rule structurally enforces fresh read at plan time)
+- META-incidents A+B captured in this Note (not in memory — memory failed for this failure mode)
 - v2 skill empirical evidence base unchanged (this session was pre-validated cleanup, not skill execution)
 
 **Disciplines validated this session**:
-- New `feedback_read_disciplines_before_planning.md` codified from single-incident worked example (counters synthesis-bias that waits for multi-session evidence when the lesson is structurally clear from one — empirical-evidence-≥2 rule applies to skill amendments, not memory feedback rules)
+- `feedback_hooks_are_structural.md`: same-session memory-rule failure (incident B with rule loaded) validates the principle (memory ≠ hook; advisory ≠ structural)
 - `feedback_judgment_and_automate.md` applied at every decision phase
-- Hook didn't fire (prep reads sufficient when execution finally happened in main session: decision-design-sharpening SKILL.md + profiles/INDEX.md + L5a + G + L4a)
+- Hook didn't fire on edits (prep reads sufficient when execution finally happened in main session: decision-design-sharpening SKILL.md + profiles/INDEX.md + L5a + G + L4a)
+
+**Open question for future** (NOT this session; not blocking): is there a structural fix for plan-time chat-output positioning around discipline triggers? PreToolUse hooks require tool calls; chat output isn't tool-mediated. Candidates: UserPromptSubmit hook scanning prompt for discipline-keywords; or a self-imposed procedural step in CLAUDE.md (e.g., "any chat output containing M3/M4/M5/violate/discipline-name MUST be preceded by Read tool call on the named discipline source"). Until resolved: user-pushback remains the correction mechanism.
 
 **Phase 3 status**: unchanged from Note 50. Phase 3.1 + 3.2 v2-audited and CONFIRMS-LOCKED. Phase 3.4 effectively COMPLETE per Note 48 (substrate + adapter Pattern A; sparring + audit reclassified mechanism-class; coordination/trust/time cancelled). Phase 3.4 sub-cluster v2-audit remains next substantive cluster-execution.
 
-**Notes 44-50**: stay as historical session-log; will rotate to archive next time HANDOFF crosses ~500 lines (currently ~440 after Note 51).
+**Notes 44-50**: stay as historical session-log; will rotate to archive next time HANDOFF crosses ~500 lines (currently ~470 after Note 51 expansion).
 
 ---
