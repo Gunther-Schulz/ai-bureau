@@ -424,7 +424,7 @@ This decision composes with prior locked architecture:
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic; commit `<this-commit>`):
+Wave 1 (this DR commit + ARCH topic; commit `3b187ea`):
 - `arch/workflow-work-unit.md` (NEW; primitive-cluster 12+5 ARCH topic; two-Pattern-B topic-template-class anchor)
 - `docs/decisions/workflow-work-unit-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
 
@@ -453,10 +453,14 @@ Cascade Wave 2 scope (deferred to Wave-2 Cascade-Writer per `arch/specialist-ski
 - Per-pattern conditional applicability bullet updated: Two Pattern B clusters marked as ANCHOR per `arch/workflow-work-unit.md`; "granularity + per-primitive lifecycle ordering APPLIES; cross-shape policy variation APPLIES; bundle / marketplace N/A documented explicitly (workflow + work-unit are bundled IN specialist, not bundlers themselves); 12+5 template extends WITHOUT variation"
 
 **E. BACKLOG.md cascade**:
-- Phase 3.5 row resolution: workflow-work-unit topic marked RESOLVED with cluster commits `<this-commit>` (Wave-1) → Wave-2 cascade commit hash + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 58 forward-reference
+- Phase 3.5 row resolution: workflow-work-unit topic marked RESOLVED with cluster commits `3b187ea` (Wave-1) → Wave-2 cascade commit hash (resolved at Wave-2 commit landing) + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 58 forward-reference
 - Phase 5 ROADMAP entries added: "Workflow_pattern primitive vs Layer A reusable templates" (W1) + "Cross-practitioner workflow handoff mechanics" (W2) + "Multi-workflow_instance phase choreography mechanics" (W4)
 - Phase 6 watch-list entries added: "Per-kind structural conventions schema standardization" (W3) + "Workflow_instance suspension state implementation" + "work-unit instance pivot mechanics implementation"
 - Cross-cutting "3-tier REVISION/EXPANSION discriminator codification" watch-list cumulative count update (4 REVISION-flavored EXPANSIONS across 3 cluster-executions: specialist-skill = 2 + practitioner = 1 + workflow-work-unit = 1; **trip threshold reached: 4 ≥ 3**; flag for Coherence-audit C2 evaluation post-Phase-3.5 close per `disciplines/09-coherence-audit-cadence.md`)
+
+**Wave-2 cascade applied** (commit hash recorded in HANDOFF Note 58 + git log; cascade-bundle pattern per Note 56 + Note 57): A1+A2 GLOSSARY downstream cascade (workflow.md + work-unit.md See sections anchored to `arch/workflow-work-unit.md`) + A3 reciprocal mention (glossary/authority-binding.md composes-with workflow + work-unit rows + See section reciprocal back-link APPLIED per cardinality-asymmetry composition); B1-B6 peer ARCH §17/§19 reciprocal back-mentions (substrate + audit + adapter + sparring §19; specialist-skill + practitioner §17 forward-references upgraded to backward-references); C1 `ARCHITECTURE.md` §7 NEW lock entry + C2 §2 row 3.5 update (2 of 6 → 3 of 6 phrasing per row content; remaining count `3 primitive-cluster + cross-cutting integrator topics remain`) + C3 §3 doc structure status table update (6 of 11 → 7 of 11); D1+D2 MAINTENANCE.md Layer 3 Primitive-cluster topic template ANCHOR codification for two-Pattern-B + per-topic count expectation row update; E1-E4 BACKLOG cascade (Phase 3.5 row resolution + Phase 5 W1+W2+W4 + Phase 6 W3 + suspension/pivot watch-list entries + 3-tier discriminator cumulative-count update reaching trip threshold).
+
+**F. DR §9 Files-touched Wave-2 cascade hash resolution** (THIS amendment per cascade discipline auditability; following Note 57 specialist-skill + practitioner DR §9 Wave-2 cascade-scope pattern precedent): Wave-1 commit hash `3b187ea` substituted for placeholder `<this-commit>` in Wave-1 enumeration above; Wave-2 cascade scope sub-sections A-E supplemented with applied-status note above. This DR amendment is part of the SAME Wave-2 cascade commit (cascade-bundle pattern per Note 56 + Note 57).
 
 ## 10. Revisit triggers
 

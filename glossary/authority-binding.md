@@ -54,6 +54,8 @@ Every accountability-bearing event needs actor binding regardless of domain — 
 - [practitioner](practitioner.md) — practitioner-record is a specific actor-kind that authority-binding records for human-actor accountability moments
 - [skill](skill.md) — skill emissions record `actor_kind: ai_runtime` + skill identifier; authority-binding makes skill-side attribution observable
 - [policy](policy.md) — per-shape trust-model policy parameterizes how authority-binding satisfies shape-specific accountability (practitioner-judgment / budget-policy / individual per audit class §14)
+- [workflow](workflow.md) — workflow_instance phase transitions may require specific authority per workflow definition `phase_authority_requirements` per `glossary/workflow.md` composes-with authority-binding row; authority-binding mechanism enforces actor declaration on phase-transition events (per `arch/workflow-work-unit.md` SD-4 event-kind catalog)
+- [work-unit](work-unit.md) — work-unit instance lifecycle transitions emit events bound to authority-decision actor per `glossary/work-unit.md` composes-with authority-binding row (practitioner-shape send/archive = practitioner-only per defensibility-critical; autonomous-business-shape transitions = operator-attestation programmatic); per-shape policy declares which transitions require which authority via authority-binding mechanism
 
 **VISION-grounding chain**:
 - Composes with VISION axis 3 (authorship preservation) — practitioner remains-the-author requires actor-attribution chain for every accountability-bearing claim. Without authority-binding, the defensibility test (`will the practitioner be able to defend this six months from now?`) cannot answer "who emitted each claim?" — defensibility's reconstructible-reasoning-chain condition fails
@@ -76,5 +78,6 @@ Every accountability-bearing event needs actor binding regardless of domain — 
 - `arch/audit.md` (the mechanism class consuming authority-binding for per-event attribution)
 - `arch/substrate.md` §2.C (permission flow integration for authority-decision moments)
 - `arch/practitioner.md` §4 + §14 (practitioner-record as human authority bound to claim_made / signature_applied events; per-shape trust model parameterizes practitioner-record's accountability surface per `arch/audit.md` §14)
+- `arch/workflow-work-unit.md` (Phase 3.5 third primitive-cluster ARCH topic; workflow_instance phase transitions + work-unit instance lifecycle transitions are explicit composition relationships with authority-binding per per-event actor declaration sub-aspect; per-shape policy declares which transitions require which authority)
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Concept-by-concept" Authority binding row (canonical concept reference)
 - `docs/decisions/audit-arch-topic.md` (Trust subsumption rationale)

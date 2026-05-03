@@ -322,13 +322,13 @@ Established by `arch/specialist-skill.md` (Pattern B + atomic-primitive anchor; 
 
 - **Pattern B + atomic-primitive clusters** (specialist-skill anchor): granularity tests + bundle composition + marketplace + per-primitive lifecycle ordering all likely apply; cross-shape policy variation typically partial
 - **Pattern C bipartite clusters** (practitioner; ANCHOR per `arch/practitioner.md`): granularity / bundle / marketplace N/A documented explicitly; cross-shape policy variation + per-primitive lifecycle ordering APPLIES; 12+5 template extends WITHOUT variation
-- **Two Pattern B clusters** (workflow-work-unit): granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace likely N/A (workflow + work-unit are bundled IN specialist, not bundlers themselves)
+- **Two Pattern B clusters** (workflow-work-unit; ANCHOR per `arch/workflow-work-unit.md`): granularity + per-primitive lifecycle ordering APPLIES; cross-shape policy variation APPLIES; bundle / marketplace N/A documented explicitly (workflow + work-unit are bundled IN specialist, not bundlers themselves); 12+5 template extends WITHOUT variation
 - **PRIMITIVE + DERIVED clusters** (claim-defensibility): granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace / cross-shape likely N/A
 
 **Per-topic section count expectation** (primitive-cluster topics):
 - specialist-skill (Pattern B + atomic-primitive; ANCHOR): 12 common + 5 conditional applies (all 5 partial or full per anchor) = ~17-18 total → ~470 lines
 - practitioner (Pattern C bipartite; ANCHOR for Pattern C topic-template-class): 12 common + 2 conditional applies (§8 + §13) + 3 N/A documented (§9 + §10 + §11) + §12 N/A-parity = 18 total per `arch/practitioner.md` (375 lines)
-- workflow-work-unit (two Pattern B): expected 12 common + ~3-4 conditional (granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace likely N/A) = ~15-16 total
+- workflow-work-unit (two Pattern B; ANCHOR for two-Pattern-B topic-template-class): 12 common + 3 conditional applies (§8 + §9 + §13) + 2 N/A documented (§10 + §11) + §12 N/A-parity = 18 total per `arch/workflow-work-unit.md` (482 lines)
 - claim-defensibility (PRIMITIVE + DERIVED): expected 12 common + ~2-3 conditional (granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace / cross-shape likely N/A) = ~14-15 total
 
 **Why 12+5 not 12+7** (rationale): primitive-clusters lack Pattern A pluggability that justifies §3 multi-class boundaries / §10 substrate-specific lifecycle / §12 transport variation / §13 deployment-tier (Pattern A specifics). Conditional count drops to 5 reflecting genuine shape difference, not template-copy. Future primitive-cluster topics may surface 6th conditional candidates per cascade discipline (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
