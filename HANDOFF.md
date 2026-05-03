@@ -193,3 +193,79 @@ Executed Note 55 step 6.a recommended order: Phase 3.5 substantive primitive-clu
 **Notes 51-54**: archived to `archive/handoffs/HANDOFF-sessions-22-25.md` at session start (commit `ef13327`). HANDOFF currently at ~121 lines + ~120 expansion = ~240 lines after Note 56. Well below ~500-line rotation threshold; no rotation candidacy.
 
 ---
+
+**Note 57: Session 28 — Phase 3.5 second primitive-cluster ARCH topic LOCKED (practitioner); Pattern C topic-template-class anchored (12+5 extends WITHOUT variation); 3-commit cascade complete (Wave-1 + Wave-2 + Wave-2.5); cross-execution pattern continues (0 T1 across 6 cluster-executions); brief-vs-DR divergence Note 56 process-learning pattern DID NOT recur (positive cross-execution observation)**
+
+Executed Note 56 step 6 recommended order: Phase 3.5 second primitive-cluster substantive work (`arch/practitioner.md` SOLO Pattern C bipartite). Per opening proposal sequence + user lock: SOLO sequential (not paired) initial-creation execution per Note 56 5-cluster-execution methodology. Decision-design-sharpening Mode 2 upfront-known composite decomposition (5 sub-decisions; vs specialist-skill's 6 — narrower Pattern C surface) Round 1 + Round 2 user-locked en bloc → Writer-Reviewer + Cascade-Writer-Reviewer + Cleanup-Writer sub-agent dispatch sequence. Closes 2 of 6 Phase 3.5 ARCH topics.
+
+**Outputs (3 commits; pushed to origin/main)**:
+- `7ffe93a` Wave-1 Writer: `arch/practitioner.md` (375 lines; Pattern C topic-template-class anchor; 12+5 primitive-cluster template extends WITHOUT variation: §8 + §13 APPLIES + §9/§10/§11 N/A documented + §12 N/A-parity = 18 sections) + `docs/decisions/practitioner-arch-topic.md` (352 lines; composite DR Mode 2; 5 sub-decisions)
+- `e86a92f` Wave-2 Cascade: 11 file edits (GLOSSARY downstream pair: glossary/practitioner.md A1 See section anchored + glossary/authority-binding.md A2 reciprocal mention; MAINTENANCE.md primitive-cluster template ANCHOR codification; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update (1 of 6 → 2 of 6) + §3 doc structure status table update (4 of 11 → 6 of 11); 5× peer ARCH §17/§19 reciprocal back-mentions: substrate + audit + adapter + sparring + specialist-skill (forward-ref upgraded to back-ref per R-CC-9); BACKLOG cascade Phase 3.5 row resolution + Phase 5 W1+W4 + Phase 6 W2+W3 + cross-cutting 3-tier discriminator cumulative-count update; DR §3 T3-1 phrasing fix + DR §9 Files-touched A-G enumeration)
+- `807b763` Wave-2.5 Cleanup: 2 file edits (BACKLOG hash placeholder resolution `<Wave-2 cascade commit hash>` → `e86a92f` + cross-cluster F7 closure: glossary/specialist.md:67 See section placeholder cleanup parallel to Wave-2 A1 pattern, closing the cross-cluster Lens 4 carryover from specialist-skill Wave-2.5 c4b4992 commit which had updated composes-with rows + work-unit/workflow vocabulary closure but missed the See section placeholder)
+
+**Result shape**: **0 T1 + 0 T2 + 1 T3 (out-of-scope cross-cluster F7) + 7 T4 across Wave-2 Cascade-Reviewer audit; 0 T1 + 0 T2 + 3 T3 + 8 T4 across Wave-1 Reviewer audit.** All Wave-1 + Round 2 substantive architectural positions survived sub-agent dispatches faithfully; all R-CC-1 through R-CC-10 + R-SD-1 + R-SD-2 cross-cutting refinements applied.
+
+**Cross-execution pattern signal (corpus-stable across 6 cluster-executions)**:
+- Phase 3.1 (4 DRs): 0 T1 + 0-2 T2 + ~10 T3
+- Phase 3.2 (2 DRs): 0 T1 + 2 T2 + ~13 T3
+- Phase 3.4 substrate+adapter (4 artifacts v2-audit): 0 T1 + 5 T2 + 17 T3 + 35 T4
+- Phase 3.4 sparring+audit (4 artifacts v2-audit): 0 T1 + 3 T2 + 8 T3 + 21 T4 at Wave-1; +4 T3 at cleanup
+- Phase 3.5 specialist-skill (2 artifacts initial-creation + 11+3 cascade): 0 T1 + 1 T2 + 2 T3 + 13 T4
+- **Phase 3.5 practitioner (2 artifacts initial-creation + 11+2 cascade): 0 T1 + 0 T2 + 4 T3 (1 cross-cluster carryover) + 15 T4**
+- **Pattern continues**: substantive architecture survives across 6 cluster-executions; 0 T1 across all clusters; T2 count drops to 0 for Pattern C (vs Pattern B + atomic-primitive's 1); methodology composability validates further with INITIAL-CREATION pattern at smaller-surface Pattern C cluster
+
+**Substantive architectural commitments locked (Wave-1 + Wave-2 user-locked en bloc per `feedback_judgment_and_automate.md`)**:
+
+1. **Pattern C topic-template-class anchored at `arch/practitioner.md`** (parallel to Pattern A 12+7 anchor at substrate + primitive-cluster Pattern B + atomic-primitive 12+5 anchor at specialist-skill); 12+5 primitive-cluster template extends WITHOUT variation; §-numbering preserved; 3 N/A documented explicitly + §12 N/A-parity per locked template convention
+2. **Bipartite Pattern C structural articulation** — §2.1 HUMAN aspect (cross-cutting; framework records nothing about HUMAN directly; NOT placed in any scope) + §2.2 RECORD aspect (Owner B entity; 11-field manifest schema enumerated)
+3. **Multi-practitioner workspace mechanics + legal-entity workspace context** — cardinality matrix per shape (solo-1 / multi-N / legal-entity-N-under-firm); legal-entity context lives at WORKSPACE level NOT practitioner-level; cross-practitioner composition rules 4-row table (READ permitted / WRITE prohibited / workflow-handoff permitted / sparring orthogonal via AI-runtime); R-CC-10 multi-practitioner concurrent-session handling (each session binds to ONE practitioner-record)
+4. **Practitioner lifecycle + deactivation semantics** — `active | dormant` states; 4 event-kind catalog (minted / updated with details.changed_fields / deactivated / reactivated); dormant-not-deleted ARCH-locks rationale (axis-3 defensibility-critical); per-shape policy variation 3-row matrix (practitioner-shape STRICT / autonomous-business archival OR delete-with-audit / personal-OS minimal); workspace dissolution archival-as-default per cross-pattern coherence with `arch/specialist-skill.md` §13
+5. **Authority-binding integration + cross-axis composition + watch-list** — practitioner-record IS the human authority bound to claim_made / signature_applied / sparring-engagement events per `glossary/authority-binding.md`; cross-axis 3-row composition table; per-shape trust model 3-row variation matrix; W1-W4 watch-list (multi-tenant federation + Identity-class adapter Surface candidate per `arch/adapter.md` §3 partition + cryptographic signing + cross-practitioner workflow handoff)
+6. **GLOSSARY back-check verdict CLEAN** — no retro-fits required; 5 candidates evaluated and rejected as non-glossary-grade (manifest schema enum / firm_binding field type / legal_entity_context block / cross-practitioner WRITE-prohibition / archival-as-default destruction); cleaner Round 2 GLOSSARY back-check than Note 56 specialist-skill which surfaced specialist-namespace mechanic R-N-1 (narrower Pattern C surface produces less GLOSSARY-grade material)
+7. **6-cluster-execution methodology composability** validated: Writer + Reviewer + Cascade-Writer + Cascade-Reviewer + Cleanup-Writer pattern composes with `decision-design-sharpening` Mode 2 composite decomposition for INITIAL CREATION work at simpler primitive-cluster cardinality; same orchestration shape works across both Pattern B + atomic-primitive (specialist-skill) and Pattern C bipartite (practitioner) primitive-cluster sub-types
+
+**Methodology applied (M3-M7 self-applied; brief-vs-DR divergence Note 56 process-learning pattern DID NOT recur — positive cross-execution observation)**:
+- M3 sub-agent-first: 4 sub-agents in fresh contexts (Wave-1 Writer + Wave-1 Reviewer + Wave-2 Cascade-Writer + Wave-2 Cascade-Reviewer + Wave-2.5 Cleanup-Writer composite role = 5 sub-agents); main session as orchestrator only
+- M4 Writer-Reviewer pattern: applied per-Wave (Wave-1 Writer + Reviewer separate dispatches; Wave-2 Cascade-Writer + Cascade-Reviewer separate; Wave-2.5 Cleanup-Writer composite role per Note 56 c4b4992 Reviewer-compose pattern)
+- M5 /clear discipline: NOT triggered mid-cluster (cascade-bundle worked end-to-end without context-budget breach); /clear recommendation at HARD STOP this Note for next-session start
+- M6 HARD STOP at logical-unit boundary (practitioner cluster CLOSED; 4 of 6 Phase 3.5 topics remain so this is mid-Phase-3.5 not Phase-3.5-close)
+- M7 Ralph self-check: each sub-agent confirmed at completion; main-session checks at Wave + cluster boundaries
+- Hook (`architectural_commit_gate`) behavior: blocked Wave-1 Writer first Write attempt (≥3 profile cluster requirement; only 2 profile reads + INDEX); resolved by reading `profiles/L1-specialist-creator.md` as Cluster A representative; subsequent sub-agents pre-emptively read all required prep files; no further hook blocks
+- Per CLAUDE.md M3 strict reading: 2-artifact-cluster + 11-file-cascade + 2-file-cleanup ALL delegated to fresh-context sub-agents; no main-session Edit/Write attempts on architectural artifacts (HANDOFF.md is Layer 0 + this Note 57 is the only main-session Edit, which is below M3 trigger threshold)
+
+**Process learning surfaced (cross-execution pattern observation; POSITIVE)**:
+
+**Brief-vs-DR divergence Note 56 process-learning pattern DID NOT RECUR**:
+- Note 56 surfaced: Wave-1 Writer EXTENDED main-session GLOSSARY back-check verdict from TRIO (specialist + work-unit + workflow) to QUAD (added skill.md commitment per cross-specialist composition rule R-L1-2 implication); main-session Wave-2 brief inherited the original TRIO framing; Cascade-Reviewer caught the divergence; Wave-2.5 Cleanup-Writer reconciled the gap
+- This iteration: Wave-1 Writer's DR §6 GLOSSARY back-check verdict CLEAN matched main-session brief; Wave-1 Reviewer T4-7 verified DR §6 commitments faithful to main-session lock; Wave-2 Cascade-Reviewer F8 explicit brief-vs-DR divergence detection returned NO EXTENSION; Wave-2.5 Cleanup did NOT need to reconcile a brief-vs-DR divergence (only mechanical hash resolution + cross-cluster F7 carryover)
+- Empirical evidence: Note 56 process learning (main-session re-reads Wave-1 DR §6 verdict before drafting Wave-2 brief) APPLIED at this iteration's Wave-2 brief-drafting; pattern PREVENTED recurrence; below 2-incident threshold for skill-amendment OR cascade-discipline-amendment per Note 56 process learning ("not a methodology amendment-warranting pattern (single instance; recoverable via Cleanup-Writer; below 2-incident threshold for skill-amendment)")
+
+**Cross-cluster Lens 4 carryover discovered (POSITIVE; Cascade-Reviewer F7 finding)**:
+- Wave-2 Cascade-Reviewer surfaced cross-cluster Lens 4 finding F7: glossary/specialist.md:67 See section placeholder cleanup parallel to A1 pattern just applied to glossary/practitioner.md was MISSED in specialist-skill Wave-2.5 cleanup-cascade (commit c4b4992) which had updated composes-with rows + work-unit/workflow vocabulary closure
+- Wave-2.5 Cleanup-Writer this cluster closed F7 immediately (1-line cosmetic fix to mirror A1 style)
+- Empirical evidence: cross-cluster Lens 4 review caught what within-cluster Lens 4 missed; Cascade-Reviewer cross-cluster awareness IS load-bearing; cumulative count = 1 cross-cluster carryover across 6 cluster-executions; below 2-incident threshold for cascade-discipline-amendment
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 57
+3. **Recommend `/clear`** between cluster-executions per `CLAUDE.md` M5 — main session has accumulated 5-sub-agent dispatch context across 3 commits + decision-design-sharpening Round 1 + Round 2 chat surface; fresh session for next substantive work (practitioner cluster CLOSED is natural cascade boundary)
+4. **No NON-BLOCKING follow-ups remain from this cluster-execution** — all Reviewer + Cascade-Reviewer findings reconciled across 3 commits. practitioner cluster CLOSED. F7 cross-cluster carryover closed in Wave-2.5.
+5. **Carryover follow-ups from prior sessions**: NONE — Note 56 already documented zero remaining; this Note adds zero new follow-ups (F7 closed in Wave-2.5)
+6. **Next substantive options** (foundation-up per `BACKLOG.md` Phase 3.5 + opening proposal sequence per Note 56 step 6):
+   - **`arch/workflow-work-unit.md` SOLO** (two Pattern B primitives clustered; depends on specialist-skill containment lock + practitioner cardinality lock — both now satisfied) — natural follow-up; validates whether 12+5 primitive-cluster template extends to two-Pattern-B clusters per `MAINTENANCE.md` Layer 3 anticipated applicability ("granularity + per-primitive lifecycle ordering likely apply; bundle / marketplace likely N/A — workflow + work-unit are bundled IN specialist, not bundlers themselves"). Anchors two-Pattern-B topic-template-class pattern.
+   - Then `arch/claim-defensibility.md` (PRIMITIVE + DERIVED; depends on most others including practitioner authority-binding chain just locked)
+   - Then cross-cutting integrators: `arch/scope-model.md` + `arch/axis-interactions.md` (LAST per ARCHITECTURE.md §5 reading order)
+7. **Phase 3.5 progress**: 2 of 6 ARCH topics LOCKED (specialist-skill + practitioner); 4 remain (workflow-work-unit two-Pattern-B + claim-defensibility PRIMITIVE+DERIVED + scope-model cross-cutting + axis-interactions cross-cutting); coherence-audit checkpoint C2 (post-Phase-3.5 close) gates on completion of all 6 per `disciplines/09-coherence-audit-cadence.md`
+
+**What is NOT lost**:
+- All Wave-1 practitioner substantive architecture validated under Writer-Reviewer + Cascade-Writer-Reviewer + Cleanup-Writer pattern; 12+5 primitive-cluster template extends to Pattern C without variation; Pattern C topic-template-class anchored at MAINTENANCE.md Layer 3 + ARCHITECTURE.md §7; bipartite HUMAN cross-cutting + RECORD Owner B with 11-field manifest schema; multi-practitioner cardinality matrix + legal-entity workspace context placement; lifecycle 4-event-kind catalog + archival-as-default deactivation per cross-pattern coherence with specialist-skill §13; cross-axis composition + per-shape trust model variation; W1-W4 watch-list all locked
+- 6-cluster-execution methodology composability extends INITIAL-CREATION pattern across both Pattern B + atomic-primitive (specialist-skill) and Pattern C bipartite (practitioner) primitive-cluster sub-types; same Writer + Reviewer + Cascade-Writer + Cascade-Reviewer + Cleanup-Writer orchestration shape works
+- Cross-execution pattern stable: 0 T1 across 6 cluster-executions; T2 count DROPS to 0 for Pattern C (vs Pattern B + atomic-primitive's 1); substantive architecture survives; drift = Lens 5 v0.2.1 retro-application + cascade-miss legacy + occasional cross-cluster carryover (F7; recoverable via Cleanup-Writer same Wave-2.5)
+- Process learning (POSITIVE): brief-vs-DR divergence pattern from Note 56 DID NOT recur — main-session re-reads Wave-1 DR §6 verdict before Wave-2 brief-drafting works; below 2-incident threshold for skill-amendment
+
+**Phase 3 status post-this-cluster**: Phase 3.1 + 3.2 + 3.4 (substrate + adapter + sparring + audit; v2-audited + C1-validated) + Phase 3.5 specialist-skill + practitioner (2 of 6) all LOCKED. Phase 3.5 4 ARCH topics remain (workflow-work-unit two-Pattern-B + claim-defensibility PRIMITIVE+DERIVED + scope-model cross-cutting + axis-interactions cross-cutting). Coherence-audit checkpoint C2 gates on Phase 3.5 close per `disciplines/09-coherence-audit-cadence.md` cadence.
+
+**Notes 51-54**: archived to `archive/handoffs/HANDOFF-sessions-22-25.md` at session start (commit `ef13327`). HANDOFF currently at ~195 lines + ~120 expansion = ~315 lines after Note 57. Well below ~500-line rotation threshold; no rotation candidacy.
+
+---
