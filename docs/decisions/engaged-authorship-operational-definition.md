@@ -1,9 +1,7 @@
 # DR: engaged-authorship-operational-definition (DERIVED axis-3 success mode; two-phase composite)
 
 **Status**: ACCEPTED (Phase 3.1 lock; closes 3.1)
-**Locked**: session 16 (2026-05-02)
-**Sharpening**: 2-round pattern (Round 1 full monty + Round 2 user-triggered) under G + multi-axis + profile-anchored + D gate disciplines + GLOSSARY back-check
-**Phase**: 3.1 (open architectural questions; FINAL 3.1 item)
+**Date**: 2026-05-02
 
 ## Decision
 
@@ -139,6 +137,9 @@ This DR should be revisited if:
 - Second-shape productization (autonomous-business OR personal-OS) reveals engagement semantics differ structurally beyond per-shape quality-policy variation
 - Federation / multi-practitioner work surfaces multi-author engagement structurally requiring framework-level (not just shape-policy) treatment
 - Pioneer-deployment data shows two-phase composite is over- or under-specified
+- **Workspace migration cross-substrate**: workspace migration cross-substrate (per `profiles/G-composability-gate.md` backup-restore-migration round-trip) shows engaged-authorship event schema lossy across substrate boundaries → may revise AuditEvent spec for cross-substrate portability
+- **Coherence-audit Lens 6/9 firing**: Coherence-audit Lens 6 (reciprocal asymmetry) / Lens 9 (vocabulary distinction) firing in Phase-3.5+ corpus audit surfaces engaged-authorship vocabulary collision with `engaged AI` / `intertwined AI` → may sharpen vocabulary disambiguation
+- **Pre-existing-claim ingestion real evidence**: legacy claims imported mid-deployment show option-(a) re-engagement-event semantics infeasible → may revise to option-(b) flag-conditional handling
 
 ## Sharpening rounds metadata
 

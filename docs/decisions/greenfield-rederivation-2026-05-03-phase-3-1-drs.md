@@ -2,7 +2,7 @@
 
 ## Status
 
-PROPOSED → (will transition to ACCEPTED-VALIDATED or ACCEPTED-WITH-FINDINGS at user-reconciliation phase per skill §Post-cluster).
+ACCEPTED-WITH-FINDINGS. User-reconciliation complete (P1-P4 + P7 REVISE/AMEND-LOCKED en bloc; P5 + P6 KEEP-LOCKED). Cascade execution complete (Cascade Writer sub-agent in fresh context; Cascade Reviewer sub-agent verdict READY-TO-PUSH; 3 DRs amended in single tightly-coupled commit per `MAINTENANCE.md` cascade discipline).
 
 Audit-pattern: greenfield-rederivation v0.1.0 (`plugin/skills/greenfield-rederivation/SKILL.md`). Per-cluster scope; per-artifact Writer + Reviewer sub-agent dispatch; tiered-divergence verdict scheme; user-decision per divergence.
 
@@ -166,18 +166,23 @@ Each Writer brief explicitly excludes reading the artifact under audit during de
 
 ## Constraints flowing to downstream commitments
 
-(POPULATED AS DECISIONS LAND)
+User-reconciled cascade applied:
+- **P1** (3 DRs: workflow / deployment / engaged-authorship): Status-line provenance breadcrumbs stripped; replaced with shape-only Status + Date-only metadata per `MAINTENANCE.md:334`.
+- **P2** (workflow DR): Pioneer-instance B-Plan-Begründung references in Rationale re-framed; pattern-first claim leads; pioneer demoted to one of N parallel cross-archetype illustrations (planning bureau / legal practice / research lab / accounting practice).
+- **P3** (workflow DR): Trajectory breadcrumbs moved from canonical sections (Critical-refinement / Cross-specialist / Validated-under-new-disciplines) into §Sharpening provenance section; canonical sections hold shape-only claims.
+- **P4** (workflow DR): Decomposition-mode tag added to §Sharpening provenance (`Mode 1 emergent (single decision; no upfront-known sub-decision split)`).
+- **P7** (engaged-authorship DR): 3 added revisit triggers appended (workspace migration cross-substrate event-schema lossy / coherence-audit Lens 6+9 vocabulary collision / pre-existing-claim ingestion real evidence); 5 existing triggers preserved.
 
-If user-approved revisions exist:
-- Per-revision cascade scope (which downstream artifacts touch the changed primitive)
-- Cascade-completion commitment (tightly-coupled commits per affected layer; foundation-up ordering)
-- Reviewer pass on cascade diff before push (per `CLAUDE.md` M4)
+Cascade verification: Reviewer sub-agent (fresh context) verdict READY-TO-PUSH on all 7 positions. Architectural content (Decision / Composition / Constraints flowing / Defers / REVISION stress-tests) preserved across all 3 DRs. No new vocabulary; no scope-creep; no out-of-scope edits.
 
-## Files touched (this DR's commit + per-Wave findings amendments)
+Minor non-blocking observation (Reviewer-surfaced; not actioned this Wave): section-name "Sharpening rounds metadata" in deployment + engaged-authorship DRs could normalize to template-canonical "Sharpening provenance" per `MAINTENANCE.md:288` — cosmetic only; deferred to backlog or next cluster pass if normalization is desired.
 
-- This DR: `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-1-drs.md` (PROPOSED status; pre-Wave-1)
-- Per-Wave findings amendments: this same DR's Decision section + Sharpening provenance section (incremental per Wave)
-- Cascade artifacts: TBD per user-decided revisions
+## Files touched
+
+- `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-1-drs.md` (this DR — created PROPOSED → Wave-1 findings persisted → user-reconciled → cascade-completion + status transition to ACCEPTED-WITH-FINDINGS)
+- `docs/decisions/workflow-bipartite-classification.md` (P1 + P2 + P3 + P4 cascade)
+- `docs/decisions/deployment-derived-classification.md` (P1 cascade)
+- `docs/decisions/engaged-authorship-operational-definition.md` (P1 + P7 cascade)
 
 ## Revisit triggers
 

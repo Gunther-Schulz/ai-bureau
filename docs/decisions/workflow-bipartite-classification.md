@@ -1,9 +1,7 @@
 # DR: workflow bipartite-classification
 
-**Status**: ACCEPTED
-**Locked**: session 16 (2026-05-02)
-**Sharpening**: 2-round pattern (Round 1 full monty + Round 2 user-triggered) + retrospective revisit under new disciplines (G + multi-axis + D gate)
-**Phase**: 3.1 (open architectural questions)
+**Status**: ACCEPTED (Phase 3.1 lock)
+**Date**: 2026-05-02
 
 ## Decision
 
@@ -36,10 +34,10 @@ Phase 3.1 first item: resolve this hedge.
 
 ## Rationale for B3
 
-1. **Workflow PATTERN is genuinely reusable** (B-Plan-Begründung drafting structure applies across many Bebauungspläne) — bipartite captures the reuse-vs-instance gap that single-aspect glosses over
-2. **Workflows aren't standalone framework primitives** — they're specialist-bundled (PlanningSpecialist defines its workflows; AuditingSpecialist defines its workflows) — DEFINITION inherits specialist's Framework C placement via composition; doesn't need workflow as its own Framework C member
+1. **Workflow PATTERN is genuinely reusable across instances of similar work** — bipartite captures the reuse-vs-instance gap that single-aspect glosses over. Holds across archetypes: a planning bureau's drafting workflow applies across municipalities; a legal practice's case-management workflow applies across cases; a research lab's manuscript-review workflow applies across manuscripts; an accounting practice's engagement-closing workflow applies across engagements
+2. **Workflows aren't standalone framework primitives** — they're specialist-bundled (each archetype's specialist defines its workflows: PlanningSpecialist / LegalSpecialist / ResearchSpecialist / AuditingSpecialist) — DEFINITION inherits specialist's Framework C placement via composition; doesn't need workflow as its own Framework C member
 3. **Aligns with foundation-up**: specialist (Pattern B Framework C) is the foundational primitive; workflow rides on its structure rather than competing
-4. **Cross-archetype**: legal practice's "case-management workflow" lives in LegalSpecialist; research lab's "manuscript-review workflow" lives in ResearchSpecialist — pattern holds
+4. **Cross-archetype generalization**: pattern holds uniformly across archetype-specialist pairings — workflow definitions live wherever the relevant specialist's bundle lives, regardless of domain
 
 ## Why not other options
 
@@ -49,23 +47,17 @@ Phase 3.1 first item: resolve this hedge.
 
 **Option B2 (Layer A definition)**: Layer A is domain-keyed knowledge (templates, conventions, references). Workflows could fit there but workflows are PROCEDURAL not REFERENCE — they describe how to do work, not what to consult. Specialist DEFINITION is the procedural-bundle home; Layer A is the reference-content home. Different content types.
 
-## Critical refinement: optional applicability
+## Optional applicability
 
-User push during Round 2 surfaced the ad-hoc work case. Round 1 framing implied workflow_instance attaches to every work-unit; user observed: "in practice not everything a practitioner does is tied to a predefined workflow. many processes will be ad-hoc."
+Workflow_instance engages OPTIONALLY — only when work follows a codified pattern. Ad-hoc work-units have NO workflow_instance; they're carried by session(s) + work-unit + skill firings + claim emissions + events alone. Workflow primitive is an OPTIONAL structural overlay, not a mandatory companion to work-unit.
 
-**Revised framing (REVISION-grade)**: workflow_instance engages OPTIONALLY — only when work follows a codified pattern. Ad-hoc work-units have NO workflow_instance — they're carried by session(s) + work-unit + skill firings + claim emissions + events alone. Workflow primitive is OPTIONAL structural overlay, not mandatory companion to work-unit.
+This generalizes to **partial coverage**: one work-unit may have ZERO / ONE / or MULTIPLE workflow_instances attached over its lifecycle, with ad-hoc phases between them. Ad-hoc work is outside workflow primitive scope entirely (not a degenerate Pattern B case).
 
-This generalizes to **partial coverage**: one work-unit may have ZERO / ONE / or MULTIPLE workflow_instances attached over its lifecycle, with ad-hoc phases between them.
+## Cross-specialist shared workflow patterns
 
-Round 1 ST4 had framed ad-hoc as "degenerate Pattern B case." Better framing: ad-hoc work outside workflow primitive scope entirely.
+**Cross-specialist shared workflow patterns live as Layer A reusable templates / specialist-bundled bausteine** (content, NOT framework primitive). No `workflow_pattern` framework primitive: mental modeling within profile grounding (multi-axis + G gate) resolves the cross-archetype reuse case to Layer A by default.
 
-## Cross-specialist shared workflow patterns (workflow_pattern question)
-
-Round 2 ST9 deferred this with watch-list signal. Retrospective D Gate mental modeling resolved it:
-
-**Cross-specialist shared workflow patterns live as Layer A reusable templates / specialist-bundled bausteine** (content, NOT framework primitive). Watch-list signal: if Layer A growth proves insufficient for genuinely-cross-archetype pattern, examine then.
-
-**No `workflow_pattern` framework primitive needed.** Mental modeling resolved the question via available tools (profiles + multi-axis + G gate). The defer was unnecessary; D Gate now codifies that mental modeling fires before defer.
+Watch-list signal: if Layer A growth proves insufficient for genuinely-cross-archetype patterns, examine then.
 
 ## Refinements applied (Round 2 expansions)
 
@@ -106,15 +98,11 @@ GLOSSARY entries updated with reciprocal references:
 | `mechanism` | Authority binding + audit emission + persistent state compose |
 | `category collapse` / `quality-gate` | Workflow execution telemetry feeds quality-gate drift detection |
 
-## Validated under new disciplines (retrospective revisit)
-
-After Phase 3.1 introduced G Composability Gate + D Defer Gate + multi-axis validation discipline, workflow lock revisited:
+## Validated under disciplines
 
 - **Multi-axis**: archetype × work-type × role variations all pass
 - **G gate**: specialist's distributable bundle (containing workflow definitions) packageable for multi-mode consumption (consulting / firm-reuse / OSS / marketplace-future / backup-migration)
-- **D gate**: all original deferrals validated as appropriate Phase 3.x schema territory; workflow_pattern was the suspect; resolved via mental modeling
-
-**Lock holds under new disciplines.** 0 architectural REVISIONS surfaced in revisit.
+- **D gate**: all deferrals are Phase 3.x schema territory (not architectural-decision defers); workflow_pattern question resolved via mental modeling to Layer A
 
 ## Defers (D-gate-validated)
 
@@ -151,10 +139,19 @@ This DR should be revisited if:
 - Phase 3.5 workflow-mechanics ARCH topic surfaces operational concerns not anticipated at decision time
 - Pioneer-deployment evidence shows ad-hoc-vs-codified ratio is different than mental-modeled
 
-## Sharpening rounds metadata
+## Sharpening provenance
 
-- **Round 1**: AI full monty — 4 adoption options + 9 stress tests + position committed (B3 with optional applicability)
-- **Round 2**: USER-TRIGGERED — 9 EXPANSIONS + 1 REVISION (R1 workflow_pattern resolution; user push surfaced ad-hoc scope refinement)
-- **Retrospective revisit**: under new G + multi-axis + D gate disciplines — lock holds; 0 architectural REVISIONS
+**Round-by-Round summary**:
+- **Round 1** (AI full monty): 4 adoption options + 9 stress tests + position committed (B3 with optional applicability). Round 1 framing implied workflow_instance attaches to every work-unit; Round 1 ST4 framed ad-hoc as "degenerate Pattern B case." Round 1 ST9 deferred the cross-specialist shared-pattern (workflow_pattern) question with a watch-list signal.
+- **Round 2** (USER-TRIGGERED): 9 EXPANSIONS + 1 REVISION. User push surfaced the ad-hoc work case ("in practice not everything a practitioner does is tied to a predefined workflow. many processes will be ad-hoc"), forcing the optional-applicability revision (REVISION-grade): workflow_instance is OPTIONAL structural overlay, not mandatory companion to work-unit.
+- **Retrospective revisit**: under newly-codified G Composability Gate + D Defer Gate + multi-axis disciplines — lock holds; 0 architectural REVISIONS surfaced. D Gate retrospective resolved Round 2 ST9's workflow_pattern defer via mental modeling (cross-specialist shared patterns → Layer A reusable templates / specialist-bundled bausteine; not a framework primitive). Defer was unnecessary; D Gate now codifies that mental modeling fires before defer.
+
+**Manufactured-criticism rejections**: none recorded (Round 2 surfaced genuine refinements; revisit yielded 0 REVISIONS without rejected candidates).
+
+**GLOSSARY back-check**: this work IS itself glossary work; EXPANSIONS surfaced went directly into the workflow entry (re-classified bipartite Pattern B; vocabulary disambiguated; cascade-pass to specialist / workspace / session / claim / event / intertwining / work-unit). No retro-fit gap.
+
+**Profile-anchored validation**: Cluster A producers (specialist creator) + Cluster B deployers + Cluster C consumers (multi-archetype practitioner profiles) tested. All confirm bipartite Pattern B with optional applicability holds across archetypes and shapes.
+
+**Decomposition mode**: Mode 1 emergent (single decision; no upfront-known sub-decision split).
 
 Total: 2 rounds + retrospective validation. Per `DISCIPLINES.md` Discipline 3 2-round sweet spot empirical pattern.

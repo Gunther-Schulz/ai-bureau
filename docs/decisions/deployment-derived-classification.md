@@ -1,9 +1,7 @@
 # DR: deployment-derived-classification (workspace-as-bound-runtime)
 
-**Status**: ACCEPTED (Phase 3.1 lock)
-**Locked**: session 16 (2026-05-02)
-**Sharpening**: 2-round pattern (Round 1 full monty + Round 2 user-triggered) under cascade-from-established-pattern judgment
-**Phase**: 3.1 (open architectural questions; resolves workspace Cardinality field hedge)
+**Status**: ACCEPTED (Phase 3.1 lock; resolves workspace Cardinality field hedge)
+**Date**: 2026-05-02
 
 ## Decision
 
