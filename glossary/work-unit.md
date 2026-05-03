@@ -57,7 +57,7 @@ When unambiguous from context, just "work-unit" works. When ambiguous, qualify.
 - **Personal-OS-shape**: `task` or `goal` kind
 - **Federation-shape**: cross-node `peering` work-units possible
 
-The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at Framework C. Workspace's active specialists determine which kinds are available in that deployment. Kind-namespace disambiguation: when multiple specialists offer same-named kind (e.g., `legal-litigation:matter` vs `legal-advisory:matter`), workspace resolves at work-unit creation via active-specialist set + creator's specialist context (ARCH 3.5 schema-detail).
+The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at Framework C. Workspace's active specialists determine which kinds are available in that deployment. Specialist-namespace disambiguation: when multiple specialists offer same-named kind (e.g., `legal-litigation:matter` vs `legal-advisory:matter`), workspace resolves at work-unit creation via active-specialist set + creator's specialist context (ARCH 3.5 schema-detail).
 
 **Boundary test**: Three questions:
 1. Is this the DEPLOYMENT-BOUND artifact-instance one piece of work tracks? → it's a `work-unit instance`
@@ -89,4 +89,4 @@ The KIND is specialist-defined; the kind enum lives in specialist DEFINITION at 
 - [workspace](workspace.md) (which contains work-unit instances)
 - [claim](claim.md) (atomic content-unit within work-unit instance output)
 - [quality-gate](quality-gate.md) (Pattern A runtime protocol consuming work-unit observability)
-- ARCH Layer 3.5 work-unit-mechanics topics (placeholder — kind schema; per-kind structural conventions; lifecycle state machine; multi-workflow_instance composition; multi-practitioner authorship; kind-namespace disambiguation; orphan-instance handling; archived material to consult: `entity-md-scope-model-restructure.md`, archived per-specialist DEFINITIONs)
+- ARCH Layer 3.5 work-unit-mechanics topics (placeholder — kind schema; per-kind structural conventions; lifecycle state machine; multi-workflow_instance composition; multi-practitioner authorship; specialist-namespace disambiguation; orphan-instance handling; archived material to consult: `entity-md-scope-model-restructure.md`, archived per-specialist DEFINITIONs)

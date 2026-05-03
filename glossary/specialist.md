@@ -46,7 +46,7 @@ A workspace activates a domain-relevant set: PBS-Schulz might activate `planning
 - [workspace](workspace.md) — workspace activates specialists per `specialists_active` field in `workspace.md`
 - [Framework C scope](framework-c-scope.md) — specialist DEFINITIONS live here as distributable bundles
 - [Owner B scope](owner-b-scope.md) — specialist INSTANCE-CONTENT (entities owned by the deployed specialist instance) lives here
-- [skill](skill.md) — skills are atomic work logic units within a specialist
+- [skill](skill.md) — skills are atomic work logic units within a specialist. Skill names scoped under specialist-namespace = specialist-name; fully-qualified skill reference is `specialist-name:skill-name`; prevents cross-specialist skill-name collision (e.g., `planning-document-work:save-baustein` distinct from a hypothetical `legal-research:save-baustein`); cross-specialist skill invocation uses fully-qualified reference
 - [mechanism](mechanism.md) — specialists use framework mechanisms (audit emission, source-grounding, sparring) via the substrate at runtime
 - [shape](shape.md) — shape policies may mandate certain specialists or constrain what's permitted (e.g., practitioner-shape may mandate sparring-relevant specialists)
 - [adapter](adapter.md) — specialists may bundle adapter implementations as part of their package (per locked `adapter` entry)
