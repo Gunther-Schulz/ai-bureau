@@ -87,6 +87,37 @@ Boundary criteria operate at:
 - Per-class Surface design moment (this ARCH topic per current 5 classes; new classes added via DR amendment per cascade discipline)
 - Per-Implementation design moment (Phase 6 implementation work)
 
+### Framework-baseline class vs shape-extension class
+
+Per-class Surfaces partition into two categories along a layer-of-introduction discriminator. The discriminator determines WHERE the class lives + WHEN it activates + WHO defines it; per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 pattern-vs-instance (framework primitives stay shape-neutral; shape policy bundle handles per-shape variation).
+
+| Category | Defined by | Applicability | Activation | Lifecycle |
+|---|---|---|---|---|
+| **Framework-baseline class** | Framework-mechanism layer (this ARCH topic + Phase 6 META-Surface + per-class Pydantic Protocol spec) | ALL framework-supported shape archetypes (practitioner / autonomous-business / personal-OS / federation / hybrid) — universal applicability | Available in any workspace regardless of selected shape; shape policy may activate / restrict / set per-shape adapter behavior (per §14 cross-shape policy variation) but does NOT redefine the per-class Surface semantically | Lives in framework distribution; new classes added via framework-mechanism-layer DR amendment per cascade discipline |
+| **Shape-extension class** | Shape policy bundle (additive layer per shape; lives in shape's distributable artifacts) | Specific shape's archetype only (per shape that introduces it; not necessarily reusable across other shapes) | Activated only in workspaces using the introducing shape (or shapes that inherit from it); NOT a framework-mechanism modification — additive layer per shape | Lives in shape policy bundle distribution; new shape-extension classes added via shape-policy-bundle DR per shape definer (L2 profile) |
+
+**Discriminator test** (when first instance of a candidate per-class Surface surfaces):
+
+1. **Universal-applicability test**: Would this per-class Surface apply across ALL framework-supported shape archetypes — testable via hypothetical legal-practice / research-paper / engineering-doc workspaces (per `glossary/authority-binding.md` boundary-test pattern)? If yes → framework-baseline candidate.
+2. **Shape-specific test**: Does this per-class Surface only make sense within a specific shape's archetype scope (introduced by that shape's policy bundle as additional class beyond framework-baseline)? If yes → shape-extension candidate.
+3. **Semantic-redefinition test**: Does the per-class Surface require redefining a framework-baseline class's semantics for a specific shape (vs additive new class)? If yes → NOT shape-extension; that's framework-mechanism-layer revision per cascade discipline.
+
+**Current 5 per-class Surfaces — CONFIRMED FRAMEWORK-BASELINE**:
+
+| Per-class Surface | Framework-baseline confirmation |
+|---|---|
+| **Email Adapter Surface** | Universal-applicability: hypothetical legal-practice (brief delivery via email), research-paper (manuscript correspondence), engineering-doc (specification distribution) workspaces all need send / fetch / threading semantics. Email is a framework-baseline integration boundary despite Email having domain shape; the per-class Surface is shape-neutral. |
+| **Accounting Adapter Surface** | Universal-applicability: hypothetical legal-practice (firm billing), research-paper (grant accounting), engineering-doc (project budget tracking) workspaces all need invoice / payment / ledger semantics. Accounting is a framework-baseline integration boundary despite Accounting having domain shape; the per-class Surface is shape-neutral (period-lock awareness is universal across accounting use cases). |
+| **MCP-Server Adapter Surface** | Universal-applicability: any framework-supported shape may consume MCP-protocol-exposed tools (corpus retrieval / external-system query / capability extension). Tool registration + capability negotiation + invocation are shape-neutral architectural concerns. |
+| **A2A-Peer Adapter Surface** | Universal-applicability: any framework-supported shape may participate in cross-node specialist sharing (federation-shape primary; other shapes inherit via federation participation). Peer handshake + request-send + response-receive + capability discovery are shape-neutral architectural concerns. |
+| **File-Sync Adapter Surface** | Universal-applicability: any framework-supported shape may need source-of-truth synchronization (filesystem / cloud / repository). Source declaration + sync + conflict resolution + change subscription are shape-neutral architectural concerns. |
+
+**Shape-extension class candidates** (forward-pointer):
+- Future per-class Surfaces emerging from shape policy bundle introduction land as shape-extension classes — they live in the introducing shape's distributable policy bundle, NOT in framework-mechanism-layer adapter distribution
+- Examples (illustrative; not yet locked): document-signing class introduced by practitioner-shape (qualified-electronic-signature flow per L5a pioneer reality); compliance-reporting class introduced by autonomous-business-shape (regulatory-reporting flow per business compliance policy); per-domain integration boundaries surfaced by specific shape archetypes
+- Lifecycle: additive layer per shape; new shape-extension classes added via shape-policy-bundle DR per shape definer (L2 profile); framework-baseline 5-class enumeration unchanged by shape-extension additions
+- Resolution: when first candidate per-class Surface surfaces, apply discriminator test above to classify as framework-baseline (universal applicability → framework-mechanism-layer DR amendment) OR shape-extension (specific shape's policy bundle additive extension → shape-policy-bundle DR)
+
 ## 4. Per-implementation aspect
 
 Implementations live at `Framework C scope` as distributable definitions. Each Implementation belongs to ONE integration class + satisfies that class's Surface + the META-Surface conventions.
@@ -446,7 +477,7 @@ Per layered coverage observation in `decision-design-sharpening` v0.6.0: these b
 |---|---|---|---|
 | W1 | New per-class Surface emergence | New integration domain ships ecosystem-wide patterns (e.g., CRM as ecosystem-pattern; or document-signing-adapter as locked class given pioneer reality) | Surface-design moment per cascade discipline; new per-class Surface added with DR amendment |
 | W2 | Federation-shape mature → A2A-Peer Surface refinement | First federation-shape deployment with concrete cross-node trust model | Re-evaluate A2A-Peer Surface against federation realities; per-shape adapter behavior in §11 may sharpen |
-| W3 | Document-signing as candidate per-class Surface | Pioneer experience with qualified-electronic-signature suggests architectural pattern (per L5a line 90) | Either bundle in specialist OR formalize as per-class Surface; criterion: 2+ archetype illustrations + framework-distinct architectural concerns |
+| W3 | Candidate **framework-baseline OR shape-extension** class (e.g., document-signing per pioneer qualified-electronic-signature pattern at L5a line 90; future domain-specific integration boundaries) | Either bundle in specialist OR first instance of candidate per-class Surface surfaces with concrete pattern | Apply §3 framework-baseline-vs-shape-extension discriminator test (universal-applicability across hypothetical legal-practice / research-paper / engineering-doc workspaces? → framework-baseline via framework-mechanism-layer DR amendment; introduced by specific shape's policy bundle as additive layer? → shape-extension via shape-policy-bundle DR per L2 shape-definer profile). Document-signing example: passes universal-applicability test if all three hypothetical workspaces share signing-flow semantics → framework-baseline candidate; fails if practitioner-shape qualified-electronic-signature is shape-specific addition → shape-extension candidate |
 | W4 | Multi-account same-class binding patterns | Multi-account workspaces (personal + work email common) surface integration friction | §5 Selection mechanics may need explicit multi-account-per-class semantics; Phase 6 spec impl |
 | W5 | Cross-adapter operation atomicity | Workflows involving multiple adapter writes (invoice + email) surface failure-recovery friction | May require coordination protocol amendment OR adapter-side compensation patterns; defer to coordination ARCH topic + cross-decision audit |
 

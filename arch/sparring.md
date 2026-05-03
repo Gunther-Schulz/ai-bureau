@@ -77,6 +77,8 @@ Per-sub-mechanism Surface contract articulated here (Mode 4 conceptual) + Phase 
 
 ## 3. Sub-mechanism boundary criteria
 
+Per Pattern A / mechanism-class template `MAINTENANCE.md:267`: §3 common-surface boundary criteria is conventionally N/A for mechanism-class topics (single-layer Surface convention — sub-mechanisms ARE the Surface; no multi-class boundary criteria). However, sparring as mechanism class still warrants a sub-mechanism-vs-non-sub-mechanism boundary rule (decision-criterion table below) plus a layer-of-introduction discriminator (framework-baseline-vs-shape-extension partition — co-located here for adapter-uniformity per `disciplines/02-apply-principle-uniformly.md`; full per-realization detail at §4).
+
 Decision rule for "in Sparring mechanism class" vs "out":
 
 | Decision criterion | Verdict | Examples |
@@ -88,6 +90,8 @@ Decision rule for "in Sparring mechanism class" vs "out":
 | Per-shape policy declaration mechanics (which sub-mechanisms active) | Out (composes with `shape` GLOSSARY entry; declared in shape policy bundles) |
 
 Architectural-encoded vs behaviorally-enforced classification per sub-mechanism uses `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 discriminator: gate-dispatched-on-every-write → structural; AI-applies-at-judgment-time → prose convention with audit.
+
+**Layer-of-introduction note**: sub-mechanisms further partition into framework-baseline vs shape-extension along a layer-of-introduction discriminator (parallel to adapter §3 framework-baseline-vs-shape-extension class partition — uniformly applied per `disciplines/02-apply-principle-uniformly.md`). Full discriminator + CONFIRMS-LOCKED 8 current sub-mechanisms as framework-baseline + shape-extension forward-pointer at §4 below.
 
 ## 4. Per-sub-mechanism realization aspect
 
@@ -104,7 +108,41 @@ Per-sub-mechanism realization variation (e.g., LLM-prompted vs rule-based vs ret
 - **Architecturally-encoded sub-mechanisms 1-4**: leverage substrate Surface §D (structured output validation) for schema enforcement; orchestrator wiring per archived sparring-output-v1.md pattern (validate → retry-on-fail → escalate-after-N-retries → bypass-with-reason).
 - **Behaviorally-enforced sub-mechanisms 5-8**: AI applies at judgment time via skill body prose conventions + heuristic-detection emits events when sub-mechanism violations cluster.
 
-Future shape extensions may add per-domain sub-mechanisms (e.g., legal-practice may add `precedent-citation-required` sub-mechanism; not yet locked) — those land as additional sub-mechanisms in the class, not as alternative whole-class implementations.
+### Framework-baseline sub-mechanism vs shape-extension sub-mechanism
+
+Sub-mechanisms partition into two categories along a layer-of-introduction discriminator (uniformly applied with adapter §3 framework-baseline-vs-shape-extension class partition per `disciplines/02-apply-principle-uniformly.md`). The discriminator determines WHERE the sub-mechanism lives + WHEN it activates + WHO defines it; per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 pattern-vs-instance (framework primitives stay shape-neutral; shape policy bundle handles per-shape variation).
+
+| Category | Defined by | Applicability | Activation | Lifecycle |
+|---|---|---|---|---|
+| **Framework-baseline sub-mechanism** | Framework-mechanism layer (this ARCH topic + Phase 6 per-sub-mechanism Pydantic schemas for architecturally-encoded sub-mechanisms 1-4) | ALL framework-supported shape archetypes (practitioner / autonomous-business / personal-OS / federation / hybrid) — universal applicability per Ming research foundation (sparring is the productive mode regardless of shape; only the activation matrix + thresholds vary per shape) | Available in any workspace regardless of selected shape; per-shape activation matrix (per §5) modulates which sub-mechanisms active + threshold values + retry budget but does NOT redefine the sub-mechanism semantically | Lives in framework distribution; new framework-baseline sub-mechanisms added via framework-mechanism-layer DR amendment per cascade discipline |
+| **Shape-extension sub-mechanism** | Shape policy bundle (additive layer per shape; lives in shape's distributable artifacts) | Specific shape's archetype only (per shape that introduces it; NOT framework-mechanism modification — additive layer per shape) | Activated only in workspaces using the introducing shape (or shapes inheriting from it); per-shape policy declares activation + thresholds for the shape-extension sub-mechanism alongside framework-baseline sub-mechanisms | Lives in shape policy bundle distribution; new shape-extension sub-mechanisms added via shape-policy-bundle DR per shape definer (L2 profile) |
+
+**Discriminator test** (when first instance of a candidate sub-mechanism surfaces):
+
+1. **Universal-applicability test**: Would this sub-mechanism apply across ALL framework-supported shape archetypes — testable via hypothetical legal-practice / research-paper / engineering-doc workspaces (per `glossary/authority-binding.md` boundary-test pattern)? Per Ming research foundation: does the axis-2 productive-mode role apply regardless of shape? If yes → framework-baseline candidate.
+2. **Shape-specific test**: Does this sub-mechanism only make sense within a specific shape's archetype scope (introduced by that shape's policy bundle as additional sub-mechanism beyond framework-baseline)? If yes → shape-extension candidate.
+3. **Semantic-redefinition test**: Does the sub-mechanism require redefining a framework-baseline sub-mechanism's semantics for a specific shape (vs additive new sub-mechanism)? If yes → NOT shape-extension; that's framework-mechanism-layer revision per cascade discipline.
+
+**Current 8 sub-mechanisms — CONFIRMED FRAMEWORK-BASELINE**:
+
+| Sub-mechanism | Framework-baseline confirmation |
+|---|---|
+| **A. Counter-argument as first-class output** | Universal-applicability: hypothetical legal-practice (counter-argument on opposing-counsel-position), research-paper (counter-argument on methodology critique), engineering-doc (counter-argument on alternative-design-tradeoff) workspaces all need explicit counter-argument production. Per Ming research foundation: counter-argument is the productive-mode discriminator regardless of domain. |
+| **B. Confidence calibration** | Universal-applicability: hypothetical legal-practice (precedent-strength confidence), research-paper (effect-size confidence), engineering-doc (specification-correctness confidence) workspaces all need typed confidence + basis-of-confidence declaration. |
+| **C. Visible reasoning** | Universal-applicability: chain-of-inference disclosure is shape-neutral — every accountability-bearing claim across all hypothetical workspaces needs reasoning visibility for axis-3 defensibility composition. |
+| **D. Selective friction** | Universal-applicability: per-claim-ambiguity threshold-triggered friction applies across all hypothetical workspaces; threshold value is shape-policy-mandated parameter (per §5 activation matrix), but the sub-mechanism semantics are framework-baseline. |
+| **E. Anti-sycophancy guard** | Universal-applicability: soften-without-evidence pattern detection applies across all hypothetical workspaces — Ming research's validator-mode failure mode is shape-neutral. |
+| **F. Asymmetric knowledge respect** | Universal-applicability: declarative "I'm drawing on X; local context Y might change this" applies across all hypothetical workspaces — practitioner local-context awareness is shape-neutral. |
+| **G. Commit-to-recommendations** | Universal-applicability: context-dependent commit-vs-question discrimination applies across all hypothetical workspaces — per-claim recommendation production is shape-neutral. |
+| **H. What's-missing checkpoint** | Universal-applicability: layered review checkpoint applies across all hypothetical workspaces — coverage-gap surfacing is shape-neutral. |
+
+Per-shape activation matrix (per §5 + §14 cross-shape policy variation) modulates WHICH framework-baseline sub-mechanisms active in a given workspace + threshold values + retry budget; the activation matrix does NOT redefine sub-mechanism semantics — only the policy parameters per shape.
+
+**Shape-extension sub-mechanism candidates** (forward-pointer):
+- Future shape extensions may add per-domain sub-mechanisms — those land as **shape-extension sub-mechanisms** living in the introducing shape's distributable policy bundle, NOT in framework-mechanism-layer sparring distribution; framework-baseline 8-sub-mechanism enumeration unchanged by shape-extension additions
+- Examples (illustrative; not yet locked): `precedent-citation-required` introduced by legal-practice shape policy bundle (per-claim precedent-citation requirement); `dataset-provenance-required` introduced by research-paper shape policy bundle (per-claim dataset-provenance requirement); `safety-case-traceability-required` introduced by engineering-doc shape policy bundle (per-claim safety-case-traceability requirement)
+- Lifecycle: additive layer per shape; new shape-extension sub-mechanisms added via shape-policy-bundle DR per shape definer (L2 profile); per-shape activation matrix extends to cover framework-baseline + shape-extension sub-mechanisms uniformly
+- Resolution: when first candidate sub-mechanism surfaces, apply discriminator test above to classify as framework-baseline (universal applicability per Ming research foundation → framework-mechanism-layer DR amendment) OR shape-extension (specific shape's policy bundle additive extension → shape-policy-bundle DR)
 
 ### Per-shape policy declares
 
@@ -321,7 +359,7 @@ These belong to Phase 6 pre-implementation sharpening; ARCH topic explicitly doe
 | W1 | Behavioral → structural promotion of sub-mechanisms 5-8 | Operational evidence (drift patterns; user-frustration signals) accumulating across deployments | Re-evaluate per-sub-mechanism architectural-encoded vs behaviorally-enforced classification; promote to Surface category if structural enforcement becomes viable |
 | W2 | Anti-sycophancy false-positive friction-budget | First production deployment surfaces friction patterns | Tune heuristic threshold per impl; potential per-shape override mechanism |
 | W3 | Cross-shape sub-mechanism activation matrix expansion | Second-shape productization (autonomous-business / personal-OS deployments) | Validate activation matrix against second-shape reality; potential refinement of architecturally-encoded vs behaviorally-enforced classification per shape |
-| W4 | Per-domain sparring sub-mechanism extension | Specific archetype (legal-practice / research-lab) surfaces domain-specific axis-2 mechanism (e.g., precedent-citation-required) | Add as per-shape-extension sub-mechanism; preserve framework Surface neutrality (extension lives in shape policy bundle) |
+| W4 | Candidate **shape-extension sub-mechanism** (additive per shape policy bundle; NOT framework-baseline modification) — e.g., `precedent-citation-required` (legal-practice shape), `dataset-provenance-required` (research-paper shape), `safety-case-traceability-required` (engineering-doc shape) | Specific shape's policy bundle introduces domain-specific axis-2 sub-mechanism with concrete pattern | Apply §3 layer-of-introduction note + §4 framework-baseline-vs-shape-extension discriminator test (universal-applicability across hypothetical legal-practice / research-paper / engineering-doc workspaces per Ming research foundation? → framework-baseline via framework-mechanism-layer DR amendment; introduced by specific shape's policy bundle as additive layer? → shape-extension via shape-policy-bundle DR per L2 shape-definer profile). Lock as shape-extension sub-mechanism per §3/§4 discriminator; preserve framework-baseline 8-sub-mechanism enumeration unchanged (extension lives in shape policy bundle distribution; per-shape activation matrix extends uniformly to cover framework-baseline + shape-extension sub-mechanisms) |
 
 ## 17. Decision-design provenance
 
