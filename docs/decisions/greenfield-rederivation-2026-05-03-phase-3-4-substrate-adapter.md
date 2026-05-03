@@ -1,14 +1,14 @@
 ---
 title: Greenfield-rederivation execution — Phase 3.4 substrate+adapter sub-cluster
 topic-cluster: greenfield-rederivation
-status: PROPOSED
+status: ACCEPTED-WITH-FINDINGS
 ---
 
 # Greenfield-rederivation execution — Phase 3.4 substrate+adapter sub-cluster
 
 ## Status
 
-PROPOSED. Per `plugin/skills/greenfield-rederivation/SKILL.md` v0.1.0 §Per-execution DR shape: status transitions PROPOSED → ACCEPTED-VALIDATED (no findings) OR ACCEPTED-WITH-FINDINGS (findings + user-decisions persisted) at post-cluster reconciliation.
+ACCEPTED-WITH-FINDINGS. User en-bloc-accepted all 22 AI-committed positions per Decision section table (S1-S11 + A1-A11). Cascade execution follows per skill §Cascade execution + `CLAUDE.md` M3 (fresh-context Cascade-Writer sub-agent + Cascade-Reviewer per M4).
 
 ## Owner
 
@@ -106,7 +106,7 @@ Per `HANDOFF.md` Note 50 (option-1 next-cluster choice, deferred to Note 51 foll
 
 35 elements across both topic-pairs survive greenfield-derivation chain unchanged. Per Reviewer detail in §Sharpening provenance below. Includes: substrate.md §1/§2/§5/§6/§8/§9/§10/§12/§13/§14/§15/§16/§17/§18; substrate-arch-topic.md Owner/Context/Decision/Composition/Constraints/Revisit triggers; adapter.md §1/§3/§4/§5/§6/§7/§14/§15/§17; adapter-arch-topic.md Related/Context/Composition/Constraints/Files/Revisit triggers.
 
-**Status transition**: PROPOSED → ACCEPTED-WITH-FINDINGS pending user-reconciliation per finding (or en-bloc confirmation per Notes 49-50 pattern).
+**Status transition**: PROPOSED → ACCEPTED-WITH-FINDINGS (user en-bloc-accepted all 22 positions). Cascade execution follows.
 
 ## Sharpening provenance
 
