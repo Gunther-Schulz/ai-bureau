@@ -264,3 +264,60 @@ Executed Note 47 plan in single session. v2 is now the active audit-pattern arti
 **Notes 44 + 45 + 46 + 47**: superseded by this Note 48 + the v2 skill itself. Will rotate to archive next time HANDOFF crosses ~500 lines.
 
 ---
+
+**Note 49: Session 20 — v2 greenfield-rederivation first cluster-execution (Phase 3.1 4 DRs); ACCEPTED-WITH-FINDINGS; cascade complete**
+
+Executed Note 48 next-session priority: ran v2 greenfield-rederivation skill against the Phase 3.1 4 DRs cluster (workflow / work-unit / deployment / engaged-authorship). Single-Wave execution; full v2 procedure followed end-to-end.
+
+**Outputs**:
+- `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-1-drs.md` (per-execution DR; ACCEPTED-WITH-FINDINGS)
+- 3 cascaded DRs amended (workflow / deployment / engaged-authorship per P1-P4 + P7)
+- Commits: `bf4f3f0` (DR stub PROPOSED) → `539f45a` (Wave-1 findings persisted) → `e0b0a41` (cascade complete; ACCEPTED-WITH-FINDINGS); pushed to origin/main
+
+**Result shape**: **0 T1 (framework-shape-changing) findings. 0-2 T2 (topic-rewriting) borderline. ~10 T3 (mechanical edit) findings — concentrated in Lens 5 provenance hygiene + Lens 8 pioneer-instance leakage.** Core architecture across all 4 DRs survives greenfield re-derivation under sub-agent + Writer-Reviewer orchestration. Drift detected was template-conformance + provenance-hygiene drift; locked DRs predated Lens 5 v0.2.1 codification + the M1-M8 cascade-load mitigations.
+
+**v1 vs v2 audit comparison (corpus-stable signal)**: v1 surfaced Tier-1 findings (Pattern A catalog 8→3; template restructure 18→12+6) under single-AI cascade-load conditions; those Tier-1 findings cascaded across the corpus prior to v2 execution. v2 — running on the SAME 4 DRs — surfaces 0 T1 + ~10 T3 housekeeping. Expected stable-corpus shape post-Tier-1-cascade: foundational classifications correct; drift is provenance-hygiene drift accumulated under cascade-load before M1-M8 + Lens 5 v0.2.1 codification.
+
+**Methodology applied (M3-M7 self-applied)**:
+- M3 sub-agent-first: 4 Writer + 4 Reviewer + 1 Cascade-Writer + 1 Cascade-Reviewer = 10 sub-agents in fresh contexts; main session as orchestrator only
+- M4 Writer-Reviewer pattern: applied per-artifact in Wave-1 + applied to cascade execution
+- M5 /clear discipline: single-Wave execution; /clear recommendation at cluster boundary (next cluster)
+- M6 HARD STOP: at cluster-execution end (this Note + commit + push)
+- M7 Ralph self-check: each sub-agent confirmed at completion; main-session checks at Wave + cluster boundaries
+- Hook (architectural_commit_gate) fired once on per-execution DR initial Write; resolved by reading decision-design-sharpening SKILL.md per `feedback_blocked_actions.md`; subsequent commits passed cleanly
+
+**5 user-decision verdicts** (per `feedback_judgment_and_automate.md` commit-positions-don't-menu):
+- P1 REVISE-LOCKED (3 DRs): strip Status-line provenance breadcrumbs
+- P2 REVISE-LOCKED (workflow): re-frame pioneer-instance as cross-archetype illustration
+- P3 REVISE-LOCKED (workflow): move trajectory breadcrumbs to §Sharpening provenance
+- P4 REVISE-LOCKED (workflow): add decomposition-mode tag
+- P5 KEEP-LOCKED (work-unit): optional event/actor composition row sharpening unnecessary
+- P6 KEEP-LOCKED (engaged-authorship): pre-existing-claim ingestion stays watch-list-deferred per no-defer discipline
+- P7 AMEND-LOCKED (engaged-authorship): incorporate 3 added revisit triggers
+
+User confirmed all en bloc.
+
+**Skill v0.1.0 empirical validation**: single-execution evidence consistent with skill design; orchestration shape (per-cluster + per-artifact sub-agent + Writer-Reviewer + user-reconciliation + delegated cascade) worked end-to-end without drift. Per skill §Status (preliminary-locked at v0.1.0; ≥2 cluster-executions threshold for amendment), single-execution does NOT justify amendment. v0.1.1 amendments waiting on next cluster-execution evidence.
+
+Reviewer-surfaced minor non-blocking observation: section-name "Sharpening rounds metadata" in deployment + engaged-authorship DRs could normalize to template-canonical "Sharpening provenance" per `MAINTENANCE.md:288`. Cosmetic only; deferred to backlog or next cluster pass.
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 49 + per-execution DR `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-1-drs.md`
+3. **Recommend `/clear` between cluster-executions** per `CLAUDE.md` M5 — main session has accumulated cluster-execution context; fresh session for next cluster
+4. **Next cluster options** (foundation-up per skill §When-to-use):
+   - **Phase 3.2 composite DR + topic catalog** (`docs/decisions/phase-3-2-doc-organization.md` + ARCHITECTURE.md §4 catalog) — composite-decision-grade audit; smaller cluster
+   - **Phase 3.4 Pattern A protocol topics** (4 ARCH topics: substrate / adapter / sparring / audit + their DRs) — larger cluster; may decompose into 2 Waves
+   - Substantive Phase 3.5 / 3.6 work per BACKLOG (post-v2-audit-confidence on Phase 3.1; can proceed with substantive work in parallel with audit campaign)
+5. Per Note 48 audit campaign estimate: ~5-8 cluster-executions total across corpus; each cluster = 1-2 sessions
+
+**What is NOT lost**:
+- All Phase 3.1 DRs validated under v2; any latent foundational drift would have surfaced as T1/T2 (none did)
+- Cascaded DRs (P1-P4 + P7) preserved all architectural content; only housekeeping changed
+- v1 procedure DR stays archived as historical input (`docs/decisions/greenfield-rederivation-pause.md` SUPERSEDED)
+- v2 skill v0.1.0 empirically validated on first cluster-execution
+
+**Phase 3 status post-audit**: Phase 3.1 v2-audited and CONFIRMS-LOCKED on architecture. Phase 3.4 effectively COMPLETE per Note 48 (substrate + adapter Pattern A; sparring + audit reclassified mechanism-class; coordination/trust/time cancelled). Phase 3.5 + 3.6 + 3.8 next per ROADMAP — can proceed with substantive work or continue v2 audit campaign.
+
+---
