@@ -75,5 +75,6 @@ Every accountability-bearing event needs actor binding regardless of domain — 
 - [defensibility](defensibility.md) (axis-3 success criterion authority-binding composes into)
 - `arch/audit.md` (the mechanism class consuming authority-binding for per-event attribution)
 - `arch/substrate.md` §2.C (permission flow integration for authority-decision moments)
+- `arch/practitioner.md` §4 + §14 (practitioner-record as human authority bound to claim_made / signature_applied events; per-shape trust model parameterizes practitioner-record's accountability surface per `arch/audit.md` §14)
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Concept-by-concept" Authority binding row (canonical concept reference)
 - `docs/decisions/audit-arch-topic.md` (Trust subsumption rationale)

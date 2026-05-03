@@ -66,4 +66,4 @@ In all cases: practitioner is one human (or natural-or-legal-person bearing acco
 - [workspace](workspace.md) (which serves practitioner; multi-practitioner workspace handles kind variation)
 - [actor](actor.md) (broader category; practitioner is one kind)
 - [Owner B scope](owner-b-scope.md) (where practitioner-record lives)
-- ARCH Layer 3 practitioner-detail topics (placeholder until Phase 3 — multi-practitioner workspace mechanics; legal-entity workspace context; signing-practitioner-per-work-product configuration; archived material to consult: `office-level-managed-entities.md` for practitioner-record schema)
+- `arch/practitioner.md` (Phase 3.5 second primitive-cluster ARCH topic; Pattern C topic-template-class anchor; bipartite HUMAN cross-cutting + RECORD Owner B; multi-practitioner cardinality matrix + legal-entity workspace context placement; lifecycle 4-event-kind catalog with archival-as-default deactivation; cross-axis composition; per-shape trust model; W1-W4 watch-list)
