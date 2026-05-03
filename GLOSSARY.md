@@ -41,39 +41,40 @@ Each axis has its own glossary entry; full claims live in `VISION.md`.
 | 1 | <a id="actor"></a>actor | PRIMITIVE | cross-cutting | cross-axis | [actor.md](glossary/actor.md) |
 | 2 | <a id="adapter"></a>adapter | PRIMITIVE | multi-aspect | cross-axis | [adapter.md](glossary/adapter.md) |
 | 3 | <a id="answer-machine-ai"></a>answer-machine AI | DERIVED | framework-meta | axis-2 | [answer-machine-ai.md](glossary/answer-machine-ai.md) |
-| 4 | <a id="authorship-preservation-axis-3"></a><a id="authorship-preservation"></a>authorship preservation (axis 3) | DERIVED | cross-cutting | axis-3 | [authorship-preservation.md](glossary/authorship-preservation.md) |
-| 5 | <a id="category-collapse"></a>category collapse | DERIVED | framework-meta | cross-axis | [category-collapse.md](glossary/category-collapse.md) |
-| 6 | <a id="claim"></a>claim | PRIMITIVE | cross-cutting | axis-3 | [claim.md](glossary/claim.md) |
-| 7 | <a id="co-worker"></a>co-worker | DERIVED | cross-cutting | axis-1 | [co-worker.md](glossary/co-worker.md) |
-| 8 | <a id="defensibility"></a>defensibility | DERIVED | cross-cutting | axis-3 | [defensibility.md](glossary/defensibility.md) |
-| 9 | <a id="deployment"></a>deployment | DERIVED | framework-meta | cross-axis | [deployment.md](glossary/deployment.md) |
-| 10 | <a id="engaged-authorship"></a>engaged authorship | DERIVED | cross-cutting | axis-3 | [engaged-authorship.md](glossary/engaged-authorship.md) |
-| 11 | <a id="event"></a>event | PRIMITIVE | framework-mechanism | cross-axis | [event.md](glossary/event.md) |
-| 12 | <a id="framework"></a>framework | META-PRIMITIVE | framework-meta | cross-axis | [framework.md](glossary/framework.md) |
-| 13 | <a id="framework-c-scope"></a>Framework C scope | SCOPE-CLASSIFICATION | framework-meta | cross-axis | [framework-c-scope.md](glossary/framework-c-scope.md) |
-| 14 | <a id="intertwined-ai"></a>intertwined AI | DERIVED | cross-cutting | axis-1 | [intertwined-ai.md](glossary/intertwined-ai.md) |
-| 15 | <a id="intertwining-axis-1"></a><a id="intertwining"></a>intertwining (axis 1) | DERIVED | cross-cutting | axis-1 | [intertwining.md](glossary/intertwining.md) |
-| 16 | <a id="layer-a-scope"></a>Layer A scope | SCOPE-CLASSIFICATION | cross-cutting | cross-axis | [layer-a-scope.md](glossary/layer-a-scope.md) |
-| 17 | <a id="mechanism"></a>mechanism | PRIMITIVE | framework-mechanism | cross-axis | [mechanism.md](glossary/mechanism.md) |
-| 18 | <a id="oracle-ai"></a>oracle AI | DERIVED | framework-meta | axis-2 | [oracle-ai.md](glossary/oracle-ai.md) |
-| 19 | <a id="owner-b-scope"></a>Owner B scope | SCOPE-CLASSIFICATION | cross-cutting | cross-axis | [owner-b-scope.md](glossary/owner-b-scope.md) |
-| 20 | <a id="pioneer-instance"></a>pioneer instance | DERIVED | framework-meta | cross-axis | [pioneer-instance.md](glossary/pioneer-instance.md) |
-| 21 | <a id="policy"></a>policy | PRIMITIVE | shape-policy | cross-axis | [policy.md](glossary/policy.md) |
-| 22 | <a id="practitioner"></a>practitioner | PRIMITIVE | multi-aspect | axis-3 | [practitioner.md](glossary/practitioner.md) |
-| 23 | <a id="protocol-architectural"></a>protocol (architectural) | META-PRIMITIVE | multi-aspect | cross-axis | [protocol-architectural.md](glossary/protocol-architectural.md) |
-| 24 | <a id="quality-gate"></a>quality-gate | PRIMITIVE | framework-mechanism | cross-axis | [quality-gate.md](glossary/quality-gate.md) |
-| 25 | <a id="rubber-stamping"></a>rubber-stamping | DERIVED | framework-meta | axis-3 | [rubber-stamping.md](glossary/rubber-stamping.md) |
-| 26 | <a id="session"></a>session | PRIMITIVE | cross-cutting | cross-axis | [session.md](glossary/session.md) |
-| 27 | <a id="shape"></a>shape | META-PRIMITIVE | framework-meta | cross-axis | [shape.md](glossary/shape.md) |
-| 28 | <a id="skill"></a>skill | PRIMITIVE | cross-cutting | cross-axis | [skill.md](glossary/skill.md) |
-| 29 | <a id="sparring-axis-2"></a><a id="sparring"></a>sparring (axis 2) | DERIVED | cross-cutting | axis-2 | [sparring.md](glossary/sparring.md) |
-| 30 | <a id="specialist"></a>specialist | PRIMITIVE | multi-aspect | cross-axis | [specialist.md](glossary/specialist.md) |
-| 31 | <a id="substrate"></a>substrate | PRIMITIVE | multi-aspect | cross-axis | [substrate.md](glossary/substrate.md) |
-| 32 | <a id="tacked-on-ai"></a>tacked-on AI | DERIVED | cross-cutting | axis-1 | [tacked-on-ai.md](glossary/tacked-on-ai.md) |
-| 33 | <a id="validator-ai"></a>validator AI | DERIVED | framework-meta | axis-2 | [validator-ai.md](glossary/validator-ai.md) |
-| 34 | <a id="workflow"></a>workflow | PRIMITIVE | multi-aspect | axis-1 | [workflow.md](glossary/workflow.md) |
-| 35 | <a id="work-unit"></a>work-unit | PRIMITIVE | multi-aspect | cross-axis | [work-unit.md](glossary/work-unit.md) |
-| 36 | <a id="workspace"></a>workspace | PRIMITIVE | cross-cutting | cross-axis | [workspace.md](glossary/workspace.md) |
+| 4 | <a id="authority-binding"></a>authority-binding | PRIMITIVE | framework-mechanism | cross-axis | [authority-binding.md](glossary/authority-binding.md) |
+| 5 | <a id="authorship-preservation-axis-3"></a><a id="authorship-preservation"></a>authorship preservation (axis 3) | DERIVED | cross-cutting | axis-3 | [authorship-preservation.md](glossary/authorship-preservation.md) |
+| 6 | <a id="category-collapse"></a>category collapse | DERIVED | framework-meta | cross-axis | [category-collapse.md](glossary/category-collapse.md) |
+| 7 | <a id="claim"></a>claim | PRIMITIVE | cross-cutting | axis-3 | [claim.md](glossary/claim.md) |
+| 8 | <a id="co-worker"></a>co-worker | DERIVED | cross-cutting | axis-1 | [co-worker.md](glossary/co-worker.md) |
+| 9 | <a id="defensibility"></a>defensibility | DERIVED | cross-cutting | axis-3 | [defensibility.md](glossary/defensibility.md) |
+| 10 | <a id="deployment"></a>deployment | DERIVED | framework-meta | cross-axis | [deployment.md](glossary/deployment.md) |
+| 11 | <a id="engaged-authorship"></a>engaged authorship | DERIVED | cross-cutting | axis-3 | [engaged-authorship.md](glossary/engaged-authorship.md) |
+| 12 | <a id="event"></a>event | PRIMITIVE | framework-mechanism | cross-axis | [event.md](glossary/event.md) |
+| 13 | <a id="framework"></a>framework | META-PRIMITIVE | framework-meta | cross-axis | [framework.md](glossary/framework.md) |
+| 14 | <a id="framework-c-scope"></a>Framework C scope | SCOPE-CLASSIFICATION | framework-meta | cross-axis | [framework-c-scope.md](glossary/framework-c-scope.md) |
+| 15 | <a id="intertwined-ai"></a>intertwined AI | DERIVED | cross-cutting | axis-1 | [intertwined-ai.md](glossary/intertwined-ai.md) |
+| 16 | <a id="intertwining-axis-1"></a><a id="intertwining"></a>intertwining (axis 1) | DERIVED | cross-cutting | axis-1 | [intertwining.md](glossary/intertwining.md) |
+| 17 | <a id="layer-a-scope"></a>Layer A scope | SCOPE-CLASSIFICATION | cross-cutting | cross-axis | [layer-a-scope.md](glossary/layer-a-scope.md) |
+| 18 | <a id="mechanism"></a>mechanism | PRIMITIVE | framework-mechanism | cross-axis | [mechanism.md](glossary/mechanism.md) |
+| 19 | <a id="oracle-ai"></a>oracle AI | DERIVED | framework-meta | axis-2 | [oracle-ai.md](glossary/oracle-ai.md) |
+| 20 | <a id="owner-b-scope"></a>Owner B scope | SCOPE-CLASSIFICATION | cross-cutting | cross-axis | [owner-b-scope.md](glossary/owner-b-scope.md) |
+| 21 | <a id="pioneer-instance"></a>pioneer instance | DERIVED | framework-meta | cross-axis | [pioneer-instance.md](glossary/pioneer-instance.md) |
+| 22 | <a id="policy"></a>policy | PRIMITIVE | shape-policy | cross-axis | [policy.md](glossary/policy.md) |
+| 23 | <a id="practitioner"></a>practitioner | PRIMITIVE | multi-aspect | axis-3 | [practitioner.md](glossary/practitioner.md) |
+| 24 | <a id="protocol-architectural"></a>protocol (architectural) | META-PRIMITIVE | multi-aspect | cross-axis | [protocol-architectural.md](glossary/protocol-architectural.md) |
+| 25 | <a id="quality-gate"></a>quality-gate | PRIMITIVE | framework-mechanism | cross-axis | [quality-gate.md](glossary/quality-gate.md) |
+| 26 | <a id="rubber-stamping"></a>rubber-stamping | DERIVED | framework-meta | axis-3 | [rubber-stamping.md](glossary/rubber-stamping.md) |
+| 27 | <a id="session"></a>session | PRIMITIVE | cross-cutting | cross-axis | [session.md](glossary/session.md) |
+| 28 | <a id="shape"></a>shape | META-PRIMITIVE | framework-meta | cross-axis | [shape.md](glossary/shape.md) |
+| 29 | <a id="skill"></a>skill | PRIMITIVE | cross-cutting | cross-axis | [skill.md](glossary/skill.md) |
+| 30 | <a id="sparring-axis-2"></a><a id="sparring"></a>sparring (axis 2) | DERIVED | cross-cutting | axis-2 | [sparring.md](glossary/sparring.md) |
+| 31 | <a id="specialist"></a>specialist | PRIMITIVE | multi-aspect | cross-axis | [specialist.md](glossary/specialist.md) |
+| 32 | <a id="substrate"></a>substrate | PRIMITIVE | multi-aspect | cross-axis | [substrate.md](glossary/substrate.md) |
+| 33 | <a id="tacked-on-ai"></a>tacked-on AI | DERIVED | cross-cutting | axis-1 | [tacked-on-ai.md](glossary/tacked-on-ai.md) |
+| 34 | <a id="validator-ai"></a>validator AI | DERIVED | framework-meta | axis-2 | [validator-ai.md](glossary/validator-ai.md) |
+| 35 | <a id="workflow"></a>workflow | PRIMITIVE | multi-aspect | axis-1 | [workflow.md](glossary/workflow.md) |
+| 36 | <a id="work-unit"></a>work-unit | PRIMITIVE | multi-aspect | cross-axis | [work-unit.md](glossary/work-unit.md) |
+| 37 | <a id="workspace"></a>workspace | PRIMITIVE | cross-cutting | cross-axis | [workspace.md](glossary/workspace.md) |
 
 ## Cluster index (concept-cluster navigation)
 
@@ -115,6 +116,7 @@ The primitives that compose into a workspace deployment.
 
 - [actor](glossary/actor.md) — event emitter
 - [event](glossary/event.md) — audit emission unit
+- [authority-binding](glossary/authority-binding.md) — actor-attribution mechanism (every accountability-bearing event records emitting actor; load-bearing for axis-3 defensibility + axis-1 trust)
 
 **Note**: specific mechanism instances (audit trail = sequence of events; source-grounding = traceability claim; persistent state = cross-session state; orchestration = continuous decision layer) are NOT separate GLOSSARY entries — they're specific instances of the abstract `mechanism` primitive (already locked). Their canonical detail lives in **ARCH Layer 3** (placeholder until Phase 3). Same applies to the 8 sparring sub-mechanisms (see §6 below). GLOSSARY locks SHAPE primitives (mechanism, policy, framework, shape, etc.); specific mechanism instances are ARCH territory.
 

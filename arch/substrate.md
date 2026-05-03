@@ -49,9 +49,11 @@ Runtime authorization mechanism. The substrate exposes `request_permission` acce
 
 Schema-validated agent output with auto-retry semantics. Skill or specialist declares Pydantic schema; substrate forces agent output to satisfy schema; auto-retries with corrective instructions on validation fail.
 
-### E. Hook registration
+### E. Hook registration + event-bus
 
 Common-subset lifecycle event registration. Hook events: PRE/POST tool use, agent start, agent end. Hooks return typed structured output capable of denying or modifying agent behavior. Substrate-extension Protocols expose substrate-specific hook events (subagent lifecycle, pre-compact, etc.) — those are NOT in Surface.
+
+Includes substrate-internal **event-bus** mechanism for inter-component event dispatch (substrate-internal; consumes-side composes with audit Surface §D integrity per `arch/audit.md` §B append-only persistence + §8 dual-emission catalog; sparring sub-mechanism event-emission flows through this dispatch per `arch/sparring.md` §8 per-sub-mechanism event-kind catalog). Event-bus is the canonical home for cross-component event dispatch (subsumes prior coordination Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 — per-shape policy configures call-shape vs event-shape coordination). Boundary clarity: event-bus = dispatch mechanism (substrate-internal; like hash-chain at audit §D); audit Surface §D integrity = consumes events. NOT a separate Pattern A or framework primitive (substrate-instance-internal mechanism).
 
 ### F. Session/context management
 

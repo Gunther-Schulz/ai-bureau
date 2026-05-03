@@ -92,8 +92,15 @@ Some primitives are **multi-aspect** (manifest at multiple scopes) but do NOT fo
 | **A** (Protocol pattern; tri-aspect) | substrate, adapter, protocol | Surface + Implementations + Instance/binding (3 across mechanism / Framework C / Owner B) |
 | **B** (bipartite — definition + instance-content) | specialist | DEFINITION (Framework C; distributable bundle) + INSTANCE-CONTENT (Owner B; entities owned within deployed specialist). NO multiple implementations: a specialist IS its definition. |
 | **C** (bipartite of different shape) | practitioner | HUMAN (cross-cutting; the actual person; not "placed") + RECORD (Owner B; system representation) |
+| **D** (mechanism class; per-shape policy variation) | sparring, audit | Surface (capability categories fixed at framework-mechanism layer) + Per-shape policy (declares which capability categories active + per-shape granularity / event-kind catalog / threshold values / error semantics) + Per-sub-mechanism / per-event-emission realization variation (skill-side OR substrate-impl-side; NOT pluggable Surface implementations) |
 
-The Layer tag value `multi-aspect` covers all multi-scope primitives regardless of count. Each entry's body specifies the count + which aspects + which scopes. Only Pattern A is generalized as a recurring named pattern; don't conflate B / C with A.
+The Layer tag value `multi-aspect` covers all multi-scope primitives regardless of count. Each entry's body specifies the count + which aspects + which scopes. Pattern A is generalized as a recurring named pluggability pattern; Pattern D is generalized as a recurring named mechanism-class pattern; don't conflate B / C / D with A.
+
+**Pattern A vs Pattern D discriminator** (load-bearing — both have a Surface aspect; the distinction is what varies):
+- **Pattern A**: pluggable Surface contract + alternative whole-class Implementations (e.g., substrate's Claude Agent SDK / MS AF; adapter's gmail / outlook / fastbill realizing per-class Surface differently) + workspace-or-shape selects WHICH Implementation. Cardinality of alternative implementations: ≥2 per Surface.
+- **Pattern D**: fixed Surface (capability categories defined at framework-mechanism layer; same across all shapes) + per-shape policy variation (activation matrix / granularity / threshold values / error semantics declared in shape policy bundle) + per-sub-mechanism realization variation (each sub-mechanism realized independently; sparring sub-mechanisms 1-4 via substrate Surface §D structured output validation; audit storage realization per substrate-impl). NO alternative whole-class Implementations realizing one Surface differently.
+
+Pattern D codifies sparring + audit as currently-locked instances per mechanism-class reclassification. The container category lives here in TOP-LEVEL ARCHITECTURE rather than as a separate GLOSSARY entry — it's architectural-meta (a pattern-of-primitives), not an atomic semantic primitive with its own canonical content beyond what individual instances supply.
 
 ### Glossary entry classification
 
@@ -223,13 +230,13 @@ This repo is **the framework + dev tooling source — the starting point for dep
 
 **Single abstraction level per file**: structural mechanisms for primitives; decisional reasoning for disciplines.
 
-#### Pattern A protocol topic template (LOCKED; revised per `docs/decisions/greenfield-rederivation-pause.md` Step 4 + `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md`)
+#### Pattern A / mechanism-class topic template (LOCKED; revised per `docs/decisions/greenfield-rederivation-pause.md` Step 4 + `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md`)
 
-For ARCH topics describing Pattern A protocols (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry), use this two-tier template:
-- **12 common-required sections** apply to every Pattern A topic
-- **7 protocol-specific-conditional sections** apply per protocol if applicable to its nature
+For ARCH topics describing **either Pattern A protocols** (Surface + Implementations + Selection per `protocol (architectural)` GLOSSARY entry) **or Pattern D mechanism classes** (Surface + per-shape policy variation + per-sub-mechanism realization per TOP-LEVEL ARCHITECTURE Pattern D row above), use this two-tier template:
+- **12 common-required sections** apply to every Pattern A or mechanism-class topic
+- **7 protocol-specific-conditional sections** apply per topic if applicable to its nature (per per-pattern applicability rules below)
 
-Established by `arch/substrate.md` (anchor; 6 of 7 conditional sections apply, §14 N/A per shape-uniform Surface) + validated by `arch/adapter.md` (some conditional sections thin or N/A; §14 applies per shape-policy-mediated nature) + greenfield-tested against quality-gate at template-derivation time.
+Established by `arch/substrate.md` (Pattern A anchor; 6 of 7 conditional sections apply, §14 N/A per shape-uniform Surface) + validated by `arch/adapter.md` (Pattern A; some conditional sections thin or N/A; §14 applies per shape-policy-mediated nature) + greenfield-tested against quality-gate at template-derivation time + extended to mechanism-class topics by `arch/sparring.md` + `arch/audit.md` (Pattern D instances; §14 always applies per mechanism-class definition; §3 N/A per single-layer Surface convention).
 
 **12 common-required sections** (every Pattern A topic):
 
@@ -248,24 +255,31 @@ Established by `arch/substrate.md` (anchor; 6 of 7 conditional sections apply, �
 | 18 | Phase routing | Architectural shape (locked here) vs Pydantic spec vs concrete impls (Phase 6) |
 | 19 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing / Phase 6 spec target |
 
-**7 protocol-specific-conditional sections** (apply per protocol if applicable to its nature; document N/A explicitly when section is omitted):
+**Per-pattern applicability rules** (which conditional sections apply per topic-pattern):
+
+- **Pattern A topics** (substrate / adapter / quality-gate / future Pattern A): §10 substrate-specific lifecycle stays as substrate-only conditional (per-instance ordering invariants distinct from §9); §14 applies when shape-policy-mediated (per-shape variation in audit emission / permission flow / error escalation); §3 applies for multi-class Surface (e.g., adapter per-integration-class).
+- **Mechanism-class topics** (sparring / audit / future Pattern D): §10 applies when storage-realization OR per-instance lifecycle has load-bearing ordering invariants distinct from §9 cardinality + lifecycle treatment (e.g., audit's storage-realization boot-before-substrate / shutdown-after-substrate invariants); §14 likely-applicable (per-shape policy variation IS the mechanism-class definition); §3 N/A (single-layer Surface convention for mechanism-class — sub-mechanisms ARE the Surface; no multi-class boundary criteria).
+
+**7 protocol-specific-conditional sections** (apply per topic if applicable per per-pattern rules above; document N/A explicitly when section is omitted):
 
 | § | Section | Applicability |
 |---|---|---|
-| 3 | Common-surface boundary criteria | Applies when protocol has multi-class Surface (e.g., adapter's per-integration-class Surfaces); skip if single-layer Surface |
-| 8 | Substrate-internal vs skill-side audit emission | Substrate-specific (substrate registers MCP gate; other protocols emit skill-side only) |
-| 10 | Boot + shutdown phase ordering (architectural-level) | Substrate-specific lifecycle (per-instance ordering; flush-before-release invariants); other protocols document lifecycle in §9 cardinality + lifecycle without separate phase ordering |
-| 11 | Substrate error categories (architectural-level) | Per-protocol error semantics differ; document per-protocol error categories when load-bearing distinct from §9 lifecycle treatment |
+| 3 | Common-surface boundary criteria | Pattern A only when protocol has multi-class Surface (e.g., adapter's per-integration-class Surfaces); skip if single-layer Surface; N/A for mechanism-class topics (single-layer Surface convention) |
+| 8 | Substrate-internal vs skill-side audit emission | Substrate-specific (substrate registers MCP gate; other Pattern A protocols + mechanism-class topics emit skill-side only) |
+| 10 | Boot + shutdown phase ordering (architectural-level) | Substrate-specific lifecycle (per-instance ordering; flush-before-release invariants) for Pattern A topics; OR mechanism-class topics with load-bearing storage-realization OR per-instance lifecycle ordering invariants distinct from §9 cardinality + lifecycle treatment |
+| 11 | Substrate error categories (architectural-level) | Per-topic error semantics differ; document per-topic error categories when load-bearing distinct from §9 lifecycle treatment |
 | 12 | Transport variation + per-tier mapping | Substrate-specific (MCP transport variation); skip when no multi-transport surface |
-| 13 | Deployment-tier awareness | Substrate-specific (Tier 1/2/3 per-tier behavior in impl, not Surface); skip when protocol is tier-uniform |
-| 14 | Cross-shape policy variation | Applies when protocol behavior is shape-policy-mediated (audit emission per shape; permission flow per shape; error escalation per shape; or other axes where shape policy bundle declares per-shape variation); document N/A explicitly when behavior is shape-uniform |
+| 13 | Deployment-tier awareness | Substrate-specific (Tier 1/2/3 per-tier behavior in impl, not Surface); skip when topic is tier-uniform |
+| 14 | Cross-shape policy variation | Applies when topic behavior is shape-policy-mediated. Pattern A: applies when shape-policy-mediated (audit emission per shape; permission flow per shape; error escalation per shape); document N/A explicitly when behavior is shape-uniform. Mechanism-class: likely-applicable (per-shape policy variation IS the mechanism-class definition) |
 
-**Per-protocol section count expectation**:
-- substrate: 12 common + 7 conditional (anchor; 6 of 7 apply; §14 N/A per shape-uniform substrate Surface) = ~18-19 total (depending on counting N/A documentation)
-- adapter: 12 common + ~5 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors, §14 cross-shape variation; §8 + §12 + §13 N/A) = ~17 total
-- quality-gate: 12 common + ~3-4 conditional (§11 fail-closed / fail-open per shape, §14 cross-shape variation expected per shape-policy-mediated nature; others TBD per topic creation) = ~15-16 total
+**Per-topic section count expectation**:
+- substrate (Pattern A): 12 common + 7 conditional (anchor; 6 of 7 apply; §14 N/A per shape-uniform substrate Surface) = ~18-19 total (depending on counting N/A documentation)
+- adapter (Pattern A): 12 common + ~5 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors, §14 cross-shape variation; §8 + §12 + §13 N/A) = ~17 total
+- quality-gate (Pattern A): 12 common + ~3-4 conditional (§11 fail-closed / fail-open per shape, §14 cross-shape variation expected per shape-policy-mediated nature; others TBD per topic creation) = ~15-16 total
+- sparring (mechanism class): 12 common + ~5-6 conditional (§11 sparring error categories, §14 cross-shape activation matrix mandatory; §3 + §8 + §10 + §12 + §13 N/A) = ~17-18 total
+- audit (mechanism class): 12 common + ~6 conditional (§8 dual-emission catalog, §10 storage-realization boot/shutdown ordering, §11 audit error categories, §14 cross-shape policy variation mandatory; §3 + §12 + §13 N/A) = ~18 total
 
-Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic). Future Pattern A 8th-conditional candidates lock when first instance surfaces (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
+Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic; sparring + audit extended template to Pattern D mechanism-class). Future Pattern A or Pattern D 8th-conditional candidates lock when first instance surfaces (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
 
 #### Provenance hygiene
 

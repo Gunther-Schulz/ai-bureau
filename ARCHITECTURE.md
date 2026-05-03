@@ -131,6 +131,34 @@ Detail in `arch/scope-model.md` (Phase 3.5).
 
 Lock items others depend on FIRST; downstream items composing with multiple foundations come last. Applied across Phase 3.1 sub-decisions / topic ordering / within-Sub-decision sharpening. Per `DISCIPLINES.md` Discipline 8 + cascade discipline.
 
+### Workspace boot + shutdown composite sequence
+
+Step-by-step composite boot ordering across audit + substrate + adapter, resolving substrate §10 + audit §10 step-numbering ambiguity. Substrate §10 + audit §10 reference THIS subsection rather than duplicating ordering.
+
+**Boot composite ordering** (audit-phase precedes substrate-phase precedes adapter-phase per audit-storage-realization-before-first-substrate-event invariant):
+
+1. **audit-phase 1**: AuditEvent schema validation (Pydantic schema available; emission API defined)
+2. **audit-phase 2**: Substrate-internal storage backend availability check (filesystem accessible; existing audit-trail (if present) hash-chain verifiable per `arch/audit.md` §10 boot step 3)
+3. **audit-phase 3**: Audit Surface available (`audit_storage_ready` per `arch/audit.md` §10 boot step 4); emission API ready BEFORE substrate emits its first architectural event
+4. **substrate-phase 1**: Substrate Implementation instantiates per workspace.md selection (`substrate = await ChosenSubstrate.from_config(config)` per `arch/substrate.md` §10 boot step 3); agent-loop entry available
+5. **substrate-phase 2**: Substrate registers configured MCP servers (per `arch/substrate.md` §10 boot step 4); substrate-emitted events flow through audit Surface from this point (per substrate §8 dual-emission)
+6. **substrate-phase 3**: Adapter bindings load (per workspace.md adapter bindings list; per-binding instantiation per `arch/adapter.md` §10 per-instance boot in declaration order; adapter-emitted events flow through audit Surface)
+7. **substrate-phase 4**: Specialist registration (substrate-native materialization per substrate Surface §G)
+8. **substrate-phase 5**: `boot_complete` event emitted via audit Surface; agent loop accepts runs (per substrate §10 boot steps 8-9); `workspace_booted` event-kind first-class in audit-trail
+
+**Shutdown composite ordering** (reverse with explicit flush-before-release invariants):
+
+1. Substrate shutdown initiates: `shutdown_initiated` event emitted via audit Surface
+2. In-flight agent runs drain to completion OR cancel per cancellation policy
+3. Substrate stops accepting new run_agent calls
+4. Adapter bindings shut down in REVERSE declaration order (per `arch/adapter.md` §10 per-instance shutdown); per-binding drains in-flight operations + flushes auth tokens / circuit state / threading caches; per-binding `adapter_stopped` events emitted
+5. MCP servers stop (subprocess MCP servers gracefully terminate)
+6. Substrate releases substrate-internal runtime resources; `shutdown_complete` event emitted via audit Surface
+7. Sparring (mechanism class peer) emissions drain; final events emit via audit Surface
+8. Audit storage realization shutdown LAST (per `arch/audit.md` §10 shutdown steps 5-8): substrate-impl drains pending audit-trail writes; flushes audit-trail to storage; verifies hash-chain integrity; `audit_trail_integrity_verified` emitted (final event); audit storage realization shutdown returns
+
+**Invariant preserved**: every emitted event is persisted in audit-trail BEFORE workspace shutdown completes. Audit storage available BEFORE substrate emits first architectural event AND audit storage shuts down AFTER substrate releases (boot-before-substrate / shutdown-after-substrate ordering per `arch/audit.md` §10).
+
 ### Logic placement modes (4-mode distribution)
 
 Where actual framework logic lives, by interpretability:
