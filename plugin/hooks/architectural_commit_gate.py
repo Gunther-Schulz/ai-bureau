@@ -170,6 +170,30 @@ def read_transcript_events(transcript_path: str) -> list[dict]:
     return events
 
 
+def gather_session_transcript_paths(transcript_path: str) -> list[str]:
+    """Return main-session transcript path + all sibling sub-agent
+    transcript paths.
+
+    Claude Code records sub-agent transcripts at
+    `<project>/<session_id>/subagents/agent-*.jsonl` — siblings of the
+    main JSONL named `<session_id>.jsonl`. The hook payload's
+    `transcript_path` is the main-session path even when the firing
+    Edit/Write came from a sub-agent's tool call; sub-agent prep-Reads
+    therefore live in those sibling files. They count for freshness:
+    sub-agents dispatched in the current session ARE the current session
+    for discipline-execution purposes (per CLAUDE.md M3 sub-agent-first
+    cascade routing — sub-agents are the intended execution path).
+    """
+    if not transcript_path:
+        return []
+    paths = [transcript_path]
+    p = Path(transcript_path)
+    subagent_dir = p.with_suffix("") / "subagents"
+    if subagent_dir.is_dir():
+        paths.extend(sorted(str(f) for f in subagent_dir.glob("*.jsonl")))
+    return paths
+
+
 def extract_read_paths(events: Iterable[dict]) -> list[str]:
     """Scan ALL events for Read tool_use; extract file_path arguments.
 
@@ -236,10 +260,13 @@ def main() -> int:
         return 0
 
     # This is an architectural-artifact write. Check preparatory Reads.
-    # Whole-session scan: transcript_path is per-session per Claude Code
-    # hooks API; we look at ALL events in the transcript (no call-count
-    # window — avoids cascade-load eviction of prep Reads).
-    events = read_transcript_events(transcript_path) if transcript_path else []
+    # Whole-session scan: aggregate main-session transcript + all
+    # sibling sub-agent transcripts (sub-agents are part of current
+    # session for prep-Read accounting; hook payload's transcript_path
+    # points at main-session only even when fired from sub-agent context).
+    events = []
+    for tp in gather_session_transcript_paths(transcript_path):
+        events.extend(read_transcript_events(tp))
     session_reads = extract_read_paths(events)
 
     blocks: list[str] = []
