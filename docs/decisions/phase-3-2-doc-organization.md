@@ -1,7 +1,6 @@
 # DR: Phase 3.2 doc-organization (composite — taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure)
 
-**Status**: ACCEPTED (Phase 3.2 closed; composite synthesis) — **AMENDED session 17 per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade** (topic-catalog reduction 14 → 11; Pattern A protocol catalog reduction 8 → 3; sparring + audit reclassified as mechanism classes; coordination + trust + time cancelled). See "Amendments" section at end of this DR for cascade detail.
-**Locked**: session 16 (2026-05-02); amended session 17 (2026-05-02)
+**Status**: ACCEPTED (Phase 3.2 closed; composite synthesis) — AMENDED post-greenfield-rederivation-pause Step 3 cascade (topic-catalog reduction 14 → 11; Pattern A protocol catalog reduction 8 → 3; sparring + audit reclassified as mechanism classes; coordination + trust + time cancelled). See §Amendments for cascade detail.
 **Sharpening**: Mode-2 composite decomposition per `decision-design-sharpening` v0.6.0 — 4 tightly-coupled sub-decisions in foundation-up dependency order; per-sub-decision standard 2-round sweet spot; this DR is the final synthesis pass.
 **Phase**: 3.2 (composite of 4 sub-decisions; closes phase before 3.3 per-mechanism / 3.4 per-protocol / 3.5 per-primitive-detail content begins)
 
@@ -9,7 +8,7 @@
 
 Phase 3.2 produces 4 locked sub-decisions organizing how Phase 3.3-3.7 content lives:
 
-1. **Topic taxonomy** — 14 ARCH topics (8 Pattern A protocols + 4 primitive-cluster topics + 2 cross-cutting integrators); protocol-centric aggregation. **Amended session 17 → 11 topics** (3 Pattern A protocols + 2 reclassified mechanism-class topics + 4 primitive-cluster topics + 2 cross-cutting integrators) per greenfield-rederivation cascade; see "Amendments" at end.
+1. **Topic taxonomy** — **11 ARCH topics** (3 Pattern A protocols + 2 reclassified mechanism-class topics + 4 primitive-cluster topics + 2 cross-cutting integrators); protocol-centric aggregation. See §Amendments for the catalog-reduction cascade detail.
 2. **File naming convention** — flat `arch/<slug>.md`; lowercase kebab-case slug = topic name; aggregation join via hyphen; no prefixes / sub-directories / arch-README
 3. **Cross-cutting topics placement** — TOPICS-vs-CONCERNS distinction; cross-cutting topics get dedicated arch/ files; cross-cutting concerns live in ARCHITECTURE.md sections
 4. **ARCHITECTURE.md overview structure** — 9 sections (Audience+scope / Phase status / Doc structure / Topic catalog / Reading order / Cross-cutting principles / Locked decisions / Disciplines / Watch-list); explicit consumer-model + Logic placement modes 4-mode codification
@@ -32,12 +31,12 @@ Mid-sharpening user question ("is ARCHITECTURE.md purely documentation or drawn 
 
 **Resolution**: 14 ARCH topics in protocol-centric aggregation with primitive-cluster topics. Foundation-up ordered. Under MAINTENANCE budget (15-20 cap) with 6-topic headroom for emergent additions during Phase 3.3-3.6 work.
 
-**Topic structure (as locked session 16; amended session 17 per greenfield-rederivation cascade)**:
-- ~~8 Pattern A protocol topics~~ → **3 Pattern A protocol topics** (substrate / adapter / quality-gate); plus **2 mechanism-class topics retained as ARCH topics but reclassified** (sparring / audit — per-shape policy variation, not Pattern A pluggability); coordination + trust + time CANCELLED (subsumed into substrate hooks + audit authority-binding + substrate-impl temporal semantics + adapter time-driven operations respectively)
-- 4 primitive-cluster topics (specialist+skill / practitioner / workflow+work-unit / claim+defensibility) — UNCHANGED
-- 2 cross-cutting integrator topics (scope-model / axis-interactions) — UNCHANGED
+**Topic structure**:
+- **3 Pattern A protocol topics** (substrate / adapter / quality-gate); plus **2 mechanism-class topics retained as ARCH topics** (sparring / audit — per-shape policy variation, not Pattern A pluggability); coordination + trust + time CANCELLED (subsumed into substrate hooks + audit authority-binding + substrate-impl temporal semantics + adapter time-driven operations respectively)
+- 4 primitive-cluster topics (specialist+skill / practitioner / workflow+work-unit / claim+defensibility)
+- 2 cross-cutting integrator topics (scope-model / axis-interactions)
 
-Total: **11 topics** post-amendment (was 14).
+Total: **11 topics**.
 
 **Aggregation rationale**: Pattern A protocols are natural topic anchors (Surface + per-impl + composing mechanisms + composing primitives all coherent); primitives without Pattern A home cluster by composition tightness (specialist contains skill; workflow attaches to work-unit; claim resolves at defensibility-granularity); cross-cutting integrators for irreducibly cross-axis content. Per Lens 15: aggregate when items tightly coupled OR individually <100 lines.
 
@@ -132,7 +131,7 @@ Total: **11 topics** post-amendment (was 14).
 This composite decision flows constraints into:
 
 - **Phase 3.3 per-mechanism detail**: mechanisms subsumed under Pattern A protocol topics (per Sub-decision 1 aggregation); audit-emission + audit-trail + event in arch/audit.md; persistent-state in arch/substrate.md; orchestration in arch/workflow-work-unit.md; etc.
-- **Phase 3.4 per-architectural-Protocol detail**: ~~8~~ **3 Pattern A topics** (substrate ✅ / adapter ✅ / quality-gate at 3.6) + **2 reclassified mechanism-class topics retained** (sparring ✅ / audit ✅; both DRAFTED then RECLASSIFIED session 17 per greenfield-rederivation cascade — per-shape policy variation, not Pattern A pluggability); coordination + trust + time CANCELLED (subsumed); foundation-up sequence locked
+- **Phase 3.4 per-architectural-Protocol detail**: **3 Pattern A topics** (substrate ✅ / adapter ✅ / quality-gate at 3.6) + **2 mechanism-class topics retained** (sparring ✅ / audit ✅ — per-shape policy variation, not Pattern A pluggability); coordination + trust + time CANCELLED (subsumed); foundation-up sequence locked
 - **Phase 3.5 primitive-detail topics**: 4 primitive-cluster topics + 2 cross-cutting integrators ready for content
 - **Phase 3.6 quality-gate full ARCH topic**: arch/quality-gate.md ready for Phase 3.6 detail (Surface specification + per-implementation + signal catalog + intervention mechanics + error semantics + tier-awareness)
 - **Phase 4 DRs**: each Phase 3.3-3.7 architectural decision may produce its own DR; this composite DR is the precedent for grouped sub-decision DRs (per Mode-2)
@@ -173,7 +172,7 @@ Total: 4 sub-decisions × 2 rounds = 8 sharpening rounds + 1 final synthesis (th
 
 ## Amendments
 
-### Session 17 (2026-05-02) — greenfield-rederivation cascade
+### greenfield-rederivation-pause cascade
 
 **Source**: `docs/decisions/greenfield-rederivation-pause.md` Step 3 (Tier-1 finding; Pattern A protocol catalog reduction 8 → 3) + Step 4 (Tier-1 finding; topic template restructure 18-section monolithic → 12 common + 6 conditional). User-accepted at procedure DR Step 7 decision phase.
 
@@ -190,17 +189,18 @@ Total: 4 sub-decisions × 2 rounds = 8 sharpening rounds + 1 final synthesis (th
 
 **Sub-decision 4 (ARCHITECTURE.md overview structure)**: UNCHANGED at section level — 9-section structure stable; only Section 4 Topic catalog content amended (14 → 11 rows; sparring + audit reshape; coordination/trust/time cancelled).
 
-**Cascade-related file changes** (session 17, this commit + prior foundational #1 commit):
+**Cascade-related file changes**:
 - `GLOSSARY.md` `protocol (architectural)` cross-archetype catalog: 7-protocol list → 3-protocol catalog + reclassification/subsumption note
 - `GLOSSARY.md` `framework` body's 8-protocol catalog (line 868): 8 → 3 protocols + note
 - `MAINTENANCE.md` Pattern A protocol topic template (lines 326-349): 18-section monolithic → 12 common + 6 conditional
 - `ARCHITECTURE.md` §2 Phase 3 sub-phase status table: 8 Pattern A → 3 + reclassification notes
 - `ARCHITECTURE.md` §4 Topic catalog: 14 → 11 topics; sparring + audit reshaped
 - `ARCHITECTURE.md` §6 Pattern A examples: 8 → 3 examples + cascade note
-- `arch/sparring.md` + `docs/decisions/sparring-arch-topic.md` — Pattern A → mechanism-class reclassification (Step 7.B)
-- `arch/audit.md` + `docs/decisions/audit-arch-topic.md` — Pattern A → mechanism-class reclassification (Step 7.B)
-- `arch/substrate.md` — minor structural restructure per new template (Step 7.B; content unchanged)
-- `arch/adapter.md` — minor revision per new template (Step 7.B; thin sections retained as N/A markers or relocated)
+- `arch/sparring.md` + `docs/decisions/sparring-arch-topic.md` — Pattern A → mechanism-class reclassification
+- `arch/audit.md` + `docs/decisions/audit-arch-topic.md` — Pattern A → mechanism-class reclassification
+- `arch/substrate.md` — minor structural restructure per new template (content unchanged)
+- `arch/adapter.md` — minor revision per new template (thin sections retained as N/A markers or relocated)
+- `disciplines/09-coherence-audit-cadence.md` — C1 checkpoint row updated (Pattern A topic catalog 7 → 3 + 2 reclassified mechanism-class)
 
 **Why amendment vs supersession**: Phase 3.2 sub-decisions 1's topic-count + protocol-shape claims are revised; sub-decisions 2/3/4 unchanged. Single sub-decision amendment doesn't warrant whole-DR supersession per preliminary-lock principle; the original decision shape (Mode-2 composite decomposition; 4 sub-decisions; foundation-up dependency) holds.
 

@@ -1,12 +1,13 @@
 # Decision record: Doc-organization templates + memory consolidation (composite)
 
-**Status**: ACCEPTED — session 16 (2026-05-02); 2-round generic sharpen (per `plugin/skills/sharpen/SKILL.md` v0.9.0) on the proposal itself; user-authorized execution.
+**Status**: ACCEPTED.
 
 **Owner**: Doc-system maintenance (Layer 0 governance work; per MAINTENANCE.md "When this doc itself changes" discipline).
 
 **Related**:
 - `MAINTENANCE.md` (5-layer doc model + TOP-LEVEL DESIGN PRINCIPLES + TOP-LEVEL SCOPE absorbs absorbed memory content)
 - `DISCIPLINES.md` (absorbs 7 discipline files)
+- `disciplines/10-greenfield-evaluation.md` (extends Lens 5 v0.2.1 to ARCH topics + DR §16 — load-bearing for Lock 1 §16 wording rule)
 - `ARCHITECTURE.md` (cross-cutting principles absorb ai-as-runtime + llm-instruction-tightness)
 - `phase-3-2-doc-organization.md` (composite DR pattern; this DR follows same Mode-2 composite decomposition shape)
 - coherence-audit Lens 5 v0.2.1 provenance hygiene (DR Sharpening provenance section IS the meta-home; absorbs provenance from ARCH topics)
@@ -26,27 +27,38 @@ Three locks comprise this composite:
 
 ### Lock 1: arch/<topic>.md template (Pattern A protocol topic)
 
-Lock 18-section template established by `arch/substrate.md` + validated by `arch/adapter.md`. Persisted in `MAINTENANCE.md` 5-layer model Layer 3 description.
+Lock two-tier template (12 common-required + 6 protocol-specific-conditional) established by `arch/substrate.md` (anchor; all 6 conditional sections apply) + validated by `arch/adapter.md` (some conditional sections thin or N/A) + greenfield-tested against quality-gate at template-derivation time. Persisted in `MAINTENANCE.md` 5-layer model Layer 3 description (`MAINTENANCE.md:226-267` is canonical source).
 
-Pattern A protocol topic template:
+**12 common-required sections** (every Pattern A topic; foundation-up order):
+
 1. Topic scope + frontmatter
 2. Surface contract (architectural-level)
-3. Common-surface boundary criteria
-4. Per-implementation aspect
-5. Selection mechanics
-6. Tri-aspect reconciliation
-7. Composition with framework primitives
-8. Substrate-internal vs skill-side audit emission
-9. Cardinality + lifecycle
-10. Boot + shutdown phase ordering
-11. Substrate error categories
-12. Transport variation + per-tier mapping (where applicable)
-13. Deployment-tier awareness
-14. Pre-implementation operational concerns (Phase 6 forward reference)
-15. Watch-list
-16. Decision-design provenance (archived sources only; meta-provenance moves to DR)
-17. Phase routing
-18. Cross-references
+3. Per-implementation aspect
+4. Selection mechanics
+5. Tri-aspect reconciliation
+6. Composition with framework primitives
+7. Cardinality + lifecycle
+8. Pre-implementation operational concerns (Phase 6 forward reference)
+9. Watch-list
+10. Decision-design provenance (INPUT-citation only)
+11. Phase routing
+12. Cross-references
+
+**6 protocol-specific-conditional sections** (apply per protocol if applicable to its nature; document N/A explicitly when omitted):
+
+- **Common-surface boundary criteria** — applies when protocol has multi-class Surface (e.g., adapter's per-integration-class Surfaces); skip if single-layer Surface
+- **Substrate-internal vs skill-side mechanics** — substrate-specific (substrate registers MCP gate; other protocols emit skill-side only)
+- **Boot + shutdown phase ordering (architectural-level)** — substrate-specific lifecycle (per-instance ordering; flush-before-release invariants); other protocols document lifecycle in §Cardinality + lifecycle without separate phase ordering
+- **Per-protocol error categories (architectural-level)** — per-protocol error semantics differ; document per-protocol error categories when load-bearing distinct from §Cardinality + lifecycle treatment
+- **Transport variation + per-tier mapping** — substrate-specific (MCP transport variation); skip when no multi-transport surface
+- **Deployment-tier awareness** — substrate-specific (Tier 1/2/3 per-tier behavior in impl, not Surface); skip when protocol is tier-uniform
+
+**Per-protocol section count expectation**:
+- substrate: 12 required + 6 conditional (anchor; all apply) = 18 total
+- adapter: 12 required + ~3-4 conditional (common-surface boundary criteria, lifecycle / auth-refresh, per-impl error categories) = ~15-16 total
+- quality-gate: 12 required + ~1-2 conditional (fail-closed / fail-open per shape) = ~13-14 total
+
+**Section ordering rationale**: ordering composes three principles. Foundation-up — topic scope before Surface contract before per-impl before Selection before Tri-aspect (each section depends on definitions established by earlier sections). Reader-cognitive-flow — architectural shape first (sections 1-7 describe what the protocol IS structurally), forward-deferred operational concerns next (section 8), open questions and provenance last (sections 9-12 close the loop). Provenance-meta-home composition — §Decision-design provenance carries INPUT citations only (the canonical decision body lives in this DR's Sharpening provenance section; ARCH-topic §Decision-design provenance is the secondary surface, not the meta-home).
 
 Future Pattern B / C / cross-cutting integrator topic templates locked when first instance lands (foundation-up; substrate established Pattern-A template via first-Pattern-A topic).
 
@@ -157,7 +169,7 @@ Mode-2 composite (upfront-known): 3 sub-decisions visible at framing time with f
 
 ## Constraints flowing to downstream commitments
 
-- **Future ARCH topic content**: must follow Pattern A protocol topic 18-section template per MAINTENANCE.md Layer 3 description. Sparring / audit / coordination / trust / time topics next; reuse template directly.
+- **Future ARCH topic content**: must follow Pattern A protocol topic two-tier template (12 common-required + 6 protocol-specific-conditional) per MAINTENANCE.md Layer 3 description. Subsequent Pattern A topics reuse template directly; protocol-specific-conditional sections apply per protocol.
 - **Future DRs**: must follow DR template per MAINTENANCE.md Layer 4 description. Sharpening provenance section IS the meta-home — no "Pattern note (meta)" / sharpening trajectory in ARCH topics.
 - **Future memory feedback proposals**: discriminator (behavioral preference vs discipline vs architectural commitment) determines home BEFORE writing memory file. Default to absorbed-content home; memory only when behavioral-preference shape applies.
 - **Cascade discipline**: each future DR / ARCH topic / discipline change cascades cross-refs across affected files via `git grep` + per-file update in same commit.

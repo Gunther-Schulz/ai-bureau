@@ -13,7 +13,7 @@ When `coherence-audit` skill fires across Phase 3-6 work. Codifies WHEN audits r
 
 | # | When | Scope | Purpose |
 |---|---|---|---|
-| **C1** | Post-Phase-3.4 close | After 7 Pattern A protocol topics locked (substrate / adapter / sparring / audit / coordination / trust / time) | Validates Pattern A precedent set + 18-section template + per-Pattern-A cardinality variations before primitive-cluster topics extend |
+| **C1** | Post-Phase-3.4 close | After 3 Pattern A protocol topics locked (substrate / adapter / quality-gate) + 2 reclassified mechanism-class ARCH topics locked (sparring / audit). (coordination / trust / time were Pattern-A candidates but cancelled per `docs/decisions/phase-3-2-doc-organization.md` §Amendments — subsumed into substrate hooks + audit authority-binding + substrate-impl temporal semantics + adapter time-driven operations.) | Validates Pattern A precedent set + 12-required + 6-conditional template + per-Pattern-A cardinality variations before primitive-cluster topics extend |
 | **C2** | Post-Phase-3.5 close | After 4 primitive cluster + 2 cross-cutting integrator topics locked | Validates primitive clusters compose cleanly with Pattern A protocols |
 | **C3** | Phase 3.8 phase-boundary | ARCH-specific Lenses 11-15 activate (inter-layer consistency / specs traceability / architectural-protocol completeness / DR coverage gap / granularity match) | Comprehensive corpus-set audit before Phase 4 starts |
 | **C4** | Phase 6 pre-implementation | Architectural-validation pass before implementation work begins; Lens 17 (schema completeness) activates | Catches architectural drift accumulated across Phase 4-5 |
@@ -29,7 +29,7 @@ When `coherence-audit` skill fires across Phase 3-6 work. Codifies WHEN audits r
 
 ## Why this cadence
 
-- Phase 3.4 mid-audit (after 5 of 7 topics) deferred — Pattern A pattern already validated by 3 topics; mid-phase audit before C1 = cost without benefit
+- Phase 3.4 mid-audit deferred — Pattern A pattern already validated by the 3 Pattern A topics; mid-phase audit before C1 = cost without benefit
 - Phase 5 close audit skipped — ROADMAP is concise; subsumed into C4 (Phase 6 pre-implementation) which validates ROADMAP + spec planning together
 - Phase 4 close audit subsumed into C4 — DR-set audit (Lens 16 decision-linkage / constraint-flow tracking) activates within C4 unless 5+ DR trigger fires mid-Phase-4
 - Per-DR audit rejected — would fire too frequently; trigger condition (5+ DRs) catches accumulation

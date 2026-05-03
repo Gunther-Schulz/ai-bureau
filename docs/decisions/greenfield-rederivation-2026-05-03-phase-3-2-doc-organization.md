@@ -2,7 +2,7 @@
 
 ## Status
 
-PROPOSED — Wave-1 findings persisted; user-reconciliation phase pending. Status will transition to ACCEPTED-WITH-FINDINGS post-reconciliation.
+ACCEPTED-WITH-FINDINGS — user-reconciliation complete; cascade applied per P1-P10 in single tightly-coupled commit per `MAINTENANCE.md` cascade discipline + `CLAUDE.md` M3 (sub-agent-first cascade).
 
 Audit-pattern: greenfield-rederivation v0.1.0 (`plugin/skills/greenfield-rederivation/SKILL.md`). Per-cluster scope; per-artifact Writer + Reviewer sub-agent dispatch; tiered-divergence verdict scheme; user-decision per divergence.
 
@@ -188,12 +188,28 @@ Mode 2 upfront-known composite (per `decision-design-sharpening` v0.6.0): 2 tigh
 
 ## Constraints flowing to downstream commitments
 
-(Pending user-reconciliation per divergence.)
+User-reconciliation complete. Cascade applied per position commits P1-P10 in single tightly-coupled commit:
+
+- **P1** (REVISE-LOCKED, T3 Lens 5 v0.2.1 cleanup) → `docs/decisions/phase-3-2-doc-organization.md` Status header / Locked-line / Sub-decision 1 body / Constraints flowing section: stripped session-N + AMENDED-session-N + amendment-narrative breadcrumbs + strikethrough markup; replaced with clean current-shape claims; load-bearing forward-reference to greenfield-rederivation-pause Step 3 retained per Lens 5 v0.2.1 strip-vs-keep test
+- **P2** (REVISE-LOCKED, T3 cascade-fix) → `disciplines/09-coherence-audit-cadence.md:16` C1 row: 7-Pattern-A-topic claim → 3 Pattern A + 2 reclassified mechanism-class ARCH topics + cancellation note; "Why this cadence" 5-of-7 reference also updated
+- **P3** (AMEND-LOCKED, T3 cascade-list completion) → `docs/decisions/phase-3-2-doc-organization.md` §Amendments: added `disciplines/09-coherence-audit-cadence.md` to cascade-related file changes list
+- **P4** (AMEND-LOCKED, T2 LOAD-BEARING cascade-miss) → `docs/decisions/doc-organization-templates.md` Lock 1: rewrote 18-section flat list to canonical 12 common-required + 6 protocol-specific-conditional structure per `MAINTENANCE.md:226-267`; included anchor + greenfield-tested provenance note; future Pattern B/C clause preserved
+- **P5** (AMEND-LOCKED, T3 generalization; folded into P4) → Lock 1 §8 "Substrate-internal vs skill-side audit emission" → "Substrate-internal vs skill-side mechanics"; §11 "Substrate error categories" → "Per-protocol error categories"
+- **P6** (REVISE-LOCKED, T3 Lens 5 self-application) → `docs/decisions/doc-organization-templates.md` Status field: stripped session-N + sharpen-tool-reference narrative; replaced with clean "ACCEPTED."; sharpen v0.9.0 + 2-round reference preserved in pre-existing §Sharpening provenance (canonical meta-home)
+- **P7** (REVISE-LOCKED, T3 migration-trajectory strip; folded into P4) → Lock 1 §16 "Decision-design provenance" header parenthetical changed from "(archived sources only; meta-provenance moves to DR)" → "(INPUT-citation only)"
+- **P8** (AMEND-LOCKED, T3 Pareto-improving expansion; folded into P4) → Lock 1 per-protocol section count expectations added: substrate=18 (12+6) / adapter=15-16 (12+3-4) / quality-gate=13-14 (12+1-2)
+- **P9** (AMEND-LOCKED, T3 cross-ref completion) → `docs/decisions/doc-organization-templates.md` top-level Related list: added `disciplines/10-greenfield-evaluation.md` cross-reference
+- **P10** (AMEND-LOCKED, T3 Pareto-improving expansion; folded into P4) → Lock 1 added section-ordering rationale paragraph (foundation-up + reader-cognitive-flow + provenance-meta-home composition)
+- **Cascade-flowing edit** (cascades from P4) → Lock 1's "Future ARCH topic content" constraint also updated from "18-section template" reference → "two-tier template (12 common-required + 6 protocol-specific-conditional)"
+
+Cascade discipline preserved: single tightly-coupled commit; all cascaded files + per-execution DR status transition + this Constraints flowing summary in same commit; no main-session bypass of `CLAUDE.md` M3 sub-agent-first routing.
 
 ## Files touched
 
-- `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-2-doc-organization.md` (this DR — to be created PROPOSED → Wave-1 findings persisted → user-reconciled → cascade-completion + status transition to ACCEPTED-WITH-FINDINGS or ACCEPTED-VALIDATED)
-- (Pending; cluster artifacts touched only if user approves REVISE-LOCKED / AMEND-LOCKED divergences)
+- `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-2-doc-organization.md` (this DR — Status: PROPOSED → ACCEPTED-WITH-FINDINGS; Constraints flowing populated with concrete cascade-applied summary; Files touched populated)
+- `docs/decisions/phase-3-2-doc-organization.md` (P1 + P3 cascade — Status header + Sub-decision 1 body + Constraints flowing + §Amendments cleanup)
+- `disciplines/09-coherence-audit-cadence.md` (P2 cascade — C1 checkpoint row + "Why this cadence" updated for current Pattern A topic catalog)
+- `docs/decisions/doc-organization-templates.md` (P4 + P5 + P6 + P7 + P8 + P9 + P10 cascade — Status field cleanup + Related list expansion + Lock 1 rewrite to two-tier template + Constraints flowing template-shape correction)
 
 ## Revisit triggers
 
