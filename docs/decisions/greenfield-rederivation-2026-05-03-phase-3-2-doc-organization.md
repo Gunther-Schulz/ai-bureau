@@ -2,7 +2,7 @@
 
 ## Status
 
-PROPOSED. Cluster definition + Wave decomposition persisted. Writer wave not yet dispatched.
+PROPOSED — Wave-1 findings persisted; user-reconciliation phase pending. Status will transition to ACCEPTED-WITH-FINDINGS post-reconciliation.
 
 Audit-pattern: greenfield-rederivation v0.1.0 (`plugin/skills/greenfield-rederivation/SKILL.md`). Per-cluster scope; per-artifact Writer + Reviewer sub-agent dispatch; tiered-divergence verdict scheme; user-decision per divergence.
 
@@ -51,21 +51,67 @@ What this audit aims to surface (per skill §Reviewer brief — 4 lenses, applie
 
 ## Decision
 
-Pre-execution. Per-artifact verdicts + tiered findings populated post-Wave-1.
+Wave-1 findings persisted; user-reconciliation phase pending (status remains PROPOSED until reconciliation completes).
 
 ### Headline result
 
-(Pending Wave-1 + Reviewer wave + main-session aggregation.)
+**0 T1 (framework-shape-changing) findings. 2 T2 (topic-rewriting) findings — both on doc-organization-templates.md Lock 1 (Pattern A topic template cascade-miss between locked DR and MAINTENANCE.md). ~13 T3 (mechanical edit) findings — concentrated in Lens 5 v0.2.1 self-application gaps + cascade-miss to disciplines/09 + Pareto-improving expansions.**
+
+Core architectural commitments survive greenfield re-derivation under sub-agent + Writer-Reviewer orchestration. The load-bearing finding is **cascade-miss**: MAINTENANCE.md was revised to current 12-required + 6-conditional Pattern A topic template (post-greenfield-rederivation-pause Step 4 cascade), but the source-of-truth DR (`doc-organization-templates.md` Lock 1) was never amended to match. This is exactly the fault mode greenfield-rederivation is designed to catch — drift accumulated under prior cascade-load conditions before M1-M8 + Lens 5 v0.2.1 codification.
 
 ### Per-artifact verdict table
 
-(Pending.)
+| DR | Per-artifact verdict | Tier | Reviewer summary |
+|---|---|---|---|
+| phase-3-2-doc-organization | GREENFIELD-VALID on substance (4 sub-decisions confirm-locked); NEEDS-REVISION on Lens 5 v0.2.1 provenance breadcrumbs in Status header + Sub-decision 1 body + strikethrough markup in canonical content; NEEDS-REVISION on disciplines/09 cascade-miss (stale 7-Pattern-A claim post-Step-3 amendment) + amendment-list completeness | T3 (×5) | Substance survives; mechanical Lens-5 cleanup + 1 cascade-fix to disciplines/09 |
+| doc-organization-templates | GREENFIELD-VALID on Lock 2 (DR template) + Lock 3 (memory consolidation rules); NEEDS-REVISION on Lock 1 (Pattern A topic template cascade-miss vs MAINTENANCE.md current 12+6 structure); NEEDS-REVISION on multiple Lens 5 self-application gaps (Status field + §16 migration breadcrumb) + Pareto-improving expansions (per-protocol section counts; Discipline 10 cross-ref; section-ordering rationale) | T2 (×2 — Lock 1 cascade-miss); T3 (×8) | Lock 1 needs amendment to match MAINTENANCE.md current template; Lock 2/3 substance confirms-locked; ~10 mechanical edits |
 
-### Position commits per divergence
+### Position commits per divergence (main-session AI commits per `feedback_judgment_and_automate.md`)
 
-(Pending Reviewer wave + main-session position commitment per `feedback_judgment_and_automate.md`.)
+#### On phase-3-2-doc-organization.md (Reviewer-1 findings)
 
-### Verdict scheme reference (per skill §Verdict scheme)
+**P1 — Lens 5 v0.2.1 provenance breadcrumbs (Status header + Sub-decision 1 body + strikethrough markup)**: REVISE-LOCKED (T3 mechanical). Strip "AMENDED session 17" / "session 16 (2026-05-02); amended session 17 (2026-05-02)" / "(as locked session 16; amended session 17 per greenfield-rederivation cascade)" / strikethrough `~~8 Pattern A protocol topics~~ → **3 Pattern A**` patterns from Status header + Sub-decision 1 body + Constraints flowing section. Replace strikethrough with clean current shape. Keep load-bearing forward-reference "Amended per greenfield-rederivation-pause.md Step 3" without session-N tag. Full amendment narrative stays in §Amendments (the meta-home). Per Lens 5 v0.2.1 strip-vs-keep test: removing breadcrumbs does not confuse a fresh reader's understanding of WHAT THE DECISION IS.
+
+**P2 — disciplines/09 cascade-miss (stale 7-Pattern-A topic catalog)**: REVISE-LOCKED (T3 mechanical; cascade-fix). `disciplines/09-coherence-audit-cadence.md:16` C1 row reads "After 7 Pattern A protocol topics locked (substrate / adapter / sparring / audit / coordination / trust / time)" — stale post-session-17 amendment which reduced Pattern A catalog to 3 (substrate / adapter / quality-gate) + reclassified sparring/audit as mechanism-class + cancelled coordination/trust/time. Update C1 row to reflect current 3 Pattern A + 2 reclassified mechanism-class topics + cancellations.
+
+**P3 — DR amendment cascade-list completeness**: AMEND-LOCKED (T3 mechanical). Add `disciplines/09-coherence-audit-cadence.md` to §Amendments cascade-list in phase-3-2-doc-organization.md (currently missing per CM-B finding).
+
+#### On doc-organization-templates.md (Reviewer-2 findings)
+
+**P4 — Lock 1 Pattern A topic template cascade-miss (LOAD-BEARING T2)**: AMEND-LOCKED (T2 topic-rewriting). Lock 1 currently shows ORIGINAL 18-section flat list; MAINTENANCE.md `:226-267` has REVISED 12-required + 6-conditional template (post-greenfield-rederivation-pause Step 4). Amend Lock 1 to match MAINTENANCE.md current structure: 12 required sections (in foundation-up order: topic scope+frontmatter / Surface contract / per-implementation aspect / Selection mechanics / tri-aspect reconciliation / Composition with framework primitives / Cardinality+lifecycle / Pre-implementation operational concerns forward-ref / Watch-list / Decision-design provenance INPUT-only / Phase routing / Cross-references) + 6 protocol-specific-conditional sections (common-surface boundary / substrate-internal-vs-skill-side mechanics / Boot+shutdown phase ordering / per-protocol error categories / transport variation+per-tier mapping / deployment-tier awareness). Add §Amendments entry tracking the cascade-miss closure. Source-DR-as-canonical-decision-record discipline: DR reflects current locked template, not original-then-stale 18-section list.
+
+**P5 — Section naming generalization (cascades from P4)**: AMEND-LOCKED (T3 mechanical). Rename Lock 1 §8 from "Substrate-internal vs skill-side audit emission" (substrate-specific) to general Pattern-A wording per MAINTENANCE.md `:256` ("Substrate-internal vs skill-side mechanics"). Rename §11 from "Substrate error categories" to "Per-protocol error categories" per MAINTENANCE.md `:258`. Generalization required for Pattern-A-pluralism (multiple protocols beyond substrate use the template).
+
+**P6 — Lens 5 v0.2.1 self-application failure in Status field**: REVISE-LOCKED (T3 self-application). Strip "session 16 (2026-05-02); 2-round generic sharpen (per `plugin/skills/sharpen/SKILL.md` v0.9.0) on the proposal itself; user-authorized execution" from Status `:3`. Move sharpening-tool reference (`sharpen v0.9.0` + 2-round) to §Sharpening provenance (the canonical meta-home). Strip date+session+narrative breadcrumbs entirely (live in HANDOFF + git log). Self-application: this DR codifies provenance hygiene; its own Status must satisfy the rule it codifies.
+
+**P7 — §16 migration-trajectory breadcrumb strip**: REVISE-LOCKED (T3 mechanical). Strip "(archived sources only; **meta-provenance moves to DR**)" parenthetical from Lock 1 §16 Decision-design provenance section name. "Meta-provenance moves to DR" is migration-trajectory (where it WAS vs WHERE IT IS); fresh reader doesn't need this to understand WHAT THE SECTION IS. Keep clean "Decision-design provenance (INPUT-citation only)".
+
+**P8 — Per-protocol section count expectations sync**: AMEND-LOCKED (T3 Pareto-improving expansion). Lock 1 currently silent on per-protocol section count expectations; MAINTENANCE.md `:262-265` provides per-protocol counts (substrate = 18 = 12 required + 6 conditional; adapter = 15-16 = 12 required + 3-4 conditional; quality-gate = 13-14 = 12 required + 1-2 conditional). Sync into Lock 1.
+
+**P9 — Add Discipline 10 cross-reference**: AMEND-LOCKED (T3 mechanical; cascade-symmetry). Add `disciplines/10-greenfield-evaluation.md` to Lock 2 §16 Related list. Discipline 10 (`disciplines/10-greenfield-evaluation.md:33`) explicitly extends Lens 5 v0.2.1 to ARCH topics + DR §16 — load-bearing for this DR's own §16 wording rule. Currently missing.
+
+**P10 — Section ordering rationale (Pareto-improving expansion)**: AMEND-LOCKED (T3 Pareto-improving expansion). Lock 1 currently provides flat numbered list with no rationale; Writer derivation surfaces design rationale (foundation-up + reader-cognitive-flow + provenance-meta-home compose). Add rationale prose. Strengthens template-design defensibility without changing content.
+
+**P11 — Memory consolidation 5-target vs 4-target target inventory**: KEEP-LOCKED. Writer derivation includes GLOSSARY as 5th absorption target; locked DR enumerates 4 (DISCIPLINES + MAINTENANCE TOP-LEVEL DESIGN PRINCIPLES + MAINTENANCE TOP-LEVEL SCOPE + ARCHITECTURE cross-cutting). Locked DR captures what actually fired in the session-16 consolidation event; GLOSSARY route is theoretically valid (per primitive-vocabulary absorption) but didn't fire in THIS consolidation. Both legitimate; locked is concrete event-record (HISTORICAL-fact), Writer is broader-rule. Locked stands.
+
+**P12 — Discriminator under-specification**: KEEP-LOCKED. Reviewer flagged Writer derivation as gap-in-Writer (under-specified runtime discriminator); locked DR `:101` provides 3-category discriminator (DISCIPLINE / BEHAVIORAL / architectural-commitment). Writer's derivation gap, not locked drift. Locked stands.
+
+### v1 vs v2 audit comparison + cluster-execution-pair signal
+
+This is the second cluster-execution of v2 greenfield-rederivation skill v0.1.0 (after Phase 3.1 4-DR cluster). Cross-execution signal:
+
+- **Phase 3.1 (4 DRs)**: 0 T1 + 0-2 T2 (borderline) + ~10 T3. Concentrated in Lens 5 + Lens 8 (pioneer-instance leakage).
+- **Phase 3.2 (2 DRs)**: 0 T1 + 2 T2 + ~13 T3. T2 finding is cascade-miss (locked DR not amended after MAINTENANCE.md was revised); T3 concentrated in Lens 5 v0.2.1 self-application gaps + cascade-miss to disciplines/09 + Pareto-improving expansions.
+
+**Pattern emerging across both executions**: corpus survives greenfield-derivation chain on substantive architecture (0 T1 in either cluster); drift concentrates in provenance hygiene (Lens 5 v0.2.1 codification post-dates locked artifacts) + cascade gaps (downstream files not updated when upstream amends). M1-M8 mitigations from session 18 close the cascade-load fault surface going forward; the v2 audit campaign closes the legacy fault surface artifact-by-artifact.
+
+**v2 skill empirical-evidence accumulation**: with this execution complete, v0.1.0 has TWO cluster-execution evidence base — meeting the ≥2-execution amendment threshold per skill §Status. v0.1.1 amendments can be considered post-this-execution. Reviewer-1's minor non-blocking observation from Phase 3.1 (section-name "Sharpening rounds metadata" → canonical "Sharpening provenance" normalization) accumulates with this cluster's similar Lens 5 self-application findings — pattern is "Lens 5 v0.2.1 retro-application across pre-codification artifacts."
+
+### User-reconciliation phase (pending)
+
+Per skill §Post-cluster step 2 (decision phase = user approval per `DISCIPLINES.md` working procedure). User decides per P1-P12. Status will transition PROPOSED → ACCEPTED-WITH-FINDINGS post-decision. Cascade execution (P1-P10 if approved) delegated to fresh-context sub-agent per `CLAUDE.md` M3 + skill §Cascade execution.
+
+Verdict scheme reference (per skill §Verdict scheme):
 
 | Per-artifact verdict | Meaning |
 |---|---|
@@ -107,11 +153,27 @@ Each Writer brief explicitly excludes reading the artifact under audit during de
 
 ### Wave-1 dispatch summary (executed)
 
-(Pending.)
+**Writer wave**: 2 sub-agents dispatched in parallel (single message; 2 Agent tool invocations). Each Writer in fresh context with focused brief (artifact path; required reads list; explicit DO-NOT-READ list including artifact-under-audit + peer cluster artifact + v1 findings + prior v2 cluster findings + ARCHITECTURE.md §4 + arch/* + memory/*). Each Writer derived greenfield content for the artifact's stated scope (4 sub-decisions for phase-3-2; 3 locks for doc-organization-templates) from MAINTENANCE first-principles + 5-layer doc model + DISCIPLINES + GLOSSARY substrate + ≥3 cluster-relevant profile files. Both Writers returned greenfield-derivation summaries with file:line citations + Ralph self-check confirmation + explicit synthesis-vs-citation flagging.
+
+**Reviewer wave**: 2 sub-agents dispatched in parallel against respective Writer outputs (sequenced after Writer wave; Reviewer needs Writer derivation as input). Each Reviewer in fresh context with brief (locked-artifact path + inline Writer derivation + 4-lens framework: Lens 5 v0.2.1 provenance hygiene + Lens 8 pattern-vs-instance + Lens 9 VISION-grounding transitive + cascade-miss). Each Reviewer produced per-element verdict table + tier per finding + recommendation per finding + Ralph self-check confirmation. Reviewer-2 (doc-organization-templates) surfaced the load-bearing T2 cascade-miss between locked DR and MAINTENANCE.md current template.
 
 ### Per-sub-agent Ralph self-check verification (per skill §Termination criteria)
 
-(Pending; populated as sub-agents return.)
+| Sub-agent | Required-reads complete | Discipline 10 applied | Avoided locked-artifact / peer-cluster / v1-findings / downstream reads | Cited specific MAINTENANCE/GLOSSARY/VISION refs |
+|---|---|---|---|---|
+| Writer-1 (phase-3-2-doc-organization) | ✅ | ✅ | ✅ | ✅ (50+ citations; transitive grounding for META work explicit) |
+| Writer-2 (doc-organization-templates) | ✅ | ✅ | ✅ | ✅ (50+ citations; Lens 5 self-application discipline applied to derivation output) |
+| Reviewer-1 (phase-3-2-doc-organization) | ✅ (locked + Writer + lenses) | n/a (Reviewer applies lenses) | n/a (Reviewer reads locked) | ✅ |
+| Reviewer-2 (doc-organization-templates) | ✅ (locked + Writer + lenses + MAINTENANCE current template) | n/a | n/a | ✅ |
+
+**Main-session Ralph self-check** (per skill §Ralph self-check at apparent completion + `CLAUDE.md` M7):
+- Read SKILL.md fresh at invocation: ✅
+- Each Writer + Reviewer Ralph self-check confirmed at completion: ✅ (4/4)
+- Avoided executing greenfield-derivation in main session: ✅ (orchestrator role only)
+- Dispatched Reviewer separate from Writer per artifact: ✅ (2+2 in fresh contexts)
+- Persisted Wave-1 findings to per-execution DR before next Wave: ✅ (this commit; single Wave for this 2-artifact cluster)
+- Cascade-execution discipline preserved: pending user-reconciliation; cascade delegated to fresh-context sub-agent per M3 + skill §Cascade execution
+- Provenance-hygiene check on this DR: ✅ (Decision section holds shape-only verdict claims; trajectory + Wave dispatch summary in Sharpening provenance per `MAINTENANCE.md:288`; no session-N breadcrumbs in canonical content)
 
 ### Decomposition mode
 
