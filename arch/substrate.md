@@ -1,7 +1,7 @@
 ---
 title: Substrate
-topic-cluster: Pattern A protocol topics (#1 of 8)
-status: drafted (Phase 3.4 Round 2; locked pending optional Round 3 trigger)
+topic-cluster: Pattern A protocol topics (#1 of 3)
+status: locked
 ---
 
 # Substrate
@@ -80,17 +80,9 @@ The Surface contract is articulated here (Mode 4 conceptual; this topic) and enc
 
 ## 3. Common-surface boundary criteria
 
-Decision rule for "in Surface" vs "in per-impl extension" — applied each time a new capability is considered:
+**N/A** — substrate has a single unified Surface (per §2 seven capability categories). The Pattern A protocol topic template's §3 (per `MAINTENANCE.md` Pattern A protocol topic template §3 applicability) applies when a protocol has multi-class Surface (e.g., adapter's per-integration-class Surfaces). Substrate's Surface-vs-per-impl-extension boundary is covered in §4 Per-implementation aspect (per-substrate extension Protocols pattern).
 
-| Decision criterion | Verdict | Examples |
-|---|---|---|
-| Both/all candidate substrates support natively with comparable shape | Surface | run_agent, register_mcp_server, request_permission, structured output validation |
-| One substrate native + others can hand-roll equivalent | Surface w/ substrate-conditional impl | register_mcp_server (Claude Agent SDK supports in-process; MS AF subprocess only with audit-emitted fallback) |
-| Only one substrate supports natively; others can't equivalent | Per-impl extension Protocol | Subagent primitives (Claude Agent SDK only); workflow engine (MS AF only) |
-| Each substrate has substantially different shape | Per-impl extension Protocols | Compaction strategies (Claude Agent SDK = single hook; MS AF = 6+ strategies) |
-| Future-only feature not yet supported by either | Don't add yet (per no-defer principle's external-info-test) | Wait for substrate to ship |
-
-The boundary criteria operate at the SURFACE-DESIGN moment (decision-design phase per `decision-design-sharpening`); revisited when new substrate candidate emerges (per Watch-list §12).
+The Surface-vs-extension decision rule (applied each time a new substrate capability is considered) lives with §4's per-impl extension Protocols pattern: capabilities supported natively with comparable shape across all substrates → Surface; one substrate native + others hand-roll → Surface with substrate-conditional impl; only one substrate supports natively → per-impl extension Protocol; substantially different shape per substrate → per-impl extension Protocols; future-only features → don't add yet (per no-defer principle's external-info-test).
 
 ## 4. Per-implementation aspect
 
@@ -185,6 +177,7 @@ Specialist Pattern B = bipartite (DEFINITION + INSTANCE). Substrate Pattern A = 
 | `workspace` | Workspace selects exactly one substrate via `workspace.md`; substrate is what workspace runs ON |
 | `Owner B scope` | Running substrate Instance bound to workspace deployment (Owner B) |
 | `protocol (architectural)` | Substrate Surface is one of the framework's architectural Protocols (Pattern A) |
+| `actor` | Substrate's running Instance IS the `actor_kind: ai_runtime` (per `glossary/actor.md`); 1:1 cardinality (1 ai_runtime actor per workspace = 1 substrate Instance per workspace) |
 | `adapter` | Distinct mechanism category — substrate hosts the runtime; adapter integrates external systems via auth-bound channels. Both Pattern A protocols. |
 | `audit` | Substrate emits substrate-internal audit events (§8); skill emits via MCP audit gate; both writes converge in audit-trail |
 | `event` | Substrate-emitted events are first-class events in audit-trail (architectural-event kinds: see §8) |
@@ -303,6 +296,7 @@ Substrate operations may fail in named architectural categories. Each Implementa
 | `RegistrationConflict` | Registration failure (MCP server name collision, transport unavailable, specialist id collision) |
 | `AgentRunFailure` | Agent loop failure; status field on AgentRunResult also captures finer-grain failure mode |
 | `StructuredOutputValidation` | Auto-retry exhausted; output doesn't match declared schema |
+| `CrossSubstrateMigration` | Errors during workspace serialization/deserialization across substrate boundaries (backup→restore on different substrate; workspace-format migration). Audit-trail integrity check fires on cross-substrate restore (per `profiles/G-composability-gate.md` lines 154-155 cross-substrate consumption + backup-restore-migration round-trip scenarios). Sub-categories: `WorkspaceFormatIncompatible` / `SubstrateMetadataLoss` / `AuditTrailIntegrityViolation` |
 
 Per-shape error semantics:
 - **practitioner-shape**: fail-closed (defensibility-critical; substrate failures must surface to practitioner; no silent degradation)

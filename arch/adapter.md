@@ -1,7 +1,7 @@
 ---
 title: Adapter
-topic-cluster: Pattern A protocol topics (#2 of 8)
-status: drafted (Phase 3.4 Round 2; locked)
+topic-cluster: Pattern A protocol topics (#2 of 3)
+status: locked
 ---
 
 # Adapter
@@ -188,7 +188,7 @@ Adapter as tri-aspect Pattern A primitive:
 | **Per-instance config** | Workspace-owned | At Owner B; declared in workspace.md; mutable via re-binding |
 | **Binding declarations** (which adapters bound) | Workspace-owned | At Owner B; declared in workspace.md |
 
-Adapter-coupling-impossible-by-construction (analog to substrate-coupling-impossible per `arch/substrate.md` §6): skill code targeting per-class Surface is portable across Implementations within that class; skill code reaching Implementation-internal primitives is impl-pinned by construction.
+Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 "make wrong shapes impossible, not solvable": skill code targeting per-class Surface is portable across Implementations within that class; skill code reaching Implementation-internal primitives is impl-pinned by construction. The same structural-typing-plus-isinstance-check mechanism that protects substrate (per `arch/substrate.md` §6) protects adapter — one principle, two applications.
 
 ### Distinct from substrate's tri-aspect
 
@@ -220,15 +220,107 @@ The cardinality variation IS the architectural distinction between substrate Pat
 | `time` | Time-driven adapter operations (scheduled email send; periodic accounting sync) compose with `arch/time.md` |
 | `quality-gate` | Quality-gate observability via adapter's audit-event emission + per-class quota/rate-limit metrics; shape policy declares per-shape adapter-action enforcement |
 
-## 8. Per-action audit emission (skill-side via MCP gate)
+## 8. Substrate-internal vs skill-side audit emission
 
-### Architectural commitment
+**N/A** — per Pattern A template `MAINTENANCE.md:256`, §8 is substrate-specific (substrate registers MCP audit gate; substrate has dual-emission paths — substrate-internal direct + skill-side via MCP gate — to resolve MCP-gate-circularity). Adapter does not register the MCP audit gate; adapter operations are skill-side invocations of adapter primitives. Adapter has no circularity issue and no dual-emission framing to discuss — adapter actions emit audit events via MCP audit gate (skill-side) only.
 
-Adapter actions emit audit events via MCP audit gate (skill-side) — NOT through substrate-internal direct emission. Distinct from substrate's MCP-gate-circularity resolution.
+Per-class audit event-kind catalog (architectural enumeration of adapter-emitted events, skill-side via MCP gate) lives in §11 Per-integration-class error categories alongside the per-class error refinements (both are per-class architectural enumerations).
 
-Reason: adapters run WITHIN substrate's execution (per §7 composition); adapter operations are skill-invocations of adapter primitives, not substrate-internal architectural events. Adapters don't have circularity issue (adapter doesn't register MCP audit gate; substrate does).
+## 9. Cardinality + lifecycle
 
-### Per-class event-kind catalog (architectural-level)
+Adapter follows multi-instance cardinality (distinct from substrate's singular per workspace) — per Pattern A template `MAINTENANCE.md` §9 common-required section.
+
+### Cardinality
+
+(Per §5 Selection mechanics; restated here for template-fidelity.)
+
+- N adapter Instances active per workspace (typically 3-10)
+- Typically 1 per integration class (occasionally N when multi-account scenarios apply per W4)
+- M Implementations per class in Framework C catalog
+- 5 per-class Surfaces in framework (Email / Accounting / MCP-Server / A2A-Peer / File-Sync; future per ecosystem)
+
+### Lifecycle ownership
+
+- **Creator**: framework-runtime (workspace activation orchestrator) — instantiates one Implementation class per active workspace.md adapter binding at workspace boot
+- **Owner**: workspace deployment runtime (Owner B scope membership; per-instance state at Owner B)
+- **Destroyer**: framework-runtime at workspace shutdown (per-binding shutdown in reverse declaration order; see §10 phase ordering)
+
+### Mutability
+
+- **Per-instance config** mutable via re-binding mid-workspace-life (hot-swap; distinct architectural commitment from substrate's deploy-time-bound)
+- **Auth tokens** persist across substrate restart at Owner B with security boundary (encrypted-at-rest per shape policy — practitioner-shape mandates per defensibility; autonomous-business per business policy; personal-OS per user preference)
+- **Adapter-internal state** (circuit state, quota counters, threading caches) per §6 adapter-internal vs adapter-external table; per-impl persistence semantics
+
+### Cross-session persistence
+
+Per-impl persistence semantics declare which adapter-instance-state survives substrate restart vs which resets. Auth tokens persist (encrypted-at-rest per shape); circuit state typically resets on substrate restart unless per-impl declares persistence; quota counters per-class quota-model semantics.
+
+### Adapter Implementation versioning
+
+Semver-like:
+- **Major**: breaking changes to per-class Surface satisfaction OR auth model OR config schema
+- **Minor**: new capabilities; backward-compatible
+- **Patch**: bug fixes; no API changes
+
+Each Implementation declares: version + min-substrate-version + compat-substrate-versions + min-class-Surface-version. Workspace.md adapter binding declares: integration class + Implementation id + min-version constraint + (optional) max-version constraint.
+
+### Hot-swap migration (cross-session)
+
+Per §5 Re-binding semantics, adapter Implementations re-bindable mid-workspace-life. Migration mechanics:
+1. New Implementation bound; both old + new active during transition window
+2. In-flight operations on old drain to completion (or quarantine if past drain timeout)
+3. Workflow_instances using adapter notified; per-impl re-binding compatibility check
+4. Old Implementation shut down per §10 lifecycle phase ordering
+5. `adapter_rebound` event emitted with old + new identities
+
+Breaking-change migration (major version): explicit migration path declared; workflow_instances may pause until migration complete.
+
+## 10. Lifecycle phase ordering + auth refresh (adapter-conditional)
+
+Per Pattern A template `MAINTENANCE.md:257`: "Boot + shutdown phase ordering" is substrate-specific by template default; adapter has multi-instance lifecycle distinct from substrate's singular boot, plus auth-refresh semantics — both warrant adapter-conditional §10 detail.
+
+### Per-class auth models
+
+| Class | Typical auth model |
+|---|---|
+| **Email** | OAuth (gmail / outlook); SMTP basic auth (legacy); IMAP password |
+| **Accounting** | OAuth (modern APIs); API key (Fastbill / Lexware); shared secret |
+| **MCP-Server** | None (in-process); subprocess-trust; HTTP bearer / mTLS |
+| **A2A-Peer** | mTLS (federation); shared secret (initial handshake); capability-token |
+| **File-Sync** | OAuth (cloud storage); SSH key (git); credential pair |
+
+Each Implementation declares its specific auth model; META-Surface validates the declaration.
+
+### Auth-refresh lifecycle (architectural commitment)
+
+- **Proactive refresh**: refresh tokens at 80% of expiry window (avoid auth-expired-mid-operation)
+- **Reactive refresh**: on auth-expired error, refresh + retry once before propagating failure
+- **Refresh-failure handling**: emit `adapter_auth_expired` event; circuit-breaker may open; shape policy declares per-shape escalation (practitioner-shape blocks workflow; personal-OS may continue with degraded auth)
+
+### Per-instance boot sequence (per workspace)
+
+1. Workspace boot triggers adapter binding orchestration (per workspace.md adapter bindings list)
+2. Per-binding (in declaration order): instantiate Implementation; load auth state; validate config; `from_config(config)` boot
+3. Per-binding emit `adapter_started` audit event
+4. Per-binding `is_ready` becomes True; workspace's overall boot waits for all adapters ready
+5. Adapter operations now accessible to skills via per-class Surface
+
+### Per-instance shutdown sequence (per workspace)
+
+1. Workspace shutdown triggers per-adapter drain
+2. Per-binding (in REVERSE declaration order): drain in-flight adapter operations
+3. Per-binding stop accepting new operations
+4. Per-binding flush adapter-internal state (auth tokens persisted; circuit state captured; threading caches cleaned)
+5. Per-binding emit `adapter_stopped` audit event
+6. Per-binding shutdown returns
+
+Reverse-order drain ensures adapters with dependencies on each other (e.g., email adapter depending on auth adapter) drain in correct order.
+
+## 11. Per-integration-class error categories + audit event-kind catalog (adapter-conditional)
+
+Per Pattern A template `MAINTENANCE.md:258`: per-protocol error semantics differ; adapter has cross-class architectural categories + per-class refinements + cross-class operational concerns (quota / rate-limit / circuit-breaker) — all warrant adapter-conditional §11 detail. Per-class audit event-kind catalog (skill-side emission via MCP gate; relocated from §8 per template applicability) co-located here as the per-class architectural enumerations parallel structurally.
+
+### Per-class audit event-kind catalog (architectural-level)
 
 Per-integration-class event kinds (architectural enumeration; per-event-shape Pydantic schema → Phase 6):
 
@@ -252,52 +344,7 @@ Cross-class architectural events (apply to any adapter class):
 
 ### Composition with audit-trail integrity
 
-Per `profiles/L8-auditor-reviewer-posthoc.md` line 29 "Audit-trail integrity must survive intact across deployments / migrations": adapter-emitted events are first-class in audit-trail along with substrate-emitted events (per `arch/substrate.md` §8) and skill-claim events. Auditor reads unified event stream for reasoning chain reconstruction.
-
-## 9. Auth + lifecycle semantics (architectural-level)
-
-### Per-class auth models
-
-| Class | Typical auth model |
-|---|---|
-| **Email** | OAuth (gmail / outlook); SMTP basic auth (legacy); IMAP password |
-| **Accounting** | OAuth (modern APIs); API key (Fastbill / Lexware); shared secret |
-| **MCP-Server** | None (in-process); subprocess-trust; HTTP bearer / mTLS |
-| **A2A-Peer** | mTLS (federation); shared secret (initial handshake); capability-token |
-| **File-Sync** | OAuth (cloud storage); SSH key (git); credential pair |
-
-Each Implementation declares its specific auth model; META-Surface validates the declaration.
-
-### Auth-refresh lifecycle (architectural commitment)
-
-- **Proactive refresh**: refresh tokens at 80% of expiry window (avoid auth-expired-mid-operation)
-- **Reactive refresh**: on auth-expired error, refresh + retry once before propagating failure
-- **Refresh-failure handling**: emit `adapter_auth_expired` event; circuit-breaker may open; shape policy declares per-shape escalation (practitioner-shape blocks workflow; personal-OS may continue with degraded auth)
-
-Auth-state persistence: across substrate restart, auth tokens persist at Owner B with security boundary (encrypted-at-rest per shape policy — practitioner-shape mandates per defensibility; autonomous-business per business policy; personal-OS per user preference).
-
-### Per-instance lifecycle ordering
-
-Multi-instance lifecycle distinct from substrate's singular boot:
-
-**Boot sequence (per workspace):**
-1. Workspace boot triggers adapter binding orchestration (per workspace.md adapter bindings list)
-2. Per-binding (in declaration order): instantiate Implementation; load auth state; validate config; `from_config(config)` boot
-3. Per-binding emit `adapter_started` audit event
-4. Per-binding `is_ready` becomes True; workspace's overall boot waits for all adapters ready
-5. Adapter operations now accessible to skills via per-class Surface
-
-**Shutdown sequence (per workspace):**
-1. Workspace shutdown triggers per-adapter drain
-2. Per-binding (in REVERSE declaration order): drain in-flight adapter operations
-3. Per-binding stop accepting new operations
-4. Per-binding flush adapter-internal state (auth tokens persisted; circuit state captured; threading caches cleaned)
-5. Per-binding emit `adapter_stopped` audit event
-6. Per-binding shutdown returns
-
-Reverse-order drain ensures adapters with dependencies on each other (e.g., email adapter depending on auth adapter) drain in correct order.
-
-## 10. Per-integration-class error categories
+Per `profiles/L8-auditor-reviewer-posthoc.md` audit-trail integrity must survive intact across deployments / migrations: adapter-emitted events are first-class in audit-trail along with substrate-emitted events (per `arch/substrate.md` §8) and skill-claim events. Auditor reads unified event stream for reasoning chain reconstruction.
 
 ### Cross-class architectural categories
 
@@ -329,25 +376,6 @@ Shape policy declares per-shape adapter error escalation:
 - **autonomous-business-shape**: fail-open with alert (continuity prioritized; alert on failure; circuit-breaker may auto-recover)
 - **personal-OS-shape**: fail-open (lightweight; degradation acceptable; auto-retry with reduced verbosity)
 
-Per-class Pydantic shape → Phase 6 spec.
-
-## 11. Cross-shape policy variation
-
-Per `profiles/G-composability-gate.md` line 157: "Cross-shape consumption: practitioner-shape specialist (mandates audit-emission) used in personal-OS-shape workspace (light audit). Shape's policy bundle determines if specialist activates fully or partially."
-
-Adapter behavior is shape-policy-mediated:
-
-| Shape | Adapter audit emission | Adapter permission flow | Adapter error escalation |
-|---|---|---|---|
-| **practitioner-shape** | Per-action audit mandatory (defensibility) | HITL on send-class operations (axis-3 critical) | Fail-closed |
-| **autonomous-business-shape** | Per-action audit recommended; shape policy may relax | Permission flow per business policy (autonomy-graded) | Fail-open with alert |
-| **personal-OS-shape** | Per-action audit optional; user-preference-driven | Light permission flow; user-decision per session | Fail-open |
-| **federation-shape** | Per-action audit + cross-node-trust audit | Federation-trust-handshake-bound permission | Fail-closed within node; fail-open across nodes (pending peer recovery) |
-
-Shape policy declares per-shape adapter-action enforcement at workspace boot. Adapter Implementations themselves are shape-neutral; shape policy interprets architectural events + decisions per shape's mandate.
-
-## 12. Quota + rate-limit + circuit-breaker semantics
-
 ### Quota tracking (architectural commitment)
 
 Adapter instances track quota counters per integration-class quota model:
@@ -372,31 +400,30 @@ Quota configuration per impl + workspace.md binding (workspace may set tighter l
 
 Circuit-breaker state-changes emit `adapter_circuit_opened` / `adapter_circuit_closed` audit events.
 
-## 13. Versioning + migration
+Per-class Pydantic shape (errors + quota + circuit-breaker) → Phase 6 spec.
 
-### Adapter Implementation versioning
+## 12. Transport variation + per-tier mapping
 
-Semver-like (per archived `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 discipline + GLOSSARY-grade locked policy on versioning):
-- **Major**: breaking changes to per-class Surface satisfaction OR auth model OR config schema
-- **Minor**: new capabilities; backward-compatible
-- **Patch**: bug fixes; no API changes
+**N/A** — per Pattern A template `MAINTENANCE.md:259`, transport-variation §12 is substrate-specific (MCP-transport-variation surfaces at substrate Surface §B). Adapter operates over per-class transports declared per Implementation (e.g., email = SMTP/IMAP/MAPI/HTTP-API per impl; A2A = HTTP/gRPC per impl); transport choice is impl-internal per per-class Surface satisfaction, not a substrate-style transport-tier-mapping framework concern. Per-impl transport declared in §4 per-implementation declarations + §10 per-class auth models.
 
-Each Implementation declares: version + min-substrate-version + compat-substrate-versions + min-class-Surface-version.
+## 13. Deployment-tier awareness
 
-### Workspace.md binding constraints
+**N/A** — per Pattern A template `MAINTENANCE.md:260`, tier-awareness §13 is substrate-specific (substrate is tier-uniform Surface with per-tier behavior in impl). Adapter behavior is shape-class-shape (per §14 cross-shape policy variation) + integration-class-shape, NOT tier-shape. Per-impl tier-compatibility declared in §4 (Tier 1 / Tier 2 / Tier 3 compatibility per Implementation), but per-class Surface contracts themselves are tier-uniform.
 
-Workspace.md adapter binding declares: integration class + Implementation id + min-version constraint + (optional) max-version constraint.
+## 13a. Cross-shape policy variation (adapter-specific appendix)
 
-### Hot-swap migration
+Per `profiles/G-composability-gate.md` line 157: "Cross-shape consumption: practitioner-shape specialist (mandates audit-emission) used in personal-OS-shape workspace (light audit). Shape's policy bundle determines if specialist activates fully or partially."
 
-Per §5 Re-binding semantics, adapter Implementations re-bindable mid-workspace-life. Migration mechanics:
-1. New Implementation bound; both old + new active during transition window
-2. In-flight operations on old drain to completion (or quarantine if past drain timeout)
-3. Workflow_instances using adapter notified; per-impl re-binding compatibility check
-4. Old Implementation shut down per §9 lifecycle ordering
-5. `adapter_rebound` event emitted with old + new identities
+Adapter behavior is shape-policy-mediated. (Appendix-slot: this content is load-bearing for adapter but doesn't fit a Pattern A template numbered section — substrate's tier-shape variation is template §13; adapter's shape-class variation is adapter-specific. Surfaced as §13a appendix per `MAINTENANCE.md` cascade discipline + per-execution DR A5 finding.)
 
-Breaking-change migration (major version): explicit migration path declared; workflow_instances may pause until migration complete.
+| Shape | Adapter audit emission | Adapter permission flow | Adapter error escalation |
+|---|---|---|---|
+| **practitioner-shape** | Per-action audit mandatory (defensibility) | HITL on send-class operations (axis-3 critical) | Fail-closed |
+| **autonomous-business-shape** | Per-action audit recommended; shape policy may relax | Permission flow per business policy (autonomy-graded) | Fail-open with alert |
+| **personal-OS-shape** | Per-action audit optional; user-preference-driven | Light permission flow; user-decision per session | Fail-open |
+| **federation-shape** | Per-action audit + cross-node-trust audit | Federation-trust-handshake-bound permission | Fail-closed within node; fail-open across nodes (pending peer recovery) |
+
+Shape policy declares per-shape adapter-action enforcement at workspace boot. Adapter Implementations themselves are shape-neutral; shape policy interprets architectural events + decisions per shape's mandate.
 
 ## 14. Pre-implementation operational concerns (Phase 6 forward reference)
 
@@ -427,11 +454,13 @@ Per layered coverage observation in `decision-design-sharpening` v0.6.0: these b
 
 ## 16. Decision-design provenance
 
-This topic articulates adapter as Pattern A protocol per locked GLOSSARY entry. Source materials:
+This topic articulates adapter as Pattern A protocol per locked GLOSSARY entry.
 
-- `archive/docs/a2a-and-gemini-pattern-emulation.md` — A2A peer adapter pattern (federation-shape); Tier-3 reframing per pattern-vs-instance discipline
-- `archive/docs/plugin-conventions.md` — MCP-tool integration; Anthropic plugin manifest patterns
-- `archive/docs/backend-conventions.md` — MCP-corpus adapter pattern (LanceDB backend); request/response sync
+**Archive sources** (INPUT only per `disciplines/10-greenfield-evaluation.md` — archive citations name SOURCE where input came from, NOT TEMPLATE where structure transferred; each cited element greenfield-evaluated against current locked vocabulary, not transcribed):
+
+- A2A peer adapter pattern (federation-shape); Tier-3 reframing per pattern-vs-instance discipline (archived A2A + Gemini pattern emulation DR)
+- MCP-tool integration; Anthropic plugin manifest patterns (archived plugin-conventions)
+- MCP-corpus adapter pattern (LanceDB backend); request/response sync (archived backend-conventions)
 
 Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces stay shape-neutral / archetype-neutral / pioneer-neutral. Pioneer reality (PBS-Schulz / outlook + LaTeX + signing) grounds the adapter primitive without leaking pioneer specifics into Surface contracts.
 
@@ -450,7 +479,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: per-class Adapter Surfaces
 ## 18. Cross-references
 
 - **GLOSSARY**: `adapter` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `substrate`, `skill`, `specialist`, `audit`, `event`, `coordination`, `trust`, `time`, `shape`
-- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (adapter-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (per-class Surface neutrality); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity)
+- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 "make wrong shapes impossible, not solvable" (per-class Surface typing + isinstance check on Implementation make impl-coupling-by-accident impossible); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (per-class Surface neutrality); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity)
 - **Profiles validated**: `G-composability-gate.md` (line 157 cross-shape consumption); `L5a-planner-pbs-schulz.md` (line 90 active adapters; line 66 ad-hoc communication via adapter); `L1-specialist-creator.md` (line 23 specialist DEFINITION boundary; specialist may bundle adapter Implementations); `L4a-workspace-deployer-solo.md` (line 23 adapter configuration: email integration; document-signing; LaTeX compile); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity across deployments)
 - **ARCH topics composing with adapter**: `arch/substrate.md` (Surface §B MCP registration + §C permission flow + §8 dual audit emission); `arch/coordination.md` (cross-adapter coordination); `arch/trust.md` (federation trust handshake); `arch/time.md` (scheduled adapter operations); `arch/audit.md` (per-action audit emission); `arch/quality-gate.md` (observability via adapter audit + quota metrics)
 - **Phase 6 spec target**: `docs/specs/adapter.md` (META-Surface + 5 per-class Pydantic Protocols + per-impl spec)

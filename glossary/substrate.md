@@ -26,6 +26,7 @@ vision_usage: implicit
 **Cross-archetype illustration**: All shapes use SOME substrate; not all shapes are compatible with all substrates. Examples (named, factually existing):
 - **Claude Agent SDK** — Anthropic's plugin/agent runtime; archived as primary substrate per substrate eval
 - **MS Agent Framework** — Microsoft's agentic framework; archived as second backend
+- **Hand-rolled (Python + MCP + Pydantic)** — Tier 1 fallback; minimal direct implementation; baseline for substrate-pluggability validation
 - (Future substrates may emerge — e.g., specialized runtimes for Tier-3 / federation / autonomous-business shapes)
 
 A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowledge-graph-shape workspace might run on a different substrate optimized for retrieval; the SAME framework mechanisms (audit emission, source-grounding, etc.) compose with each.
