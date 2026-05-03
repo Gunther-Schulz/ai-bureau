@@ -57,12 +57,56 @@ Per `HANDOFF.md` Note 50 (option-1 next-cluster choice, deferred to Note 51 foll
 
 ## Decision
 
-**TO BE POPULATED POST-WAVE-1 + POST-RECONCILIATION**.
+**Cluster-level summary** (post-Wave-1 reconciliation pending):
 
-Per skill §Per-execution DR shape, this section captures:
-- Per-artifact verdict (GREENFIELD-VALID / INPUT-ONLY-VALID / NEEDS-REVISION / NEEDS-REWORK)
-- Per-divergence tier (T1 framework-shape-changing / T2 topic-rewriting / T3 mechanical edit / T4 confirms-locked)
-- User-decision per divergence (REVISE-LOCKED / KEEP-LOCKED / AMEND-LOCKED / SUPERSEDE-LOCKED)
+| Tier | Count | Concentration |
+|---|---|---|
+| T1 — framework-shape-changing | 0 | n/a |
+| T2 — topic-rewriting | 5 | DR procedural-narrative blocks (substrate ×3) + adapter §2 per-class catalog (bidirectional architectural question) + adapter DR §Decision section-count cascade |
+| T3 — mechanical edit | 17 | Lens 5 provenance hygiene (status breadcrumbs; "session N"; Pattern-note-(meta) sections) + cascade-miss (Hand-rolled GLOSSARY back-check; missing actor cross-ref; "#2 of 8" stale; template section-numbering renumbering) |
+| T4 — confirms-locked | 35 | Substantive architecture (Surfaces; tri-aspect; cardinality+lifecycle; selection mechanics; composition claims; phase routing; cross-references on architectural content) survives greenfield-derivation chain |
+
+**Cross-cluster pattern signal** (per HANDOFF.md Note 50 cluster-pair observation, now extended to 3rd cluster-execution): substantive Pattern A architecture survives greenfield-derivation; drift concentrates in (a) Lens 5 v0.2.1 provenance hygiene retro-application gaps (locked artifacts predate Lens 5 v0.2.1 codification + M1-M8 cascade-load mitigations) + (b) cascade-miss between locked artifact and current MAINTENANCE template / current GLOSSARY entries.
+
+**Per-finding verdict + AI-committed position table** (user-reconciliation pending):
+
+### substrate-pair findings
+
+| # | Finding | Tier | AI-committed position | Rationale |
+|---|---|---|---|---|
+| S1 | `arch/substrate.md` frontmatter status: "drafted (Phase 3.4 Round 2; locked pending optional Round 3 trigger)" | T3 | AMEND-LOCKED | Strip Round/phase breadcrumb → `status: locked` per `MAINTENANCE.md:273` minimal frontmatter + Lens 5 v0.2.1 |
+| S2 | `arch/substrate.md` §3 Common-surface boundary criteria — substrate has SINGLE Surface; §3 per `MAINTENANCE.md:255` applies "when protocol has multi-class Surface (e.g., adapter)"; locked uses §3 for "Surface vs per-impl-extension boundary" instead | T3 (bidirectional) | REVISE-LOCKED | Reframe substrate.md §3 as N/A with note (substrate has single unified Surface; Surface-vs-extension boundary covered in §4) — substrate is template anchor; resolution propagates to all Pattern A topics |
+| S3 | `arch/substrate.md` §4 enumerates "Three concrete substrate Implementations: Claude Agent SDK / MS Agent Framework / Hand-rolled (Python + MCP + Pydantic)" — Hand-rolled NOT in `glossary/substrate.md:26-29` cross-archetype illustration | T3 (cascade-miss) | REVISE-LOCKED | Add Hand-rolled to `glossary/substrate.md` as third concrete Implementation per `MAINTENANCE.md:18-22` GLOSSARY back-check (DOWNSTREAM cascade direction) |
+| S4 | `arch/substrate.md` §7 missing `actor` row — locked content cites "Substrate's running Instance IS the `actor_kind: ai_runtime`" claim implicitly but composition table omits actor reciprocal | T3 (Lens 6 symmetry) | AMEND-LOCKED | Add `actor` row to §7 composition table per Lens 6 reciprocity gap |
+| S5 | `arch/substrate.md` §11 missing cross-substrate-portability error category despite §9 workspace-identity-persists-across-substrate-migrations claim being locked | T3 | AMEND-LOCKED | Add 6th error category for cross-substrate migration / portability errors per `profiles/G-composability-gate.md:154-155` |
+| S6 | `docs/decisions/substrate-arch-topic.md` Status: heavy session-N + "AMENDED session 16" + "post-Phase-3.4-#4" provenance breadcrumbs | T3 | AMEND-LOCKED | Strip session breadcrumbs; preserve sharpening-rounds-metadata semantics per `MAINTENANCE.md:283`; relocate provenance content to §Sharpening provenance |
+| S7 | `docs/decisions/substrate-arch-topic.md` Related — Discipline 1 reference suffixed with "(procedural discipline applied during this DR's Round 2; canonical session-16 case)" | T3 | AMEND-LOCKED | Strip session-16 narrative suffix; keep Discipline 1 reference |
+| S8 | `docs/decisions/substrate-arch-topic.md` Refinements applied block + "Round 1 termination position FAILURE" sub-section + "After user prompted skill check..." narrative | T2 | AMEND-LOCKED | Restructure under §Sharpening provenance per `MAINTENANCE.md:288-294`; preserve Round-by-Round substantive content (EXPANSIONS list, manufactured-criticism counts); strip session-narrative wrapping |
+| S9 | `docs/decisions/substrate-arch-topic.md` "Retroactive greenfield-pass amendment" sub-section — process-narrative wrapping load-bearing REVISION-1 content | T2 | AMEND-LOCKED | Restructure: keep audit-findings table + REVISION-1 substantive content as §Sharpening provenance REVISIONS-surfaced sub-section; strip "User-triggered audit" / "session 16" / "post-Phase-3.4-#4" framing |
+| S10 | `docs/decisions/substrate-arch-topic.md` Files touched embeds "(Note 35: substrate ARCH topic locked; first canonical arch/<topic>.md established; profile-anchored validation properly executed under 5-location procedural discipline)" | T3 | AMEND-LOCKED | Strip Note-35 narrative parenthetical; keep `HANDOFF.md` file-list entry |
+| S11 | `docs/decisions/substrate-arch-topic.md` "Pattern note (meta)" final section — entire section is meta-narrative about session 16 procedural-fidelity work | T2 | AMEND-LOCKED | Strip entire section per Lens 5 strip-test (would removing confuse fresh reader's understanding of decision? No); preserve in HANDOFF + git log narrative |
+
+### adapter-pair findings
+
+| # | Finding | Tier | AI-committed position | Rationale |
+|---|---|---|---|---|
+| A1 | `arch/adapter.md` frontmatter status: "drafted (Phase 3.4 Round 2; locked)" + `topic-cluster: Pattern A protocol topics (#2 of 8)` — Round breadcrumb + STALE 8-count post-3→reduction per `glossary/protocol-architectural.md:39-43` | T3 | REVISE-LOCKED | Strip "Phase 3.4 Round 2" → `status: locked`; update count "#2 of 8" → "#2 of 3" (3 Pattern A topics post-greenfield-rederivation v1: substrate / adapter / quality-gate) |
+| A2 | `arch/adapter.md` §2 per-class Surface catalog — locked names {Email / Accounting / MCP-Server / A2A-Peer / File-Sync}; Writer derived {Email / Accounting / corpus / federation-peer / file-sync}; bidirectional architectural question on whether MCP-Server is first-class per-integration-class Surface OR shape underneath broader "corpus" class | T2 (bidirectional) | KEEP-LOCKED + surface-to-user | Locked frame (MCP-Server first-class) defensibly composes with substrate Surface §B per `arch/substrate.md` reference; Writer's "corpus" framing under-recognizes substrate-composition. Surface as user-decision question — could be Writer-derivation drift OR genuine simplification opportunity |
+| A3 | `arch/adapter.md` §8 over-extended — locked treats §8 as ACTIVE with full per-class event-kind catalog ("Per-action audit emission via MCP gate"); template `MAINTENANCE.md:256` treats §8 as substrate-conditional | T3 | AMEND-LOCKED | Move per-class event-kind catalog to its own section OR §11; keep §8 as N/A-with-rationale per template |
+| A4 | `arch/adapter.md` §9 title drift — locked: "Auth + lifecycle semantics (architectural-level)"; template `MAINTENANCE.md:244`: "Cardinality + lifecycle (Creator / owner / destroyer; mutability; cross-session persistence)" | T3 | REVISE-LOCKED | Rename §9 to template-faithful "Cardinality + lifecycle"; move auth content to §10 conditional |
+| A5 | `arch/adapter.md` §10/§11/§12/§13 silent renumbering — locked uses slots for non-template content (Per-integration-class error categories / Cross-shape policy variation / Quota+rate-limit+circuit-breaker / Versioning+migration); silently skipped multiple template conditionals without explicit N/A | T3 | REVISE-LOCKED | Renumber to match Pattern A template per `MAINTENANCE.md:251-265`; document N/A explicitly for skipped conditionals; map auth → §10; per-impl errors → §11; skipped §12/§13 explicit-N/A |
+| A6 | `arch/adapter.md` §16 Decision-design provenance — archive citations clean but missing Discipline 10 explicit "INPUT only" framing | T3 | AMEND-LOCKED | Add "INPUT only (per `disciplines/10-greenfield-evaluation.md` — not transcribed as template)" qualifier to archive citations |
+| A7 | `arch/adapter.md` §18 Cross-references — coined "adapter-coupling impossible-by-construction" not anchored in MAINTENANCE | T3 | REVISE-LOCKED | Rephrase to cite the existing "make wrong shapes impossible" per `MAINTENANCE.md:117-128` § (TOP-LEVEL DESIGN PRINCIPLES §1) — don't coin parallel principle |
+| A8 | `arch/adapter.md` DR §Decision lists 18 sections matching locked ARCH topic; Pattern A template expects ~15-16 for adapter per `MAINTENANCE.md:264` | T2 | REVISE-LOCKED (cascades from A5) | Renumber DR §Decision section list to match A5 renumbering output (~15-16 sections) |
+| A9 | `docs/decisions/adapter-arch-topic.md` Status contains "session 16 (2026-05-02)" narrative breadcrumb | T3 | REVISE-LOCKED | Strip "session 16"; date can stay; rephrase per `MAINTENANCE.md:283` template |
+| A10 | `docs/decisions/adapter-arch-topic.md` Sharpening provenance contains session-state language "still in evidence from substrate Round 2 retroactive pass" | T3 | AMEND-LOCKED | Strip session-state language; rephrase as structured cluster verdict |
+| A11 | `docs/decisions/adapter-arch-topic.md` "Pattern note (meta)" section — process-narrative-breadcrumb per `MAINTENANCE.md:271` provenance-hygiene rule | T3 | REVISE-LOCKED | Remove section per Lens 5 strip-test; content (if load-bearing) moves to HANDOFF |
+
+### KEEP-LOCKED (T4 confirms)
+
+35 elements across both topic-pairs survive greenfield-derivation chain unchanged. Per Reviewer detail in §Sharpening provenance below. Includes: substrate.md §1/§2/§5/§6/§8/§9/§10/§12/§13/§14/§15/§16/§17/§18; substrate-arch-topic.md Owner/Context/Decision/Composition/Constraints/Revisit triggers; adapter.md §1/§3/§4/§5/§6/§7/§14/§15/§17; adapter-arch-topic.md Related/Context/Composition/Constraints/Files/Revisit triggers.
+
+**Status transition**: PROPOSED → ACCEPTED-WITH-FINDINGS pending user-reconciliation per finding (or en-bloc confirmation per Notes 49-50 pattern).
 
 ## Sharpening provenance
 
@@ -74,11 +118,20 @@ Per skill §Per-execution DR shape, this section captures:
 
 ### Per-Wave dispatch summary
 
-**TO BE POPULATED POST-WAVE-1**:
-- Writer-1 (substrate-pair): brief summary + Ralph self-check confirmation
-- Writer-2 (adapter-pair): brief summary + Ralph self-check confirmation
-- Reviewer-1 (against Writer-1 output): brief summary + tiered-divergence count + Ralph self-check confirmation
-- Reviewer-2 (against Writer-2 output): brief summary + tiered-divergence count + Ralph self-check confirmation
+**Wave-1 dispatch** (4 sub-agents in fresh contexts; main session orchestrator-only per skill §Per-Wave step 3):
+
+- **Writer-1 (substrate-pair)**: 660-line greenfield-derivation summary covering both `arch/substrate.md` 18-section Pattern A topic + `docs/decisions/substrate-arch-topic.md` 10-section DR. Read sequence: VISION + MAINTENANCE + 12 GLOSSARY entries (substrate / protocol-architectural / mechanism / policy / framework / shape / framework-c-scope / owner-b-scope / workspace / session / event / actor) + DISCIPLINES index + disciplines/01 + disciplines/10 + profiles/INDEX + L4a + L5a + G. Ralph self-check: PASS (5/5 confirmations).
+- **Writer-2 (adapter-pair)**: 403-line greenfield-derivation summary covering both `arch/adapter.md` 12+~3-4-conditional Pattern A topic + `docs/decisions/adapter-arch-topic.md` DR. Read sequence: VISION + MAINTENANCE + 12 GLOSSARY entries (adapter / substrate / protocol-architectural / mechanism / policy / framework / shape / framework-c-scope / owner-b-scope / workspace / event / actor) + DISCIPLINES index + disciplines/01 + disciplines/10 + profiles/INDEX + L4a + L5a + G. Ralph self-check: PASS (5/5 confirmations).
+- **Reviewer-1 (against Writer-1 output)**: per-element verdict table covering all 18 `arch/substrate.md` sections + all 8 + 4 sub-elements of `docs/decisions/substrate-arch-topic.md`. Tiered findings: 0 T1 + 3 T2 + 8 T3 + 22 T4-confirms. 4 lenses applied (pattern-vs-instance / VISION-grounding / provenance-hygiene / cascade-miss). Ralph self-check: PASS (6/6 confirmations).
+- **Reviewer-2 (against Writer-2 output)**: per-element verdict table covering all 18 `arch/adapter.md` sections + all 10 sections + Pattern-note-(meta) of `docs/decisions/adapter-arch-topic.md`. Tiered findings: 0 T1 + 2 T2 + 9 T3 + 13 T4-confirms. 4 lenses applied. Ralph self-check: PASS (4/4 confirmations).
+
+**Aggregate cluster signal** (per Decision section table above): 0 T1 + 5 T2 + 17 T3 + 35 T4-confirms across both topic-pairs.
+
+**Cross-execution pattern signal** (3rd cluster-execution; corpus-stable signal continuing per `HANDOFF.md` Notes 49-50):
+- Phase 3.1 (4 DRs): 0 T1 + 0-2 T2 + ~10 T3
+- Phase 3.2 (2 DRs): 0 T1 + 2 T2 + ~13 T3 (1 load-bearing cascade-miss closed)
+- **Phase 3.4 substrate+adapter (4 artifacts)**: 0 T1 + 5 T2 + 17 T3 (5 T2 includes 1 bidirectional architectural question on adapter §2 per-class catalog; rest is provenance-narrative restructuring)
+- **Stable-corpus pattern**: substantive Pattern A architecture survives greenfield-derivation chain; drift concentrates in (a) Lens 5 v0.2.1 provenance hygiene retro-application + (b) cascade-miss to upstream/downstream artifacts predating M1-M8 + Lens 5 v0.2.1 codification.
 
 ### Foundation-up dependency analysis (within cluster)
 
