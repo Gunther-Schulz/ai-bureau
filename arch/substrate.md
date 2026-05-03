@@ -39,7 +39,7 @@ The substrate provides the entry point for starting an agent run. Run takes prom
 
 ### B. MCP server registration + discovery
 
-The substrate supports tool registration as MCP server, with multiple transport modes as first-class peers (in-process / subprocess / HTTP — see §5 Transport variation). Discovery API enables runtime introspection: list registered servers, get server by name, list available tools per server.
+The substrate supports tool registration as MCP server, with multiple transport modes as first-class peers (in-process / subprocess / HTTP — see §12 Transport variation). Discovery API enables runtime introspection: list registered servers, get server by name, list available tools per server.
 
 ### C. Permission flow
 
@@ -397,7 +397,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays sh
 ## 19. Cross-references
 
 - **GLOSSARY**: `substrate` (canonical entry); `framework`, `mechanism`, `Framework C scope`, `Owner B scope`, `workspace`, `protocol (architectural)`, `adapter`, `audit`, `event`, `session`, `specialist`, `deployment`
-- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (substrate-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pioneer-neutrality of Surface); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section) (procedural fidelity at session-16 substrate Round 1)
+- **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (substrate-coupling impossible-by-construction); `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pioneer-neutrality of Surface); `ARCHITECTURE.md` cross-cutting principles "AI as runtime" (Mode-2 Python runtime); `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)
 - **Profiles validated**: `G-composability-gate.md` (lines 155-156, 159, 168) + `L5a-planner-pbs-schulz.md` (lines 88, 126, 129) + `L1-specialist-creator.md` (line 27) + `L4a-workspace-deployer-solo.md` (lines 22, 38) + `L8-auditor-reviewer-posthoc.md` (lines 29, 32)
 - **ARCH topics composing with substrate**: `arch/adapter.md` (Pattern A protocol; integrates external systems); `arch/audit.md` (substrate-emitted vs skill-emitted dual-emission paths); `arch/coordination.md`, `arch/trust.md`, `arch/time.md` (Pattern A protocols composing with substrate); `arch/quality-gate.md` (substrate-agnostic; observability infrastructure)
 - **Phase 6 spec target**: `docs/specs/substrate.md` (Pydantic Protocol + supporting types + per-substrate-impl spec)

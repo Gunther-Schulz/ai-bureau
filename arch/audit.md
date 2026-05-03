@@ -12,7 +12,7 @@ status: drafted (Phase 3.4 Round 2; mechanism class with per-shape granularity p
 
 The **Audit mechanism class** formalizes the audit-trail-as-canonical-source architectural commitment + composes substrate / adapter / sparring emission paths into unified event stream. Per locked GLOSSARY `event` entry: events are atomic structured emission units; audit-trail is their COMPOSITION (sequence over time). This topic articulates the COMPOSITION mechanics + the AuditEvent schema as the class's central mechanism Surface, plus per-shape granularity policy parameterizing emission catalog + error semantics + trust model.
 
-**Mechanism class Surface** (AuditEvent schema + audit-trail composition + 6 capability categories — emission / persistence / query / integrity / event-kind catalog management / state-rendering). The class does NOT have multiple alternative implementations realizing one whole-class Surface differently — that's the discriminator distinguishing it from Pattern A protocols (substrate / adapter / quality-gate). Storage-backend variation (jsonl / LanceDB / Postgres / cloud-backed) is **substrate-impl level** (per substrate Surface §F session+context management), not class-level pluggability — the substrate provides the storage substrate; audit's mechanism Surface is independent of how bytes land.
+**Mechanism class Surface** (AuditEvent schema + audit-trail composition + 7 capability categories — emission / persistence / query / integrity / event-kind catalog management / state-rendering / cross-deployment external-format export). The class does NOT have multiple alternative implementations realizing one whole-class Surface differently — that's the discriminator distinguishing it from Pattern A protocols (substrate / adapter / quality-gate). Storage-backend variation (jsonl / LanceDB / Postgres / cloud-backed) is **substrate-impl level** (per substrate Surface §F session+context management), not class-level pluggability — the substrate provides the storage substrate; audit's mechanism Surface is independent of how bytes land.
 
 **Cardinality**: 1 audit-trail per workspace (always present; not selectable); per-shape policy declares granularity + event-kind catalog (claim-level / action-level / light per locked event entry Cross-archetype illustration); per-substrate-impl storage realization (jsonl default; alternative backends per substrate-impl).
 
@@ -20,7 +20,7 @@ The **Audit mechanism class** formalizes the audit-trail-as-canonical-source arc
 
 **Composition with framework**:
 - AuditEvent schema IS a `mechanism` (framework-level interface contract per locked event entry); audit-trail composition + 6 capability categories constitute the class
-- Per-shape policy declares granularity + mandatory event kinds + error semantics + authority-binding trust model (subsumed prior Trust Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade)
+- Per-shape policy declares granularity + mandatory event kinds + error semantics. Authority-binding trust model (per-shape policy on practitioner-judgment / budget-policy / individual) lives at authority-binding mechanism per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table; audit composes with authority-binding (records emitting actor via AuditEvent).
 - Storage backend mediated via substrate Surface §F (jsonl / LanceDB / Postgres / cloud-backed all substrate-impl-pinned, NOT audit-class-level)
 - Architectural-event emission paths (substrate-internal direct + skill-side via MCP gate) converge in audit-trail; both validated against AuditEvent schema
 
@@ -28,7 +28,7 @@ The **Audit mechanism class** formalizes the audit-trail-as-canonical-source arc
 
 ## 2. Audit mechanism class Surface (architectural-level capability categories)
 
-Six capability categories define the class's Surface (AuditEvent schema + audit-trail composition unified):
+Seven capability categories define the class's Surface (AuditEvent schema + audit-trail composition unified):
 
 ### A. Emission API + actor declaration
 
@@ -64,6 +64,10 @@ Surface manages event-kind catalog at three layers:
 
 Workspace state (workflow_instance state; claim status; per-actor activity) is DERIVED from event sequence. Architectural commitment: state IS the rendered view; events ARE the source of truth. Per archived audit-trail-v2 single-write architecture. State-rendering implementation Phase 6 (substrate-impl level); architectural-level commitment: workspace state queryable via audit-trail rendering.
 
+### G. Cross-deployment external-format export
+
+Audit-trail integrity must survive intact across deployments / migrations / cloud transitions (per `profiles/G-composability-gate.md` backup-restore-migration round-trip). External-format export (PDF reports / CSV event logs / regulator-submission format) supports L8 evaluator post-hoc engagement when L8 may not access framework directly (per `profiles/L8-auditor-reviewer-posthoc.md`). Architectural-level commitment: export-format-flexibility is class-level (not Phase-6-impl-detail). Specific format mechanics (PDF rendering library; CSV schema; cross-deployment migration export; integrity verification at boundary) are substrate-impl level Phase 6.
+
 ### Logic placement mode
 
 Surface contract articulated here (Mode 4 conceptual) + Phase 6 spec (Mode 3 Pydantic AuditEvent schema + per-shape event-kind catalog declarations + companion docs). Mode 1 production-runtime AI (skills + specialists) emits events via skill-side MCP audit gate (per substrate §8 + adapter §8 + sparring §8 patterns).
@@ -78,7 +82,7 @@ Decision rule for "in Audit mechanism class" vs "out":
 | Per-shape mandatory event-kind declarations | Out (composes with `shape` GLOSSARY entry; declared in shape policy bundles) |
 | Per-claim attestation events (axis-3 success mode) | Out (composes with `engaged authorship` per axis-3 → `arch/claim-defensibility.md` Phase 3.5) |
 | Cross-claim audit coordination (multiple claims in same workflow_instance share audit-trail context) | Out (subsumed into substrate hooks + event-bus per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — see `arch/substrate.md`; per-shape policy configures coordination shape — call-shaped vs event-shaped). Prior `coordination` Pattern A topic CANCELLED per same DR. |
-| Authority decisions (who can sign / approve; trust model) | **In class — subsumes prior `trust` Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade**: authority-binding mechanism with per-shape trust policy (practitioner-judgment / budget-policy / individual) lives in this class. Substrate Surface §C permission flow integrates. Prior `trust` Pattern A topic CANCELLED per same DR. |
+| Authority decisions (who can sign / approve; trust model) | Out (composes with authority-binding mechanism per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table; AuditEvent records the binding actor). Per-shape trust policy (practitioner-judgment / budget-policy / individual) lives at shape-policy declaring trust model. Substrate Surface §C permission flow integrates audit with authority-binding. |
 | Quality-gate consumption of audit-event emissions | Out (composes with quality-gate Pattern A — `arch/quality-gate.md` Phase 3.6) |
 | File-format mechanics (jsonl line structure; per-line schema validation; encoding; hash-algorithm) | Out (substrate-impl level per substrate Surface §F session+context management; storage backend variation is substrate-impl-pinned, not audit-class-level) |
 | Time-driven audit operations (scheduled archival; cron-driven exports) | Out (subsumed into substrate-impl temporal semantics + adapter time-driven operations per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — no separate Time Pattern A topic; prior `time` topic CANCELLED) |
@@ -104,7 +108,7 @@ Each per-shape policy bundle declares:
 - **Granularity** (claim-level / action-level / light per locked event entry Cross-archetype illustration)
 - **Mandatory event-kind catalog** (per-shape required emissions; framework baseline always present)
 - **Error semantics** (fail-closed for practitioner-shape; fail-open with alert for autonomous-business; fail-open with retry for personal-OS)
-- **Trust model** (per-shape authority-binding policy: practitioner-judgment / budget-policy / individual — subsumes prior Trust Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade)
+- **Trust model** (per-shape authority-binding policy: practitioner-judgment / budget-policy / individual)
 - **Append-only enforcement reference** (gate-dispatched-structural per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1; substrate-impl provides the gate)
 - **Error mapping** (substrate-native errors → AuditError categories per §10)
 
@@ -169,12 +173,12 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Audit
 |---|---|
 | `framework` | Audit is a mechanism class within the framework's mechanism layer |
 | `mechanism` | AuditEvent schema IS a mechanism (framework-level interface contract per locked entry); query primitives + 6 capability categories are mechanisms; the Audit class aggregates them |
-| `shape` | Shape policy declares per-shape mandatory event-kind catalog + audit error semantics + trust model (per-shape authority-binding policy subsumed from prior Trust Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade) |
+| `shape` | Shape policy declares per-shape mandatory event-kind catalog + audit error semantics + trust model (per-shape authority-binding policy: practitioner-judgment / budget-policy / individual) |
 | `workspace` | Workspace inherits audit class Surface always (not selectable); shape policy provides granularity + catalog + trust |
 | `protocol (architectural)` | Audit is **NOT** a Pattern A protocol per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict (AuditEvent schema IS the Surface; per-shape granularity is POLICY-level; storage backend variation is substrate-impl level). Distinct from substrate / adapter / quality-gate. |
 | **`event`** | **Locked GLOSSARY primitive: atomic structured emission unit; audit-trail is COMPOSITION (sequence over time). This topic articulates the composition mechanics + class Surface** |
 | `actor` | Every event declares emitting actor; audit class Surface enforces actor declaration at emission |
-| **`substrate`** | **Substrate Surface §8 dual-emission (substrate-internal direct + skill-side via MCP gate) converges in audit-trail; substrate emits architectural events; audit class persists. Substrate Surface §F (session + context management) provides storage realization. Substrate Surface §C (permission flow) integrates with audit's authority-binding mechanism (subsumed prior Trust Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade). Substrate also subsumes prior `coordination` Pattern A topic per same DR (substrate hooks + event-bus subsume cross-claim audit coordination).** |
+| **`substrate`** | **Substrate Surface §8 dual-emission (substrate-internal direct + skill-side via MCP gate) converges in audit-trail; substrate emits architectural events; audit class persists. Substrate Surface §F (session + context management) provides storage realization. Substrate Surface §C (permission flow) integrates audit with authority-binding mechanism (independent framework primitive). Substrate also subsumes prior `coordination` Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade (substrate hooks + event-bus subsume cross-claim audit coordination).** |
 | **`adapter`** | **Adapter §8 skill-side MCP-gate emission converges in audit-trail; per-action audit-event kinds per integration class. Adapter time-driven operations subsume prior `time` Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade.** |
 | **`sparring` (mechanism class peer)** | **Sparring §8 skill-side MCP-gate emission converges in audit-trail; per-sub-mechanism event-kind catalog + axis-2 failure-mode detection events. Sparring is sister mechanism class — see `arch/sparring.md`.** |
 | `claim` | Claims emit `claim_made` events (per claim entry composes-with); per-claim reasoning chain reconstructed via audit-trail query |
@@ -182,14 +186,12 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1: skill code targeting Audit
 | `defensibility` | Audit-trail provides reconstructible reasoning chain — one of three structural conditions defensibility tests |
 | `rubber-stamping` | Events alone don't prevent rubber-stamping (events record sign-off, not engagement that would make sign-off substantive); per-claim attestation requirements + sparring-event presence are counter-mechanism |
 | `quality-gate` (Phase 3.6) | Quality-gate (Pattern A protocol) consumes audit-event emissions for axis enforcement; per-shape policy declares quality-gate enforcement of audit requirements |
-| Authority binding mechanism | Subsumes prior `trust` Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade; per-shape policy declares trust model (practitioner-judgment / budget-policy / individual). Lives in this class; substrate Surface §C permission flow integrates. |
+| Authority binding mechanism | Authority-binding mechanism is its own framework primitive per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table. Audit composes with it: AuditEvent records the binding actor. Per-shape trust policy (practitioner-judgment / budget-policy / individual) lives at shape-policy. Substrate Surface §C permission flow integrates audit with authority-binding. |
 | `workflow` | Workflow_instance lifecycle emits events (workflow_started, phase_transitioned, workflow_completed, etc.); audit-trail records workflow_instance state transitions |
 | `work-unit` | Events scoped to work-unit (per `event` entry composes-with); per-work-unit attribution mandatory |
 | `session` | Session_id field on events identifies session boundaries; cross-session audit-trail continuity preserved |
 
-## 8. Substrate-internal vs skill-side audit emission (architectural-event kinds catalog; conditional section per template)
-
-> **Template note**: This section is one of the 6 protocol-specific-conditional sections per the restructured Pattern A template (per `MAINTENANCE.md` Pattern A protocol topic template). For the audit mechanism class, the section applies because audit IS where dual-path emission converges — load-bearing for understanding the class.
+## 8. Substrate-internal vs skill-side audit emission (architectural-event kinds catalog)
 
 ### Architectural commitment
 
@@ -239,9 +241,9 @@ Per G line 159 backup-restore-migration round-trip: substrate-specific metadata 
 - **Audit-trail content append-only** (events never rewritten; per §2.B)
 - **Cross-session persistence**: audit-trail persists across sessions (workspace lifetime); session_id field on events identifies session boundaries; session resumption preserves prior audit-trail state per substrate Surface §F
 
-## 10. Boot + shutdown phase ordering (conditional section per template; load-bearing for audit class)
+## 10. Boot + shutdown phase ordering
 
-> **Template note**: This section is one of the 6 protocol-specific-conditional sections per the restructured Pattern A template. The audit class Surface lives at framework-mechanism layer (no per-instance boot of its own), but **audit's storage realization via substrate Surface §F has load-bearing ordering invariants** — the storage substrate must be ready BEFORE substrate emits its first architectural event (preserves invariant: every emitted event is persisted before workspace shutdown completes). Reframed as substrate-storage-realization ordering rather than separate audit-impl boot/shutdown lifecycle.
+Audit class Surface lives at framework-mechanism layer (no per-instance boot of its own). Audit's storage realization via substrate Surface §F has load-bearing ordering invariants — the storage substrate must be ready BEFORE substrate emits its first architectural event (preserves invariant: every emitted event is persisted before workspace shutdown completes). Ordering treated as substrate-storage-realization, not separate audit-impl boot/shutdown lifecycle.
 
 ### Boot sequence
 
@@ -268,9 +270,7 @@ Audit storage realization shuts down LAST (substrate shutdown drains in-flight e
 
 This ordering preserves invariant: every emitted event is persisted in audit-trail before workspace shutdown completes.
 
-## 11. Audit error categories (conditional section per template; class-level error semantics)
-
-> **Template note**: This section is one of the 6 protocol-specific-conditional sections per the restructured Pattern A template. For the audit mechanism class, error semantics differ per source layer (class-level vs substrate-impl-level vs shape-policy-level); documented here because per-shape error semantics are load-bearing for fail-closed/fail-open behavior.
+## 11. Audit error categories (class-level error semantics)
 
 | Category | Architectural meaning | Layer |
 |---|---|---|
@@ -293,13 +293,26 @@ Per-class Pydantic shape → Phase 6 spec.
 
 ## 12. Transport variation
 
-> **Template note**: §12 (substrate-specific MCP transport variation) does NOT apply to the audit class — audit emission rides through whatever transport the substrate-impl provides (skill-side via MCP audit gate; substrate-internal via direct Python). Transport variation is **substrate-impl-level** (per `arch/substrate.md` §12), not audit-class-level. Section retained as N/A marker per restructured template's conditional applicability rule.
+Transport variation — **N/A**: audit emission rides through whatever transport the substrate-impl provides (skill-side via MCP audit gate; substrate-internal via direct Python). Transport variation is substrate-impl-level (per `arch/substrate.md` §12), not audit-class-level.
 
 ## 13. Deployment-tier awareness
 
-> **Template note**: §13 (substrate-specific Tier 1/2/3 per-tier behavior) does NOT apply to the audit class as separate per-tier behavior — audit class Surface is tier-uniform; tier-driven variation lands at substrate-impl storage realization (Tier 2 may use cloud-backed storage; Tier 3 federation-aware) per `arch/substrate.md` §13. Section retained as N/A marker per restructured template's conditional applicability rule. Per-tier audit observability per L8 cross-deployment evidence requirement is documented in §10 boot/shutdown ordering + §11 error semantics, not as separate per-tier behavior on the class Surface.
+Deployment-tier awareness — **N/A** for class Surface: tier-uniform at architectural level. Tier-driven variation lands at substrate-impl storage realization (Tier 2 may use cloud-backed storage; Tier 3 federation-aware) per `arch/substrate.md` §13. Per-tier audit observability per L8 cross-deployment evidence requirement is documented in §10 boot/shutdown ordering + §11 error semantics.
 
-## 14. Pre-implementation operational concerns (Phase 6 forward reference)
+## 14. Cross-shape policy variation
+
+Audit's behavior is shape-policy-mediated across four orthogonal dimensions (granularity / event-kind catalog / trust model / error semantics). Mechanism-class is by-definition shape-policy-mediated; this section consolidates per-shape policy declared by shape policy bundles.
+
+| Dimension | practitioner-shape | autonomous-business-shape | personal-OS-shape |
+|---|---|---|---|
+| **Granularity** | claim-level (every substantive claim emits `claim_made` + per-claim attestation events) | action-level (per workflow action / task batch / budget-consumed checkpoint) | light (memory/replay only; minimal emission) |
+| **Mandatory event-kind catalog** | claim_made / source_grounded / sparring_round / per_claim_attestation / signature_applied | task_started / task_completed / budget_consumed / approval_requested | minimal subset (mostly framework-level: workspace_booted / session_started) |
+| **Trust model (per-shape policy on authority-binding mechanism)** | practitioner-judgment (human-actor required in accountability-bearing output chain) | budget-policy (programmatic threshold-based) | individual (single-user attestation; no chain) |
+| **Error semantics on emission failure** | fail-closed (defensibility-critical; audit-trail emission failure must block) | fail-open with alert + queued-retry (continuity prioritized) | fail-open with retry (lightweight; degradation acceptable) |
+
+§5 Per-shape policy mechanics + §11 Per-shape error semantics + §6 mechanism-class structural reconciliation row reference §14 as canonical surface for per-shape variation. Shape policy bundle declares each dimension's value at workspace boot; audit class Surface unchanged across shapes (variation is POLICY, not IMPL).
+
+## 15. Pre-implementation operational concerns (Phase 6 forward reference)
 
 Operational/runtime concerns NOT locked at ARCH level:
 
@@ -310,14 +323,13 @@ Operational/runtime concerns NOT locked at ARCH level:
 - **Append-only enforcement OS-level** (filesystem flags; alternative for substrate-impls without OS support)
 - **Cross-deployment migration mechanics** (export format; import validation; integrity verification at boundary; substrate-impl level)
 - **Audit-trail compression / archival strategy at scale** (W3; rotation policies; archival to cold storage; substrate-impl level)
-- **External-format export** (PDF rendering; CSV aggregation; regulator-submission format)
 - **Per-shape event-kind catalog declaration syntax** (in shape policy bundles)
 - **Per-shape trust model declaration syntax** (in shape policy bundles; authority-binding per-shape configuration)
 - **Audit-trail-state-rendering implementation** (state derived from event sequence; per-substrate-impl performance)
 
 These belong to Phase 6 pre-implementation sharpening; ARCH topic explicitly does NOT lock these.
 
-## 15. Watch-list
+## 16. Watch-list
 
 | W# | Item | Awaited signal | Resolution mechanism |
 |---|---|---|---|
@@ -328,7 +340,7 @@ These belong to Phase 6 pre-implementation sharpening; ARCH topic explicitly doe
 | W5 | Federation-aware substrate-impl audit storage realization | First Tier 3 federated deployment | Implement federation-aware substrate-impl; cross-node audit-trail coordination; per-tenant isolation |
 | W6 | Per-shape trust-model concrete declarations | First second-shape productization (autonomous-business / personal-OS) | Validate per-shape trust model (practitioner-judgment / budget-policy / individual) against second-shape reality; potential refinement of authority-binding mechanism within audit class |
 
-## 16. Decision-design provenance
+## 17. Decision-design provenance
 
 Source materials:
 - `archive/docs/decisions/audit-trail-v2.md` — single-write architecture (state rendered FROM events; append-only discipline)
@@ -339,11 +351,11 @@ Source materials:
 
 This topic articulates the audit **mechanism class** per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict: AuditEvent schema IS the Surface (not "Surface + alternative architectural impls"); per-shape granularity (claim-level / action-level / light) is POLICY-level (which event kinds mandatory + at what granularity), not IMPL-level alternative architectures; storage backend variation (jsonl / LanceDB / Postgres / cloud-backed / federation) is **substrate-impl level** (per substrate Surface §F session+context management), not audit-class-level pluggability. Cross-validated by GLOSSARY `event` entry tags (Class **PRIMITIVE single-aspect** — not Pattern A).
 
-**Trust Pattern A topic subsumption**: per same DR, prior `trust` Pattern A topic CANCELLED; trust model (practitioner-judgment / budget-policy / individual) folded into audit class as authority-binding mechanism with per-shape trust policy. Substrate Surface §C permission flow integrates. Trust as alternative-architectural-design Pattern A protocol failed greenfield derivation (per-shape variation is POLICY-level, not IMPL-level alternative architectures).
+**Trust Pattern A topic cancellation**: prior `trust` Pattern A topic CANCELLED (per-shape variation was POLICY-level, not IMPL-level alternative architectures). Trust model (per-shape policy on practitioner-judgment / budget-policy / individual) lives at shape-policy declaring trust at authority-binding mechanism. Audit composes with authority-binding via AuditEvent's actor field; substrate Surface §C permission flow integrates.
 
 Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: audit class stays shape-neutral / archetype-neutral / pioneer-neutral. Per-shape event-kind catalogs + per-shape trust models handle archetypal variation via shape policy.
 
-## 17. Phase routing
+## 18. Phase routing
 
 | Concern | Phase | Notes |
 |---|---|---|
@@ -357,11 +369,11 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: audit class stays shape-ne
 | External-format export (PDF / CSV) | 6 | Per L8 auditor external-format requirements |
 | Pre-implementation operational concerns | 6 | Pre-implementation sharpening at Phase 6 implementation-start |
 
-## 18. Cross-references
+## 19. Cross-references
 
 - **GLOSSARY**: `event` (canonical primitive); `actor`, `mechanism`, `Framework C scope`, `Owner B scope`, `protocol (architectural)`, `substrate`, `adapter`, `sparring (axis 2)`, `claim`, `engaged authorship`, `defensibility`, `rubber-stamping`, `quality-gate`, `workflow`, `work-unit`, `session`, `shape`
 - **Disciplines**: `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1 (append-only as gate-dispatched-structural); `DISCIPLINES.md` Discipline 9 (coherence-audit cadence — audit class's audit-trail is the corpus those audits operate on)
-- **Profiles validated**: `G-composability-gate.md` (line 159 backup-restore-migration round-trip; line 168 substrate-portability + substrate-pinned variation); `L5a-planner-pbs-schulz.md` (line 41 claim_made events emitted per substantive claim — DIRECTLY validates §11 practitioner-shape claim-level granularity); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity; line 32 cross-deployment evidence; line 33 external-format requirements — DIRECTLY validate §10 boot/shutdown ordering + §14 external-format export)
-- **ARCH topics composing with audit**: `arch/substrate.md` (Surface §8 dual-emission converges here; Surface §F provides storage realization; Surface §C permission flow integrates with audit's authority-binding mechanism; subsumes prior `coordination` Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — substrate hooks + event-bus subsume cross-claim audit-trail coordination); `arch/adapter.md` (§8 per-action emission; subsumes prior `time` Pattern A topic per same DR — adapter time-driven operations subsume scheduled audit operations); `arch/sparring.md` (§8 per-sub-mechanism emission; mechanism class peer to audit); `arch/quality-gate.md` (Phase 3.6; Pattern A protocol consuming audit-event emissions for axis enforcement); `arch/claim-defensibility.md` (Phase 3.5; audit-trail provides reconstructible reasoning chain for defensibility test). Cancelled per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade: `arch/coordination.md` (subsumed into substrate hooks + event-bus) + `arch/trust.md` (folded into this audit class as authority-binding mechanism per above) + `arch/time.md` (subsumed into substrate-impl temporal semantics + adapter time-driven operations).
+- **Profiles validated**: `G-composability-gate.md` (line 159 backup-restore-migration round-trip; line 168 substrate-portability + substrate-pinned variation); `L5a-planner-pbs-schulz.md` (line 41 claim_made events emitted per substantive claim — DIRECTLY validates §11 practitioner-shape claim-level granularity); `L8-auditor-reviewer-posthoc.md` (line 29 audit-trail integrity; line 32 cross-deployment evidence; line 33 external-format requirements — DIRECTLY validate §10 boot/shutdown ordering + §2.G cross-deployment external-format export)
+- **ARCH topics composing with audit**: `arch/substrate.md` (Surface §8 dual-emission converges here; Surface §F provides storage realization; Surface §C permission flow integrates audit with authority-binding mechanism (independent framework primitive; per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE concept-by-concept table). Prior `trust` Pattern A topic CANCELLED per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade — trust model is per-shape policy on authority-binding, not subsumed into audit class. Substrate also subsumes prior `coordination` Pattern A topic per same DR — substrate hooks + event-bus subsume cross-claim audit-trail coordination); `arch/adapter.md` (§8 per-action emission; subsumes prior `time` Pattern A topic per same DR — adapter time-driven operations subsume scheduled audit operations); `arch/sparring.md` (§8 per-sub-mechanism emission; mechanism class peer to audit); `arch/quality-gate.md` (Phase 3.6; Pattern A protocol consuming audit-event emissions for axis enforcement); `arch/claim-defensibility.md` (Phase 3.5; audit-trail provides reconstructible reasoning chain for defensibility test). Cancelled per `docs/decisions/greenfield-rederivation-pause.md` Step 3 cascade: `arch/coordination.md` (subsumed into substrate hooks + event-bus) + `arch/trust.md` (per-shape trust policy lives at shape-policy declaring trust at authority-binding mechanism) + `arch/time.md` (subsumed into substrate-impl temporal semantics + adapter time-driven operations).
 - **Phase 6 spec target**: `docs/specs/audit.md` (AuditEvent Pydantic schema + per-substrate-impl realization spec + per-shape event-kind catalog + per-shape trust-model declarations)
 - **Archived sources**: `archive/docs/decisions/audit-trail-v2.md`, `archive/docs/decisions/audit-trail-v1.md`, `archive/docs/audit-pre-rag.md`

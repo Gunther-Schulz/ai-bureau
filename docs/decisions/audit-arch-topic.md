@@ -4,9 +4,11 @@
 
 ACCEPTED — session 16 (2026-05-02); 2-round sharpening per `decision-design-sharpening` v0.6.0 layered coverage observation. Persisted under DR template locked in `MAINTENANCE.md` Layer 4 (per `doc-organization-templates.md` composite DR).
 
+**AMENDED 2026-05-03** per Phase 3.4 sparring+audit reclassified-mechanism-class sub-cluster v2-audit (per `docs/decisions/greenfield-rederivation-2026-05-03-phase-3-4-sparring-audit.md`): (a) §14 Cross-shape policy variation added to `arch/audit.md` + §14-§18 → §15-§19 renumbering applied; (b) Trust subsumption framing reframed as "audit composes with authority-binding mechanism (independent framework primitive)"; (c) Capability category count 6 → 7 (external-format export promoted to G); (d) Pattern-A self-description scrub. Cascade per per-execution DR's user-decisions; ARCHITECTURE.md §7 line 219-221 reframed in same cascade.
+
 ## Owner
 
-Phase 3.4 Per-architectural-Protocol detail rebuild; fourth Pattern A protocol topic (substrate first; adapter second; sparring third; audit fourth per foundation-up ordering — audit composes with all prior emission paths).
+Phase 3.4 Per-architectural-Protocol detail rebuild; fourth Phase 3.4 ARCH topic (substrate first; adapter second; sparring third; audit fourth per foundation-up ordering — audit composes with all prior emission paths). Mechanism class with per-shape policy variation (NOT Pattern A protocol per `docs/decisions/greenfield-rederivation-pause.md` Step 3).
 
 ## Related
 
@@ -22,7 +24,7 @@ Phase 3.4 Per-architectural-Protocol detail rebuild; fourth Pattern A protocol t
 
 ## Context
 
-Audit is the fourth Pattern A protocol topic in Phase 3.4 sequence (foundation-up: substrate → adapter → sparring → audit → 4 remaining). Validates Pattern A 18-section template (4th application). Consolidates emission paths from substrate (dual: internal direct + skill-side via MCP gate) + adapter (skill-side via MCP gate) + sparring (skill-side via MCP gate) into unified architectural commitment.
+Audit is the fourth Phase 3.4 ARCH topic in sequence (foundation-up: substrate → adapter → sparring → audit → 4 remaining). Validates Pattern A 18-section template (4th application). Consolidates emission paths from substrate (dual: internal direct + skill-side via MCP gate) + adapter (skill-side via MCP gate) + sparring (skill-side via MCP gate) into unified architectural commitment.
 
 Critical architectural distinctions:
 - **Single-layer Surface** (substrate-style; like sparring); audit-trail concerns unified across emission/persistence/query/integrity/catalog/state-rendering
@@ -113,9 +115,8 @@ Mode 1 (single-decision; not composite). 21 EXPANSIONS within 2-round sweet spot
 
 ## Composition with existing architecture
 
-- 18-section Pattern A protocol topic template reinforced (4th application: substrate / adapter / sparring / audit)
-- Audit Protocol consolidates emission paths from substrate §8 + adapter §8 + sparring §8 into unified architectural commitment — first Pattern A topic that primarily INTEGRATES other Pattern A protocols (vs being primarily-new-mechanism like prior 3)
-- NEW Pattern A cardinality variation: deployment-tier-driven impl variation (substrate = singular tier-aware; adapter = multi-instance per-class; sparring = singular per-shape activation; **audit = singular deployment-tier-driven**). Fourth Pattern A cardinality pattern.
+- Phase 3.4 ARCH topic; mechanism class with per-shape policy variation; will receive §14 cross-shape + renumber via Phase 3.4 sparring+audit v2-audit cascade per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md`
+- Audit Protocol consolidates emission paths from substrate §8 + adapter §8 + sparring §8 into unified architectural commitment — first ARCH topic that primarily INTEGRATES other ARCH topics' emission paths (vs being primarily-new-mechanism like prior 3)
 - Audit-trail-as-canonical-source commitment is foundational for axis-3 defensibility (reconstructible reasoning chain) — composes load-bearingly with claim-defensibility ARCH topic (Phase 3.5)
 - Append-only enforcement at architectural level (gate-dispatched-structural per TOP-LEVEL DESIGN PRINCIPLES §1) sets precedent for similar enforcement decisions in remaining Pattern A topics
 - Boot-before-substrate / shutdown-after-substrate ordering establishes Audit Protocol as foundational Pattern A protocol — substrate composes ABOVE audit at runtime layering
@@ -124,7 +125,7 @@ Mode 1 (single-decision; not composite). 21 EXPANSIONS within 2-round sweet spot
 
 ### → Phase 3.4 remaining ARCH topics (coordination / trust / time / quality-gate at 3.6)
 
-- 4-of-7 Pattern A protocol topics now use 18-section template (substrate / adapter / sparring / audit). Template robust.
+- Phase 3.4 ARCH topic count: 4 (substrate + adapter Pattern A; sparring + audit reclassified mechanism class).
 - Audit Protocol Surface §C query patterns + §F state-rendering compose with coordination ARCH topic (Phase 3.4)
 - Audit Protocol's per-shape event-kind catalog supports trust + time Pattern A protocol event emissions
 

@@ -218,7 +218,7 @@ Each lock = 1-line resolution + cross-ref to DR/GLOSSARY for full content.
 
 ### Audit ARCH topic (Phase 3.4 fourth — RECLASSIFIED mechanism class) — LOCKED
 
-**Resolution**: `arch/audit.md` LOCKED. 6 Surface capability categories; **audit-trail-as-canonical-source** (single-write architecture; state rendered FROM events; append-only); append-only enforced architecturally per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1; per-shape event-kind catalog; boot-before-substrate / shutdown-after-substrate ordering; hash-chain integrity; cross-deployment external-format export. Full detail: `arch/audit.md` + `docs/decisions/audit-arch-topic.md`.
+**Resolution**: `arch/audit.md` LOCKED. 7 Surface capability categories (emission / persistence / query / integrity / event-kind catalog / state-rendering / cross-deployment external-format export); **audit-trail-as-canonical-source** (single-write architecture; state rendered FROM events; append-only); append-only enforced architecturally per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1; per-shape event-kind catalog; boot-before-substrate / shutdown-after-substrate ordering; hash-chain integrity; §14 Cross-shape policy variation (per shape-policy granularity / event-kind catalog / trust model / error semantics). Audit composes with authority-binding mechanism (independent framework primitive per TOP-LEVEL ARCHITECTURE concept-by-concept table); per-shape trust policy lives at shape-policy declaring trust model. Trust as Pattern A protocol CANCELLED per `docs/decisions/greenfield-rederivation-pause.md` Step 3. Full detail: `arch/audit.md` + `docs/decisions/audit-arch-topic.md`.
 
 ### Phase 3.1 closed
 
