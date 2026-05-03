@@ -193,7 +193,7 @@ Resolved Note 52 NON-BLOCKING #2 (§13a appendix-slot precedent question for Pha
 - `arch/substrate.md`: NEW §14 documenting N/A explicitly per shape-uniform substrate Surface; §14-§18 → §15-§19 renumbering + internal cross-reference updates
 - `arch/adapter.md`: §13a appendix-slot promoted to canonical §14 with cleaned Lens 5 v0.2.1 framing (drops appendix-slot meta-language); §14-§18 → §15-§19 renumbering + §7 shape-row reference updated + internal cross-reference updates
 - `glossary/shape.md`: cross-reference added pointing to MAINTENANCE.md Layer 3 §14 conditional + new DR
-- Commits: (main session fills hash); pushed to origin/main
+- Commits: `67c15c2` (cascade applied; ACCEPTED-AS-IS Wave 2 finalization); pushed to origin/main
 
 **Decision-design-sharpening Round 1 outcome**: option (b) ESCALATE-TEMPLATE-AMENDMENT chosen over (a) reference-link-from-§7 + (c) accept-§13a-appendix-slot-as-precedent. 13 refinements surfaced (12 EXPANSIONS + 1 REVISION-flavored re: persistence-target chose new DR over Lock 1 in-place amendment to preserve Lock 1 composite-historical-integrity); user-locked en bloc ("Iagreed"). Profile-anchored validation per `decision-design-sharpening` v0.6.0+ Round 2: ≥3 cluster representatives read fresh (G-composability-gate.md + L5a-planner-pbs-schulz.md + L8-auditor-reviewer-posthoc.md = Clusters A Producers + C Consumers + D Validators); 3/3 PASS with cited content.
 
