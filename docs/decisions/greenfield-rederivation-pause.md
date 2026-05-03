@@ -1,5 +1,23 @@
 # Decision record: Greenfield re-derivation pause (Phase 3 procedural-laxness response)
 
+## SUPERSEDED — historical input to greenfield-rederivation skill
+
+**Status**: SUPERSEDED by `plugin/skills/greenfield-rederivation/SKILL.md` (v0.1.0).
+
+This DR captured a 7-step single-pass greenfield-rederivation procedure executed pre-mitigation-codification. The procedure was executed by a single AI under cascade-load conditions — the same conditions later diagnosed as producing META-failure (instruction-adherence collapse at oversized mandatory load). Self-praise bias (same agent did the audited work AND the audit) means this DR's verdicts cannot credibly claim to have caught all errors.
+
+**Findings preserved as HISTORICAL INPUT, NOT authoritative verdicts**:
+
+- Tier-1 findings (Pattern A catalog 8→3 reduction; template restructure 18→12+6 conditional) ARE empirical evidence the audit caught some errors, but completeness is not claimable
+- Tier-2 / Tier-3 findings + per-artifact verdicts: same status — directional input, not authoritative
+- The cascade items this DR specified (Step 7.A-7.C) were executed in part + then subsumed by larger restructures; downstream artifacts re-anchor on those restructures, not on this DR's Step-by-step verdicts
+
+**Successor skill** (`plugin/skills/greenfield-rederivation/SKILL.md`) implements the same audit pattern (re-derive each artifact greenfield from primitives; compare to locked content; surface tiered divergences; user reconciles per finding) WITH per-cluster scope + per-artifact sub-agent dispatch + Writer-Reviewer pattern + per-execution DRs — orchestration shape that corrects the META-failure surface this DR was executed under. Future cluster-executions reference this DR's findings as input context; verdicts are re-derived, not inherited.
+
+**Do NOT execute this 7-step procedure as written**. Use the skill instead (per-cluster execution; multiple per-execution DRs at `docs/decisions/greenfield-rederivation-<YYYY-MM-DD>-<cluster-slug>.md`). This DR remains in repo as procedural archaeology + finding-input source.
+
+---
+
 ## Executive summary (for fresh readers)
 
 Phase 3.4 work paused mid-execution after discovering procedural laxness allowed archive-cargo-cult drift in 4 already-locked Pattern A protocol topics (substrate / adapter / sparring / audit). Retroactive audit on substrate yielded 1 architectural REVISION (boot/shutdown ordering contradicted audit topic). User flagged broader concern: framework foundation may be more archive-anchored than realized. This DR documents 7-step procedure for greenfield re-derivation BEFORE continuing Phase 3.4. Procedure pauses Phase 3.4 + audits foundation (GLOSSARY + Pattern A vs B vs C framework + 8 Pattern A protocol list + topic template) per Discipline 10 greenfield-evaluation discipline. Steps 1.A-1.B audit foundation; Steps 2-4 derive from scratch; Steps 5-6 compare to current locked work + surface revisions; Step 7 commits revise-foundations vs validate-greenfield-equivalent decisions.
