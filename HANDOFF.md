@@ -317,3 +317,71 @@ Reframed across 9 audit.md sites + sparring.md composition row + ARCHITECTURE.md
 **Notes 51-53**: stay as historical session-log. HANDOFF currently at ~243 + ~120 expansion ≈ ~360 lines after Note 54. No rotation warranted (well below ~500-line threshold).
 
 ---
+
+**Note 55: Session 26 — Coherence-audit C1 (post-Phase-3.4 close) STABLE; foundation codification + framework-baseline-vs-shape-extension partition + 30+ mechanical cleanups landed across 6 commits; Phase 3.5 unblocked**
+
+Executed Note 54 step 6.a: ran `coherence-audit` skill C1 checkpoint per `disciplines/09-coherence-audit-cadence.md` "Post-Phase-3.4 close" row + `BACKLOG.md` Phase 3 audit-checkpoint cadence. Full-systematic phase-boundary audit on Phase 3.4 corpus (substrate / adapter / sparring / audit ARCH topics + 4 DRs + Phase 3.2 composite DR + 7th-conditional template DR + supporting upstream layers). LOCK-HARD target-type per skill §Step 4 target-type modifier. **STABLE verdict** after 3 audit rounds + 4 cascade commits.
+
+**Outputs (6 commits; pushed to origin/main)**:
+- `5e0ae4f` Wave 1: foundation codification (5 sub-decisions; +34/-9 MAINTENANCE.md + 1 NEW glossary entry + 4 supporting edits)
+- `f571a4c` Wave 2: framework-baseline-vs-shape-extension partition (+72/-3 across adapter §3 + sparring §3-pointer/§4 + W3/W4 reframes)
+- `4ee2ea7` Waves 3-6: cascade-miss + definition+symmetry + provenance hygiene + EXPANSIONS (+97/-69 across 24 files; ~30 sub-fixes)
+- `2566eca` Cleanup-cascade: 8 mechanical findings post-Recheck Round 2 (+25/-20 across 18 files; closes within-entry contradiction + Lens 6 reciprocity gaps + placeholder boilerplate scrub + adapter DR numbering bug)
+
+**Audit dispatch shape (M3 sub-agent-first; all sub-agents in fresh contexts)**:
+- Wave 0 audit: 2 parallel Auditors split by lens-focus (Auditor-A = Lens 1+8+9+13 LOAD-BEARING; Auditor-B = Lens 2+3+4+5+6+7+10 mechanical/coherence) + 1 Auditor-Reviewer (M4)
+- Wave 1+2 cascade: Cascade-Writer + Cascade-Reviewer pair per wave
+- Waves 3-6 cascade: single Cascade-Writer-3 (~40 sub-fixes in coupled commit) + combined Cascade-Reviewer-3 + Recheck-Auditor (Round 2)
+- Cleanup: Cleanup-Writer + integrated final recheck (Round 3) — composite role per Note 54 v2 greenfield-rederivation Cleanup-Writer pattern (Reviewer compose pattern)
+- Total: 9 sub-agent dispatches in fresh contexts; main session orchestrator-only
+
+**Substantive architectural commitments locked (Wave 1 + Wave 2; user-locked en bloc per `feedback_judgment_and_automate.md`)**:
+
+1. **Pattern D (mechanism class) codified** in `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE (parallel to Pattern A/B/C; sparring + audit current instances; discriminator vs Pattern A: fixed Surface + per-shape policy variation + per-sub-mechanism realization variation; NO alternative whole-class implementations)
+2. **Pattern A protocol topic template renamed** to "Pattern A / mechanism-class topic template" + per-pattern conditional applicability rules (§10 substrate-specific stays for Pattern A; §10 applies for mechanism-class when storage-realization ordering load-bearing; §14 likely-applicable for mechanism-class; §3 N/A for mechanism-class single-layer Surface convention)
+3. **NEW GLOSSARY entry `authority-binding`** (PRIMITIVE / framework-mechanism / cross-axis with axis-3 lean) — closes bidirectional cascade DOWNSTREAM miss from sparring/audit reclassification per `MAINTENANCE.md:21-22` discipline; resolves L1-A1 finding; entry #4 alphabetical position; GLOSSARY.md index renumbered 4-36 → 5-37
+4. **`arch/substrate.md` §E extended** to include event-bus as substrate-internal mechanism (subsumes coordination Pattern A topic per `docs/decisions/greenfield-rederivation-pause.md` Step 3 verdict)
+5. **`ARCHITECTURE.md` §6 NEW "Workspace boot + shutdown composite sequence" subsection** (resolves L1-B1 substrate/audit step-numbering ambiguity; substrate §10 + audit §10 reference target)
+6. **Framework-baseline-vs-shape-extension partition** codified in `arch/adapter.md` §3 + `arch/sparring.md` §4 + W3/W4 watch-list reframes (CONFIRMS-LOCKED current 5-class adapter Surface + 8-sub-mechanism sparring enumerations as framework-baseline; future extensions = shape-extension category; per Discipline 2 uniform application)
+
+**Cross-execution density signal (per skill §Empirical density check + §Termination signals)**:
+- C1 first-pass (Auditor-A + Auditor-B + Reviewer dedup): **27 substantive findings** (5 LOAD-BEARING REVISION cluster L1-M1 + L1-A1 + L1-B1 + L8-3 + L8-5 + L13-1 + 5 Lens 4 cascade-miss + 5 Lens 5 provenance scrub + 2 Lens 6 reciprocity + 7 Lens 2/3/7/10 mechanical + 3 Lens 9 EXPANSION + 1 Lens 13 EXPANSION)
+- Recheck Round 2 (Cascade-Reviewer-3 + Recheck-Auditor combined): **8 substantive findings** (70% drop confirmed; 4 Lens 4 + 4 Lens 6 + 0 Lens 7 [chained from Lens 4 #2; not double-counted] + 0 Lens 1)
+- Recheck Round 3 (Cleanup-Writer integrated final recheck): **0 substantive findings** (100% drop; STABLE per skill §Termination signals "Round 2 of audit yields nothing new = Audit complete" + §Verdict criteria "Lens 1+4+6+7 collective findings = 0 AND density decay confirmed")
+
+**Cascade-Writer-3 + Cleanup-Writer process learning (cross-skill empirical-evidence)**: large-scope mechanical cascade (≥30 file edits) in single sub-agent dispatch is sustainable — Cascade-Writer-3 successfully applied ~40 sub-fixes across Waves 3+4+5+6 in coupled commit; Cleanup-Writer applied 8 follow-up findings across 18 files. Pattern matches Note 54 v2 greenfield-rederivation Cleanup-Writer (Reviewer compose pattern) when work is pre-validated by Cascade-Reviewer-3 + Recheck-Auditor.
+
+**Methodology applied (M3-M7 self-applied; first coherence-audit C1 execution; cross-skill composability with v2 greenfield-rederivation pattern)**:
+- M3 sub-agent-first: 9 sub-agents in fresh contexts (2 Auditors Wave 0 + 1 Auditor-Reviewer Wave 0 + 2 Cascade-Writer-Reviewer pairs Waves 1+2 + 1 Cascade-Writer + 1 combined Reviewer/Recheck-Auditor Waves 3-6 + 1 Cleanup-Writer + integrated recheck); main session as orchestrator only
+- M4 Writer-Reviewer pattern: applied per-wave (Auditors → Reviewer; Cascade-Writers per wave → Cascade-Reviewers; Cleanup-Writer → integrated recheck per Note 54 Reviewer-compose pattern)
+- M5 /clear discipline: NOT triggered mid-cluster (cascade-bundle worked end-to-end without context-budget breach); /clear recommendation at HARD STOP this Note for next session start
+- M6 HARD STOP: at C1 closure (this Note + commit + push)
+- M7 Ralph self-check: each sub-agent confirmed at completion; main-session checks at Wave + cluster boundaries
+- Hook (`architectural_commit_gate`) behavior: blocked Cascade-Writer-1 first Edit until decision-design-sharpening/SKILL.md added to prep reads (whole-session freshness scan working as designed per `feedback_hooks_are_structural.md` post Note 54 commit `4327ddc` fix); subsequent sub-agents pre-emptively read both SKILL.md files; no further hook blocks fired
+- Per `CLAUDE.md` M3 strict reading: 4-artifact-cluster + 30+ file cascade BOTH delegated to fresh-context sub-agents; no main-session execution attempt
+- Per skill §Self-validation bias warning: Lens 1+8+9 collective REVISION count = 5 (above zero); load-bearing lenses produced substantive findings; counter-mechanism satisfied
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 55 + (optional) `MAINTENANCE.md` Pattern D + `glossary/authority-binding.md` + `ARCHITECTURE.md` §6 composite subsection (Wave 1 substantive landings)
+3. **Recommend `/clear` between cluster-executions** per `CLAUDE.md` M5 — main session has accumulated full C1 execution context (9 sub-agent dispatches + 4 cascade commits + Round 3 recheck); fresh session for next substantive work
+4. **No NON-BLOCKING follow-ups remain from C1** — all 27 first-pass findings + 8 Round-2 findings + 0 Round-3 findings reconciled across 4 cascade commits. C1 audit CLOSED.
+5. **Carryover follow-ups from prior sessions**: NONE — Note 54 already documented zero remaining; this Note adds zero new follow-ups
+6. **Next substantive options** (foundation-up per BACKLOG):
+   - **Phase 3.5 substantive primitive-cluster work** per `BACKLOG.md` Phase 3.5 — specialist+skill / practitioner / workflow+work-unit / claim+defensibility primitive cluster topics + scope-model + axis-interactions cross-cutting integrators (UNBLOCKED post-C1; 6 ARCH topics)
+   - **Phase 3.6 quality-gate ARCH topic** per `BACKLOG.md` Phase 3.6 — now has §14 slot ready at template-creation moment per Note 53 + Wave 1.B template rename + audit/adapter §14 precedents + audit-composes-with-authority-binding-mechanism reframe per Note 54 T2 + Wave 1 NEW authority-binding GLOSSARY entry (quality-gate inherits clean composition with authority-binding without Trust subsumption ambiguity)
+   - **Coherence-audit checkpoint C2** per `disciplines/09-coherence-audit-cadence.md` post-Phase-3.5 close (NOT runnable yet; gates on Phase 3.5 completion)
+7. **Recommended order**: Phase 3.5 next (foundation-up; primitive-cluster topics extend on now-validated Pattern A + Pattern D set + framework-baseline-vs-shape-extension partition); Phase 3.6 quality-gate after Phase 3.5 (composes with authority-binding + quality-gate Pattern A is its OWN Pattern A topic so all primitive-cluster compositions inform its design); C2 fires when Phase 3.5 closes per cadence
+
+**What is NOT lost**:
+- All Phase 3.4 corpus validated set-level coherent under C1 phase-boundary audit; foundational Pattern A precedent set + 12+7 conditional template + 4-Pattern-A-cardinality-pattern set + Pattern D mechanism-class peer pattern + framework-baseline-vs-shape-extension partition all CONFIRMS-LOCKED
+- 6 substantive new architectural commitments landed (Pattern D codification + authority-binding GLOSSARY entry + Pattern A/mechanism-class template rename + ARCHITECTURE.md §6 composite boot subsection + arch/substrate.md §E event-bus extension + framework-baseline-vs-shape-extension partition)
+- Cross-execution pattern signal post-C1: substantive architecture survives full-systematic phase-boundary audit; load-bearing primitives codified where audit surfaced canonical-home gaps; mechanical cascade-misses + provenance-hygiene scrubs cleaned in 4 commits; Lens 1+8+9 collective REVISION = 5 (load-bearing lenses produced substantive findings; counter-mechanism per skill §Self-validation bias warning satisfied)
+- Coherence-audit skill v0.3.4 empirically validated on first phase-boundary execution; cross-skill composability with v2 greenfield-rederivation Cleanup-Writer pattern + decision-design-sharpening prep-read discipline + skill §Termination signals + §Honest termination test Q1-Q5
+
+**Phase 3 status post-this-audit**: Phase 3.1 + 3.2 + 3.4 (substrate + adapter + sparring + audit) all v2-audited + C1-validated set-level coherent. Phase 3.4 effectively COMPLETE per Note 48 + Note 54; Phase 3.4 v2-audit campaign CLOSED per Note 54; **Phase 3.4 C1 coherence-audit CLOSED per this Note**. Phase 3.5 + 3.6 unblocked per audit-cadence + foundation-up ordering; coherence-audit checkpoint C2 (post-Phase-3.5) gates on Phase 3.5 completion per `disciplines/09-coherence-audit-cadence.md` cadence.
+
+**Notes 51-54**: stay as historical session-log. HANDOFF currently at ~360 + ~120 expansion ≈ ~480 lines after Note 55. Approaching ~500-line threshold; rotation candidate next session start (Notes 51-54 → `archive/handoffs/HANDOFF-sessions-22-25.md`).
+
+---
