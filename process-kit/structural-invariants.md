@@ -64,9 +64,19 @@ Behavioral preferences ("user wants terse summaries") persist freely. Factual cl
 
 Every claim has a citation — a named basis. Without one, the claim defaults to "known from direct evidence in current context." When the basis isn't direct evidence, name what it actually is (summary, synthesis, memory, pattern-match).
 
-**Failure mode addressed**: Assertions defaulting to fabricated confidence. The honest basis is often weaker than the assertion implies; without explicit basis, the AI presents synthesis as observation.
+**Procedural rule (the cite-or-flag-or-read decision)**: Before asserting any claim about code behavior, system state, or what a document says, take ONE of three paths:
 
-**Basis**: Cross-validated; standard practice in well-cited human research; particularly load-bearing for AI given known confabulation tendency.
+- (a) **Cite** — the source has been read in current session; cite specific file:line or section name
+- (b) **Read** — read the source now, then assert
+- (c) **Flag** — explicitly tag the assertion as "inferred from adjacent signal X — not verified by reading source"
+
+Defaulting to confident assertion without one of these three IS the failure mode. Particularly load-bearing for claims that adjacent signals (commit messages, file names, function names, doc titles, recall of prior conversations, framework-pattern-matching) make plausible — these are precisely the cases where inference most often produces wrong-but-confident results.
+
+**Failure mode addressed**: Assertions defaulting to fabricated confidence. The honest basis is often weaker than the assertion implies; without explicit basis, the AI presents synthesis as observation. Particularly common when adjacent signals exist (commit messages, function names, doc titles) that make a plausible-sounding inference available without verification — the inference feels like knowledge to the AI, but the basis is pattern-match, not evidence.
+
+**Basis**: Cross-validated; standard practice in well-cited human research; particularly load-bearing for AI given known confabulation tendency. Procedural rule strengthening (cite-or-flag-or-read) responds to assertion-without-basis as a recurring failure mode observed across multiple agent-style AI projects — the descriptive form ("make basis explicit") is necessary but not action-prescribing; AI under context pressure defaults to confident assertion unless given an explicit decision tree.
+
+**Structural-enforcement gap**: Unlike invariants enforceable via PreToolUse hooks (e.g., prep-reads before writing to architectural artifacts — see invariant 5), this invariant cannot be deterministically enforced — assertions happen in natural-language output, not in tool calls. See `meta-rules.md` "Honest residual concerns" for the residual.
 
 ## 9. Self-audit before declaring done
 
