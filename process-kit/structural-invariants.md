@@ -38,11 +38,33 @@ Writer-Reviewer (or Investigator-Implementer) in different contexts. The agent p
 
 ## 5. Make load-bearing rules deterministic, not advisory
 
-Anything that has empirically failed as prose discipline becomes a hook, pre-tool gate, or regex check. Treat advisory rules as best-effort hints; treat hooks as guarantees.
+Anything that has empirically failed as prose discipline becomes structurally enforced — hooks, pre-tool gates, regex checks, OR other strong-form enforcement patterns when hook-style enforcement is infeasible (see "Strong-form enforcement patterns" below). Treat advisory rules as best-effort hints; treat structural enforcement as guarantees.
 
-**Failure mode addressed**: Prose discipline silently fails under context pressure. The AI follows it sometimes, drops it under load. Structural enforcement guarantees the action happens.
+**Failure mode addressed**: Prose discipline silently fails under context pressure. The AI follows it sometimes, drops it under load. Structural enforcement guarantees the action happens — or at minimum, makes its absence observable.
 
-**Basis**: Anthropic engineering guidance: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens." Well-evidenced.
+**Basis**: Anthropic engineering guidance: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens." Well-evidenced for hook-style enforcement. The strong-form patterns below are derived from review of clippy plugin (single-sample); cross-framework validation pending.
+
+### Strong-form enforcement patterns (when hooks are infeasible)
+
+Some failure modes cannot be intercepted by PreToolUse hooks — most notably, assertions in natural-language output (see invariant 8 "Structural-enforcement gap"). For these, structural enforcement comes from procedural patterns observable in artifacts and tool-call sequences. Six patterns observed in clippy plugin's investigate-design + verify skills:
+
+1. **Multi-level status indicators**: replace binary claim/no-claim with gradient levels (e.g., `[NOT VERIFIED]` / `[PARTIALLY VERIFIED]` / `[VERIFIED]` / `[VIOLATION]`). Forces gradient grading; "I'm not yet sure" is a first-class status. Single-component evidence is structurally distinguishable from cross-component evidence.
+
+2. **Default-state = NOT READY with cycle counting**: framing default state as "incomplete, correct" prevents rush-to-completion as a structural matter. Single-pass assertions of "done" are structurally framed as wrong. Expected cycle count (e.g., 2-5+ before READY) makes single-cycle declarations of completion observable as anti-pattern.
+
+3. **Discovery vs. verification distinction**: define what counts as evidence per artifact type. For code: grep finds locations; `read_file` is evidence; need 2-3+ distinct components for systemic patterns. For documents: grep finds sections; reading the section is evidence. The distinction is domain-specific but the pattern is universal — "I searched" ≠ "I read."
+
+4. **Run-the-tool-show-the-output mandate**: for claims about verification state (tests pass, build succeeds, schema validates), require invocation of the verification tool AND showing its output. Output is the evidence; absence of output = unverified. Domain-specific verification tools (linters, type-checkers, test runners, validation scripts) become observable evidence sources.
+
+5. **Structured disk artifacts as basis records**: tracker files (e.g., `.ai/investigation/tracker.yaml`) hold verification state per finding. Status is structurally observable; readers can inspect the artifact to see what's at what level. Forces accumulation of evidence over time and makes basis grading auditable post-hoc.
+
+6. **Explicit anti-pattern enumeration**: per-discipline "DO NOT" lists naming common failure modes by name. Examples: "Mark [RESOLVED] after only reading structure/pattern"; "Assume pattern understanding = verification"; "Defer X when investigation can resolve it." Naming failure modes is a stronger guard than naming only success criteria.
+
+These patterns compose. A discipline using all six is structurally stronger than one relying on prose alone, even without PreToolUse hooks. They are particularly relevant for invariant 8 (basis explicit) and invariant 9 (self-audit before done) where the failure mode happens in natural-language output and hooks cannot intercept.
+
+**Application during derivation**: when running `derivation-procedure.md` Step 3 (derive hooks) and Step 4 (derive named skills), consider these strong-form patterns as alternatives to hooks for failure modes where natural-language output is the failure surface. Per-project procedures may adopt some, all, or none depending on cost-of-error calibration.
+
+**Basis (this sub-section)**: Single-sample — derived from review of clippy plugin (`investigate-design/SKILL.md`, `verify/SKILL.md`, `references/VERIFICATION_EXAMPLES.md`). Other agent-style frameworks may surface additional or different patterns. Tagged judgment-call per `meta-rules.md` evidence-tier scale until cross-framework validation accumulates. First adopters' experience refines this pattern set.
 
 ## 6. Force re-grounding at every invocation of a procedure
 
