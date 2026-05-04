@@ -75,4 +75,4 @@ Negative-marker test (rubber-stamping NOT occurring):
 - [category collapse](category-collapse.md) (general force)
 - [tacked-on AI](tacked-on-ai.md) (axis-1 parallel failure mode)
 - [answer-machine AI](answer-machine-ai.md) / [oracle AI](oracle-ai.md) / [validator AI](validator-ai.md) (axis-2 parallel failure modes — independent dimensions)
-- ARCH Layer 3 axis-3-failure-detection topics (placeholder until Phase 3 — per-claim attestation mechanics; engagement-quality signals at finalization; `quality-gate` Pattern A protocol per GLOSSARY entry handles pre-attestation gate design at Phase 3.6)
+- [arch/claim-defensibility.md](../arch/claim-defensibility.md) — rubber-stamping as axis-3 failure mode failing defensibility's Cond #1 engaged-authorship attestation-phase per per-claim attestation chain mechanics + per-claim attestation event mandatoriness per shape (Phase 3.5 fourth primitive-cluster ARCH topic LOCKED; PRIMITIVE+DERIVED topic-template-class anchor; `quality-gate` Pattern A protocol composes with axis-3 rubber-stamping signal at attestation moments — Phase 3.6 forthcoming)

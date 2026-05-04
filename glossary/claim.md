@@ -72,4 +72,4 @@ In all archetypes: claim = atomic-defensible-assertion. Cross-archetype shape co
 - [sparring (axis 2)](sparring.md) (which fires at claim granularity)
 - [practitioner](practitioner.md) (who defends claims)
 - [event](event.md) (claims emit `claim_made` events)
-- ARCH Layer 3 claim-detail topics (placeholder until Phase 3 — claim-event schema, claim-revision semantics, finalization mechanics, source-grounding requirements per claim, sparring-target mechanics; archived material to consult: `audit-trail-v2.md`)
+- [arch/claim-defensibility.md](../arch/claim-defensibility.md) — claim primitive structural overview + per-claim attestation chain mechanics + cluster composition + cross-pattern destruction inheritance (Phase 3.5 fourth primitive-cluster ARCH topic LOCKED; PRIMITIVE+DERIVED topic-template-class anchor; archived material to consult for Phase 6 claim-event schema: `audit-trail-v2.md`)
