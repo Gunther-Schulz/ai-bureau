@@ -4,6 +4,19 @@ These are the cross-domain claims about what makes AI-partnered work robust. The
 
 Each invariant: the rule, the failure mode it addresses, the basis for the claim.
 
+## Normative Language
+
+The key words MUST, MUST NOT, REQUIRED, SHOULD, SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
+
+Invariant classification (used by `derivation-procedure.md` Step 11 conformance check):
+
+- **Invariants 1-9 (load-bearing)**: MUST. Skipping these means the derived procedure does not conform to the kit's claims about robustness. Each names a documented failure mode that prose discipline alone has empirically failed to prevent
+- **Invariant 10 (Defense in depth)**: SHOULD. Best practice and recommended for high-stakes work. Skipping is acceptable when the sizing principle determines defense-in-depth is over-engineered for the artifact class (low-stakes / high-reversibility / low-coupling)
+- **Sizing principle (governs application of 1-10)**: REQUIRED to be calibrated per project; the calibration ITSELF is implementation-defined and project-specific
+- **Strong-form enforcement patterns (invariant 5 sub-section)**: RECOMMENDED. Consider during derivation; adopt patterns whose cost is justified by domain cost-of-error
+
+Conformance is determined by `derivation-procedure.md` Step 11 (Definition of Done). A derived procedure that omits a MUST-tagged invariant without explicit justification is non-conformant; one that omits a SHOULD-tagged invariant with documented reason remains conformant.
+
 ## 1. Load mandatory context at every fresh start
 
 A small, anchor-grade entry document names the must-reads and the bootstrap order for any session beginning substantive work. The entry document auto-loads (or is the first thing read) so even fresh sessions with no prior context arrive at the project's specialized procedures.
@@ -60,11 +73,13 @@ Some failure modes cannot be intercepted by PreToolUse hooks — most notably, a
 
 6. **Explicit anti-pattern enumeration**: per-discipline "DO NOT" lists naming common failure modes by name. Examples: "Mark [RESOLVED] after only reading structure/pattern"; "Assume pattern understanding = verification"; "Defer X when investigation can resolve it." Naming failure modes is a stronger guard than naming only success criteria.
 
-These patterns compose. A discipline using all six is structurally stronger than one relying on prose alone, even without PreToolUse hooks. They are particularly relevant for invariant 8 (basis explicit) and invariant 9 (self-audit before done) where the failure mode happens in natural-language output and hooks cannot intercept.
+7. **Lifecycle hooks contract**: register procedural hooks at well-defined transition points (artifact creation / before-run / after-run / before-cleanup) with explicit failure semantics per hook (fatal-to-current-attempt vs. logged-and-ignored). Different from invariant 5's main hook concept (which is PreToolUse-style intercepting tool calls); this is procedural-lifecycle hooks at known transition points. Particularly useful for: workspace setup/teardown enforcement; pre-condition validation before high-stakes operations; post-condition cleanup that must happen even on failure. Pattern observed in Symphony's workspace hooks specification: `after_create` failure is fatal to workspace creation; `before_run` failure is fatal to current run attempt; `after_run` and `before_remove` failures are logged and ignored. The fatal-vs-ignored distinction prevents both silent setup-failures (caught) AND cleanup-failures from blocking forward progress (logged but not fatal).
+
+These patterns compose. A discipline using all seven is structurally stronger than one relying on prose alone, even without PreToolUse hooks. They are particularly relevant for invariant 8 (basis explicit) and invariant 9 (self-audit before done) where the failure mode happens in natural-language output and hooks cannot intercept.
 
 **Application during derivation**: when running `derivation-procedure.md` Step 3 (derive hooks) and Step 4 (derive named skills), consider these strong-form patterns as alternatives to hooks for failure modes where natural-language output is the failure surface. Per-project procedures may adopt some, all, or none depending on cost-of-error calibration.
 
-**Basis (this sub-section)**: Single-sample — derived from review of clippy plugin (`investigate-design/SKILL.md`, `verify/SKILL.md`, `references/VERIFICATION_EXAMPLES.md`). Other agent-style frameworks may surface additional or different patterns. Tagged judgment-call per `meta-rules.md` evidence-tier scale until cross-framework validation accumulates. First adopters' experience refines this pattern set.
+**Basis (this sub-section)**: Patterns 1-6 derived from review of clippy plugin (`investigate-design/SKILL.md`, `verify/SKILL.md`, `references/VERIFICATION_EXAMPLES.md`). Pattern 7 (lifecycle hooks) derived from Symphony plugin specification (`SPEC.md` §9.4). Two-sample-derived; other agent-style frameworks may surface additional or different patterns. Tagged judgment-call per `meta-rules.md` evidence-tier scale until cross-framework validation accumulates. First adopters' experience refines this pattern set.
 
 ## 6. Force re-grounding at every invocation of a procedure
 

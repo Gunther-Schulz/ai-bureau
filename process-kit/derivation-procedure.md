@@ -88,7 +88,9 @@ At the boundary: write to handoff log, commit, push (or domain equivalent), STOP
 
 Output of this step: definition of "logical work unit" for the project plus the close-out actions at each boundary.
 
-## Step 8 — Calibrate sizing
+## Step 8 — Calibrate sizing + document trust posture
+
+### 8a. Sizing calibration
 
 For each artifact type and work-unit type, decide mitigation density:
 
@@ -98,7 +100,19 @@ For each artifact type and work-unit type, decide mitigation density:
 
 The sizing decisions belong in your derived procedure document, made explicit so the project can revisit them as cost calibration shifts.
 
-Output of this step: a sizing table (artifact type → mitigation density → which invariants apply structurally vs. advisorily).
+Output of 8a: a sizing table (artifact type → mitigation density → which invariants apply structurally vs. advisorily).
+
+### 8b. Trust posture documentation (REQUIRED)
+
+In addition to the sizing table, document your project's trust/safety posture explicitly in plain prose. Per `meta-rules.md` honest-residual concern (assertion-without-basis is named but not hook-enforceable), each adopter project should make explicit:
+
+- **High-stakes artifact classes**: which artifacts in this project carry the highest cost-of-error and warrant full structural enforcement
+- **Cost-of-error per class** (concrete examples): "wrong claim about regulatory text → potential legal exposure"; "wrong test pass claim → broken production"; "wrong claim about API behavior → consumer breakage"
+- **Falsifier role**: who is the falsifier within this project? (per `self-application.md` falsifier-role discussion — the kit lacks a central live falsifier; adopter projects need a designated human or process role to detect drift between rules and intent)
+- **Approval/sandbox/operator-confirmation policy**: what does the AI do without confirmation, and where does it require explicit user approval? (e.g., "AI may edit code/ without confirmation but MUST request approval before migrations/" or "all edits proceed; user reviews via PR")
+- **Mitigation-to-artifact mapping**: which mitigations apply to which artifacts, and why? (cross-references back to sizing table)
+
+Output of 8b: a "Trust posture" section in your derived procedure document, scannable in 1-2 minutes by a new contributor. The trust posture is consulted whenever sizing decisions are revisited (per Step 10 maintenance protocol).
 
 ## Step 9 — Write your project's procedure document
 
@@ -126,6 +140,54 @@ Your derived procedure must include its own maintenance discipline. This lives i
 - **Re-derivation triggers** — when to re-run this whole derivation procedure (major domain shift, recurring failure not addressed, kit itself updated per `self-application.md`)
 
 These thresholds (N, M) are project-calibrated. The kit does not prescribe specific numbers — calibrate from your domain's failure cadence and cost-of-error.
+
+## Step 11 — Conformance check (Definition of Done)
+
+A derivation conforms to this kit when ALL of the following hold. Use this as a checklist before treating your derived procedure as kit-conformant.
+
+### REQUIRED for conformance (invariants tagged MUST per `structural-invariants.md` Normative Language)
+
+For each, your derived procedure MUST explicitly address how the invariant is applied in your domain:
+
+- **Invariant 1 (Load mandatory context)**: identify your anchor-grade entry document and verify auto-load at every session start
+- **Invariant 2 (Bound + refresh context)**: split anchor docs to per-topic files where size warrants; specify natural cascade boundaries; specify state-externalization artifacts (handoff log / commits / task list equivalents)
+- **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" in your domain
+- **Invariant 4 (Writer-Reviewer separation)**: identify which work-unit types require Writer-Reviewer separation; specify how the separation is achieved (sub-agent dispatch / fresh context / etc.)
+- **Invariant 5 (Deterministic enforcement)**: specify which load-bearing rules are hook-enforced or strong-form-pattern-enforced (vs. advisory). Document why each enforced rule is enforced (which prior failure mode or evidence justifies it)
+- **Invariant 6 (Re-grounding)**: identify procedures/skills that require re-reading at every invocation; document the re-grounding discipline
+- **Invariant 7 (Memory-as-preference vs truth)**: identify what counts as preference (persists freely) vs factual claim (verify before acting); document how factual claims are verified
+- **Invariant 8 (Basis explicit)**: identify how the cite-or-flag-or-read procedural rule applies in your domain; specify what counts as evidence per artifact type (per the strong-form-pattern Discovery vs. Verification distinction)
+- **Invariant 9 (Self-audit before done)**: specify the self-audit checklist for your work-unit boundaries; identify what evidence shows the audit was actually performed
+
+A REQUIRED item omitted without justification is a kit-conformance violation.
+
+### RECOMMENDED (invariant 10 + strong-form patterns; SHOULD)
+
+Apply when sizing calibration warrants:
+
+- **Invariant 10 (Defense in depth)**: name the redundant layers per high-stakes artifact class; identify which mitigations catch each failure mode
+- **Strong-form enforcement patterns** (invariant 5 sub-section) — per pattern, document whether your derivation adopts it:
+  - Multi-level status indicators
+  - Default-state = NOT READY with cycle counting
+  - Discovery vs verification distinction
+  - Run-the-tool-show-the-output mandate
+  - Structured disk artifacts as basis records
+  - Explicit anti-pattern enumeration
+  - Lifecycle hooks contract (after_create / before_run / after_run / before_remove)
+
+A SHOULD-tagged item omitted with documented reason remains conformant.
+
+### OPTIONAL (domain-specific extensions)
+
+Adopters MAY add domain-specific mitigations beyond the kit's invariants. These should be:
+
+- Explicitly documented as project-specific (not kit-derived)
+- Justified by observed (not speculative) failure modes in this domain
+- Tracked in the derived procedure's failure log + adoption-criteria entries
+
+### Conformance audit
+
+A periodic conformance check (e.g., at refresh-cadence intervals from Step 10) compares the derived procedure against this checklist. Drift from REQUIRED items is a kit-conformance violation; surface in the project's failure log + revisit Step 1 if needed. The check is a self-audit performed by the project, not centralized — per `self-application.md` falsifier-role discussion.
 
 ## Output
 
