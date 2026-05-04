@@ -224,6 +224,35 @@ Phase 6.1 narrower scope does NOT mean lighter discipline. Per `disciplines/09-c
 
 ARCH amendments that surface during 6.1 / 6.2 execution OR via post-lock evidence triggers fire as v1.x amendments per existing preliminary-lock revision discipline (per TOP-LEVEL DESIGN PRINCIPLES §3) + cascade discipline. Examples currently parked as v1.x amendment candidates per `BACKLOG.md` Phase 3.7: PydanticAI substrate evaluation (W5 watch-list candidate); framework-level RAG-engagement architecture HOW (deployment-evidence-driven).
 
+### Milestone-close pause-points
+
+Two structural pause-points anchor the thin-slice → production sequence — analogous to `disciplines/11-effort-switch-cluster-map.md` effort-switch pause-points but at milestone-close granularity. P1 is light (procedural confirm); P2 is hard (testing-approach decision-design required before Phase 6.2 unblocks).
+
+**P1 — Architectural-foundation-clean** (fires at Phase 3.8 close + post-amendment corpus stable):
+
+- **Mechanical criteria**: Phase 3.8 C3 audit clean OR user-confirmed-acceptable findings + post-amendment corpus stable (hand-rolled drop amendment + any C3-surfaced remediation landed)
+- **Declaration**: explicit HANDOFF Note "Architectural foundation clean" + commit subject convention `Architectural foundation clean — Phase 3.8 close + post-amendment corpus stable`
+- **Pause type**: LIGHT (procedural confirmation)
+- **AI surface**: "Phase 6.1 substantive work unblocked; pre-6.1 sanity check moment if any concerns surface"
+- **Default action**: user confirms green-light → Phase 6.1 substantive work (Mode 3 specs + Mode 2 reference impls) begins
+- **Skip condition**: user signals "no sanity check needed; proceed" — pause closes immediately
+
+**P2 — v1.0-runtime-thin-slice LOCKED** (fires at Phase 6.1 close = C5 post-Phase-6.1 close audit clean):
+
+- **Mechanical criteria**: C5 post-Phase-6.1 close audit clean + Mode 2 reference impls runnable end-to-end + items 1-5 deployment-instance authoring complete (in deployment-instance repo)
+- **Declaration**: explicit HANDOFF Note "v1.0-runtime-thin-slice LOCKED" + commit subject convention `v1.0-runtime-thin-slice LOCKED — Phase 6.1 close`
+- **Pause type**: HARD (decision-design required before proceeding)
+- **AI surface**: "milestone-close declared; testing-approach decision-design moment REQUIRED before Phase 6.2 substantive work begins"
+- **Required decision-design**: testing-approach decision-design-sharpening locks (a) test scope (Mode 1 authoring against architecture? full end-to-end runtime exercise? specific deployment-instance scenario?); (b) rigor depth; (c) success criteria; (d) what surfaced gaps are v1.x-amendment vs Phase 6.2-blocking
+- **Phase 6.2 unblocked only after testing-approach decision lands + executed.** Possible outcomes:
+  - "test now then proceed" — execute test; gaps surface as v1.x amendments OR Phase 6.2 prerequisite work
+  - "explicit watch on test deferral; proceed with risk acknowledged" — proceed to 6.2 with named test-deferral watch entry + revisit signal
+  - "minimum-viable test then proceed" — bounded test scope + proceed to 6.2 with test-evidence on file
+
+**Why hard pause at P2**: Phase 6.2 commitment is non-trivial (real LanceDB + fastembed + bge-m3 + LaTeX wrapper + real Layer A domain content + MS AF substrate impl + extended adapter classes + extended per-shape gate impls). Sunk-cost into 6.2 work without testing the thin-slice would mask thin-slice gaps that compound into 6.2 work. P2 forces deliberate testing-approach decision before that commitment.
+
+**Composition with v1.x amendment cadence**: testing-approach decision at P2 may surface ARCH gaps that fire as v1.x amendments BEFORE Phase 6.2 begins — composes cleanly with v1.x amendment cadence (per "v1.x amendment cadence (post-thin-slice-lock)" sub-subsection above).
+
 ### Cross-references
 
 - `BACKLOG.md` Phase 3.7 (v1.x amendment candidates) + Phase 6.1 (thin-slice scope) + Phase 6.2 (production scope)

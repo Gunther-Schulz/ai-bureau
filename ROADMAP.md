@@ -11,6 +11,8 @@
 | v1.0-runtime-thin-slice (UPCOMING) | 6.1 | Architecture composes structurally end-to-end (Mode 3 specs + minimal Mode 2 reference impls + items 1-5 with stub heavy infrastructure) | Phase 6.2 substantive work begins; deployment-instance Mode 1 authoring validates against locked architecture |
 | v1.0-production (UPCOMING) | 6.2 | First-deployment-instance production utility (PBS-Schulz pioneer); real infrastructure operational; extended substrate / adapter / shape-gate set | Production deployment + multi-archetype consulting motion |
 
+**Milestone-close pause-points** (per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points): P1 fires at Phase 3.8 close (light procedural confirm; Phase 6.1 substantive work unblocks on confirm); P2 fires at Phase 6.1 close (hard pause; testing-approach decision-design REQUIRED before Phase 6.2 unblocks).
+
 ## Parallel tracks (run alongside sequential milestones)
 
 | Track | Scope | Sequencing |

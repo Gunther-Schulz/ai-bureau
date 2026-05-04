@@ -133,7 +133,7 @@ Non-sequential ARCH amendment candidates that fire opportunistically post-Phase-
 
 ### 3.8 Coherence-audit Lenses 11-15 activation (phase-boundary audit)
 
-ARCH-corpus-specific lenses activate when ARCH approaches lockable state. Run before Phase 4 transition. **UNBLOCKED with Phase 3.6 close** (quality-gate ARCH topic LOCKED 2026-05-04; Phase 3 ARCH work substantively complete pending Phase 3.7 cross-cutting investigations); C3 phase-boundary audit fires per `disciplines/09-coherence-audit-cadence.md` cadence.
+ARCH-corpus-specific lenses activate when ARCH approaches lockable state. Run before Phase 4 transition. **UNBLOCKED with Phase 3.6 close** (quality-gate ARCH topic LOCKED 2026-05-04; Phase 3 ARCH work substantively complete pending Phase 3.7 cross-cutting investigations); C3 phase-boundary audit fires per `disciplines/09-coherence-audit-cadence.md` cadence. **Pause-point P1 (architectural-foundation-clean)** fires at this section's close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points.
 
 - **Lens 11 (Inter-layer consistency)** — formalize ARCH ↔ GLOSSARY ↔ DR ↔ spec citation health checks
 - **Lens 12 (Specs traceability)** — every ARCH topic with implementation contract has corresponding spec OR explicit deferral
@@ -212,7 +212,7 @@ When STRATEGY.md is created, fold these positioning claims (removed from VISION 
 
 ## Phase 6.1 — v1.0-runtime-thin-slice (Specs + minimal reference impls + items 1-5)
 
-Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: in-scope = needed for Mode 1 deployment-instance authoring against locked architecture OR for Mode 2 reference impl work that exercises items 1-5 end-to-end with stub heavy infrastructure.
+Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: in-scope = needed for Mode 1 deployment-instance authoring against locked architecture OR for Mode 2 reference impl work that exercises items 1-5 end-to-end with stub heavy infrastructure. **Pause-point P2 (v1.0-runtime-thin-slice LOCKED)** fires at this section's close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points; testing-approach decision-design REQUIRED before Phase 6.2 substantive work begins.
 
 ### Open
 
@@ -239,7 +239,7 @@ Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: in-scope = needed for Mode 1
 
 ## Phase 6.2 — v1.0-production (real infrastructure + extended impls)
 
-Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: replaces Phase 6.1 stubs with production-grade impls + extends substrate / adapter / shape-gate set; first deployment-instance utility validation.
+Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: replaces Phase 6.1 stubs with production-grade impls + extends substrate / adapter / shape-gate set; first deployment-instance utility validation. **Phase 6.2 substantive work unblocked only after Phase 6.1 P2 pause-point closes** per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points.
 
 ### Open
 
