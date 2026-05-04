@@ -2,13 +2,7 @@
 
 ## 1. Status
 
-**ACCEPTED** (session 28, 2026-05-03). 2-round decision-design-sharpening (Round 1 full monty + Round 2 user-triggered). Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 5 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite).
-
-Sharpening rounds metadata:
-- Round 1 (full monty): 5 sub-decisions inventoried + sharpened with foundation-up dependency ordering
-- Round 2 (user-triggered): cross-cutting + schema-detail refinements (R-CC-1 through R-CC-10 + R-SD-1 + R-SD-2)
-- STABLE-AT-ROUND-2 verdict per `decision-design-sharpening` §Lock + persist signals (DECAY CONFIRMED; specific termination signal named below)
-- LOCK-HARD target-type per skill §Step 4 target-type modifier (architectural decision; cascades hard if revised)
+**ACCEPTED** 2026-05-03. Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 5 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite). LOCK-HARD target-type (architectural decision; cascades hard if revised).
 
 ## 2. Owner
 
@@ -17,11 +11,11 @@ Phase 3.5 — second primitive-cluster ARCH topic. Anchors **Pattern C topic-tem
 ## 3. Related
 
 **Composes with**:
-- `arch/substrate.md` Surface §C (permission flow records practitioner identity at HITL approval moments per R-CC-4) + §G (specialist registration composes with practitioner-record activation ordering per R-CC-1) + §10 (boot ordering integration) + §8 (dual-emission paths apply when practitioner-attribution events flow through both substrate-internal AND skill-side emission)
-- `arch/audit.md` Surface §A (emission API + actor declaration for practitioner-RECORD identity) + §C (query API for cross-practitioner audit-trail defensibility test per R-CC-7) + §14 (cross-shape policy variation per R-CC-2 audit emission granularity composes with practitioner attribution) + §15 W5 federated audit-trail watch (composes with W1 multi-tenant federation)
-- `arch/sparring.md` §14 per-shape activation matrix + sparring engagement events `actor_kind: ai_runtime` per R-CC-3
+- `arch/substrate.md` Surface §C (permission flow records practitioner identity at HITL approval moments) + §G (specialist registration composes with practitioner-record activation ordering) + §10 (boot ordering integration) + §8 (dual-emission paths apply when practitioner-attribution events flow through both substrate-internal AND skill-side emission)
+- `arch/audit.md` Surface §A (emission API + actor declaration for practitioner-RECORD identity) + §C (query API for cross-practitioner audit-trail defensibility test) + §14 (cross-shape policy variation; audit emission granularity composes with practitioner attribution) + §15 W5 federated audit-trail watch (composes with W1 multi-tenant federation)
+- `arch/sparring.md` §14 per-shape activation matrix + sparring engagement events `actor_kind: ai_runtime`
 - `arch/adapter.md` §3 framework-baseline-vs-shape-extension partition (W2 Identity-class adapter Surface candidate per W2)
-- `arch/specialist-skill.md` §5 mid-session re-binding (cross-specialist activation actor binding back-link per R-CC-9) + §13 archival-as-default destruction semantics (cross-pattern coherence per R-CC-8)
+- `arch/specialist-skill.md` §5 mid-session re-binding (cross-specialist activation actor binding back-link) + §13 archival-as-default destruction semantics (cross-pattern coherence)
 - `docs/decisions/specialist-skill-arch-topic.md` (primitive-cluster 12+5 template precedent + Mode 2 composite decomposition precedent)
 - `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` (Pattern A / mechanism-class template; primitive-cluster 12+5 derived parallel)
 - `docs/decisions/audit-arch-topic.md` (mechanism-class precedent; per-shape trust model parameterization)
@@ -36,7 +30,7 @@ Phase 3.5 — second primitive-cluster ARCH topic. Anchors **Pattern C topic-tem
 - `engaged-authorship` (production-phase + attestation-phase per-claim engagement composes through practitioner-RECORD identity)
 - `co-worker` (practitioner is human side of axis-1 co-worker pairing)
 - `claim` (practitioners accountable for individual claims; defensibility resolves at claim granularity through practitioner attribution)
-- `session` (session binds to ONE practitioner-record at session-open per R-CC-10)
+- `session` (session binds to ONE practitioner-record at session-open)
 
 **Forward-references** (future Phase 3.5 topics):
 - `arch/claim-defensibility.md` (per-claim attestation chain via authority-binding + practitioner-RECORD identity; defensibility resolves at claim granularity)
@@ -51,7 +45,7 @@ Phase 3.5 — second primitive-cluster ARCH topic. Anchors **Pattern C topic-tem
 
 **Archived sources** (INPUT only per Discipline 10 — greenfield-evaluated against current locked vocabulary; NOT transcribed as template):
 - `archive/docs/decisions/office-level-managed-entities.md` (NAMING SUPERSEDED per archived header — "Office-level managed entities" → "Workspace-scope managed entities" per current locked vocabulary; ActorEntity schema lines 84-95 cited as INPUT for practitioner-RECORD field enumeration but NOT transcribed verbatim — archive conflates actor + practitioner; current locked vocabulary SEPARATES them per `glossary/actor.md`; greenfield-derived practitioner-RECORD schema per current Pattern C bipartite)
-- `archive/docs/decisions/governance-and-identity-sourcing.md` (decision 1 = role primitive at shape-policy per current vocabulary — applied to `role_bindings` field per SD-2 / §8; decision 2 = native vs adapter mode for practitioner-RECORD source — applied to `mode` + `adapter_binding` fields per SD-2; decision 3 = per-deployment uniqueness convention preserved as deployment-side commitment per R-SD-1; decision 4 = prose-rules pattern for ID minting cited as deployment-level discipline)
+- `archive/docs/decisions/governance-and-identity-sourcing.md` (decision 1 = role primitive at shape-policy per current vocabulary — applied to `role_bindings` field per SD-2 / §8; decision 2 = native vs adapter mode for practitioner-RECORD source — applied to `mode` + `adapter_binding` fields per SD-2; decision 3 = per-deployment uniqueness convention preserved as deployment-side commitment; decision 4 = prose-rules pattern for ID minting cited as deployment-level discipline)
 
 ## 4. Context
 
@@ -110,7 +104,7 @@ Five sub-decisions per Mode 2 composite decomposition (sub-decisions have no ind
 | `lifecycle_state` | enum | required | `active` \| `dormant` per SD-4 |
 | `firm_binding` | str | optional | Reference to workspace.md `legal_entity_context` block (per SD-3; for legal-entity-shape workspaces only) |
 
-**Schema explanation note** (per R-CC-5): `signing_authority` constrains WHO can sign claims at framework level (gate-enforced structural per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1); `role_bindings` constrains WHICH actions per shape policy (shape-policy-enforced). Different scopes; both load-bearing; not redundant.
+**Schema explanation note**: `signing_authority` constrains WHO can sign claims at framework level (gate-enforced structural per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §1); `role_bindings` constrains WHICH actions per shape policy (shape-policy-enforced). Different scopes; both load-bearing; not redundant.
 
 ### SD-3: Multi-practitioner workspace mechanics + legal-entity workspace context
 
@@ -124,7 +118,7 @@ Five sub-decisions per Mode 2 composite decomposition (sub-decisions have no ind
 - Cross-practitioner workflow handoff: YES (mid-workflow handoff = phase transition with attribution chain preserving prior + new owner)
 - Cross-practitioner SPARRING engagement: YES via AI runtime (sparring `actor_kind: ai_runtime`; cross-practitioner REVIEW separate workflow phase per archived `office-level-managed-entities.md` decision 1 layered enforcement greenfield-evaluated)
 
-**Multi-practitioner concurrent-session handling** (per R-CC-10): each session binds to ONE practitioner-record at session-open (`session.bound_practitioner_id: str`); cross-session within workspace = multiple practitioner-records active concurrently in different sessions; never multiple practitioners in single session.
+**Multi-practitioner concurrent-session handling**: each session binds to ONE practitioner-record at session-open (`session.bound_practitioner_id: str`); cross-session within workspace = multiple practitioner-records active concurrently in different sessions; never multiple practitioners in single session.
 
 ### SD-4: Practitioner lifecycle + deactivation semantics
 
@@ -132,7 +126,7 @@ Five sub-decisions per Mode 2 composite decomposition (sub-decisions have no ind
 
 **Lifecycle event-kind catalog** (4 kinds):
 - `practitioner_record_minted` — workspace setup OR per-practitioner-addition
-- `practitioner_record_updated` — single event-kind with `details.changed_fields: list[str]` per R-CC-6 (NOT separate event-kinds per field; minimal event-kind catalog growth per archived `audit-trail-v2.md` `details:` payload precedent)
+- `practitioner_record_updated` — single event-kind with `details.changed_fields: list[str]` (NOT separate event-kinds per field; minimal event-kind catalog growth per archived `audit-trail-v2.md` `details:` payload precedent)
 - `practitioner_record_deactivated` — practitioner leaves; record becomes dormant (NOT deleted)
 - `practitioner_record_reactivated` — dormant practitioner returns
 
@@ -142,7 +136,7 @@ Five sub-decisions per Mode 2 composite decomposition (sub-decisions have no ind
 
 **Cross-practitioner-handoff at deactivation**: per shape policy (practitioner-shape may require explicit handoff-to-named-practitioner; autonomous-business-shape may permit auto-routing).
 
-**Workspace dissolution + practitioner-record archival** (per R-CC-8 cross-pattern coherence with `arch/specialist-skill.md` §13): archival-as-default per axis-3 defensibility (practitioner-records preserve historic-claim attribution); deletion-with-audit opt-in per shape policy (`workspace.md` `instance_content_dissolution_policy: archive | delete-with-audit`).
+**Workspace dissolution + practitioner-record archival** (cross-pattern coherence with `arch/specialist-skill.md` §13): archival-as-default per axis-3 defensibility (practitioner-records preserve historic-claim attribution); deletion-with-audit opt-in per shape policy (`workspace.md` `instance_content_dissolution_policy: archive | delete-with-audit`).
 
 ### SD-5: Authority-binding integration + cross-axis composition + watch-list
 
@@ -289,13 +283,13 @@ Per `decision-design-sharpening` §Round termination signals + §Honest terminat
 
 This decision composes with prior locked architecture:
 
-- **Pattern A protocols** (substrate / adapter; sparring + audit mechanism classes per Phase 3.4 close): practitioner composes with substrate Surface §C (permission flow records practitioner identity at HITL approval moments per R-CC-4) + §F (session/context management; session binds to ONE practitioner-record per R-CC-10); with audit Surface §A skill-side emission + §C query API (per R-CC-7); with adapter §3 framework-baseline-vs-shape-extension partition (W2 Identity-class adapter Surface candidate). Practitioner is NOT Pattern A (no multiple interchangeable implementations of one Surface) — practitioner is Pattern C bipartite (HUMAN cross-cutting + RECORD at Owner B).
+- **Pattern A protocols** (substrate / adapter; sparring + audit mechanism classes per Phase 3.4 close): practitioner composes with substrate Surface §C (permission flow records practitioner identity at HITL approval moments) + §F (session/context management; session binds to ONE practitioner-record); with audit Surface §A skill-side emission + §C query API; with adapter §3 framework-baseline-vs-shape-extension partition (W2 Identity-class adapter Surface candidate). Practitioner is NOT Pattern A (no multiple interchangeable implementations of one Surface) — practitioner is Pattern C bipartite (HUMAN cross-cutting + RECORD at Owner B).
 
-- **Pattern B specialist-skill primitive cluster** (per `arch/specialist-skill.md` Phase 3.5 first primitive-cluster lock): cross-specialist activation actor binding back-link per `arch/specialist-skill.md` §5 mid-session re-binding — when specialist activates mid-session, the activating actor is practitioner-RECORD bound to current session (R-CC-9 cross-cutting refinement); back-link preserves attribution chain across capability changes.
+- **Pattern B specialist-skill primitive cluster** (per `arch/specialist-skill.md` Phase 3.5 first primitive-cluster lock): cross-specialist activation actor binding back-link per `arch/specialist-skill.md` §5 mid-session re-binding — when specialist activates mid-session, the activating actor is practitioner-RECORD bound to current session; back-link preserves attribution chain across capability changes.
 
 - **authority-binding mechanism** (per `glossary/authority-binding.md` from Phase 3.4 C1 cascade): practitioner-RECORD IS the human authority bound to claim_made / signature_applied / sparring-engagement events per per-event actor declaration sub-aspect; per-claim author attribution chain composes through practitioner-RECORD identity for `actor_kind: human` events.
 
-- **`ARCHITECTURE.md` §6 composite boot subsection**: practitioner-record activation ordering integrates within substrate-phase 3 adapter bindings load step per ARCH §13 boot-time activation ordering (R-CC-1 REVISION-flavored EXPANSION; structural elevation of implicit boot ordering to explicit).
+- **`ARCHITECTURE.md` §6 composite boot subsection**: practitioner-record activation ordering integrates within substrate-phase 3 adapter bindings load step per ARCH §13 boot-time activation ordering.
 
 - **`MAINTENANCE.md` Layer 3 Primitive-cluster topic template** (locked per `arch/specialist-skill.md` DR + `MAINTENANCE.md` Layer 3 §3 Primitive-cluster topic template subsection): Pattern C topic-template-class anchored at this topic per per-pattern conditional applicability rules (granularity / bundle / marketplace likely N/A for Pattern C bipartite single-primitive clusters; cross-shape policy variation + per-primitive lifecycle ordering likely apply). Future Pattern C primitive-cluster topics inherit this DR's anchor for conditional applicability rules.
 
@@ -310,47 +304,26 @@ This decision composes with prior locked architecture:
 - **Phase 3.5 `arch/workflow-work-unit.md`**: cross-practitioner workflow handoff mechanics (W4) compose with workflow_handoff event-kind shape; per-shape required-handoff-recipient enforcement per shape policy
 - **Phase 3.6 `arch/quality-gate.md`**: consumes practitioner-attestation events for axis-3 intervention per `glossary/engaged-authorship.md` quality-gate row; quality-gate Pattern A composes with practitioner-RECORD identity for per-claim attestation defensibility
 - **Phase 6 specs** (`docs/specs/practitioner.md`): inherit practitioner-RECORD frontmatter manifest schema per SD-2; PractitionerError class hierarchy per ARCH §7
-- **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): per-deployment practitioner-record entity-md authoring + per-deployment ID uniqueness convention prose + adapter-mode hydration caching mechanics (R-SD-1; per-deployment storage convention deferred to Phase 6)
-- **Wave-2 Cascade-Writer commit** (this commit's tight coupling): GLOSSARY back-check applied (CLEAN per §6 verdict — no retro-fits needed); MAINTENANCE.md Layer 3 Primitive-cluster topic template Pattern C-specific conditional applicability codification (if Pattern C-specific applicability rules warrant explicit codification per Cascade-Writer scope determination); ARCHITECTURE.md §7 lock entry; Lens 6 reciprocal back-mentions in peer ARCH topics §17/§19 (substrate + audit + adapter + sparring + specialist-skill)
-- **BACKLOG.md**: W1 (multi-tenant federation practitioner identity) → Phase 5+ ROADMAP entry per D Gate; W2 (adapter-mode practitioner-RECORD source mechanics + Identity-class adapter Surface candidate) → Phase 6 watch trigger composing with `arch/adapter.md` §3 partition; W3 (practitioner-record signing mechanism) → Phase 6 audit-trail integrity implementation trigger; W4 (cross-practitioner workflow handoff) → Phase 5+ second-multi-practitioner-deployment-surface signal; cross-DR cumulative REVISION-flavored count (1 here + 2 in `arch/specialist-skill.md` DR = 3) flagged for Coherence-audit C2 evaluation of 3-tier discriminator codification
+- **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): per-deployment practitioner-record entity-md authoring + per-deployment ID uniqueness convention prose + adapter-mode hydration caching mechanics (per-deployment storage convention deferred to Phase 6)
+- **GLOSSARY cascade**: GLOSSARY back-check applied (CLEAN per §6 verdict — no retro-fits needed); MAINTENANCE.md Layer 3 Primitive-cluster topic template Pattern C-specific conditional applicability codification; ARCHITECTURE.md §7 lock entry; reciprocal back-mentions in peer ARCH topics §17/§19 (substrate + audit + adapter + sparring + specialist-skill)
+- **BACKLOG.md**: W1 (multi-tenant federation practitioner identity) → Phase 5+ ROADMAP entry per D Gate; W2 (adapter-mode practitioner-RECORD source mechanics + Identity-class adapter Surface candidate) → Phase 6 watch trigger composing with `arch/adapter.md` §3 partition; W3 (practitioner-record signing mechanism) → Phase 6 audit-trail integrity implementation trigger; W4 (cross-practitioner workflow handoff) → Phase 5+ second-multi-practitioner-deployment-surface signal
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic; commit `7ffe93a`):
-- `arch/practitioner.md` (NEW; primitive-cluster 12+5 ARCH topic; Pattern C topic-template-class anchor)
-- `docs/decisions/practitioner-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
+- `arch/practitioner.md` — primitive-cluster 12+5 ARCH topic (Pattern C topic-template-class anchor)
+- `docs/decisions/practitioner-arch-topic.md` — this composite DR
+- `glossary/practitioner.md` — See section anchored to `arch/practitioner.md` reference
+- `glossary/authority-binding.md` — See section reciprocal mention added (`arch/practitioner.md` §4 + §14: practitioner-record as human authority; per-shape trust model parameterizes accountability surface per `arch/audit.md` §14)
+- `arch/substrate.md` §19 — added `arch/practitioner.md` reference (Surface §C permission flow records practitioner identity at HITL approval moments; activation integrates within substrate-phase 3 adapter bindings load step)
+- `arch/audit.md` §19 — added `arch/practitioner.md` reference (per-event actor declaration; per-shape audit emission granularity composes through practitioner-record; cross-practitioner audit-trail query pattern)
+- `arch/adapter.md` §19 — added `arch/practitioner.md` reference (W2 Identity-class adapter Surface candidate; native-vs-adapter mode pattern; 6th-class candidate)
+- `arch/sparring.md` §19 — added `arch/practitioner.md` reference (practitioner is engagement subject; sparring engagement events `actor_kind: ai_runtime`)
+- `arch/specialist-skill.md` §17 — forward-reference upgraded to backward-reference (cross-specialist activation actor binding back-link)
+- `ARCHITECTURE.md` §7 — lock entry "Practitioner ARCH topic (Phase 3.5 second primitive-cluster) — LOCKED"; §2 Phase 3 sub-phase status table row 3.5 update; §3 Doc structure status table update (4 of 11 → 6 of 11 drafted)
+- `MAINTENANCE.md` Layer 3 Primitive-cluster topic template subsection — per-topic section count expectation row + per-pattern conditional applicability bullet for Pattern C
+- `BACKLOG.md` — Phase 3.5 row resolution; Phase 5 ROADMAP + Phase 6 watch-list entries for W1-W4
 
-Cascade Wave 2 (single tightly-coupled commit per `MAINTENANCE.md` cascade discipline; following `arch/specialist-skill.md` DR §9 Wave-2 cascade pattern precedent):
-
-**A. GLOSSARY downstream cascade**:
-- `glossary/practitioner.md` See section update (placeholder text replaced with anchored `arch/practitioner.md` reference per Phase 3.5 second primitive-cluster lock; parallel to glossary/specialist.md Wave-2 cascade per Note 56)
-- `glossary/authority-binding.md` See section reciprocal mention (added `arch/practitioner.md` §4 + §14 — practitioner-record as human authority bound to claim_made / signature_applied events; per-shape trust model parameterizes practitioner-record's accountability surface per `arch/audit.md` §14)
-
-**B. Peer ARCH §19/§17 reciprocal back-mentions** (Lens 6 reciprocal symmetry; per Note 56 specialist-skill Wave-2.5 quad-closure precedent):
-- `arch/substrate.md` §19 (added `arch/practitioner.md` reference — substrate Surface §C permission flow records practitioner identity at HITL approval moments per R-CC-4; practitioner-record activation integrates within substrate-phase 3 adapter bindings load step per `ARCHITECTURE.md` §6 composite boot subsection per practitioner §13)
-- `arch/audit.md` §19 (added `arch/practitioner.md` reference — per-event actor declaration via Surface §A records practitioner identity for human-actor events; per-shape audit emission granularity per §14 composes through practitioner-record per practitioner §4; cross-practitioner audit-trail query pattern via Surface §C query API per practitioner §4 R-CC-7)
-- `arch/adapter.md` §19 (added `arch/practitioner.md` reference — W2 Identity-class adapter Surface candidate per practitioner §14 watch-list; per archived `governance-and-identity-sourcing.md` decision 2 native-vs-adapter mode pattern; framework-baseline-vs-shape-extension partition pattern per adapter §3 currently 5 classes; Identity = 6th-class candidate awaiting concrete adapter implementation surface)
-- `arch/sparring.md` §19 (added `arch/practitioner.md` reference — practitioner is engagement subject of sparring per axis-2 cross-axis composition; sparring engagement events `actor_kind: ai_runtime` AI sparring-partner compose with practitioner-record per per-shape activation matrix per sparring §14; production-phase substrate for engaged-authorship per `glossary/engaged-authorship.md`)
-- `arch/specialist-skill.md` §17 (forward-reference upgraded to backward-reference per Note 56 cleanup discipline — practitioner-reference recasts from "Forward-references to future Phase 3.5 topics" to "Phase 3.5 second primitive-cluster LOCKED"; cross-specialist activation actor binding back-link per R-CC-9 — when specialist activates mid-session per §5, the activating actor (workspace-runtime activator per §7 `specialist_activated` event-kind) is the practitioner-RECORD bound to current session per practitioner §4 composition table cross-specialist activation actor binding row)
-
-**C. ARCHITECTURE.md updates**:
-- `ARCHITECTURE.md` §7 NEW lock entry: "Practitioner ARCH topic (Phase 3.5 second primitive-cluster) — LOCKED" (positioned after specialist-skill entry, before Phase 3.1 closed entry; covers Pattern C topic-template-class anchor + bipartite HUMAN cross-cutting + RECORD Owner B + 11-field manifest schema + multi-practitioner cardinality matrix + legal-entity workspace context placement at WORKSPACE level + lifecycle 4-event-kind catalog + archival-as-default deactivation per cross-pattern coherence with specialist-skill §13 + W1-W4 watch-list + composes-with substrate §C + audit §A/§C + adapter (W2) + sparring + specialist-skill (R-CC-9 back-link) + authority-binding mechanism + cross-axis composition axis-1/2/3)
-- `ARCHITECTURE.md` §2 Phase 3 sub-phase status table row 3.5 update (reflects second primitive-cluster LOCKED — practitioner; Pattern C topic-template-class anchor; 4 primitive-cluster + cross-cutting integrator topics remain)
-- `ARCHITECTURE.md` §3 Doc structure status table update (4 of 11 → 6 of 11 drafted: substrate / adapter / sparring / audit / specialist-skill / practitioner)
-
-**D. MAINTENANCE.md Layer 3 Primitive-cluster topic template subsection**:
-- Per-topic section count expectation row updated for practitioner: marked as ANCHOR for Pattern C topic-template-class; "12 common + 2 conditional applies (§8 + §13) + 3 N/A documented (§9 + §10 + §11) + §12 N/A-parity = 18 total per `arch/practitioner.md` (375 lines)"
-- Per-pattern conditional applicability bullet updated: Pattern C bipartite clusters marked as ANCHOR per `arch/practitioner.md`; "granularity / bundle / marketplace N/A documented explicitly; cross-shape policy variation + per-primitive lifecycle ordering APPLIES; 12+5 template extends WITHOUT variation"
-
-**E. BACKLOG.md cascade**:
-- Phase 3.5 row resolution: practitioner topic marked RESOLVED with cluster commits 7ffe93a (Wave-1) → Wave-2 cascade commit hash + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 57 forward-reference
-- Phase 5 ROADMAP entries added: "Multi-tenant federation practitioner identity" (W1) + "Cross-practitioner workflow handoff mechanics + per-shape policy variation" (W4)
-- Phase 6 watch-list entries added: "Adapter-mode practitioner-RECORD + Identity-class adapter Surface candidate" (W2 + adapter §3 6th-class) + "Practitioner-record signing mechanism for historic-claim defensibility" (W3 + audit §D)
-- Cross-cutting "3-tier REVISION/EXPANSION discriminator codification" watch-list cumulative count update (3 REVISION-flavored EXPANSIONS across 2 cluster-executions: specialist-skill = 2 + practitioner = 1; trip threshold reached for cumulative-count signal but USER pushback / cascade-work-lag signals NOT yet materialized; flag for Coherence-audit C2 evaluation post-Phase-3.5 close)
-
-**F. T3-1 cleanup**: DR §3 phrasing fix on substrate §8 reference (per Wave-1 Reviewer T3-1 — current "+ §8 (dual-emission for practitioner-attribution events)" sharpened to "+ §8 (dual-emission paths apply when practitioner-attribution events flow through both substrate-internal AND skill-side emission)")
-
-**G. THIS amendment**: DR §9 Files touched section enumeration (this amendment per cascade discipline auditability; following Note 56 specialist-skill DR §9 Wave-2 cascade-scope pattern precedent)
+Initial commit `7ffe93a`; cascade + cleanup commits per git log.
 
 ## 10. Revisit triggers
 

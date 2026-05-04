@@ -2,13 +2,7 @@
 
 ## 1. Status
 
-**ACCEPTED** (session 27, 2026-05-03). 2-round decision-design-sharpening (Round 1 full monty + Round 2 user-triggered). Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite).
-
-Sharpening rounds metadata:
-- Round 1 (full monty): 6 sub-decisions inventoried + sharpened with foundation-up dependency ordering
-- Round 2 (user-triggered): cross-cutting + schema-detail refinements (R-G* + R-L5a-* + R-L1-* + R-CC-* + R-N-1 + R-COMP-1)
-- STABLE-AT-ROUND-2 verdict per `decision-design-sharpening` §Lock + persist signals (DECAY CONFIRMED; specific termination signal named below)
-- LOCK-HARD target-type per skill §Step 4 target-type modifier (architectural decision; cascades hard if revised)
+**ACCEPTED** 2026-05-03. Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite). LOCK-HARD target-type (architectural decision; cascades hard if revised).
 
 ## 2. Owner
 
@@ -138,11 +132,11 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 **Decision**: Specialist DEFINITION at Framework C contains: (a) workflow DEFINITIONs (per `glossary/specialist.md` composes-with workflow row); (b) work-unit KIND DEFINITIONs + per-kind structural conventions (per `glossary/specialist.md` composes-with work-unit row). At Owner B, deployed specialist instance owns: workflow_instance entities (when work follows codified pattern per workflow's optional-overlay nature) + work-unit instances of the kinds the specialist defined.
 
-**Specialist-namespace** (per R-N-1 Round 2 refinement): per-specialist namespace = specialist-name; prevents cross-specialist KIND/workflow-name collision (e.g., `legal-research:matter` distinct from `planning-document-work:project`). Anchored to existing locked primitive (specialist) rather than introducing kind-vs-specialist ambiguity.
+**Specialist-namespace**: per-specialist namespace = specialist-name; prevents cross-specialist KIND/workflow-name collision (e.g., `legal-research:matter` distinct from `planning-document-work:project`). Anchored to existing locked primitive (specialist) rather than introducing kind-vs-specialist ambiguity.
 
 **Foundation-up note**: this DR locks the CONTAINMENT relationship. Future Phase 3.5 `arch/workflow-work-unit.md` topic locks the contained primitives' Pattern B mechanics.
 
-**Cross-specialist composition rules** (per R-L1-2 REVISION-flavored EXPANSION; structural elevation of implicit-to-explicit):
+**Cross-specialist composition rules**:
 - Skill in specialist-A invokes skill in specialist-B: YES via fully-qualified `specialist-B:skill-name` reference
 - Cross-specialist entity reads: YES (audit-trail records both specialist identifiers)
 - Cross-specialist entity writes: NO (entity ownership boundary structural per Pattern B)
@@ -315,7 +309,7 @@ This decision composes with prior locked architecture:
 
 - **`ARCHITECTURE.md` §6 composite boot subsection**: specialist registration ordering integrates at substrate-phase 4 per ARCH §13 boot-time activation ordering.
 
-- **`MAINTENANCE.md` Pattern A / mechanism-class topic template** (`MAINTENANCE.md` Layer 3 §3): primitive-cluster 12+5 template establishes parallel topic class; future primitive-cluster topics (Phase 3.5 practitioner / workflow-work-unit / claim-defensibility) inherit this DR's template. MAINTENANCE.md Layer 3 §3 cascade in Wave-2 Cascade-Writer commit codifies the 12+5 template as canonical primitive-cluster pattern.
+- **`MAINTENANCE.md` Pattern A / mechanism-class topic template** (`MAINTENANCE.md` Layer 3 §3): primitive-cluster 12+5 template establishes parallel topic class; future primitive-cluster topics (Phase 3.5 practitioner / workflow-work-unit / claim-defensibility) inherit this DR's template. MAINTENANCE.md Layer 3 §3 codifies the 12+5 template as canonical primitive-cluster pattern.
 
 - **TOP-LEVEL DESIGN PRINCIPLES §1 (structural over conventional)**: specialist-skill structural boundary (skill-as-bundled-within-specialist) + specialist-namespace anchored to existing primitive — both exemplify structural-over-conventional discipline.
 
@@ -328,38 +322,24 @@ This decision composes with prior locked architecture:
 - **Phase 3.6 `arch/quality-gate.md`**: consumes skill-firing observability + specialist-lifecycle event-kind catalog per §7 ARCH topic; quality-gate Pattern A composes with this cluster
 - **Phase 6 specs** (`docs/specs/specialist.md` + `docs/specs/skill.md`): inherit manifest frontmatter schema per SD-2; skill output schema integration with substrate Surface §D per SD-3; specialist-error class hierarchy per §7 ARCH topic
 - **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): app-skill rebuild inherits specialist-as-skill-bundle constraint per SD-3 + W3 reconciliation
-- **Wave-2 Cascade-Writer commit** (this commit's tight coupling): GLOSSARY cascade (`glossary/specialist.md` + `glossary/work-unit.md` + `glossary/skill.md`) + MAINTENANCE.md primitive-cluster 12+5 template codification
+- **GLOSSARY cascade**: `glossary/specialist.md` + `glossary/work-unit.md` + `glossary/skill.md` + MAINTENANCE.md primitive-cluster 12+5 template codification
 - **BACKLOG.md**: W1 (marketplace publication mechanics) → Phase 5 ROADMAP entry per D Gate; W2 (cross-substrate skill-portability) → Phase 6 watch trigger; W3 (PBS specialist-as-skill-bundle vs Anthropic bare-skill reconciliation) → Phase 6 app-skill rebuild trigger; W4 (specialist provenance + signing) → Phase 5/6+ tooling territory
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic; locked at commit `f6bab6e`):
-- `arch/specialist-skill.md` (NEW; primitive-cluster 12+5 ARCH topic; ~470 lines)
-- `docs/decisions/specialist-skill-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
+- `arch/specialist-skill.md` — primitive-cluster 12+5 ARCH topic (~470 lines)
+- `docs/decisions/specialist-skill-arch-topic.md` — this composite DR
+- `glossary/specialist.md` — specialist-namespace anchor for work-unit kinds + workflow definitions; composes-with rows amended for reciprocal symmetry
+- `glossary/work-unit.md` — composes-with specialist row: specialist-namespace mention; fully-qualified kind reference `specialist-name:kind-name`
+- `glossary/workflow.md` — composes-with specialist row: specialist-namespace mention; fully-qualified workflow reference `specialist-name:workflow-name`
+- `MAINTENANCE.md` Layer 3 — primitive-cluster topic template subsection (12 common-required + 5 cluster-conditional + per-pattern conditional applicability + §12-as-N/A-parity convention)
+- `ARCHITECTURE.md` §7 — lock entry "Specialist-skill ARCH topic — Phase 3.5 first primitive-cluster"; §2 Phase 3 sub-phase status table row 3.5 updated (Pending → ACTIVE)
+- `arch/substrate.md` §19 — added `arch/specialist-skill.md` reference (substrate Surface §G specialist registration integration point)
+- `arch/audit.md` §19 — added `arch/specialist-skill.md` reference (specialist-lifecycle event-kind catalog emits via audit Surface)
+- `arch/adapter.md` §19 — added `arch/specialist-skill.md` reference (specialists may bundle adapter implementations per `arch/specialist-skill.md` §10 bundle composition)
+- `arch/sparring.md` §19 — added `arch/specialist-skill.md` reference (sparring sub-mechanisms invoked from skills within specialists composing with substrate Surface §D)
 
-Cascade Wave 2 (single tightly-coupled commit per `MAINTENANCE.md` cascade discipline; expanded per Reviewer-1 F2 Lens 6 reciprocal-symmetry gap + F1 cleanup; Option A reconciliation — expand Wave-2 scope, no revision-Writer for ARCH topic itself):
-
-**A. GLOSSARY back-check (Round 2 R-N-1 specialist-namespace reciprocal closure)**:
-- `glossary/specialist.md` (specialist-namespace anchor for work-unit kinds + workflow definitions; composes-with rows amended for Lens 6 reciprocal symmetry)
-- `glossary/work-unit.md` (composes-with specialist row: specialist-namespace mention; fully-qualified kind reference `specialist-name:kind-name`)
-- `glossary/workflow.md` (composes-with specialist row: specialist-namespace mention; fully-qualified workflow reference `specialist-name:workflow-name`)
-
-**B. MAINTENANCE.md primitive-cluster topic template codification**:
-- `MAINTENANCE.md` Layer 3 (NEW subsection: "Primitive-cluster topic template" — 12 common-required + 5 cluster-conditional + per-pattern conditional applicability + §12-as-N/A-parity convention + per-topic count expectation block)
-
-**C. ARCHITECTURE.md §7 lock entry**:
-- `ARCHITECTURE.md` §7 (NEW lock entry: "Specialist-skill ARCH topic — Phase 3.5 first primitive-cluster"); §2 Phase 3 sub-phase status table row 3.5 updated (Pending → ACTIVE)
-
-**D. Lens 6 peer ARCH §19 reciprocal back-mentions** (per Reviewer-1 F2):
-- `arch/substrate.md` §19 (added `arch/specialist-skill.md` reference — substrate Surface §G specialist registration is the integration point)
-- `arch/audit.md` §19 (added `arch/specialist-skill.md` reference — specialist-lifecycle event-kind catalog emits via audit Surface)
-- `arch/adapter.md` §19 (added `arch/specialist-skill.md` reference — specialists may bundle adapter implementations per `arch/specialist-skill.md` §10 bundle composition)
-- `arch/sparring.md` §19 (added `arch/specialist-skill.md` reference — sparring sub-mechanisms invoked from skills within specialists composing with substrate Surface §D)
-
-**E. F1 mechanical cleanup** (per Reviewer-1 T3):
-- `arch/specialist-skill.md` line 452 (stale cross-reference fix: `§10 framework-baseline-vs-shape-extension` → `§3 framework-baseline-vs-shape-extension`; adapter's partition lives at adapter §3)
-
-**F. DR §9 Files touched amendment** (THIS section): explicit enumeration of Wave-2 cascade scope for auditability per cascade discipline.
+Initial commit `f6bab6e`; cascade + cleanup commits per git log.
 
 ## 10. Revisit triggers
 

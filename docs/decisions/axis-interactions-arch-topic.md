@@ -2,13 +2,7 @@
 
 ## 1. Status
 
-**ACCEPTED** (session 31, 2026-05-04). 2-round decision-design-sharpening (Round 1 full monty + Round 2 user-triggered; USER-LOCKED en bloc per Note 60 cluster-execution pattern + user grant of autonomous authority through Wave-2.5 + HANDOFF Note 60 dispatch). Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite).
-
-Sharpening rounds metadata:
-- Round 1 (full monty): 6 sub-decisions inventoried + sharpened with foundation-up dependency ordering (sub-decision-batched: 7 EXPANSIONS = SD-1 cross-cutting integrator template applies WITHOUT variation + SD-2 per-axis structural overview 3 sub-sections + SD-3 cross-axis composition WITHIN cluster + SD-4 composition with primitives outside cluster + per-primitive axis-anchoring table + SD-5 cross-shape policy variation 6-row matrix + SD-6 W1-W4 watch-list + cross-references)
-- Round 2 (user-triggered): cross-cutting + schema-detail refinements (E1-E6 = 6 EXPANSIONS + 1 REVISION-flavored EXPANSION CC-1 = 8 total surfacing operations distributed across SDs; CC-1 cross-axis failure cascade pattern + E1 cross-axis composition with composite boot sequence + E2 per-axis observability hooks Phase 3.6 forward-reference + E3 cross-axis governance integration + cross-axis attribution chain + E4 cross-axis errors + recovery semantics Phase 6 + E5 per-axis falsification schema Phase 6 + E6 per-claim cross-axis lifecycle composition)
-- STABLE-AT-ROUND-2 verdict per `decision-design-sharpening` §Lock + persist signals (Q3 DECAY HOLDS within ±25% — Round 1 7 → Round 2 8 surfacing operations within tolerance; Q5 specific termination signal named below; Q4 no unaddressed pass)
-- LOCK-HARD target-type per skill §Step 4 target-type modifier (architectural decision; cascades hard if revised; cross-cutting integrator template-class second instance — extends scope-model anchor WITHOUT variation)
+**ACCEPTED** 2026-05-04. Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite). LOCK-HARD target-type (architectural decision; cascades hard if revised; cross-cutting integrator template-class second instance — extends scope-model anchor WITHOUT variation).
 
 ## 2. Owner
 
@@ -20,7 +14,7 @@ Phase 3.5 — sixth + final ARCH topic = second cross-cutting integrator (6 of 6
 - `docs/decisions/scope-model-arch-topic.md` (just-locked cross-cutting integrator template-class anchor; axis-interactions extends WITHOUT variation per anchor's per-pattern conditional applicability rules; parallel cross-cutting integrators — scope-model articulates structural surface + axis-interactions articulates cross-axis surface, complementary not duplicative)
 - `docs/decisions/claim-defensibility-arch-topic.md` (PRIMITIVE+DERIVED cluster; per-claim attestation chain mechanics + content-unit-IN-instance pattern + claim is axis-3 PRIMARY anchor + per-claim cross-axis lifecycle composition per E6)
 - `docs/decisions/workflow-work-unit-arch-topic.md` (two-Pattern-B cluster; workflow IS axis-1 PRIMARY anchor — workflow IS what intertwined AI intertwines WITH; work-unit cross-axis container all axes operate against)
-- `docs/decisions/practitioner-arch-topic.md` (Pattern C bipartite; cross-axis composition — axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 authorship preservation ROLE protected; cross-axis attribution chain via R-CC-10 session-bound practitioner)
+- `docs/decisions/practitioner-arch-topic.md` (Pattern C bipartite; cross-axis composition — axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 authorship preservation ROLE protected; cross-axis attribution chain via session-bound practitioner)
 - `docs/decisions/specialist-skill-arch-topic.md` (Pattern B + atomic-primitive bipartite; skills produce claims for axis-3 + execute workflow steps for axis-1 + emit sparring events for axis-2)
 - `docs/decisions/audit-arch-topic.md` (mechanism class Pattern D; **axis-3 PRIMARY** per §4.1 — audit-trail-as-canonical-source IS axis-3 defensibility evidence layer; per-shape audit emission granularity per §14 composes with §8 cross-axis activation matrix; boot-before-substrate ordering per E1 — axis-3 evidence layer ready BEFORE axes 1+2 begin)
 - `docs/decisions/sparring-arch-topic.md` (mechanism class Pattern D; **axis-2 PRIMARY** per §4.1 — 8 sub-mechanism categories Surface; per-shape activation matrix per §4 framework-baseline-vs-shape-extension partition composes with §8; cross-axis dependency on axis-1 per CC-1; cross-axis output for axis-3 — sparring events ARE production-phase substrate for engaged-authorship Cond #1)
@@ -54,7 +48,7 @@ Phase 3.5 — sixth + final ARCH topic = second cross-cutting integrator (6 of 6
 - `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pattern-vs-instance — axis-interactions primitives stay shape-neutral / archetype-neutral / pioneer-neutral; cross-archetype illustration anchors framework neutrality)
 - `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 (preliminary-lock vs anchored — VISION axes ANCHORED revision-on-falsification per `VISION.md` §Falsification criteria; cross-axis composition primitives preliminary-locked; revisable when Phase 1+ pioneer deployment data reveals mismatches)
 - `MAINTENANCE.md` TOP-LEVEL SCOPE (per-deployment workspace.md authoring happens at deployment-instance; not framework repo)
-- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section); Discipline 4 (cascade-prevention; greenfield-draft + minimize-embedded + cascade-pass + foundation-first); Discipline 7 (cascade discipline structural consistency); Discipline 8 (foundation-up workflow ordering — axis-interactions is sixth + final Phase 3.5 ARCH topic + second cross-cutting integrator; LAST per `ARCHITECTURE.md` §5 reading order); Discipline 10 (greenfield-evaluation of archived sources); Discipline 11 (effort-switch cluster-execution map step 7 Wave-1 Writer xhigh effort sizing; full-cycle 3-toggle map applies for second cross-cutting integrator cluster-execution)
+- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section); Discipline 4 (cascade-prevention; greenfield-draft + minimize-embedded + cascade-pass + foundation-first); Discipline 7 (cascade discipline structural consistency); Discipline 8 (foundation-up workflow ordering — axis-interactions is sixth + final Phase 3.5 ARCH topic + second cross-cutting integrator; LAST per `ARCHITECTURE.md` §5 reading order); Discipline 10 (greenfield-evaluation of archived sources); Discipline 11 (effort-switch cluster-execution map)
 
 **Archived sources**: NONE expected for axis-interactions — foundations are `VISION.md` (anchored axis bodies + Foundations Vivienne Ming + Falsification criteria + Trust+sparring+authorship together) + 14 axis-related GLOSSARY entries (locked Phase 2 GLOSSARY foundational vocabulary per `docs/decisions/greenfield-rederivation-pause.md` Step 1.A) + 9 prior locked Phase 3.4 + Phase 3.5 ARCH topics; not archive territory per `disciplines/10-greenfield-evaluation.md` greenfield-evaluation rule. Parallel to `arch/scope-model.md` archived sources NONE per cross-cutting integrator pattern.
 
@@ -126,7 +120,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 **Asymmetric composition** (load-bearing): axis-2 OPERATIONAL within axis-1; axis-3 EVALUATIVE about 1+2 OUTPUTS; axis-1 FOUNDATIONAL for both. Directional dependency (REVERSE direction does NOT hold).
 
-**CC-1 Cross-axis failure cascade pattern** (REVISION-flavored EXPANSION; load-bearing structural commitment elevated from implicit-in-VISION axis-failure framing per `VISION.md` lines 39-43):
+**Cross-axis failure cascade pattern**:
 - axis-1 failure (tacked-on) → forecloses axes 2+3
 - axis-2 failure (oracle/validator/answer-machine) → cascades to axis-3 production-phase
 - axis-3 failure (rubber-stamping) is INDEPENDENTLY possible per `glossary/rubber-stamping.md` line 27
@@ -393,7 +387,7 @@ This decision composes with prior locked architecture:
 
 - **Pattern B specialist-skill primitive cluster** (per `arch/specialist-skill.md` Phase 3.5 first primitive-cluster lock): cross-axis composition — skills produce claims for axis-3 + execute workflow steps for axis-1 + emit sparring events for axis-2 per `arch/specialist-skill.md` §4 composition table.
 
-- **Pattern C practitioner primitive cluster** (per `arch/practitioner.md` Phase 3.5 second primitive-cluster lock): cross-axis composition — axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 authorship preservation ROLE protected; cross-axis attribution chain via R-CC-10 session-bound practitioner per `arch/practitioner.md` §4.
+- **Pattern C practitioner primitive cluster** (per `arch/practitioner.md` Phase 3.5 second primitive-cluster lock): cross-axis composition — axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 authorship preservation ROLE protected; cross-axis attribution chain via session-bound practitioner per `arch/practitioner.md` §4.
 
 - **Two-Pattern-B workflow-work-unit primitive cluster** (per `arch/workflow-work-unit.md` Phase 3.5 third primitive-cluster lock): **axis-1 PRIMARY for workflow** (workflow IS what intertwined AI intertwines WITH per `glossary/workflow.md`); cross-axis container for work-unit (artifact-container all axes operate against per `glossary/work-unit.md`).
 
@@ -418,60 +412,35 @@ This decision composes with prior locked architecture:
 - **Coherence-audit C2 fires post-Phase-3.5 close** (per `disciplines/09-coherence-audit-cadence.md` cadence): primitive-cluster + cross-cutting integrator set audited at phase boundary; cross-primitive coherence verified across all 6 Phase 3.5 ARCH topics; cumulative REVISION-flavored count (8 across 6 cluster-executions; trip threshold reached) evaluated for 3-tier discriminator codification per BACKLOG watch-list; cross-cluster Lens 4 carryover continuity flag (3 incidents at Note 60 → potentially escalating with axis-interactions cluster execution)
 - **Phase 6 specs**: `docs/specs/observability-hooks.md` (per-axis signal-set per E2; Phase 6 spec) + `docs/specs/cross-axis-errors.md` (cross-axis error catalog per E4) + `docs/specs/falsification-schema.md` (per-axis falsification schema per E5); cross-link to `arch/quality-gate.md` Pattern A Surface specification + per-axis observability hook signal-set integration
 - **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): per-deployment cross-axis activation per shape policy bundle declaration; per-deployment per-axis observability hook integration per workspace.md cross-axis configuration; per-shape failure-mode salience monitoring per per-shape category-collapse vulnerability
-- **Wave-2 Cascade-Writer commit** (anticipated tight coupling): GLOSSARY downstream — `glossary/category-collapse.md` retro-fit (CC-1 directional cascade pattern as load-bearing cross-axis structural commitment per GLOSSARY back-check verdict; Wave-2 cascade scope) + 14 axis-related GLOSSARY entry See-section back-mentions + Composes-with rows update (axis-interactions reference); ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update (5 of 6 → 6 of 6) + §3 doc structure status table update (9 of 11 → 10 of 11); 9 peer ARCH §17/§19 reciprocal back-mentions (forward-references upgraded to backward-references): substrate + adapter + sparring + audit + specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model; MAINTENANCE.md Layer 3 cross-cutting integrator topic-template-class second instance documentation (FORMAL STABILITY achieved with second instance lock); BACKLOG.md cascade
-- **BACKLOG.md cascade**: W1 (shape-neutrality validation cross-axis re-mapping per shape) → Phase 3.5+ cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry + `arch/scope-model.md` §14 W4; W2 (VISION update triggers per-axis empirical signal accumulation) → Anchored revision; W3 (cross-deployment cross-axis composition patterns) → Phase 5+ cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/scope-model.md` §14 W2 + `arch/substrate.md` §F; W4 (quality-gate cross-axis signal-set integration Phase 3.6 quality-gate ARCH topic) → Phase 3.6 cross-link to `arch/quality-gate.md`; cross-DR cumulative REVISION-flavored count (1 here + 2 in `arch/specialist-skill.md` DR + 1 in `arch/practitioner.md` DR + 1 in `arch/workflow-work-unit.md` DR + 1 in `arch/claim-defensibility.md` DR + 2 in `arch/scope-model.md` DR = 8) flagged for Coherence-audit C2 evaluation of 3-tier discriminator codification (trip threshold continues: 8 ≥ 3)
+- **GLOSSARY cascade**: `glossary/category-collapse.md` retro-fit (directional cascade pattern as load-bearing cross-axis structural commitment) + 14 axis-related GLOSSARY entry See-section back-mentions + Composes-with rows update; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update + §3 doc structure status table update (9 of 11 → 10 of 11); 9 peer ARCH §17/§19 reciprocal back-mentions: substrate + adapter + sparring + audit + specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model; MAINTENANCE.md Layer 3 cross-cutting integrator topic-template-class second instance documentation; BACKLOG.md cascade
+- **BACKLOG.md cascade**: W1 (shape-neutrality validation cross-axis re-mapping per shape) → Phase 3.5+ cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry + `arch/scope-model.md` §14 W4; W2 (VISION update triggers per-axis empirical signal accumulation) → Anchored revision; W3 (cross-deployment cross-axis composition patterns) → Phase 5+ cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/scope-model.md` §14 W2 + `arch/substrate.md` §F; W4 (quality-gate cross-axis signal-set integration Phase 3.6 quality-gate ARCH topic) → Phase 3.6 cross-link to `arch/quality-gate.md`
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic):
-- `arch/axis-interactions.md` (NEW; cross-cutting integrator 12+5 ARCH topic; second cross-cutting integrator instance — extends scope-model anchor WITHOUT variation; cross-cutting integrator template-class FORMAL STABILITY achieved)
-- `docs/decisions/axis-interactions-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
+- `arch/axis-interactions.md` — cross-cutting integrator 12+5 ARCH topic (second cross-cutting integrator instance; extends scope-model anchor WITHOUT variation)
+- `docs/decisions/axis-interactions-arch-topic.md` — this composite DR
+- `glossary/category-collapse.md` — directional cascade pattern retro-fit (load-bearing cross-axis structural commitment)
+- `glossary/intertwining.md` / `glossary/sparring.md` / `glossary/authorship-preservation.md` — See sections anchored to `arch/axis-interactions.md` per axis PRIMARY anchors
+- `glossary/co-worker.md` — See section back-mention (co-worker frame as cross-axis vocabulary)
+- `glossary/intertwined-ai.md` / `glossary/tacked-on-ai.md` / `glossary/answer-machine-ai.md` / `glossary/oracle-ai.md` / `glossary/validator-ai.md` / `glossary/rubber-stamping.md` — See section back-mentions (failure-mode catalog)
+- `glossary/engaged-authorship.md` — See section back-mention (per-claim cross-axis lifecycle composition; axis-3 PRIMARY composition)
+- `glossary/defensibility.md` — See section back-mention (axis-3 evaluative composition)
+- `glossary/quality-gate.md` — See section back-mention (architectural counter-mechanism for category-collapse)
+- `glossary/authority-binding.md` — See section back-mention (cross-axis attribution chain)
+- `arch/substrate.md` §19 — added `arch/axis-interactions.md` reference (cross-axis foundational; Surface §B hooks + §F session/context for axis-1; §D for axis-2; §E for axis-3)
+- `arch/audit.md` §19 — added `arch/axis-interactions.md` reference (axis-3 PRIMARY; audit-trail-as-canonical-source IS axis-3 defensibility evidence layer)
+- `arch/sparring.md` §19 — added `arch/axis-interactions.md` reference (axis-2 PRIMARY; cross-axis dependency on axis-1; cross-axis output for axis-3)
+- `arch/adapter.md` §19 — added `arch/axis-interactions.md` reference (cross-axis: axis-1 external integration + axis-3 per-action audit emission)
+- `arch/specialist-skill.md` §17 — forward-reference upgraded to backward-reference (skills produce claims for axis-3 + workflow steps for axis-1 + sparring events for axis-2)
+- `arch/practitioner.md` §17 — forward-reference upgraded to backward-reference (axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 author role protected)
+- `arch/workflow-work-unit.md` §17 — forward-reference upgraded to backward-reference (workflow axis-1 PRIMARY; work-unit cross-axis container)
+- `arch/claim-defensibility.md` §17 — forward-reference upgraded to backward-reference (claim axis-3 PRIMARY; per-claim cross-axis lifecycle composition)
+- `arch/scope-model.md` §17 — forward-reference upgraded to backward-reference (parallel cross-cutting integrators; orthogonal but complementary articulation)
+- `ARCHITECTURE.md` §7 — lock entry "Axis-interactions ARCH topic (Phase 3.5 sixth + final ARCH topic; second cross-cutting integrator) — LOCKED"; §2 row 3.5 update (Phase 3.5 CLOSED; 6 of 6 ARCH topics LOCKED); §3 doc structure status table update (9 of 11 → 10 of 11 drafted); §4 Topic catalog row 11 status update
+- `MAINTENANCE.md` Layer 3 cross-cutting integrator topic-template-class subsection — second instance documentation (FORMAL STABILITY achieved with second instance lock; axis-interactions extends WITHOUT variation per scope-model anchor)
+- `BACKLOG.md` — Phase 3.5 row resolution (Phase 3.5 CLOSED); Phase 3.5+ / Phase 3.6 / Phase 5+ / Phase 6 watch-list entries for W1-W4
 
-Cascade Wave 2 scope (deferred to Wave-2 Cascade-Writer per `arch/specialist-skill.md` DR §9 + `arch/practitioner.md` DR §9 + `arch/workflow-work-unit.md` DR §9 + `arch/claim-defensibility.md` DR §9 + `arch/scope-model.md` DR §9 Wave-2 cascade pattern precedent; anticipated):
-
-**A. GLOSSARY downstream cascade** (CC-1 retro-fit + axis-related entry back-mentions):
-- `glossary/category-collapse.md` (CC-1 directional cascade pattern retro-fit per GLOSSARY back-check verdict — load-bearing cross-axis structural commitment elevation; parallel to scope-model E2 + E3 elevation pattern + claim-defensibility E4 elevation pattern)
-- `glossary/intertwining.md` See section back-mention (anchored `arch/axis-interactions.md` reference per axis-1 PRIMARY anchor; axis-1 cross-axis composition per §4.1)
-- `glossary/sparring.md` See section back-mention (anchored `arch/axis-interactions.md` reference per axis-2 PRIMARY anchor; axis-2 cross-axis composition per §4.1)
-- `glossary/authorship-preservation.md` See section back-mention (anchored `arch/axis-interactions.md` reference per axis-3 PRIMARY anchor; axis-3 cross-axis composition per §4.1)
-- `glossary/co-worker.md` See section back-mention (anchored `arch/axis-interactions.md` §4.2 reference per co-worker frame as cross-axis vocabulary)
-- `glossary/intertwined-ai.md` / `glossary/tacked-on-ai.md` / `glossary/answer-machine-ai.md` / `glossary/oracle-ai.md` / `glossary/validator-ai.md` / `glossary/rubber-stamping.md` See section back-mentions (anchored `arch/axis-interactions.md` reference per failure-mode catalog)
-- `glossary/engaged-authorship.md` See section back-mention (anchored `arch/axis-interactions.md` reference per §3.6 E6 per-claim cross-axis lifecycle composition + §4.1 axis-3 PRIMARY composition)
-- `glossary/defensibility.md` See section back-mention (anchored `arch/axis-interactions.md` reference per axis-3 evaluative composition + §3.3 asymmetric composition)
-- `glossary/quality-gate.md` See section back-mention (anchored `arch/axis-interactions.md` §4.3 reference per quality-gate as architectural counter-mechanism for category-collapse + W4 cross-axis signal-set integration)
-- `glossary/authority-binding.md` See section back-mention (anchored `arch/axis-interactions.md` §4.4 E3 reference per cross-axis attribution chain)
-
-**B. Peer ARCH §17/§19 reciprocal back-mentions** (Lens 6 reciprocal symmetry; per Note 56 + Note 57 + Note 58 + Note 59 + Note 60 cluster Wave-2 cascade precedent):
-- `arch/substrate.md` §19 (added `arch/axis-interactions.md` reference — substrate Pattern A tri-aspect cross-axis foundational per §4.1 — Surface §B hooks + §F session/context for axis-1; Surface §D structured output validation for axis-2; Surface §E event-bus extension for axis-3)
-- `arch/audit.md` §19 (added `arch/axis-interactions.md` reference — audit mechanism class **axis-3 PRIMARY** per §4.1 — audit-trail-as-canonical-source IS axis-3 defensibility evidence layer; per-shape audit emission granularity composes with §8)
-- `arch/sparring.md` §19 (added `arch/axis-interactions.md` reference — sparring mechanism class **axis-2 PRIMARY** per §4.1 — 8 sub-mechanism categories Surface; cross-axis dependency on axis-1 per CC-1; cross-axis output for axis-3)
-- `arch/adapter.md` §19 (added `arch/axis-interactions.md` reference — adapter Pattern A tri-aspect cross-axis per §4.1 — axis-1 external integration + axis-3 per-action audit emission)
-- `arch/specialist-skill.md` §17 (forward-reference upgraded to backward-reference per Note 56 + Note 57 + Note 58 + Note 59 + Note 60 cleanup discipline — axis-interactions-reference recasts; specialist-skill cross-axis composition per §4.1 — skills produce claims for axis-3 + workflow steps for axis-1 + sparring events for axis-2)
-- `arch/practitioner.md` §17 (forward-reference upgraded to backward-reference — axis-interactions-reference recasts; practitioner cross-axis composition per §4.1 — axis-1 co-worker pairing + axis-2 sparring engagement subject + axis-3 author role protected)
-- `arch/workflow-work-unit.md` §17 (forward-reference upgraded to backward-reference — axis-interactions-reference recasts; workflow **axis-1 PRIMARY** per §4.1 — workflow IS what intertwined AI intertwines WITH; work-unit cross-axis container)
-- `arch/claim-defensibility.md` §17 (forward-reference upgraded to backward-reference — axis-interactions-reference recasts; claim **axis-3 PRIMARY** per §4.1 — claim is unit-of-defense; per-claim cross-axis lifecycle composition per §3.6 E6)
-- `arch/scope-model.md` §17 (forward-reference upgraded to backward-reference — axis-interactions-reference recasts; scope-model + axis-interactions parallel cross-cutting integrators — orthogonal but complementary articulation per §4.1)
-
-**C. ARCHITECTURE.md updates**:
-- `ARCHITECTURE.md` §7 NEW lock entry: "Axis-interactions ARCH topic (Phase 3.5 sixth + final ARCH topic; second cross-cutting integrator) — LOCKED" (positioned after scope-model entry, before Phase 3.1 closed entry; covers cross-cutting integrator template-class second instance + 3-sub-section per-axis structural overview + cross-axis composition WITHIN cluster + 3 pairwise + 1 triple + asymmetric composition + CC-1 directional cascade pattern + E1 cross-axis composite boot sequence + E6 per-claim cross-axis lifecycle + per-primitive axis-anchoring catalog + co-worker frame + category-collapse cross-axis force + E3 cross-axis governance integration + cross-axis attribution chain + per-shape policy variation 6-row matrix + falsification criteria per axis + W1-W4 watch-list)
-- `ARCHITECTURE.md` §2 Phase 3 sub-phase status table row 3.5 update (reflects sixth + final ARCH topic LOCKED; **Phase 3.5 CLOSED**; 6 of 6 ARCH topics LOCKED; unblocks Coherence-audit C2)
-- `ARCHITECTURE.md` §3 Doc structure status table update (9 of 11 → 10 of 11 drafted: substrate / adapter / sparring / audit / specialist-skill / practitioner / workflow-work-unit / claim-defensibility / scope-model / axis-interactions)
-- `ARCHITECTURE.md` §4 Topic catalog row 11 status update (`arch/axis-interactions.md` Phase column "3.5" → "3.5 — DRAFTED" reflecting cross-cutting integrator second instance lock)
-
-**D. MAINTENANCE.md Layer 3 cross-cutting integrator topic-template-class subsection update**:
-- Update existing cross-cutting integrator topic template subsection (anchored at scope-model first instance) to document second instance: "axis-interactions extends WITHOUT variation per scope-model anchor; cross-cutting integrator template-class FORMAL STABILITY achieved with second instance lock"
-- Per-topic section count expectation row updated: axis-interactions row added — "12 common + 1 conditional applies (§8) + 4 N/A documented (§9 + §10 + §11 + §13) + §12 N/A-parity = 18 total"
-- Future cross-cutting integrator topics (if any) inherit two-instance stability anchor
-
-**E. BACKLOG.md cascade**:
-- Phase 3.5 row resolution: axis-interactions topic marked RESOLVED with cluster commits (Wave-1) → (Wave-2 cascade applied) + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 61 forward-reference; **Phase 3.5 CLOSED** (6 of 6 ARCH topics LOCKED)
-- Phase 3.5+ entry added: "Shape-neutrality validation cross-axis re-mapping per shape" (W1; cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry + `arch/scope-model.md` §14 W4)
-- Phase 3.6 entries added: "Quality-gate cross-axis signal-set integration" (W4; cross-link to `arch/quality-gate.md` Pattern A) + "Per-axis observability hook signal-set" (per E2; Phase 3.6 + Phase 6 spec)
-- Phase 5+ entries added: "Cross-deployment cross-axis composition patterns" (W3; cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/scope-model.md` §14 W2 + `arch/substrate.md` §F)
-- Phase 6 watch-list entries added: "Cross-axis errors + recovery semantics" (per E4) + "Per-axis falsification schema" (per E5)
-- Anchored revision entry: "VISION update triggers — per-axis empirical signal" (per W2; Phase 1+ pioneer deployment data + falsification-criteria signals per `VISION.md` §Falsification criteria)
-- Cross-cutting "3-tier REVISION/EXPANSION discriminator codification" watch-list cumulative count update (8 REVISION-flavored EXPANSIONS across 6 cluster-executions: specialist-skill = 2 + practitioner = 1 + workflow-work-unit = 1 + claim-defensibility = 1 + scope-model = 2 + axis-interactions = 1; **trip threshold continues: 8 ≥ 3** — increased from 7 at scope-model DR per Note 60; flag continues for Coherence-audit C2 evaluation post-Phase-3.5 close per `disciplines/09-coherence-audit-cadence.md`)
-- Cross-cluster Lens 4 carryover continuity flag update (3 incidents at Note 60 → escalate flag for Coherence-audit C2 evaluation post-Phase-3.5 close)
+Cascade + cleanup commits per git log.
 
 ## 10. Revisit triggers
 

@@ -126,7 +126,7 @@ Per `arch/claim-defensibility.md` §3 per-claim attestation chain mechanics + `g
 - `claim_made` event fires (axis-1 substrate; AI co-worker emits within intertwined work-production) → axis-2 production-phase sparring events fire DURING claim production (sparring sub-mechanisms execute per skill body) → engaged-authorship Cond #1 production-phase signal accumulated
 
 **Attestation phase**:
-- claim finalized at send/sign moment → `claim_attested` event fires with `actor_kind: human` + practitioner-RECORD identity per `arch/practitioner.md` §4 R-CC-10 → engaged-authorship Cond #1 attestation-phase signal complete; defensibility Cond #1 holds for this claim version
+- claim finalized at send/sign moment → `claim_attested` event fires with `actor_kind: human` + practitioner-RECORD identity per `arch/practitioner.md` §4 → engaged-authorship Cond #1 attestation-phase signal complete; defensibility Cond #1 holds for this claim version
 
 **Revision lifecycle** (per-claim per-version semantics):
 - `claim_revised` event fires (new state preserving prior per append-only audit) → axis-2 production-phase re-engagement events fire on revised content → `claim_re_attested` event fires; engaged-authorship test re-applies for v2 (v1 engagement does NOT carry forward)
@@ -172,7 +172,7 @@ Per `arch/substrate.md` §C permission flow + `arch/sparring.md` §4 + `arch/pra
 
 - **axis-1 permission flow (substrate Surface §C)**: HITL approval moments compose axis-1 (intertwined runtime) with axis-3 (HITL approval IS practitioner attestation surface; per-action authority binding records `actor_kind: human` per `glossary/authority-binding.md` line 34). Permission flow is the structural integration point at workspace runtime where axis-1 substrate meets axis-3 attestation requirements.
 - **axis-2 authority binding**: sparring engagement subject is practitioner per `arch/practitioner.md` §4; sparring fires AT practitioner judgment moments per `arch/sparring.md` §4; sparring events bind to practitioner-RECORD identity for axis-3 production-phase attribution per `arch/claim-defensibility.md` §3 attestation chain step 2.
-- **axis-3 authority binding**: per-claim attestation event records `actor_kind: human` + practitioner-RECORD identity per `arch/practitioner.md` §4 R-CC-10 + `arch/claim-defensibility.md` §3 attestation chain step 5. Per-claim attestation IS the structural axis-3 evidence at finalization moment.
+- **axis-3 authority binding**: per-claim attestation event records `actor_kind: human` + practitioner-RECORD identity per `arch/practitioner.md` §4 + `arch/claim-defensibility.md` §3 attestation chain step 5. Per-claim attestation IS the structural axis-3 evidence at finalization moment.
 
 **Cross-axis attribution chain**: per-claim attribution chain spans Framework C definitions (skill identifier → specialist DEFINITION) + Owner B instances (workspace + work-unit instance + practitioner-RECORD) + per-event actor recording (`actor_kind: ai_runtime` for axis-2 production-phase events; `actor_kind: human` for axis-3 attestation events). Attribution chain IS axis-3 defensibility Cond #2 (reconstructible reasoning chain) per `arch/claim-defensibility.md` §3 + `glossary/defensibility.md` Composes-with authority-binding row.
 

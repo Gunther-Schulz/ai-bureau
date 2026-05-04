@@ -2,13 +2,7 @@
 
 ## 1. Status
 
-**ACCEPTED** (session 29, 2026-05-03). 2-round decision-design-sharpening (Round 1 full monty + Round 2 user-triggered). Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite).
-
-Sharpening rounds metadata:
-- Round 1 (full monty): 6 sub-decisions inventoried + sharpened with foundation-up dependency ordering (sub-decision-batched: 4 + 5 + 3 + 4 + 3 + 6 = 25 EXPANSIONS)
-- Round 2 (user-triggered): cross-cutting + schema-detail refinements (R-CC-1 through R-CC-11 = 11 EXPANSIONS)
-- STABLE-AT-ROUND-2 verdict per `decision-design-sharpening` §Lock + persist signals (Q3 DECAY CONFIRMED ~56%; Q5 specific termination signal named below; Q4 no unaddressed pass)
-- LOCK-HARD target-type per skill §Step 4 target-type modifier (architectural decision; cascades hard if revised)
+**ACCEPTED** 2026-05-03. Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite). LOCK-HARD target-type (architectural decision; cascades hard if revised).
 
 ## 2. Owner
 
@@ -17,12 +11,12 @@ Phase 3.5 — third primitive-cluster ARCH topic. Anchors **two-Pattern-B topic-
 ## 3. Related
 
 **Composes with**:
-- `arch/substrate.md` Surface §C (permission flow integrates with workflow_instance phase transitions + work-unit instance lifecycle transitions for authority-binding moments per R-CC-4) + §F (session/context management persists workflow_instance + work-unit instance state across sessions per R-CC-5) + §10 (boot/shutdown ordering integration per ARCHITECTURE.md §6 composite subsection per R-CC-1) + §8 (dual-emission paths apply when workflow_instance + work-unit instance lifecycle events flow through both substrate-internal AND skill-side emission)
-- `arch/audit.md` Surface §A (emission API + actor declaration for §SD-4 event-kind catalog per R-CC-6) + §C (query API for cross-workflow_instance + cross-work-unit-instance audit-trail defensibility test per R-CC-7) + §14 (cross-shape policy variation per R-CC-2 audit emission granularity composes with work-unit attribution) + §15 W5 federated audit-trail watch (composes with W2 cross-practitioner workflow handoff)
-- `arch/sparring.md` §4 (sparring sub-mechanisms accessed by skills DURING workflow_instance phase progression AND ad-hoc work-unit progression; per-shape activation matrix; per R-CC-3)
-- `arch/adapter.md` §2 (per-class Surfaces consumed by skills firing within workflow_instance phases per R-CC-8)
-- `arch/specialist-skill.md` §10 (cross-specialist composition rules + bundle composition; workflow + work-unit DEFINITIONs nest within specialist's bundle per cluster boundary; cross-specialist work-unit attachment PERMITTED + ownership mutation PROHIBITED per R-CC-9) + §11 (marketplace + distribution mechanics; workflow + work-unit kind DEFINITIONs distributed THROUGH specialist DEFINITION) + §13 boot step 9 (workflow + work-unit kind DEFINITIONs registered at substrate-phase 4 step 9; cross-pattern destruction archival-as-default coherence) + §3-4 composition tables
-- `arch/practitioner.md` §4 R-CC-10 (multi-practitioner concurrent-session handling; workflow_instance.bound_practitioner_id references session-bound practitioner; per R-CC-9) + §8 (cross-shape policy variation matrix shape-policy-mediated multi-practitioner work-unit authorship + workflow_instance flexibility) + §13 (archival-as-default destruction; cross-pattern coherence) + §14 W4 (cross-practitioner workflow handoff mechanics; composes with W2 here)
+- `arch/substrate.md` Surface §C (permission flow integrates with workflow_instance phase transitions + work-unit instance lifecycle transitions for authority-binding moments) + §F (session/context management persists workflow_instance + work-unit instance state across sessions) + §10 (boot/shutdown ordering integration per ARCHITECTURE.md §6 composite subsection) + §8 (dual-emission paths apply when workflow_instance + work-unit instance lifecycle events flow through both substrate-internal AND skill-side emission)
+- `arch/audit.md` Surface §A (emission API + actor declaration for §SD-4 event-kind catalog) + §C (query API for cross-workflow_instance + cross-work-unit-instance audit-trail defensibility test) + §14 (cross-shape policy variation; audit emission granularity composes with work-unit attribution) + §15 W5 federated audit-trail watch (composes with W2 cross-practitioner workflow handoff)
+- `arch/sparring.md` §4 (sparring sub-mechanisms accessed by skills DURING workflow_instance phase progression AND ad-hoc work-unit progression; per-shape activation matrix)
+- `arch/adapter.md` §2 (per-class Surfaces consumed by skills firing within workflow_instance phases)
+- `arch/specialist-skill.md` §10 (cross-specialist composition rules + bundle composition; workflow + work-unit DEFINITIONs nest within specialist's bundle per cluster boundary; cross-specialist work-unit attachment PERMITTED + ownership mutation PROHIBITED) + §11 (marketplace + distribution mechanics; workflow + work-unit kind DEFINITIONs distributed THROUGH specialist DEFINITION) + §13 boot step 9 (workflow + work-unit kind DEFINITIONs registered at substrate-phase 4 step 9; cross-pattern destruction archival-as-default coherence) + §3-4 composition tables
+- `arch/practitioner.md` §4 (multi-practitioner concurrent-session handling; workflow_instance.bound_practitioner_id references session-bound practitioner) + §8 (cross-shape policy variation matrix shape-policy-mediated multi-practitioner work-unit authorship + workflow_instance flexibility) + §13 (archival-as-default destruction; cross-pattern coherence) + §14 W4 (cross-practitioner workflow handoff mechanics; composes with W2 here)
 - `docs/decisions/specialist-skill-arch-topic.md` (primitive-cluster 12+5 template precedent + Mode 2 composite decomposition precedent)
 - `docs/decisions/practitioner-arch-topic.md` (Pattern C topic-template-class anchor precedent + Mode 2 composite decomposition precedent + per-shape policy variation matrix precedent + lifecycle event-kind catalog with `details:` payload precedent + cross-pattern destruction archival-as-default precedent)
 - `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` (Pattern A / mechanism-class template; primitive-cluster 12+5 derived parallel)
@@ -61,7 +55,7 @@ Phase 3.5 — third primitive-cluster ARCH topic. Anchors **two-Pattern-B topic-
 
 Phase 3.5 third primitive-cluster ARCH topic. Prior to this DR, Phase 3.5 first primitive-cluster topic (specialist-skill) LOCKED at commit `f6bab6e` per `ARCHITECTURE.md` §7 + `docs/decisions/specialist-skill-arch-topic.md`; Phase 3.5 second primitive-cluster topic (practitioner) LOCKED at commit `7ffe93a` per `ARCHITECTURE.md` §7 + `docs/decisions/practitioner-arch-topic.md`; Pattern A protocol topics + mechanism-class topics LOCKED in Phase 3.4 per `ARCHITECTURE.md` §7 (substrate + adapter + sparring + audit).
 
-**Why workflow-work-unit chosen third** (foundation-up per Discipline 8): workflow + work-unit DEFINITIONs nest within specialist's bundle per `arch/specialist-skill.md` §10 (cluster boundary); workflow_instance + work-unit instance attribution composes through practitioner-RECORD per `arch/practitioner.md` §4 R-CC-10 (multi-practitioner concurrent-session handling). Locking workflow-work-unit third after specialist-skill + practitioner means the future Phase 3.5 `arch/claim-defensibility.md` topic locks per-claim attestation chain against an already-validated workflow_instance + work-unit instance attribution surface. Reverse ordering would force claim-defensibility to forward-reference unlocked workflow_instance + work-unit instance primitives.
+**Why workflow-work-unit chosen third** (foundation-up per Discipline 8): workflow + work-unit DEFINITIONs nest within specialist's bundle per `arch/specialist-skill.md` §10 (cluster boundary); workflow_instance + work-unit instance attribution composes through practitioner-RECORD per `arch/practitioner.md` §4 (multi-practitioner concurrent-session handling). Locking workflow-work-unit third after specialist-skill + practitioner means the future Phase 3.5 `arch/claim-defensibility.md` topic locks per-claim attestation chain against an already-validated workflow_instance + work-unit instance attribution surface. Reverse ordering would force claim-defensibility to forward-reference unlocked workflow_instance + work-unit instance primitives.
 
 **Why two-Pattern-B topic-template-class anchored here**: workflow + work-unit are BOTH bipartite Pattern B (per locked GLOSSARY entries: workflow bipartite Pattern B with optional applicability; work-unit bipartite Pattern B with always-present container). The cluster pairs two Pattern B primitives — structurally distinct from Pattern B + atomic-primitive (specialist-skill cluster) + Pattern C bipartite (practitioner cluster) + future PRIMITIVE + DERIVED (claim-defensibility cluster). Two-Pattern-B-specific conditional applicability surfaces here (granularity tests + per-primitive lifecycle ordering APPLY per shape-policy-mediated multi-practitioner authorship + workflow_instance state-machine + work-unit kind state-machine; bundle / marketplace N/A per workflow + work-unit are bundled IN specialist, not bundlers themselves). Future two-Pattern-B primitive-cluster topics inherit this DR's anchor for conditional applicability rules.
 
@@ -105,7 +99,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 | Field | Type | Required | Purpose |
 |---|---|---|---|
-| `name` | str | required | Workflow name local to specialist; specialist-namespace per Note 56 R-N-1 |
+| `name` | str | required | Workflow name local to specialist; specialist-namespace per `arch/specialist-skill.md` §10 |
 | `version` | semver | required | Inherits specialist version |
 | `phases` | list (ordered) | required | Phase identifiers in sequence |
 | `phase_authority_requirements` | object | optional | Per-phase authority binding |
@@ -120,16 +114,16 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 | `definition_snapshot` | object | required | Snapshot of workflow definition at workflow-start (preserves defensibility) |
 | `definition_ref` | str | required | Fully-qualified `specialist-name:workflow-name@version` |
 | `current_phase` | enum | required | References definition `phases` list |
-| `lifecycle_state` | enum | required | `running` \| `suspended` \| `completed` \| `abandoned` \| `failed` (per R-CC-1 naming alignment) |
+| `lifecycle_state` | enum | required | `running` \| `suspended` \| `completed` \| `abandoned` \| `failed` (naming aligned across cluster) |
 | `attached_work_unit_id` | str | required | work-unit instance attribution (cardinality asymmetry: 1 work-unit per workflow_instance) |
-| `bound_practitioner_id` | str | required | practitioner-RECORD attribution per `arch/practitioner.md` §4 R-CC-10 |
+| `bound_practitioner_id` | str | required | practitioner-RECORD attribution per `arch/practitioner.md` §4 |
 | `phase_history` | list | optional | Phase transitions with timestamps + actor + audit event references |
 
 **Work-unit KIND DEFINITION manifest schema**:
 
 | Field | Type | Required | Purpose |
 |---|---|---|---|
-| `name` | str | required | Kind discriminator; specialist-namespace per Note 56 R-N-1 |
+| `name` | str | required | Kind discriminator; specialist-namespace per `arch/specialist-skill.md` §10 |
 | `version` | semver | required | Inherits specialist version |
 | `lifecycle_states` | list | required | Kind-specific state machine; default: `initiated → in-progress → completed | sent | archived` |
 | `artifact_attachment_shape` | object | optional | Per-kind structural conventions (archived `entity-md-scope-model-restructure.md` greenfield-evaluated INPUT) |
@@ -157,7 +151,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 3. **Ad-hoc work first-class via session + skill + claim + event** (NOT via workflow primitive engagement): when work-unit has no workflow_instance attached, work proceeds via session(s) + skill firings + claim emissions + audit events alone. Anchored in `profiles/L5a-planner-pbs-schulz.md` lines 60-73 hybrid moments.
 
-4. **Snapshot pattern as cross-primitive structural commitment** (per R-CC-10 REVISION-flavored EXPANSION): workflow_instance `definition_snapshot` + work-unit instance `kind_snapshot` both use snapshot-at-creation for defensibility-preservation across specialist version bumps. Cross-primitive pattern; structural elevation of implicit pattern to explicit (parallels `arch/practitioner.md` R-CC-1 boot ordering elevation).
+4. **Snapshot pattern as cross-primitive structural commitment**: workflow_instance `definition_snapshot` + work-unit instance `kind_snapshot` both use snapshot-at-creation for defensibility-preservation across specialist version bumps. Cross-primitive pattern.
 
 **Cross-specialist composition** (within cluster but cross-specialist mechanics per `arch/specialist-skill.md` §10):
 - Cross-specialist work-unit ATTACHMENT: PERMITTED (workflow_instance from specialist-A attaches to work-unit from specialist-B)
@@ -170,7 +164,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 **workflow_instance state machine** (per `glossary/workflow.md` lifecycle):
 - States: `running | suspended | completed | abandoned | failed`
-- Transitions: `running ↔ suspended`; `running → completed | abandoned | failed`; **`suspended → completed | abandoned | failed`** (per R-CC-3; non-terminal states transition to terminal)
+- Transitions: `running ↔ suspended`; `running → completed | abandoned | failed`; **`suspended → completed | abandoned | failed`** (non-terminal states transition to terminal)
 - Event-kind catalog (architectural enumeration; Phase 6 Pydantic):
   - `workflow_started` — workflow_instance created with definition snapshot
   - `workflow_phase_transitioned` — phase change with `details.from_phase/to_phase` per archived `audit-trail-v2.md` `details:` payload precedent
@@ -190,7 +184,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
   - `work_unit_completed`
   - `work_unit_sent`
   - `work_unit_archived`
-  - `work_unit_pivoted` (per R-CC-4; `details.predecessor_work_unit_id`; kind-FIXED-at-creation enforcement; pivot creates new work-unit linked via predecessor_id)
+  - `work_unit_pivoted` (`details.predecessor_work_unit_id`; kind-FIXED-at-creation enforcement; pivot creates new work-unit linked via predecessor_id)
 
 **Cross-pattern destruction coherence** (per `arch/specialist-skill.md` §13 + `arch/practitioner.md` §13): archival-as-default on workspace dissolution per `workspace.md` `instance_content_dissolution_policy: archive | delete-with-audit` (same field per cross-pattern coherence convention).
 
@@ -251,7 +245,7 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 - **W3**: Per-kind structural conventions schema standardization — Awaited signal: ≥3 kinds across specialists develop divergent artifact-attachment shapes warranting standardization. Resolution: per-kind structural conventions schema; Phase 6 spec territory.
 - **W4**: Multi-workflow_instance phase choreography mechanics — Awaited signal: second workspace deploys multi-workflow_instance against single work-unit pattern. Resolution: per-workflow phase coordination semantics + cross-specialist phase ordering. Cross-link: `arch/specialist-skill.md` §10.
 
-**§7 Pre-implementation operational concerns** (per R-CC-11 error categories enumeration):
+**§7 Pre-implementation operational concerns** (error categories enumeration):
 
 | Category | Architectural meaning |
 |---|---|
@@ -395,11 +389,11 @@ Per `decision-design-sharpening` §Round termination signals + §Honest terminat
 
 This decision composes with prior locked architecture:
 
-- **Pattern A protocols** (substrate / adapter; sparring + audit mechanism classes per Phase 3.4 close): workflow + work-unit composes with substrate Surface §C (permission flow integrates with workflow_instance phase transitions + work-unit instance lifecycle transitions for authority-binding moments per R-CC-4) + §F (session/context management persists workflow_instance + work-unit instance state across sessions per R-CC-5); with audit Surface §A skill-side emission (per R-CC-6) + §C query API (per R-CC-7); with adapter §2 per-class Surfaces consumed by skills firing within workflow_instance phases (per R-CC-8); with sparring §4 per-shape activation matrix (per R-CC-3). Workflow + work-unit are NOT Pattern A (no multiple interchangeable implementations of one Surface) — both are bipartite Pattern B per locked GLOSSARY entries.
+- **Pattern A protocols** (substrate / adapter; sparring + audit mechanism classes per Phase 3.4 close): workflow + work-unit composes with substrate Surface §C (permission flow integrates with workflow_instance phase transitions + work-unit instance lifecycle transitions for authority-binding moments) + §F (session/context management persists workflow_instance + work-unit instance state across sessions); with audit Surface §A skill-side emission + §C query API; with adapter §2 per-class Surfaces consumed by skills firing within workflow_instance phases; with sparring §4 per-shape activation matrix. Workflow + work-unit are NOT Pattern A (no multiple interchangeable implementations of one Surface) — both are bipartite Pattern B per locked GLOSSARY entries.
 
-- **Pattern B specialist-skill primitive cluster** (per `arch/specialist-skill.md` Phase 3.5 first primitive-cluster lock): workflow + work-unit DEFINITIONs nest within specialist's bundle per `arch/specialist-skill.md` §10 (cluster boundary); cross-specialist composition rules apply per `arch/specialist-skill.md` §10 + §3 (cross-specialist work-unit attachment PERMITTED + ownership mutation PROHIBITED per R-CC-9); marketplace + distribution mechanics per `arch/specialist-skill.md` §11 (workflow + work-unit kind DEFINITIONs distributed THROUGH specialist DEFINITION per SD-1 §11 N/A); boot integration per `arch/specialist-skill.md` §13 boot step 9 (workflow + work-unit kind DEFINITIONs registered at substrate-phase 4 step 9).
+- **Pattern B specialist-skill primitive cluster** (per `arch/specialist-skill.md` Phase 3.5 first primitive-cluster lock): workflow + work-unit DEFINITIONs nest within specialist's bundle per `arch/specialist-skill.md` §10 (cluster boundary); cross-specialist composition rules apply per `arch/specialist-skill.md` §10 + §3 (cross-specialist work-unit attachment PERMITTED + ownership mutation PROHIBITED); marketplace + distribution mechanics per `arch/specialist-skill.md` §11 (workflow + work-unit kind DEFINITIONs distributed THROUGH specialist DEFINITION per SD-1 §11 N/A); boot integration per `arch/specialist-skill.md` §13 boot step 9 (workflow + work-unit kind DEFINITIONs registered at substrate-phase 4 step 9).
 
-- **Pattern C practitioner primitive cluster** (per `arch/practitioner.md` Phase 3.5 second primitive-cluster lock): workflow_instance binds to ONE practitioner-record at session-open per `arch/practitioner.md` §4 R-CC-10 (multi-practitioner concurrent-session handling; workflow_instance.bound_practitioner_id references session-bound practitioner per R-CC-9); work-unit instance attribution composes through practitioner-RECORD per `glossary/work-unit.md` composes-with practitioner row + `arch/practitioner.md` §3 + §8 (multi-practitioner-shape variants = shape-policy); cross-practitioner workflow handoff mechanics per W2 composes with `arch/practitioner.md` §14 W4; archival-as-default destruction per cross-pattern coherence with `arch/practitioner.md` §13.
+- **Pattern C practitioner primitive cluster** (per `arch/practitioner.md` Phase 3.5 second primitive-cluster lock): workflow_instance binds to ONE practitioner-record at session-open per `arch/practitioner.md` §4 (multi-practitioner concurrent-session handling; workflow_instance.bound_practitioner_id references session-bound practitioner); work-unit instance attribution composes through practitioner-RECORD per `glossary/work-unit.md` composes-with practitioner row + `arch/practitioner.md` §3 + §8 (multi-practitioner-shape variants = shape-policy); cross-practitioner workflow handoff mechanics per W2 composes with `arch/practitioner.md` §14 W4; archival-as-default destruction per cross-pattern coherence with `arch/practitioner.md` §13.
 
 - **authority-binding mechanism** (per `glossary/authority-binding.md` from Phase 3.4 C1 cascade): workflow_instance phase transitions may require specific authority per workflow definition `phase_authority_requirements` (per `glossary/workflow.md` composes-with authority-binding row); work-unit instance lifecycle transitions emit events bound to authority-decision actor per `glossary/work-unit.md` composes-with authority-binding row.
 
@@ -419,48 +413,27 @@ This decision composes with prior locked architecture:
 - **Phase 3.6 `arch/quality-gate.md`**: consumes workflow_instance + work-unit instance lifecycle events for quality-gate's drift detection per `glossary/workflow.md` + `glossary/work-unit.md` composes-with quality-gate rows; quality-gate Pattern A composes with workflow_instance observability (axis-3 rubber-stamping signal at attestation moment) + work-unit instance observability (rapid sign-off cadence signal)
 - **Phase 6 specs** (`docs/specs/workflow.md` + `docs/specs/work-unit.md`): inherit WorkflowDescriptor + WorkUnitKindDescriptor manifest schemas per SD-2; WorkflowError + WorkUnitError class hierarchies per ARCH §7
 - **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): per-deployment workflow_instance + work-unit instance entity-md authoring + per-deployment ID uniqueness convention prose + cross-practitioner workflow handoff implementation mechanics + per-kind structural conventions schema standardization + multi-workflow_instance phase choreography implementation
-- **Wave-2 Cascade-Writer commit** (anticipated tight coupling): GLOSSARY downstream — workflow + work-unit See sections; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update + §3 doc structure status table update; peer ARCH §17/§19 reciprocal back-mentions: substrate + audit + adapter + sparring + specialist-skill + practitioner; MAINTENANCE.md Layer 3 Primitive-cluster topic template per-pattern conditional applicability rule update for two-Pattern-B; BACKLOG.md cascade
-- **BACKLOG.md cascade**: W1 (workflow_pattern primitive vs Layer A) → Phase 5+ ROADMAP entry per D Gate; W2 (cross-practitioner workflow handoff mechanics) → Phase 5+ second-multi-practitioner-deployment-surface signal (composes with `arch/practitioner.md` §14 W4); W3 (per-kind structural conventions schema standardization) → Phase 6 spec territory; W4 (multi-workflow_instance phase choreography mechanics) → Phase 5+ second-workspace-multi-workflow_instance-pattern signal; cross-DR cumulative REVISION-flavored count (1 here + 2 in `arch/specialist-skill.md` DR + 1 in `arch/practitioner.md` DR = 4) flagged for Coherence-audit C2 evaluation of 3-tier discriminator codification (trip threshold reached: 4 ≥ 3)
+- **GLOSSARY cascade**: workflow + work-unit See sections; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update + §3 doc structure status table update; peer ARCH §17/§19 reciprocal back-mentions: substrate + audit + adapter + sparring + specialist-skill + practitioner; MAINTENANCE.md Layer 3 Primitive-cluster topic template per-pattern conditional applicability rule update for two-Pattern-B; BACKLOG.md cascade
+- **BACKLOG.md cascade**: W1 (workflow_pattern primitive vs Layer A) → Phase 5+ ROADMAP entry per D Gate; W2 (cross-practitioner workflow handoff mechanics) → Phase 5+ second-multi-practitioner-deployment-surface signal (composes with `arch/practitioner.md` §14 W4); W3 (per-kind structural conventions schema standardization) → Phase 6 spec territory; W4 (multi-workflow_instance phase choreography mechanics) → Phase 5+ second-workspace-multi-workflow_instance-pattern signal
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic; commit `3b187ea`):
-- `arch/workflow-work-unit.md` (NEW; primitive-cluster 12+5 ARCH topic; two-Pattern-B topic-template-class anchor)
-- `docs/decisions/workflow-work-unit-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
+- `arch/workflow-work-unit.md` — primitive-cluster 12+5 ARCH topic (two-Pattern-B topic-template-class anchor)
+- `docs/decisions/workflow-work-unit-arch-topic.md` — this composite DR
+- `glossary/workflow.md` — See section anchored to `arch/workflow-work-unit.md`
+- `glossary/work-unit.md` — See section anchored to `arch/workflow-work-unit.md`
+- `glossary/authority-binding.md` — See section reciprocal back-link added (composes-with workflow + work-unit rows)
+- `arch/substrate.md` §19 — added `arch/workflow-work-unit.md` reference (Surface §C permission flow + §F session/context management for workflow_instance + work-unit instance state)
+- `arch/audit.md` §19 — added `arch/workflow-work-unit.md` reference (§A emission API for event-kind catalog; §C query API for cross-instance defensibility; §14 cross-shape policy variation)
+- `arch/adapter.md` §19 — added `arch/workflow-work-unit.md` reference (adapters invoked by skills firing within workflow_instance phases)
+- `arch/sparring.md` §19 — added `arch/workflow-work-unit.md` reference (sparring sub-mechanisms accessed by skills during workflow_instance phase progression + ad-hoc work-unit progression)
+- `arch/specialist-skill.md` §17 — forward-reference upgraded to backward-reference (cross-specialist composition rules apply to cross-specialist work-unit attachment)
+- `arch/practitioner.md` §17 — forward-reference upgraded to backward-reference (workflow_instance bound_practitioner_id + work-unit instance attribution; cross-practitioner workflow handoff)
+- `ARCHITECTURE.md` §7 — lock entry "Workflow + work-unit ARCH topic (Phase 3.5 third primitive-cluster) — LOCKED"; §2 row 3.5 update; §3 doc structure status table update (6 of 11 → 7 of 11 drafted)
+- `MAINTENANCE.md` Layer 3 Primitive-cluster topic template subsection — per-topic section count expectation row + per-pattern conditional applicability bullet for two-Pattern-B
+- `BACKLOG.md` — Phase 3.5 row resolution; Phase 5 ROADMAP + Phase 6 watch-list entries for W1-W4
 
-Cascade Wave 2 scope (deferred to Wave-2 Cascade-Writer per `arch/specialist-skill.md` DR §9 + `arch/practitioner.md` DR §9 Wave-2 cascade pattern precedent; anticipated):
-
-**A. GLOSSARY downstream cascade**:
-- `glossary/workflow.md` See section update (placeholder text replaced with anchored `arch/workflow-work-unit.md` reference per Phase 3.5 third primitive-cluster lock; parallel to glossary/specialist.md + glossary/practitioner.md Wave-2 cascade per Notes 56 + 57)
-- `glossary/work-unit.md` See section update (parallel; placeholder text replaced with anchored `arch/workflow-work-unit.md` reference)
-- `glossary/authority-binding.md` See section reciprocal mention (potentially — if workflow phase transitions + work-unit lifecycle transitions warrant explicit authority-binding back-link per Cascade-Writer scope determination)
-
-**B. Peer ARCH §17/§19 reciprocal back-mentions** (Lens 6 reciprocal symmetry; per Note 56 + Note 57 specialist-skill + practitioner Wave-2 cascade precedent):
-- `arch/substrate.md` §19 (added `arch/workflow-work-unit.md` reference — substrate Surface §C permission flow integrates with workflow_instance phase transitions + work-unit instance lifecycle transitions; Surface §F session/context management persists workflow_instance + work-unit instance state across sessions)
-- `arch/audit.md` §19 (added `arch/workflow-work-unit.md` reference — Surface §A emission API for §SD-4 event-kind catalog; Surface §C query API for cross-workflow_instance + cross-work-unit-instance audit-trail defensibility; §14 cross-shape policy variation per-shape audit emission granularity composes with work-unit attribution)
-- `arch/adapter.md` §19 (added `arch/workflow-work-unit.md` reference — adapters invoked by skills firing within workflow_instance phases per `glossary/skill.md` composes-with adapter row)
-- `arch/sparring.md` §19 (added `arch/workflow-work-unit.md` reference — sparring sub-mechanisms accessed by skills DURING workflow_instance phase progression AND ad-hoc work-unit progression; orthogonal to workflow primitive engagement per per-shape activation matrix)
-- `arch/specialist-skill.md` §17 (forward-reference upgraded to backward-reference per Note 56 + Note 57 cleanup discipline — workflow-work-unit-reference recasts from "Forward-references to future Phase 3.5 topics" to "Phase 3.5 third primitive-cluster LOCKED"; cross-specialist composition rules per §10 + §3 apply to cross-specialist work-unit attachment per workflow-work-unit §3)
-- `arch/practitioner.md` §17 (forward-reference upgraded to backward-reference — workflow-work-unit-reference recasts from "Forward-references to future Phase 3.5 topics" to "Phase 3.5 third primitive-cluster LOCKED"; workflow_instance bound_practitioner_id + work-unit instance attribution compose through practitioner-RECORD per §4 R-CC-10; cross-practitioner workflow handoff mechanics per §14 W4 composes with W2 in workflow-work-unit)
-
-**C. ARCHITECTURE.md updates**:
-- `ARCHITECTURE.md` §7 NEW lock entry: "Workflow + work-unit ARCH topic (Phase 3.5 third primitive-cluster) — LOCKED" (positioned after practitioner entry, before Phase 3.1 closed entry; covers two-Pattern-B topic-template-class anchor + 4-sub-section structural overview + always-present asymmetry + cardinality asymmetry + ad-hoc work first-class + snapshot pattern + cross-specialist composition rules + 2 state machines + per-shape policy variation matrix + 8-category error catalog + W1-W4 watch-list + composes-with substrate §C/§F + audit §A/§C + adapter + sparring + specialist-skill + practitioner + authority-binding mechanism + cross-axis composition axis-1/2/3)
-- `ARCHITECTURE.md` §2 Phase 3 sub-phase status table row 3.5 update (reflects third primitive-cluster LOCKED — workflow-work-unit; two-Pattern-B topic-template-class anchor; 3 primitive-cluster + cross-cutting integrator topics remain)
-- `ARCHITECTURE.md` §3 Doc structure status table update (6 of 11 → 7 of 11 drafted: substrate / adapter / sparring / audit / specialist-skill / practitioner / workflow-work-unit)
-
-**D. MAINTENANCE.md Layer 3 Primitive-cluster topic template subsection**:
-- Per-topic section count expectation row updated for workflow-work-unit: marked as ANCHOR for two-Pattern-B topic-template-class; "12 common + 3 conditional applies (§8 + §9 + §13) + 2 N/A documented (§10 + §11) + §12 N/A-parity = 18 total"
-- Per-pattern conditional applicability bullet updated: Two Pattern B clusters marked as ANCHOR per `arch/workflow-work-unit.md`; "granularity + per-primitive lifecycle ordering APPLIES; cross-shape policy variation APPLIES; bundle / marketplace N/A documented explicitly (workflow + work-unit are bundled IN specialist, not bundlers themselves); 12+5 template extends WITHOUT variation"
-
-**E. BACKLOG.md cascade**:
-- Phase 3.5 row resolution: workflow-work-unit topic marked RESOLVED with cluster commits `3b187ea` (Wave-1) → Wave-2 cascade commit hash (resolved at Wave-2 commit landing) + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 58 forward-reference
-- Phase 5 ROADMAP entries added: "Workflow_pattern primitive vs Layer A reusable templates" (W1) + "Cross-practitioner workflow handoff mechanics" (W2) + "Multi-workflow_instance phase choreography mechanics" (W4)
-- Phase 6 watch-list entries added: "Per-kind structural conventions schema standardization" (W3) + "Workflow_instance suspension state implementation" + "work-unit instance pivot mechanics implementation"
-- Cross-cutting "3-tier REVISION/EXPANSION discriminator codification" watch-list cumulative count update (4 REVISION-flavored EXPANSIONS across 3 cluster-executions: specialist-skill = 2 + practitioner = 1 + workflow-work-unit = 1; **trip threshold reached: 4 ≥ 3**; flag for Coherence-audit C2 evaluation post-Phase-3.5 close per `disciplines/09-coherence-audit-cadence.md`)
-
-**Wave-2 cascade applied** (commit hash recorded in HANDOFF Note 58 + git log; cascade-bundle pattern per Note 56 + Note 57): A1+A2 GLOSSARY downstream cascade (workflow.md + work-unit.md See sections anchored to `arch/workflow-work-unit.md`) + A3 reciprocal mention (glossary/authority-binding.md composes-with workflow + work-unit rows + See section reciprocal back-link APPLIED per cardinality-asymmetry composition); B1-B6 peer ARCH §17/§19 reciprocal back-mentions (substrate + audit + adapter + sparring §19; specialist-skill + practitioner §17 forward-references upgraded to backward-references); C1 `ARCHITECTURE.md` §7 NEW lock entry + C2 §2 row 3.5 update (2 of 6 → 3 of 6 phrasing per row content; remaining count `3 primitive-cluster + cross-cutting integrator topics remain`) + C3 §3 doc structure status table update (6 of 11 → 7 of 11); D1+D2 MAINTENANCE.md Layer 3 Primitive-cluster topic template ANCHOR codification for two-Pattern-B + per-topic count expectation row update; E1-E4 BACKLOG cascade (Phase 3.5 row resolution + Phase 5 W1+W2+W4 + Phase 6 W3 + suspension/pivot watch-list entries + 3-tier discriminator cumulative-count update reaching trip threshold).
-
-**F. DR §9 Files-touched Wave-2 cascade hash resolution** (THIS amendment per cascade discipline auditability; following Note 57 specialist-skill + practitioner DR §9 Wave-2 cascade-scope pattern precedent): Wave-1 commit hash `3b187ea` substituted for placeholder `<this-commit>` in Wave-1 enumeration above; Wave-2 cascade scope sub-sections A-E supplemented with applied-status note above. This DR amendment is part of the SAME Wave-2 cascade commit (cascade-bundle pattern per Note 56 + Note 57).
+Initial commit `3b187ea`; cascade + cleanup commits per git log.
 
 ## 10. Revisit triggers
 

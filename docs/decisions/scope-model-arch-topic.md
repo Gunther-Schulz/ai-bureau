@@ -2,13 +2,7 @@
 
 ## 1. Status
 
-**ACCEPTED** (session 31, 2026-05-04). 2-round decision-design-sharpening (Round 1 full monty + Round 2 user-triggered; USER-LOCKED en bloc per Note 59 cluster-execution pattern + user grant of autonomous authority through Wave-2.5 + HANDOFF Note 60). Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite).
-
-Sharpening rounds metadata:
-- Round 1 (full monty): 6 sub-decisions inventoried + sharpened with foundation-up dependency ordering (sub-decision-batched: 7 EXPANSIONS = SD-1 anchor + SD-2 per-scope structural + SD-3 workspace integration + SD-4 cross-scope composition + SD-5 cross-shape policy + SD-6 watch-list)
-- Round 2 (user-triggered): cross-cutting + schema-detail refinements (E1-E7 = 7 EXPANSIONS; 2 REVISION-flavored EXPANSIONS — E2 nested-bundle pattern + E3 content-unit-IN-instance pattern as load-bearing structural elevations)
-- STABLE-AT-ROUND-2 verdict per `decision-design-sharpening` §Lock + persist signals (Q3 DECAY CONFIRMED Round 1 7 → Round 2 7 within ±25%; Q5 specific termination signal named below; Q4 no unaddressed pass)
-- LOCK-HARD target-type per skill §Step 4 target-type modifier (architectural decision; cascades hard if revised; cross-cutting integrator template-class anchor)
+**ACCEPTED** 2026-05-04. Mode 2 upfront-known composite decomposition per `decision-design-sharpening` v0.10.0 §Two decomposition modes — 6 sub-decisions tightly coupled; single composite DR (sub-decisions have no independent meaning outside the composite). LOCK-HARD target-type (architectural decision; cascades hard if revised; cross-cutting integrator template-class anchor).
 
 ## 2. Owner
 
@@ -54,7 +48,7 @@ Phase 3.5 — fifth ARCH topic = first cross-cutting integrator (5 of 6 primitiv
 - `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2 (pattern-vs-instance — scope-model primitives stay shape-neutral / archetype-neutral / pioneer-neutral; cross-archetype illustration anchors framework neutrality)
 - `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3 (preliminary-lock — A-B-C scope model preliminary-locked per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE; revisable when concrete entity-md authoring exercises Phase 3+ reveal mismatches)
 - `MAINTENANCE.md` TOP-LEVEL SCOPE (per-deployment workspace.md authoring happens at deployment-instance; not framework repo)
-- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section); Discipline 4 (cascade-prevention; greenfield-draft + minimize-embedded + cascade-pass + foundation-first); Discipline 7 (cascade discipline structural consistency); Discipline 8 (foundation-up workflow ordering — scope-model is fifth Phase 3.5 ARCH topic + first cross-cutting integrator anchor); Discipline 10 (greenfield-evaluation of archived sources); Discipline 11 (effort-switch cluster-execution map step 7 Wave-1 Writer template-class-anchor exception per xhigh effort sizing)
+- `DISCIPLINES.md` Discipline 1 (skill+profile sub-section); Discipline 4 (cascade-prevention; greenfield-draft + minimize-embedded + cascade-pass + foundation-first); Discipline 7 (cascade discipline structural consistency); Discipline 8 (foundation-up workflow ordering — scope-model is fifth Phase 3.5 ARCH topic + first cross-cutting integrator anchor); Discipline 10 (greenfield-evaluation of archived sources); Discipline 11 (effort-switch cluster-execution map)
 
 **Archived sources**: NONE expected for scope-model — foundations are `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE (preliminary-locked Phase 1.85 + cascade discipline) + `glossary/framework-c-scope.md` + `glossary/owner-b-scope.md` + `glossary/layer-a-scope.md` + `glossary/workspace.md` (locked Phase 2 GLOSSARY foundational vocabulary per `docs/decisions/greenfield-rederivation-pause.md` Step 1.A); not archive territory per `disciplines/10-greenfield-evaluation.md` greenfield-evaluation rule.
 
@@ -133,9 +127,9 @@ Six sub-decisions per Mode 2 composite decomposition (sub-decisions have no inde
 
 **Decision**: §4 narrative for primitives whose scope-placement has load-bearing nuance + 4 NEW PATTERNS surfaced Round 2 + §18 per-primitive composition table.
 
-**E2 nested-bundle pattern (REVISION-flavored EXPANSION)**: specialist Framework C bundle NESTS other Framework C definitions (skill DEFINITIONs + workflow DEFINITIONs + work-unit KIND DEFINITIONs + adapter Implementations) under **specialist-namespace** per `glossary/specialist.md` locked mechanic — fully-qualified references `specialist-name:skill-name` / `specialist-name:kind-name` / `specialist-name:workflow-name`. Distinct from atomic Framework C primitives (substrate / shape / mechanism — no nested Framework C children). Load-bearing pattern preventing cross-specialist KIND/skill/workflow-name collision. REVISION-flavored EXPANSION — surfaces nested-bundle pattern that was implicit in specialist-skill cluster lock per Note 56 R-N-1 specialist-namespace mechanic; elevates to explicit cross-cutting structural pattern at scope-model articulation.
+**E2 nested-bundle pattern**: specialist Framework C bundle NESTS other Framework C definitions (skill DEFINITIONs + workflow DEFINITIONs + work-unit KIND DEFINITIONs + adapter Implementations) under **specialist-namespace** per `glossary/specialist.md` locked mechanic — fully-qualified references `specialist-name:skill-name` / `specialist-name:kind-name` / `specialist-name:workflow-name`. Distinct from atomic Framework C primitives (substrate / shape / mechanism — no nested Framework C children). Load-bearing pattern preventing cross-specialist KIND/skill/workflow-name collision.
 
-**E3 content-unit-IN-instance pattern (REVISION-flavored EXPANSION)**: claim is **content-unit IN work-unit** (NOT separately scoped — INHERITS work-unit's Owner B placement) per `arch/claim-defensibility.md` lock + `glossary/claim.md`. Distinct from instance-content-at-Owner-B placement (specialist instance content / work-unit instance) — content-unit pattern is INSIDE-the-instance-payload, not a separately-placed Owner B sub-entity. REVISION-flavored EXPANSION — surfaces content-unit-vs-entity distinction that was implicit in claim-defensibility cluster lock; elevates to explicit cross-cutting structural pattern at scope-model articulation; documents claim's cross-pattern destruction inheritance per `arch/claim-defensibility.md` §13 (claims inherit work-unit's `instance_content_dissolution_policy: archive | delete-with-audit`).
+**E3 content-unit-IN-instance pattern**: claim is **content-unit IN work-unit** (NOT separately scoped — INHERITS work-unit's Owner B placement) per `arch/claim-defensibility.md` lock + `glossary/claim.md`. Distinct from instance-content-at-Owner-B placement (specialist instance content / work-unit instance) — content-unit pattern is INSIDE-the-instance-payload, not a separately-placed Owner B sub-entity. Documents claim's cross-pattern destruction inheritance per `arch/claim-defensibility.md` §13 (claims inherit work-unit's `instance_content_dissolution_policy: archive | delete-with-audit`).
 
 **E4 cross-cutting non-placed pattern**: properties/tests/concepts that are NOT placed get explicit N/A documentation in §18 table:
 - defensibility (DERIVED property; not entity)
@@ -382,52 +376,35 @@ This decision composes with prior locked architecture:
 - **Coherence-audit C2 fires post-Phase-3.5 close** (per `disciplines/09-coherence-audit-cadence.md` cadence): primitive-cluster + cross-cutting integrator set audited at phase boundary; cross-primitive coherence verified across specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions; cumulative REVISION-flavored count (7 across 5 cluster-executions; trip threshold reached) evaluated for 3-tier discriminator codification per BACKLOG watch-list
 - **Phase 6 specs** (`docs/specs/scope-model.md` + `docs/specs/workspace.md`): per-scope identity-uniqueness rules + schema versioning semantics per E6 + scope-categorization error catalog per E7 + workspace identity persistence schema per W3; cross-link to `arch/specialist-skill.md` §11 specialist marketplace deferred per W1 + `arch/practitioner.md` §4 multi-practitioner manifest schema
 - **Phase 6 deployment** (per `MAINTENANCE.md` TOP-LEVEL SCOPE: PBS-Schulz workspace deployment): per-deployment workspace.md authoring happens at deployment-instance via Mode 1 production-runtime LLM-MD; per-deployment workspace.scope configuration; per-deployment Layer A content assembly per workspace.scope.{domains, states} configuration
-- **Wave-2 Cascade-Writer commit** (anticipated tight coupling): GLOSSARY downstream — `glossary/framework-c-scope.md` + `glossary/owner-b-scope.md` + `glossary/layer-a-scope.md` + `glossary/workspace.md` See sections + Composes-with rows; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update (4 of 6 → 5 of 6) + §3 doc structure status table update (8 of 11 → 9 of 11); peer ARCH §17/§19 reciprocal back-mentions: substrate + audit + adapter + sparring + specialist-skill + practitioner + workflow-work-unit + claim-defensibility (forward-references upgraded to backward-references); MAINTENANCE.md Layer 3 NEW cross-cutting integrator topic-template-class ANCHOR codification subsection + per-topic count expectation row update (scope-model ANCHOR row); BACKLOG.md cascade
-- **BACKLOG.md cascade**: W1 (multi-tenant federation scope-model variation) → Phase 5+ cross-link to `arch/practitioner.md` §14 W1; W2 (cross-deployment claim portability scope-model variation) → Phase 5+ cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/substrate.md` §F; W3 (workspace identity persistence schema) → Phase 6 spec territory; W4 (engagement-target entity catalog per second-shape productization) → Phase 3.5+ cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry; cross-DR cumulative REVISION-flavored count (2 here + 2 in `arch/specialist-skill.md` DR + 1 in `arch/practitioner.md` DR + 1 in `arch/workflow-work-unit.md` DR + 1 in `arch/claim-defensibility.md` DR = 7) flagged for Coherence-audit C2 evaluation of 3-tier discriminator codification (trip threshold continues: 7 ≥ 3)
+- **GLOSSARY cascade**: `glossary/framework-c-scope.md` + `glossary/owner-b-scope.md` + `glossary/layer-a-scope.md` + `glossary/workspace.md` See sections + Composes-with rows; ARCHITECTURE.md §7 NEW lock entry + §2 row 3.5 update + §3 doc structure status table update (8 of 11 → 9 of 11); peer ARCH §17/§19 reciprocal back-mentions: substrate + audit + adapter + sparring + specialist-skill + practitioner + workflow-work-unit + claim-defensibility; MAINTENANCE.md Layer 3 NEW cross-cutting integrator topic-template-class ANCHOR codification subsection + per-topic count expectation row update; BACKLOG.md cascade
+- **BACKLOG.md cascade**: W1 (multi-tenant federation scope-model variation) → Phase 5+ cross-link to `arch/practitioner.md` §14 W1; W2 (cross-deployment claim portability scope-model variation) → Phase 5+ cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/substrate.md` §F; W3 (workspace identity persistence schema) → Phase 6 spec territory; W4 (engagement-target entity catalog per second-shape productization) → Phase 3.5+ cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry
 
 ## 9. Files touched
 
-Wave 1 (this DR commit + ARCH topic):
-- `arch/scope-model.md` (NEW; cross-cutting integrator 12+5 ARCH topic; cross-cutting integrator topic-template-class anchor)
-- `docs/decisions/scope-model-arch-topic.md` (THIS file; composite DR; Mode 2 sub-decisions)
+- `arch/scope-model.md` — cross-cutting integrator 12+5 ARCH topic (cross-cutting integrator topic-template-class anchor)
+- `docs/decisions/scope-model-arch-topic.md` — this composite DR
 
-Cascade Wave 2 scope (deferred to Wave-2 Cascade-Writer per `arch/specialist-skill.md` DR §9 + `arch/practitioner.md` DR §9 + `arch/workflow-work-unit.md` DR §9 + `arch/claim-defensibility.md` DR §9 Wave-2 cascade pattern precedent; anticipated):
+Cascade scope:
 
-**A. GLOSSARY downstream cascade**:
-- `glossary/framework-c-scope.md` See section update (placeholder text replaced with anchored `arch/scope-model.md` reference per Phase 3.5 fifth ARCH topic + first cross-cutting integrator lock; parallel to glossary/specialist + glossary/practitioner + glossary/workflow + glossary/work-unit + glossary/claim Wave-2 cascades per Notes 56 + 57 + 58 + 59)
-- `glossary/owner-b-scope.md` See section update (parallel; placeholder text replaced with anchored `arch/scope-model.md` reference; engagement-target shape-policy-mandated rule cross-reference)
-- `glossary/layer-a-scope.md` See section update (parallel; placeholder text replaced with anchored `arch/scope-model.md` reference)
-- `glossary/workspace.md` See section update + Composes-with rows update (anchored `arch/scope-model.md` reference per workspace IS the binding-instance entity at Owner B per §3 workspace integration)
-- `glossary/deployment.md` See section reciprocal mention (1:1 reciprocal cardinality with workspace + workspace identity persistence across multiple deployments per W3)
-- `glossary/authority-binding.md` See section back-link to scope-model §4 E5 authority-binding placement pattern (mechanism dual-aspect: Framework C definition + Owner B event recording on `actor_kind`); consistent with E5 dual-aspect pattern; reciprocally anchored at scope-model §4 + §18
+- `glossary/framework-c-scope.md` — See section anchored to `arch/scope-model.md`
+- `glossary/owner-b-scope.md` — See section anchored; engagement-target shape-policy-mandated rule cross-reference
+- `glossary/layer-a-scope.md` — See section anchored
+- `glossary/workspace.md` — See section + Composes-with rows updated (workspace IS the binding-instance entity at Owner B)
+- `glossary/deployment.md` — See section reciprocal mention (1:1 reciprocal cardinality with workspace)
+- `glossary/authority-binding.md` — See section back-link to scope-model §4 E5 authority-binding placement pattern
+- `arch/substrate.md` §19 — added `arch/scope-model.md` reference (Pattern A tri-aspect Framework C + Owner B Implementation Instance; substrate-phase 1 boot integration)
+- `arch/audit.md` §19 — added `arch/scope-model.md` reference (mechanism class Framework C Surface + Owner B audit-trail)
+- `arch/adapter.md` §19 — added `arch/scope-model.md` reference (Pattern A tri-aspect Framework C + Owner B Instance bindings)
+- `arch/sparring.md` §19 — added `arch/scope-model.md` reference (mechanism class Framework C Surface + Owner B sparring events)
+- `arch/specialist-skill.md` §17 — forward-reference upgraded to backward-reference (specialist DEFINITION as Framework C bundle nesting per E2)
+- `arch/practitioner.md` §17 — forward-reference upgraded to backward-reference (Pattern C HUMAN cross-cutting NOT placed per E4 + RECORD Owner B)
+- `arch/workflow-work-unit.md` §17 — forward-reference upgraded to backward-reference (KIND DEFINITION nested in specialist's Framework C bundle per E2)
+- `arch/claim-defensibility.md` §17 — forward-reference upgraded to backward-reference (claim content-unit IN work-unit per E3; defensibility cross-cutting non-placed per E4)
+- `ARCHITECTURE.md` §7 — lock entry "Scope model ARCH topic (Phase 3.5 first cross-cutting integrator) — LOCKED"; §2 row 3.5 update; §3 doc structure status table update (8 of 11 → 9 of 11 drafted); §4 Topic catalog row 10 status update
+- `MAINTENANCE.md` Layer 3 — new cross-cutting integrator topic-template-class subsection (12+5 inherits primitive-cluster template WITHOUT variation; cross-shape policy variation APPLIES; granularity / bundle / marketplace / per-element lifecycle ordering N/A documented)
+- `BACKLOG.md` — Phase 3.5 row resolution; Phase 5+ ROADMAP + Phase 6 watch-list entries for W1-W4
 
-**B. Peer ARCH §17/§19 reciprocal back-mentions** (Lens 6 reciprocal symmetry; per Note 56 + Note 57 + Note 58 + Note 59 cluster Wave-2 cascade precedent):
-- `arch/substrate.md` §19 (added `arch/scope-model.md` reference — substrate Pattern A tri-aspect Framework C Surface + Implementations + Owner B Implementation Instance per E5 substrate parallel; substrate Surface §F session/context for cross-deployment claim portability per W2; substrate-phase 1 boot integration per E1)
-- `arch/audit.md` §19 (added `arch/scope-model.md` reference — audit mechanism class Framework C Surface + Owner B audit-trail per E5; per-shape audit emission granularity per §14 composes with §8 cross-shape policy variation)
-- `arch/adapter.md` §19 (added `arch/scope-model.md` reference — adapter Pattern A tri-aspect Framework C + Owner B Instance bindings; framework-baseline-vs-shape-extension partition per §3 composes with §8)
-- `arch/sparring.md` §19 (added `arch/scope-model.md` reference — sparring mechanism class Framework C Surface + Owner B sparring events per E5; per-shape activation matrix per §4 composes with §8)
-- `arch/specialist-skill.md` §17 (forward-reference upgraded to backward-reference per Note 56 + Note 57 + Note 58 + Note 59 cleanup discipline — scope-model-reference recasts from "Forward-references to future Phase 3.5 topics" to "Phase 3.5 first cross-cutting integrator LOCKED"; specialist DEFINITION as Framework C bundle nesting per E2 nested-bundle pattern)
-- `arch/practitioner.md` §17 (forward-reference upgraded to backward-reference — scope-model-reference recasts from "Forward-references to future Phase 3.5 topics" to "Phase 3.5 first cross-cutting integrator LOCKED"; bipartite Pattern C HUMAN cross-cutting NOT placed per E4 + RECORD Owner B per `arch/practitioner.md` §2.2)
-- `arch/workflow-work-unit.md` §17 (forward-reference upgraded to backward-reference — scope-model-reference recasts; workflow + work-unit bipartite Pattern B KIND DEFINITION nested in specialist's Framework C bundle per E2 + workflow_instance + work-unit instance Owner B)
-- `arch/claim-defensibility.md` §17 (forward-reference upgraded to backward-reference — scope-model-reference recasts; claim PRIMITIVE content-unit IN work-unit instance per E3 INHERITS work-unit's Owner B placement; defensibility DERIVED cross-cutting non-placed per E4)
-
-**C. ARCHITECTURE.md updates**:
-- `ARCHITECTURE.md` §7 NEW lock entry: "Scope model ARCH topic (Phase 3.5 first cross-cutting integrator) — LOCKED" (positioned after claim-defensibility entry, before Phase 3.1 closed entry; covers cross-cutting integrator topic-template-class anchor + 3-sub-section per-scope structural overview + workspace integration as cross-scope composition WITHIN cluster + 4 NEW patterns E2/E3/E4/E5 + per-scope cardinality + lifecycle + per-element Mode distribution within scopes + cross-shape policy variation 6-row matrix + W1-W4 watch-list)
-- `ARCHITECTURE.md` §2 Phase 3 sub-phase status table row 3.5 update (reflects fifth ARCH topic + first cross-cutting integrator LOCKED; 1 cross-cutting integrator remains — axis-interactions Phase 3.5 sixth + final)
-- `ARCHITECTURE.md` §3 Doc structure status table update (8 of 11 → 9 of 11 drafted: substrate / adapter / sparring / audit / specialist-skill / practitioner / workflow-work-unit / claim-defensibility / scope-model)
-- `ARCHITECTURE.md` §4 Topic catalog row 10 status update (`arch/scope-model.md` Phase column "3.5" → "3.5 — DRAFTED" reflecting cross-cutting integrator lock)
-
-**D. MAINTENANCE.md Layer 3 NEW cross-cutting integrator topic-template-class subsection**:
-- NEW subsection added below Primitive-cluster topic template subsection: "Cross-cutting integrator topic template (LOCKED; established by `arch/scope-model.md` per `docs/decisions/scope-model-arch-topic.md` SD-1)"
-- Per-pattern conditional applicability documented: cross-cutting integrators inherit 12+5 primitive-cluster template WITHOUT variation; cross-shape policy variation APPLIES; granularity / bundle / marketplace / per-element lifecycle ordering N/A documented; §12 N/A-parity preserved
-- Per-topic section count expectation row added: scope-model ANCHOR for cross-cutting integrator topic-template-class; "12 common + 1 conditional applies (§8) + 4 N/A documented (§9 + §10 + §11 + §13) + §12 N/A-parity = 18 total"
-
-**E. BACKLOG.md cascade**:
-- Phase 3.5 row resolution: scope-model topic marked RESOLVED with cluster commits `c209182` (Wave-1) → `0e2876a` (Wave-2 cascade applied) + execution-pattern signal + DR + profile-cluster validation citations + HANDOFF Note 60 forward-reference
-- Phase 5+ ROADMAP entries added: "Multi-tenant federation scope-model variation" (W1; cross-link to `arch/practitioner.md` §14 W1) + "Cross-deployment claim portability scope-model variation" (W2; cross-link to `arch/claim-defensibility.md` §14 W2 + `arch/substrate.md` §F)
-- Phase 6 watch-list entries added: "Workspace identity persistence schema" (W3; integrates with `arch/audit.md` §D + `arch/practitioner.md` W3 + `arch/claim-defensibility.md` W4) + "Per-scope identity-uniqueness rules + schema versioning semantics" (per E6) + "Scope-categorization error catalog + recovery semantics" (per E7)
-- Phase 3.5+ entry added: "Engagement-target entity catalog per second-shape productization" (W4; cross-link to BACKLOG "Shape-neutrality validation for second-shape productization" entry)
-- Cross-cutting "3-tier REVISION/EXPANSION discriminator codification" watch-list cumulative count update (7 REVISION-flavored EXPANSIONS across 5 cluster-executions: specialist-skill = 2 + practitioner = 1 + workflow-work-unit = 1 + claim-defensibility = 1 + scope-model = 2; **trip threshold continues: 7 ≥ 3** — increased from 5 at claim-defensibility DR per Note 59; flag continues for Coherence-audit C2 evaluation post-Phase-3.5 close per `disciplines/09-coherence-audit-cadence.md`)
+Initial commit `c209182`; cascade commit `0e2876a`; cleanup commits per git log.
 
 ## 10. Revisit triggers
 
