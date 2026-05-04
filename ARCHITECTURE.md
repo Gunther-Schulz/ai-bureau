@@ -33,7 +33,7 @@
 | **3.4** | Per-architectural-Protocol detail (3 Pattern A protocol topics: substrate / adapter; quality-gate at 3.6) | Effectively COMPLETE — substrate + adapter remain Pattern A; sparring + audit RECLASSIFIED as mechanism classes per `docs/decisions/greenfield-rederivation-pause.md` Step 3; coordination + trust + time CANCELLED (subsumed). |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | CLOSED — ALL 6 of 6 ARCH topics LOCKED (specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions); coherence-audit checkpoint C2 CLOSED 2026-05-04 per `disciplines/09-coherence-audit-cadence.md` cadence |
 | **3.6** | Quality-gate ARCH topic | CLOSED — Pattern A 12+7 third instance LOCKED (FORMAL STABILITY achieved 3 of 3 Pattern A instances complete with this lock); resolves axis-interactions §7 E2 + §14 W4 forward-references |
-| **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
+| **3.7** | ARCH amendments / follow-ups (PydanticAI substrate Implementations enumeration; framework-level RAG-engagement architecture HOW) | Pending |
 | **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — C1 (post-3.4) CLOSED + C2 (post-3.5) CLOSED 2026-05-04 per cadence in `BACKLOG.md` Phase 3 audit-checkpoints |
 
 Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions before structure before content before audit.
@@ -73,7 +73,7 @@ Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions be
 
 **Foundation-up dependency**: topics 1-2 are Pattern A protocols (foundational mechanism layer); 3-4 are mechanism-class topics (per-shape policy variation, not Pattern A); 5 quality-gate Pattern A composes with all axes (Phase 3.6); 6-9 are primitive clusters; 10-11 are cross-cutting integrators (load LAST).
 
-**Phase 3.7 cross-cutting investigations excluded** (research/strategic items, not ARCH-topic-shaped): PydanticAI substrate eval / Markdown-validation feasibility / Ming research deepening / Adjacent thinkers expansion / Multi-VISION model question.
+**Phase 3.7 ARCH amendments / follow-ups excluded from topic catalog** (concrete amendment candidates that compose with locked topics, not new topic-shaped items): PydanticAI substrate Implementations enumeration / Framework-level RAG-engagement architecture HOW.
 
 **Headroom**: 9 emergent topics may be added (11 → 20 cap) during Phase 3.3-3.6 work without taxonomy revision.
 
