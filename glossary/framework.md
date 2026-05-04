@@ -50,5 +50,5 @@ If a candidate concept fails test 1 (it IS shape-specific), it doesn't belong in
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies" section (the foundational architectural commitment)
-- `ARCHITECTURE.md` (Layer 2 overview; framework-mechanisms enumeration via topic catalog §4) + `arch/scope-model.md` (Phase 3.5 forthcoming — entity placement across Framework C / Owner B / Layer A)
+- `ARCHITECTURE.md` (Layer 2 overview; framework-mechanisms enumeration via topic catalog §4) + `arch/scope-model.md` (entity placement across Framework C / Owner B / Layer A)
 - Other foundational meta-primitives: [shape](shape.md), [mechanism](mechanism.md), [policy](policy.md)

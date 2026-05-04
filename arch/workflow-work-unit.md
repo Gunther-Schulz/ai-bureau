@@ -124,9 +124,7 @@ This composition is what distinguishes this cluster's two Pattern B primitives f
 
 ### Snapshot pattern as cross-primitive structural commitment (R-CC-10)
 
-Both workflow_instance (`definition_snapshot` per §2.2) and work-unit instance (`kind_snapshot` per §2.4) use snapshot-at-creation for defensibility-preservation across specialist version bumps. This is a CROSS-PRIMITIVE PATTERN — structural elevation of an implicit pattern (already named in `glossary/workflow.md` definition snapshot + `glossary/work-unit.md` kind-creation snapshot mirror) to explicit cross-primitive commitment.
-
-The snapshot pattern parallels `arch/practitioner.md` R-CC-1 boot ordering elevation (REVISION-flavored EXPANSION pattern): both elevate implicit cross-primitive structural facts to explicit canonical commitments. Cross-DR cumulative count contributes to BACKLOG watch-list "3-tier discriminator codification" per `decision-design-sharpening` §REVISION/EXPANSION classification self-check + `BACKLOG.md` cross-cutting "3-tier REVISION/EXPANSION discriminator codification" entry.
+Both workflow_instance (`definition_snapshot` per §2.2) and work-unit instance (`kind_snapshot` per §2.4) use snapshot-at-creation for defensibility-preservation across specialist version bumps. This is a CROSS-PRIMITIVE PATTERN — explicit cross-primitive commitment grounded in `glossary/workflow.md` definition snapshot + `glossary/work-unit.md` kind-creation snapshot mirror.
 
 ### Cross-specialist composition (within cluster but cross-specialist mechanics per `arch/specialist-skill.md` §10)
 

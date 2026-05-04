@@ -56,5 +56,5 @@ vision_usage: directly-used
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" for framework/shape relationship + concept-by-concept worked examples
 - `MAINTENANCE.md` Layer 3 description Pattern A protocol topic template §14 cross-shape policy variation conditional (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md`) — shape policy bundles mediate per-shape variation in shape-policy-mediated Pattern A protocols (adapter audit emission / permission flow / error escalation per shape; quality-gate enforcement per shape)
 - [Framework C scope](framework-c-scope.md) (where shape definitions live)
-- `arch/sparring.md` §4 + `arch/audit.md` §14 + `arch/adapter.md` §3+§14 (Phase 3.4 locked — shape-extension partition + per-shape policy variation patterns); `arch/scope-model.md` (Phase 3.5 forthcoming — shape composition with scope categories)
+- `arch/sparring.md` §4 + `arch/audit.md` §14 + `arch/adapter.md` §3+§14 (Phase 3.4 locked — shape-extension partition + per-shape policy variation patterns); `arch/scope-model.md` (shape composition with scope categories)
 - Other foundational meta-primitives: [framework](framework.md), [mechanism](mechanism.md), [policy](policy.md)

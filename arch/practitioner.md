@@ -167,7 +167,7 @@ Substrate emits AuditEvents at practitioner-record lifecycle moments. Event kind
 - `practitioner_record_deactivated` — practitioner leaves workspace; `lifecycle_state` transitions to `dormant`; record NOT deleted (preserves audit-trail attribution to historic outputs per axis-3 defensibility-critical)
 - `practitioner_record_reactivated` — dormant practitioner returns; `lifecycle_state` transitions back to `active`
 
-Practitioner-lifecycle events compose with substrate §10 boot/shutdown sequence per `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence" subsection — practitioner-record activation integrates within substrate-phase 3 adapter bindings load step (per §13 boot ordering integration; R-CC-1 REVISION-flavored EXPANSION).
+Practitioner-lifecycle events compose with substrate §10 boot/shutdown sequence per `ARCHITECTURE.md` §6 "Workspace boot + shutdown composite sequence" subsection — practitioner-record activation integrates within substrate-phase 3 adapter bindings load step (per §13 boot ordering integration).
 
 ## 6. Logic placement mode
 

@@ -61,4 +61,4 @@ If a candidate fails test 2 (it's universal across shapes; no archetype variatio
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section (atom-vs-container relationship + concept-by-concept worked examples)
 - Other foundational meta-primitives + atoms: [mechanism](mechanism.md), [framework](framework.md), [shape](shape.md)
 - [Framework C scope](framework-c-scope.md) — where shape definitions (containing policy bundles) live
-- `arch/sparring.md` §4 + `arch/audit.md` §14 + `arch/adapter.md` §3+§14 (Phase 3.4 locked — framework-baseline-vs-shape-extension partition lives at policy bundle layer); `arch/scope-model.md` (Phase 3.5 forthcoming — entity placement composing with policy bundles)
+- `arch/sparring.md` §4 + `arch/audit.md` §14 + `arch/adapter.md` §3+§14 (Phase 3.4 locked — framework-baseline-vs-shape-extension partition lives at policy bundle layer); `arch/scope-model.md` (entity placement composing with policy bundles)

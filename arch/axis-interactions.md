@@ -99,7 +99,7 @@ The directional dependency is captured per VISION line 41: "Tacked-on but well-d
 
 ### 3.4 CC-1 — Cross-axis failure cascade pattern
 
-Three independent failure modes; one directional cascade. **Load-bearing structural commitment** (REVISION-flavored EXPANSION elevated from implicit-in-VISION axis-failure framing per `VISION.md` lines 39-43):
+Three independent failure modes; one directional cascade. **Load-bearing structural commitment** (per `VISION.md` lines 39-43 axis-failure framing made explicit as cross-axis structural commitment):
 
 - **axis-1 failure (tacked-on) → forecloses axes 2+3**: tacked-on AI cannot host genuine sparring (axis-2 forecloses) AND cannot produce reasoning chains the practitioner can reconstruct under regulatory challenge (axis-3 forecloses). One-way cascade: axis-1 failure CASCADES TO axes 2+3.
 - **axis-2 failure (oracle / validator / answer-machine) → cascades to axis-3 production-phase**: per `glossary/answer-machine-ai.md` + `glossary/oracle-ai.md` + `glossary/validator-ai.md` composes-with engaged-authorship row — production-phase sparring engagement is bypassed under axis-2 failure mode; engaged-authorship Cond #1 fails at production phase; defensibility test fails per claim. One-way cascade: axis-2 failure CASCADES TO axis-3 production-phase.
