@@ -16,6 +16,7 @@ This file is the **index**. Per-discipline detail lives in `disciplines/<NN-slug
 - **Content phase** (markdown content following locked decisions): write directly without per-content approval
 - **Commit positions, don't menu**: AI commits to recommendations with rationale; user shapes via challenge or confirmation. Avoid presenting open menus.
 - **Commit and push often**: no per-commit confirmation needed; treat push as part of commit
+- **Scope-bounded autonomous authority grant**: when user grants scope-bounded autonomy (e.g., "until next /clear checkpoint" / "go ahead through Wave-N" / "do all tasks for this cluster"), AI proceeds through subsequent decision-phases within that scope without per-step confirmation. Chat surfaces still carry positions/decisions/reasons (decision-phase visibility preserved); locks happen en bloc; sub-agent dispatch + content-phase work proceed automatically. Per `CLAUDE.md` "Executing actions with care": authorization stands for the scope specified — NOT beyond. Match action scope to what was requested. Composes with `feedback_propose_before_commit.md` + `feedback_judgment_and_automate.md` decision-vs-content-phase distinction. Canonical exemplar: HANDOFF Note 58 cluster-execution (workflow-work-unit primitive-cluster Wave-1 + Wave-2 + Wave-2.5 + HANDOFF write proceeded post Round-2-lock without per-step user confirmation).
 
 Per memory: `feedback_propose_before_commit.md`, `feedback_judgment_and_automate.md`, `feedback_push_after_commit.md`.
 
