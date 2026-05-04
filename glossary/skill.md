@@ -54,4 +54,4 @@ A specialist activates a coherent set of skills; e.g., `planning-document-work` 
 
 **See**:
 - [specialist](specialist.md) (which contains skills)
-- ARCH Layer 3 skill-detail topics (placeholder until Phase 3 — skill granularity 3-test, frontmatter schema, output validation; archived material to consult: `skill-expert-agent-and-domain-knowledge.md`, `terminology-and-specialist-primitive.md` for `specialist:` frontmatter requirement)
+- [arch/specialist-skill.md](../arch/specialist-skill.md) — skill atomic structure + substrate Surface §G hot-activation re-binding semantics + cross-specialist composition rules (skill invocation via `specialist-name:skill-name`; cross-specialist entity reads permitted; entity writes prohibited at framework level) + skill granularity 3-tests + two-tier classification (domain-anchored vs cross-archetype) (Phase 3.5 first primitive-cluster ARCH topic LOCKED; Pattern B + atomic-primitive anchor for 12+5 primitive-cluster topic template; archived material to consult for Phase 6 skill schema: `skill-expert-agent-and-domain-knowledge.md`, `terminology-and-specialist-primitive.md` for `specialist:` frontmatter requirement)
