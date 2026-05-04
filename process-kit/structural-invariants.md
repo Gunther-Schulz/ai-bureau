@@ -8,9 +8,18 @@ Each invariant: the rule, the failure mode it addresses, the basis for the claim
 
 The key words MUST, MUST NOT, REQUIRED, SHOULD, SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-Invariant classification (used by `derivation-procedure.md` Step 11 conformance check):
+### Use MUST sparingly (per RFC 2119 §6, also quoted by RFC 7322 §4.8.2)
 
-- **Invariants 1-9 (load-bearing)**: MUST. Skipping these means the derived procedure does not conform to the kit's claims about robustness. Each names a documented failure mode that prose discipline alone has empirically failed to prevent
+Quote (verbatim from RFC 2119 §6 / `~/dev/reference/ai/general/rfcs/rfc-2119.txt:75-83`):
+
+> "Imperatives of the type defined in this memo must be used with care and sparingly. In particular, they MUST only be used where it is actually required for interoperation or to limit behavior which has potential for causing harm... they must not be used to try to impose a particular method on implementers where the method is not required for interoperability."
+
+Applied to the kit: an invariant earns MUST classification ONLY when skipping it has direct potential for causing harm to the kit's claims about robustness — NOT when it imposes a method where alternatives exist. The classification below reflects this strict test.
+
+### Invariant classification (used by `derivation-procedure.md` Step 11 conformance check)
+
+- **Invariants 1, 2, 5, 6, 7, 8, 9 (load-bearing harm-prevention)**: MUST. Skipping these has direct potential for harm — context drift / silent prose-discipline failure / pattern-matched-from-memory wrong claims / assertion-without-basis / agentic laziness producing premature completion. Each names a documented failure mode that prose discipline alone has empirically failed to prevent
+- **Invariants 3, 4 (method-imposing)**: SHOULD. Sub-agent routing (3) and Writer-Reviewer separation (4) are best-practice methods to address documented failure modes (cascade-mode load + self-validation bias) but per the strict test these methods have valid alternatives in some contexts (e.g., extreme-care multi-pass main-session work for low-stakes coupled artifacts). Skipping with documented reason — sized appropriately for low-stakes work — remains conformant
 - **Invariant 10 (Defense in depth)**: SHOULD. Best practice and recommended for high-stakes work. Skipping is acceptable when the sizing principle determines defense-in-depth is over-engineered for the artifact class (low-stakes / high-reversibility / low-coupling)
 - **Sizing principle (governs application of 1-10)**: REQUIRED to be calibrated per project; the calibration ITSELF is implementation-defined and project-specific
 - **Strong-form enforcement patterns (invariant 5 sub-section)**: RECOMMENDED. Consider during derivation; adopt patterns whose cost is justified by domain cost-of-error

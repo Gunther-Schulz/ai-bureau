@@ -151,8 +151,6 @@ For each, your derived procedure MUST explicitly address how the invariant is ap
 
 - **Invariant 1 (Load mandatory context)**: identify your anchor-grade entry document and verify auto-load at every session start
 - **Invariant 2 (Bound + refresh context)**: split anchor docs to per-topic files where size warrants; specify natural cascade boundaries; specify state-externalization artifacts (handoff log / commits / task list equivalents)
-- **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" in your domain
-- **Invariant 4 (Writer-Reviewer separation)**: identify which work-unit types require Writer-Reviewer separation; specify how the separation is achieved (sub-agent dispatch / fresh context / etc.)
 - **Invariant 5 (Deterministic enforcement)**: specify which load-bearing rules are hook-enforced or strong-form-pattern-enforced (vs. advisory). Document why each enforced rule is enforced (which prior failure mode or evidence justifies it)
 - **Invariant 6 (Re-grounding)**: identify procedures/skills that require re-reading at every invocation; document the re-grounding discipline
 - **Invariant 7 (Memory-as-preference vs truth)**: identify what counts as preference (persists freely) vs factual claim (verify before acting); document how factual claims are verified
@@ -161,10 +159,12 @@ For each, your derived procedure MUST explicitly address how the invariant is ap
 
 A REQUIRED item omitted without justification is a kit-conformance violation.
 
-### RECOMMENDED (invariant 10 + strong-form patterns; SHOULD)
+### RECOMMENDED (invariants 3, 4, 10 + strong-form patterns; SHOULD)
 
-Apply when sizing calibration warrants:
+Apply when sizing calibration warrants — these methods address documented failure modes but have valid alternatives in some contexts (per RFC 2119 §6 strict test, see `structural-invariants.md` "Use MUST sparingly"):
 
+- **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" in your domain. Skipping for low-stakes work with documented reason remains conformant
+- **Invariant 4 (Writer-Reviewer separation)**: identify which work-unit types require Writer-Reviewer separation; specify how the separation is achieved (sub-agent dispatch / fresh context / etc.). Skipping for low-stakes work with documented reason remains conformant
 - **Invariant 10 (Defense in depth)**: name the redundant layers per high-stakes artifact class; identify which mitigations catch each failure mode
 - **Strong-form enforcement patterns** (invariant 5 sub-section) — per pattern, document whether your derivation adopts it:
   - Multi-level status indicators
