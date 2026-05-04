@@ -62,7 +62,7 @@ When applying the kit:
 
 - Read each invariant freshly when invoking it; do not pattern-match from memory of "I read this before" (per invariant 6, applied recursively to the kit itself)
 - Cite the specific section name when reasoning from the kit; "per `structural-invariants.md` invariant 4 (Separate the doer from the judge)" beats "per the kit"
-- When the kit's claim conflicts with your direct observation in your project, trust your observation but record the conflict — it may be a per-domain calibration point, or it may be a kit defect surfacing through your project's data
+- When the kit's claim conflicts with direct observation in the project, trust the observation but record the conflict — it may be a per-domain calibration point, or it may be a kit defect surfacing through the project's data
 
 ## When meta-rules update
 

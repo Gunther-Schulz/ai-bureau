@@ -98,7 +98,7 @@ For each artifact type and work-unit type, decide mitigation density:
 - **Medium**: structural invariants 1, 2, 6, 8 minimum (context, re-grounding, basis-honesty); other invariants advisory
 - **Low**: advisory only; treat the invariants as guidance not enforcement
 
-The sizing decisions belong in your derived procedure document, made explicit so the project can revisit them as cost calibration shifts.
+The sizing decisions belong in the derived procedure document, made explicit so the project can revisit them as cost calibration shifts.
 
 Output of 8a: a sizing table (artifact type → mitigation density → which invariants apply structurally vs. advisorily).
 
@@ -112,7 +112,7 @@ In addition to the sizing table, document the project's trust/safety posture exp
 - **Approval/sandbox/operator-confirmation policy**: what does the AI do without confirmation, and where does it require explicit user approval? (e.g., "AI may edit code/ without confirmation but MUST request approval before migrations/" or "all edits proceed; user reviews via PR")
 - **Mitigation-to-artifact mapping**: which mitigations apply to which artifacts, and why? (cross-references back to sizing table)
 
-Output of 8b: a "Trust posture" section in your derived procedure document, scannable in 1-2 minutes by a new contributor. The trust posture is consulted whenever sizing decisions are revisited (per Step 10 maintenance protocol).
+Output of 8b: a "Trust posture" section in the derived procedure document, scannable in 1-2 minutes by a new contributor. The trust posture is consulted whenever sizing decisions are revisited (per Step 10 maintenance protocol).
 
 ## Step 9 — Write the project's procedure document
 
@@ -139,7 +139,7 @@ The derived procedure must include its own maintenance discipline. This lives in
 - **Adoption criteria** — when to add a new mitigation (observed failure ≥N times within this project; never speculative)
 - **Re-derivation triggers** — when to re-run this whole derivation procedure (major domain shift, recurring failure not addressed, kit itself updated per `self-application.md`)
 
-These thresholds (N, M) are project-calibrated. The kit does not prescribe specific numbers — calibrate from your domain's failure cadence and cost-of-error.
+These thresholds (N, M) are project-calibrated. The kit does not prescribe specific numbers — calibrate from the domain's failure cadence and cost-of-error.
 
 ## Step 11 — Conformance check (Definition of Done)
 
@@ -166,7 +166,7 @@ Apply when sizing calibration warrants — these methods address documented fail
 - **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" for the project. Skipping for low-stakes work with documented reason remains conformant
 - **Invariant 4 (Writer-Reviewer separation)**: identify which work-unit types require Writer-Reviewer separation; specify how the separation is achieved (sub-agent dispatch / fresh context / etc.). Skipping for low-stakes work with documented reason remains conformant
 - **Invariant 10 (Defense in depth)**: name the redundant layers per high-stakes artifact class; identify which mitigations catch each failure mode
-- **Strong-form enforcement patterns** (invariant 5 sub-section) — per pattern, document whether your derivation adopts it:
+- **Strong-form enforcement patterns** (invariant 5 sub-section) — per pattern, document whether the derivation adopts it:
   - Multi-level status indicators
   - Default-state = NOT READY with cycle counting
   - Discovery vs verification distinction
