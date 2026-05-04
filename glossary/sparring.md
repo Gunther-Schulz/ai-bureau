@@ -40,3 +40,4 @@ vision_usage: directly-used
 **See**:
 - VISION "Sparring partner, not answer machine (axis 2)" section + Foundations Vivienne Ming subsection
 - `arch/sparring.md` (Layer 3 mechanism-class topic; 8 sub-mechanism Surfaces; per-shape activation matrix; per-sub-mechanism event-kind catalog; per-shape policy variation)
+- [arch/axis-interactions.md](../arch/axis-interactions.md) — axis-2 PRIMARY anchor per §2.2 + §4.1 per-primitive axis-anchoring catalog; axis-2 OPERATIONAL within axis-1 per §3.3 asymmetric composition (sparring fires WITHIN intertwined co-work; axis-2 requires axis-1 substrate); axis-2 → axis-3 production-phase substrate per §3.1 pairwise composition (sparring events ARE production-phase substrate for engaged-authorship Cond #1); axis-2 failure (oracle/validator/answer-machine) cascades to axis-3 production-phase per CC-1 §3.4 (Phase 3.5 sixth + final ARCH topic LOCKED; second cross-cutting integrator extending scope-model anchor WITHOUT variation)

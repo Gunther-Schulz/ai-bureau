@@ -44,6 +44,14 @@ Three structural drivers of category collapse:
 
 In all archetypes: the collapse is in the practitioner's mental category, not in the architecture. Architecture enables; the practitioner's cognitive state determines whether enablement converts to actual engagement.
 
+**Cross-axis failure cascade pattern (CC-1)**: per-axis manifestations follow a directional cascade structure (load-bearing cross-axis structural commitment surfaced through axis-interactions articulation per `arch/axis-interactions.md` §3 cross-axis composition WITHIN cluster):
+
+- **axis-1 failure (tacked-on) → forecloses axes 2+3**: tacked-on AI cannot host genuine sparring (no co-work to spar within → axis-2 forecloses) AND cannot produce reasoning chains the practitioner can reconstruct under regulatory challenge (no co-work outputs to defend → axis-3 forecloses). One-way cascade: axis-1 failure CASCADES TO axes 2+3.
+- **axis-2 failure (oracle / validator / answer-machine) → cascades to axis-3 production-phase**: production-phase sparring engagement is bypassed under axis-2 failure mode (per `engaged-authorship` Cond #1 production-phase test); engaged-authorship Cond #1 fails at production phase; defensibility test fails per claim. One-way cascade: axis-2 failure CASCADES TO axis-3 production-phase.
+- **axis-3 failure (rubber-stamping at attestation) is INDEPENDENTLY possible**: per `rubber-stamping` "Not mutually exclusive with axis-1 / axis-2 failures" — engaged-authorship Cond #1 satisfied at production-phase + Cond #2 reconstructible-reasoning-chain + Cond #3 source-grounded all hold; but practitioner attests without engagement = rubber-stamping. axis-3 attestation-phase failure can occur EVEN WITH axes 1+2 success at production phase; orthogonal to axes 1+2 success.
+
+`category-collapse` is the general force pattern producing per-axis manifestations; CC-1 is the directional cascade structure those manifestations follow. Per-axis signals must be detected at the axis where the failure FIRES, not downstream where it cascades (load-bearing for cross-axis observability per `arch/axis-interactions.md` §7 E2 per-axis observability hooks).
+
 **Boundary test**: Three questions — category collapse is occurring when ANY resolves favorably:
 1. Has the practitioner mentally re-categorized the AI from its architectural-intent role (co-worker / sparring-partner / authoring-partner) to a lower-engagement role (tool / oracle / output-source)?
 2. Are outcomes shifting from architectural-intent-aligned to lower-engagement-shape, despite no architectural change?
@@ -79,4 +87,4 @@ Negative-marker test (collapse NOT occurring):
 - [co-worker](co-worker.md) (relational frame collapsing)
 - [answer-machine AI](answer-machine-ai.md) / [oracle AI](oracle-ai.md) / [validator AI](validator-ai.md) — axis-2 failure outcomes
 - [rubber-stamping](rubber-stamping.md) — axis-3 failure outcome
-- ARCH Layer 3 category-collapse-detail topics (placeholder until Phase 3 — counter-mechanisms catalog; engagement-quality signals; per-archetype collapse signatures; collapse-detection observability; architectural friction patterns that resist collapse)
+- [arch/axis-interactions.md](../arch/axis-interactions.md) — category-collapse as cross-axis force per §4.3; per-axis manifestations (axis-1 tacked-on / axis-2 oracle/validator/answer-machine / axis-3 rubber-stamping); CC-1 directional cascade pattern (axis-1 forecloses 2+3 / axis-2 cascades to axis-3 production-phase / axis-3 independently possible) per §3.4 (Phase 3.5 sixth + final ARCH topic LOCKED; second cross-cutting integrator extending scope-model anchor WITHOUT variation; quality-gate Pattern A as architectural counter-mechanism per §4.3 — Phase 3.6 forthcoming)

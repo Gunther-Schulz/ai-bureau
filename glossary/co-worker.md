@@ -64,4 +64,4 @@ Same role-shape across archetypes; differs by what work is produced.
 - [intertwined AI](intertwined-ai.md) (positive realization)
 - [tacked-on AI](tacked-on-ai.md) (failure mode contrast)
 - [practitioner](practitioner.md) (human side of the pairing)
-- ARCH Layer 3 axis-1-mechanism topic (placeholder until Phase 3 — the mechanisms enabling co-worker frame)
+- [arch/axis-interactions.md](../arch/axis-interactions.md) — co-worker frame as cross-axis vocabulary per §4.2 (axis-1 PRIMARY anchor relational frame; axis-2 cross-axis composition co-worker frame is SUBSTRATE for sparring engagement; axis-3 cross-axis composition co-author-but-NOT-author distinction load-bearing — practitioner remains author per axis-3 protected role even though work co-produced per axis-1 collaborative); axis-1 FOUNDATIONAL substrate per §3.3 asymmetric composition (Phase 3.5 sixth + final ARCH topic LOCKED; second cross-cutting integrator extending scope-model anchor WITHOUT variation)

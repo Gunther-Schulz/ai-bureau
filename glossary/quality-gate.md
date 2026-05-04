@@ -88,6 +88,7 @@ Both involve "gate" but operate at different layers + lifecycle moments. Disambi
 
 **See**:
 - ARCH Layer 3 quality-gate topic (placeholder until Phase 3.6 — full Surface specification + per-implementation detail + per-axis signal catalog + intervention mechanics + error semantics + tier-awareness configuration)
+- [arch/axis-interactions.md](../arch/axis-interactions.md) — quality-gate Pattern A as architectural counter-mechanism for category-collapse per §4.3 (gate fires at runtime checkpoints to monitor for category-collapse manifestations across all 3 VISION axes); cross-axis observability hook signal-set integration per §7 E2 + §14 W4 (per-axis signals quality-gate consumes for category-collapse drift detection across axis-1 / axis-2 / axis-3); Phase 3.6 quality-gate ARCH topic consumes per-axis signal-set per §14 W4 watch-list resolution mechanism (Phase 3.5 sixth + final ARCH topic LOCKED; second cross-cutting integrator extending scope-model anchor WITHOUT variation; quality-gate ARCH topic Phase 3.6 forthcoming)
 - `profiles/G-composability-gate.md` (DISTINCT — G is architectural-decision-time validation gate)
 - `profiles/INDEX.md` D Gate section (DISTINCT — D is architectural-decision-time validation gate)
 - [category collapse](category-collapse.md) (force quality-gate exists to resist)

@@ -75,5 +75,5 @@ Negative-marker test (validator NOT occurring):
 - [answer-machine AI](answer-machine-ai.md) (sibling — extraction direction)
 - [oracle AI](oracle-ai.md) (sibling — declarative direction)
 - [tacked-on AI](tacked-on-ai.md) (axis-1 parallel)
-- Anti-sycophancy mechanism (ARCH Layer 3 forthcoming)
-- ARCH Layer 3 axis-2-failure-detection topics (placeholder until Phase 3; `quality-gate` Pattern A protocol per GLOSSARY entry; Phase 3.6 ARCH topic forthcoming)
+- Anti-sycophancy mechanism (per `arch/sparring.md` §4 — sparring sub-mechanism specifically designed to resist validator-mode failure; axis-2 architecturally-encoded gate-dispatched + behaviorally-enforced sub-mechanism categories)
+- [arch/axis-interactions.md](../arch/axis-interactions.md) — validator-ai as axis-2 failure mode per §2.2 + §4.1 per-primitive axis-anchoring catalog (affirmation-direction failure shape per Vivienne Ming research; three independent axis-2 failure shapes); axis-2 failure → cascades to axis-3 production-phase per CC-1 cross-axis failure cascade pattern §3.4 (sycophantic confirmation is not sparring participation → engaged-authorship Cond #1 production-phase fails); axis-2 collapse to "answer machine" per §4.3 category-collapse manifestation; per-axis observability hooks per §7 E2 (affirmation-pattern signals); quality-gate Pattern A as architectural counter-mechanism per §4.3 — Phase 3.6 forthcoming (Phase 3.5 sixth + final ARCH topic LOCKED; second cross-cutting integrator extending scope-model anchor WITHOUT variation)
