@@ -75,6 +75,19 @@ Phase 3.5 instances of new-template-class anchoring (all kept Wave-1 Writer at x
 
 The downshift suggestion (Wave-1 Writer `xhigh → high`) only fires when Writer is 2nd-instance of an already-anchored template-class. That state hasn't been reached in Phase 3.5 yet; surface the suggestion when it does.
 
+## Lens 5 subtle-breadcrumb-detection requirement (Wave-1 Reviewer effort)
+
+Wave-1 Reviewer effort cannot downshift from xhigh to high — even on narrow-surface cross-cutting integrator second-instance audits or other Reviewer roles where surface narrowness might suggest high-effort sufficiency. Empirical evidence: high-effort Wave-1 Reviewer misses Lens 5 v0.2.2 sharpening-tier-label leakage at structural-elevation moments. The label feels load-bearing as marker of structural-vs-coverage distinction; subtle-breadcrumb detection requires xhigh reasoning depth. xhigh reverify dispatch surfaces what high missed.
+
+**Generalization**: Reviewer roles applying Lens 5 v0.2.2 / sharpening-trajectory hygiene at structural-elevation moments require xhigh effort regardless of surface-narrowness. Specific cases:
+- Wave-1 Reviewer (initial audit of Wave-1 Writer output)
+- Wave-2 Cascade-Reviewer
+- Wave-2.5 Cleanup-Writer integrated final recheck
+
+Cascade-execution generation-dense work (mass scrub; mechanical placeholder refresh) MAY downshift to high per the 3-toggle map step 14 + step 25 — those are pure-mechanical-execution shapes, not Lens-5-detection shapes. The discriminator: detection-class work (catching subtle sharpening-tier labels at structural-elevation moments) stays xhigh; execution-class work (applying already-found findings as well-specified edits) downshifts to high.
+
+Composes with the Reviewer-brief checklist requirement codified in `plugin/skills/coherence-audit/SKILL.md` Step 5 (v0.2.2): the Reviewer brief MUST enumerate sharpening-tier-label scrub as explicit checklist item AND the dispatching effort level MUST stay xhigh. Both compose; neither alone suffices.
+
 ## Coherence-audit checkpoint procedure (different shape — C1-C5)
 
 Coherence-audit checkpoint executions follow a different procedure than primitive-cluster cluster-execution. The C1 shape (per Note 55 retrospective):

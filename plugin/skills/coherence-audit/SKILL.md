@@ -2,7 +2,7 @@
 name: coherence-audit
 description: "**READ THIS FILE BEFORE APPLYING. Use the Read tool to load this SKILL.md at every invocation, regardless of prior usage in same session — pattern-matching from memory of prior usage FAILS load-bearing discipline elements (per `DISCIPLINES.md` Discipline 1 (skill+profile sub-section)).** Use when multiple architectural decisions / GLOSSARY entries / DRs / specs have already been locked and the user wants a CROSS-DECISION audit pass on the corpus as a SET — not within-decision sharpening. Triggers via natural-language prompts including \"audit the glossary\", \"review the corpus\", \"cross-entry audit\", \"is the architecture clean\", \"are these the right primitives\", \"primitive-set audit\", \"set-level review\", \"coherence check\", \"is the vocabulary coherent\". Phase 3 of the dev-skill family — distinct from `decision-design-sharpening` (pre-decision; one decision; pre-commit) and `pre-implementation-sharpening` (one decision; at implementation-start). NOT for within-entry refinement on a single decision (use decision-design-sharpening). NOT for operational-detail surfacing on one decision (use pre-implementation-sharpening)."
 when_to_use: After multiple decisions / GLOSSARY entries / DRs are locked; user wants a SET-level audit. Natural triggers: "audit glossary", "review corpus", "cross-entry audit", "are these the right primitives", "primitive-set audit", "is the architecture clean", "coherence check". Do NOT use for single-decision sharpening — that's decision-design-sharpening.
-version: 0.3.4
+version: 0.3.5
 ---
 
 # Coherence audit (Phase 3 dev skill)
@@ -102,10 +102,26 @@ Schema + discipline check across entries (was Lens 4 + Lens 6 in v0.1.0; merged 
 - Source sections cite file:line where claims have file:line basis (per `DISCIPLINES.md` Discipline 1)
 - Synthesis flagged distinctly from citation
 - "Pattern-matched / inferred" basis flagged at low confidence
-- **Provenance hygiene** (v0.2.1): entries should NOT contain audit/revision history breadcrumbs ("per RA4 Round 3 audit", "per A1 — primitive-set lens, applied session 16", "per Phase 1.75 + feedback_X resolution"). Provenance lives in HANDOFF.md notes + git log + commit messages. Discriminator:
-  - **Strip**: audit-revision-history markers ("per <audit-name>", "applied session N", "Round N audit"). These pollute canonical-definition prose.
-  - **Keep**: load-bearing forward-references / discipline notes ("deferred to Phase 3 ARCH", "deliberately NOT 'X' — X is locked vocabulary for Y", "Phase 6 reconciles..."). These are SEMANTIC context future readers need.
-  - The test: would removing this breadcrumb confuse a fresh reader's understanding of WHAT THE PRIMITIVE IS? If no, strip; if yes, keep.
+- **Provenance hygiene** (v0.2.2): entries should NOT contain audit / revision-history / sharpening-trajectory breadcrumbs in canonical content. Provenance lives in HANDOFF.md notes + git log + commit messages + DR §6 Sharpening provenance section + BACKLOG.md watch-list entries (for cumulative-count tracking that spans phases).
+
+  **STRIP-class** (v0.2.2):
+  - **Audit-revision-history markers**: "per <audit-name>", "applied session N", "Round N audit", "per RA4 Round 3 audit", "per A1 — primitive-set lens, applied session 16", "per Phase 1.75 + feedback_X resolution"
+  - **Sharpening-tier labels**: "REVISION-flavored EXPANSION" / "elevated from <prior framing>" / sharpening-trajectory tags like "R-N-1" / "R-N-2" / "R-CC-N" / "CC-N as sharpening-trajectory marker" / "E-N as sharpening-trajectory tag" — STRIP from canonical content (ARCH topic bodies, GLOSSARY entries, ARCHITECTURE.md §7 lock entries, MAINTENANCE.md). The structural fact survives without the sharpening-tier qualifier; the qualifier is provenance, not semantics. At structural-elevation moments the label can feel load-bearing as marker of structural-vs-coverage distinction — that feeling is the failure mode this rule prevents.
+  - **Cumulative count tracking**: "8 cumulative REVISION-flavored EXPANSIONS across N cluster-executions" / "3-incident threshold REACHED" / "N cumulative incidents" — STRIP from canonical content; lives at BACKLOG watch-list entry + DR §6.
+  - **Wave-N narrative**: "Wave-1 Writer + Wave-2 Cascade-Writer + Wave-2.5 Cleanup-Writer" cluster-execution narrative — STRIP from DR §9 Files-touched section (preserve commit-hash + file-list only). Wave narrative belongs in HANDOFF Notes + git log.
+
+  **KEEP-class**: load-bearing forward-references / discipline notes ("deferred to Phase 3 ARCH", "deliberately NOT 'X' — X is locked vocabulary for Y", "Phase 6 reconciles..."). These are SEMANTIC context future readers need.
+
+  **Discriminator test** (v0.2.2): would removing this breadcrumb confuse a fresh reader's understanding of WHAT THE PRIMITIVE IS / WHAT THE DECISION COMMITS TO? If no, strip; if yes, keep. The test is deliberately about the structural fact / the decision content — not about the trajectory by which that content arrived at its current shape (trajectory is provenance).
+
+  **Where sharpening-trajectory provenance lives** (canonical home — non-exhaustive): DR §6 Sharpening provenance section + HANDOFF.md notes + git log + commit messages + BACKLOG.md watch-list entries. NOT in canonical ARCH / GLOSSARY / ARCHITECTURE / MAINTENANCE content.
+
+  **Surfaces where v0.2.2 enforcement applies** (enumerated to prevent ambiguity at audit-time):
+  - **ARCH topics**: §SD-N + §3 + §4 + §6 + §7 + §17 (canonical-decision content)
+  - **DR**: §4 Context + §5 Decision content + §7 Composition + §8 Constraints flowing + §9 Files touched (canonical-decision content). **DR §6 IS the sharpening-provenance home** — sharpening-tier labels are correct THERE.
+  - **GLOSSARY entries**: full body
+  - **ARCHITECTURE.md**: §4 + §7 lock entries
+  - **MAINTENANCE.md**: TOP-LEVEL sections + Layer-3 templates + Layer-4 DR template
 
 ### Lens 6: Symmetry
 
@@ -230,16 +246,20 @@ Manufactured-criticism counter-test + manufactured-comfort counter-test BOTH app
 
 Per `MAINTENANCE.md` cascade discipline: when locking a corpus-level revision, identify all affected entries and update in same commit (or tightly-coupled sequence explicitly marked as completing the cascade).
 
-**Provenance discipline when applying revisions** (v0.2.1): when applying a finding's revision to an entry, do NOT embed audit-revision-history breadcrumbs in the entry text. Provenance goes in:
+**Provenance discipline when applying revisions** (v0.2.2): when applying a finding's revision to an entry, do NOT embed audit-revision-history breadcrumbs OR sharpening-tier labels in the entry text. Provenance goes in:
 - **HANDOFF.md note** for the audit run (records what was changed + why)
 - **Commit message** (records exact diff + rationale)
 - **git log** (full history)
+- **DR §6 Sharpening provenance section** (sharpening-tier labels are correct THERE)
+- **BACKLOG.md watch-list entries** (cumulative-count tracking that spans phases)
 
-The entry stays canonical: definition prose without "per RA4 Round 3 audit" / "per A1 — primitive-set lens, applied session 16" markers. Fresh readers see the locked definition; readers wanting provenance check HANDOFF + git log.
+The entry stays canonical: definition prose without "per RA4 Round 3 audit" / "applied session N" / "REVISION-flavored EXPANSION" / "elevated from <prior framing>" / sharpening-trajectory tags ("R-N-N" / "R-CC-N" / "CC-N" / "E-N as sharpening-trajectory marker") / cumulative-count tracking. Fresh readers see the locked definition; readers wanting provenance check HANDOFF + git log + DR §6.
 
-Anti-pattern caught by Lens 5 provenance-hygiene check: AI applying a revision feels productive when it adds an "applied session X" marker (signals work-was-done). But that marker pollutes the canonical layer. Resist the urge.
+Anti-pattern caught by Lens 5 v0.2.2 provenance-hygiene check: AI applying a revision feels productive when it adds an "applied session X" marker (signals work-was-done) OR a sharpening-tier label at structural-elevation moments (signals "this is the elevated structural fact, not just coverage"). Both feelings pollute the canonical layer. The structural fact survives without the qualifier. Resist the urge.
 
 **Exception**: load-bearing forward-references / discipline notes ("deferred to Phase 3 ARCH", "deliberately NOT 'X'") stay because they're SEMANTIC context, not provenance.
+
+**Reviewer-brief checklist requirement** (v0.2.2 enforcement composability with cluster-execution methodology): when running Wave-1 Reviewer + Wave-2 Cascade-Reviewer + Wave-2.5 Cleanup-Writer integrated-recheck cycles within cluster-execution methodology, the Reviewer brief MUST include sharpening-tier-label scrub at canonical content as an explicit checklist item — not implicit under Lens 5 general hygiene. Empirically grounded: high-effort Reviewer cycles miss subtle sharpening-tier-label leakage at structural-elevation moments because the label feels load-bearing as marker of structural-vs-coverage distinction; xhigh effort + explicit checklist item required for detection. The Reviewer brief should enumerate the STRIP-class items (audit-revision-history markers / sharpening-tier labels / cumulative count tracking / Wave-N narrative) by name + the surfaces where v0.2.2 enforcement applies (ARCH §SD-N + §3-§7 / DR §4-§5 + §7-§9 with §6 carved out as sharpening-provenance home / GLOSSARY / ARCHITECTURE / MAINTENANCE) so the Reviewer applies the discriminator deterministically rather than reasoning from general hygiene.
 
 ### Step 6: Output
 

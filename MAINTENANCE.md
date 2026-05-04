@@ -303,7 +303,7 @@ Established by `arch/specialist-skill.md` (Pattern B + atomic-primitive anchor; 
 | 6 | Logic placement mode | Mode 4 development-time per `ARCHITECTURE.md` §6; per-primitive mode-distribution (DEFINITIONs / instances / schemas) |
 | 7 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details (error categories; lifecycle event-kind catalog; deferred mechanics) |
 | 14 | Watch-list | Items awaiting external evidence; resolution mechanisms |
-| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.1 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
+| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.2 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
 | 16 | Phase routing | Architectural shape (locked here) vs Pydantic spec (Phase 6) vs concrete deployment (Phase 6 workspace) |
 | 17 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing with this cluster / Phase 6 spec target / archived sources |
 | 18 | Composition table | Per-composing-primitive table showing how each cluster primitive composes (one column per cluster primitive) |
@@ -357,7 +357,7 @@ Established by `arch/scope-model.md` (cross-cutting integrator ANCHOR for cross-
 | 6 | Logic placement mode | Mode 4 development-time per `ARCHITECTURE.md` §6; per-element Mode distribution within cluster's surface |
 | 7 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details (error categories; schema versioning semantics; deferred mechanics) |
 | 14 | Watch-list | Items awaiting external evidence; resolution mechanisms |
-| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.1 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
+| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.2 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
 | 16 | Phase routing | Architectural shape (locked here) vs Pydantic spec (Phase 6) vs concrete deployment (Phase 6 workspace) |
 | 17 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing with this cluster / Phase 6 spec target / archived sources |
 | 18 | Composition table | Per-composing-primitive table covering all already-locked primitive surfaces (one row per primitive; columns per cross-cutting integrator's surface dimension) |
