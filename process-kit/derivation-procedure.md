@@ -61,7 +61,7 @@ What must auto-load (or be read first) at every session start? Candidate roles:
 - A vision / goal document — what this project is for; the success criteria the procedure must keep serving
 - A working-discipline document — how the team / human / AI operate together
 - A current-state document — handoff log, in-progress work, recent decisions
-- A backlog document — phase-tagged forward-work tracker
+- A backlog document — structured forward-work tracker (phase-tagged / sprint-tagged / milestone-tagged / etc., depending on project conventions)
 
 Keep auto-loaded content compact. If anchor documents grow large, split them: index in the auto-loaded layer, detail loaded on-demand. Per invariant 2.
 
