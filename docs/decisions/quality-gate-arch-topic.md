@@ -283,6 +283,19 @@ This decision flows constraints into:
 
 Wave-2 cascade follow-ups (downstream cascade per cascade discipline): `ARCHITECTURE.md` §2 sub-phase status (3.6 LOCKED) + §4 topic catalog (quality-gate DRAFTED → LOCKED) + §6 cross-cutting principles "Workspace boot + shutdown composite sequence" subsection (gate-phase 1-4 amendment) + §7 locked architectural decisions (quality-gate ARCH topic Phase 3.6 LOCKED entry); `GLOSSARY.md` quality-gate index entry (placeholder forthcoming → LOCKED link); `glossary/quality-gate.md` "See" section (placeholder forthcoming → LOCKED link); `BACKLOG.md` Phase 3.6 entry (1 of 1 ARCH topic LOCKED); `HANDOFF.md` (Phase 3.6 close note); cross-corpus sweep per cascade discipline mandatory cross-corpus sweep at Phase 3.6 phase-set closure (placeholder framings of OTHER terms now made citable by Phase 3.6 close).
 
+### Wave-2 cascade applied (commit `<Wave-2-hash>`)
+
+Wave-2 cascade applied 2026-05-04 across the following files (~30+ file edits — Wave-2-hash placeholder pending Wave-2.5 Cleanup-Writer resolution):
+
+- **ARCHITECTURE.md** — §2 row 3.6 CLOSED + §3 11/11 LOCKED + §4 row 5 DRAFTED + §6 composite boot+shutdown sequence gate-phase 1-4 + gate-shutdown 1-4 amendment + §7 NEW lock entry quality-gate Pattern A 12+7 third instance with FORMAL STABILITY codification
+- **MAINTENANCE.md** — Pattern A protocol topic template subsection: FORMAL STABILITY language addition (3 of 3 Pattern A instances complete) + per-topic section count expectation quality-gate row update (19 numbered §-headers + 4 conditional applies + 3 N/A documented)
+- **BACKLOG.md** — Phase 3.6 row resolved cluster format + 3-tier discriminator cumulative-count update 8 → 10 across 7 cluster-executions (preserves freeze 2026-05-04 + signal-(a) DEFER WITH NAMED AWAIT-SIGNAL per Note 62) + Phase 3.7 + Phase 3.8 unblocked notation
+- **glossary/quality-gate.md** — See section: placeholder until Phase 3.6 → LOCKED link to `arch/quality-gate.md`
+- **10 peer ARCH topics §17/§19 reciprocal back-mentions upgraded to LOCKED**: substrate + adapter + sparring + audit + specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions (axis-interactions §7 E2 + §14 W4 RESOLVED notation; cross-corpus sweep ~15 forward-references upgraded)
+- **Cross-corpus sweep per `MAINTENANCE.md` Cascade 1 commit `f075927` structural amendment** — 7 glossary entries upgraded (category-collapse + answer-machine-ai + oracle-ai + validator-ai + rubber-stamping + workflow + protocol-architectural); all "Phase 3.6 forthcoming" / "(forthcoming)" / "placeholder until Phase 3.6" framings of quality-gate-related references upgraded to LOCKED links
+
+Wave-2 commit hash placeholder `<Wave-2-hash>` to be resolved by Wave-2.5 Cleanup-Writer post-Wave-2 commit landing.
+
 ## 10. Revisit triggers
 
 This DR should be revisited if:

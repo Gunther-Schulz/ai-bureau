@@ -238,7 +238,7 @@ For ARCH topics describing **either Pattern A protocols** (Surface + Implementat
 - **12 common-required sections** apply to every Pattern A or mechanism-class topic
 - **7 protocol-specific-conditional sections** apply per topic if applicable to its nature (per per-pattern applicability rules below)
 
-Established by `arch/substrate.md` (Pattern A anchor; 6 of 7 conditional sections apply, §14 N/A per shape-uniform Surface) + validated by `arch/adapter.md` (Pattern A; some conditional sections thin or N/A; §14 applies per shape-policy-mediated nature) + greenfield-tested against quality-gate at template-derivation time + extended to mechanism-class topics by `arch/sparring.md` + `arch/audit.md` (Pattern D instances; §14 always applies per mechanism-class definition; §3 N/A per single-layer Surface convention).
+Established by `arch/substrate.md` (Pattern A anchor; 6 of 7 conditional sections apply, §14 N/A per shape-uniform Surface) + validated by `arch/adapter.md` (Pattern A second instance; some conditional sections thin or N/A; §14 applies per shape-policy-mediated nature) + extended by `arch/quality-gate.md` (Pattern A third instance; §3 + §8 + §12 N/A documented + §10 + §11 + §13 + §14 applies; FORMAL STABILITY achieved with 3 of 3 Pattern A instances complete) + extended to mechanism-class topics by `arch/sparring.md` + `arch/audit.md` (Pattern D instances; §14 always applies per mechanism-class definition; §3 N/A per single-layer Surface convention). **Pattern A 12+7 topic-template-class FORMAL STABILITY achieved** — 12+7 extends WITHOUT variation across all 3 Pattern A instances per per-pattern instance-driven trigger pattern; 3 of 3 Pattern A instances complete with Phase 3.6 close.
 
 **12 common-required sections** (every Pattern A topic):
 
@@ -277,7 +277,7 @@ Established by `arch/substrate.md` (Pattern A anchor; 6 of 7 conditional section
 **Per-topic section count expectation**:
 - substrate (Pattern A): 12 common + 7 conditional (anchor; 6 of 7 apply; §14 N/A per shape-uniform substrate Surface) = ~18-19 total (depending on counting N/A documentation)
 - adapter (Pattern A): 12 common + ~5 conditional (§3 per-integration-class boundaries, §10 lifecycle/auth-refresh, §11 per-impl errors, §14 cross-shape variation; §8 + §12 + §13 N/A) = ~17 total
-- quality-gate (Pattern A): 12 common + ~3-4 conditional (§11 fail-closed / fail-open per shape, §14 cross-shape variation expected per shape-policy-mediated nature; others TBD per topic creation) = ~15-16 total
+- quality-gate (Pattern A; THIRD INSTANCE): 12 common + 4 conditional applies (§10 boot/shutdown ordering + §11 per-shape error categories + §13 deployment-tier awareness + §14 cross-shape policy variation) + 3 N/A documented (§3 single-layer Surface + §8 substrate-internal vs skill-side audit emission + §12 transport variation) = 19 numbered §-headers / ~410 lines per `arch/quality-gate.md` (Phase 3.6)
 - sparring (mechanism class): 12 common + ~5-6 conditional (§11 sparring error categories, §14 cross-shape activation matrix mandatory; §3 + §8 + §10 + §12 + §13 N/A) = ~17-18 total
 - audit (mechanism class): 12 common + ~6 conditional (§8 dual-emission catalog, §10 storage-realization boot/shutdown ordering, §11 audit error categories, §14 cross-shape policy variation mandatory; §3 + §12 + §13 N/A) = ~18 total
 
