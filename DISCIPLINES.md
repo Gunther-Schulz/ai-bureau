@@ -39,6 +39,7 @@ Each row links to the per-discipline file with full detail (sub-sections, exampl
 | 8 | Foundation-up workflow ordering | Compositional / architectural work (GLOSSARY, DRs, ARCH, specs, layered design) | `disciplines/08-foundation-up-ordering.md` |
 | 9 | Coherence-audit cadence | Phase 3-6 work checkpoints; mid-phase trigger conditions; BACKLOG-scheduled checkpoints | `disciplines/09-coherence-audit-cadence.md` |
 | 10 | Greenfield evaluation of archived material | ARCH/DR/spec work cites archived material; Round 1 sharpening surfaces archive citation; Round 2 termination self-check | `disciplines/10-greenfield-evaluation.md` |
+| 11 | Effort-switch cluster-execution map | At dispatch-class transitions during Phase 3.5+ cluster-execution; at audit-checkpoint executions (C1-C5) | `disciplines/11-effort-switch-cluster-map.md` |
 
 Anchor-stable section headings below preserve resolvability of existing `DISCIPLINES.md#discipline-N-...` cross-references from other docs. Each section is a one-line summary + cross-ref to per-discipline file.
 
@@ -101,6 +102,12 @@ Detail: `disciplines/09-coherence-audit-cadence.md`.
 Each cited archived element MUST be greenfield-evaluated against current locked vocabulary — NOT transcribed as template. Archive embodies pre-rebuild commitments, much of which was unlocked / instance-anchored / contradiction-bearing per rebuild rationale.
 
 Detail: `disciplines/10-greenfield-evaluation.md`.
+
+## Discipline 11 — Effort-switch cluster-execution map
+
+Operationalizes the Working-procedure "Effort-level switch suggestion is a pause-point" bullet by enumerating exact dispatch-points where AI surfaces switch suggestions during cluster execution. 3-toggle practical map for primitive-cluster cluster-execution: `xhigh → high` before Wave-2 Cascade-Writer (step 14); `high → xhigh` before Wave-2 Cascade-Reviewer (step 16); `xhigh → high` before HANDOFF write (step 25). Audit checkpoints (C1-C5) follow different shape: stay xhigh; downshift only when dispatching cascade-execution sub-agents.
+
+Detail: `disciplines/11-effort-switch-cluster-map.md`.
 
 ---
 
