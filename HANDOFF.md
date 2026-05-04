@@ -368,3 +368,65 @@ Executed Note 62 step 7 recommended order: Phase 3.6 quality-gate ARCH topic sub
 **HANDOFF rotation candidacy strengthens**: HANDOFF at ~611 lines after Note 63; PAST ~500-line rotation threshold; recommend rotation Notes 59-60 at next session start would leave Notes 61 + 62 + 63 as load-bearing pickup context (~360 lines comfortably below threshold).
 
 ---
+
+**Note 64: Session 34 — Thin-slice v1.0-runtime milestone approach LOCKED + Phase 6.1/6.2 split + Phase 3.7 re-tagged as v1.x amendment candidates + base framework boundary discriminator codified; persistence cascade landing the conceptual frame in MAINTENANCE.md / BACKLOG.md / ARCHITECTURE.md / ROADMAP.md before dependent cascade-execution (hand-rolled drop amendment + C3 phase-boundary audit) per `memory/feedback_persist_frame_before_cascade.md` discipline; HANDOFF rotation Notes 59-60 → archive/handoffs/HANDOFF-sessions-30-31.md at session start; Phase 3.7 corpus-organization cleanup separated research-flavored items (Markdown-validation / Ming research / Adjacent thinkers) → Cross-cutting + Multi-VISION → Phase 5 STRATEGY + Symphony §10 review STRUCK; PydanticAI substrate eval Round 1 verdict drafted ("NOT a substrate; W5 watch-list candidate") parked as v1.x amendment candidate**
+
+Executed mid-session user-flagged "shouldn't we persist what we just decided first?" prompt: surface chat-locked conceptual decisions (thin-slice v1.0-runtime milestone approach + Phase 6.1/6.2 split + Phase 3.7 v1.x re-tag + base framework boundary discriminator) into canonical docs BEFORE dependent cascade-execution dispatches fire (hand-rolled substrate Implementation drop amendment + Phase 3.8 C3 phase-boundary audit). Per CLAUDE.md M3: 5-file cascade (MAINTENANCE / BACKLOG / ARCHITECTURE / ROADMAP / HANDOFF) → sub-agent dispatch in fresh context. New `memory/feedback_persist_frame_before_cascade.md` codifies the lesson: chat-surfaced conceptual decisions that motivate downstream cascade-execution MUST be persisted in canonical docs BEFORE the dependent cascade fires.
+
+**Outputs (this session's commits in order; pushed to origin/main)**:
+- `21d7f44` Session-start housekeeping: HANDOFF rotation Notes 59-60 → `archive/handoffs/HANDOFF-sessions-30-31.md`
+- `ffbcc8a` Phase 3.7 corpus-organization cleanup — strike Symphony + 3-way split (ARCH amendments / cross-cutting research / Phase 5 STRATEGY)
+- `<persistence-cascade-commit-hash>` Persistence cascade — thin-slice v1.0-runtime milestone frame + Phase 6.1/6.2 split + Phase 3.7 v1.x re-tag + ROADMAP first-cut + base framework boundary discriminator + HANDOFF Note 64 (THIS COMMIT)
+- [forward-reference: hand-rolled drop amendment commit + C3 audit commits to follow in subsequent dispatches]
+
+**Substantive decisions locked (chat-surfaced this session; now persisted)**:
+
+1. **Thin-slice v1.0-runtime milestone approach** — single v1.0-runtime-thin-slice target instead of separate v1.0-arch / v1.0-runtime milestones. Thin-slice = full framework SHAPE running end-to-end with stub heavy infrastructure; production-ready production stack deferred to v1.0-production.
+
+2. **Phase 6.1 / 6.2 split with explicit scope** per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: 6.1 in-scope = Mode 3 specs + Mode 2 reference impls (Claude Agent SDK substrate only + MCP-server adapter only + audit storage + authority-binding + sparring sub-mechanisms + practitioner-shape gate) + Pydantic schemas + stub MCP server backend + items 1-5 deployment-instance content + minimal Layer A; 6.2 in-scope = LanceDB + fastembed + bge-m3 + LaTeX + real Layer A + MS AF substrate + extended adapter classes + extended shape gates + RAG-stack pluggable adoption deployment-level eval.
+
+3. **Phase 3.7 → v1.x ARCH amendment candidates (non-sequential)** — re-tagged as opportunistic post-thin-slice-lock amendments per evidence triggers, NOT in main Phase sequence. Each entry names specific evidence trigger / awaited signal.
+
+4. **Hand-rolled substrate Implementation drop** (corollary of thin-slice) — Implementation set 3 → 2 (Claude Agent SDK + MS Agent Framework only). Pattern A ≥2 implementations discriminator already satisfied. NOTE: cascade dispatch SEPARATE upcoming dispatch (not in scope of THIS persistence cascade); persistence cascade FOREWARNS the substrate amendment but doesn't apply it.
+
+5. **Base framework boundary discriminator** — IN-scope for v1.0-runtime-thin-slice if and only if needed for Mode 1 deployment-instance authoring against locked architecture OR Mode 2 reference impl work that exercises items 1-5 end-to-end with stub heavy infrastructure. Phase 5 methodology + dev tooling items (AI-app-development skill / learnings distillation / testing harness / sharpening-skills global plugin elevation / composability tooling) are POST-thin-slice parallel-track work.
+
+6. **Phase 3.7 corpus-organization cleanup** (commit `ffbcc8a` earlier this session) — Symphony §10 review STRUCK; research-flavored items (Markdown-validation / Ming research / Adjacent thinkers) moved to Cross-cutting (any phase); Multi-VISION model question moved to Phase 5 STRATEGY.
+
+7. **Numbering convention** — sequential execution-order numbering for 3.0–3.6 → 3.8 → 6.1 → 6.2; Phase 3.7 explicitly NON-sequential (renamed "v1.x ARCH amendment candidates").
+
+8. **PydanticAI substrate eval Round 1 verdict** drafted in chat: "NOT a substrate per locked Surface; W5 watch-list candidate". Parked as v1.x amendment to `arch/substrate.md` §16 watch-list when thin-slice surfaces concrete need OR PydanticAI maturity reaches ≥5 of 7 Surface categories.
+
+**Methodology applied (M3-M7 self-applied)**:
+- M3 sub-agent-first: persistence cascade (5-file cascade across MAINTENANCE / BACKLOG / ARCHITECTURE / ROADMAP / HANDOFF) delegated to general-purpose sub-agent in fresh context per CLAUDE.md M3 trigger threshold (≥3 Layer 0/1/2/3 files)
+- M4 Writer-Reviewer pattern: persistence cascade is mechanical (no architectural substantive decision; conceptual frame already locked in chat); Writer-only sufficient for this dispatch class
+- M5 /clear discipline: recommend `/clear` between persistence cascade close + hand-rolled drop amendment dispatch (natural cascade boundary)
+- M6 HARD STOP at logical-unit boundary (persistence cascade complete; hand-rolled drop amendment + C3 audit in subsequent dispatches)
+- M7 Ralph self-check at completion (sub-agent + main session)
+- 3-tier sequencing: persistence cascade → hand-rolled drop amendment → C3 phase-boundary audit
+- User-grant pattern Note 58 codification continues (scope-bounded autonomous authority through cascade execution)
+
+**Process learnings surfaced**:
+
+**NEW process-learning observation (mid-session catch by user)**: chat-surfaced conceptual decisions (milestone split / scope boundary / framework reorganization) that motivate downstream cascade-execution MUST be persisted in canonical docs BEFORE the dependent cascade fires. Otherwise: orphan-cascade-without-frame state if `/clear` fires between cascade landing + frame persistence. Codified in `memory/feedback_persist_frame_before_cascade.md`. Composes with existing `feedback_subagent_first_cascade.md` (sub-agent-first for cascade work) — both procedures fire pre-cascade-execution; this new feedback specifies the frame-persistence prerequisite.
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 64
+3. **Recommend `/clear`** between persistence cascade close + hand-rolled drop amendment dispatch (natural cascade boundary per CLAUDE.md M5)
+4. **Next substantive options**:
+   - **Hand-rolled drop amendment cascade** (M3 sub-agent dispatch) — applies Implementation set 3 → 2 (Claude Agent SDK + MS AF only) to `arch/substrate.md` §4 + DR + GLOSSARY back-check; Pattern A ≥2 implementations discriminator already satisfied
+   - **Phase 3.8 C3 phase-boundary audit** (multi-cascade audit-checkpoint; per Note 62 precedent) — full ARCH-specific Lenses 11-15 activation (Inter-layer consistency / Specs traceability / Architectural protocol completeness / DR coverage gap / Granularity match)
+5. **Phase 3 status post-this-session**: Phase 3.0-3.6 LOCKED + Phase 3.7 v1.x amendment candidates re-tagged (non-sequential) + Phase 3.8 C3 still PENDING + Phase 6.1 / 6.2 SCOPED in BACKLOG / MAINTENANCE / ROADMAP
+6. **HANDOFF rotation candidacy**: HANDOFF currently at ~370 lines pre-Note-64 + ~120 expansion = ~490 lines after Note 64; AT/JUST-UNDER 500-line threshold; rotation deferred 1-2 sessions
+
+**What is NOT lost**:
+- All conceptual decisions persisted in canonical docs (MAINTENANCE TOP-LEVEL MILESTONE STRUCTURE + BACKLOG Phase 3.7/6.1/6.2 + ARCHITECTURE §2 + ROADMAP first-cut)
+- Memory feedback `feedback_persist_frame_before_cascade.md` codifies the lesson for future sessions
+- PydanticAI Round 1 verdict + 5 refinements + 4 counter-arguments preserved as v1.x amendment candidate context
+- HANDOFF chronological provenance preserved via rotation pattern
+
+**Phase 3 status post-this-session**: Phase 3.0-3.6 LOCKED. Phase 3.7 re-tagged v1.x non-sequential. Phase 3.8 C3 PENDING (next sequential). Phase 6.1 / 6.2 SCOPED. v1.x amendment candidates parked.
+
+---

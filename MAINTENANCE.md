@@ -172,6 +172,67 @@ If any answer suggests revision → re-examine. The cost of revising a prelimina
 
 ---
 
+## TOP-LEVEL MILESTONE STRUCTURE — Base framework boundary + thin-slice / production split
+
+The framework's path to v1.0 follows a thin-slice → production sequence (per 2026-05-04 chat-locked direction): get full framework SHAPE running end-to-end with stub heavy infrastructure first; replace stubs with real production-grade impls + extend the substrate / adapter / shape-gate set in a follow-up milestone. This avoids investing heavily in production-grade impls before validating the architecture composes end-to-end.
+
+### v1.0-runtime-thin-slice (Phase 6.1)
+
+In-scope discriminator: an artifact is IN-scope for v1.0-runtime-thin-slice if and only if it's needed for Mode 1 deployment-instance authoring (specialist DEFINITIONs / workspace.md / shape policy bundles) against the locked architecture OR for Mode 2 reference impl work that exercises items 1-5 end-to-end with stub heavy infrastructure.
+
+In-scope artifacts:
+- C3 phase-boundary audit (Phase 3.8) + remediation
+- Mode 3 Pydantic Protocol specs per ARCH topic (~11 specs)
+- Mode 2 reference substrate impl: Claude Agent SDK only (MS AF deferred to 6.2; hand-rolled dropped per concurrent amendment)
+- Mode 2 reference adapter impl: MCP-server class only (Email / Accounting / A2A-Peer / File-Sync deferred to 6.2)
+- Mode 2 reference mechanism impls: audit storage realization + authority-binding + sparring sub-mechanisms + practitioner-shape quality-gate (autonomous-business-shape + personal-OS-shape gates deferred to 6.2)
+- Pydantic schemas: workspace.md + specialist DEFINITION manifest + AuditEvent + key event-kinds
+- Stub MCP server backend: filesystem-backed entity persistence + audit-trail emission (NO LanceDB / fastembed / RAG)
+- Items 1-5 deployment-instance content (in deployment-instance repo): PBS-Schulz workspace.md + practitioner-RECORD + shape policy bundle (practitioner-shape + planner archetype) + planner specialist DEFINITION + 19 archived app-skills rebuild against locked architecture
+- Minimal Layer A content (placeholder structure with sample bausteine; real DACH-EU / Bauleitplanung / B-Plan-Begründung content deferred to 6.2)
+
+### v1.0-production (Phase 6.2)
+
+In-scope artifacts:
+- LanceDB + fastembed + bge-m3 + LaTeX compile wrapper (item 6 backend MCP server real infrastructure)
+- Real Layer A domain content (item 7): DACH-EU regulatory + Bauleitplanung + B-Plan-Begründung
+- MS Agent Framework substrate impl
+- Additional adapter class impls: Email + Accounting + A2A-Peer + File-Sync
+- Additional per-shape quality-gate impls: autonomous-business-shape-gate + personal-OS-shape-gate (research-lab-shape per second-shape productization signal)
+- Real-deployment validation evidence
+
+### Validation contract
+
+**6.1 close validates**: architecture composes structurally end-to-end; framework loadable + bootable; skills fire; permission flow works; audit-trail records events; entity reads/writes work; specialist DEFINITION → workspace activation pipeline works; sparring + quality-gate + authority-binding all wire correctly.
+
+**6.1 close does NOT validate**: real-world utility; domain output quality; RAG retrieval accuracy; LaTeX compilation; second-shape productization (deferred per shape-neutrality watch-list).
+
+**6.2 close validates**: production utility for first deployment instance (PBS-Schulz pioneer).
+
+### Rigor preservation across thin-slice
+
+Phase 6.1 narrower scope does NOT mean lighter discipline. Per `disciplines/09-coherence-audit-cadence.md` cadence:
+- C3 phase-boundary audit fires before Phase 6.1 substantive work begins (Lenses 11-15 ARCH-specific activation)
+- Per Mode 3 spec gets `pre-implementation-sharpening` skill treatment (not skipped or compressed)
+- Writer-Reviewer + Cascade pattern preserved per spec + per Mode 2 reference impl
+- C4 pre-implementation audit fires before Mode 2 reference impl work begins
+- C5 post-Phase-6.1 close audit before declaring v1.0-runtime-thin-slice locked
+- Greenfield evaluation of archived material per Discipline 10
+- Profile-anchored validation per Discipline 3 when L1-L4 producer profiles surface gaps
+
+### v1.x amendment cadence (post-thin-slice-lock)
+
+ARCH amendments that surface during 6.1 / 6.2 execution OR via post-lock evidence triggers fire as v1.x amendments per existing preliminary-lock revision discipline (per TOP-LEVEL DESIGN PRINCIPLES §3) + cascade discipline. Examples currently parked as v1.x amendment candidates per `BACKLOG.md` Phase 3.7: PydanticAI substrate evaluation (W5 watch-list candidate); framework-level RAG-engagement architecture HOW (deployment-evidence-driven).
+
+### Cross-references
+
+- `BACKLOG.md` Phase 3.7 (v1.x amendment candidates) + Phase 6.1 (thin-slice scope) + Phase 6.2 (production scope)
+- `ARCHITECTURE.md` §2 sub-phase status table (rows for 3.8 / 6.1 / 6.2)
+- `ROADMAP.md` (parallel tracks + sequencing)
+- TOP-LEVEL DESIGN PRINCIPLES §3 (preliminary-lock + revision discipline governs v1.x amendments)
+
+---
+
 ## TOP-LEVEL SCOPE — Repo identity: framework source, not deployment instance
 
 This repo is **the framework + dev tooling source — the starting point for deployments**, NOT a deployment instance itself.

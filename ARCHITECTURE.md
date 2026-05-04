@@ -33,8 +33,10 @@
 | **3.4** | Per-architectural-Protocol detail (3 Pattern A protocol topics: substrate / adapter; quality-gate at 3.6) | Effectively COMPLETE — substrate + adapter remain Pattern A; sparring + audit RECLASSIFIED as mechanism classes per `docs/decisions/greenfield-rederivation-pause.md` Step 3; coordination + trust + time CANCELLED (subsumed). |
 | **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | CLOSED — ALL 6 of 6 ARCH topics LOCKED (specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions); coherence-audit checkpoint C2 CLOSED 2026-05-04 per `disciplines/09-coherence-audit-cadence.md` cadence |
 | **3.6** | Quality-gate ARCH topic | CLOSED — Pattern A 12+7 third instance LOCKED (FORMAL STABILITY achieved 3 of 3 Pattern A instances complete with this lock); resolves axis-interactions §7 E2 + §14 W4 forward-references |
-| **3.7** | ARCH amendments / follow-ups (PydanticAI substrate Implementations enumeration; framework-level RAG-engagement architecture HOW) | Pending |
+| **3.7** | v1.x ARCH amendment candidates (non-sequential; post-thin-slice-lock per evidence triggers): PydanticAI substrate Implementations enumeration; framework-level RAG-engagement architecture HOW | Pending (non-sequential) |
 | **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — C1 (post-3.4) CLOSED + C2 (post-3.5) CLOSED 2026-05-04 per cadence in `BACKLOG.md` Phase 3 audit-checkpoints |
+| **6.1** | Specs + minimal reference impls (Mode 3 specs ~11 + Mode 2 reference impls thin-slice + stub MCP server backend + items 1-5 deployment-instance content + minimal Layer A) per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE | Pending |
+| **6.2** | Production-grade infrastructure + extended impls (LanceDB stack + real Layer A domain + MS AF substrate + extended adapter classes + extended shape gates) per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE | Pending |
 
 Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions before structure before content before audit.
 
