@@ -80,6 +80,7 @@ Per drafts: `drafts/execution-fidelity.md` (META-framework concern; AI faithful 
 **This repo = framework source, not a deployment instance.** Per `MAINTENANCE.md` TOP-LEVEL SCOPE:
 
 - Dev skills (sharpening / audit / validation) live here permanently in `plugin/skills/`
+- Portable meta-kits (e.g., `process-kit/`) live here — distilled FROM this repo's dev-process for use in OTHER projects; consulted not transplanted; each carries its own update protocol per its `self-application.md`
 - App skills (per-deployment workspace skills; specialist DEFINITIONs; per-shape policy bundles) NEVER live here — they belong in deployed workspaces
 - Framework distribution mechanics + app-skill packaging surface in Phase 3+ ARCH work
 
