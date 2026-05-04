@@ -31,10 +31,10 @@
 | **3.2** | Topic taxonomy + naming + cross-cutting placement + ARCHITECTURE.md structure (4 sub-decisions) | COMPLETE — all 4 sub-decisions LOCKED. Composite DR `phase-3-2-doc-organization.md`. |
 | **3.3** | Per-mechanism detail (12 mechanisms; subsumed into Pattern A protocol topics) | Pending |
 | **3.4** | Per-architectural-Protocol detail (3 Pattern A protocol topics: substrate / adapter; quality-gate at 3.6) | Effectively COMPLETE — substrate + adapter remain Pattern A; sparring + audit RECLASSIFIED as mechanism classes per `docs/decisions/greenfield-rederivation-pause.md` Step 3; coordination + trust + time CANCELLED (subsumed). |
-| **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | CLOSED — ALL 6 of 6 ARCH topics LOCKED (specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions); coherence-audit checkpoint C2 next per `disciplines/09-coherence-audit-cadence.md` cadence |
+| **3.5** | Per-primitive detail topics (4 primitive-cluster topics + 2 cross-cutting integrators) | CLOSED — ALL 6 of 6 ARCH topics LOCKED (specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions); coherence-audit checkpoint C2 CLOSED 2026-05-04 per `disciplines/09-coherence-audit-cadence.md` cadence |
 | **3.6** | Quality-gate ARCH topic | Pending |
 | **3.7** | Cross-cutting investigations (PydanticAI re-eval; markdown-validation; Ming research; multi-VISION) | Pending |
-| **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — preceded by C1 (post-3.4) + C2 (post-3.5) per cadence in `BACKLOG.md` Phase 3 audit-checkpoints |
+| **3.8** | Coherence-audit checkpoint C3 (phase-boundary; ARCH-specific Lenses 11-15 activate) per `DISCIPLINES.md` Discipline 9 | Pending — C1 (post-3.4) CLOSED + C2 (post-3.5) CLOSED 2026-05-04 per cadence in `BACKLOG.md` Phase 3 audit-checkpoints |
 
 Foundation-up ordering applied (per `DISCIPLINES.md` Discipline 8): questions before structure before content before audit.
 

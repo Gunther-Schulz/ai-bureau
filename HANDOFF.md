@@ -388,3 +388,74 @@ Executed Note 60 step 6 recommended order: Phase 3.5 sixth + final ARCH topic su
 **HANDOFF rotation candidacy strengthens**: HANDOFF at ~624 lines after Note 61; PAST ~500-line rotation threshold; recommend rotation Notes 57-58 at next session start would leave Notes 59-60-61 as load-bearing pickup context (~360 lines comfortably below threshold).
 
 ---
+
+**Note 62: Coherence-audit C2 post-Phase-3.5 close — 4-cascade Step 5 cascade-aware revision application; signals (b)+(c)+(d)+(e) RESOLVED; signal (a) DEFER WITH NAMED AWAIT-SIGNAL + cumulative-count freeze 2026-05-04; Phase 3.5 cluster-execution methodology composability extends to audit-checkpoint shape (first multi-cascade audit-checkpoint execution); Discipline 11 third FULL-CYCLE execution (xhigh → xhigh → high → high); Notes 57-58 rotated to archive/handoffs/HANDOFF-sessions-28-29.md at this cluster start; Phase 3.6 quality-gate ARCH topic UNBLOCKED for next session**
+
+Executed Note 61 step 6 recommended order: Coherence-audit C2 cadence-checkpoint per `disciplines/09-coherence-audit-cadence.md` UNBLOCKED post-Phase-3.5 close. Full-systematic phase-boundary strategy + sub-agent-first dispatch + 4-parallel sub-agent C2 audit (GLOSSARY auditor + ARCH auditor + DR-set auditor + carryover-signals evaluator) + 4-cascade Step 5 cascade-aware revision application across signals (b)+(c)+(d)+(e); signal (a) 3-tier discriminator preserved as DEFER WITH NAMED AWAIT-SIGNAL per skill v0.6.0/v0.3.1 detection mechanism still working empirically. Closes C2 cadence-checkpoint; unblocks Phase 3.6 quality-gate ARCH topic.
+
+**C2 audit per-corpus verdicts**:
+- **GLOSSARY** (36 entries): STABLE (0 REVISIONS / 3 cosmetic EXPANSIONS — no Lens 1+8+9 LOAD-BEARING gaps)
+- **ARCH** (10 LOCKED topics): CONTINUE — 40 R-CC-N residual labels + 7 stale forthcoming markers cleaned in Cascade 3
+- **DR-set** (Phase 3.5 6 DRs): STABLE-with-codification-candidacy — 5 substantive findings clustered at signal (d) DR provenance-hygiene
+- Lens 1+8+9 LOAD-BEARING all CLEAN across all 3 corpus kinds; 0 architectural REVISIONS
+- FORMAL STABILITY of all 5 ARCH template-classes verified (Pattern A 12+7 + Pattern B+atomic + Pattern C + two-Pattern-B + PRIMITIVE+DERIVED + cross-cutting integrator 12+5)
+
+**Per-signal carryover verdicts + cascade resolution**:
+- **(a) 3-tier REVISION/EXPANSION discriminator codification**: DEFER WITH NAMED AWAIT-SIGNAL. Detection mechanism (decision-design-sharpening v0.6.0 self-check + coherence-audit v0.3.1 Step 7) working empirically; cumulative-count freeze at 8 across 6 cluster-executions as of 2026-05-04. Named await-signals: USER pushback on classification feel OR cascade-work-lag traceable to misclassification at sharpening-time (NOT placeholder carryover; that's a different signal class) OR ≥3 v0.6.0 self-check fires that don't resolve cleanly within 2-tier. Defer-rule-conformant per `MAINTENANCE.md` §2 no-defer test (external-information test PASS — concrete signal classes named; effort-asymmetry test PASS — codification-now would lock shape ahead of signal evidence; 2-tier sufficient empirically through 6 cluster-executions). BACKLOG entry preserves cumulative-count tracking + named await-signals.
+- **(b) Cross-cluster Lens 4 carryover continuity**: HYBRID resolution — Cascade 1 (commit `f075927`) cross-corpus sweep + cascade-discipline structural amendment to `MAINTENANCE.md` cascade-discipline procedure (mandatory cross-corpus sweep at lock-time when cluster-anchor primitive lands OR phase-set closes). Note 61 retrospective overcount caught by sub-agent-A audit: actual genuine LOCKED-topic carryovers were 3 (adapter / substrate / protocol-architectural), not 7 as Note 61 retrospective claimed. Other Note-61-flagged terms (mechanism / session / pioneer-instance / quality-gate) either have no `arch/` topic to point to (placeholder framing remains valid) or point to genuinely Phase 3.6 forthcoming work (quality-gate). Sub-agent-first discipline-1 cross-check overrode retrospective Note 61 count.
+- **(c) Phase 3.5 Lens 5 v0.2.1 systemic leakage**: CODIFY NOW resolution — Cascade 2 (commit `4cfbbde`) Lens 5 v0.2.1 → v0.2.2 prose tightening (cascade-discipline-amendment shape; NOT a new Lens-X). Explicit STRIP-class enumeration for sharpening-tier labels at structural-elevation moments + enumerated enforcement surfaces (ARCH §SD-N + §3-§7 / DR §4-§5 + §7-§9 with §6 carved out as sharpening-provenance home / GLOSSARY / ARCHITECTURE / MAINTENANCE) + DR §6 + HANDOFF + git log + BACKLOG watch-list as canonical sharpening-provenance home enumeration. Plus Cascade 3 (commit `a8da004`) mass scrub of ~40 R-CC-N / R-N-N labels across 6 ARCH topics applying v0.2.2 enforcement.
+- **(d) DR provenance-hygiene tightening sweep**: SWEEP NOW resolution — Cascade 3 (commit `a8da004`). 6 Phase 3.5 DRs §1 Status + §3 Related + §4 Context + §5 Decision SD-N + §7 Composition + §8 Constraints flowing + §9 Files touched scrubbed of sharpening-tier labels. §6 Sharpening provenance KEPT per Lens 5 v0.2.2 carve-out (DR §6 IS the sharpening-provenance canonical home).
+- **(e) Discipline 11 plan-deviation correction empirical evidence**: CODIFY NOW resolution — Cascade 2 (commit `4cfbbde`) `disciplines/11-effort-switch-cluster-map.md` refinement adding Lens 5 v0.2.2 subtle-breadcrumb-detection requirement (Wave-1 Reviewer effort cannot downshift from xhigh because Lens 5 subtle-breadcrumb detection is the load-bearing reason — empirically validated at axis-interactions cluster Note 61 mid-cluster correction).
+
+**Cross-execution pattern signal (corpus-stable across audit-checkpoints + cluster-executions)**: 0 T1 across both Phase 3.5 cluster-executions + audit-checkpoint C2; methodology composability extends from cluster-execution shape to audit-checkpoint shape (first multi-cascade audit-checkpoint execution; same Writer + Reviewer + Cascade-Writer + Cleanup-Writer orchestration shape works at audit-checkpoint scale). 4 sub-agent dispatches at C2 audit + 4 sub-agent dispatches at C2 application = 8 total dispatches single-session.
+
+**Methodology applied (M3-M7 self-applied + Discipline 11 effort-switch cluster map third FULL-CYCLE execution)**:
+- M3 sub-agent-first: 8 sub-agents in fresh contexts (4 audit-pass + 4 cascade-application; main session as orchestrator only)
+- M4 Writer-Reviewer pattern: implicit at audit-pass (4 parallel auditors compose as multi-perspective Reviewer); Cleanup-Writer pattern at Cascade 3 (mass scrub) + Cascade 4 (this closeout)
+- M5 /clear discipline: NOT triggered mid-session (cascade-bundle worked end-to-end without context-budget breach); /clear at HARD STOP this Note for next-session start (C2 CLOSED is natural cascade boundary; Phase 3.6 quality-gate next session)
+- M6 HARD STOP at logical-unit boundary (C2 CLOSED + 4 signals resolved + signal-(a) DEFER WITH NAMED AWAIT-SIGNAL preserved)
+- M7 Ralph self-check: each sub-agent confirmed at completion; main-session checks at cascade boundaries
+- Hook (`architectural_commit_gate`) behavior: 1 PreToolUse block at Cascade 3 practitioner DR Edit (archived `governance-and-identity-sourcing.md` cited but not Read in current sub-agent session); satisfied by Reading the archive file then retrying — hook working as designed
+- Per `feedback_judgment_and_automate.md` + user "ok continue" lock-confirmation: post-plan-lock execution proceeded without per-step user confirmation EXCEPT effort-switch suggestion pause-points (Cascade 3 xhigh → high pause-point user-confirmed via `/effort high`)
+- **Discipline 11 effort-switch cluster map THIRD FULL-CYCLE execution applied** (first audit-checkpoint shape; differs from Note 60 + Note 61 cluster-execution-shape FULL-cycles): xhigh → xhigh → high → high pattern across 4 cascades; first multi-cascade audit-checkpoint execution; effort-switch pause-point at Cascade 3 boundary (Discipline 11 plan compliance verified; user-confirmed via `/effort high`); empirical evidence Discipline 11 just-codified Lens 5 v0.2.2 subtle-breadcrumb-detection requirement at Wave-1-Reviewer-style audit-pass dispatches valid (4 audit auditors all dispatched at xhigh per the requirement)
+
+**Process learnings surfaced (cross-execution pattern observations)**:
+
+**NEW process-learning observation (Note 61 cumulative-count overcount caught at sub-agent-first audit)**:
+- Sub-agent A (GLOSSARY auditor) discipline-1 source-grounded cross-check overrode Note 61's retrospective claim of "7 Phase 3.4 ARCH topic placeholder cross-corpus carryovers" — actual genuine LOCKED-topic carryovers were 3 (adapter / substrate / protocol-architectural). Other Note-61-flagged terms either have no `arch/` topic to point to (placeholder framing remains valid) OR point to genuinely Phase 3.6 forthcoming work (quality-gate; placeholder framing valid until Phase 3.6 lock).
+- Empirical evidence: sub-agent-first cascade discipline catches retrospective-narrative drift; main-session-pattern-matching from prior-session HANDOFF Note ≠ direct evidence per global CLAUDE.md "honesty about sources" + `DISCIPLINES.md` Discipline 1 source-grounded.
+- Composes with: global honesty-about-sources rule + Discipline 1 re-grounding sub-section.
+
+**NEW process-learning observation (memory feedback `feedback_effort_level_clarity.md` codified mid-session)**:
+- User surfaced feedback "i always need CLEAR indication which effort level to use" after AI initial Cascade 3 effort-recommendation hedging language ("could be xhigh or high depending on...").
+- Memory feedback codified at C2 mid-execution + applied at all subsequent Cascade dispatch effort recommendations (Cascade 3 + Cascade 4 dispatched with explicit committed effort recommendation per Discipline 11 plan).
+- Pattern composability with `feedback_judgment_and_automate.md` (commit positions, don't menu).
+
+**POSITIVE observations**:
+- 0 T1 across all 4 Cascade applications + all 4 audit-pass dispatches (substantive architecture survives audit-checkpoint shape just as it survives cluster-execution shape)
+- User-grant of autonomous authority pattern Note 58 codification reproduced (5th consecutive across cluster-executions + audit-checkpoint)
+- Brief-vs-DR divergence Note 56 process-learning pattern PREVENTED 6 consecutive (formal stability strengthens further across audit-checkpoint shape too)
+- Cluster-execution methodology composability extends to audit-checkpoint shape with no T1 surfacing
+
+**To resume next session**:
+
+1. `/reload-plugins` — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto) + this Note 62
+3. **Recommend `/clear`** between cluster-executions per `CLAUDE.md` M5 — main session has accumulated 8-sub-agent dispatch context across 4 audit-pass + 4 cascade-application; fresh session for next substantive work (C2 CLOSED is natural cascade boundary; Phase 3.6 quality-gate next-session-natural)
+4. **Carryover follow-ups**: NONE remaining from C2 application; signal (a) preserved as DEFER WITH NAMED AWAIT-SIGNAL in BACKLOG for cross-session monitoring
+5. **Next substantive option**: Phase 3.6 quality-gate ARCH topic per `BACKLOG.md` Phase 3.6 — UNBLOCKED with C2 close. Pattern A protocol with mechanism-shaped Surface; structural variation per shape; per-shape Surface implementations; cross-axis category-collapse counter-mechanism per `arch/axis-interactions.md` §4.3 + W4 forward-reference + per-axis observability hooks E2 forward-reference. Composes with all 9 already-locked Phase 3.4 + 3.5 ARCH topics.
+6. **Recommended order**: Phase 3.6 quality-gate ARCH topic NEXT (foundation-up; final Phase 3 ARCH topic before Phase 3.7 cross-cutting investigations + Phase 3.8 C3 Lens 11-15 phase-boundary audit).
+7. **Phase 3 status post-C2**: Phase 3.1 + 3.2 + 3.4 + 3.5 (10 ARCH topics) all LOCKED; **C2 CLOSED**; Phase 3.6 (1 ARCH topic) UNBLOCKED. Coherence-audit checkpoint C3 fires post-Phase-3.8 close per `disciplines/09-coherence-audit-cadence.md` cadence (full ARCH-specific Lens 11-15 activation).
+8. **HANDOFF rotation completed this cluster**: Notes 57-58 → `archive/handoffs/HANDOFF-sessions-28-29.md` at this cluster start (commit `8a01749`). Active HANDOFF retains Notes 59 + 60 + 61 + 62 (~360+ lines comfortably below 500-line rotation threshold).
+9. **3-tier discriminator awaited-signal**: cumulative-count freeze at 8 across 6 cluster-executions as of 2026-05-04; named await-signals per BACKLOG entry (USER pushback OR cascade-work-lag traceable to misclassification at sharpening-time NOT placeholder carryover OR ≥3 v0.6.0 self-check fires that don't resolve cleanly within 2-tier). Cross-session monitoring continues.
+
+**What is NOT lost** (provenance + discipline state preserved):
+- All 8 sub-agent reports + per-corpus verdicts captured in this Note 62 prose
+- Lens 5 v0.2.1 → v0.2.2 codification preserves Lens 5 ALL prior empirical history via `plugin/skills/coherence-audit/SKILL.md` history (git log)
+- Discipline 11 refinement preserves all prior FULL-cycle execution history via `disciplines/11-effort-switch-cluster-map.md` git log
+- 6 Phase 3.5 DRs §6 Sharpening provenance sections retain ALL Round 1/Round 2/Manufactured-criticism/GLOSSARY back-check/Profile-anchored validation labels (per Lens 5 v0.2.2 carve-out — DR §6 IS the canonical sharpening-provenance home)
+- All 4 Cascade commit hashes (`f075927` Cascade 1 + `4cfbbde` Cascade 2 + `a8da004` Cascade 3 + this commit Cascade 4) link to canonical work outputs
+
+**Phase 3 status post-this-checkpoint**: Phase 3.1 + 3.2 + 3.4 (substrate + adapter + sparring + audit; v2-audited + C1-validated) + Phase 3.5 (specialist-skill + practitioner + workflow-work-unit + claim-defensibility + scope-model + axis-interactions; 6 of 6) all LOCKED. **C2 CLOSED.** Phase 3.6 quality-gate ARCH topic UNBLOCKED for next session. Coherence-audit checkpoint C3 fires post-Phase-3.8 close per `disciplines/09-coherence-audit-cadence.md` cadence (full ARCH-specific Lens 11-15 activation).
+
+---
