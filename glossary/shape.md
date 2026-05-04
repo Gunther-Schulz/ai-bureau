@@ -24,7 +24,7 @@ vision_usage: directly-used
 - Not a single policy (shape is a BUNDLE)
 - Not always practitioner-shape (PBS markets practitioner-shape; framework supports multiple shapes — see named-shapes catalog below)
 
-**Cross-archetype catalog (named shapes — canonical per-shape detail forthcoming)**:
+**Cross-archetype catalog (named shapes — per-shape detail in ARCH topic shape-policy rows; see `arch/scope-model.md` §8 + `arch/axis-interactions.md` §8 6-row matrices + per-Pattern-A / per-Pattern-D / per-primitive-cluster topic §8 / §14 / §SD-N as applicable)**:
 - **practitioner-shape** — workspace shape for accountability-bearing expert work; PBS marketed positioning + pioneer reference
 - **autonomous-business-shape** — operator-supervised multi-agent shop
 - **personal-OS-shape** — individual life-OS

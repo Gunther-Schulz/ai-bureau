@@ -72,6 +72,7 @@ Negative-marker test (collapse NOT occurring):
 - [defensibility](defensibility.md) — collapsed authorship state (rubber-stamping) fails defensibility test
 - [practitioner](practitioner.md) — the cognitive-state-bound agent in whom the force operates
 - [mechanism](mechanism.md) — counter-mechanisms (sparring sub-mechanisms; engagement-feedback mechanisms; deliberate-re-engagement signals) work to RESIST collapse but don't prevent it; architectural intent enables, doesn't enforce
+- [quality-gate](quality-gate.md) — Pattern A architectural counter-mechanism for category-collapse; gate fires at runtime checkpoints to monitor for category-collapse manifestations across all 3 VISION axes (reciprocal: `quality-gate.md` Composes-with lists category-collapse as the force the gate watches against)
 
 **Cardinality + lifecycle**: Cardinality N/A — category collapse is a force, not an instance-having entity. The force can manifest per practitioner per workspace per axis. **Lifecycle**: always-latent (any high-engagement mode is susceptible); manifestation is gradual (drift over time across uses); reversible via deliberate re-engagement or architectural re-design that adds friction against collapse (e.g., sparring sub-mechanisms that force engagement). Detectability requires engagement-quality signals, not just architectural-conformance signals (architecture stays unchanged during collapse; behavior shifts).
 

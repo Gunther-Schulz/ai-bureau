@@ -61,4 +61,4 @@ A practitioner-shape PBS-Schulz workspace might run on Claude Agent SDK; a knowl
 **See**:
 - [Framework C scope](framework-c-scope.md) (where substrate definitions live)
 - [workspace](workspace.md) (which selects exactly one substrate)
-- ARCH Layer 3 substrate-detail topics (placeholder until Phase 3 — Substrate Protocol method set; per-substrate implementation detail; deployment-tier framing; eval-framework integration; archived material to consult: `substrate-protocol-design.md`, `substrate-agentic-framework.md`, `sdk-deep-read.md`)
+- [arch/substrate.md](../arch/substrate.md) — Substrate Protocol method set (Surfaces §A-§G), per-substrate implementation detail, deployment-tier framing per §13, transport variation per §12, boot/shutdown phase ordering per §10, error categories per §11 (Phase 3.4 LOCKED — Pattern A topic-template anchor)

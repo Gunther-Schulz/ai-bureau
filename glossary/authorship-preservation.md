@@ -32,7 +32,7 @@ vision_usage: directly-used
 - [engaged authorship](engaged-authorship.md) — operational success mode this axis preserves (two-phase composite per-claim test); the architectural commitment this axis expresses, made observable via engaged-authorship's structural signals
 - `authorship mechanisms` — class of axis-3 mechanisms (collective term; per-mechanism detail in ARCH Layer 3)
 - [practitioner](practitioner.md) — the role this axis protects
-- `practitioner-shape` — workspace shape where this axis is mandated (canonical entry forthcoming; see [shape](shape.md) named-shapes catalog)
+- `practitioner-shape` — workspace shape where this axis is mandated; per-shape policy detail lives in ARCH topic shape-policy rows (see [shape](shape.md) named-shapes catalog + `arch/scope-model.md` §8 + `arch/axis-interactions.md` §8 6-row matrices for cross-shape policy variation)
 - [claim](claim.md) — the atomic unit-of-defense; defensibility test resolves at claim granularity, not at whole-work-unit granularity
 - [rubber-stamping](rubber-stamping.md) — axis-3 failure mode (the named failure-state contrast; preventing rubber-stamping is what authorship preservation requires)
 - [category collapse](category-collapse.md) — general force; rubber-stamping is its axis-3 manifestation

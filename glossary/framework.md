@@ -29,7 +29,7 @@ The framework includes:
 - Not a workspace or deployment instance (workspaces are BUILT FROM framework + shape policies + practitioners + state)
 - Not market positioning or strategic claims (framework is shape-neutral; positioning lives in `STRATEGY.md`)
 
-**Cross-archetype illustration**: All workspace archetypes share the SAME framework; they differ in which shape's policies they apply over framework mechanisms. Example shapes: practitioner-shape (PBS marketed positioning), autonomous-business-shape, personal-OS-shape, knowledge-graph-shape, federation-shape, hybrid-shape. Per-shape policy specifics live in canonical shape entries forthcoming (see [shape](shape.md) entry for the meta-primitive). Same framework underwrites all archetypes; shape policies determine what each one mandates.
+**Cross-archetype illustration**: All workspace archetypes share the SAME framework; they differ in which shape's policies they apply over framework mechanisms. Example shapes: practitioner-shape (PBS marketed positioning), autonomous-business-shape, personal-OS-shape, knowledge-graph-shape, federation-shape, hybrid-shape. Per-shape policy specifics live in ARCH topic shape-policy rows (see [shape](shape.md) entry for the meta-primitive + `arch/scope-model.md` §8 + `arch/axis-interactions.md` §8 6-row matrices for cross-shape policy variation across primitives). Same framework underwrites all archetypes; shape policies determine what each one mandates.
 
 **Boundary test**: Two questions:
 1. "Is this thing shape-specific (only valid for one shape)?" If yes → not framework; it's shape-policy or shape-specific primitive.

@@ -64,4 +64,4 @@ Skills invoke adapters at runtime (e.g., draft-cover-mail skill invokes email-ad
 - [substrate](substrate.md) (parallel Pattern A primitive; structurally singular vs adapter's multiplicity; INTERNAL runtime vs EXTERNAL integration)
 - [specialist](specialist.md) (which may bundle adapter implementations)
 - [skill](skill.md) (which invokes adapters at runtime)
-- ARCH Layer 3 adapter-detail topics (placeholder until Phase 3 — per-integration-class Adapter Protocol Surface specifications, per-implementation detail, audit-emission + permission-flow integration, lifecycle / auth-refresh / error-handling semantics; archived material to consult: `a2a-and-gemini-pattern-emulation.md`, `plugin-conventions.md`, `backend-conventions.md`)
+- [arch/adapter.md](../arch/adapter.md) — per-integration-class Adapter Protocol Surface specifications (per §3 framework-baseline-vs-shape-extension partition), per-implementation detail, audit-emission + permission-flow integration, lifecycle / auth-refresh / error-handling semantics, cross-shape policy variation per §14 (Phase 3.4 LOCKED)
