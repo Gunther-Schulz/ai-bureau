@@ -44,4 +44,4 @@ vision_usage: implicit
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
-- `arch/scope-model.md` (Phase 3.5 forthcoming — Workspace + Framework C / Owner B / Layer A scope categories + entity placement)
+- `arch/scope-model.md` (Phase 3.5 first cross-cutting integrator LOCKED — §2.2 Owner B scope structural overview + Members catalog (workspace + workspace-scope managed entities universal practitioner-record + Actor + shape-policy-mandated engagement-target entities + specialist instance content + workflow_instance + work-unit instances) + identity convention + properties; §3 workspace integration as cross-scope composition WITHIN cluster (workspace IS the central Owner B instance + container); §4 per-primitive composition narrative including E3 content-unit-IN-instance pattern (claim INHERITS work-unit's Owner B placement) + E5 authority-binding placement pattern; §8 cross-shape policy variation 6-row matrix per shape-policy-mandated engagement-target catalog rule)

@@ -335,7 +335,54 @@ Established by `arch/specialist-skill.md` (Pattern B + atomic-primitive anchor; 
 
 **Why 12+5 not 12+7** (rationale): primitive-clusters lack Pattern A pluggability that justifies §3 multi-class boundaries / §10 substrate-specific lifecycle / §12 transport variation / §13 deployment-tier (Pattern A specifics). Conditional count drops to 5 reflecting genuine shape difference, not template-copy. Future primitive-cluster topics may surface 6th conditional candidates per cascade discipline (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern).
 
-Future cross-cutting integrator topic templates (axis-interactions / scope-model) lock when first instance lands per foundation-up + per per-pattern instance-driven trigger pattern.
+Future cross-cutting integrator topic templates lock when first instance lands per foundation-up + per per-pattern instance-driven trigger pattern (anchor established by `arch/scope-model.md` per next subsection).
+
+#### Cross-cutting integrator topic template (LOCKED; established by `arch/scope-model.md` per `docs/decisions/scope-model-arch-topic.md` SD-1)
+
+For ARCH topics that **integrate composition ACROSS prior primitive-cluster + Pattern A + mechanism-class topics** (cross-cutting integrators — articulating structural surfaces across which per-axis primitives compose; distinct from primitive-cluster topics which articulate per-primitive structural detail), use this two-tier template:
+- **12 common-required sections** apply to every cross-cutting integrator topic (parallel to Pattern A 12+7 + primitive-cluster 12+5 templates)
+- **5 cluster-conditional sections** apply per topic if discriminators warrant; cross-cutting integrators inherit the primitive-cluster 12+5 template WITHOUT variation
+
+Established by `arch/scope-model.md` (cross-cutting integrator ANCHOR for cross-cutting integrator topic-template-class; first cross-cutting integrator instance; closes 5 of 6 Phase 3.5 ARCH topics). Future cross-cutting integrator instance (`arch/axis-interactions.md` Phase 3.5 sixth + final ARCH topic) extends WITHOUT variation per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern.
+
+**12 common-required sections** (every cross-cutting integrator topic; same numbering as primitive-cluster template):
+
+| § | Section | Purpose |
+|---|---|---|
+| 1 | Topic scope + frontmatter | Cluster identity (cross-cutting integrator class); primitives covered; cross-axis claim; cardinality at topic level |
+| 2 | Per-primitive structural overview | One sub-section per primitive in cluster; cites GLOSSARY canonical body; structural articulation without duplicating MAINTENANCE.md TOP-LEVEL ARCHITECTURE summary |
+| 3 | Cross-primitive composition WITHIN the cluster | Cross-cutting integrator's WITHIN-cluster composition surface (e.g., scope-model's workspace integration binding all three scopes; axis-interactions' cross-axis composition surface) |
+| 4 | Composition with framework primitives outside the cluster | Per-primitive narrative articulating how each already-locked framework primitive composes through this cross-cutting integrator's surface; NEW load-bearing patterns may surface here |
+| 5 | Cardinality + lifecycle (per primitive in cluster) | Per-primitive cardinality + per-primitive lifecycle (where applicable to cross-cutting integrator's scope) |
+| 6 | Logic placement mode | Mode 4 development-time per `ARCHITECTURE.md` §6; per-element Mode distribution within cluster's surface |
+| 7 | Pre-implementation operational concerns (Phase 6 forward reference) | Explicitly NOT-locked-at-ARCH-level operational details (error categories; schema versioning semantics; deferred mechanics) |
+| 14 | Watch-list | Items awaiting external evidence; resolution mechanisms |
+| 15 | Decision-design provenance | Provenance pointer to DR; cite `MAINTENANCE.md` Lens 5 v0.2.1 (provenance lives in DR + HANDOFF + git log; minimal in canonical content) |
+| 16 | Phase routing | Architectural shape (locked here) vs Pydantic spec (Phase 6) vs concrete deployment (Phase 6 workspace) |
+| 17 | Cross-references | GLOSSARY entries / disciplines / profiles validated / ARCH topics composing with this cluster / Phase 6 spec target / archived sources |
+| 18 | Composition table | Per-composing-primitive table covering all already-locked primitive surfaces (one row per primitive; columns per cross-cutting integrator's surface dimension) |
+
+**5 cluster-conditional sections** (apply per topic if cross-cutting integrator's discriminators warrant; document N/A explicitly when section is omitted):
+
+| § | Section | Applicability |
+|---|---|---|
+| 8 | Cross-shape policy variation | Applies when cross-cutting integrator's surface is shape-policy-mediated (e.g., scope-model's engagement-target Owner B managed entities shape-policy-mandated per `glossary/owner-b-scope.md` "additional managed entities per shape-policy mandate (NOT framework-level)"); 6-row matrix when multi-dimensional shape variation |
+| 9 | Granularity tests | N/A for cross-cutting integrators — scope-categorization is binary classification (Framework C / Owner B / Layer A — definitively one category per primitive); axis-classification is binary (axis-1 / axis-2 / axis-3 / cross-axis — definitively one category per primitive); granularity discriminators live in respective primitive-cluster topics |
+| 10 | Bundle composition | N/A for cross-cutting integrators — cross-cutting integrators don't bundle artifacts; Framework C bundling is specialist's domain per `arch/specialist-skill.md` §10; cross-cutting integrators analyze composition ACROSS prior topics, not packaging |
+| 11 | Marketplace + distribution mechanics | N/A for cross-cutting integrators — cross-cutting integrators are integrator topics, not independently distributable artifacts; distributable artifacts (specialist DEFINITIONs / shape policy bundles / Layer A content) live at Framework C per their respective primitive-cluster topics |
+| 13 | Per-element lifecycle ordering | N/A for cross-cutting integrators — cross-cutting integrators have no entities with boot/shutdown/activation ordering distinct from §5 cardinality + lifecycle treatment; per-primitive lifecycle ordering lives in respective primitive-cluster + Pattern A + mechanism-class topics |
+
+**§-numbering convention** (template-anchoring per `arch/scope-model.md` cross-cutting integrator ANCHOR): inherits primitive-cluster template's §-numbering convention (common-required §§1-7 + cluster-conditional interleaved §§8-13 + common-tail §§14-18; **§12 reserved as N/A-parity slot** preserving visual numbering parity with substrate's §12 Transport variation N/A + primitive-cluster topics' §12 reservation; downstream cross-cutting integrator topic Writers MUST keep §12 reserved as N/A-parity rather than omit-§12 or fill-§12-with-content; prevents template drift across topic-templates).
+
+**Per-pattern conditional applicability** (which conditional sections likely apply per cross-cutting integrator pattern type):
+
+- **Cross-cutting integrators** (scope-model ANCHOR; axis-interactions extending WITHOUT variation): §8 cross-shape policy variation APPLIES (cross-cutting integrator's surface is shape-policy-mediated where shape-policy declares per-shape variation in engagement-target catalog / activation matrix / per-shape variation surface — scope-model engagement-target Owner B managed entities shape-policy-mandated; axis-interactions per-shape activation matrix variation expected); §9 granularity / §10 bundle / §11 marketplace / §13 per-element lifecycle ordering N/A documented explicitly (cross-cutting integrators have no granularity-test / bundle / marketplace / per-element lifecycle-ordering surface — those concerns live in respective primitive-cluster + Pattern A topics whose entities ARE placed across scopes); §12 N/A-parity preserved per primitive-cluster + Pattern A precedent; 12+5 template extends WITHOUT variation (1 conditional applies + 4 N/A documented + §12 N/A-parity = 18 sections total)
+
+**Per-topic section count expectation** (cross-cutting integrator topics):
+- scope-model (cross-cutting integrator; ANCHOR for cross-cutting integrator topic-template-class): 12 common + 1 conditional applies (§8) + 4 N/A documented (§9 + §10 + §11 + §13) + §12 N/A-parity = 18 total per `arch/scope-model.md` (442 lines)
+- axis-interactions (cross-cutting integrator; Phase 3.5 sixth + final ARCH topic; extends WITHOUT variation per anchor): 12 common + 1 conditional applies (§8 expected per per-shape activation matrix variation) + 4 N/A documented (§9 + §10 + §11 + §13) + §12 N/A-parity = 18 total expected
+
+**Why 12+5 extends WITHOUT variation** (rationale): cross-cutting integrators inherit primitive-cluster 12+5 template structure — same conditional surface (§8 / §9 / §10 / §11 / §13 + §12 N/A-parity); per-pattern conditional applicability differs (cross-cutting integrators have only §8 applying per shape-policy-mediation surface; primitive-clusters have multiple conditionals applying per primitive-set discriminators) but template structure is shared. Future cross-cutting integrator topics may surface 6th conditional candidates per cascade discipline (per `docs/decisions/pattern-a-template-7th-conditional-cross-shape-variation.md` instance-driven trigger pattern); cross-cutting integrator pattern surfaced 4 NEW load-bearing patterns through scope-model articulation (E2 nested-bundle / E3 content-unit-IN-instance / E4 cross-cutting non-placed / E5 authority-binding placement) documented in `arch/scope-model.md` §4 — pattern-set is cluster-articulation territory, not template-class extension.
 
 #### Provenance hygiene
 

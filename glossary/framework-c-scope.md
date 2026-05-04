@@ -41,4 +41,4 @@ vision_usage: implicit
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
-- `arch/scope-model.md` (Phase 3.5 forthcoming — Workspace + Framework C / Owner B / Layer A scope categories + entity placement)
+- `arch/scope-model.md` (Phase 3.5 first cross-cutting integrator LOCKED — §2.1 Framework C scope structural overview + Members catalog + identity convention + properties; §4 per-primitive composition narrative including E2 nested-bundle pattern (specialist Framework C bundle nesting skill / workflow / work-unit-kind / adapter Implementations under specialist-namespace) + E5 authority-binding placement pattern (mechanism dual-aspect: Framework C definition + Owner B event recording); §5 Framework C cardinality + lifecycle; §18 per-primitive composition table)

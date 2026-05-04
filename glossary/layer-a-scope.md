@@ -46,4 +46,4 @@ vision_usage: implicit
 
 **See**:
 - `MAINTENANCE.md` "TOP-LEVEL ARCHITECTURE" section "A-B-C scope model"
-- `arch/scope-model.md` (Phase 3.5 forthcoming — Workspace + Framework C / Owner B / Layer A scope categories + entity placement)
+- `arch/scope-model.md` (Phase 3.5 first cross-cutting integrator LOCKED — §2.3 Layer A scope structural overview + Members catalog + Layer values (universal / domain / state) + identity convention; §3 workspace integration (workspace.scope.{domains, states} configuration determines effective content); §5 Layer A cardinality + lifecycle (effective content per workspace = universal + active-domains + active-states); §8 cross-shape policy variation Layer A scope configuration defaults per shape row)
