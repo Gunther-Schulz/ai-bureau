@@ -1,24 +1,24 @@
 # Derivation procedure — producing a per-project procedure document
 
-This is the step-by-step procedure for deriving your project's own procedure document. The output is a separate artifact that lives in your project (not in this kit). The structural invariants from `structural-invariants.md` are applied verbatim; everything else in your output is derived from your project's specifics.
+This is the step-by-step procedure for deriving a project-specific procedure document. The structural invariants from `structural-invariants.md` apply verbatim; everything else is derived from the project's specifics. The output lives in the project being derived for, not in this kit.
 
 ## Inputs (gather before starting)
 
-1. **Domain definition** — what kind of work is this? (software engineering, compliance documents, content production, research, design, regulatory submissions, etc.) Different domains have different artifact types and different failure surfaces
-2. **Cost-of-error calibration** — for each artifact type your project produces, what is the cost of errors? How reversible are they? This drives mitigation density (per the sizing principle in `structural-invariants.md`)
-3. **Failure history** — for existing projects: what has gone wrong before? Pattern-recognized, not anecdotal — same failure observed independently multiple times is the clear signal
-4. **Anticipated failure modes** — for new projects: which of the structural invariants' addressed failure modes are most likely to bite given your domain?
-5. **Collaboration model** — solo vs. team, AI roles, human roles, review structure, what the AI is permitted to do autonomously vs. what requires confirmation
+1. **Domain definition** — name the kind of work the procedure addresses (software engineering, compliance documents, content production, research, design, regulatory submissions, etc.). Different domains have different artifact types and different failure surfaces
+2. **Cost-of-error calibration** — per artifact type the project produces, identify the cost of errors and how reversible they are. This drives mitigation density (per the sizing principle in `structural-invariants.md`)
+3. **Failure history** — for existing projects: name what has gone wrong before. Pattern-recognized, not anecdotal — the same failure observed independently multiple times is the clear signal
+4. **Anticipated failure modes** — for new projects: identify which of the structural invariants' addressed failure modes are most likely to bite given the domain
+5. **Collaboration model** — solo vs. team; AI roles; human roles; review structure; the AI's autonomy boundaries (what proceeds without confirmation vs. what requires explicit approval)
 
 ## Step 1 — Apply structural invariants verbatim
 
 Treat invariants 1-10 in `structural-invariants.md` as universal. Do not modify, soften, or skip them. Their *implementation details* vary per project; the rules themselves do not.
 
-If you find yourself wanting to skip an invariant: that is a signal either (a) you're working at a scope that doesn't need this kit (apply the sizing principle and stop), or (b) you've misunderstood the invariant. Re-read.
+Wanting to skip an invariant signals either (a) working at a scope that doesn't need this kit (apply the sizing principle and stop), or (b) the invariant has been misunderstood. Re-read.
 
 ## Step 2 — Identify protected artifacts
 
-Within your project, which files / outputs / decisions are high-stakes? Criteria:
+Identify the high-stakes files / outputs / decisions within the project. Criteria:
 
 - Errors cascade across multiple files or downstream artifacts
 - Fixing errors after-the-fact is expensive
@@ -29,7 +29,7 @@ These are the artifacts that warrant structural protection (hooks, gates, determ
 
 Output of this step: a list of protected-artifact categories, with cost-of-error notes per category.
 
-## Step 3 — Derive your hooks
+## Step 3 — Derive hooks
 
 For each protected-artifact category from Step 2:
 
@@ -42,7 +42,7 @@ These become hooks (PreToolUse / PostToolUse / equivalent in your tooling). Impl
 
 Output of this step: hook specifications (what they check, what they block, what error message they emit).
 
-## Step 4 — Derive your named skills
+## Step 4 — Derive named skills
 
 A procedure earns codification as a named skill when:
 
@@ -54,7 +54,7 @@ For each candidate skill: write a SKILL document with explicit procedure, named 
 
 Output of this step: a list of named skills, each with a SKILL document.
 
-## Step 5 — Derive your anchor documents
+## Step 5 — Derive anchor documents
 
 What must auto-load (or be read first) at every session start? Candidate roles:
 
@@ -67,17 +67,17 @@ Keep auto-loaded content compact. If anchor documents grow large, split them: in
 
 Output of this step: list of anchor documents, with size budgets and split-points where applicable.
 
-## Step 6 — Derive your sub-agent routing thresholds
+## Step 6 — Derive sub-agent routing thresholds
 
-What counts as a "high-stakes cascade" in your domain? Implementation: a numeric threshold (e.g., ≥N protected files touched in one work-unit) plus categorical rules (e.g., any change to artifacts of type X always routes to sub-agent regardless of count).
+Define what counts as a "high-stakes cascade" for the project. Implementation: a numeric threshold (e.g., ≥N protected files touched in one work-unit) plus categorical rules (e.g., any change to artifacts of type X always routes to sub-agent regardless of count).
 
 Above the threshold: sub-agent dispatch is mandatory. Below it: main session may execute directly.
 
 Output of this step: explicit routing rules with named thresholds.
 
-## Step 7 — Derive your HARD STOP boundaries
+## Step 7 — Derive HARD STOP boundaries
 
-What is a "logical work unit" for your project? Examples:
+Define what counts as a "logical work unit" for the project. Examples:
 
 - One architectural decision committed
 - One feature implemented and tested
@@ -104,7 +104,7 @@ Output of 8a: a sizing table (artifact type → mitigation density → which inv
 
 ### 8b. Trust posture documentation (REQUIRED)
 
-In addition to the sizing table, document your project's trust/safety posture explicitly in plain prose. Per `meta-rules.md` honest-residual concern (assertion-without-basis is named but not hook-enforceable), each adopter project should make explicit:
+In addition to the sizing table, document the project's trust/safety posture explicitly in plain prose. Per `meta-rules.md` honest-residual concern (assertion-without-basis is named but not hook-enforceable), each adopter project should make explicit:
 
 - **High-stakes artifact classes**: which artifacts in this project carry the highest cost-of-error and warrant full structural enforcement
 - **Cost-of-error per class** (concrete examples): "wrong claim about regulatory text → potential legal exposure"; "wrong test pass claim → broken production"; "wrong claim about API behavior → consumer breakage"
@@ -114,11 +114,11 @@ In addition to the sizing table, document your project's trust/safety posture ex
 
 Output of 8b: a "Trust posture" section in your derived procedure document, scannable in 1-2 minutes by a new contributor. The trust posture is consulted whenever sizing decisions are revisited (per Step 10 maintenance protocol).
 
-## Step 9 — Write your project's procedure document
+## Step 9 — Write the project's procedure document
 
-Combine outputs of Steps 2-8 into a single anchor document for your project. Suggested sections:
+Combine outputs of Steps 2-8 into a single anchor document for the project. Suggested sections:
 
-- What this procedure is for (your goal-doc or a pointer to it)
+- What the procedure is for (the project's goal-doc or a pointer to it)
 - Structural invariants applied (reference this kit's `structural-invariants.md` so updates propagate)
 - Protected artifacts (list, with cost-of-error and mitigation density per type)
 - Hooks (what they check, what they block)
@@ -131,7 +131,7 @@ Combine outputs of Steps 2-8 into a single anchor document for your project. Sug
 
 ## Step 10 — Maintenance protocol for the derived procedure
 
-Your derived procedure must include its own maintenance discipline. This lives in the *output*, not in this kit:
+The derived procedure must include its own maintenance discipline. This lives in the *output*, not in this kit:
 
 - **Failure log** — when a mitigation fired correctly, when it should have but didn't, when it fired falsely. Date + work-unit + mode + outcome
 - **Refresh cadence** — periodic re-read of own procedure (project-calibrated; e.g., every N work-units or every M months)
@@ -143,19 +143,19 @@ These thresholds (N, M) are project-calibrated. The kit does not prescribe speci
 
 ## Step 11 — Conformance check (Definition of Done)
 
-A derivation conforms to this kit when ALL of the following hold. Use this as a checklist before treating your derived procedure as kit-conformant.
+A derivation conforms to this kit when ALL of the following hold. Use this as a checklist before treating the derived procedure as kit-conformant.
 
 ### REQUIRED for conformance (invariants tagged MUST per `structural-invariants.md` Normative Language)
 
-For each, your derived procedure MUST explicitly address how the invariant is applied in your domain:
+For each, the derived procedure MUST explicitly address how the invariant is applied in the project's domain:
 
-- **Invariant 1 (Load mandatory context)**: identify your anchor-grade entry document and verify auto-load at every session start
+- **Invariant 1 (Load mandatory context)**: identify an anchor-grade entry document and verify auto-load at every session start
 - **Invariant 2 (Bound + refresh context)**: split anchor docs to per-topic files where size warrants; specify natural cascade boundaries; specify state-externalization artifacts (handoff log / commits / task list equivalents)
 - **Invariant 5 (Deterministic enforcement)**: specify which load-bearing rules are hook-enforced or strong-form-pattern-enforced (vs. advisory). Document why each enforced rule is enforced (which prior failure mode or evidence justifies it)
 - **Invariant 6 (Re-grounding)**: identify procedures/skills that require re-reading at every invocation; document the re-grounding discipline
 - **Invariant 7 (Memory-as-preference vs truth)**: identify what counts as preference (persists freely) vs factual claim (verify before acting); document how factual claims are verified
-- **Invariant 8 (Basis explicit)**: identify how the cite-or-flag-or-read procedural rule applies in your domain; specify what counts as evidence per artifact type (per the strong-form-pattern Discovery vs. Verification distinction)
-- **Invariant 9 (Self-audit before done)**: specify the self-audit checklist for your work-unit boundaries; identify what evidence shows the audit was actually performed
+- **Invariant 8 (Basis explicit)**: identify how the cite-or-flag-or-read procedural rule applies in the project's domain; specify what counts as evidence per artifact type (per the strong-form-pattern Discovery vs. Verification distinction)
+- **Invariant 9 (Self-audit before done)**: specify the self-audit checklist for project work-unit boundaries; identify what evidence shows the audit was actually performed
 
 A REQUIRED item omitted without justification is a kit-conformance violation.
 
@@ -163,7 +163,7 @@ A REQUIRED item omitted without justification is a kit-conformance violation.
 
 Apply when sizing calibration warrants — these methods address documented failure modes but have valid alternatives in some contexts (per RFC 2119 §6 strict test, see `structural-invariants.md` "Use MUST sparingly"):
 
-- **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" in your domain. Skipping for low-stakes work with documented reason remains conformant
+- **Invariant 3 (Sub-contexts for high-stakes coupled work)**: define the threshold for sub-agent routing; specify what counts as "high-stakes cascade" for the project. Skipping for low-stakes work with documented reason remains conformant
 - **Invariant 4 (Writer-Reviewer separation)**: identify which work-unit types require Writer-Reviewer separation; specify how the separation is achieved (sub-agent dispatch / fresh context / etc.). Skipping for low-stakes work with documented reason remains conformant
 - **Invariant 10 (Defense in depth)**: name the redundant layers per high-stakes artifact class; identify which mitigations catch each failure mode
 - **Strong-form enforcement patterns** (invariant 5 sub-section) — per pattern, document whether your derivation adopts it:
@@ -191,6 +191,6 @@ A periodic conformance check (e.g., at refresh-cadence intervals from Step 10) c
 
 ## Output
 
-A single procedure document (or small set of documents) anchored in your project. Once derived, it becomes the project's living procedure — evolved by its own maintenance protocol, not by re-running this kit.
+A single procedure document (or small set of documents) anchored in the project. Once derived, it becomes the project's living procedure — evolved by its own maintenance protocol, not by re-running this kit.
 
 The kit is consulted again only when the kit itself updates (per `self-application.md`).

@@ -144,6 +144,6 @@ No single mechanism is trusted to hold across all conditions. Layer redundantly;
 
 Mitigation density should scale with cost-of-error and irreversibility. The full stack is heavy; it is worth its cost only when errors cascade and are expensive to unwind. For low-stakes work, applying all ten invariants is over-engineered.
 
-The right question per project, per artifact, per work-unit: **what's the blast radius of getting this wrong, and how reversible is it?**
+The right question per project, per artifact, per work-unit: **what is the blast radius of getting this wrong, and how reversible is it?**
 
 Sizing is not an invariant; it is a calibration step performed during derivation (see `derivation-procedure.md` Step 8). Different artifact types within the same project may warrant different sizing.

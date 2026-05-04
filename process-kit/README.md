@@ -4,7 +4,7 @@
 
 An **instructional kit** for deriving project-specific procedures that make AI-partnered work robust against documented AI failure modes (context drift, pattern-matching from synthesized memory, self-validation bias, cascade-mode degradation, agentic laziness, sycophancy, prose-discipline silent failure, etc.).
 
-This kit is **not a template** to copy. It is a **generator** — a procedure for producing your project's own procedure document. The kit stays at the meta level; the per-project artifacts implement.
+This kit is **not a template** to copy. It is a **generator** — a procedure for producing a project-specific procedure document. The kit stays at the meta level; the per-project artifacts implement.
 
 ## What it produces
 
@@ -34,9 +34,9 @@ For one-shot scripts, throwaway prototypes, or low-coupling work, this kit is ov
 
 ## How to use
 
-1. Read `structural-invariants.md` first — these are the universal claims you'll apply verbatim
-2. Run `derivation-procedure.md` against your project — produces your per-project procedure document
-3. Maintain that derived procedure per its own internal maintenance section (Step 10 of the derivation procedure)
+1. Read `structural-invariants.md` first — these are the universal claims to apply verbatim
+2. Run `derivation-procedure.md` against the project — produces a project-specific procedure document
+3. Maintain the derived procedure per its own internal maintenance section (Step 10 of the derivation procedure)
 4. Periodically (or on triggers) consult `self-application.md` — when fundamental new information arrives, the kit itself can be refreshed by applying its own derivation procedure to itself
 
 ## Provenance and basis
