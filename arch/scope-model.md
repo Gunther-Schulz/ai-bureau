@@ -154,7 +154,7 @@ Per-primitive narrative articulating how each already-locked framework primitive
 
 ### Pattern E2 — Nested-bundle pattern (Framework C children under specialist-namespace)
 
-Specialist Framework C bundle NESTS other Framework C definitions under **specialist-namespace** per `glossary/specialist.md` locked mechanic (per `arch/specialist-skill.md` §4 R-N-1 specialist-namespace mechanic; quad-closure across glossary/specialist + glossary/skill + glossary/work-unit + glossary/workflow per Note 56):
+Specialist Framework C bundle NESTS other Framework C definitions under **specialist-namespace** per `glossary/specialist.md` locked mechanic (per `arch/specialist-skill.md` §10 specialist-namespace mechanic + `glossary/specialist.md` composes-with skill / work-unit / workflow rows):
 
 - skill DEFINITIONs nested in specialist's Framework C bundle under specialist-namespace; fully-qualified reference `specialist-name:skill-name`
 - workflow DEFINITIONs nested in specialist's Framework C bundle under specialist-namespace; fully-qualified reference `specialist-name:workflow-name`
