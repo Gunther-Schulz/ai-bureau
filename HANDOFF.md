@@ -718,3 +718,13 @@ User asked proactive surface of remaining meta-process leaks before P1 fires. Fo
 Pause-point P1 ready to fire. On green-light: Phase 6.1 begins — Mode 3 specs written directly as typed schema files, no per-spec sharpening, verify by typecheck + cross-reference.
 
 ---
+
+**Note 72: Phase 6.1 batch 4 — pbs/adapter.py written. AdapterProtocol META-Surface + McpServerAdapterProtocol per-class Surface (MCP-Server only; Email / Accounting / A2A-Peer / File-Sync per-class Surfaces deferred to 6.2 per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE + `BACKLOG.md` §215-228) + 12 adapter-emitted event classes (8 cross-class META + 4 MCP-Server per-class per §11) + 11 AdapterError categories (8 cross-class architectural + 3 MCP-Server per-class refinements per §11) + 3 supporting Pydantic models (AdapterConfig / AdapterBinding / HealthReport) + 6 enums (IntegrationClass / AuthModel / CircuitState / HealthStatus / AdapterDirection; DeploymentTier reused from pbs.substrate). mypy strict clean (7 files); smoke-test confirms config + binding + events + error hierarchy + runtime_checkable Protocols + per-class Surface MRO inheritance from META.**
+
+Batch 4 of 7 complete. Adapter Protocol covers full §2 META-Surface (lifecycle + auth + health + versioning) + MCP-Server per-class Surface (register_with_substrate composing with substrate Surface §B + negotiate_capabilities + invoke_tool + list_tools) + §10 per-instance boot/shutdown lifecycle + auth-refresh lifecycle + §11 error categories + §11 cross-class + per-class event-kind catalog + §13 N/A documented (per-impl tier-compat in AdapterConfig.deployment_tier_compat) + §8 N/A documented (skill-side MCP audit gate only; no dual-emission). RegistrationConflict cross-link to pbs.substrate per §11 note.
+
+Outputs: `pbs/adapter.py` (~836 lines, larger than substrate.py at ~470 due to two-layer Surface structure carrying both META + per-class capabilities + 5-class IntegrationClass enum + cross-class + per-class event/error sets).
+
+Next batch (batch 5 of 7 in foundation-up sequence): pbs/sparring.py + pbs/quality_gate.py (mechanism class + Pattern A; sparring 8 sub-mechanism contracts per `arch/sparring.md` + practitioner-shape quality-gate per `arch/quality-gate.md` per Phase 6.1 BACKLOG §224 thin-slice scope; autonomous-business-shape-gate + personal-OS-shape-gate deferred to 6.2). Recommend `/clear` before batch 5 per CLAUDE.md M5 — main session has accumulated bildhauer + 3 process revisions + C3 audit + 4 Foundation+Mode-3-spec batches context.
+
+---
