@@ -436,7 +436,7 @@ Executed mid-session user-flagged "shouldn't we persist what we just decided fir
 Executed HANDOFF Note 64 step 4: hand-rolled drop amendment cascade as the FIRST v1.x ARCH amendment to fire post-Phase-3.7 v1.x re-tag. Decision-shape pre-locked at chat per Note 64 #4 + persisted to MAINTENANCE.md TOP-LEVEL MILESTONE STRUCTURE line 186 ("hand-rolled dropped per concurrent amendment"). Mechanical scope-narrowing within stable Pattern A topic; no Round 1/Round 2 sharpening triggered per `decision-design-sharpening` skill scope. Per CLAUDE.md M3 sub-agent-first cascade discipline: Writer + Reviewer + Cleanup-Writer in fresh contexts; main session orchestrates only.
 
 **Outputs (this cluster's commit; pushed to origin/main)**:
-- `<this commit hash>` Hand-rolled substrate Implementation drop amendment cascade — first v1.x ARCH amendment + NEW DR + 3 ARCH topic edits
+- `fa3ce20` Hand-rolled substrate Implementation drop amendment cascade — first v1.x ARCH amendment + NEW DR + 3 ARCH topic edits
 
 **Files touched (single commit-bundle)**:
 - `arch/substrate.md` — §4 Per-implementation aspect (narrative 3 → 2 + Pattern A ≥2 discriminator preservation note + identity example list `hand_rolled_tier1` drop) + §9 Cardinality + lifecycle table (N → ≥2 + Pattern A discriminator note) + §12 Per-impl transport support varies (hand-rolled bullet drop) + §17 Decision-design provenance amendment-note (historical archived-source citation kept INTACT + follow-up paragraph cross-referencing NEW DR) + §18 Phase routing concrete-impls row (HandRolledSubstrate strike)
