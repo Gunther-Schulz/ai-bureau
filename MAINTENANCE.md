@@ -31,6 +31,31 @@ Before committing any non-trivial doc change: (1) **grep the affected concept na
 
 Contradictory claims across docs (DR-A "framework is shape-neutral" + DR-B "framework enforces axis 3 on all shapes"); stale references (DR references old path after restructure); vocabulary drift ("office" vs "workspace"); decisions without overview reflection (Layer 4 DR captures decision; Layer 2 ARCH reference card not updated).
 
+### Procedure-rigor discipline (default-light + escalate-on-evidence)
+
+Cascade-application procedure-rigor is **default-light** with **escalate-on-evidence** semantics. The heavy cluster-execution methodology (Wave-1 Writer + Reviewer + Wave-2 Cascade-Writer + Reviewer + Wave-2.5 Cleanup-Writer + cross-cluster Lens 4/5 sweeps + FORMAL STABILITY tracking across template-class instances) is **available as reference pattern**, **never default ceremony**.
+
+**Default cascade-application** = single sub-agent at xhigh effort with clear brief. Applies to: audits, mechanical cascades, v1.x amendments, audit-checkpoints, Mode 3 Pydantic specs.
+
+**Escalate to multi-sub-agent / Writer-Reviewer / cluster-execution methodology** ONLY when:
+
+1. Single-pass surfaces a T1 finding (architectural REVISION needing cascade application)
+2. Substantive new ARCH topic creation (NOT v1.x amendment / audit-checkpoint / Mode 3 spec / mechanical cascade)
+3. Explicit user request for high-stakes decision
+
+**Empirical grounding**: 0 T1 across 14 cluster-executions (per HANDOFF Notes 61-65 cross-execution pattern signal tracking). T2/T3 findings have been dominantly DOCUMENT-HYGIENE class — Lens 5 v0.2.x sharpening-tier label leakage; cross-cluster Lens 4 placeholder framing carryovers; hash-placeholder resolutions; ARCHITECTURE.md §7 SD-N labels — all catchable by a single xhigh sub-agent. The 4-parallel multi-cascade audit-checkpoint shape (per Note 62 C2 precedent) does not surface a different finding-class than single-pass would have surfaced. The architecture has been substantively right at every lock; the heavy procedure was catching cosmetic leaks at order-of-magnitude higher compute cost than benefit warranted. Treating heavy ceremony as default is **category-collapse applied recursively to the meta-process** (per VISION.md:207-209 category-collapse warning — the gradual reduction of a thing to a feature catalog because each addition seemed reasonable in isolation).
+
+**Per-shape application**:
+
+- **Audit-checkpoint procedure** (C3 + future C4/C5): single xhigh sub-agent reads relevant corpus + applies named lenses + reports verdict. Multi-cascade audit-checkpoint shape (per Note 62 C2 4-parallel auditor + 4-cascade-application precedent) reserved for T1 escalation OR explicit user request.
+- **Mode 3 Pydantic specs**: write directly per spec; verify by typecheck + cross-reference. No per-spec DR; no cluster-execution.
+- **v1.x amendments**: main session direct edit + commit when sub-5-line edits OR cascade fits in single file; sub-agent only when cascade truly spans 5+ Layer 0-3 files. The Phase 3.7 hand-rolled-drop v1.x amendment (Note 65) applied full 3-sub-agent cluster-execution methodology to a one-line cardinality narrowing — canonical example of methodology-as-default-leak to avoid.
+- **Doc-hygiene findings**: fix significant ones inline; ignore performative ones; no dedicated cleanup-cascade dispatches.
+
+**Done-criterion for design phase**: design is done when (a) single-pass C3 audit clean (b) ~11 Mode 3 specs written and typecheckable (c) Pydantic schemas cross-reference cleanly. Then implementation begins. P1 / P2 / FORMAL STABILITY tracking become reference-only at that point.
+
+**Composes with**: `disciplines/07-cascade-discipline.md` (cascade structural consistency); `disciplines/09-coherence-audit-cadence.md` (audit-checkpoint default procedure); `disciplines/11-effort-switch-cluster-map.md` (effort-switch plan applies to single-dispatch by default; FULL-CYCLE patterns become reference-only); `memory/feedback_subagent_first_cascade.md` (sub-agent-first ≠ multi-sub-agent cluster-execution).
+
 ---
 
 ## TOP-LEVEL ARCHITECTURE — Framework = mechanisms; Shape = policies

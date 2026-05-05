@@ -522,3 +522,83 @@ Executed HANDOFF Note 64 step 4: hand-rolled drop amendment cascade as the FIRST
 **Phase 3 status post-this-cluster**: Phase 3.0-3.6 LOCKED + Phase 3.7 v1.x amendment cadence FIRST instance complete (hand-rolled substrate Implementation drop) + Phase 3.8 C3 phase-boundary audit UNBLOCKED + Phase 6.1 / 6.2 SCOPED. Pattern A 12+7 topic-template-class FORMAL STABILITY UNAFFECTED (3 of 3 Pattern A instances complete with Phase 3.6 close survives this amendment cleanly). Phase 3.8 C3 phase-boundary audit fires next per `disciplines/09-coherence-audit-cadence.md` cadence; Pause-point P1 (architectural-foundation-clean) fires at C3 close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points.
 
 ---
+
+**Note 66: Process revision — default-light + escalate-on-evidence procedure-rigor discipline persisted in canonical docs (CLAUDE.md M2 + MAINTENANCE.md TOP-LEVEL Cascade discipline + disciplines/07/09/11 + memory feedback) on `step-back-evaluation` branch — BEFORE Phase 3.8 C3 audit dispatch fires under the revised regime; cluster-execution / multi-cascade / lens-versioning / FORMAL STABILITY ceremony downgraded from default → reference-pattern-on-escalation; empirical grounding 0 T1 across 14 cluster-executions; canonical example of methodology-as-default-leak documented (Note 65 hand-rolled-drop applied full ceremony to one-line cardinality narrowing); recursive `feedback_persist_frame_before_cascade.md` discipline applied (frame persisted before dependent C3 cascade fires)**
+
+User triggered 2nd bildhauer pass on the framework rebuild trajectory + discipline regime question. Pass surfaced: design-first strategy was right; procedure around the design accumulated meta-overhead doing something different than verifying design correctness (catching DOCUMENT-HYGIENE leaks, not architectural T1 problems). Empirically: 0 T1 across 14 cluster-executions; T2/T3 dominantly Lens 5 v0.2.x sharpening-tier label leakage + cross-cluster Lens 4 placeholder framings. Heavy ceremony for routine cascades = category-collapse applied recursively to meta-process (per `VISION.md`:207-209 category-collapse warning self-applied). User requested process revision in canonical docs BEFORE Phase 3.8 C3 audit fires under the revised lighter rule.
+
+**Outputs (single commit; pushed)**:
+- `<this commit hash>` Process revision: default-light + escalate-on-evidence procedure-rigor (5 file edits + 2 memory file edits)
+
+**Files touched**:
+- `CLAUDE.md` Cascade discipline section: M1 clarified (default = single sub-agent at xhigh); M2 substantially revised (Writer-Reviewer pattern + cluster-execution methodology = on-demand reference, never default ceremony; escalation triggered by T1 evidence OR substantive new ARCH topic OR explicit user request); M5 Ralph self-check composes with M2 only when escalation has fired; new "Per-shape application" trailing block (audit-checkpoint / Mode 3 / v1.x / doc-hygiene / done-criterion)
+- `MAINTENANCE.md` TOP-LEVEL RULE Cascade discipline: NEW "Procedure-rigor discipline (default-light + escalate-on-evidence)" subsection (escalation-trigger triplet + empirical grounding + per-shape application + done-criterion for design phase + composes-with pointers)
+- `disciplines/07-cascade-discipline.md`: procedure-rigor paragraph added + composes-with cross-references to 09 + 11 + memory feedback + MAINTENANCE.md Procedure-rigor subsection
+- `disciplines/09-coherence-audit-cadence.md`: NEW "Audit-checkpoint procedure (default-light + escalate-on-evidence)" subsection (single-pass single-sub-agent default + multi-cascade reserved for T1 escalation + done-criterion + empirical grounding)
+- `disciplines/11-effort-switch-cluster-map.md`: NEW "Default applicability — single-dispatch shape" subsection establishing single-dispatch as default + xhigh effort baseline + Lens 5 v0.2.2 subtle-breadcrumb-detection generalized to audit-pass dispatches; cross-cluster Lens 5 v0.2.2 retro-application sweep at phase-set closure (Note 63 codification) DOWNGRADED from in-scope-at-phase-set-closure → escalation-only; coherence-audit checkpoint procedure subsection rewritten as default-light + multi-cascade-as-reference-pattern; FULL-CYCLE patterns become reference patterns for substantive new ARCH topic clusters
+- `~/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/feedback_subagent_first_cascade.md`: clarified sub-agent-first ≠ multi-sub-agent cluster-execution; default = single sub-agent at xhigh; escalation triggers (T1 OR substantive new ARCH topic OR explicit user request); empirical grounding extended; how-to-apply split into default + escalation paths
+- `~/.claude/projects/-home-g-dev-Gunther-Schulz-pbs-bureau/memory/MEMORY.md`: index entry updated for revised feedback_subagent_first_cascade
+
+**Result shape**: 0 T1 + 0 T2 + 3 T3 (out-of-scope cross-corpus follow-ups; all KEEP-class per default-light triage rule). Hook 0 blocks. Single sub-agent dispatch at HIGH effort (mechanical-substantive content-phase per locked decision). Demonstrates new lighter regime by doing it.
+
+**3 T3 cross-corpus follow-ups flagged for deferral** (per default-light triage = fix significant inline, ignore performative, no dedicated cleanup cascade):
+- `plugin/skills/coherence-audit/SKILL.md:262` Reviewer-brief checklist framed assuming cluster-execution default; reads correctly under new escalation-only framing as conditional. KEEP for now.
+- `plugin/skills/greenfield-rederivation/SKILL.md:24` Writer-Reviewer pattern as default for greenfield-rederivation; not load-bearing until skill fires. KEEP.
+- `docs/decisions/greenfield-rederivation-pause.md:15` historical paused DR; not load-bearing. KEEP.
+
+**Substantive commitments locked**:
+
+1. **Default cascade-application = single sub-agent at xhigh effort** with clear brief. For audits, mechanical cascades, v1.x amendments, audit-checkpoints, Mode 3 specs.
+
+2. **Escalate to multi-sub-agent / Writer-Reviewer / cluster-execution methodology** ONLY on: (a) single-pass T1 finding (architectural REVISION) OR (b) substantive new ARCH topic creation OR (c) explicit user request for high-stakes decision.
+
+3. **Cluster-execution methodology** (Wave-1 Writer + Reviewer + Wave-2 Cascade-Writer + Reviewer + Wave-2.5 Cleanup-Writer + cross-cluster Lens 4/5 sweeps + FORMAL STABILITY tracking) = available reference pattern; **never default ceremony**.
+
+4. **Audit-checkpoint procedure** (C3 + future C4/C5) = single xhigh sub-agent default; multi-cascade audit-checkpoint shape (per Note 62 C2 4-parallel + 4-cascade precedent) reserved for T1 escalation.
+
+5. **Mode 3 Pydantic specs** = direct schema-writing per spec; verify by typecheck + cross-reference; no per-spec DR; no cluster-execution.
+
+6. **v1.x amendments** = main session direct edit + commit when sub-5-line OR cascade fits in single file; sub-agent only when cascade truly spans 5+ Layer 0-3 files. Note 65 hand-rolled-drop applied full 3-sub-agent cluster-execution methodology to one-line cardinality narrowing — canonical example of methodology-as-default-leak to avoid.
+
+7. **Doc-hygiene findings** = fix significant ones inline; ignore performative ones; no dedicated cleanup-cascade dispatches.
+
+8. **Cross-cluster Lens 5 v0.2.2 retro-application sweep at phase-set closure** (Note 63 codification) = DOWNGRADED from in-scope-at-phase-set-closure → escalation-only.
+
+9. **Done-criterion for design phase fixed**: design is done when (a) single-pass C3 audit clean (b) ~11 Mode 3 specs written and typecheckable (c) Pydantic schemas cross-reference cleanly. Then implementation begins. P1 / P2 / FORMAL STABILITY tracking become reference-only at that point.
+
+**Empirical grounding** (cross-execution pattern signal across 14 cluster-executions per HANDOFF Notes 61-65):
+- T1 (architectural REVISION) count: 0 across all 14 clusters
+- T2/T3 findings dominantly DOCUMENT-HYGIENE class (Lens 5 v0.2.x sharpening-tier label leakage; cross-cluster Lens 4 placeholder framing carryovers; hash-placeholder resolutions; ARCHITECTURE.md §7 SD-N labels) — catchable by single xhigh sub-agent
+- 4-parallel multi-cascade audit-checkpoint (Note 62 C2 precedent) does NOT surface different finding-class than single-pass would; insurance value low
+- Heavy procedure for routine cascades was instance of category-collapse self-applied per `VISION.md`:207-209
+
+**Branch context**: this Note + revisions live on `step-back-evaluation` branch (created post-Note-65 commit `4cb548b` to preserve main as fallback during step-back evaluation). Main remains at `4cb548b`. If revised regime proves correct after Phase 3.8 C3 + Mode 3 specs land + implementation begins, merge step-back-evaluation → main. If revisions need adjustment, refine on this branch first.
+
+**To resume next session**:
+
+1. `/reload-plugins` if next-session — activates hook (architectural_commit_gate)
+2. Read CLAUDE.md (auto if next-session) + this Note 66
+3. **`/clear` decision point**: optional — main session has accumulated bildhauer 2-pass context + revision-cascade dispatch + this Note. Either fresh-context-into-C3 OR same-session-into-C3 works under default-light (single sub-agent dispatch is much smaller context budget than prior multi-cascade ceremony).
+4. **Next substantive option**: **Phase 3.8 C3 phase-boundary audit** under new default-light regime. Single xhigh sub-agent reads relevant corpus + applies Lens 11-15 (Inter-layer consistency / Specs traceability / Protocol completeness / DR coverage / Granularity match) + Lens 1-10 universal where applicable + carryover-signals from C2 + post-amendment residual check. Reports verdict. T1 → escalate cascade only what's broken. T2/T3 only → triage inline + skip ceremony.
+5. **After C3 close + Pause-point P1**: ~11 Mode 3 Pydantic specs written directly per spec (no per-spec DR / no cluster-execution); typecheck + cross-reference verification = the audit. Then implementation begins.
+6. **Phase 3 status post-this-revision**: Phase 3.0-3.6 LOCKED + Phase 3.7 v1.x amendment cadence FIRST instance complete + Phase 3.8 C3 PENDING under default-light regime + Phase 6.1 / 6.2 SCOPED.
+7. **HANDOFF rotation candidacy**: HANDOFF after Note 66 is ~700+ lines; PAST rotation threshold; recommend rotation Notes 61-62-63 → archive at next session start to leave Notes 64-65-66 as load-bearing pickup context.
+
+**What is NOT lost**:
+- VISION + GLOSSARY + ARCH topics + DRs as locked architectural surface (35 sessions of substantive design work preserved as reference)
+- Discipline regime as available reference (cluster-execution / multi-cascade / lens-versioning / FORMAL STABILITY tracking still documented; just no longer default ceremony)
+- v1.x amendment cadence + preliminary-lock revision discipline (per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §3) as runtime-driven revision mechanism
+- Architectural commit gate hook as structural enforcement
+- All cross-execution pattern signal evidence (HANDOFF Notes 61-65) preserved as empirical grounding for the revised rule
+- The bildhauer pass insight (category-collapse applied recursively to meta-process) codified in canonical Procedure-rigor discipline subsection for future-self awareness
+
+**What stops being produced going forward** (per revised regime):
+- Cross-execution pattern signal tracking across N cluster-executions (no more default cluster-execution to track)
+- FORMAL STABILITY claims across template-class instances
+- New Discipline N codification refinements per cluster
+- Lens version increments to catch progressively subtler doc-hygiene leaks
+- Wave-2.5 Cleanup-Writer dispatches as default
+- Multi-cascade audit-checkpoint shapes as default
+- HANDOFF Notes longer than the work they describe (this Note 66 ~75 lines describes a ~84-insertion 5-file revision — lighter than Note 65's ~120 lines for similar scope; demonstrates new regime)
+
+---

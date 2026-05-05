@@ -7,13 +7,27 @@ load_on_demand: true
 
 # Discipline 11 — Effort-switch cluster-execution map
 
-Operationalizes the Working-procedure "Effort-level switch suggestion is a pause-point" bullet by enumerating the exact dispatch-points where AI surfaces switch suggestions during a primitive-cluster cluster-execution. Codifies WHEN the suggestion fires; the abstract rule (suggest + pause; user decides) lives in `DISCIPLINES.md` Working procedure.
+Operationalizes the Working-procedure "Effort-level switch suggestion is a pause-point" bullet by enumerating the exact dispatch-points where AI surfaces switch suggestions during dispatch sequences. Codifies WHEN the suggestion fires; the abstract rule (suggest + pause; user decides) lives in `DISCIPLINES.md` Working procedure.
+
+## Default applicability — single-dispatch shape
+
+**The effort-switch plan applies to single-dispatch single-sub-agent shape as default** (per `MAINTENANCE.md` Procedure-rigor discipline + CLAUDE.md M1 + M2: default cascade-application = single sub-agent at xhigh; multi-sub-agent / Writer-Reviewer / cluster-execution methodology = escalation, not default ceremony).
+
+For single-dispatch work (audits, mechanical cascades, v1.x amendments, audit-checkpoints, Mode 3 Pydantic specs):
+- **Default effort = xhigh** for the dispatched sub-agent (reasoning-dense + Lens 5 v0.2.2 subtle-breadcrumb-detection requirement)
+- **Effort-switch suggestion** at single explicit pause-point: between the sub-agent's substantive work and any subsequent main-session HANDOFF write (xhigh → high acceptable for HANDOFF write)
+- **No multi-step toggle map** for single-dispatch (the 3-toggle map below applies to FULL-CYCLE cluster-execution which is reference-only by default)
+
+**FULL-CYCLE patterns** (Note 60/61/62/63 5-stage Wave-1 + Reviewer + Wave-2 + Reviewer + Wave-2.5 effort-switch sequences) become **reference patterns for substantive new ARCH topic clusters**; NOT default for v1.x amendments / audit-checkpoints / Mode 3 specs / mechanical cascades.
 
 ## Composes with
 
 - Working-procedure "Effort-level switch suggestion is a pause-point" bullet (this file is the operational map for that abstract rule)
 - Working-procedure "Scope-bounded autonomous authority grant" bullet (effort-switch is the explicit exception within otherwise-autonomous scope)
 - `process-kit/structural-invariants.md` "Sizing principle" (cost-of-error + reasoning-density govern mitigation depth — including reasoning-depth via effort level)
+- `MAINTENANCE.md` Procedure-rigor discipline subsection (default-light + escalate-on-evidence)
+- `disciplines/07-cascade-discipline.md` (cascade structural consistency + procedure-rigor)
+- `disciplines/09-coherence-audit-cadence.md` (audit-checkpoint default = single-pass; multi-cascade reserved for T1 escalation)
 
 ## Full primitive-cluster cluster-execution procedure (28 steps)
 
@@ -75,30 +89,29 @@ Phase 3.5 instances of new-template-class anchoring (all kept Wave-1 Writer at x
 
 The downshift suggestion (Wave-1 Writer `xhigh → high`) only fires when Writer is 2nd-instance of an already-anchored template-class. That state hasn't been reached in Phase 3.5 yet; surface the suggestion when it does.
 
-## Lens 5 subtle-breadcrumb-detection requirement (Wave-1 Reviewer effort)
+## Lens 5 subtle-breadcrumb-detection requirement (audit-pass dispatches)
 
-Wave-1 Reviewer effort cannot downshift from xhigh to high — even on narrow-surface cross-cutting integrator second-instance audits or other Reviewer roles where surface narrowness might suggest high-effort sufficiency. Empirical evidence: high-effort Wave-1 Reviewer misses Lens 5 v0.2.2 sharpening-tier-label leakage at structural-elevation moments. The label feels load-bearing as marker of structural-vs-coverage distinction; subtle-breadcrumb detection requires xhigh reasoning depth. xhigh reverify dispatch surfaces what high missed.
+For audit-pass dispatches (single-sub-agent default OR Reviewer roles in escalated cluster-execution), effort cannot downshift from xhigh to high — even on narrow-surface audits. Empirical evidence: high-effort audit-pass dispatch misses Lens 5 v0.2.2 sharpening-tier-label leakage at structural-elevation moments. The label feels load-bearing as marker of structural-vs-coverage distinction; subtle-breadcrumb detection requires xhigh reasoning depth.
 
-**Generalization**: Reviewer roles applying Lens 5 v0.2.2 / sharpening-trajectory hygiene at structural-elevation moments require xhigh effort regardless of surface-narrowness. Specific cases:
-- Wave-1 Reviewer (initial audit of Wave-1 Writer output)
-- Wave-2 Cascade-Reviewer
-- Wave-2.5 Cleanup-Writer integrated final recheck
+**Generalization**: dispatches applying Lens 5 v0.2.2 / sharpening-trajectory hygiene at structural-elevation moments require xhigh effort regardless of surface-narrowness. Applies to:
+- Single-pass audit dispatch (default audit-checkpoint shape per `disciplines/09-coherence-audit-cadence.md`)
+- Wave-1 Reviewer (when escalated cluster-execution methodology has fired)
+- Wave-2 Cascade-Reviewer (when escalated)
+- Wave-2.5 Cleanup-Writer integrated final recheck (when escalated)
 
-Cascade-execution generation-dense work (mass scrub; mechanical placeholder refresh) MAY downshift to high per the 3-toggle map step 14 + step 25 — those are pure-mechanical-execution shapes, not Lens-5-detection shapes. The discriminator: detection-class work (catching subtle sharpening-tier labels at structural-elevation moments) stays xhigh; execution-class work (applying already-found findings as well-specified edits) downshifts to high.
+Cascade-execution generation-dense work (mass scrub; mechanical placeholder refresh) MAY downshift to high — those are pure-mechanical-execution shapes, not Lens-5-detection shapes. The discriminator: detection-class work (catching subtle sharpening-tier labels at structural-elevation moments) stays xhigh; execution-class work (applying already-found findings as well-specified edits) downshifts to high.
 
-Composes with the Reviewer-brief checklist requirement codified in `plugin/skills/coherence-audit/SKILL.md` Step 5 (v0.2.2): the Reviewer brief MUST enumerate sharpening-tier-label scrub as explicit checklist item AND the dispatching effort level MUST stay xhigh. Both compose; neither alone suffices.
+Composes with the Reviewer-brief checklist requirement codified in `plugin/skills/coherence-audit/SKILL.md` Step 5 (v0.2.2): the dispatch brief MUST enumerate sharpening-tier-label scrub as explicit checklist item AND the dispatching effort level MUST stay xhigh. Both compose; neither alone suffices.
 
-## Coherence-audit checkpoint procedure (different shape — C1-C5)
+**Cross-cluster Lens 5 v0.2.2 retro-application sweep at phase-set closure** (Note 63 codification) is **DOWNGRADED** from "in-scope at phase-set closure" → **available on T1 escalation; not default**. Per `MAINTENANCE.md` Procedure-rigor discipline: doc-hygiene findings at phase-set closures get fixed inline if significant; performative cleanup-cascade dispatches are methodology-as-default-leak. Reserve cross-cluster retro-sweeps for T1 escalation OR explicit user request.
 
-Coherence-audit checkpoint executions follow a different procedure than primitive-cluster cluster-execution. The C1 shape (per Note 55 retrospective):
+## Coherence-audit checkpoint procedure (default-light + escalate-on-evidence)
 
-- Wave 0: parallel Auditors split by lens-focus + Auditor-Reviewer (M4 Writer-Reviewer pattern)
-- Cascade waves per finding-class (Wave 1 / Wave 2 / Waves 3-6 etc.)
-- Recheck rounds (Round 2 + Round 3 termination signals per skill §Termination signals)
+Per `disciplines/09-coherence-audit-cadence.md` audit-checkpoint procedure subsection: **default audit-checkpoint = single sub-agent at xhigh effort** reads relevant corpus + applies named lenses + reports verdict. Effort stays xhigh throughout single-pass audit (reasoning-dense; Lens 5 v0.2.2 subtle-breadcrumb-detection requirement).
 
-Audit work is **reasoning-dense throughout** (lens-application + cross-cluster pattern detection + density-decay judgment). Recommendation: **xhigh for nearly every step**. Exception: cascade-execution sub-agents (Cascade-Writer-N applying Auditor findings as mechanical edits) mirror primitive-cluster Cascade-Writer characteristics → high.
+**Multi-cascade audit-checkpoint shape** (Note 62 C2 4-parallel auditor + 4-cascade-application precedent — Wave 0 parallel Auditors split by lens-focus + Cascade waves per finding-class + Recheck rounds) **stays available as reference pattern** for T1 escalation OR explicit user request; **NOT default**. When the multi-cascade shape fires under escalation: xhigh for audit-pass + Reviewer dispatches; downshift to high only for cascade-execution sub-agents applying already-found findings as mechanical edits.
 
-For audit checkpoints: practical map is "stay xhigh; downshift only when dispatching cascade-execution sub-agents".
+C1 shape (Note 55 retrospective: Wave 0 + Wave 1-6 + Round 2/3 recheck) is **historical reference**; future audit-checkpoints fire under default-light unless escalation triggered.
 
 ## Why surface at dispatch transitions, not constantly
 

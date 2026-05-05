@@ -38,6 +38,18 @@ When `coherence-audit` skill fires across Phase 3-6 work. Codifies WHEN audits r
 
 Skill defines HOW (10 universal lenses + corpus-specific 11-18); this discipline defines WHEN (5 hard checkpoints + 3 triggers). Together: at each checkpoint or trigger fire, READ skill (per Discipline 1 skill+profile sub-section); apply procedure; cite specific lens names + findings in chat output.
 
+## Audit-checkpoint procedure (default-light + escalate-on-evidence)
+
+**Default audit-checkpoint procedure** = single sub-agent at xhigh effort reads relevant corpus + applies named lenses + reports verdict. T1 findings (architectural REVISION) trigger cascade-application of revisions ONLY for what's actually broken; T2/T3 findings get triaged inline + skip cascade ceremony.
+
+**Multi-cascade audit-checkpoint shape** (per Note 62 C2 4-parallel auditor + 4-cascade-application precedent: GLOSSARY auditor + ARCH auditor + DR-set auditor + carryover-signals evaluator + 4-cascade Step 5 cascade-aware revision application) **stays available as reference pattern** for T1 escalation OR explicit user request; **NOT default**. Heavy ceremony applied to routine doc-hygiene findings is methodology-as-default-leak per `MAINTENANCE.md` Procedure-rigor discipline subsection.
+
+**C3 + future C4/C5 fire under default-light** unless escalation triggered. The done-criterion for design phase per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: design is done when (a) single-pass C3 audit clean (b) ~11 Mode 3 specs written and typecheckable (c) Pydantic schemas cross-reference cleanly. Then implementation begins.
+
+**Empirical grounding**: 0 T1 across C1 + C2 + 14 cluster-executions per HANDOFF Notes 61-65 cross-execution pattern signal tracking. T2/T3 findings at C2 (per Note 62 verdict shape) clustered at signal (b) cross-cluster Lens 4 carryover + signal (c) Phase 3.5 Lens 5 v0.2.x systemic leakage + signal (d) DR provenance-hygiene + signal (e) Discipline 11 plan-deviation correction — all DOCUMENT-HYGIENE class catchable by single xhigh auditor; the 4-parallel multi-cascade did not surface a different finding-class. Pattern-recurrence at C3 expected: doc-hygiene findings, not architectural correctness findings.
+
+**Composes with**: `MAINTENANCE.md` TOP-LEVEL RULE — Cascade discipline → Procedure-rigor discipline subsection (default-light + escalate-on-evidence general rule); `disciplines/07-cascade-discipline.md`; `disciplines/11-effort-switch-cluster-map.md` (effort-switch plan applies to single-dispatch by default).
+
 ## Persistence target
 
 BACKLOG.md scheduled audit checkpoints per Phase. ARCHITECTURE.md §2 sub-phase status table (Phase 3.8 row already present; C1 + C2 cross-ref BACKLOG).

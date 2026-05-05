@@ -18,19 +18,28 @@ Read in this order before substantive work. Skip only for trivial questions (e.g
 
 Specific `arch/<topic>.md` + `disciplines/<id>.md` + `glossary/<entry>.md` + `profiles/L*.md` files load on-demand.
 
-## Cascade discipline (sub-agent-first; mandatory for multi-file architectural work)
+## Cascade discipline (sub-agent-first; default-light + escalate-on-evidence)
 
 Per session-18 research into Claude/agent adherence + Anthropic engineering guidance: oversized context + cascade-mode load reliably degrade instruction adherence (per Chroma context-rot study + AgentIF benchmark + Anthropic's "Bloated CLAUDE.md files cause Claude to ignore your actual instructions"). Five mitigations now codified:
 
-1. **Sub-agent-first for cascade work**. Any multi-file architectural cascade (≥3 files of Layer 0/1/2/3 edits, or any cascade involving GLOSSARY / ARCHITECTURE / MAINTENANCE / arch/* / docs/decisions/*) MUST be delegated to general-purpose sub-agent(s). Brief each with focused scope + the specific files + relevant disciplines (NOT full corpus). Sub-agent works in clean fresh context; returns summary; main agent reviews + commits + pushes. Per Anthropic: "subagents are one of the most powerful tools available... preserve context by keeping exploration and implementation out of your main conversation."
+1. **Sub-agent-first for cascade work**. Any multi-file architectural cascade (≥3 files of Layer 0/1/2/3 edits, or any cascade involving GLOSSARY / ARCHITECTURE / MAINTENANCE / arch/* / docs/decisions/*) MUST be delegated to general-purpose sub-agent. **Default: single sub-agent at xhigh effort with clear brief** (focused scope + specific files + relevant disciplines, NOT full corpus). Sub-agent works in clean fresh context; returns summary; main agent reviews + commits + pushes. Multi-sub-agent dispatch is escalation, not default — see M2. Per Anthropic: "subagents are one of the most powerful tools available... preserve context by keeping exploration and implementation out of your main conversation."
 
-2. **Writer-Reviewer pattern**. For any architectural commit (Layer 0/1/2/3), spawn a separate Reviewer sub-agent against the diff before push. Reviewer reads relevant disciplines, scans for breadcrumbs / instance-leakage / cargo-cult / cascade-miss. Per Anthropic: "Separating the agent doing the work from the agent judging it proves to be a strong lever" (counters self-praise bias).
+2. **Writer-Reviewer pattern (on-demand, not default)**. The Writer-Reviewer pattern + cluster-execution methodology (Wave-1 Writer + Reviewer + Wave-2 Cascade-Writer + Reviewer + Wave-2.5 Cleanup-Writer + cross-cluster Lens 4/5 sweeps + FORMAL STABILITY tracking) is **available as reference pattern**, **never default ceremony**. Fires when (a) single-pass surfaces a T1 architectural REVISION needing cascade application, OR (b) substantive new ARCH topic creation (NOT v1.x amendment / audit-checkpoint / Mode 3 spec / mechanical cascade), OR (c) explicit user request for high-stakes decision. Empirically grounded: 0 T1 across 14 cluster-executions per HANDOFF Notes 61-65 cross-execution pattern signal tracking; T2/T3 findings dominantly DOCUMENT-HYGIENE class (Lens 5 v0.2.x sharpening-tier label leakage; cross-cluster Lens 4 placeholder framing carryovers; hash-placeholder resolutions; ARCHITECTURE.md §7 SD-N labels) — catchable by single xhigh sub-agent; 4-parallel multi-cascade does not surface a different finding-class. Heavy ceremony for routine cascades was instance of category-collapse applied recursively to the meta-process (per VISION.md:207-209 category-collapse warning). Per Anthropic: "Separating the agent doing the work from the agent judging it proves to be a strong lever" (counters self-praise bias) — applies on escalation, not as default.
 
 3. **`/clear` between cascade chunks**. Recommend `/clear` at natural cascade boundaries (between Steps; between major files). User discipline; AI surfaces "recommend /clear before next chunk" at boundaries. Per Anthropic: "A clean session with a better prompt almost always outperforms a long session with accumulated corrections."
 
 4. **HARD STOP markers**. Each logical work unit ends with HANDOFF write + commit + push + STOP. AI surfaces "logical unit complete; recommend HARD STOP" at natural boundaries. Per agent-loop research: structural session boundaries, not verbal commitments to stop.
 
-5. **Ralph Loop self-check at apparent completion**. Before declaring done, AI explicitly asks: "Did I read every file the procedure listed? Did I apply every discipline cited? Did I leave anything unfinished?" Catches "agentic laziness" (per Anthropic long-running Claude research). Composes with M2 Reviewer.
+5. **Ralph Loop self-check at apparent completion**. Before declaring done, AI explicitly asks: "Did I read every file the procedure listed? Did I apply every discipline cited? Did I leave anything unfinished?" Catches "agentic laziness" (per Anthropic long-running Claude research). Composes with M2 Writer-Reviewer when escalation has fired.
+
+**Per-shape application** (default-light specifics):
+- **Audit-checkpoint procedure** (C3 + future C4/C5): single-pass single xhigh sub-agent default; multi-cascade audit-checkpoint shape (per Note 62 C2 4-parallel auditor + 4-cascade-application precedent) reserved for T1 escalation OR explicit user request.
+- **Mode 3 Pydantic specs**: write directly per spec; verify by typecheck + cross-reference; no per-spec DR; no cluster-execution.
+- **v1.x amendments**: main session direct edit + commit when sub-5-line edits OR cascade fits in single file; sub-agent only when cascade truly spans 5+ Layer 0-3 files. Phase 3.7 hand-rolled-drop v1.x amendment (Note 65) applied full 3-sub-agent cluster-execution methodology to a one-line cardinality narrowing — canonical example of methodology-as-default-leak to avoid.
+- **Doc-hygiene findings**: fix significant ones inline; ignore performative ones; no dedicated cleanup-cascade dispatches.
+- **Done-criterion for design phase**: design is done when (a) single-pass C3 audit clean (b) ~11 Mode 3 specs written and typecheckable (c) Pydantic schemas cross-reference cleanly. Then implementation begins. P1 / P2 / FORMAL STABILITY tracking become reference-only.
+
+Detailed mechanism + composition: `MAINTENANCE.md` TOP-LEVEL RULE — Cascade discipline → Procedure-rigor discipline subsection.
 
 ## Specialized skill invocation procedure (mandatory at every invocation)
 
