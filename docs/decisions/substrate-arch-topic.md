@@ -172,7 +172,7 @@ Subsequent greenfield-rederivation cluster execution (per `docs/decisions/greenf
 - Pydantic Protocol contract for Substrate Surface (7 capability categories typed)
 - SubstrateError class hierarchy (per §11 architectural categories including cross-substrate-portability sub-categories)
 - Supporting Pydantic types (TransportMode / DeploymentTier / SubstrateConfig / HookEvent / SessionContext / etc.)
-- Concrete substrate Implementations: ClaudeAgentSDKSubstrate / MSAgentFrameworkSubstrate / HandRolledSubstrate (Tier 1 fallback)
+- Concrete substrate Implementations: ClaudeAgentSDKSubstrate / MSAgentFrameworkSubstrate (current set per `docs/decisions/substrate-hand-rolled-drop.md` post-Phase-3.7 v1.x amendment; HandRolledSubstrate dropped)
 - Per-substrate extension Protocols: ClaudeAgentSDKExtensions / MSAgentFrameworkExtensions
 - Pre-implementation sharpening at Phase 6 implementation-start (operational/runtime concerns per §14 forward reference)
 

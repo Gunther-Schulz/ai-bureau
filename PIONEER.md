@@ -8,9 +8,9 @@ This co-evolution is intentional. Framework-as-method is distinct from pioneer-i
 
 Per `BACKLOG.md` Phase 6: pioneer rebuild deferred until framework rebuild completes.
 
-- Framework rebuild in progress (Phase 2 GLOSSARY in progress; 28 of ~30 entries locked)
+- Framework rebuild in progress (Phase 3.0-3.6 ARCH topics LOCKED; Phase 3.7 v1.x amendment cadence first instance complete; Phase 3.8 C3 phase-boundary audit complete; 36 GLOSSARY entries from Phase 2 + 1 from Phase 3.1 = 37 locked)
 - Pioneer instance archived per `archive/INDEX.md`: 19 app skills + backend MCP server + per-domain content snapshots from v0.35
-- Pioneer rebuild starts post-Phase 5 (after ROADMAP locked) — rebuilds INTO deployment instance, NOT into this repo (per `MAINTENANCE.md` TOP-LEVEL SCOPE: framework source, not deployment instance)
+- Pioneer rebuild starts at Phase 6.1 thin-slice deployment-instance authoring per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE — rebuilds INTO deployment instance, NOT into this repo (per `MAINTENANCE.md` TOP-LEVEL SCOPE: framework source, not deployment instance)
 
 ## Relation to framework
 

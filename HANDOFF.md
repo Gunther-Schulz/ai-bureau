@@ -602,3 +602,43 @@ User triggered 2nd bildhauer pass on the framework rebuild trajectory + discipli
 - HANDOFF Notes longer than the work they describe (this Note 66 ~75 lines describes a ~84-insertion 5-file revision — lighter than Note 65's ~120 lines for similar scope; demonstrates new regime)
 
 ---
+
+**Note 67: Phase 3.8 C3 phase-boundary audit complete under default-light regime — single xhigh sub-agent dispatch + main-session inline cleanup of 4 T3 doc-hygiene findings; CONFIRMS-LOCKED verdict (0 T1 + 0 T2); empirical validation of default-light audit-checkpoint procedure (single-pass surfaced same finding-class as 4-parallel C2 multi-cascade would have); Pause-point P1 (architectural-foundation-clean) READY TO FIRE per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points; demonstrates new regime — single sub-agent dispatch + 5-line inline cleanup + brief HANDOFF Note replaces prior multi-cascade audit-checkpoint ceremony**
+
+C3 audit dispatched per Note 66 default-light regime: 1 sub-agent at xhigh, brief covered Lens 11-15 ARCH-specific + Lens 1-10 universal spot-checks + carryover signals from C2 + post-amendment residual check. Verdict CONFIRMS-LOCKED.
+
+**Outputs (single commit; pushed)**:
+- `<this commit hash>` C3 audit + 4 T3 inline cleanups (3 files)
+
+**Findings + cleanups**:
+- T3-1 (substrate-arch-topic.md:175): stale `HandRolledSubstrate` forward-reference in §Phase 6 spec list (Note 65 cascade-miss; DR §9 Files-touched didn't enumerate touching this DR). Fixed: forward-reference now matches post-amendment Implementation set.
+- T3-2 (ARCHITECTURE.md:264/268/272): 4 R-CC-N sharpening-trajectory residual labels in §7 Phase 3.5 lock entries (Lens 5 v0.2.2 STRIP-class; Note 63 scrubbed SD-N but missed R-CC-N class). Fixed: all 4 R-CC labels stripped; substantive Resolution narrative preserved.
+- T3-4 (PIONEER.md:11): stale "Phase 2 GLOSSARY in progress; 28 of ~30 entries locked" status text. Fixed: reflects current Phase 3 state + 37 GLOSSARY entries + Phase 6.1 thin-slice deployment-instance authoring trigger per MAINTENANCE.md TOP-LEVEL MILESTONE STRUCTURE.
+
+**Result shape**: 0 T1 + 0 T2 + 4 T3 (all doc-hygiene) + multiple T4 verifications. 0 hook blocks at inline edits (prep-Reads completed). Single sub-agent dispatch + main-session inline cleanup; no Cleanup-Writer dispatch; no multi-cascade application; no FORMAL STABILITY tracking. Total compute for this audit-checkpoint ≈ 1 sub-agent + 5-line main-session cleanup vs prior multi-cascade C2 = 4 audit-pass auditors + 4 cascade-application sub-agents.
+
+**Empirical validation of default-light regime**: single-pass single-sub-agent at xhigh successfully surfaced the same DOCUMENT-HYGIENE finding-class as the prior 4-parallel multi-cascade C2 shape would have surfaced (per Note 62 verdict: "T2/T3 findings dominantly DOCUMENT-HYGIENE class"). The procedure-rigor discipline default-light rule per Note 66 is empirically validated for audit-checkpoint shape. No T1 escalation triggered; no multi-cascade dispatch needed. Cross-execution pattern signal: 0 T1 across 15 dispatches now (14 cluster-executions + this audit).
+
+**Pause-point P1 (architectural-foundation-clean) READY TO FIRE**:
+- Mechanical criteria per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points: "Phase 3.8 C3 audit clean OR user-confirmed-acceptable findings + post-amendment corpus stable (hand-rolled drop amendment + any C3-surfaced remediation landed)" → MET (0 T1 + 0 T2 + 4 T3 inline-cleanup-resolved + Note 65 hand-rolled drop landed + Note 66 process revision landed).
+- Pause type: LIGHT (procedural confirmation).
+- AI surface: Phase 6.1 substantive work unblocked; pre-6.1 sanity check moment if any concerns surface.
+- Default action: user confirms green-light → Phase 6.1 substantive work begins (Mode 3 Pydantic specs + Mode 2 reference impls per per-shape application: direct schema-writing per spec, no per-spec DR, no cluster-execution).
+- Skip condition: user signals "no sanity check needed; proceed" — pause closes immediately.
+
+**To resume next session OR continue same-session post-P1 green-light**:
+
+1. P1 fires: surface to user; await confirmation OR skip-signal.
+2. On green-light: Phase 6.1 begins — write ~11 Mode 3 Pydantic Protocol specs as typed schema files (substrate Surface 7 categories + adapter per-class Surfaces + audit Surface + sparring sub-mechanisms + specialist DEFINITION manifest + practitioner-RECORD manifest + workflow + work-unit manifests + claim primitive + quality-gate per-shape impls + AuditEvent + key event-kinds). Per per-shape rule: direct schema-writing; no per-spec DR; no cluster-execution. Done when typecheck + cross-reference clean.
+3. After Mode 3 specs: Phase 6.1 Mode 2 reference impls + items 1-5 deployment-instance content (in deployment-instance repo per `MAINTENANCE.md` TOP-LEVEL SCOPE).
+4. P2 fires at Phase 6.1 close (HARD pause: testing-approach decision-design required before Phase 6.2).
+5. **Branch context**: this Note + cleanup live on `step-back-evaluation` branch. If revised regime continues to validate through Mode 3 specs + early implementation, merge step-back-evaluation → main.
+6. **HANDOFF rotation**: HANDOFF now ~870 lines; PAST 500-line threshold; recommend rotation Notes 61-62-63 → archive at next session start, leaving Notes 64-65-66-67 as load-bearing pickup context.
+
+**What is NOT lost**:
+- C3 audit verdict + per-lens findings preserved in this Note + sub-agent report (in conversation log)
+- 4 T3 cleanups applied; cross-corpus residuals clean post-cleanup
+- Default-light regime empirically validated for audit-checkpoint shape (single-pass at xhigh = 4-parallel C2 multi-cascade for finding-class coverage)
+- Phase 3 architectural surface CONFIRMS-LOCKED at Phase 3.8 C3 close
+
+---
