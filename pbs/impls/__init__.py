@@ -35,11 +35,23 @@ Phase 6.1 thin-slice scope (per `BACKLOG.md` §222-§224):
   stamping detection mandatory per §14 row 2) per `BACKLOG.md` §224 thin-
   slice scope; autonomous-business / personal-OS / research-lab gate impls
   deferred to Phase 6.2 per W1
+- `practitioner_shape_authority_binding` — practitioner-shape authority-binding
+  mechanism reference satisfying `pbs.authority_binding.AuthorityBindingProtocol`
+  per `glossary/authority-binding.md` + `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE
+  concept-by-concept table; PRACTITIONER_JUDGMENT trust model; HUMAN actor
+  required for accountability-bearing legal-bind moments (signature_applied /
+  send_authorized / claim_attested / work_unit_archived /
+  workflow_phase_transition); composes with audit class via `AuthorityChecker`
+  injection (per `arch/audit.md` §11 `AuditTrustError`); composes with
+  substrate Surface §C permission flow via `bind_decision()` (Phase 6.2 wiring
+  point). Per `BACKLOG.md` §224 thin-slice; autonomous-business-shape
+  (BUDGET_POLICY) + personal-OS-shape (INDIVIDUAL) deferred to Phase 6.2
 
 Phase 6.2 forthcoming impls (deferred per BACKLOG §242+): MS Agent Framework
 substrate; Email / Accounting / A2A-Peer / File-Sync per-class adapter impls;
-authority-binding mechanism; sparring sub-mechanism impls; autonomous-business
-/ personal-OS / research-lab gate impls.
+sparring sub-mechanism impls; autonomous-business / personal-OS / research-lab
+gate impls; autonomous-business-shape + personal-OS-shape authority-binding
+impls.
 
 Foundation-up: imports from `pbs.<surface>` (Pattern A Protocols + manifests)
 to satisfy them concretely; impls are downstream of Surfaces.
