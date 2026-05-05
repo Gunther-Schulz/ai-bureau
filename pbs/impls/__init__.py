@@ -46,12 +46,25 @@ Phase 6.1 thin-slice scope (per `BACKLOG.md` §222-§224):
   substrate Surface §C permission flow via `bind_decision()` (Phase 6.2 wiring
   point). Per `BACKLOG.md` §224 thin-slice; autonomous-business-shape
   (BUDGET_POLICY) + personal-OS-shape (INDIVIDUAL) deferred to Phase 6.2
+- `practitioner_shape_sparring` — practitioner-shape sparring mechanism-class
+  reference satisfying `pbs.sparring.SparringProtocol` per `arch/sparring.md`
+  §6 mechanism-class structural reconciliation; aggregates 8 sub-mechanism
+  impl classes (4 architecturally-encoded: counter-argument / confidence-
+  calibration / visible-reasoning / selective-friction + 4 behaviorally-
+  enforced: anti-sycophancy / asymmetric-knowledge-respect / commit-to-
+  recommendations / whats-missing-checkpoint); fail-closed (defensibility-
+  critical); all 8 sub-mechanisms active per §14 practitioner-shape profile;
+  ≥1 sparring-event per claim mandatory; AI_RUNTIME actor binding for axis-2
+  production-phase engagement events. Per `BACKLOG.md` §224 thin-slice;
+  autonomous-business-shape (subset 4-6 / fail-open with alert) + personal-
+  OS-shape (subset 1-3 / fail-open) sparring impls deferred to Phase 6.2 per
+  W3 second-shape productization
 
 Phase 6.2 forthcoming impls (deferred per BACKLOG §242+): MS Agent Framework
 substrate; Email / Accounting / A2A-Peer / File-Sync per-class adapter impls;
-sparring sub-mechanism impls; autonomous-business / personal-OS / research-lab
-gate impls; autonomous-business-shape + personal-OS-shape authority-binding
-impls.
+autonomous-business / personal-OS / research-lab gate impls; autonomous-
+business-shape + personal-OS-shape authority-binding impls; autonomous-
+business-shape + personal-OS-shape sparring impls.
 
 Foundation-up: imports from `pbs.<surface>` (Pattern A Protocols + manifests)
 to satisfy them concretely; impls are downstream of Surfaces.
