@@ -77,3 +77,7 @@ For high-impact decisions (primitive classifications; per-mechanism / per-protoc
 - Cluster D Validators (L8+G+D gates)
 
 Flesh skeleton-profile if specific decision affects it (per `coherence-audit` on-demand fleshing). For routine decisions or cascade-from-established-pattern, multi-axis principle-level check sufficient. Discriminator: shape-specific or instance-specific surface → profile-anchored; purely structural cascade → multi-axis principle-level.
+
+## Mode 3 spec writing — routine-cascade default (Phase 6.1)
+
+Mode 3 Pydantic Protocol specs operationalize already-locked ARCH topic Surface contracts (purely structural cascade per the profile-anchored discriminator above). **No default sharpening fire per spec**; spec writing is content-phase mechanical work. `decision-design-sharpening` + `pre-implementation-sharpening` skills fire on-demand only when an unexpected substantive decision surfaces (cardinality not implied by ARCH; ambiguous Pydantic shape between valid alternatives; schema choice forces not-yet-locked architectural commitment). Default = direct schema-writing per `MAINTENANCE.md` Procedure-rigor discipline subsection → per-shape application Mode 3 row.

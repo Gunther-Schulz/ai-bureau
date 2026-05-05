@@ -686,3 +686,11 @@ User surfaced after C3 audit landing: "309.6k tokens for C3 [audit] essentially 
 **Pattern signal**: this is the SECOND meta-process leak removal in this session. Note 66 removed heavy-procedure-as-default-leak (catching doc-hygiene at cluster-execution cost). Note 68 removes cadence-as-mandatory-leak (audit-checkpoints firing regardless of evidence). Both leaks were instances of category-collapse applied recursively to meta-process per VISION.md:207-209. Same pattern; different layer. Suggests further leaks may exist; surface as observed.
 
 ---
+
+**Note 69: Discipline 3 Mode 3 spec routine-cascade default codified — `disciplines/03` clarifies Mode 3 Pydantic spec writing as routine-cascade-from-established-pattern (no default sharpening-skill fire per spec; on-demand only). Third meta-process leak removal this session. Single-file 5-line addition. Adopting Candidate 1 (shorter HANDOFF format) + Candidate 3 (no hash-placeholder follow-up commit) per organic-practice change going forward.**
+
+User asked proactive surface of remaining meta-process leaks before P1 fires. Found 3 candidates; applied Candidate 2 (Discipline 3 Mode 3 spec writing default-fire risk) — added explicit routine-cascade subsection per existing profile-anchored discriminator. Discipline 3 already had the discriminator (shape-specific → profile-anchored vs purely-structural-cascade → multi-axis principle-level); amendment makes Mode 3 spec routing explicit so pattern-match-from-prior-heavy-procedure habit doesn't over-apply.
+
+Pause-point P1 ready to fire. On green-light: Phase 6.1 begins — Mode 3 specs written directly as typed schema files, no per-spec sharpening, verify by typecheck + cross-reference.
+
+---
