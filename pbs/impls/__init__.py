@@ -26,12 +26,20 @@ Phase 6.1 thin-slice scope (per `BACKLOG.md` §222-§224):
   `pbs.substrate.TransportMode`; MCP-Server class only at Phase 6.1 per
   `BACKLOG.md` §223 (Email / Accounting / A2A-Peer / File-Sync per-class
   Surface Protocols + impls deferred to Phase 6.2)
+- `practitioner_shape_gate` — practitioner-shape quality-gate Implementation
+  satisfying `pbs.quality_gate.QualityGateProtocol` per `arch/quality-gate.md`
+  §4 per-implementation aspect; full engagement procedure (friction + nudge +
+  block + practitioner attestation + re-engagement); fail-closed
+  (defensibility-critical); stateful (cumulative engagement signals via
+  audit-trail-as-state-store reframe per §2.F); axis-3 PRIMARY (rubber-
+  stamping detection mandatory per §14 row 2) per `BACKLOG.md` §224 thin-
+  slice scope; autonomous-business / personal-OS / research-lab gate impls
+  deferred to Phase 6.2 per W1
 
 Phase 6.2 forthcoming impls (deferred per BACKLOG §242+): MS Agent Framework
 substrate; Email / Accounting / A2A-Peer / File-Sync per-class adapter impls;
-authority-binding mechanism; sparring sub-mechanism impls; practitioner-shape
-quality-gate impl; autonomous-business / personal-OS / research-lab gate
-impls.
+authority-binding mechanism; sparring sub-mechanism impls; autonomous-business
+/ personal-OS / research-lab gate impls.
 
 Foundation-up: imports from `pbs.<surface>` (Pattern A Protocols + manifests)
 to satisfy them concretely; impls are downstream of Surfaces.
