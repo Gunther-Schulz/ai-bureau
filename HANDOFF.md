@@ -703,6 +703,16 @@ Recommend `/clear` between batches per CLAUDE.md M5 — main session has accumul
 
 ---
 
+**Note 71: Phase 6.1 batch 3 — pbs/substrate.py written. SubstrateProtocol Pattern A Surface (7 capability categories §A-§G typed) + 10 substrate-emitted event classes (§8) + 9 SubstrateError categories (§11) + 3 supporting Pydantic models (SubstrateConfig / AgentRunResult / PermissionDecision / SessionContext / HookEvent) + 4 enums (TransportMode / DeploymentTier / HookEventKind / PermissionDecisionKind) + 2 sub-Protocols (SessionStore / HookHandle). mypy strict clean (6 files); smoke-test confirms config + events + error hierarchy + runtime_checkable Protocol.**
+
+Batch 3 of 7 complete. Substrate Protocol covers full §2 Surface + §10 lifecycle (from_config / is_ready / shutdown) + §11 error categories + §12 transport variation + §13 deployment-tier awareness. SpecialistDescriptor parameter typed `Any` pending pbs/manifests/specialist.py (Phase 6.1 batch 6).
+
+Outputs: `pbs/substrate.py` (~470 lines).
+
+Next batch: pbs/adapter.py (Adapter Pattern A; per-class Surface — META + per-integration-class for MCP-Server only in 6.1; other classes Email / Accounting / A2A-Peer / File-Sync deferred to Phase 6.2 per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE).
+
+---
+
 User asked proactive surface of remaining meta-process leaks before P1 fires. Found 3 candidates; applied Candidate 2 (Discipline 3 Mode 3 spec writing default-fire risk) — added explicit routine-cascade subsection per existing profile-anchored discriminator. Discipline 3 already had the discriminator (shape-specific → profile-anchored vs purely-structural-cascade → multi-axis principle-level); amendment makes Mode 3 spec routing explicit so pattern-match-from-prior-heavy-procedure habit doesn't over-apply.
 
 Pause-point P1 ready to fire. On green-light: Phase 6.1 begins — Mode 3 specs written directly as typed schema files, no per-spec sharpening, verify by typecheck + cross-reference.
