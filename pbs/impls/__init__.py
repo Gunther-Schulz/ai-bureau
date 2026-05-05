@@ -19,11 +19,19 @@ Phase 6.1 thin-slice scope (per `BACKLOG.md` §222-§224):
   practitioner-shape default policy (fail-closed) per `BACKLOG.md` §224
   thin-slice scope; autonomous-business / personal-OS shapes wire policies
   via config injection (Phase 6.2 alert + retry mechanics)
+- `mcp_server_adapter` — generic MCP-Server adapter Implementation satisfying
+  `pbs.adapter.McpServerAdapterProtocol` (which extends `AdapterProtocol`
+  META-Surface) per `arch/adapter.md` §3 + §4 per-implementation aspect;
+  reference impl spans in_process / subprocess / HTTP transports per
+  `pbs.substrate.TransportMode`; MCP-Server class only at Phase 6.1 per
+  `BACKLOG.md` §223 (Email / Accounting / A2A-Peer / File-Sync per-class
+  Surface Protocols + impls deferred to Phase 6.2)
 
 Phase 6.2 forthcoming impls (deferred per BACKLOG §242+): MS Agent Framework
-substrate; MCP-server adapter impl; authority-binding mechanism; sparring
-sub-mechanism impls; practitioner-shape quality-gate impl; autonomous-business /
-personal-OS / research-lab gate impls.
+substrate; Email / Accounting / A2A-Peer / File-Sync per-class adapter impls;
+authority-binding mechanism; sparring sub-mechanism impls; practitioner-shape
+quality-gate impl; autonomous-business / personal-OS / research-lab gate
+impls.
 
 Foundation-up: imports from `pbs.<surface>` (Pattern A Protocols + manifests)
 to satisfy them concretely; impls are downstream of Surfaces.
