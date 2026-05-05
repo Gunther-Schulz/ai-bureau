@@ -608,7 +608,7 @@ User triggered 2nd bildhauer pass on the framework rebuild trajectory + discipli
 C3 audit dispatched per Note 66 default-light regime: 1 sub-agent at xhigh, brief covered Lens 11-15 ARCH-specific + Lens 1-10 universal spot-checks + carryover signals from C2 + post-amendment residual check. Verdict CONFIRMS-LOCKED.
 
 **Outputs (single commit; pushed)**:
-- `<this commit hash>` C3 audit + 4 T3 inline cleanups (3 files)
+- `95ef632` C3 audit + 4 T3 inline cleanups (3 files)
 
 **Findings + cleanups**:
 - T3-1 (substrate-arch-topic.md:175): stale `HandRolledSubstrate` forward-reference in §Phase 6 spec list (Note 65 cascade-miss; DR §9 Files-touched didn't enumerate touching this DR). Fixed: forward-reference now matches post-amendment Implementation set.
