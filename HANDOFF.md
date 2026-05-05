@@ -528,7 +528,7 @@ Executed HANDOFF Note 64 step 4: hand-rolled drop amendment cascade as the FIRST
 User triggered 2nd bildhauer pass on the framework rebuild trajectory + discipline regime question. Pass surfaced: design-first strategy was right; procedure around the design accumulated meta-overhead doing something different than verifying design correctness (catching DOCUMENT-HYGIENE leaks, not architectural T1 problems). Empirically: 0 T1 across 14 cluster-executions; T2/T3 dominantly Lens 5 v0.2.x sharpening-tier label leakage + cross-cluster Lens 4 placeholder framings. Heavy ceremony for routine cascades = category-collapse applied recursively to meta-process (per `VISION.md`:207-209 category-collapse warning self-applied). User requested process revision in canonical docs BEFORE Phase 3.8 C3 audit fires under the revised lighter rule.
 
 **Outputs (single commit; pushed)**:
-- `<this commit hash>` Process revision: default-light + escalate-on-evidence procedure-rigor (5 file edits + 2 memory file edits)
+- `4ce69b8` Process revision: default-light + escalate-on-evidence procedure-rigor (5 file edits + 2 memory file edits)
 
 **Files touched**:
 - `CLAUDE.md` Cascade discipline section: M1 clarified (default = single sub-agent at xhigh); M2 substantially revised (Writer-Reviewer pattern + cluster-execution methodology = on-demand reference, never default ceremony; escalation triggered by T1 evidence OR substantive new ARCH topic OR explicit user request); M5 Ralph self-check composes with M2 only when escalation has fired; new "Per-shape application" trailing block (audit-checkpoint / Mode 3 / v1.x / doc-hygiene / done-criterion)
