@@ -44,6 +44,7 @@ from typing import Any, Literal, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from pbs.manifests.specialist import SpecialistDescriptor
 from pbs.types.event_base import AuditEventBase
 
 # ---------------------------------------------------------------------------
@@ -640,7 +641,7 @@ class SubstrateProtocol(Protocol):
     # §G Specialist registration
     # ------------------------------------------------------------------
 
-    async def register_specialist(self, descriptor: Any) -> None:
+    async def register_specialist(self, descriptor: SpecialistDescriptor) -> None:
         """Register specialist per `arch/substrate.md` §2.G + `arch/specialist-skill.md` §10.
 
         Translates substrate-neutral SpecialistDescriptor (per `glossary/
@@ -652,14 +653,19 @@ class SubstrateProtocol(Protocol):
         definitions written against SpecialistDescriptor work on any
         substrate impl).
 
-        Note: `descriptor` typed as `Any` pending pbs/manifests/specialist.py
-        SpecialistDescriptor manifest schema (Phase 6.1 forthcoming);
-        will refine to typed SpecialistDescriptor when manifest module
-        lands.
+        Per `arch/specialist-skill.md` §13 boot-time activation ordering:
+        substrate Surface §G translates SpecialistDescriptor → substrate-
+        native form at substrate-phase 4 step 4; per-skill registration
+        emits `SpecialistSkillRegistered` per step 5.
 
         Emits `SpecialistRegistered` audit event.
 
         Raises:
             RegistrationConflict: specialist id collision.
+            SpecialistManifestValidation: manifest fails schema validation
+                (per `pbs.manifests.specialist`).
+            SpecialistSubstrateClassPinViolation: descriptor's
+                `activation_prereqs.substrate_class_pinned` incompatible
+                with this substrate impl.
         """
         ...
