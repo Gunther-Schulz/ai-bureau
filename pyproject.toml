@@ -1,0 +1,34 @@
+[project]
+name = "pbs"
+version = "0.1.0"
+description = "PBS framework — Mode 3 Pydantic Protocol contracts + Mode 2 reference implementations (Phase 6.1 thin-slice)"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.8",
+    "pytest>=8.0",
+    "ruff>=0.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pbs"]
+
+[tool.mypy]
+strict = true
+python_version = "3.11"
+files = ["pbs"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "RUF"]

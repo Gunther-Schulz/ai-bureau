@@ -689,6 +689,20 @@ User surfaced after C3 audit landing: "309.6k tokens for C3 [audit] essentially 
 
 **Note 69: Discipline 3 Mode 3 spec routine-cascade default codified — `disciplines/03` clarifies Mode 3 Pydantic spec writing as routine-cascade-from-established-pattern (no default sharpening-skill fire per spec; on-demand only). Third meta-process leak removal this session. Single-file 5-line addition. Adopting Candidate 1 (shorter HANDOFF format) + Candidate 3 (no hash-placeholder follow-up commit) per organic-practice change going forward.**
 
+---
+
+**Note 70: Phase 6.1 begins — pbs/ Python package scaffolded; Foundation Mode 3 specs written (ActorKind enum + AuditEventBase + AuditProtocol + audit-internal events + 8 AuditError categories); mypy strict + smoke-test green.**
+
+Phase 6.1 P1 fired; Mode 3 spec writing begins per per-shape rule (direct schema-writing, no per-spec DR, no cluster-execution). Foundation-up batch 1 + 2 of proposed 7-batch sequence complete.
+
+**Outputs**: scaffold (`pyproject.toml` + `pbs/` package layout w/ `pbs.types` + `pbs.audit`); `pbs/types/actor_kind.py` (HUMAN / AI_RUNTIME / EXTERNAL StrEnum per `glossary/actor.md`); `pbs/types/event_base.py` (AuditEventBase frozen Pydantic model — actor_kind/actor_id/event_kind/timestamp/session_id/work_unit_id/workflow_instance_id/claim_id/substrate_kind/prev_hash/details fields per `arch/audit.md` §2.A + §2.D + §8); `pbs/audit.py` (4 audit-internal event classes + 8 AuditError categories + AuditProtocol typing.Protocol with §A emit + §C 5 query primitives + §D verify_integrity + §F render_state + §G export). Verified: `uv run mypy pbs` strict clean (5 files); smoke-test confirms frozen models + Literal discriminator enforcement.
+
+**Next batches (foundation-up order from prior proposal)**: pbs/substrate.py (7 capability categories §A-§G) → pbs/adapter.py (META + per-class for MCP-Server only in 6.1) → pbs/sparring.py + pbs/quality_gate.py (mechanism-class + Pattern A) → pbs/manifests/* (specialist / practitioner / workflow / work_unit / workspace / claim).
+
+Recommend `/clear` between batches per CLAUDE.md M5 — main session has accumulated bildhauer 2-pass + 3 process revisions + C3 audit + Foundation specs context. Fresh context for next batch (substrate.py) keeps brief focused.
+
+---
+
 User asked proactive surface of remaining meta-process leaks before P1 fires. Found 3 candidates; applied Candidate 2 (Discipline 3 Mode 3 spec writing default-fire risk) — added explicit routine-cascade subsection per existing profile-anchored discriminator. Discipline 3 already had the discriminator (shape-specific → profile-anchored vs purely-structural-cascade → multi-axis principle-level); amendment makes Mode 3 spec routing explicit so pattern-match-from-prior-heavy-procedure habit doesn't over-apply.
 
 Pause-point P1 ready to fire. On green-light: Phase 6.1 begins — Mode 3 specs written directly as typed schema files, no per-spec sharpening, verify by typecheck + cross-reference.
