@@ -9,7 +9,10 @@ load_on_demand: true
 
 When `coherence-audit` skill fires across Phase 3-6 work. Codifies WHEN audits run (vs `coherence-audit` SKILL.md which codifies HOW).
 
-## 5 hard checkpoints (scheduled in BACKLOG.md per Phase)
+## 5 natural checkpoint moments (available on-demand; default-skip per cadence-default-skip rule)
+
+These are NATURAL MOMENTS at phase boundaries where an audit MAY add value. They are NOT cadence-mandated. **Default = skip; fire on-demand only when specific architectural concern surfaces OR user requests**. Empirical grounding: 0 T1 across C1 + C2 + C3 + 14 cluster-executions; C3 (2026-05-05) returned 0 T1 + 0 T2 + 4 T3 doc-hygiene at ~309k tokens — insurance premium not warranted by default given empirical 0-T1 base rate. Cadence-as-mandatory was a meta-process leak (parallel to heavy-procedure-as-default-leak per `MAINTENANCE.md` Procedure-rigor discipline subsection).
+
 
 | # | When | Scope | Purpose |
 |---|---|---|---|
@@ -44,7 +47,7 @@ Skill defines HOW (10 universal lenses + corpus-specific 11-18); this discipline
 
 **Multi-cascade audit-checkpoint shape** (per Note 62 C2 4-parallel auditor + 4-cascade-application precedent: GLOSSARY auditor + ARCH auditor + DR-set auditor + carryover-signals evaluator + 4-cascade Step 5 cascade-aware revision application) **stays available as reference pattern** for T1 escalation OR explicit user request; **NOT default**. Heavy ceremony applied to routine doc-hygiene findings is methodology-as-default-leak per `MAINTENANCE.md` Procedure-rigor discipline subsection.
 
-**C3 + future C4/C5 fire under default-light** unless escalation triggered. The done-criterion for design phase per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: design is done when (a) single-pass C3 audit clean (b) ~11 Mode 3 specs written and typecheckable (c) Pydantic schemas cross-reference cleanly. Then implementation begins.
+**C3 fired 2026-05-05 (verdict CONFIRMS-LOCKED; per HANDOFF Note 67); future C4/C5 default-skip unless specific architectural concern surfaces OR user requests**. The done-criterion for design phase per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: design is done when (a) ~11 Mode 3 specs written and typecheckable + (b) Pydantic schemas cross-reference cleanly. Then implementation begins. (C3 audit removed from done-criterion per cadence-default-skip rule; was mandatory under prior cadence-required state.)
 
 **Empirical grounding**: 0 T1 across C1 + C2 + 14 cluster-executions per HANDOFF Notes 61-65 cross-execution pattern signal tracking. T2/T3 findings at C2 (per Note 62 verdict shape) clustered at signal (b) cross-cluster Lens 4 carryover + signal (c) Phase 3.5 Lens 5 v0.2.x systemic leakage + signal (d) DR provenance-hygiene + signal (e) Discipline 11 plan-deviation correction — all DOCUMENT-HYGIENE class catchable by single xhigh auditor; the 4-parallel multi-cascade did not surface a different finding-class. Pattern-recurrence at C3 expected: doc-hygiene findings, not architectural correctness findings.
 

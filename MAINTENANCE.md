@@ -236,14 +236,11 @@ In-scope artifacts:
 
 ### Rigor preservation across thin-slice
 
-Phase 6.1 narrower scope does NOT mean lighter discipline. Per `disciplines/09-coherence-audit-cadence.md` cadence:
-- C3 phase-boundary audit fires before Phase 6.1 substantive work begins (Lenses 11-15 ARCH-specific activation)
-- Per Mode 3 spec gets `pre-implementation-sharpening` skill treatment (not skipped or compressed)
-- Writer-Reviewer + Cascade pattern preserved per spec + per Mode 2 reference impl
-- C4 pre-implementation audit fires before Mode 2 reference impl work begins
-- C5 post-Phase-6.1 close audit before declaring v1.0-runtime-thin-slice locked
-- Greenfield evaluation of archived material per Discipline 10
-- Profile-anchored validation per Discipline 3 when L1-L4 producer profiles surface gaps
+Phase 6.1 narrower scope does NOT mean lighter discipline (architectural rigor preserved); does mean lighter PROCEDURE per `MAINTENANCE.md` Procedure-rigor discipline subsection + `disciplines/09-coherence-audit-cadence.md` cadence-default-skip rule:
+- Mode 3 specs written directly per spec (typecheck + cross-reference verification = the audit; no per-spec DR; no cluster-execution; no `pre-implementation-sharpening` skill default-fire — apply on-demand only when specific concern surfaces)
+- C3 fired 2026-05-05 verdict CONFIRMS-LOCKED (per HANDOFF Note 67); C4 + C5 default-skip per cadence-default-skip rule; fire on-demand only when specific architectural concern surfaces OR user requests
+- Greenfield evaluation of archived material per Discipline 10 (on-trigger; not cadence-mandated)
+- Profile-anchored validation per Discipline 3 when L1-L4 producer profiles surface gaps (on-evidence; not cadence-mandated)
 
 ### v1.x amendment cadence (post-thin-slice-lock)
 
@@ -255,7 +252,7 @@ Two structural pause-points anchor the thin-slice → production sequence — an
 
 **P1 — Architectural-foundation-clean** (fires at Phase 3.8 close + post-amendment corpus stable):
 
-- **Mechanical criteria**: Phase 3.8 C3 audit clean OR user-confirmed-acceptable findings + post-amendment corpus stable (hand-rolled drop amendment + any C3-surfaced remediation landed)
+- **Mechanical criteria**: post-amendment corpus stable (hand-rolled drop amendment + any architectural-concern remediation landed); audit-checkpoints available on-demand + default-skip per `disciplines/09-coherence-audit-cadence.md` cadence-default-skip rule (C3 fired 2026-05-05 returned CONFIRMS-LOCKED per HANDOFF Note 67; not required by mechanical criteria going forward)
 - **Declaration**: explicit HANDOFF Note "Architectural foundation clean" + commit subject convention `Architectural foundation clean — Phase 3.8 close + post-amendment corpus stable`
 - **Pause type**: LIGHT (procedural confirmation)
 - **AI surface**: "Phase 6.1 substantive work unblocked; pre-6.1 sanity check moment if any concerns surface"

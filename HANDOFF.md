@@ -642,3 +642,47 @@ C3 audit dispatched per Note 66 default-light regime: 1 sub-agent at xhigh, brie
 - Phase 3 architectural surface CONFIRMS-LOCKED at Phase 3.8 C3 close
 
 ---
+
+**Note 68: Cadence-default-skip rule codified — audit-checkpoints (C4 / C5 / future) default-skip + on-demand-fire only; user-frustration-grounded second meta-process leak removal (cadence-as-mandatory-leak); 3-file revision (disciplines/09 + MAINTENANCE.md + BACKLOG.md) main-session direct edit per per-shape rule (sub-5-line per file)**
+
+User surfaced after C3 audit landing: "309.6k tokens for C3 [audit] essentially confirmed minor reference to hand-rolled drop... lots of ceremony for nothing essentially". Honest re-evaluation: C3 surfaced 1 useful cascade-miss + 3 cosmetic residuals + verification-confirms; architectural validation real but at poor cost ratio given 0-T1 empirical base rate. Diagnosed second meta-process leak: even default-light regime kept cadence-as-mandatory; cadence drove unnecessary work regardless of evidence. Codified cadence-default-skip rule before Phase 6.1 starts.
+
+**Outputs (single commit; pushed)**:
+- `<this commit hash>` Cadence-default-skip rule (disciplines/09 + MAINTENANCE.md P1 + Rigor-preservation + BACKLOG §3.8 + Coherence-audit checkpoints subsection)
+
+**Decision-shape codified**:
+- Audit-checkpoint cadence (C1-C5 in Discipline 9) reframed: 5 NATURAL CHECKPOINT MOMENTS (not cadence-mandated). Default = skip; fire on-demand only when specific architectural concern surfaces OR user requests.
+- Empirical grounding: 0 T1 across C1 + C2 + C3 + 14 cluster-executions. C3 (2026-05-05) returned 0 T1 + 0 T2 + 4 T3 doc-hygiene at ~309k tokens. Insurance premium not warranted by default given empirical 0-T1 base rate.
+- C3 fired 2026-05-05 under prior cadence-required state (last cadence-mandated audit). C4 + C5 default-skip going forward.
+- P1 mechanical criteria revised: "no specific architectural concern surfaced; audit-checkpoints available on-demand" (was: "C3 audit clean OR user-confirmed-acceptable findings").
+- Done-criterion for design phase revised: design done when (a) Mode 3 specs typecheckable + (b) Pydantic schemas cross-reference cleanly. C3 audit removed from done-criterion.
+
+**Files touched** (3 files; sub-5-line per file substantive edits):
+- `disciplines/09-coherence-audit-cadence.md` — header reframe ("5 hard checkpoints" → "5 natural checkpoint moments; available on-demand; default-skip"); C3+C4+C5 procedure subsection updated to reflect cadence-default-skip + C3-fired-2026-05-05 status
+- `MAINTENANCE.md` — P1 mechanical criteria revised; Rigor preservation across thin-slice subsection updated (Mode 3 specs direct-writing default; C3 fired CONFIRMS-LOCKED; C4 + C5 default-skip)
+- `BACKLOG.md` — §3.8 reframed (C3 fired 2026-05-05 verdict CONFIRMS-LOCKED; cadence revision triggered); Coherence-audit checkpoints subsection (C3 marked resolved; C4 + C5 marked default-skip on-demand-only)
+
+**Result shape**: 0 T1 + 0 T2 + 0 T3 (mechanical reframing of locked-decision). 0 hook blocks. Main-session direct edit per per-shape rule (sub-5-line per file × 3 files; below sub-agent threshold). ~6 edits across 3 files. Demonstrates next-layer-down meta-process leak removal.
+
+**Pause-point P1 STILL READY TO FIRE** under revised mechanical criteria:
+- Post-amendment corpus stable: hand-rolled drop landed (Note 65) + process-revision landed (Note 66) + C3 audit + cleanup landed (Note 67) + cadence-default-skip codified (Note 68) ✓
+- No specific architectural concern surfaced ✓
+- Audit-checkpoints available on-demand + default-skip per revised cadence ✓
+- P1 LIGHT pause = procedural confirmation; on user green-light → Phase 6.1 begins (Mode 3 spec writing per per-shape rule: direct schema-writing, no per-spec DR, no cluster-execution).
+
+**To resume next session OR continue same-session post-P1 green-light**:
+1. P1 surfaces; await green-light OR skip-signal.
+2. On green-light: Phase 6.1 begins. Mode 3 specs written directly as typed Pydantic schema files. Verify by typecheck + cross-reference. Done when typecheck + cross-reference clean.
+3. After Mode 3 specs: Phase 6.1 Mode 2 reference impls + items 1-5 deployment-instance content (in deployment-instance repo).
+4. P2 fires at Phase 6.1 close (HARD pause: testing-approach decision-design required).
+5. Branch: `step-back-evaluation` ahead of main; merge to main when Phase 6.1 (or earlier user-judgment) validates revised regime.
+
+**What is NOT lost**:
+- C1 + C2 + C3 audit history preserved (C3 verdict CONFIRMS-LOCKED + 4 T3 cleanups landed + Lens 11-15 PASS)
+- Audit-checkpoints AVAILABLE as on-demand tools (not retired; just default-skip)
+- Empirical evidence basis for cadence-default-skip (0 T1 across 15 dispatches now)
+- All ARCH topics + GLOSSARY + DRs + disciplines unchanged structurally
+
+**Pattern signal**: this is the SECOND meta-process leak removal in this session. Note 66 removed heavy-procedure-as-default-leak (catching doc-hygiene at cluster-execution cost). Note 68 removes cadence-as-mandatory-leak (audit-checkpoints firing regardless of evidence). Both leaks were instances of category-collapse applied recursively to meta-process per VISION.md:207-209. Same pattern; different layer. Suggests further leaks may exist; surface as observed.
+
+---
