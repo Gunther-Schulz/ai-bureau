@@ -96,16 +96,15 @@ Any agentic-runtime that can satisfy the Surface qualifies. Pattern level is sub
 
 ### Current instance set (CIRCA 2026)
 
-Three concrete substrate Implementations (per `substrate-agentic-framework.md` archive + `substrate-protocol-design.md` archive):
+Two concrete substrate Implementations (per `substrate-agentic-framework.md` archive + `substrate-protocol-design.md` archive; cardinality satisfies Pattern A ≥2 implementations discriminator per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE Pattern A row):
 
 - **Claude Agent SDK** (Anthropic) — primary substrate; Anthropic ecosystem alignment by construction; deepest MCP integration; SKILL.md format native; RunHooks lifecycle; pioneer (PBS-Schulz) deployment per `profiles/L5a-planner-pbs-schulz.md` line 88
 - **MS Agent Framework** (Microsoft) — second substrate; multi-provider connectors; 3-layer middleware; workflow engine + checkpointing; Agent Skills uses SKILL.md format
-- **Hand-rolled (Python + MCP + Pydantic)** — Tier 1 fallback; minimal direct implementation; baseline for substrate-pluggability validation
 
 ### Per-implementation declares
 
 Each Implementation declares:
-- **Substrate identity** (id; e.g., `claude_agent_sdk` / `ms_agent_framework` / `hand_rolled_tier1`)
+- **Substrate identity** (id; e.g., `claude_agent_sdk` / `ms_agent_framework`)
 - **Surface satisfaction** (claim + impl mapping each Surface capability category to native primitives)
 - **Supported extension Protocols** (typed extension Protocol(s) the impl implements)
 - **Configuration schema** (per-impl config — Pydantic; Phase 6)
@@ -232,7 +231,7 @@ Per `profiles/L8-auditor-reviewer-posthoc.md` line 29 ("Audit-trail integrity mu
 |---|---|---|
 | Substrate Implementations per workspace | 1 | `workspace.md` `substrate:` field declares; framework-level 1:1 with workspace |
 | Running Instance per workspace | 1 | Bound at workspace boot; one process boundary at framework level (multi-tenant isolation = impl-internal) |
-| Implementations per Framework C catalog | N | Multiple distributable definitions; current set: Claude Agent SDK / MS AF / hand-rolled |
+| Implementations per Framework C catalog | ≥2 | Multiple distributable definitions; current set: Claude Agent SDK + MS AF (Pattern A ≥2 implementations discriminator preserved per `MAINTENANCE.md` TOP-LEVEL ARCHITECTURE Pattern A row) |
 | Per-substrate extension Protocols per Implementation | N (per-substrate variability) | Each impl declares which extension Protocols it satisfies |
 
 ### Lifecycle ownership
@@ -323,7 +322,6 @@ MCP server registration supports multiple transports as first-class peers (NOT i
 
 - Claude Agent SDK substrate: native in-process (`create_sdk_mcp_server`) + subprocess + HTTP
 - MS Agent Framework substrate: subprocess + HTTP native; in-process registration falls back to subprocess (emits `mcp_server_registration_fallback` audit event with details)
-- Hand-rolled substrate: subprocess + HTTP minimum; in-process per-impl-decision
 
 Transport registration is explicit per call (not implicit-default) — caller declares transport at registration time. Substrate may degrade transport per per-impl support (fallback emits audit event for traceability).
 
@@ -385,6 +383,8 @@ This topic articulates substrate as Pattern A protocol per locked GLOSSARY entry
 - `archive/docs/decisions/substrate-agentic-framework.md` — substrate evaluation; 4-survivor recommendation (Claude Agent SDK + MS AF + Strands + hand-rolled); pattern-vs-instance reframing of Tier 3
 - `archive/docs/decisions/sdk-deep-read.md` — SDK code-level verification; substrate Protocol surface refinement; per-substrate extension Protocols pattern formalization
 
+The current Implementation set narrowed to Claude Agent SDK + MS AF per `docs/decisions/substrate-hand-rolled-drop.md` (thin-slice v1.0-runtime scope-narrowing; first v1.x ARCH amendment to fire post-Phase-3.7 v1.x re-tag). Hand-rolled Implementation no longer in the current set; future re-introduction fires as separate v1.x amendment per evidence trigger.
+
 Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays shape-neutral / archetype-neutral / pioneer-neutral. Pioneer (PBS-Schulz / Claude Agent SDK) reality grounds the substrate primitive (per `profiles/L5a-planner-pbs-schulz.md` line 88, 126) without leaking pioneer specifics into the Surface contract.
 
 ## 18. Phase routing
@@ -393,7 +393,7 @@ Per `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES §2: substrate Surface stays sh
 |---|---|---|
 | Architectural shape (this topic) | 3.4 | LOCKED |
 | Pydantic Protocol contract | 6 | Mode 3 spec; Surface category typing; SubstrateError class hierarchy; supporting Pydantic types (TransportMode / DeploymentTier / SubstrateConfig / HookEvent / etc.) |
-| Concrete substrate implementations | 6 | ClaudeAgentSDKSubstrate full impl; MSAgentFrameworkSubstrate full backend; HandRolledSubstrate fallback impl |
+| Concrete substrate implementations | 6 | ClaudeAgentSDKSubstrate full impl; MSAgentFrameworkSubstrate full backend |
 | Pre-implementation operational concerns (cancellation / timeouts / rate-limit / health / per-tenant / streaming) | 6 | Pre-implementation sharpening at #9 implementation-start; per-implementation-sharpening skill applies |
 | Per-impl extension Protocols (ClaudeAgentSDKExtensions / MSAgentFrameworkExtensions) | 6 | Designed alongside Substrate Protocol; each impl satisfies Surface + declares extension Protocols |
 | Substrate identity portability across migrations | 6 | Workspace identity portability spec; backup/restore/migration mechanics |

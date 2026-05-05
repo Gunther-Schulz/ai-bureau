@@ -430,3 +430,95 @@ Executed mid-session user-flagged "shouldn't we persist what we just decided fir
 **Phase 3 status post-this-session**: Phase 3.0-3.6 LOCKED. Phase 3.7 re-tagged v1.x non-sequential. Phase 3.8 C3 PENDING (next sequential). Phase 6.1 / 6.2 SCOPED. v1.x amendment candidates parked.
 
 ---
+
+**Note 65: Hand-rolled substrate Implementation drop amendment cascade — FIRST v1.x ARCH amendment to fire post-Phase-3.7 v1.x re-tag; Implementation set 3 → 2 (Claude Agent SDK + MS Agent Framework); Pattern A ≥2 implementations discriminator preserved; Pattern A 12+7 topic-template-class FORMAL STABILITY UNAFFECTED; 3-sub-agent dispatch sequence (Writer + Reviewer + Cleanup-Writer); Reviewer xhigh subtle-breadcrumb-detection caught 2 unflagged residuals at PRIMARY edit site arch/substrate.md §12 + §18 (T2 cascade-miss pattern matching Phase 3.5/3.6 cross-execution observation); Wave-2.5 Cleanup-Writer applied 3-edit cleanup (T2-1 §12 + T2-2 §18 + DR §9 Files-touched scope expansion); cross-corpus sweep CLEAN against acceptable-residuals list; cross-execution pattern continues (0 T1 across 14 cluster-executions including this v1.x amendment); Phase 3.8 C3 phase-boundary audit UNBLOCKED for next dispatch sequence; Pause-point P1 (architectural-foundation-clean) fires at C3 close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points**
+
+Executed HANDOFF Note 64 step 4: hand-rolled drop amendment cascade as the FIRST v1.x ARCH amendment to fire post-Phase-3.7 v1.x re-tag. Decision-shape pre-locked at chat per Note 64 #4 + persisted to MAINTENANCE.md TOP-LEVEL MILESTONE STRUCTURE line 186 ("hand-rolled dropped per concurrent amendment"). Mechanical scope-narrowing within stable Pattern A topic; no Round 1/Round 2 sharpening triggered per `decision-design-sharpening` skill scope. Per CLAUDE.md M3 sub-agent-first cascade discipline: Writer + Reviewer + Cleanup-Writer in fresh contexts; main session orchestrates only.
+
+**Outputs (this cluster's commit; pushed to origin/main)**:
+- `<this commit hash>` Hand-rolled substrate Implementation drop amendment cascade — first v1.x ARCH amendment + NEW DR + 3 ARCH topic edits
+
+**Files touched (single commit-bundle)**:
+- `arch/substrate.md` — §4 Per-implementation aspect (narrative 3 → 2 + Pattern A ≥2 discriminator preservation note + identity example list `hand_rolled_tier1` drop) + §9 Cardinality + lifecycle table (N → ≥2 + Pattern A discriminator note) + §12 Per-impl transport support varies (hand-rolled bullet drop) + §17 Decision-design provenance amendment-note (historical archived-source citation kept INTACT + follow-up paragraph cross-referencing NEW DR) + §18 Phase routing concrete-impls row (HandRolledSubstrate strike)
+- `arch/specialist-skill.md` — §2.2 skill-loading-via-substrate Surface §G integration paragraph (drop hand-rolled portion of per-substrate materialization examples) + §14 W2 cross-substrate skill-portability watch-list (drop "or hand-rolled" from second substrate deployment options)
+- `arch/scope-model.md` — §2.1 Framework C member catalog substrate definitions list (drop hand-rolled)
+- `docs/decisions/substrate-hand-rolled-drop.md` (NEW; first v1.x ARCH amendment DR) — Layer 4 DR template 10-section conformance per `MAINTENANCE.md` Layer 4 (Status / Owner / Related / Context / Decision / Sharpening provenance / Composition with existing architecture / Constraints flowing to downstream commitments / Files touched / Revisit triggers); §6 Sharpening provenance thin-by-design (chat-locked at Note 64 #4; profile-cluster validation N/A; GLOSSARY back-check CLEAN; cross-corpus sweep CLEAN; decision-design-sharpening skill explicitly NOT triggered per skill scope); §10 Revisit triggers compose with PydanticAI W5 watch-list candidate per Note 64 #8
+
+**Result shape**: **0 T1 + 0 T2 (Wave-1 Writer cascade) + 0 T3 + T4 verifications across Wave-1 Writer report; 0 T1 + 2 T2 (T2-1 arch/substrate.md:325 §12 hand-rolled bullet + T2-2 arch/substrate.md:397 §18 HandRolledSubstrate fallback impl strike — both unflagged residuals at PRIMARY edit site Wave-1 Writer enumeration missed) + 0 T3 + multiple T4 verifications across Wave-1 Reviewer xhigh audit; 0 T1 + 0 T2 + 0 T3 across Wave-2.5 Cleanup-Writer (mechanical 3-edit application + DR §9 Files-touched scope expansion); 0 hook blocks at Cleanup-Writer first-attempt edits (Wave-1 Writer had 2 hook blocks resolved by satisfying prep-Read requirements per `feedback_hooks_are_structural.md`).** All 4 substantive cascade-application positions survived sub-agent dispatches faithfully; Pattern A ≥2 implementations discriminator preserved (2 ≥ 2 explicit at §4 + §9); Pattern A 12+7 topic-template-class FORMAL STABILITY UNAFFECTED (template structure independent of Implementation cardinality; 3 of 3 Pattern A instances complete with Phase 3.6 close survives this amendment cleanly).
+
+**Cross-execution pattern signal (corpus-stable across 14 cluster-executions including this v1.x amendment)**:
+- Phase 3.1 (4 DRs): 0 T1 + 0-2 T2 + ~10 T3
+- Phase 3.2 (2 DRs): 0 T1 + 2 T2 + ~13 T3
+- Phase 3.4 substrate+adapter (4 artifacts v2-audit): 0 T1 + 5 T2 + 17 T3 + 35 T4
+- Phase 3.4 sparring+audit (4 artifacts v2-audit): 0 T1 + 3 T2 + 8 T3 + 21 T4 + 4 T3 cleanup
+- Phase 3.5 specialist-skill (2 + 11+3 cascade): 0 T1 + 1 T2 + 2 T3 + 13 T4
+- Phase 3.5 practitioner (2 + 11+2 cascade): 0 T1 + 0 T2 + 4 T3 + 15 T4
+- Phase 3.5 workflow-work-unit (2 + 13+1 cascade): 0 T1 + 0 T2 + 2 T3 + 36 T4
+- Phase 3.5 claim-defensibility (2 + 16+4 cascade): 0 T1 + 0 T2 + 5 T3 + 49+ T4
+- Phase 3.5 scope-model (2 + 17+3 cascade): 0 T1 + 0 T2 + 5 T3 + 46 T4
+- Phase 3.5 axis-interactions (2 + 26+8 cascade): 0 T1 + 0 T2 + 6 T3 + 24+ T4
+- Coherence-audit C2 audit-checkpoint shape (4+4 sub-agents): 0 T1 + 0 T2 + 5 T3 + multiple T4
+- Phase 3.6 quality-gate (2 + 22+4 cascade): 0 T1 + 0 T2 + 3 T3 + 21+ T4
+- **Phase 3.7 hand-rolled-drop v1.x ARCH amendment (3-file cascade + NEW DR + Wave-2.5 cleanup): 0 T1 + 2 T2 (Reviewer xhigh subtle-breadcrumb-detection caught Wave-1 Writer cascade-miss at §12 + §18 PRIMARY edit site) + 0 T3 + multiple T4 across all sub-agent reports**
+- **Pattern continues**: substantive architecture survives across 14 cluster-executions including this first v1.x amendment shape; 0 T1 across all 14; Reviewer xhigh subtle-breadcrumb-detection per Discipline 11 codification + Lens 5 v0.2.2 requirement empirically validated AGAIN (catches Wave-1 Writer enumeration-miss at PRIMARY edit site); methodology composability further validated for v1.x ARCH amendment shape (mechanical cascade-application of pre-locked decision; no Round 1/Round 2 sharpening; Writer + Reviewer + Cleanup-Writer 3-sub-agent dispatch shape works at v1.x amendment scale)
+
+**Substantive architectural commitments locked (chat-pre-locked at Note 64 #4; persisted via this cascade)**:
+
+1. **Hand-rolled substrate Implementation dropped** — current Implementation set narrows from {Claude Agent SDK, MS Agent Framework, hand-rolled} → {Claude Agent SDK, MS Agent Framework}; cardinality narrows from 3 → 2 concrete Implementations.
+
+2. **Pattern A ≥2 implementations discriminator preserved** — 2 ≥ 2 satisfies the discriminator per `MAINTENANCE.md` line 100 Pattern A row; explicit preservation note cited in `arch/substrate.md` §4 narrative + §9 Cardinality table.
+
+3. **Pattern A 12+7 topic-template-class FORMAL STABILITY UNAFFECTED** — template structure is structural-shape; Implementation cardinality independent. 3 of 3 Pattern A instances complete with Phase 3.6 close (substrate anchor + adapter + quality-gate) survives this amendment cleanly.
+
+4. **First v1.x ARCH amendment DR established** — `docs/decisions/substrate-hand-rolled-drop.md` is the FIRST v1.x ARCH amendment to fire post-Phase-3.7 v1.x re-tag. Establishes DR-shape pattern for future v1.x amendments: Layer 4 DR template 10-section conformance + §6 Sharpening provenance thin-by-design when chat-locked + cardinality preservation explicit + revisit triggers compose with watch-list candidates per evidence trigger pattern. Future v1.x amendments inherit this shape.
+
+5. **Phase 6.1 reference impl architectural surface consistency** — `arch/substrate.md` Implementation set now consistent with `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE Phase 6.1 in-scope artifact "Mode 2 reference substrate impl: Claude Agent SDK only". Pre-amendment state had architectural surface (3 Implementations) + milestone scope (Claude Agent SDK only Phase 6.1; + MS AF Phase 6.2; hand-rolled excluded) inconsistent; post-amendment state is consistent.
+
+6. **PydanticAI W5 watch-list candidate composition orthogonal** — PydanticAI Round 1 verdict per Note 64 #8 ("NOT a substrate per locked Surface; W5 watch-list candidate") parked as separate future v1.x amendment to `arch/substrate.md` §16 watch-list when PydanticAI maturity reaches ≥5 of 7 Surface categories OR concrete deployment-instance evidence surfaces. This DR's Revisit triggers compose with W5 candidate; orthogonal axis.
+
+**Methodology applied (M3-M7 self-applied)**:
+- M3 sub-agent-first: 3 sub-agents in fresh contexts (Writer + Reviewer + Cleanup-Writer); main session as orchestrator only; all architectural artifacts (arch/* + docs/decisions/* + ARCHITECTURE potential touch) delegated to sub-agents
+- M4 Writer-Reviewer pattern: applied per-Wave (Wave-1 Writer + Wave-1 Reviewer separate dispatches preserving author/judge separation; Wave-2.5 Cleanup-Writer composite role per Note 56-63 Reviewer-compose pattern)
+- M5 /clear discipline: NOT triggered mid-cluster (cascade ran end-to-end without context-budget breach); /clear recommendation at HARD STOP for next-session start IF user prefers fresh context for Phase 3.8 C3 audit (alternative: continue same-session into C3 dispatch sequence per multi-cascade audit-checkpoint shape per Note 62 precedent)
+- M6 HARD STOP at logical-unit boundary (hand-rolled drop cluster CLOSED; Phase 3.7 v1.x amendment cadence FIRST instance complete); next logical unit = Phase 3.8 C3 phase-boundary audit
+- M7 Ralph self-check: each sub-agent confirmed at completion; main-session checks at Wave + cluster boundaries
+- Hook (`architectural_commit_gate`) behavior: 2 PreToolUse blocks at Wave-1 Writer first Edit attempts (resolved by satisfying prep-Read requirements per hook design — read decision-design-sharpening SKILL.md + profiles/INDEX.md + ≥3 cluster member profile files; read 3 cited archive files for §17 amendment edit per Discipline 10 greenfield-evaluation requirement); 0 hook blocks at Wave-1 Reviewer (read-only audit) + Wave-2.5 Cleanup-Writer (prep-Reads sufficient on first attempt). Hook working as designed per `feedback_hooks_are_structural.md`.
+- Per `feedback_judgment_and_automate.md` + scope-bounded autonomous authority grant matching Note 58/59/60/61/62/63 user-grant pattern: minimal user pickup directive ("Continue per HANDOFF Note 64 step 4 — hand-rolled drop amendment cascade next, then Phase 3.8 C3 audit") interpreted as scope-bounded autonomous authority through cascade execution; effort-level commitment explicit (HIGH Wave-1 Writer + xhigh Wave-1 Reviewer + HIGH Wave-2.5 Cleanup-Writer per `feedback_effort_level_clarity.md`); `decision-design-sharpening` skill NOT triggered per skill scope (decision-formation moment was at chat Note 64; this cascade is application).
+
+**Process learnings surfaced**:
+
+**NEW process-learning observation (Reviewer xhigh subtle-breadcrumb-detection caught Wave-1 Writer enumeration-miss)**:
+- Wave-1 Writer brief enumerated edit sites from pre-dispatch grep (lines 108 + 235 + 385 of arch/substrate.md among others); Writer applied 5-edit cascade to arch/substrate.md (§4 + §9 + §17) but missed §12 + §18 — both contain canonical content with hand-rolled as current Implementation
+- Wave-1 Reviewer at xhigh per Discipline 11 step 16 codification + Lens 5 v0.2.2 subtle-breadcrumb-detection requirement applied independent grep-within-file at PRIMARY edit site arch/substrate.md; caught T2-1 + T2-2 unflagged residuals
+- Empirical evidence: Wave-1 Reviewer xhigh effort-level NON-NEGOTIABLE when PRIMARY edit site is multi-section + cascade brief enumerates per-section (vs full-file scrutiny); enumeration-miss at Writer is recurring pattern; subtle-breadcrumb-detection at Reviewer xhigh is the safety net
+- Compose with: Discipline 11 step 16 codification (Wave-1 Reviewer effort cannot downshift from xhigh because Lens 5 subtle-breadcrumb detection is the load-bearing reason); cross-execution pattern signal (T2 = 2 at this v1.x amendment cluster vs T2 = 0 at Phase 3.6 quality-gate cluster)
+- Suggested codification refinement candidate (post-C3): when cascade brief enumerates per-section edit sites at PRIMARY file, Wave-1 Reviewer brief should explicitly require independent grep-within-file at PRIMARY edit site as Lens 4-cross-corpus-within-file verification step; current Lens 4 framing is cross-corpus (across-files) which scopes-out within-file enumeration-completeness verification
+
+**POSITIVE observations**:
+- 0 T1 across all 3 sub-agent reports + cross-execution pattern continues (14 cluster-executions; 0 T1 across all)
+- User-grant of autonomous authority pattern Note 58 codification reproduced (6th consecutive) — minimal pickup directive interpreted as scope-bounded autonomous authority; HIGH/xhigh/HIGH effort-level commitments explicit per `feedback_effort_level_clarity.md`
+- `feedback_persist_frame_before_cascade.md` discipline (Note 64 codification) successfully applied: chat-locked decision (Note 64 #4) was persisted in canonical docs (MAINTENANCE.md TOP-LEVEL MILESTONE STRUCTURE) BEFORE this cascade fired; cascade-application proceeded against persisted frame without orphan-cascade-without-frame state
+
+**To resume next session OR continue same-session**:
+
+1. `/reload-plugins` if next-session — activates hook (architectural_commit_gate); SKIP if continuing same-session
+2. Read CLAUDE.md (auto if next-session) + this Note 65
+3. **`/clear` decision point**: recommend `/clear` between hand-rolled drop cluster close + Phase 3.8 C3 audit dispatch IF user prefers fresh context (natural cascade boundary per CLAUDE.md M5 — main session has accumulated 3-sub-agent dispatch context this cluster); alternative continue same-session into C3 multi-cascade dispatch sequence per multi-cascade audit-checkpoint shape per Note 62 precedent
+4. **No NON-BLOCKING follow-ups remain from this cluster-execution** — all Wave-1 Reviewer findings + Cleanup-Writer applications reconciled; cross-corpus sweep CLEAN; cluster CLOSED
+5. **Carryover follow-ups from prior sessions**: NONE — Note 64 documented zero remaining; this Note adds zero NEW follow-ups
+6. **Next substantive option** (per HANDOFF Note 64 step 4 + this Note 65 close): **Phase 3.8 C3 phase-boundary audit** (multi-cascade audit-checkpoint shape per Note 62 precedent; full ARCH-specific Lenses 11-15 activation: Inter-layer consistency / Specs traceability / Architectural protocol completeness / DR coverage gap / Granularity match). Per `disciplines/09-coherence-audit-cadence.md` cadence post-Phase-3.6 close; UNBLOCKED with hand-rolled drop amendment landed (post-amendment corpus stable per `MAINTENANCE.md` Pause-point P1 mechanical criteria).
+7. **Pause-point P1 (architectural-foundation-clean) fires at C3 close** per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points. P1 is LIGHT pause-type (procedural confirmation): user confirms green-light → Phase 6.1 substantive work begins (Mode 3 specs + Mode 2 reference impls).
+8. **Phase 3 status post-this-cluster**: Phase 3.0-3.6 LOCKED + Phase 3.7 v1.x amendment cadence FIRST instance complete (hand-rolled drop) + Phase 3.8 C3 PENDING (next sequential) + Phase 6.1 / 6.2 SCOPED.
+9. **HANDOFF rotation candidacy**: HANDOFF currently at ~430 lines pre-Note-65 + ~120 expansion = ~550 lines after Note 65; PAST 500-line rotation threshold; recommend rotation Notes 61-62 at next session start IF C3 audit fires same-session (would put HANDOFF at ~700+ post-Note-66; rotation timing could be at C3 close OR after pause-point P1) — leave Note 63 + Note 64 + Note 65 + Note 66 (when written) as load-bearing pickup context.
+10. **3-tier discriminator awaited-signal**: cumulative-count freeze at 10 across 7 cluster-executions as of 2026-05-04 per Note 62 (this v1.x amendment did NOT surface Round 1/Round 2 sharpening; not in cumulative-count scope); signal-(a) DEFER WITH NAMED AWAIT-SIGNAL preserved; cross-session monitoring continues.
+11. **NEW process-learning observation candidate (post-C3 codification)**: cascade-brief-enumeration-miss-at-PRIMARY-edit-site is a recurring pattern; Wave-1 Reviewer xhigh independent grep-within-file at PRIMARY edit site catches it; suggested codification at C3 cascade-discipline refinement OR Discipline 11 amendment.
+
+**What is NOT lost**:
+- Hand-rolled drop amendment cascade CLEAN: 4-file cascade + NEW DR; Pattern A ≥2 implementations discriminator preserved; Pattern A 12+7 FORMAL STABILITY UNAFFECTED; first v1.x ARCH amendment DR-shape pattern established
+- 3-sub-agent methodology composability validated for v1.x ARCH amendment shape (Writer + Reviewer + Cleanup-Writer at HIGH/xhigh/HIGH effort distribution)
+- Cross-execution pattern stable: 0 T1 across 14 cluster-executions; T2 count = 2 at this cluster (Reviewer xhigh subtle-breadcrumb-detection caught Writer enumeration-miss) — cross-execution pattern signal
+- Process learnings (NEW × 1 + POSITIVE × 2): cascade-brief-enumeration-miss-at-PRIMARY-edit-site pattern surfaced (codification candidate post-C3); 0 T1 + user-grant 6th consecutive + frame-persist-before-cascade Note 64 discipline empirically validated
+
+**Phase 3 status post-this-cluster**: Phase 3.0-3.6 LOCKED + Phase 3.7 v1.x amendment cadence FIRST instance complete (hand-rolled substrate Implementation drop) + Phase 3.8 C3 phase-boundary audit UNBLOCKED + Phase 6.1 / 6.2 SCOPED. Pattern A 12+7 topic-template-class FORMAL STABILITY UNAFFECTED (3 of 3 Pattern A instances complete with Phase 3.6 close survives this amendment cleanly). Phase 3.8 C3 phase-boundary audit fires next per `disciplines/09-coherence-audit-cadence.md` cadence; Pause-point P1 (architectural-foundation-clean) fires at C3 close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points.
+
+---

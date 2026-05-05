@@ -47,7 +47,7 @@ Three sub-sections articulate each scope category structurally without duplicati
 **Member catalog** (per locked `glossary/framework-c-scope.md`):
 - `mechanism` definitions (atomic interface contracts authored at framework level — e.g., AuditEvent schema; `actor_kind` enum; source-grounding capability; visible reasoning capability per `glossary/mechanism.md` Examples)
 - `shape` definitions (policy bundles for archetypes — practitioner-shape / autonomous-business-shape / personal-OS-shape / etc. per `glossary/shape.md` cross-archetype catalog)
-- `substrate` definitions (runtime contract Implementations — Claude Agent SDK / MS Agent Framework / hand-rolled per `glossary/substrate.md`)
+- `substrate` definitions (runtime contract Implementations — Claude Agent SDK / MS Agent Framework per `glossary/substrate.md`)
 - `protocol-implementation` definitions (concrete realizations of Pattern A protocol Surfaces — substrate impls / adapter impls / quality-gate impls per `glossary/protocol-architectural.md`)
 - `specialist DEFINITION` (bipartite Pattern B; the distributable specialist bundle per `glossary/specialist.md` + `arch/specialist-skill.md` §10)
 
