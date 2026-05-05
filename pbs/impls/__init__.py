@@ -59,12 +59,25 @@ Phase 6.1 thin-slice scope (per `BACKLOG.md` §222-§224):
   autonomous-business-shape (subset 4-6 / fail-open with alert) + personal-
   OS-shape (subset 1-3 / fail-open) sparring impls deferred to Phase 6.2 per
   W3 second-shape productization
+- `stub_mcp_server_backend` — minimum-viable filesystem-backed MCP server
+  backend per `BACKLOG.md` §226 thin-slice exercising the §224 mechanism
+  set end-to-end; exposes 3 MCP tools (`read_entity` / `write_entity` /
+  `record_audit_event`) registerable via `arch/substrate.md` §2.B (in-
+  process transport at Phase 6.1; subprocess + HTTP transports deferred
+  to Phase 6.2); `record_audit_event` realizes the skill-side MCP audit
+  gate path per `arch/audit.md` §8 dual-emission (forwards reconstructed
+  `AuditEventBase` to injected audit Implementation's `emit()`); single-
+  workspace scoping per `arch/scope-model.md` W3 deferred multi-workspace
+  schema; production backend (LanceDB + fastembed + bge-m3 + LaTeX
+  compile wrapper) deferred to Phase 6.2 per `BACKLOG.md` §248
 
 Phase 6.2 forthcoming impls (deferred per BACKLOG §242+): MS Agent Framework
 substrate; Email / Accounting / A2A-Peer / File-Sync per-class adapter impls;
 autonomous-business / personal-OS / research-lab gate impls; autonomous-
 business-shape + personal-OS-shape authority-binding impls; autonomous-
-business-shape + personal-OS-shape sparring impls.
+business-shape + personal-OS-shape sparring impls; LanceDB + fastembed +
+bge-m3 + LaTeX compile wrapper production MCP-server backend (replaces
+Phase 6.1 stub backend per `BACKLOG.md` §248).
 
 Foundation-up: imports from `pbs.<surface>` (Pattern A Protocols + manifests)
 to satisfy them concretely; impls are downstream of Surfaces.
