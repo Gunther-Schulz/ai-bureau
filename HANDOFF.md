@@ -648,7 +648,7 @@ C3 audit dispatched per Note 66 default-light regime: 1 sub-agent at xhigh, brie
 User surfaced after C3 audit landing: "309.6k tokens for C3 [audit] essentially confirmed minor reference to hand-rolled drop... lots of ceremony for nothing essentially". Honest re-evaluation: C3 surfaced 1 useful cascade-miss + 3 cosmetic residuals + verification-confirms; architectural validation real but at poor cost ratio given 0-T1 empirical base rate. Diagnosed second meta-process leak: even default-light regime kept cadence-as-mandatory; cadence drove unnecessary work regardless of evidence. Codified cadence-default-skip rule before Phase 6.1 starts.
 
 **Outputs (single commit; pushed)**:
-- `<this commit hash>` Cadence-default-skip rule (disciplines/09 + MAINTENANCE.md P1 + Rigor-preservation + BACKLOG §3.8 + Coherence-audit checkpoints subsection)
+- `46fa083` Cadence-default-skip rule (disciplines/09 + MAINTENANCE.md P1 + Rigor-preservation + BACKLOG §3.8 + Coherence-audit checkpoints subsection)
 
 **Decision-shape codified**:
 - Audit-checkpoint cadence (C1-C5 in Discipline 9) reframed: 5 NATURAL CHECKPOINT MOMENTS (not cadence-mandated). Default = skip; fire on-demand only when specific architectural concern surfaces OR user requests.
