@@ -50,11 +50,16 @@ Per `LOCKED-STATE.md` Trigger B: **≥5 findings of severity `blocking`** trigge
 
 ## Findings (chronological)
 
-(none yet — populate as PBS deployment work surfaces them)
+### 2026-05-06 — m1-api-friction (workaround-acceptable)
+
+**Framework areas**: audit, substrate.
+**Repo link**: `pbs-dep-1/findings/2026-05-06-m1-api-friction.md`
+**Summary**: Three small API friction points surfaced wiring up Hello PBS: (1) `AuditShapePolicy` exported from impl module, not Surface module; (2) `audit.audit_storage_ready` vs substrate's `is_ready` inconsistency; (3) `audit.emit()` sync surprise vs surrounding async wiring. All workaround-acceptable; M1 ran cleanly after adjustments. Worth bundling with future API-cleanup findings.
+**Reopen relevance**: none directly.
 
 ## Severity tally (auto-tracked at reopen review; manually-updated for now)
 
 - blocking: 0 / 5 (Trigger B threshold)
-- workaround-acceptable: 0
+- workaround-acceptable: 1
 - annoyance: 0
 - observation: 0
