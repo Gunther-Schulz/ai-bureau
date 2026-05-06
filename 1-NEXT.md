@@ -60,6 +60,21 @@ What the framework must SUPPORT (not what PBS-Schulz happens to need):
 
 5. **Schedulers as part of deployment infrastructure**: cron-style for Tier 1, in-container for Tier 2 Docker, vendor-side for Tier 3 SaaS — running SDK orchestrator scripts. SDK has no native scheduling.
 
+## 3.5. Framework positioning (thin-layer over open standards + platform primitives)
+
+PBS framework is structurally a layered composition, not a self-contained runtime:
+
+| Layer | PBS approach | Why |
+|---|---|---|
+| **Open standards** (MCP, A2A) | Leverage entirely; PBS just speaks them | Universal cross-vendor adoption per §10; Linux Foundation governance for MCP; verified universal A2A adoption across Claude SDK / MS AF / Google ADK / LangGraph / CrewAI / LlamaIndex / Semantic Kernel / AutoGen |
+| **Platform primitives shared across targets** (MCP server creation, permission flow, session management, hook matchers, plugin loading) | Leverage where Claude Agent SDK + MS Agent Framework + Gemini ADK have parity | Reduces framework code; reduces maintenance burden; composes cleanly with platform infrastructure |
+| **Cross-platform abstraction** (where Claude SDK / MS AF / Gemini ADK conventions diverge) | Framework provides translation surface; mechanism Surfaces decouple from platform-specific primitives | Pattern A's ≥2-impl discriminator IS this layer's load-bearing reason |
+| **PBS-unique discipline** (practitioner-accountability semantics, sparring 8 sub-mechanisms, defensibility test, engaged-authorship operational definition, three-axes composition, workspace/practitioner/specialist/claim/work-unit vocabulary) | Framework owns this entirely; this IS the PBS contribution | Platform vendors address generic AI safety + identity + governance; PBS addresses domain-specific practitioner-accountability discipline that platforms don't |
+
+The framework's substantive value is the bottom row. The top three rows should be as thin as platform parity permits. This positioning is what allows PBS to coexist cleanly with the enterprise landscape (§10) — PBS plugs in as practitioner-accountability layer ON TOP of platform-level governance, not as a competing runtime.
+
+**Architectural test**: for any framework code, ask "does this implement PBS-unique discipline, OR could a platform primitive / open standard provide it?" If the latter, it's a candidate for leveraging rather than building. Composes with §6.6 working discipline.
+
 ## 4. Architectural reality mapping
 
 ### What survives intact (verified strong in session 35 reads)
@@ -195,6 +210,21 @@ Concrete behavioral rules per session:
 - **Per-mental-modeling check**: before deferring any §4 "continuously addressed" composability concern at this milestone's commitment, run `MAINTENANCE.md` D Gate procedure (mental modeling within profile grounding); only defer if mental-modeling genuinely cannot resolve.
 - **Per-cognitive-load check**: at any session moment where ≥3 architectural modules are in working memory simultaneously, STOP. Surface to user. Decide: defer one module, or split the session.
 - **Per-deployment expectation**: every milestone produces at least one finding entry — even if it's "expectation matched, no friction." Keeps the findings/ habit live.
+- **Per-leverage check** (per §6.6): before authoring framework code, ask "could a platform primitive / open standard provide this?" If yes and parity exists across target platforms → leverage; framework code unjustified.
+
+### 6.6 Thin-layer architectural posture
+
+Per §3.5 framework positioning: framework code defaults to leveraging platform primitives + open standards; framework owns code only where (a) it implements PBS-unique discipline OR (b) cross-platform abstraction is genuinely required.
+
+Per-milestone implementation question that gates code authoring: "can this be done by leveraging a platform primitive (Claude SDK / MS AF / Gemini ADK) or open standard (MCP / A2A), or does it require framework code?"
+
+- **Leverageable AND parity exists across target platforms** → leverage; framework code unjustified.
+- **Leverageable on ONE platform only** → consider whether parity is achievable; if not, framework code provides cross-platform abstraction (Pattern A's ≥2-impl discriminator).
+- **Implements PBS-unique discipline** (practitioner-accountability / sparring / defensibility / engaged-authorship / three-axes composition / vocabulary) → framework code justified.
+
+This composes with §6.2 contract clarification — when writing the contract, if the promise turns out to be "what platform primitive X already does," the framework code is unjustified; revise to either reference the platform primitive directly OR identify what PBS-unique discipline is being added on top.
+
+**Anti-pattern**: building framework code that duplicates platform primitives because the framework was designed before platform primitives matured. F1 specifically: SUBPROCESS MCP transport, hook scaffolding, MCP server scaffolding, permission flow wiring may all be platform-leverageable rather than framework-owned. Verify per-milestone before authoring framework code. The 7 platform features verified in §10 enterprise landscape are direct candidates to evaluate for leverage at F1.0-F1.4.
 
 ## 7. Path forward — four phases with intermediate framework milestones
 
@@ -407,6 +437,7 @@ Move into F1 when ready, per §2 framework/deployment boundary + §6 working dis
 - [ ] **Author `READ-ME-FIRST.md` (cognitive entry paths) early in F1 per §6.3** — even before its first use, just to enable it
 - [ ] **Decompose F1 into intermediate milestones with framework-side commitment + deployment-side assumption-test per §6.4** — react to illustrative F1.0-F1.4 in §7 or revise
 - [ ] **Pick the FIRST milestone (F1.0) to execute** — one milestone per session
-- [ ] **Apply session behavior rules from §6.5**: per-session scope discipline; Cite-or-Read-or-Flag on every claim; per-contract gate before locking (with ≥2 shapes + ≥2 substrates mental-modeling); per-mental-modeling check on §4 continuously-addressed concerns; per-cognitive-load check (halt if ≥3 modules in working memory); per-deployment expectation (findings entry per milestone)
+- [ ] **Apply session behavior rules from §6.5**: per-session scope discipline; Cite-or-Read-or-Flag on every claim; per-contract gate before locking (with ≥2 shapes + ≥2 substrates mental-modeling); per-mental-modeling check on §4 continuously-addressed concerns; per-cognitive-load check (halt if ≥3 modules in working memory); per-deployment expectation (findings entry per milestone); per-leverage check (§6.6) before authoring framework code
+- [ ] **Apply §3.5 framework positioning + §6.6 thin-layer posture** at every F1 architectural choice — default to leveraging platform primitives + open standards; build framework code only for PBS-unique discipline OR cross-platform abstraction
 
 Sleep well between sessions. Pick up here.
