@@ -214,6 +214,8 @@ When STRATEGY.md is created, fold these positioning claims (removed from VISION 
 
 ## Phase 6.1 — v1.0-runtime-thin-slice (Specs + minimal reference impls + items 1-5)
 
+> ⚠️ **PARKED 2026-05-06 per `LOCKED-STATE.md` lock-and-park pivot.** Open items below remain captured for future reference but no active work happens during lock. Framework state is FROZEN; PBS deployment work happens in separate `pbs-bureau-deployment` repo (not yet created). See `drafts/lock-and-park-plan.md` for full pivot rationale + execution sequence + reopen criteria. HANDOFF Note 82 captures the pivot.
+
 Per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE: in-scope = needed for Mode 1 deployment-instance authoring against locked architecture OR for Mode 2 reference impl work that exercises items 1-5 end-to-end with stub heavy infrastructure. **Pause-point P2 (v1.0-runtime-thin-slice LOCKED)** fires at this section's close per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points; testing-approach decision-design REQUIRED before Phase 6.2 substantive work begins.
 
 ### Open

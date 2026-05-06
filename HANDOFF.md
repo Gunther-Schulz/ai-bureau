@@ -401,3 +401,29 @@ Phase 6.1 status post-this-batch: Mode 3 spec layer DONE + Pattern A Surfaces + 
 **Phase 6.1 framework-side mechanism + backend layer status**: structurally complete per BACKLOG §224 + §226 closure. Remaining framework-side Phase 6.1 work scoped to §221 (Mode 3 specs) + §229 (single-touch refactor) + §230-§233 (small-scoped spec work). Phase 6.1 P2 pause-point fires when §227-§233 + §221 all close-eligible per `MAINTENANCE.md` TOP-LEVEL MILESTONE STRUCTURE → Milestone-close pause-points; testing-approach decision-design required before Phase 6.2 substantive work begins.
 
 ---
+
+**Note 82: Session 35 — pivot to lock-and-park (concrete-first PBS deployment); framework state LOCKED 2026-05-06; bildhauer pass surfaced 9 architectural composition gaps + cognitive load became unmanageable; pivoted from abstract-first to concrete-first; existing architecture preserved intact for future mining; PBS deployment work track separated to (yet-to-be-created) `pbs-bureau-deployment` repo**
+
+User invoked bildhauer mid-session for architectural composition viability re-analysis. Step 1 read-pass + step 2 PBS deployment walk-through surfaced 9 load-bearing gaps in ~90 minutes (single-shape-per-workspace mismatch / specialist shape_compatibility coarse / engagement-target conflicts / hybrid-shape undefined / boot sequence single-shape assumption / specialist instance content boundary / pattern-vs-instance discipline strain on practitioner_shape impls / non-session-initiated practitioner binding gap / CLAUDE.md vs glossary contradiction). Cognitive load became unmanageable mid-pass (user-flagged).
+
+Pivot decision: rather than continue abstract-first architectural redesign, lock current framework state + build PBS deployment concretely + let real-world findings drive any future framework changes. Existing architectural reasoning (DRs / ARCH topics / glossary / Mode 2 reference impls / Mode 3 specs) preserved intact for future mining.
+
+**Outputs (3 commits this session on `lock-and-park` branch from `step-back-evaluation`)**:
+- `9e32564` `drafts/lock-and-park-plan.md` — full plan document with 9 sections + reaction prompts
+- `124a081` `LOCKED-STATE.md` + `findings-from-pbs.md` — lock declaration with 9 questionable points + 4 reopen triggers; findings log scaffolding with severity definitions + Trigger B threshold (≥5 blocking findings)
+- This Note 82 + BACKLOG parked notice
+
+**Phase status post-this-pivot**: Phase 6.1 PARKED at lock state. Notes 75-81 work preserved (Surfaces + mechanism impls + stub backend + manifest schemas all intact at framework-side). PBS deployment work begins in separate `pbs-bureau-deployment` repo (not yet created; first action when deployment work session begins per `drafts/lock-and-park-plan.md` §7 step 5 + step 7).
+
+**To resume next session**:
+1. `/reload-plugins`
+2. Read CLAUDE.md (auto) + `LOCKED-STATE.md` + `findings-from-pbs.md`
+3. Decide: PBS deployment work begins by creating `pbs-bureau-deployment` repo + Milestone 1 "Hello PBS" per plan §3
+4. Lock means: NO edits to `pbs/` / `arch/` / `docs/decisions/` / `glossary/` / `MAINTENANCE.md` / `VISION.md` / `ARCHITECTURE.md` / `DISCIPLINES.md` except per `LOCKED-STATE.md` "What's allowed during lock" exceptions
+
+**Forward references** (deferred ideas captured so they don't get lost):
+- "Framework-from-scratch builder skill" idea (user-deferred until PBS deployment milestone 3-4; possibly composes with `clippy` skill set; do NOT explore until PBS deployment scope locked down)
+
+**Branch state**: `lock-and-park` branched from `step-back-evaluation` at commit `213cdc4` (HANDOFF rotation Notes 61-65 → archive). User direction this session: direct-merge `lock-and-park` → `step-back-evaluation` after implementation complete (no PR, audit trail via commits suffices).
+
+---
