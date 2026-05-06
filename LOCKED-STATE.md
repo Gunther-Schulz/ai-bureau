@@ -1,12 +1,26 @@
-# Framework state — LOCKED 2026-05-06
+# Framework state — PRESERVED PENDING EMPIRICAL TEST 2026-05-06
 
-## Status
+## Status (UPDATED late session 35)
 
-This framework is **LOCKED** as of 2026-05-06 per `drafts/lock-and-park-plan.md` (committed `9e32564` on `lock-and-park` branch). Locked means the framework code, architecture docs, DRs, glossary, MAINTENANCE.md, and VISION.md are FROZEN as a coherent body of work pending evidence from concrete PBS deployment.
+**Framework development PAUSED indefinitely** per `5-PIVOT-DECISION.md` (committed late session 35).
 
-This is NOT a permanent lock. It is a sequencing pivot: build PBS deployment concretely first, surface what is actually load-bearing in framework primitives via real-world findings, then resume framework work with concrete evidence rather than abstract speculation.
+Pivot direction: build PBS-Schulz planning office directly on Claude Agent SDK + Cowork + Managed Agents (research-preview features OK) + custom MCPs + custom SKILL.md files. Empirical attempt settles whether Cowork covers planning-office needs sufficiently OR whether substantive structural gaps justify resuming framework work.
 
-The pivot was triggered in session 35 by a bildhauer pass that surfaced 9 architectural composition gaps in ~90 minutes — gaps that 14 prior cluster-executions of decision-design-sharpening + coherence-audit + greenfield-rederivation had not caught. The audits were checking sharpness of decisions, not viability of the resulting whole as a deployable system.
+Repository state at late-session-35 commit is the **preservation point**. Framework code + architecture docs + DRs + glossary + MAINTENANCE/VISION/ARCHITECTURE/DISCIPLINES stay as decision-trail; not edited going forward unless framework revisit is explicitly triggered (per `5-PIVOT-DECISION.md` §6 reopen criteria).
+
+### Status history
+
+- **2026-05-06 (mid-session 35)**: LOCKED per `drafts/lock-and-park-plan.md` (commit `9e32564`); pending evidence from PBS-framework-based deployment
+- **2026-05-06 (late mid-session 35)**: ACTIVE DEVELOPMENT per `1-NEXT.md` F1-F4 plan; lock reopened after dep-1 empirical evidence justified specific framework corrections
+- **2026-05-06 (late session 35)**: PRESERVED PENDING EMPIRICAL TEST per `5-PIVOT-DECISION.md`; F1-F4 plan paused; pivot to Cowork-based deployment
+
+Each status change reflects honest narrowing as competitive verification + empirical evidence accumulated. Framework work might resume; might not. Empirical Cowork attempt settles the question.
+
+### Why this isn't "lock" framing anymore
+
+Original lock-and-park (early session 35) was preserve-pending-PBS-deployment-evidence — the framework would resume when deployment surfaced gaps the framework primitives could fill. That model assumed framework was the right path.
+
+Current preserved-pending-empirical-test framing is different: empirical Cowork attempt may show NO framework needed, OR small SKILL.md set needed, OR substantive framework gaps real. The framework's necessity itself is what the empirical test resolves. Preservation is option-value, not active wait.
 
 ## What's locked
 

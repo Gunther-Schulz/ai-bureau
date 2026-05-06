@@ -1,6 +1,8 @@
 # NEXT — pbs-bureau session handoff (post-2026-05-06)
 
-> **Status**: Working handoff document for the next session. Captures session 35's outcome: lock reopened (it served its purpose); concrete deployment goals clarified; framework/deployment boundary discipline established; phased path forward established with intermediate-milestone discipline; engagement-detection design surfaced; enterprise-landscape research integrated; working discipline corrected.
+> ⚠️ **F1-F4 PLAN PAUSED late session 35** per `5-PIVOT-DECISION.md`. Framework development paused indefinitely; pivot to Cowork-based deployment of PBS-Schulz planning office. This document preserved as decision-trail. Read `5-PIVOT-DECISION.md` first for current direction; this document for historical context of framework plan that was paused.
+>
+> **Status (PRE-pivot)**: Working handoff document captures session 35's mid-session outcome: lock reopened (it served its purpose); concrete deployment goals clarified; framework/deployment boundary discipline established; phased path forward established with intermediate-milestone discipline; engagement-detection design surfaced; enterprise-landscape research integrated; working discipline corrected. Late-session-35 competitive verification narrowed framework's claimed unique value to a niche intersection insufficient to justify framework-build effort vs Cowork-empirical-attempt; pivot decision captured in `5-PIVOT-DECISION.md`.
 >
 > **What to do at next session start**:
 > 1. Read this file in full

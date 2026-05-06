@@ -427,3 +427,43 @@ Pivot decision: rather than continue abstract-first architectural redesign, lock
 **Branch state**: `lock-and-park` branched from `step-back-evaluation` at commit `213cdc4` (HANDOFF rotation Notes 61-65 → archive). User direction this session: direct-merge `lock-and-park` → `step-back-evaluation` after implementation complete (no PR, audit trail via commits suffices).
 
 ---
+
+**Note 83: Session 35 (late) — full pivot to Cowork-based deployment of PBS-Schulz planning office; framework development PAUSED indefinitely; F1-F4 plan in 1-NEXT.md suspended; preservation point captured in 5-PIVOT-DECISION.md**
+
+Late-session-35 competitive verification across multiple turns + research narrowed PBS framework's claimed unique value progressively. Verified Claude Cowork (Feb-Apr 2026 cross-app workflows + Managed Agents architecture per Anthropic docs + 50+ connectors + skills + persistent agents + event history + HITL) covers MOST of PBS's claimed orchestration / workflow-persistence / audit-trail / agent-reuse capabilities. PBS verified-unique features narrowed to niche intersection (self-host + open-source + cross-vendor + sparring/defensibility-discipline + engagement-detection + free + markdown-preference + regulated-profession-data-sovereignty). User decision: empirical attempt is the only honest test; full pivot to building PBS-Schulz directly on Claude Agent SDK + Cowork + Managed Agents (research-preview features OK) + custom MCPs + custom SKILL.md files. See `5-PIVOT-DECISION.md` for full reasoning + reopen criteria.
+
+**Outputs (this pivot capture; all on `step-back-evaluation`)**:
+- `5-PIVOT-DECISION.md` — pivot decision + rationale + preservation framing + empirical investigation goal + reopen criteria
+- `LOCKED-STATE.md` updated — status: PRESERVED PENDING EMPIRICAL TEST (was: ACTIVE DEVELOPMENT); status history captures three transitions in session 35 (LOCKED → ACTIVE → PRESERVED)
+- `1-NEXT.md` header updated — F1-F4 PLAN PAUSED notice + pointer to `5-PIVOT-DECISION.md`
+- This Note 83 in HANDOFF.md
+
+**What's preserved + why**:
+- VISION.md (three-axes thesis + practitioner-accountability framing) — load-bearing intellectual contribution
+- glossary/ (vocabulary precision) — reusable as conceptual frame for Cowork-based work
+- arch/* + docs/decisions/* (architectural reasoning) — referenceable for designing custom skills + MCPs
+- pbs/ Mode 2 reference impls — could inform what equivalent SKILL.md files need to do
+- 1-NEXT.md + 2/3/4-PRELIMINARY docs — preserved as decision-trail
+
+Repository state at THIS commit is the **preservation point**. Framework code + arch docs + glossary + MAINTENANCE/VISION/ARCHITECTURE/DISCIPLINES not edited going forward unless framework revisit explicitly triggered per `5-PIVOT-DECISION.md` §6 reopen criteria.
+
+**Reopen criteria (per `5-PIVOT-DECISION.md` §6)**:
+- Trigger A: Cowork architecturally cannot deliver sparring discipline OR defensibility-grade audit OR engagement-detection at PBS's claimed depth, AND gap matters for actual planning-office work
+- Trigger B: Second deployment (autonomous-business-shape OR personal-OS-shape) needs to ship requiring cross-substrate portability OR shape-policy-mediated mechanism variation
+- Trigger C: Explicit user re-decision after reviewing accumulated empirical evidence
+
+**Next session work** (NOT done in this pivot capture):
+- Set up Cowork / Claude Agent SDK working environment
+- Configure first specialist (planning-document-work) as Cowork agent OR Managed Agent
+- Wire first MCP integrations (email; some PM tool; placeholder corpus)
+- Author first SKILL.md files for sparring discipline + claim-attestation + defensibility-test
+- Iterate; capture findings in deployment repo's `findings/` directory
+- Track which capabilities require custom work vs work natively
+
+**Repository decisions for deployment work** (decide at next session):
+- `pbs-dep-1` (existing private repo) — historical artifact; M1 Hello PBS proof-of-life
+- `pbs-dep-2` (planned but not yet created) — was going to be PBS-framework-based; instead becomes Cowork-based deployment OR new repo created; firm-anchored naming may be more appropriate (e.g., `pbs-schulz-planning`) since this isn't a "PBS framework deployment" anymore
+
+**Honest framing**: framework architectural reasoning isn't wasted regardless of empirical outcome. Coherent vocabulary + substantive architectural thinking + Vision articulation grounded in research + verified competitive landscape understanding all preserved. Pivot just acknowledges empirical test should precede further framework architecture investment.
+
+---
