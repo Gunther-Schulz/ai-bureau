@@ -2,33 +2,40 @@
 
 Append-only decision ledger for a fresh framework dev plan, started 2026-05-08 on branch `fresh-plan`.
 
-## What this is
+## Session-start procedure (Claude: follow when invoked)
 
-A clean restart of framework architectural decisions. The existing `pbs-bureau` corpus (VISION, ARCHITECTURE, MAINTENANCE, GLOSSARY, arch/*, profiles/*, plugin/*, pbs/*, 1-5 numbered docs at repo root) is treated as **input, not as anchor**. Each prior artifact's status (inherit-as-is / inherit-with-modification / re-derive / discard / defer) is itself a future ledger decision.
+**When the user has directed you to this README** (e.g., "read fresh-plan/README.md"), follow these steps in order before responding to substantive prompts:
+
+1. **Read this README in full** — context + conventions + status + working preferences.
+2. **Read `fresh-plan/decisions.md` in full** — the append-only ledger D1 through current. Each entry is locked; supersedes-relationships are explicit; the closure entry (D25) names the layer-2 final kind set; D26 names the post-layer-2 roadmap.
+3. **Confirm context tightly** — in 2–3 sentences, tell the user where the work stands (last decision number; current layer / phase per D26; any explicit open threads). Do not summarize the entire ledger; cite by entry number.
+4. **Wait for user direction** — do not jump into work. The user may have specific next steps that don't follow the obvious path.
+
+Throughout the session, follow the **procedural conventions** + **working preferences** below.
+
+## Operating disciplines (load-bearing during session)
+
+- **Append-only ledger.** Entries in `decisions.md` are locked once added. Override = new entry that explicitly supersedes the prior. Never edit a locked entry's substance; clarifications go in follow-up entries.
+- **One question at a time.** Discussion proceeds question by question. Each question is answered (or deliberately deferred) before the next is opened. Don't batch unrelated questions.
+- **Concrete examples before locking.** Substantive decisions are grounded with worked examples that exercise the contract before the entry is written. Don't write a decision entry from pure abstract reasoning when a concrete scenario is available.
+- **Multiple passes for substantive findings.** When a finding has cascading effects (e.g., the strict protocol-neutrality finding in D16), do honest passes — solidify or refute — before locking. Single-pass on big findings is unsafe.
+- **Rolling refinement (option C).** Clear-now findings get supersedes / clarification entries when surfaced (rather than accumulating until a closure pass). The named refinement pass per D14 catches cross-cutting and late-emerging findings at end-of-layer.
+- **Commit and push regularly.** Each substantive lock ≈ one commit, pushed to `origin/fresh-plan`. The session-stop hook complains about uncommitted/untracked files and will block stop until clean.
+
+## Working preferences (observed during prior session)
+
+- **Be honest, not sycophantic.** Push back when the user's claim is wrong; don't agree just to agree. (This is also load-bearing in the framework — D24's standards-compatibility check + the anti-sycophancy theme that emerged from input research during the early session.)
+- **Surface tensions explicitly.** Name when something feels off; don't paper over.
+- **Tight responses.** Concise communication; tables / bullets where they help; no padding.
+- **Cite decisions by number** (D1, D7, D16, etc.) rather than summarizing them inline. The ledger is the canonical reference.
+
+---
+
+## What this is (background)
+
+A clean restart of framework architectural decisions. The existing `pbs-bureau` corpus (`VISION.md`, `ARCHITECTURE.md`, `MAINTENANCE.md`, `GLOSSARY.md`, `arch/*`, `profiles/*`, `plugin/*`, `pbs/*`, 1-5 numbered docs at repo root) is treated as **input, not as anchor**. Each prior artifact's status (inherit-as-is / inherit-with-modification / re-derive / discard / defer) is itself a future ledger decision.
 
 The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the framework and made PBS-Schulz primary). Per D1: **reusable framework is primary; PBS-Schulz is the first deployment / proving ground; generality wins on conflict.**
-
-## Reading order for a fresh session
-
-1. **This README** — context + conventions.
-2. **`decisions.md`** — the full ledger, D1 through closure (currently D25 = layer-2 close).
-3. *(Optional, as background)* — `1-NEXT.md` through `5-PIVOT-DECISION.md` at repo root: prior planning trail. Superseded by D1; treat as input only.
-4. *(Reference, when needed)* — pbs-bureau corpus files (`VISION.md`, `ARCHITECTURE.md`, `arch/*.md`, etc.). **Not** anchoring constraint; consult only as input when explicitly relevant.
-
-## Key procedural conventions
-
-- **Append-only**: entries are locked once added. Override = new entry that explicitly supersedes. Never edit a locked entry's substance; clarifications go in follow-up entries.
-- **One question at a time**: discussion proceeds question by question; each answer locks before the next is opened.
-- **Concrete examples before locking**: substantive decisions are grounded with worked examples that exercise the contract before the entry is written.
-- **Multiple passes for substantive findings**: when a finding has cascading effects, do honest passes (solidify or refute) before locking.
-- **Rolling refinement (option C)**: clear-now findings get supersedes/clarification entries when surfaced. The named refinement pass per D14 catches cross-cutting and late-emerging findings at closure of each layer.
-- **Commit and push regularly**: each lock ≈ one commit, pushed to `origin/fresh-plan`. The session-stop hook complains about uncommitted/untracked files.
-
-## Working preferences (observed during session)
-
-- **Be honest, not sycophantic** — push back when something is wrong; don't agree just to agree. (Anti-sycophancy as architecture, not prompt — independent confirmation found in commenter feedback during the session.)
-- **Surface tensions explicitly** — name when something feels off; don't paper over.
-- **Tight responses** — concise communication; tables and bullets where they help.
 
 ## Layered structure (per D3)
 
