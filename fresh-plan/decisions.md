@@ -559,3 +559,73 @@ This decision surfaces inconsistencies in earlier entries that the refinement pa
 **Rationale**: per I1 (composition), adapters are how the workspace composes with external surfaces; per I2, declared emissions / consumptions / required-capabilities give framework a structural basis to validate composition at boot; per I3, declared event emissions let the workspace's event chain incorporate adapter outputs as attribution-bearing events. The strict protocol-neutrality (per D2) keeps the framework standards-friendly without standards-locked.
 
 ---
+
+## D17 — 2026-05-08 — Supersedes D12 core capability vocabulary (strict protocol-neutrality applied)
+
+**Decision**: Supersedes D12's "Core capability vocabulary (framework-declared)" section per the strict reading of D2 articulated in D16. The revised list contains **only abstract capabilities that core kinds reference**; specific-protocol-named capabilities are moved to extension-registered status.
+
+### Revised core capability vocabulary
+
+The framework-core declares these capabilities. The principle: *a capability is at core iff a core kind contract references it*.
+
+- **`hooks`** — substrate exposes hook points for shape policies / discipline enforcement. Referenced by shape kind (D13).
+- **`skills`** — substrate can load specialist bundles. Referenced by specialist kind (forthcoming).
+- **`event-streaming`** — substrate emits events the workspace state can capture. Referenced by workspace kind (D7) for state accumulation; by event kind (D10) for chain construction.
+
+### Removed from core (now extension-registered)
+
+- **`mcp-client`** — specific protocol; substrate that supports MCP advertises this via the MCP protocol extension.
+- **`a2a`** — specific protocol; substrate that supports A2A advertises this via the A2A protocol extension.
+
+### Abstract-over-protocol capabilities considered but NOT introduced
+
+Discussion considered introducing abstract capabilities like `external-tools` (over MCP and equivalents) and `agent-peering` (over A2A and equivalents). They are **not introduced at core in this entry**. Reasons:
+- The "core declares what core kinds reference" principle rules them out — no current core kind contract directly references them.
+- Adapters declare `required-substrate-capabilities[]` via opaque identifiers (per D16); extensions register whatever capability identifiers their adapters need.
+- If adapter-portability concerns later make abstract-over-protocol capabilities valuable, they can be introduced via supersedes entry then — with stronger evidence.
+
+### Substrate kind contract impact (D12)
+
+D12's `capabilities[]` slot semantics are unchanged — substrate declares what it exposes. The vocabulary it draws from is now:
+- Three core abstract capabilities (above), AND
+- Extension-registered capability identifiers (per the layer-3 extension protocol).
+
+A Claude Agent SDK substrate would advertise `hooks`, `skills`, `event-streaming` (core) AND `mcp-client`, `a2a`, `computer-use`, `parallel-tool-calls` (extension-registered).
+
+### Refinement-pass status update
+
+The D12-finding flagged in D16 is now addressed by this entry (per the rolling refinement approach: option C in the discussion that produced D17 + D18).
+
+**Rationale**: D2 (kinds are abstractions; instances are extensions) applied strictly per D16's multi-pass analysis requires no specific-protocol identifiers in framework-core's vocabulary. Keeping the core minimal (3 capabilities) follows the principle that core declares only what core kinds reference.
+
+---
+
+## D18 — 2026-05-08 — Clarifies D15 wording (per strict protocol-neutrality)
+
+**Decision**: D15's wording around how MCP and A2A "integrate" with framework-core is **clarified** to align with the strict reading articulated in D16 + D17.
+
+### Wording clarification
+
+D15's "Standards explicitly in scope" section should be read as:
+
+- **MCP** — registered as an extension-protocol identifier. In substrate context, MCP-supporting impls advertise via extension-registered substrate-capability identifiers (e.g., `mcp-client`). In adapter context, adapters wrapping MCP servers declare `protocol-or-transport: mcp-server`. Refinement pass verifies clean mappability of core kinds (actor, event, work-unit, etc.) to MCP primitives.
+- **A2A** — same shape: extension-protocol identifier; substrate-supporting impls advertise via extension-registered substrate capabilities; adapters wrapping A2A peers declare `protocol-or-transport: a2a-peer`. Refinement pass verifies clean mappability.
+
+The original phrasing in D15 ("MCP is already integrated as substrate capability + adapter protocol") was loose. It should have said: *"MCP is registered as an extension-protocol whose substrate-side implementations advertise via extension-registered substrate-capability identifiers; adapter-side implementations declare it as their protocol-or-transport."*
+
+### Why this is a clarification, not a substantive supersede
+
+D15's substantive content is unchanged:
+- The standards-compatibility criterion still applies.
+- The "research candidates" list still applies (PROV-O, VC, DID, CloudEvents, OpenTelemetry, OpenAPI, AsyncAPI, JSON Schema, Activity Streams, EU AI Act schemas).
+- The operational pass procedure (per-kind mapping notes; per-standard scope decisions; supersedes/clarification outputs) still applies.
+
+Only the phrasing about *how* MCP and A2A relate to core is sharpened.
+
+### Refinement-pass status update
+
+The D15-finding flagged in D16 is now addressed by this entry. With D17 + D18 together, the D16-flagged refinement-pass items are all resolved (per option C — rolling refinement of clear-now findings; named pass at closure still handles cross-cutting and late-emerging findings).
+
+**Rationale**: keeping the ledger internally consistent during ongoing work — D15 should not be referenced or built upon while it carries phrasing that contradicts the strict reading just locked.
+
+---
