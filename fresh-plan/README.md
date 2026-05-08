@@ -52,18 +52,29 @@ The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the fr
 | specialist | D19 | Internal capability bundle; declares skills + supported work-unit-kinds + adapter dependencies + event subscriptions. |
 | work-unit | D20 | Instance of organized work; kind-discriminated (extension-registered); fixed core lifecycle enum (created / in-progress / paused / completed / abandoned). |
 
-## Open questions / next-decision candidates (post-D25)
+## Roadmap (indicative; per D26)
 
-1. **When to begin layer 3** (extension protocol + formal schemas).
-2. **Open tension from D1**: PBS-Schulz daily work cannot pause while the reusable framework is built. A rule for "what runs PBS-Schulz daily during the rebuild" is needed at some point.
-3. **Branch / commit strategy** going forward — `fresh-plan` is the live development branch; relationship to other branches (`step-back-evaluation`, `lock-and-park`, `main`) needs deciding when fresh-plan output stabilizes.
-4. **Verification targets carried forward** to layer 3 + impl:
-   - D21 workspace-as-A2A-peer deployability.
-   - MCP-server-exposure parallel.
-   - Standards-compatibility per-kind mapping for in-scope standards (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act compliance — per D24).
-5. **Deferred refinement-pass candidates** — only revisit if downstream impl work surfaces concrete need:
-   - Optional `parent-actor` slot on actor (D9) for sub-agent parent-child queries.
-   - Workflow as containment hierarchy on work-unit.
+Phases beyond layer-2 closure, named at high level — order indicative not rigid; phase boundaries trigger-based not scheduled. See **D26** in `decisions.md` for full content.
+
+| Phase | Work | Closes when |
+|---|---|---|
+| **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | Layer-3 closure analogous to D25 |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | Reference impl boots end-to-end |
+| **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Peer + MCP-server demonstrably work |
+| **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | PBS-Schulz running on framework end-to-end |
+| **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Two distinct deployments coexist |
+| **F+** | Refinement / optimization / ecosystem | Indefinite |
+
+## Open questions / deferred items (with phase placement)
+
+Per D26, deferred items have implicit phase homes:
+
+- **D1 open tension** (PBS-Schulz daily during rebuild) → resolved in Phase D.
+- **Optional `parent-actor` slot on actor** → revisit in Phase A or B if sub-agent patterns surface concrete need.
+- **Workflow as containment hierarchy on work-unit** → Phase D (pioneer) or E (multi-deployment) if forced.
+- **Branch / commit strategy** → after fresh-plan stabilizes (likely during Phase A).
+- **D21 verification targets** (A2A peer + MCP server) → Phase C.
+- **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific).
 
 ## Status of the existing pbs-bureau corpus
 
