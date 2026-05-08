@@ -1,5 +1,21 @@
 # Claude session-start procedure (pbs-bureau framework source repo)
 
+> ## ⚠️ Active framework work has moved to `fresh-plan/`
+>
+> **This file and the broader pbs-bureau corpus (`VISION.md`, `ARCHITECTURE.md`, `MAINTENANCE.md`, `DISCIPLINES.md`, `GLOSSARY.md`, `arch/*`, `profiles/*`, `disciplines/*`, `glossary/*`, `1-NEXT.md` through `5-PIVOT-DECISION.md`, `plugin/*`, `pbs/*`) are PRESERVATION / INPUT ONLY** — not active framework constraints.
+>
+> **For current work, read `fresh-plan/README.md` first, then `fresh-plan/decisions.md`.** The fresh-plan ledger (D1–D25) substantively reconceives the framework:
+>
+> - D1 reverses `5-PIVOT-DECISION.md` — reusable framework is now primary; PBS-Schulz is the first deployment / proving ground.
+> - D4 moves the VISION three-axes (intertwining / sparring / authorship-preservation / defensibility / engaged-authorship) from framework identity to **shape policy** (carried by practitioner-shape, not framework-core).
+> - D8 decomposes "discipline" mechanisms (audit / sparring / gate / authority-binding) — none is a framework-core kind.
+> - D17 establishes strict protocol-neutrality at framework-core: no specific protocols (MCP, A2A) listed at core; protocol identifiers are extension-registered.
+> - D25 closes layer 2 with 8 kinds: workspace, actor, event, substrate, shape, adapter, specialist, work-unit.
+>
+> The procedures, structural enforcement (PreToolUse hook), skill invocation patterns, and reading orders described below pertain to the **prior** framework state. Treat the rest of this file as historical context only. **Do not follow the procedures below as active discipline; follow `fresh-plan/README.md` instead.**
+
+---
+
 This file auto-loads at every session start (including fresh sessions with no prior context). READ before substantive work.
 
 This repo is a **framework source repository** (not a deployment instance). Currently in foundational rebuild — Phase 3 ARCH topical work (post-Phase-2 GLOSSARY lock; 36 entries locked). Per `MAINTENANCE.md` TOP-LEVEL SCOPE: dev skills + framework infrastructure live here permanently; app skills + per-deployment instance content NEVER live here.
