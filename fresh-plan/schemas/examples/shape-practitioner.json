@@ -1,0 +1,29 @@
+{
+  "id": "practitioner-shape",
+  "version": "1.0.0",
+  "extends": null,
+  "actor-requirements": {
+    "human-actor": { "min": 1, "max": 1 }
+  },
+  "required-capabilities": ["hooks", "event-streaming"],
+  "optional-capabilities": ["skills"],
+  "authority-bindings": [
+    {
+      "payload-subtype": "claim",
+      "qualifier": "defensibility-grade",
+      "required-role": "attester",
+      "required-actor-subtype": "human-actor",
+      "additional-constraints": "attester must match the practitioner declared on the workspace shape configuration."
+    }
+  ],
+  "roles": [
+    { "id": "practitioner", "description": "The accountable principal of the workspace; the human actor whose authorship + attestation is preserved." },
+    { "id": "drafter", "description": "Actor that produces a draft claim; typically an agent-actor." },
+    { "id": "attester", "description": "Actor that attests a claim; typically the practitioner." },
+    { "id": "reviewer", "description": "Actor that reviews a claim or work-unit." }
+  ],
+  "hooks": [
+    { "name": "pre-claim-attest", "purpose": "Sparring / challenge before attestation fires; lets shape policy intervene in claim-finalization flow." },
+    { "name": "post-event-emit", "purpose": "Emit-time check on every event for shape policy compliance.", "applies-to": "all event payload-subtypes" }
+  ]
+}

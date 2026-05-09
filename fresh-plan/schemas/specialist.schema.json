@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/specialist.schema.json",
+  "title": "Specialist impl declaration",
+  "description": "Formal schema for a specialist impl provision per D19 (specialist kind). Specialists are packaged role/skill bundles loaded into a workspace's substrate via the `skills` capability (D17). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., supported-work-unit-kinds resolve to registered kinds; required adapter bindings exist in workspace) is out of scope per D28.",
+
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "roles",
+    "skills",
+    "supported-work-unit-kinds",
+    "required-adapter-bindings",
+    "required-substrate-capabilities",
+    "declared-event-emissions",
+    "declared-event-subscriptions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "#/$defs/kebab-id", "description": "Stable specialist identifier (D19)." },
+    "version": { "$ref": "#/$defs/semver", "description": "Specialist version (D19)." },
+    "roles": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Shape-role-tags this specialist operates in (D19), per D13's role vocabulary. Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
+      "items": { "$ref": "#/$defs/kebab-id" }
+    },
+    "skills": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Operations the specialist provides (D19). Semantic declarations only; formal interface and content (e.g., SKILL.md) = layer 3 / specialist-impl. Required slot; may be [].",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/kebab-id" },
+          "description": { "type": "string", "minLength": 1 },
+          "input-modalities": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "output-modalities": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "publicly-exposed": {
+            "type": "boolean",
+            "description": "Per D21 — exposure flag for workspace-as-A2A-peer / workspace-as-MCP-server scenarios. Default semantics deferred to layer-3 follow-on; schema admits the slot."
+          }
+        }
+      }
+    },
+    "supported-work-unit-kinds": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Which work-unit-kinds this specialist is appropriate for (D19). Open vocabulary; values are extension-registered work-unit-kinds (fully-qualified per D29). Required slot; may be [].",
+      "items": { "$ref": "#/$defs/qualified-identifier" }
+    },
+    "required-adapter-bindings": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Adapter kinds the specialist needs bound in the workspace (D19). Required slot; may be []. Items reference adapter ids by their canonical fully-qualified form.",
+      "items": { "$ref": "#/$defs/qualified-identifier" }
+    },
+    "required-substrate-capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Substrate capabilities the specialist needs (D19). Typically includes 'skills'; may include 'event-streaming' if the specialist subscribes to events. Required slot; may be [].",
+      "items": { "$ref": "#/$defs/capability-identifier" }
+    },
+    "declared-event-emissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Events the specialist produces (D19; parallel to adapter D16). Required slot; may be [].",
+      "items": { "$ref": "#/$defs/event-emission-or-subscription" }
+    },
+    "declared-event-subscriptions": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Events the specialist reacts to (D19). Specialist-flavored: specialists react via skill invocation; adapters react via external interaction. Required slot; may be [].",
+      "items": { "$ref": "#/$defs/event-emission-or-subscription" }
+    },
+    "activation-scope": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional scope conditions under which the specialist is active (D19). Absent = always-active when bound. Detail of scope-expression syntax = layer-3 follow-on."
+    }
+  },
+
+  "$defs": {
+    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "qualified-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
+    },
+    "capability-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ]
+    },
+    "payload-subtype-identifier": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["claim", "action", "state-change", "composition-change", "lifecycle-transition"]
+        },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ]
+    },
+    "event-emission-or-subscription": {
+      "type": "object",
+      "required": ["payload-subtype"],
+      "additionalProperties": false,
+      "properties": {
+        "payload-subtype": { "$ref": "#/$defs/payload-subtype-identifier" },
+        "qualifier": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "a2a-protocol-ext",
+  "version": "1.0.0",
+  "extends": null,
+
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "a2a-peer",
+      "spec-ref": "./specs/a2a-peer-protocol.schema.json"
+    },
+    {
+      "slot": "substrate.capabilities",
+      "identifier": "a2a",
+      "spec-ref": "./specs/a2a-capability.schema.json"
+    }
+  ],
+
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "a2a-peer-adapter-default",
+      "spec-ref": "./adapters/a2a-peer-default.adapter.json"
+    }
+  ],
+
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

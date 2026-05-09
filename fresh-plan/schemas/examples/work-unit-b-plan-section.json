@@ -1,0 +1,21 @@
+{
+  "id": "wu-b-plan-3-2-hennigsdorf-2024",
+  "kind": "pbs-schulz-ext:b-plan-section",
+  "status": "in-progress",
+  "payload": {
+    "section-number": "3.2",
+    "project-id": "hennigsdorf-2024",
+    "title": "Festsetzungen zum Schutz der Natur"
+  },
+  "contributing-actors": [
+    { "id": "claude-primary", "role": "drafter" },
+    { "id": "gunther-schulz", "role": "practitioner" }
+  ],
+  "contributing-specialists": [
+    "planning-document-work"
+  ],
+  "lifecycle": {
+    "created-at": "2026-05-01T08:00:00Z",
+    "started-at": "2026-05-08T10:30:00Z"
+  }
+}

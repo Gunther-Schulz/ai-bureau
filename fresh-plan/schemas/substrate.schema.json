@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/substrate.schema.json",
+  "title": "Substrate impl declaration",
+  "description": "Formal schema for a substrate impl provision per D12 (substrate kind) + D17 (capability vocabulary refinement). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11 — constrains structure, not wire format. Cross-kind referential integrity (e.g., that capability identifiers resolve to extension-registered specs) is out of scope per D28 and is handled by the framework conformance validator.",
+
+  "type": "object",
+  "required": ["id", "version", "capabilities", "runtime-shapes"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/kebab-id",
+      "description": "Stable substrate identifier (D12)."
+    },
+    "version": {
+      "$ref": "#/$defs/semver",
+      "description": "Substrate version (D12). Range-comparable for binding resolution."
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Interfaces the substrate exposes for other extensions to hook into (D12). Hybrid vocabulary per D17: framework-core declares three abstract capabilities (hooks, skills, event-streaming); other capabilities are extension-registered (fully-qualified <ext-id>:<id> per D29 namespacing). A substrate without capabilities is meaningless; minItems: 1.",
+      "items": { "$ref": "#/$defs/capability-identifier" }
+    },
+    "runtime-shapes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Interaction modes the substrate supports (D12). Core values: interactive, programmatic, hosted-interactive, hosted-programmatic. Other values are extension-registered (fully-qualified). A substrate must declare at least one runtime-shape.",
+      "items": { "$ref": "#/$defs/runtime-shape-identifier" }
+    }
+  },
+
+  "$defs": {
+    "kebab-id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "minLength": 1
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "qualified-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$",
+      "description": "Extension-namespaced identifier of the form <extension-id>:<identifier> per D29."
+    },
+    "capability-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core abstract capability (D17) or a fully-qualified extension-registered capability identifier."
+    },
+    "runtime-shape-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["interactive", "programmatic", "hosted-interactive", "hosted-programmatic"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core runtime-shape (D12) or a fully-qualified extension-registered runtime-shape."
+    }
+  }
+}

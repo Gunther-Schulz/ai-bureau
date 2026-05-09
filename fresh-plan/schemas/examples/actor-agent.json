@@ -1,0 +1,5 @@
+{
+  "id": "claude-primary",
+  "subtype": "agent-actor",
+  "substrate-binding": "primary-interactive"
+}

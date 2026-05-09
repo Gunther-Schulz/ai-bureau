@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/work-unit.schema.json",
+  "title": "Work-unit",
+  "description": "Formal schema for a work-unit per D20 (work-unit kind). Work-units are tracked instances of organized work in workspace state (D7 §3). Kind-discriminated; lifecycle status enum is fixed at framework-core. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., kind resolves to a registered work-unit-kind; payload conforms to that kind's extension-declared payload schema; contributing-specialists support this kind) is out of scope per D28.",
+
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "status",
+    "payload",
+    "contributing-actors",
+    "contributing-specialists",
+    "lifecycle"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/kebab-id",
+      "description": "Unique within the workspace (D20)."
+    },
+    "kind": {
+      "$ref": "#/$defs/qualified-identifier",
+      "description": "Work-unit-kind identifier (D20). Open vocabulary per D29; values are extension-registered (fully-qualified <ext-id>:<id>)."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["created", "in-progress", "paused", "completed", "abandoned"],
+      "description": "Lifecycle phase. Fixed core enum (D20); extensions cannot add lifecycle states. Specific shape / specialist concerns (review flows, attestation, gates) are modeled as events within `in-progress`, not as separate states."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Kind-specific content (D20). Framework doesn't validate payload shape at core; the work-unit-kind extension declaration provides a payload schema validated separately (per D29 vocabulary registration spec-ref)."
+    },
+    "contributing-actors": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Actors operating on this work-unit, with role-tags per D9 + D13. Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/kebab-id" },
+          "role": { "$ref": "#/$defs/kebab-id" }
+        }
+      }
+    },
+    "contributing-specialists": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Specialists operating on this work-unit (D20). Each must have this work-unit's `kind` in its supported-work-unit-kinds (validated by framework conformance validator, not this schema). Required slot; may be [].",
+      "items": { "$ref": "#/$defs/kebab-id" }
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["created-at"],
+      "additionalProperties": false,
+      "description": "Timestamp markers (D20). Richer lifecycle history is derivable from events filtered by this work-unit's id (D23).",
+      "properties": {
+        "created-at": { "type": "string", "format": "date-time" },
+        "started-at": { "type": "string", "format": "date-time" },
+        "completed-at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+
+  "$defs": {
+    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
+    "qualified-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
+    }
+  }
+}

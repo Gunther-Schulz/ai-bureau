@@ -1,0 +1,15 @@
+{
+  "id": "claude-agent-sdk",
+  "version": "2.1.0",
+  "capabilities": [
+    "hooks",
+    "skills",
+    "event-streaming",
+    "mcp-protocol-ext:mcp-client",
+    "a2a-protocol-ext:a2a"
+  ],
+  "runtime-shapes": [
+    "interactive",
+    "programmatic"
+  ]
+}

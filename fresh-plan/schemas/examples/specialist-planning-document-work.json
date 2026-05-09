@@ -1,0 +1,27 @@
+{
+  "id": "planning-document-work",
+  "version": "0.1.0",
+  "roles": ["drafter", "reviewer"],
+  "skills": [
+    { "id": "draft-section", "description": "Draft a section of a planning document.", "publicly-exposed": false },
+    { "id": "review-section", "description": "Review a section against regulatory + corpus citations.", "publicly-exposed": false },
+    { "id": "cite-regulation", "description": "Cite a relevant regulation passage with section reference.", "publicly-exposed": true }
+  ],
+  "supported-work-unit-kinds": [
+    "pbs-schulz-ext:b-plan-section",
+    "pbs-schulz-ext:b-plan-festsetzung",
+    "pbs-schulz-ext:umweltbericht-section"
+  ],
+  "required-adapter-bindings": [
+    "pbs-schulz-ext:bauleitplanung-corpus",
+    "pbs-schulz-ext:latex-compile"
+  ],
+  "required-substrate-capabilities": ["skills", "event-streaming"],
+  "declared-event-emissions": [
+    { "payload-subtype": "claim", "qualifier": "regulation-citation" },
+    { "payload-subtype": "action", "qualifier": "section-drafted" }
+  ],
+  "declared-event-subscriptions": [
+    { "payload-subtype": "state-change", "qualifier": "scope-changed" }
+  ]
+}

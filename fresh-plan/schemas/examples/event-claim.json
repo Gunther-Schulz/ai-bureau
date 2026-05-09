@@ -1,0 +1,18 @@
+{
+  "id": "evt-2026-05-08-001",
+  "prev-event": "evt-2026-05-08-000",
+  "timestamp": "2026-05-08T10:42:13Z",
+  "actors": [
+    { "id": "claude-primary", "role": "drafter" },
+    { "id": "gunther-schulz", "role": "attester" }
+  ],
+  "payload-subtype": "claim",
+  "payload": {
+    "assertion": "Section 3.2 of B-Plan Hennigsdorf 2024 must comply with BauGB §1(6) Nr. 7.",
+    "confidence": "high",
+    "evidence-references": [
+      "bauleitplanung-corpus:baugb/1-6-nr-7"
+    ]
+  },
+  "work-unit-id": "wu-b-plan-3-2-hennigsdorf-2024"
+}

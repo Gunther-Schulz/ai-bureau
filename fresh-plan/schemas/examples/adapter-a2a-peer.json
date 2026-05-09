@@ -1,0 +1,15 @@
+{
+  "id": "a2a-peer-adapter-default",
+  "version": "1.0.0",
+  "protocol-or-transport": "a2a-protocol-ext:a2a-peer",
+  "required-substrate-capabilities": [
+    "a2a-protocol-ext:a2a"
+  ],
+  "declared-event-emissions": [
+    { "payload-subtype": "action", "qualifier": "a2a-task-delegated" },
+    { "payload-subtype": "action", "qualifier": "a2a-task-response-received" }
+  ],
+  "declared-event-consumptions": [
+    { "payload-subtype": "action", "qualifier": "a2a-task-incoming" }
+  ]
+}

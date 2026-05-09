@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/shape.schema.json",
+  "title": "Shape impl declaration",
+  "description": "Formal schema for a shape impl provision per D13 (shape kind) — the carrier of substantive identity (D4); a policy bundle of authority-bindings + roles + hooks + actor-requirements + capability requirements. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., capability identifiers resolve, parent shape exists for `extends`) is out of scope per D28.",
+
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "actor-requirements",
+    "required-capabilities",
+    "optional-capabilities",
+    "authority-bindings",
+    "roles",
+    "hooks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "#/$defs/kebab-id", "description": "Stable shape identifier (D13)." },
+    "version": { "$ref": "#/$defs/semver", "description": "Shape version (D13)." },
+    "extends": {
+      "description": "Optional parent shape with version range (D13). When present, parent's slots are inherited; child adds / specializes. Inheritance conflict resolution semantics deferred to workstream 4.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["id", "version-range"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "$ref": "#/$defs/kebab-id" },
+            "version-range": { "$ref": "#/$defs/version-range" }
+          }
+        }
+      ]
+    },
+    "actor-requirements": {
+      "description": "Workspace-level cardinality constraints per actor-subtype not expressible in authority-bindings (D13). Required slot; explicit 'none' admissible (per D13 required-with-explicit-empty / explicit-none pattern).",
+      "oneOf": [
+        { "type": "string", "const": "none" },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "min": { "type": "integer", "minimum": 0 },
+              "max": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] }
+            }
+          },
+          "description": "Map from actor-subtype identifier (e.g., 'human-actor', or extension-registered subtype) to {min, max?}. max=null means unbounded."
+        }
+      ]
+    },
+    "required-capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Substrate capabilities the shape needs (D13). Non-empty: a shape that needs no capabilities cannot meaningfully impose policy.",
+      "items": { "$ref": "#/$defs/capability-identifier" }
+    },
+    "optional-capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Substrate capabilities the shape uses if present (D13). Required slot; may be [].",
+      "items": { "$ref": "#/$defs/capability-identifier" }
+    },
+    "authority-bindings": {
+      "type": "array",
+      "description": "Per-event authority requirements as (payload-subtype, qualifier?, required-role, required-actor-subtype, additional-constraints?) tuples (D13). Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
+      "items": {
+        "type": "object",
+        "required": ["payload-subtype", "required-role", "required-actor-subtype"],
+        "additionalProperties": false,
+        "properties": {
+          "payload-subtype": { "$ref": "#/$defs/payload-subtype-identifier" },
+          "qualifier": { "type": "string", "minLength": 1 },
+          "required-role": { "$ref": "#/$defs/kebab-id" },
+          "required-actor-subtype": { "$ref": "#/$defs/actor-subtype-identifier" },
+          "additional-constraints": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "description": "Role-tag vocabulary the shape introduces (D13). Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/kebab-id" },
+          "description": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "hooks": {
+      "type": "array",
+      "description": "Semantic declarations of policy hook points (D13). Formal hook interface = layer 3 / forthcoming. Required slot; may be [] (per D13 required-with-explicit-empty pattern). Hook callable code = implementation.",
+      "items": {
+        "type": "object",
+        "required": ["name", "purpose"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "$ref": "#/$defs/kebab-id" },
+          "purpose": { "type": "string", "minLength": 1 },
+          "applies-to": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "version-range": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?:\\*|(?:(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)(?:\\s+(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)*)$"
+    },
+    "qualified-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
+    },
+    "capability-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ]
+    },
+    "payload-subtype-identifier": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["claim", "action", "state-change", "composition-change", "lifecycle-transition"]
+        },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core payload-subtype (D10) or a fully-qualified extension-registered payload-subtype (D29)."
+    },
+    "actor-subtype-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["human-actor", "agent-actor"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core actor-subtype (D9) or a fully-qualified extension-registered subtype (D29)."
+    }
+  }
+}

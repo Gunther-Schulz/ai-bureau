@@ -1,0 +1,53 @@
+{
+  "id": "pbs-schulz",
+  "description": "PBS-Schulz planning office workspace; pioneer-instance per D26 Phase D.",
+  "composition": {
+    "extensions": [
+      { "id": "a2a-protocol-ext", "version-range": ">=1.0.0" },
+      { "id": "mcp-protocol-ext", "version-range": ">=1.0.0" },
+      { "id": "practitioner-shape-ext", "version-range": ">=1.0.0" },
+      { "id": "pbs-schulz-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "practitioner-shape-ext:practitioner-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary-interactive",
+        "provision": "claude-agent-sdk-ext:claude-agent-sdk",
+        "version-range": ">=2.0.0",
+        "runtime-shape": "interactive"
+      },
+      {
+        "binding-id": "scheduled-programmatic",
+        "provision": "claude-agent-sdk-ext:claude-agent-sdk",
+        "version-range": ">=2.0.0",
+        "runtime-shape": "programmatic"
+      }
+    ],
+    "actors": [
+      { "id": "gunther-schulz", "subtype": "human-actor", "declared-name": "Gunther Schulz" },
+      { "id": "claude-primary", "subtype": "agent-actor", "substrate-binding": "primary-interactive" },
+      { "id": "claude-monthly-invoicing", "subtype": "agent-actor", "substrate-binding": "scheduled-programmatic" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "bauleitplanung-corpus",
+        "provision": "pbs-schulz-ext:bauleitplanung-corpus-mcp",
+        "protocol-or-transport": "mcp-protocol-ext:mcp-server"
+      },
+      {
+        "binding-id": "latex-compile",
+        "provision": "pbs-schulz-ext:latex-compile-mcp",
+        "protocol-or-transport": "mcp-protocol-ext:mcp-server"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "planning-document-work",
+        "provision": "pbs-schulz-ext:planning-document-work"
+      }
+    ]
+  }
+}
