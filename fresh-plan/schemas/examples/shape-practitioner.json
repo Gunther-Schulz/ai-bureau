@@ -1,7 +1,6 @@
 {
   "id": "practitioner-shape",
   "version": "1.0.0",
-  "extends": null,
   "actor-requirements": {
     "human-actor": { "min": 1, "max": 1 }
   },

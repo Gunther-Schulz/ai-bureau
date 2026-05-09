@@ -25,14 +25,6 @@
       "description": "Version designator for this extension (D29 §1). Semver-shaped at layer-3 formal schema; range-comparable."
     },
 
-    "extends": {
-      "description": "Optional reference to a parent extension with a version range (D29 §1). When present, this extension inherits from the parent. Inheritance conflict resolution semantics are deferred to workstream 4; this schema admits the slot but does not enforce inheritance rules.",
-      "oneOf": [
-        { "type": "null" },
-        { "$ref": "#/$defs/extension-reference" }
-      ]
-    },
-
     "vocabulary-registrations": {
       "type": "array",
       "description": "List of (slot, identifier, spec-ref) tuples that add values to a core open-vocabulary slot (D29 §2). Required slot; may be [] (per D13 required-with-explicit-empty pattern).",

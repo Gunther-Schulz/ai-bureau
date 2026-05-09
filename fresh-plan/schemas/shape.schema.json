@@ -19,21 +19,6 @@
   "properties": {
     "id": { "$ref": "#/$defs/kebab-id", "description": "Stable shape identifier (D13)." },
     "version": { "$ref": "#/$defs/semver", "description": "Shape version (D13)." },
-    "extends": {
-      "description": "Optional parent shape with version range (D13). When present, parent's slots are inherited; child adds / specializes. Inheritance conflict resolution semantics deferred to workstream 4.",
-      "oneOf": [
-        { "type": "null" },
-        {
-          "type": "object",
-          "required": ["id", "version-range"],
-          "additionalProperties": false,
-          "properties": {
-            "id": { "$ref": "#/$defs/kebab-id" },
-            "version-range": { "$ref": "#/$defs/version-range" }
-          }
-        }
-      ]
-    },
     "actor-requirements": {
       "description": "Workspace-level cardinality constraints per actor-subtype not expressible in authority-bindings (D13). Required slot; explicit 'none' admissible (per D13 required-with-explicit-empty / explicit-none pattern).",
       "oneOf": [
@@ -116,11 +101,6 @@
     "semver": {
       "type": "string",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
-    },
-    "version-range": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "^(?:\\*|(?:(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)(?:\\s+(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)*)$"
     },
     "qualified-identifier": {
       "type": "string",

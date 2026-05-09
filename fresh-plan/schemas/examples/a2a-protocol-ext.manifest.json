@@ -1,7 +1,6 @@
 {
   "id": "a2a-protocol-ext",
   "version": "1.0.0",
-  "extends": null,
 
   "vocabulary-registrations": [
     {
