@@ -2,18 +2,18 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/actor.schema.json",
   "title": "Actor",
-  "description": "Formal schema for an actor per D9 (actor kind) + D22 (substrate-binding resolution refinement). An actor is an attribution-bearing participant in a workspace. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., agent-actor.substrate-binding refs an existing binding-id within workspace.composition.substrate-bindings) is out of scope per D28.",
+  "description": "Formal schema for an actor per D9 (actor kind) + D22 (substrate-binding resolution refinement). An actor is an attribution-bearing participant in a workspace. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., agent-actor.substrate-binding refs an existing binding-id within workspace.composition.substrate-bindings[]) is out of scope per D28.",
 
   "type": "object",
   "required": ["id", "subtype"],
   "unevaluatedProperties": false,
   "properties": {
     "id": {
-      "$ref": "#/$defs/kebab-id",
-      "description": "Workspace-scoped stable identifier (D9). Persists across substrate restarts, runtime episodes, and the workspace's full lifecycle."
+      "$ref": "_common.schema.json#/$defs/instance-identifier",
+      "description": "Workspace-scoped stable identifier (D9). Instance-identifier per D34. Persists across substrate restarts, runtime episodes, and the workspace's full lifecycle."
     },
     "subtype": {
-      "$ref": "#/$defs/actor-subtype-identifier",
+      "$ref": "_common.schema.json#/$defs/actor-subtype-identifier",
       "description": "Either a core actor-subtype (human-actor, agent-actor per D9) or a fully-qualified extension-registered subtype per D29."
     }
   },
@@ -25,8 +25,8 @@
         "required": ["substrate-binding"],
         "properties": {
           "substrate-binding": {
-            "$ref": "#/$defs/kebab-id",
-            "description": "References a binding-id within workspace.composition.substrate-bindings[] (D9 + D22 refinement). The actor's runtime resolves through that specific binding."
+            "$ref": "_common.schema.json#/$defs/instance-identifier",
+            "description": "References a binding-id within workspace.composition.substrate-bindings[] (D9 + D22). Instance-identifier per D34."
           }
         }
       }
@@ -44,19 +44,5 @@
         }
       }
     }
-  ],
-
-  "$defs": {
-    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
-    "qualified-identifier": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
-    },
-    "actor-subtype-identifier": {
-      "oneOf": [
-        { "type": "string", "enum": ["human-actor", "agent-actor"] },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
-    }
-  }
+  ]
 }

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-state-change.schema.json",
+  "title": "Event payload — state-change",
+  "description": "Payload schema for event.payload-subtype = 'state-change' per D10 — workspace state mutation other than composition or lifecycle (e.g., scope set, work-unit transition). Closes D34 finding 5.2. Notation: JSON Schema Draft 2020-12 per D28.",
+
+  "type": "object",
+  "required": ["what"],
+  "additionalProperties": false,
+  "properties": {
+    "what": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier for the state element changed (e.g., 'scope', 'work-unit-status'). Open vocabulary."
+    },
+    "before": {
+      "description": "Optional reference to the prior value. Type is permissive — may be a string, structured object, or null (state-element-specific)."
+    },
+    "after": {
+      "description": "Optional reference to the new value. Type is permissive — may be a string, structured object, or null (state-element-specific)."
+    }
+  }
+}

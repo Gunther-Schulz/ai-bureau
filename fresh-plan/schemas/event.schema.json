@@ -2,20 +2,20 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/event.schema.json",
   "title": "Event",
-  "description": "Formal schema for an event per D10 (event kind) + D23 (work-unit-id slot addition). Events form the workspace's single ordered chain of attribution-bearing happenings (D10). This schema validates the event envelope; per-payload-subtype payload schemas are layer-3 follow-on (core subtypes' payload shapes documented in D10; extension-registered subtypes' payloads validated by their declaring extension per D29). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., that actors[].id resolves in workspace.composition.actors; that work-unit-id resolves) is out of scope per D28.",
+  "description": "Formal schema for an event per D10 (event kind) + D23 (work-unit-id slot addition). Events form the workspace's single ordered chain of attribution-bearing happenings (D10). This schema validates the event envelope and discriminates payload structure by payload-subtype: core subtypes' payloads are validated against per-subtype schemas (claim / action / state-change / composition-change / lifecycle-transition), produced in the Phase A refinement pass per D34 finding 5.2; extension-registered payloads are validated by the declaring extension per D29. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (actor-id resolution, work-unit-id resolution) is out of scope per D28; runtime + manifest resolution per D30 §4 (clarified by D34 §6.2).",
 
   "type": "object",
   "required": ["id", "prev-event", "timestamp", "actors", "payload-subtype", "payload"],
-  "additionalProperties": false,
+  "unevaluatedProperties": false,
   "properties": {
     "id": {
-      "$ref": "#/$defs/kebab-id",
-      "description": "Unique within the workspace (D10)."
+      "$ref": "_common.schema.json#/$defs/instance-identifier",
+      "description": "Unique within the workspace (D10). Instance-identifier per D34."
     },
     "prev-event": {
       "oneOf": [
         { "type": "null" },
-        { "$ref": "#/$defs/kebab-id" }
+        { "$ref": "_common.schema.json#/$defs/instance-identifier" }
       ],
       "description": "Reference to the prior event in the workspace's chain (D10). null only for the workspace's first event ever."
     },
@@ -27,51 +27,57 @@
     "actors": {
       "type": "array",
       "minItems": 1,
-      "description": "At least one actor reference per D10 + D9. Role-tag vocabulary is shape policy, not part of the event kind.",
+      "description": "At least one actor reference per D10 + D9. Role-tag vocabulary is shape policy.",
       "items": {
         "type": "object",
         "required": ["id"],
         "additionalProperties": false,
         "properties": {
-          "id": { "$ref": "#/$defs/kebab-id" },
+          "id": { "$ref": "_common.schema.json#/$defs/instance-identifier" },
           "role": {
-            "$ref": "#/$defs/kebab-id",
+            "$ref": "_common.schema.json#/$defs/vocabulary-identifier",
             "description": "Optional shape-declared role-tag (e.g., drafter, attester, reviewer)."
           }
         }
       }
     },
     "payload-subtype": {
-      "$ref": "#/$defs/payload-subtype-identifier",
-      "description": "Either a core payload-subtype (D10: claim, action, state-change, composition-change, lifecycle-transition) or a fully-qualified extension-registered subtype per D29."
+      "$ref": "_common.schema.json#/$defs/payload-subtype-identifier",
+      "description": "Either a core payload-subtype (D10) or a fully-qualified extension-registered subtype per D29."
     },
     "payload": {
       "type": "object",
-      "description": "Subtype-specific structure (D10). Framework-core validates the five core subtypes' payload shapes (per-subtype schemas = layer-3 follow-on); extension-declared subtypes are validated by their declaring extension per D29."
+      "description": "Subtype-specific structure. Core subtypes' payloads validated by `allOf` discrimination below; extension-declared subtypes validated by declaring extension per D29."
     },
     "work-unit-id": {
       "oneOf": [
         { "type": "null" },
-        { "$ref": "#/$defs/kebab-id" }
+        { "$ref": "_common.schema.json#/$defs/instance-identifier" }
       ],
-      "description": "Optional reference to the work-unit (D20) the event is associated with (D23 added this slot). null when the event is not work-unit-associated (e.g., workspace-level lifecycle events)."
+      "description": "Optional reference to the work-unit (D20) the event is associated with (D23). null when the event is not work-unit-associated (e.g., workspace-level lifecycle events)."
     }
   },
 
-  "$defs": {
-    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
-    "qualified-identifier": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
+  "allOf": [
+    {
+      "if": { "properties": { "payload-subtype": { "const": "claim" } }, "required": ["payload-subtype"] },
+      "then": { "properties": { "payload": { "$ref": "payload-claim.schema.json" } } }
     },
-    "payload-subtype-identifier": {
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": ["claim", "action", "state-change", "composition-change", "lifecycle-transition"]
-        },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
+    {
+      "if": { "properties": { "payload-subtype": { "const": "action" } }, "required": ["payload-subtype"] },
+      "then": { "properties": { "payload": { "$ref": "payload-action.schema.json" } } }
+    },
+    {
+      "if": { "properties": { "payload-subtype": { "const": "state-change" } }, "required": ["payload-subtype"] },
+      "then": { "properties": { "payload": { "$ref": "payload-state-change.schema.json" } } }
+    },
+    {
+      "if": { "properties": { "payload-subtype": { "const": "composition-change" } }, "required": ["payload-subtype"] },
+      "then": { "properties": { "payload": { "$ref": "payload-composition-change.schema.json" } } }
+    },
+    {
+      "if": { "properties": { "payload-subtype": { "const": "lifecycle-transition" } }, "required": ["payload-subtype"] },
+      "then": { "properties": { "payload": { "$ref": "payload-lifecycle-transition.schema.json" } } }
     }
-  }
+  ]
 }

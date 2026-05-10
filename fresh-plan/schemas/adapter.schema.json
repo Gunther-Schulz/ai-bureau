@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/adapter.schema.json",
   "title": "Adapter impl declaration",
-  "description": "Formal schema for an adapter impl provision per D16 (adapter kind). Adapters integrate a workspace with external surfaces via a single protocol-or-transport (extension-registered per D2 strict reading). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., that protocol-or-transport resolves to a registered protocol; that required substrate capabilities are advertised by some bound substrate) is out of scope per D28.",
+  "description": "Formal schema for an adapter impl provision per D16 (adapter kind). Adapters integrate a workspace with external surfaces via a single protocol-or-transport (extension-registered per D2 strict reading + D29 namespacing). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., that protocol-or-transport resolves to a registered protocol; that required substrate capabilities are advertised by some bound substrate) is out of scope per D28.",
 
   "type": "object",
   "required": [
@@ -15,22 +15,28 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "id": { "$ref": "#/$defs/kebab-id", "description": "Stable adapter identifier (D16)." },
-    "version": { "$ref": "#/$defs/semver", "description": "Adapter version (D16)." },
+    "id": {
+      "$ref": "_common.schema.json#/$defs/vocabulary-identifier",
+      "description": "Stable adapter identifier (D16). Vocabulary-identifier per D34."
+    },
+    "version": {
+      "$ref": "_common.schema.json#/$defs/semver",
+      "description": "Adapter version (D16)."
+    },
     "protocol-or-transport": {
-      "$ref": "#/$defs/qualified-identifier",
-      "description": "Single protocol identifier this adapter speaks (D16). No specific protocol is listed at framework-core per D2 strict reading; values are extension-registered, fully-qualified <ext-id>:<id> per D29 namespacing. Multi-protocol adapters express by registering multiple adapter instances."
+      "$ref": "_common.schema.json#/$defs/qualified-identifier",
+      "description": "Single protocol identifier this adapter speaks (D16). No specific protocol is listed at framework-core per D2 strict reading; values are extension-registered, fully-qualified per D29."
     },
     "required-substrate-capabilities": {
       "type": "array",
       "uniqueItems": true,
-      "description": "Substrate capability identifiers the adapter needs (D16). Required slot; may be [] (e.g., direct in-process adapter that needs no substrate capability). Framework validates at boot that bound substrate(s) collectively provide every listed capability.",
-      "items": { "$ref": "#/$defs/capability-identifier" }
+      "description": "Substrate capability identifiers the adapter needs (D16). Required slot; may be []. Framework validates at boot per D30 capability satisfaction.",
+      "items": { "$ref": "_common.schema.json#/$defs/capability-identifier" }
     },
     "declared-event-emissions": {
       "type": "array",
       "uniqueItems": true,
-      "description": "Events the adapter can emit into the workspace event chain (D16). Required slot; may be []. Used by shapes' authority-bindings (D13) to reason about adapter outputs at composition validation time.",
+      "description": "Events the adapter can emit into the workspace event chain (D16). Required slot; may be [].",
       "items": { "$ref": "#/$defs/event-emission-or-consumption" }
     },
     "declared-event-consumptions": {
@@ -42,36 +48,12 @@
   },
 
   "$defs": {
-    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
-    "semver": {
-      "type": "string",
-      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
-    },
-    "qualified-identifier": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$"
-    },
-    "capability-identifier": {
-      "oneOf": [
-        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
-    },
-    "payload-subtype-identifier": {
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": ["claim", "action", "state-change", "composition-change", "lifecycle-transition"]
-        },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
-    },
     "event-emission-or-consumption": {
       "type": "object",
       "required": ["payload-subtype"],
       "additionalProperties": false,
       "properties": {
-        "payload-subtype": { "$ref": "#/$defs/payload-subtype-identifier" },
+        "payload-subtype": { "$ref": "_common.schema.json#/$defs/payload-subtype-identifier" },
         "qualifier": { "type": "string", "minLength": 1 }
       },
       "description": "Pair of (payload-subtype, qualifier?) per D16."

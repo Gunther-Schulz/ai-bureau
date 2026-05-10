@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/_common.schema.json",
+  "title": "Common $defs for fresh-plan layer-3 schemas",
+  "description": "Shared $defs extracted in the Phase A end-of-phase refinement pass (D34). Per-kind schemas $ref into this file rather than duplicating these patterns; single source of truth reduces drift surface (per refinement-pass finding 5.1). The instance-vs-vocabulary identifier split is per refinement-pass finding 1.1 (D34).",
+
+  "$defs": {
+    "vocabulary-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "minLength": 1,
+      "description": "Kebab-strict identifier for vocabulary names: extension ids, kind-impl ids (substrate.id, shape.id, adapter.id, specialist.id), role-tags, hook names, capability values, runtime-shape values, payload-subtype values, work-unit-kind bare forms. Per D29 namespacing + D34 vocabulary-vs-instance split."
+    },
+
+    "instance-identifier": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+      "minLength": 1,
+      "description": "Broader pattern for workspace-scoped runtime instance ids: workspace.id, actor.id, event.id, work-unit.id, binding-ids. Admits dots and uppercase to accommodate domain-natural keys (e.g., section numbers like 'wu-b-plan-3.2-hennigsdorf-2024', timestamp-shaped event ids). Per D34 refinement-pass finding 1.1."
+    },
+
+    "qualified-identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$",
+      "minLength": 3,
+      "description": "Extension-namespaced reference of the form <extension-id>:<vocabulary-identifier> per D29 namespacing."
+    },
+
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "description": "Semver 2.0.0 MAJOR.MINOR.PATCH with optional pre-release + build metadata. Per D33 versioning policy."
+    },
+
+    "version-range": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?:\\*|(?:(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)(?:\\s+(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)*)$",
+      "description": "npm-style version range expression. Range-intersection semantics per D33."
+    },
+
+    "capability-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core abstract capability (D17: hooks, skills, event-streaming) or a fully-qualified extension-registered capability identifier per D29."
+    },
+
+    "payload-subtype-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["claim", "action", "state-change", "composition-change", "lifecycle-transition"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core payload-subtype (D10) or a fully-qualified extension-registered subtype per D29."
+    },
+
+    "actor-subtype-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["human-actor", "agent-actor"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core actor-subtype (D9) or a fully-qualified extension-registered subtype per D29."
+    },
+
+    "runtime-shape-identifier": {
+      "oneOf": [
+        { "type": "string", "enum": ["interactive", "programmatic", "hosted-interactive", "hosted-programmatic"] },
+        { "$ref": "#/$defs/qualified-identifier" }
+      ],
+      "description": "Either a core runtime-shape (D12) or a fully-qualified extension-registered runtime-shape."
+    }
+  }
+}

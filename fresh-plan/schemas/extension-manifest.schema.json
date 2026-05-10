@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/extension-manifest.schema.json",
   "title": "Extension manifest",
-  "description": "Formal schema for the framework-core extension manifest contract per D29 (extension manifest contract + validation flow). Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11 — constrains the structure of the parsed manifest, not its wire format (instances may be serialized as JSON, YAML, etc. and round-trip through this schema). Cross-kind referential integrity (e.g., spec-ref resolution, identifier collision across extensions, conformance of referenced specs) is out of scope per D28 and is handled by the framework conformance validator (workstream 4).",
+  "description": "Formal schema for the framework-core extension manifest contract per D29 (extension manifest contract + validation flow). The `extends` slot was removed per D31. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., spec-ref resolution, identifier collision across extensions, conformance of referenced specs) is out of scope per D28; handled by the framework conformance validator (D30 + D32). Per D34 §2.4: the `vocabulary-slot` enum is intentionally closed at the six core open-vocabulary slots; adding a new open-vocabulary slot is a major bump on this contract per D33.",
 
   "type": "object",
   "required": [
@@ -13,42 +13,34 @@
     "dependencies"
   ],
   "additionalProperties": false,
-
   "properties": {
     "id": {
-      "$ref": "#/$defs/extension-id",
-      "description": "Stable extension identifier (D29 §1 Identity). Identifiers registered by an extension are implicitly namespaced by this id; canonical fully-qualified form is '<extension-id>:<identifier>'."
+      "$ref": "_common.schema.json#/$defs/vocabulary-identifier",
+      "description": "Stable extension identifier (D29 §1). Identifiers registered by an extension are implicitly namespaced by this id; canonical fully-qualified form is '<extension-id>:<vocabulary-identifier>' per D29."
     },
-
     "version": {
-      "$ref": "#/$defs/semver",
-      "description": "Version designator for this extension (D29 §1). Semver-shaped at layer-3 formal schema; range-comparable."
+      "$ref": "_common.schema.json#/$defs/semver",
+      "description": "Version designator (D29 §1; D33 versioning policy)."
     },
-
     "vocabulary-registrations": {
       "type": "array",
       "description": "List of (slot, identifier, spec-ref) tuples that add values to a core open-vocabulary slot (D29 §2). Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
       "items": { "$ref": "#/$defs/vocabulary-registration" }
     },
-
     "provisions": {
       "type": "array",
-      "description": "List of (kind, id, spec-ref) tuples — actual instances of kinds that this extension provides (D29 §3). Kinds that admit provisions: substrate, shape, adapter, specialist. (workspace, event, actor, work-unit are not extension-provided per D29.) Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
+      "description": "List of (kind, id, spec-ref) tuples — actual instances of kinds that this extension provides (D29 §3). Kinds that admit provisions: substrate, shape, adapter, specialist. (workspace, event, actor, work-unit are not extension-provided per D29.) Required slot; may be [].",
       "items": { "$ref": "#/$defs/provision" }
     },
-
     "dependencies": {
       "type": "object",
-      "description": "Dependencies the extension's provisions need to compose against (D29 §4). Both sub-slots are required; both may be [] (per D13 required-with-explicit-empty pattern).",
-      "required": [
-        "required-core-capabilities",
-        "required-extensions"
-      ],
+      "description": "Dependencies the extension's provisions need to compose against (D29 §4). Both sub-slots are required; both may be [].",
+      "required": ["required-core-capabilities", "required-extensions"],
       "additionalProperties": false,
       "properties": {
         "required-core-capabilities": {
           "type": "array",
-          "description": "Abstract core capabilities the provisions need (D17: hooks, skills, event-streaming). Required, may be [].",
+          "description": "Abstract core capabilities the provisions need (D17: hooks, skills, event-streaming).",
           "items": {
             "type": "string",
             "enum": ["hooks", "skills", "event-streaming"]
@@ -57,7 +49,7 @@
         },
         "required-extensions": {
           "type": "array",
-          "description": "Other extensions this one depends on, by (id, version-range). Required, may be []. Circular-dep detection + resolution = workstream 4.",
+          "description": "Other extensions this one depends on, by (id, version-range). Cycle detection + load order per D32; version-conflict resolution per D33.",
           "items": { "$ref": "#/$defs/extension-reference" }
         }
       }
@@ -65,40 +57,9 @@
   },
 
   "$defs": {
-    "extension-id": {
-      "type": "string",
-      "description": "Lowercase kebab-case identifier; leading letter; no ':' (reserved as namespace separator in canonical fully-qualified form '<extension-id>:<identifier>' per D29 'Identifier namespacing').",
-      "minLength": 1,
-      "pattern": "^[a-z][a-z0-9-]*$",
-      "examples": ["a2a-protocol-ext", "practitioner-shape-ext"]
-    },
-
-    "local-identifier": {
-      "type": "string",
-      "description": "Bare identifier within an extension's own manifest. Same charset as extension-id; namespacing is implicit per D29.",
-      "minLength": 1,
-      "pattern": "^[a-z][a-z0-9-]*$",
-      "examples": ["a2a-peer", "a2a-peer-adapter-default"]
-    },
-
-    "semver": {
-      "type": "string",
-      "description": "Semver 2.0.0-shaped MAJOR.MINOR.PATCH with optional pre-release and build metadata (per D29: 'semver-shaped at layer-3 formal schema').",
-      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
-      "examples": ["1.0.0", "2.3.1-rc.1", "0.1.0+build.42"]
-    },
-
-    "version-range": {
-      "type": "string",
-      "description": "npm-style version range expression. Admits operators ^, ~, >=, >, <=, <, =, or a bare version. Multi-clause ranges (e.g., '>=1.0.0 <2.0.0') are admitted; precise grammar is loader-implementation territory per D11 — schema enforces shape, validator enforces resolution.",
-      "minLength": 1,
-      "pattern": "^(?:\\*|(?:(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)(?:\\s+(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)*)$",
-      "examples": [">=1.0.0", "^1.2.3", "~0.4.0", ">=1.0.0 <2.0.0", "1.0.0", "*"]
-    },
-
     "spec-ref": {
       "type": "string",
-      "description": "Reference to a value's specification (typically a JSON Schema per D28; for some slots, additionally a behavioral contract document). Treated as opaque-string-resolvable-by-the-loader per D29 Tensions — within-package paths, URLs, and registry references are all admissible at this layer; resolution semantics are implementation per D11.",
+      "description": "Reference to a value's specification (typically a JSON Schema per D28). Treated as opaque-string-resolvable-by-the-loader per D29 — within-package paths, URLs, and registry references all admissible.",
       "minLength": 1,
       "examples": [
         "./specs/a2a-peer-protocol.schema.json",
@@ -109,18 +70,18 @@
 
     "extension-reference": {
       "type": "object",
-      "description": "Reference to another extension by id + version range (used by 'extends' and by 'dependencies.required-extensions[]').",
+      "description": "Reference to another extension by id + version range (used by 'dependencies.required-extensions[]').",
       "required": ["id", "version-range"],
       "additionalProperties": false,
       "properties": {
-        "id": { "$ref": "#/$defs/extension-id" },
-        "version-range": { "$ref": "#/$defs/version-range" }
+        "id": { "$ref": "_common.schema.json#/$defs/vocabulary-identifier" },
+        "version-range": { "$ref": "_common.schema.json#/$defs/version-range" }
       }
     },
 
     "vocabulary-slot": {
       "type": "string",
-      "description": "The set of framework-core open-vocabulary slots into which an extension may register a value, per D29 §2. Closed enum at this schema layer; if framework-core gains a new open-vocabulary slot, this enum is updated as part of the kind-contract change.",
+      "description": "The set of framework-core open-vocabulary slots into which an extension may register a value, per D29 §2. Closed enum (per D34 §2.4); adding a new slot is a major bump per D33.",
       "enum": [
         "event.payload-subtype",
         "work-unit.kind",
@@ -133,12 +94,12 @@
 
     "vocabulary-registration": {
       "type": "object",
-      "description": "A single (slot, identifier, spec-ref) tuple registering one value into one core open-vocabulary slot. The identifier is namespaced to the declaring extension per D29 'Identifier namespacing'.",
+      "description": "A single (slot, identifier, spec-ref) tuple registering one value into one core open-vocabulary slot. The identifier is namespaced to the declaring extension per D29.",
       "required": ["slot", "identifier", "spec-ref"],
       "additionalProperties": false,
       "properties": {
         "slot": { "$ref": "#/$defs/vocabulary-slot" },
-        "identifier": { "$ref": "#/$defs/local-identifier" },
+        "identifier": { "$ref": "_common.schema.json#/$defs/vocabulary-identifier" },
         "spec-ref": { "$ref": "#/$defs/spec-ref" }
       }
     },
@@ -151,12 +112,12 @@
 
     "provision": {
       "type": "object",
-      "description": "A single (kind, id, spec-ref) tuple — one provision the extension provides. The provision conforms to its kind's layer-3 formal schema (per-kind schemas are workstream 3).",
+      "description": "A single (kind, id, spec-ref) tuple — one provision the extension provides. The provision conforms to its kind's layer-3 formal schema.",
       "required": ["kind", "id", "spec-ref"],
       "additionalProperties": false,
       "properties": {
         "kind": { "$ref": "#/$defs/provision-kind" },
-        "id": { "$ref": "#/$defs/local-identifier" },
+        "id": { "$ref": "_common.schema.json#/$defs/vocabulary-identifier" },
         "spec-ref": { "$ref": "#/$defs/spec-ref" }
       }
     }

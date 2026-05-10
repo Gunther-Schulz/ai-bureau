@@ -43,8 +43,8 @@ The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the fr
 |---|---|---|
 | **Layer 1 — identity** | I1 composition system / I2 machine-checkable contracts / I3 accountability-bearing AI-human work. No substantive identity at core; substantive identity carried by shapes per D4. | Closed at D5. |
 | **Layer 2 — kinds** | 8 kinds (workspace D7, actor D9, event D10, substrate D12, shape D13, adapter D16, specialist D19, work-unit D20). | Closed at D25. |
-| **Layer 3 — extension protocol + formal schemas** | Per-kind formal schemas (concrete enough to validate, format-neutral). Extension declaration mechanism. Composition / promotion / demotion rules. | **Not started.** Non-optional for impl work. |
-| **Implementation (below layer 3)** | Format / serialization choices; storage / wire / protocol mechanisms; specific extension impls (substrate impls, shape impls, adapter impls, specialist impls). | Out of scope for framework-core work. |
+| **Layer 3 — extension protocol + formal schemas** | Per-kind formal schemas (workstream 3 artifacts in `schemas/`). Extension declaration mechanism (D29). Composition + boot-time resolution (D30, D31, D32). Promotion / demotion + versioning policy (D33). End-of-Phase-A refinement (D34). | Closed at D35 (Phase A). |
+| **Implementation (below layer 3)** | Format / serialization choices; storage / wire / protocol mechanisms; specific extension impls (substrate impls, shape impls, adapter impls, specialist impls). | Out of scope for framework-core work. Begins at D26 Phase B. |
 
 ## The 8 kinds at a glance
 
@@ -103,8 +103,25 @@ Treated as **preservation / input only**. Specific findings so far:
 
 ```
 fresh-plan/
-  README.md       <- this file
-  decisions.md    <- the append-only ledger (D1-D25 currently)
+  README.md          <- this file
+  decisions.md       <- the append-only ledger (D1-D35; layer 1 + 2 + Phase A all closed)
+  schemas/           <- layer-3 formal schemas (workstream 3 + refinement)
+    _common.schema.json
+    extension-manifest.schema.json
+    workspace.schema.json
+    actor.schema.json
+    event.schema.json
+    substrate.schema.json
+    shape.schema.json
+    adapter.schema.json
+    specialist.schema.json
+    work-unit.schema.json
+    payload-claim.schema.json
+    payload-action.schema.json
+    payload-state-change.schema.json
+    payload-composition-change.schema.json
+    payload-lifecycle-transition.schema.json
+    examples/        <- worked-example instances (validate against schemas)
 ```
 
 ## Cleanup notes

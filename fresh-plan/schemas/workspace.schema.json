@@ -2,15 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/workspace.schema.json",
   "title": "Workspace manifest",
-  "description": "Formal schema for a workspace manifest per D7 (workspace kind). The workspace = manifest + state; this schema covers the *manifest* (declarative — what this workspace IS). Runtime state (events, work-units, scope) is event-sourced and validated per its own kinds' schemas. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity (e.g., that bound shape resolves; substrate-bindings provide capabilities required by other bound extensions; actor.substrate-binding refs an existing binding-id) is out of scope per D28 — handled by the framework conformance validator at boot per D29 validation flow.",
+  "description": "Formal schema for a workspace manifest per D7 (workspace kind). The workspace = manifest + state; this schema covers the *manifest* (declarative). Runtime state (events, work-units, scope) is event-sourced and validated per its own kinds' schemas. Notation: JSON Schema Draft 2020-12 per D28. Layer-3 formal schema per D11. Cross-kind referential integrity is handled by the framework conformance validator at boot per D29 + D30 + D32.",
 
   "type": "object",
   "required": ["id", "composition"],
   "additionalProperties": false,
   "properties": {
     "id": {
-      "$ref": "#/$defs/kebab-id",
-      "description": "Stable, unique workspace identifier (D7 §1). Persists across full lifecycle; same id = same composition lineage + state lineage."
+      "$ref": "_common.schema.json#/$defs/instance-identifier",
+      "description": "Stable, unique workspace identifier (D7 §1). Persists across full lifecycle. Instance-identifier per D34."
     },
     "description": {
       "type": "string",
@@ -32,14 +32,14 @@
       "properties": {
         "extensions": {
           "type": "array",
-          "description": "Extensions this workspace references, by (id, version-range). Resolved at boot per D29; vocabulary registrations + provisions become available to subsequent bindings. May be [] (a workspace using only core kinds with no extensions).",
+          "description": "Extensions this workspace references, by (id, version-range). Resolved at boot per D29; version-conflict resolution per D33.",
           "items": {
             "type": "object",
             "required": ["id", "version-range"],
             "additionalProperties": false,
             "properties": {
-              "id": { "$ref": "#/$defs/kebab-id" },
-              "version-range": { "$ref": "#/$defs/version-range" }
+              "id": { "$ref": "_common.schema.json#/$defs/vocabulary-identifier" },
+              "version-range": { "$ref": "_common.schema.json#/$defs/version-range" }
             }
           }
         },
@@ -47,14 +47,11 @@
           "type": "object",
           "required": ["provision", "version-range"],
           "additionalProperties": false,
-          "description": "Exactly 1 shape per workspace (D7 §2). References a shape provision by fully-qualified <ext-id>:<id> per D29.",
+          "description": "Exactly 1 shape per workspace (D7 §2). Per D31, no inheritance. References a shape provision by fully-qualified <ext-id>:<id> per D29.",
           "properties": {
-            "provision": { "$ref": "#/$defs/qualified-identifier" },
-            "version-range": { "$ref": "#/$defs/version-range" },
-            "configuration": {
-              "type": "object",
-              "description": "Shape-specific configuration; structure per the referenced shape's documented configuration schema (extension-defined)."
-            }
+            "provision": { "$ref": "_common.schema.json#/$defs/qualified-identifier" },
+            "version-range": { "$ref": "_common.schema.json#/$defs/version-range" },
+            "configuration": { "type": "object" }
           }
         },
         "substrate-bindings": {
@@ -65,20 +62,24 @@
             "type": "object",
             "required": ["binding-id", "runtime-shape"],
             "additionalProperties": false,
+            "anyOf": [
+              { "required": ["provision"] },
+              { "required": ["required-capabilities"] }
+            ],
+            "description": "Per D34 §6.4: at least one of `provision` or `required-capabilities` must be supplied (specific identity vs. capability-based vs. mixed per D12). A binding declaring neither would be unbootable.",
             "properties": {
-              "binding-id": { "$ref": "#/$defs/kebab-id", "description": "Stable id within this workspace; referenced by agent-actors per D9 + D22." },
-              "provision": {
-                "$ref": "#/$defs/qualified-identifier",
-                "description": "Fully-qualified substrate provision reference. Either provision or required-capabilities must be supplied (specific identity vs capability-based vs mixed per D12)."
+              "binding-id": {
+                "$ref": "_common.schema.json#/$defs/instance-identifier",
+                "description": "Stable id within this workspace; referenced by agent-actors per D9 + D22."
               },
-              "version-range": { "$ref": "#/$defs/version-range" },
+              "provision": { "$ref": "_common.schema.json#/$defs/qualified-identifier" },
+              "version-range": { "$ref": "_common.schema.json#/$defs/version-range" },
               "required-capabilities": {
                 "type": "array",
                 "uniqueItems": true,
-                "items": { "$ref": "#/$defs/capability-identifier" },
-                "description": "Capability-based binding alternative to provision-id (D12)."
+                "items": { "$ref": "_common.schema.json#/$defs/capability-identifier" }
               },
-              "runtime-shape": { "$ref": "#/$defs/runtime-shape-identifier" },
+              "runtime-shape": { "$ref": "_common.schema.json#/$defs/runtime-shape-identifier" },
               "configuration": { "type": "object" }
             }
           }
@@ -86,7 +87,7 @@
         "actors": {
           "type": "array",
           "minItems": 1,
-          "description": "1+ actors (D7 §2; D9). Each entry validates against actor.schema.json.",
+          "description": "1+ actors (D7 §2; D9). Items validate against actor.schema.json. Note: composition is mutable per D7 §4 — runtime-added agent-actors (e.g., sub-agents per D19) join the workspace's actor registry via composition-change events; per-event identity resolution per D34 §6.2 uses the current registry, not just the manifest snapshot.",
           "items": { "$ref": "actor.schema.json" }
         },
         "adapter-bindings": {
@@ -97,56 +98,30 @@
             "required": ["binding-id", "provision"],
             "additionalProperties": false,
             "properties": {
-              "binding-id": { "$ref": "#/$defs/kebab-id" },
-              "provision": { "$ref": "#/$defs/qualified-identifier" },
-              "version-range": { "$ref": "#/$defs/version-range" },
-              "protocol-or-transport": { "$ref": "#/$defs/qualified-identifier" },
-              "configuration": { "type": "object", "description": "Adapter-specific config; schema is extension-declared per protocol (D16)." }
+              "binding-id": { "$ref": "_common.schema.json#/$defs/instance-identifier" },
+              "provision": { "$ref": "_common.schema.json#/$defs/qualified-identifier" },
+              "version-range": { "$ref": "_common.schema.json#/$defs/version-range" },
+              "protocol-or-transport": { "$ref": "_common.schema.json#/$defs/qualified-identifier" },
+              "configuration": { "type": "object" }
             }
           }
         },
         "specialist-bindings": {
           "type": "array",
-          "description": "0+ specialist bindings (D7 §2; D19).",
+          "description": "0+ specialist bindings (D7 §2; D19). binding-id is the workspace-scoped identifier referenced by work-unit.contributing-specialists[] per D34 §1.2.",
           "items": {
             "type": "object",
             "required": ["binding-id", "provision"],
             "additionalProperties": false,
             "properties": {
-              "binding-id": { "$ref": "#/$defs/kebab-id" },
-              "provision": { "$ref": "#/$defs/qualified-identifier" },
-              "version-range": { "$ref": "#/$defs/version-range" },
+              "binding-id": { "$ref": "_common.schema.json#/$defs/instance-identifier" },
+              "provision": { "$ref": "_common.schema.json#/$defs/qualified-identifier" },
+              "version-range": { "$ref": "_common.schema.json#/$defs/version-range" },
               "configuration": { "type": "object" }
             }
           }
         }
       }
-    }
-  },
-
-  "$defs": {
-    "kebab-id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "minLength": 1 },
-    "qualified-identifier": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*$",
-      "description": "Extension-namespaced reference of the form <extension-id>:<identifier> per D29."
-    },
-    "version-range": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "^(?:\\*|(?:(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)(?:\\s+(?:\\^|~|>=|<=|>|<|=)?\\s*(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?)*)$"
-    },
-    "capability-identifier": {
-      "oneOf": [
-        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
-    },
-    "runtime-shape-identifier": {
-      "oneOf": [
-        { "type": "string", "enum": ["interactive", "programmatic", "hosted-interactive", "hosted-programmatic"] },
-        { "$ref": "#/$defs/qualified-identifier" }
-      ]
     }
   }
 }

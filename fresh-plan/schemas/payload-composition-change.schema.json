@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-composition-change.schema.json",
+  "title": "Event payload — composition-change",
+  "description": "Payload schema for event.payload-subtype = 'composition-change' per D10 — workspace composition binding/unbinding (per D7 §4 composition mutability). Closes D34 finding 5.2. Notation: JSON Schema Draft 2020-12 per D28.",
+
+  "type": "object",
+  "required": ["change-type", "binding-reference"],
+  "additionalProperties": false,
+  "properties": {
+    "change-type": {
+      "type": "string",
+      "enum": ["add", "remove", "update"],
+      "description": "The kind of composition mutation performed."
+    },
+    "binding-reference": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the binding affected (e.g., a workspace.composition.adapter-bindings[].binding-id, or a substrate-binding-id, or an actor-id when an actor is added/removed)."
+    },
+    "binding-kind": {
+      "type": "string",
+      "enum": ["substrate-binding", "adapter-binding", "specialist-binding", "actor", "extension"],
+      "description": "Which kind of binding was changed. Useful for filtered-view queries."
+    }
+  }
+}

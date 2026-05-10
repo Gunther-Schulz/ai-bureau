@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-action.schema.json",
+  "title": "Event payload — action",
+  "description": "Payload schema for event.payload-subtype = 'action' per D10. Closes D34 finding 5.2. Notation: JSON Schema Draft 2020-12 per D28.",
+
+  "type": "object",
+  "required": ["action-name"],
+  "additionalProperties": false,
+  "properties": {
+    "action-name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier for the action performed (e.g., 'tool-invoked', 'message-sent', 'file-read', 'email-sent'). Vocabulary is open; conventions are shape / specialist / adapter concern, not core."
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Optional action-specific parameters. Structure is action-name-specific (extension-declared)."
+    },
+    "outcome-reference": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional reference to the action's outcome (e.g., a result identifier, a follow-up event id, a URI)."
+    }
+  }
+}

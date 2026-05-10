@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-lifecycle-transition.schema.json",
+  "title": "Event payload — lifecycle-transition",
+  "description": "Payload schema for event.payload-subtype = 'lifecycle-transition' per D10 — workspace lifecycle phase change (boot, shutdown, persist, resume, per D7 §4). Closes D34 finding 5.2. Notation: JSON Schema Draft 2020-12 per D28.",
+
+  "type": "object",
+  "required": ["transition-type"],
+  "additionalProperties": false,
+  "properties": {
+    "transition-type": {
+      "type": "string",
+      "enum": ["boot", "shutdown", "persist", "resume"],
+      "description": "Workspace lifecycle phase transition (D7 §4)."
+    },
+    "trigger": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional designator for what triggered the transition (e.g., 'user-action', 'scheduled', 'host-process', 'orchestrating-agent'). Open vocabulary."
+    }
+  }
+}

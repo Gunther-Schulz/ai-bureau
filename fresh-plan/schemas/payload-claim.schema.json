@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-claim.schema.json",
+  "title": "Event payload — claim",
+  "description": "Payload schema for event.payload-subtype = 'claim' per D10. Closes D34 finding 5.2 — D10 prose says framework-core validates the five core subtypes' payload shapes; this schema delivers the validation. Notation: JSON Schema Draft 2020-12 per D28.",
+
+  "type": "object",
+  "required": ["assertion"],
+  "additionalProperties": false,
+  "properties": {
+    "assertion": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form assertional content (D10)."
+    },
+    "confidence": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional confidence designator. Vocabulary is shape-policy or extension-defined (e.g., 'high', 'medium', 'low', 'defensibility-grade'); core does not enumerate."
+    },
+    "evidence-references": {
+      "type": "array",
+      "description": "Optional references to evidence supporting the assertion. Items are opaque strings (URIs, file paths, qualified ids; framework does not validate semantics).",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
