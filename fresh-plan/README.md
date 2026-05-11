@@ -82,7 +82,8 @@ Per D26, deferred items have implicit phase homes:
 - ~~Branch / commit strategy~~ → **resolved in D36** (`fresh-plan` is canonical).
 - **D21 verification targets** (A2A peer + MCP server) → Phase C.
 - **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific).
-- **B2 follow-on tasks** → before Phase B closure: (i) `Workspace.register_agent_actor` emits composition-change events with the new `record` slot populated per D39; (ii) `AppendOnlyEventChain.state_at(sequence_n)` per D40 §A. Tracked as B2-followon-1 + B2-followon-2; low-effort; not blocking B3.
+- ~~B2 follow-on tasks~~ → **completed**: B2-followon-1 (composition-change `record` per D39) + B2-followon-2 (`state_at(sequence_n)` per D40 §A) landed.
+- **D39 out-of-band-state tensions surfaced for end-of-Phase-B refinement** (per D39 "(ii) surfaced as a tension to address"): (a) manifest-declared actors loaded into state at boot bypass the event chain — `state_at(n)` pure-replay does not reflect them; (b) work-units' full records are not carried in state-change events (only `id` and status) — replay reconstructs status but not the full record. Both need either synthetic-event emission at boot (closing the loop) or explicit ledger entries before Phase B closure.
 - **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35).
 - **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
 - **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
@@ -157,9 +158,9 @@ fresh-plan/
 
 - **Last ledger entry**: **D40** (extends D10 with projection / query contract + integrity-mechanism extension point; cites AEGIS as canonical first example).
 - **Phase A**: closed at D35; refined by D34 + sharpened by side-quest batch D37-D40.
-- **Phase B**: **in progress.** B1 (conformance validator) + B2 (substrate runtime) committed; ~3,800 LOC total; 101 tests pass. B2 follow-on tasks pending: composition-change `record` emission per D39, `state-at(n)` query per D40 §A. B3 (generic minimal shape impl) is next per D36 workstream order.
+- **Phase B**: **in progress.** B1 (conformance validator) + B2 (substrate runtime) + B2-followon-1 (composition-change `record` per D39) + B2-followon-2 (`state_at(n)` per D40 §A) committed; 111 tests pass. D39 out-of-band-state tensions documented for end-of-Phase-B refinement (manifest-declared actors at boot; work-unit records carried only by id). B3 (generic minimal shape impl) is next per D36 workstream order.
 - **Side-quest research**: `market-context.md` captures adjacent products + landscape map (Kore.ai, Sana AI, AEGIS, Axon, big-consultancy / vertical-startup / thought-leader / muddle-through buckets). Not committed positioning; revisit Phase D or later.
-- **Open threads at handoff**: B2-followon-1 + B2-followon-2 (small); B3 (next substantive); end-of-Phase-B refinement (per D14 / D34); Phase B closure entry (analog of D25 / D35).
+- **Open threads at handoff**: B3 (next substantive); D39 out-of-band-state tensions (manifest-declared actors at boot; work-unit record carry); end-of-Phase-B refinement (per D14 / D34); Phase B closure entry (analog of D25 / D35).
 
 ## Cleanup notes
 

@@ -419,3 +419,13 @@ class Workspace:
 
     def events(self) -> Iterator[dict]:
         return iter(self._substrate.event_chain)
+
+    def state_at(self, sequence_n: int):
+        """Per D40 §A: workspace state derived from events 0..n.
+
+        Pure-replay against a fresh state. Note that manifest-declared
+        actors loaded at boot are not currently event-driven — see
+        AppendOnlyEventChain.state_at docstring for the documented
+        D39 tension.
+        """
+        return self._substrate.event_chain.state_at(sequence_n)

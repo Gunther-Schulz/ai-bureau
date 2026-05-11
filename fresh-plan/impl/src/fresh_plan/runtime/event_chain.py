@@ -19,8 +19,47 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Iterator, Optional
 
+from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
 from fresh_plan.validator.types import ValidationFailure
+
+
+def apply_event_to_state(event: dict, state: WorkspaceState) -> None:
+    """Project a single event onto a WorkspaceState per D39 state-derivability.
+
+    Canonical event → state projection, shared by:
+      - the substrate's append-time `_apply_runtime_side_effects` (mutates
+        the live state as events are appended),
+      - `AppendOnlyEventChain.state_at(n)` (replays events 0..n onto a
+        fresh state per D40 §A minimum query interface).
+
+    Per D39, state must be fully derivable from the chain. Currently
+    derivable through events: actor add/remove (via the D39 `record`
+    slot) and current_scope (via state-change:scope). Out-of-band paths
+    still present in B2 (manifest-declared actor seeding at boot;
+    work-unit records carried only by id in state-change:work-unit-*)
+    are documented tensions per D39 ("(ii) surfaced as a tension to
+    address"); they're tracked for the end-of-Phase-B refinement pass.
+    """
+    subtype = event.get("payload-subtype")
+    payload = event.get("payload") or {}
+
+    if subtype == "composition-change":
+        change_type = payload.get("change-type")
+        binding_kind = payload.get("binding-kind")
+        ref = payload.get("binding-reference")
+        if binding_kind == "actor" and ref is not None:
+            if change_type == "add":
+                record = payload.get("record")
+                if isinstance(record, dict) and not state.has_actor(ref):
+                    state.add_actor(record)
+            elif change_type == "remove":
+                if state.has_actor(ref):
+                    del state.actors[ref]
+
+    elif subtype == "state-change":
+        if payload.get("what") == "scope":
+            state.current_scope = payload.get("after")
 
 
 class MalformedEventError(Exception):
@@ -201,3 +240,24 @@ class AppendOnlyEventChain:
             if entry.event.get("id") == event_id:
                 return entry.sequence
         return None
+
+    def state_at(self, sequence_n: int) -> WorkspaceState:
+        """Per D40 §A: workspace state derived from events 0..n (inclusive).
+
+        Pure-replay against a fresh WorkspaceState — only event-driven
+        state is reflected. Out-of-band state paths (manifest-declared
+        actors loaded at boot; work-unit records carried only by id in
+        state-change events) are not reflected; those are tensions per
+        D39 to address in the end-of-Phase-B refinement pass.
+
+        Args:
+            sequence_n: inclusive upper bound. Negative returns empty
+                state; values past tail are clamped to len(chain)-1.
+        """
+        state = WorkspaceState()
+        if sequence_n < 0 or not self._entries:
+            return state
+        upper = min(sequence_n, len(self._entries) - 1)
+        for i in range(upper + 1):
+            apply_event_to_state(self._entries[i].event, state)
+        return state

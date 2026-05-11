@@ -20,7 +20,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from fresh_plan.runtime.event_chain import AppendOnlyEventChain, MalformedEventError
+from fresh_plan.runtime.event_chain import (
+    AppendOnlyEventChain,
+    MalformedEventError,
+    apply_event_to_state,
+)
 from fresh_plan.runtime.hooks import HookRegistry
 from fresh_plan.runtime.per_event_checks import (
     EventRejected,
@@ -116,36 +120,17 @@ class InProcessSubstrate:
         return seq
 
     def _apply_runtime_side_effects(self, event: dict) -> None:
-        """Mutate state in response to composition-change / state-change.
+        """Apply state mutations driven by the event per D7 §3 + D10.
 
-        Per D7 §3 + D10: state mutations flow through events. For B2,
-        we handle:
-          - composition-change:add for actors (registers sub-agents per D19),
-          - state-change with what='scope' (updates current scope).
+        Delegates to the canonical projection `apply_event_to_state`
+        (shared with AppendOnlyEventChain.state_at(n)) so live-append
+        and replay paths cannot diverge.
 
         Other composition-change targets (adapters / specialists added at
         runtime) are tracked but not 'bound' — B4-B6 owns runtime
         adapter / specialist registration.
         """
-        subtype = event.get("payload-subtype")
-        payload = event.get("payload", {})
-
-        if subtype == "composition-change":
-            change_type = payload.get("change-type")
-            binding_kind = payload.get("binding-kind")
-            ref = payload.get("binding-reference")
-            if change_type == "add" and binding_kind == "actor" and ref is not None:
-                # Per D39: composition-change:add carries the full added
-                # binding's state in `payload.record` so workspace state is
-                # fully derivable from the event chain. Idempotent: skip if
-                # the actor is already registered (replay-safe).
-                record = payload.get("record")
-                if isinstance(record, dict) and not self.state.has_actor(ref):
-                    self.state.add_actor(record)
-
-        elif subtype == "state-change":
-            if payload.get("what") == "scope":
-                self.state.current_scope = payload.get("after")
+        apply_event_to_state(event, self.state)
 
     # ---------------------------------------------------------------
     # Capability advertisement

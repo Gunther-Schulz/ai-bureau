@@ -147,6 +147,24 @@ def test_e2e_actor_registry_derivable_from_event_chain(workspace):
     assert replayed.get_actor("subagent-replay-a")["substrate-binding"] == "primary"
 
 
+def test_e2e_state_at_reflects_runtime_added_actors(workspace):
+    """Per D40 §A: Workspace.state_at(n) replays events 0..n. Runtime-added
+    sub-agents (D19 + D39) appear in the replayed state at and after their
+    composition-change event."""
+    ws = workspace
+    # Capture initial chain length (boot event already at sequence 0).
+    initial_len = len(ws.event_chain)
+    ws.register_agent_actor(id="sub-state-at", substrate_binding="primary")
+    # The composition-change event is at sequence initial_len.
+    comp_seq = initial_len
+    # Before composition-change: no sub-agent in replayed state.
+    state_before = ws.state_at(comp_seq - 1)
+    assert not state_before.has_actor("sub-state-at")
+    # At composition-change: sub-agent appears.
+    state_after = ws.state_at(comp_seq)
+    assert state_after.has_actor("sub-state-at")
+
+
 def test_e2e_chain_remains_continuous(workspace):
     ws = workspace
     primary = ws.actors["agent-primary"]
