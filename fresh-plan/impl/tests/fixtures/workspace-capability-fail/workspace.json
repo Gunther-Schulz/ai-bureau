@@ -1,0 +1,24 @@
+{
+  "id": "cap-fail-ws",
+  "composition": {
+    "extensions": [
+      { "id": "min-ext", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "min-ext:demanding-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "min-ext:weak-substrate",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human", "subtype": "human-actor", "declared-name": "Test" }
+    ],
+    "adapter-bindings": [],
+    "specialist-bindings": []
+  }
+}

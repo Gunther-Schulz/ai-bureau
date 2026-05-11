@@ -1,0 +1,25 @@
+{
+  "id": "cycle-ws",
+  "composition": {
+    "extensions": [
+      { "id": "ext-a", "version-range": ">=1.0.0" },
+      { "id": "ext-b", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "ext-a:a-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "ext-a:a-substrate",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human", "subtype": "human-actor", "declared-name": "Test" }
+    ],
+    "adapter-bindings": [],
+    "specialist-bindings": []
+  }
+}

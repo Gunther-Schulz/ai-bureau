@@ -1,0 +1,11 @@
+{
+  "id": "needy-specialist",
+  "version": "1.0.0",
+  "roles": [],
+  "skills": [],
+  "supported-work-unit-kinds": ["sp-ext:task"],
+  "required-adapter-bindings": ["sp-ext:ghost-adapter"],
+  "required-substrate-capabilities": ["skills"],
+  "declared-event-emissions": [],
+  "declared-event-subscriptions": []
+}

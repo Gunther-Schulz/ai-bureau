@@ -1,0 +1,25 @@
+{
+  "id": "vc-ws",
+  "composition": {
+    "extensions": [
+      { "id": "consumer-a", "version-range": ">=1.0.0" },
+      { "id": "consumer-b", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "consumer-a:a-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "consumer-a:a-sub",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human", "subtype": "human-actor", "declared-name": "Test" }
+    ],
+    "adapter-bindings": [],
+    "specialist-bindings": []
+  }
+}

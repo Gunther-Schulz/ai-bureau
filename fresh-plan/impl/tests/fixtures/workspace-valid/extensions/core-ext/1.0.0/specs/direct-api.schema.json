@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "direct-api protocol stub",
+  "description": "Stub spec for the direct-api protocol. Real protocol specs would describe wire format; this stub just exists to demonstrate the spec-ref resolution path.",
+  "type": "object"
+}

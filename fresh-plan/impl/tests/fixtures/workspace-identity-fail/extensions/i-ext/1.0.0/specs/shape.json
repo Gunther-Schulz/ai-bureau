@@ -1,0 +1,10 @@
+{
+  "id": "i-shape",
+  "version": "1.0.0",
+  "actor-requirements": "none",
+  "required-capabilities": ["hooks"],
+  "optional-capabilities": [],
+  "authority-bindings": [],
+  "roles": [],
+  "hooks": []
+}

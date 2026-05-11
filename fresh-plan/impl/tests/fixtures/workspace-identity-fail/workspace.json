@@ -1,0 +1,24 @@
+{
+  "id": "id-fail-ws",
+  "composition": {
+    "extensions": [
+      { "id": "i-ext", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "i-ext:i-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "i-ext:i-sub",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "agent-x", "subtype": "agent-actor", "substrate-binding": "ghost-binding-id" }
+    ],
+    "adapter-bindings": [],
+    "specialist-bindings": []
+  }
+}

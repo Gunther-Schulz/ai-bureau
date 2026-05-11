@@ -1,0 +1,29 @@
+{
+  "id": "binding-fail-ws",
+  "composition": {
+    "extensions": [
+      { "id": "sp-ext", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "sp-ext:sp-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "sp-ext:sp-sub",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human", "subtype": "human-actor", "declared-name": "Test" }
+    ],
+    "adapter-bindings": [],
+    "specialist-bindings": [
+      {
+        "binding-id": "primary-specialist",
+        "provision": "sp-ext:needy-specialist"
+      }
+    ]
+  }
+}

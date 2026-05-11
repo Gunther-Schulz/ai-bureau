@@ -1,0 +1,12 @@
+{
+  "id": "ext-b",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "ext-a", "version-range": ">=1.0.0" }
+    ]
+  }
+}

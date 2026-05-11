@@ -1,0 +1,13 @@
+{
+  "id": "i-ext",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    { "kind": "substrate", "id": "i-sub", "spec-ref": "./specs/substrate.json" },
+    { "kind": "shape", "id": "i-shape", "spec-ref": "./specs/shape.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "core-ext",
+  "version": "1.0.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "direct-api",
+      "spec-ref": "./specs/direct-api.schema.json"
+    },
+    {
+      "slot": "work-unit.kind",
+      "identifier": "simple-task",
+      "spec-ref": "./specs/simple-task.schema.json"
+    }
+  ],
+  "provisions": [
+    { "kind": "substrate", "id": "minimal-substrate", "spec-ref": "./specs/substrate.json" },
+    { "kind": "shape", "id": "minimal-shape", "spec-ref": "./specs/shape.json" },
+    { "kind": "adapter", "id": "minimal-adapter", "spec-ref": "./specs/adapter.json" },
+    { "kind": "specialist", "id": "minimal-specialist", "spec-ref": "./specs/specialist.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": ["hooks", "skills"],
+    "required-extensions": []
+  }
+}

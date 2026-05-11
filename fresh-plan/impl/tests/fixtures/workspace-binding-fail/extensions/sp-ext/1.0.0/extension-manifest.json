@@ -1,0 +1,20 @@
+{
+  "id": "sp-ext",
+  "version": "1.0.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "work-unit.kind",
+      "identifier": "task",
+      "spec-ref": "./specs/task.schema.json"
+    }
+  ],
+  "provisions": [
+    { "kind": "substrate", "id": "sp-sub", "spec-ref": "./specs/substrate.json" },
+    { "kind": "shape", "id": "sp-shape", "spec-ref": "./specs/shape.json" },
+    { "kind": "specialist", "id": "needy-specialist", "spec-ref": "./specs/specialist.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

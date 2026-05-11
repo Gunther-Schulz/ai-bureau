@@ -1,0 +1,15 @@
+{
+  "id": "consumer-a",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    { "kind": "substrate", "id": "a-sub", "spec-ref": "./substrate.json" },
+    { "kind": "shape", "id": "a-shape", "spec-ref": "./shape.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "dep-ext", "version-range": ">=1.0.0 <2.0.0" }
+    ]
+  }
+}

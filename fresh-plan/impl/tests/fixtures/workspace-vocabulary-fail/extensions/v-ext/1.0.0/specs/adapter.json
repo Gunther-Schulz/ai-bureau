@@ -1,0 +1,8 @@
+{
+  "id": "v-adapter",
+  "version": "1.0.0",
+  "protocol-or-transport": "ghost-ext:unregistered-protocol",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [],
+  "declared-event-consumptions": []
+}

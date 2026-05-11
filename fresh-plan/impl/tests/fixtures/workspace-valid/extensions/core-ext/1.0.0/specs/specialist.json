@@ -1,0 +1,11 @@
+{
+  "id": "minimal-specialist",
+  "version": "1.0.0",
+  "roles": [],
+  "skills": [],
+  "supported-work-unit-kinds": ["core-ext:simple-task"],
+  "required-adapter-bindings": ["core-ext:minimal-adapter"],
+  "required-substrate-capabilities": ["skills"],
+  "declared-event-emissions": [],
+  "declared-event-subscriptions": []
+}

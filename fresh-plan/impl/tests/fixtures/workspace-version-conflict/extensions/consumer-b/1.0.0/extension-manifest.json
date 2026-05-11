@@ -1,0 +1,12 @@
+{
+  "id": "consumer-b",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "dep-ext", "version-range": ">=2.0.0" }
+    ]
+  }
+}

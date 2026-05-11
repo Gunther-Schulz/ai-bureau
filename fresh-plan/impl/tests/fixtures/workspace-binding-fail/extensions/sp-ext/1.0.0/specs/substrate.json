@@ -1,0 +1,6 @@
+{
+  "id": "sp-sub",
+  "version": "1.0.0",
+  "capabilities": ["hooks", "skills", "event-streaming"],
+  "runtime-shapes": ["interactive"]
+}

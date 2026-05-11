@@ -1,0 +1,6 @@
+{
+  "id": "weak-substrate",
+  "version": "1.0.0",
+  "capabilities": ["hooks"],
+  "runtime-shapes": ["interactive"]
+}

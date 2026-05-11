@@ -1,0 +1,38 @@
+{
+  "id": "minimal-ws",
+  "description": "Smallest valid workspace exercising the full validator path.",
+  "composition": {
+    "extensions": [
+      { "id": "core-ext", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "core-ext:minimal-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "core-ext:minimal-substrate",
+        "version-range": ">=1.0.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human-actor-1", "subtype": "human-actor", "declared-name": "Test Human" },
+      { "id": "agent-1", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-adapter",
+        "provision": "core-ext:minimal-adapter",
+        "protocol-or-transport": "core-ext:direct-api"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "primary-specialist",
+        "provision": "core-ext:minimal-specialist"
+      }
+    ]
+  }
+}

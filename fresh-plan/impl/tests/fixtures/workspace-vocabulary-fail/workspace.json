@@ -1,0 +1,29 @@
+{
+  "id": "vocab-fail-ws",
+  "composition": {
+    "extensions": [
+      { "id": "v-ext", "version-range": ">=1.0.0" }
+    ],
+    "shape": {
+      "provision": "v-ext:v-shape",
+      "version-range": ">=1.0.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "v-ext:v-sub",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "human", "subtype": "human-actor", "declared-name": "Test" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-adapter",
+        "provision": "v-ext:v-adapter"
+      }
+    ],
+    "specialist-bindings": []
+  }
+}

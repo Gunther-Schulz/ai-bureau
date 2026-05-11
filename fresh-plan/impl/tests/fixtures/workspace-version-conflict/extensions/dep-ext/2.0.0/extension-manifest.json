@@ -1,0 +1,10 @@
+{
+  "id": "dep-ext",
+  "version": "2.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

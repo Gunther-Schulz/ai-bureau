@@ -1,0 +1,10 @@
+{
+  "id": "minimal-adapter",
+  "version": "1.0.0",
+  "protocol-or-transport": "core-ext:direct-api",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}

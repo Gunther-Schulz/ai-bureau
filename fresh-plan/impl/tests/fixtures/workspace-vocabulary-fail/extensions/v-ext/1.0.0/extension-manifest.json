@@ -1,0 +1,14 @@
+{
+  "id": "v-ext",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    { "kind": "substrate", "id": "v-sub", "spec-ref": "./specs/substrate.json" },
+    { "kind": "shape", "id": "v-shape", "spec-ref": "./specs/shape.json" },
+    { "kind": "adapter", "id": "v-adapter", "spec-ref": "./specs/adapter.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

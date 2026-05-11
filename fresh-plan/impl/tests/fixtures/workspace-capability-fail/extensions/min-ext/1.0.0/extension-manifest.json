@@ -1,0 +1,19 @@
+{
+  "id": "min-ext",
+  "version": "1.0.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "substrate.capabilities",
+      "identifier": "exotic-cap",
+      "spec-ref": "./specs/exotic.schema.json"
+    }
+  ],
+  "provisions": [
+    { "kind": "substrate", "id": "weak-substrate", "spec-ref": "./specs/substrate.json" },
+    { "kind": "shape", "id": "demanding-shape", "spec-ref": "./specs/shape.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "demanding-shape",
+  "version": "1.0.0",
+  "actor-requirements": "none",
+  "required-capabilities": ["hooks", "min-ext:exotic-cap"],
+  "optional-capabilities": [],
+  "authority-bindings": [],
+  "roles": [],
+  "hooks": []
+}

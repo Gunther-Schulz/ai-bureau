@@ -1,0 +1,15 @@
+{
+  "id": "ext-a",
+  "version": "1.0.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    { "kind": "substrate", "id": "a-substrate", "spec-ref": "./substrate.json" },
+    { "kind": "shape", "id": "a-shape", "spec-ref": "./shape.json" }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "ext-b", "version-range": ">=1.0.0" }
+    ]
+  }
+}
