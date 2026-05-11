@@ -22,6 +22,7 @@ dev = ["pytest>=7", "pytest-cov"]
 
 [project.scripts]
 fresh-plan-validate = "fresh_plan.cli:main"
+fresh-plan-run = "fresh_plan.cli:run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fresh_plan"]
