@@ -1,14 +1,14 @@
-"""InProcessSubstrate — the B2 in-process substrate runtime.
+"""Substrate runtime — D12 + D17 + D41 two-substrate parity for Phase B.
 
 Per D12, a substrate hosts the agent loop and exposes interfaces
 (capabilities) for other extensions to hook into. Per D17, the three
 core abstract capabilities are `hooks`, `skills`, `event-streaming`.
 
-Per the B2 design lock: this is the *in-process* substrate (no Claude
-Agent SDK integration in B2; that's a follow-on). The substrate is
-just a Python container that holds WorkspaceState + AppendOnlyEventChain
-+ HookRegistry + SkillRegistry, plus the per-event D30 §4 runtime
-checks invoked on every event append.
+Per D41 Phase B closure: two substrate impls ship in Phase B —
+InProcessSubstrate (B2) + MSAgentFrameworkSubstrate (B2b). Both are
+stubs at Phase B; their existence proves the D12 contract is satisfiable
+by more than one named-framework alignment. Real-wire integration is
+Phase C.
 
 Per D12 binding resolution: substrates declare `runtime-shapes[]`; each
 binding selects exactly one. The substrate instance tracks its bound
@@ -18,11 +18,11 @@ are implementation per D11.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
 from fresh_plan.runtime.event_chain import (
     AppendOnlyEventChain,
-    MalformedEventError,
     apply_event_to_state,
 )
 from fresh_plan.runtime.hooks import HookRegistry
@@ -30,6 +30,7 @@ from fresh_plan.runtime.per_event_checks import (
     EventRejected,
     check_event_references,
 )
+from fresh_plan.runtime.provision import load_provision_spec
 from fresh_plan.runtime.skills import SkillRegistry
 from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
@@ -41,12 +42,15 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class InProcessSubstrate:
-    """In-memory substrate container per D12 + D17.
+class Substrate:
+    """Base class for substrate runtime impls per D12 + D17.
 
-    Capabilities advertised: `hooks`, `skills`, `event-streaming` (the
-    three core abstract per D17). Additional extension-registered
-    capabilities are out of scope for the B2 reference substrate.
+    Holds the workspace event chain + state + hook/skill registries,
+    enforces the per-event D30 §4 runtime checks + D13 shape authority-
+    binding check on every append, and dispatches matching events into
+    subscribed specialists per D37. Subclasses override behavior only
+    when real-wire integration diverges from the in-process baseline;
+    Phase B stubs share the base behavior unchanged.
     """
 
     workspace_id: str
@@ -69,26 +73,18 @@ class InProcessSubstrate:
     capabilities: list[str] = field(default_factory=list)
 
     # Shape policy bundle (D13) attached at boot when composition.shape resolves.
-    # None for fixtures that don't bind a real shape impl.
     shape: Optional["Shape"] = None
 
     # Adapter / specialist binding metadata stored for inspection by callers.
-    # The B2 substrate does NOT execute adapters or specialists — those are
-    # B4 / B5 / B6 workstreams. We store metadata so consumers can verify the
-    # boot path resolved everything correctly.
     adapter_bindings: dict[str, dict] = field(default_factory=dict)
     specialist_bindings: dict[str, dict] = field(default_factory=dict)
 
-    # Instantiated adapter runtimes per binding-id, keyed by binding-id and
-    # typed as the Adapter base. Populated at boot step 7; workspace attached
-    # post-Workspace construction (pre boot-lifecycle event) per B4 boot-
-    # ordering.
+    # Instantiated adapter runtimes per binding-id (B4 / B5).
     adapter_instances: dict[str, "Adapter"] = field(default_factory=dict)
 
-    # Instantiated specialist runtimes per binding-id (B6 + D19). Workspace
-    # attached + skills registered post-adapter-attach so required-adapter
-    # bindings resolve. `specialist_subscribers` duplicates the values list
-    # for the append_event hot path (D37 event-driven coordination).
+    # Instantiated specialist runtimes per binding-id (B6 + D19).
+    # `specialist_subscribers` duplicates the values list for the
+    # append_event hot path (D37 event-driven coordination).
     specialist_instances: dict[str, "Specialist"] = field(default_factory=dict)
     specialist_subscribers: list["Specialist"] = field(default_factory=list)
 
@@ -107,21 +103,8 @@ class InProcessSubstrate:
 
         Per D34 §A.5: identity is against current state; sub-agents added
         via composition-change events are valid event targets *after*
-        their composition-change is appended. The substrate enforces this
-        by:
-          1. Running per-event identity checks against current state.
-          2. Appending the event (so it's now part of state).
-          3. For composition-change:add events, applying the composition
-             mutation AFTER append (so subsequent events see the new
-             state, but the composition-change event itself doesn't
-             reference its own additions in `actors[]`).
-
-        Step 3's ordering choice: the composition-change event records
-        *who added* the new binding (actors[]), referencing actors that
-        already exist; the new binding becomes visible to events appended
-        *after* the composition-change.
+        their composition-change is appended.
         """
-        # Per-event identity checks (D30 §4 runtime portion)
         ident_failures = check_event_references(
             event,
             self.state,
@@ -131,25 +114,15 @@ class InProcessSubstrate:
         if ident_failures:
             raise EventRejected(ident_failures)
 
-        # Shape authority-binding check (D13). Skipped when no shape attached
-        # (legacy fixtures binding `min-shape` etc.).
         if self.shape is not None:
             auth_failures = self.shape.check_authority(event, self.state)
             if auth_failures:
                 raise EventRejected(auth_failures)
 
-        # Schema + chain-integrity validation lives in the event chain.
-        # MalformedEventError propagates to the caller; event is not
-        # appended on raise.
         seq = self.event_chain.append(event, self.schema_store)
 
-        # Apply runtime side effects of certain payload subtypes.
         self._apply_runtime_side_effects(event)
 
-        # Dispatch event to specialist subscribers per D37 + D19 declared-event-
-        # subscriptions. One match per specialist (multiple subscription rows
-        # do not multiply on_event firings). Exceptions are swallowed so a
-        # buggy subscriber cannot corrupt the appended chain.
         if self.specialist_subscribers:
             self._dispatch_event_to_subscribers(event)
 
@@ -178,10 +151,6 @@ class InProcessSubstrate:
         Delegates to the canonical projection `apply_event_to_state`
         (shared with AppendOnlyEventChain.state_at(n)) so live-append
         and replay paths cannot diverge.
-
-        Other composition-change targets (adapters / specialists added at
-        runtime) are tracked but not 'bound' — B4-B6 owns runtime
-        adapter / specialist registration.
         """
         apply_event_to_state(event, self.state)
 
@@ -194,3 +163,63 @@ class InProcessSubstrate:
 
     def declared_capabilities(self) -> list[str]:
         return list(self.capabilities)
+
+
+@dataclass
+class InProcessSubstrate(Substrate):
+    """First concrete substrate impl per D12 — in-memory Python harness; no
+    real LLM wire; provides B2/B6 stub behavior. Phase C real-wire integration
+    (e.g., Claude Agent SDK) extends or replaces this.
+    """
+
+
+@dataclass
+class MSAgentFrameworkSubstrate(Substrate):
+    """MS Agent Framework substrate stub per B2b / D41.
+
+    Behaviorally identical to InProcessSubstrate at Phase B stub level;
+    declared separately to satisfy two-substrate parity (proves D17
+    capability vocabulary is concept-substantiated by a non-Claude-shape
+    framework, even if names lean Claude-flavored — see Bref). Phase C
+    real-wire integration would map MS Agent Framework primitives
+    (workflows + agents + middleware + tools + checkpointing) onto the
+    Substrate contract surface.
+    """
+
+
+# Module-level registry of (substrate.id → runtime class). Populated as new
+# substrate impls land. Phase C real-wire impls replace stub classes here.
+_SUBSTRATE_CLASSES: dict[str, type[Substrate]] = {
+    "inprocess-substrate": InProcessSubstrate,
+    "ms-agent-framework-substrate": MSAgentFrameworkSubstrate,
+}
+
+
+def load_substrate_from_provision(
+    provision_ref: str,
+    extensions_dir: Path,
+    *,
+    workspace_id: str,
+    runtime_shape: str,
+    schema_store: SchemaStore,
+    capabilities: list[str],
+) -> Substrate:
+    """Load a substrate spec from a `<ext-id>:<provision-id>` ref + instantiate.
+
+    Dispatches by `spec.id` to the registered runtime class. Raises
+    ValueError if the spec's id has no registered runtime class.
+    """
+    spec = load_provision_spec(provision_ref, extensions_dir)
+    substrate_id = spec.get("id")
+    cls = _SUBSTRATE_CLASSES.get(substrate_id)
+    if cls is None:
+        raise ValueError(
+            f"substrate provision {provision_ref!r}: spec id {substrate_id!r} "
+            f"has no registered Substrate runtime class"
+        )
+    return cls(
+        workspace_id=workspace_id,
+        runtime_shape=runtime_shape,
+        schema_store=schema_store,
+        capabilities=list(capabilities),
+    )

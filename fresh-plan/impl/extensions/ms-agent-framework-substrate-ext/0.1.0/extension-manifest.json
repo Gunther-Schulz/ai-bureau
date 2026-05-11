@@ -1,0 +1,16 @@
+{
+  "id": "ms-agent-framework-substrate-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    {
+      "kind": "substrate",
+      "id": "ms-agent-framework-substrate",
+      "spec-ref": "./substrate.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

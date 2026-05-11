@@ -22,6 +22,9 @@ MCP_ADAPTER_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-mcp-adapte
 GENERIC_SPECIALIST_FIXTURE = (
     Path(__file__).parent / "fixtures" / "workspace-generic-specialist"
 )
+MS_AGENT_FRAMEWORK_FIXTURE = (
+    Path(__file__).parent / "fixtures" / "workspace-ms-agent-framework"
+)
 
 
 @pytest.fixture
@@ -267,5 +270,26 @@ def test_e2e_generic_specialist_skill_invocation_emits_action():
         assert emitted["payload"]["parameters"] == {"target": "doc-1"}
         assert response["ok"] is True
         assert response["stub"] is True
+    finally:
+        ws.shutdown()
+
+
+# ---------------------------------------------------------------
+# B2b — MS Agent Framework substrate stub end-to-end (D12 + D17 + D41)
+# ---------------------------------------------------------------
+
+
+def test_e2e_ms_agent_framework_specialist_skill_invocation_emits_action():
+    """Per B2b + D41: same composition as the generic-specialist e2e but
+    hosted on the MSAgentFrameworkSubstrate stub; specialist invocation
+    still lands an action event into the chain."""
+    manifest = json.loads((MS_AGENT_FRAMEWORK_FIXTURE / "workspace.json").read_text())
+    ws = Workspace.boot(manifest, MS_AGENT_FRAMEWORK_FIXTURE / "extensions")
+    try:
+        before = len(ws.event_chain.by_payload_subtype("action"))
+        ws.substrate.skills.invoke("do-task", {"target": "ms-doc-1"})
+        actions = ws.event_chain.by_payload_subtype("action")
+        assert len(actions) == before + 1
+        assert actions[-1]["payload"]["action-name"] == "do-task"
     finally:
         ws.shutdown()

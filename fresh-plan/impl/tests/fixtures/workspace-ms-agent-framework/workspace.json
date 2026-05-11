@@ -1,0 +1,42 @@
+{
+  "id": "ms-agent-framework-ws",
+  "description": "Workspace fixture binding the MS Agent Framework substrate stub (B2b / D41). Exercises substrate dispatch + cross-substrate composition (generic-shape + mcp-tool-adapter + generic-specialist all on a non-inprocess substrate) to prove D17 capability vocabulary is concept-substantiated by a second named-framework alignment.",
+  "composition": {
+    "extensions": [
+      { "id": "ms-agent-framework-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-specialist-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "ms-agent-framework-substrate-ext:ms-agent-framework-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "ms-agent-framework-substrate-ext:workflow"
+      }
+    ],
+    "actors": [
+      { "id": "agent-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-mcp",
+        "provision": "mcp-server-ext:mcp-tool-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "primary-specialist",
+        "provision": "generic-specialist-ext:generic-specialist",
+        "version-range": ">=0.1.0"
+      }
+    ]
+  }
+}

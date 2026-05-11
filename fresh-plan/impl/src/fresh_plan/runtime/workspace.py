@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator, Optional
 
-from fresh_plan.runtime.substrate import InProcessSubstrate
+from fresh_plan.runtime.substrate import Substrate
 from fresh_plan.runtime.workspace_state import WORK_UNIT_STATUSES
 
 
@@ -170,17 +170,18 @@ class WorkUnitHandle:
 
 
 class Workspace:
-    """User-facing handle wrapping an InProcessSubstrate.
+    """User-facing handle wrapping a Substrate.
 
     Lifecycle: created by `Workspace.boot(...)` (which fires the boot
     lifecycle-transition event); context-manager `__exit__` fires the
     shutdown lifecycle-transition event.
 
-    Per the B2 brief: this is the surface other code uses to interact
-    with the running workspace.
+    Per the B2 brief + D41: this is the surface other code uses to
+    interact with the running workspace, agnostic of the concrete
+    Substrate subclass.
     """
 
-    def __init__(self, substrate: InProcessSubstrate, manifest: dict) -> None:
+    def __init__(self, substrate: Substrate, manifest: dict) -> None:
         self._substrate = substrate
         self._manifest = manifest
         self._actor_handles: dict[str, ActorHandle] = {
@@ -240,7 +241,7 @@ class Workspace:
         return self._manifest
 
     @property
-    def substrate(self) -> InProcessSubstrate:
+    def substrate(self) -> Substrate:
         return self._substrate
 
     @property

@@ -28,7 +28,12 @@ from fresh_plan.runtime.per_event_checks import (
     check_event_references,
 )
 from fresh_plan.runtime.skills import SkillRegistry, UnknownSkillError
-from fresh_plan.runtime.substrate import InProcessSubstrate
+from fresh_plan.runtime.substrate import (
+    InProcessSubstrate,
+    MSAgentFrameworkSubstrate,
+    Substrate,
+    load_substrate_from_provision,
+)
 from fresh_plan.runtime.workspace import ActorHandle, Workspace, WorkUnitHandle
 from fresh_plan.runtime.workspace_state import (
     DuplicateActorError,
@@ -48,8 +53,10 @@ __all__ = [
     "HookRegistry",
     "InProcessSubstrate",
     "InvalidWorkUnitTransitionError",
+    "MSAgentFrameworkSubstrate",
     "MalformedEventError",
     "SkillRegistry",
+    "Substrate",
     "UnknownActorError",
     "UnknownSkillError",
     "UnknownWorkUnitError",
@@ -60,4 +67,5 @@ __all__ = [
     "WorkUnitHandle",
     "boot_workspace",
     "check_event_references",
+    "load_substrate_from_provision",
 ]

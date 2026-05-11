@@ -5,7 +5,8 @@ Per the B2 brief boot procedure spec:
   1. Call B1 to validate the manifest (D29 + D30 + D32 + D33).
   2. Resolve the substrate provision from composition.substrate-bindings[].
   3. Load the resolved substrate provision's spec.
-  4. Instantiate the substrate runtime (InProcessSubstrate for B2).
+  4. Instantiate the substrate runtime — dispatched by provision id
+     (InProcessSubstrate / MSAgentFrameworkSubstrate per D41).
   5. Register manifest-declared actors into the registry.
   6. Load shape policies (B2: record names; full impl is B3).
   7. Bind adapters (B2: store metadata; runtime is B4/B5).
@@ -22,7 +23,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from fresh_plan.runtime.substrate import InProcessSubstrate
+from fresh_plan.runtime.provision import load_provision_spec
+from fresh_plan.runtime.substrate import load_substrate_from_provision
 from fresh_plan.validator import validate_workspace_boot
 from fresh_plan.validator.schemas import SchemaStore, load_schemas
 from fresh_plan.validator.types import ValidationFailure
@@ -93,42 +95,41 @@ def boot_workspace(
         )
     primary_binding = substrate_bindings[0]
     runtime_shape = primary_binding.get("runtime-shape")
-
-    # 3. Load the substrate provision spec (already in result.loaded_extensions —
-    # but we need the resolved spec dict, not just the manifest, so we re-read
-    # it through the validator's extension loader).
-    capabilities: list[str] = []
     prov_ref = primary_binding.get("provision")
-    if prov_ref:
-        ext_id, prov_id = prov_ref.split(":", 1)
-        # Use the validator's `extensions.load_extension` path indirectly:
-        # the validator already validated everything, so we just re-walk the
-        # extensions-dir to get the provision spec.
-        from fresh_plan.validator.extensions import (
-            discover_extensions,
-            load_extension,
+    if not prov_ref:
+        # Per workspace schema substrate-binding anyOf: provision OR required-
+        # capabilities. B1 success implies at least one is present; a binding
+        # with required-capabilities only cannot be booted in B2b (no
+        # registered runtime class to dispatch to). Treat as resolution failure.
+        raise WorkspaceBootError(
+            [
+                ValidationFailure(
+                    category="resolution",
+                    path="composition.substrate-bindings[0].provision",
+                    value=None,
+                    reason=(
+                        "substrate-binding lacks an explicit provision; "
+                        "capability-only binding is not bootable in Phase B"
+                    ),
+                )
+            ]
         )
 
-        discovered = discover_extensions(extensions_dir)
-        if ext_id in discovered:
-            # Pick the version selected by the validator (any present here).
-            # Per D32 multi-version handling — we trust whichever the validator
-            # chose; for B2's single-version test fixtures this is unambiguous.
-            for version, manifest_path in discovered[ext_id].items():
-                loaded_ext, _errs = load_extension(ext_id, version, manifest_path)
-                spec = loaded_ext.provisions_loaded.get(prov_id)
-                if spec is not None:
-                    capabilities = list(spec.get("capabilities", []))
-                    break
+    # 3. Load the substrate provision spec via the shared helper.
+    capabilities: list[str] = list(
+        load_provision_spec(prov_ref, extensions_dir).get("capabilities", [])
+    )
 
-    # If the binding is purely capability-based, advertise the required
-    # capabilities (per D12 mixed binding semantics).
+    # If the binding additionally lists required-capabilities, advertise them
+    # (per D12 mixed binding semantics).
     for cap in primary_binding.get("required-capabilities", []) or []:
         if cap not in capabilities:
             capabilities.append(cap)
 
-    # 4. Instantiate the substrate runtime.
-    substrate = InProcessSubstrate(
+    # 4. Instantiate the substrate runtime — dispatched by provision id.
+    substrate = load_substrate_from_provision(
+        prov_ref,
+        extensions_dir,
         workspace_id=manifest["id"],
         runtime_shape=runtime_shape,
         schema_store=schema_store,
@@ -186,7 +187,6 @@ def boot_workspace(
     # (B6 + D19). When no runtime class is registered for spec.id (B1-era
     # fixtures binding e.g. `core-ext:minimal-specialist`), fall back to the
     # B2 stub-skill registration via load_provision_spec.
-    from fresh_plan.runtime.provision import load_provision_spec
     from fresh_plan.runtime.specialist import load_specialist_from_provision
 
     for binding in composition.get("specialist-bindings", []):
