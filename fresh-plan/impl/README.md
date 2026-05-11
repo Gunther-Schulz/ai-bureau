@@ -55,6 +55,14 @@ if not result.success:
 
 The validator scans `<extensions-dir>` recursively; each `<extension-id>/<version>/extension-manifest.json` is treated as one extension version.
 
+## Extension naming conventions
+
+Conventions that emerged from worked examples in B2 (`inprocess-substrate-ext`) and B3 (`generic-shape-ext`). **Revisable when a workstream surfaces a structural reason** — not aesthetic preference. Revision = update this section + every in-tree reference in one pass.
+
+1. **Extension-id**: kebab-case, `-ext` suffix. Examples: `inprocess-substrate-ext`, `generic-shape-ext`. Anticipated next: `mcp-server-ext` (B4), `direct-api-ext` (B5), `practitioner-shape-ext` (Phase D), `pbs-schulz-ext` (Phase D).
+2. **Provision-id**: kebab-case, **no** `-ext` suffix. The provision is the *thing the extension provides*, distinct from the extension itself. Examples: `inprocess-substrate` (provided by `inprocess-substrate-ext`), `generic-shape` (provided by `generic-shape-ext`).
+3. **Cross-extension reference**: fully-qualified form `<ext-id>:<provision-id>`. Used in workspace-manifest binding `provision` slots and per D29 namespacing semantics. Examples: `inprocess-substrate-ext:inprocess-substrate`, `generic-shape-ext:generic-shape`.
+
 ## Known limitations
 
 - **Per-event runtime checks** (D30 §4 "per-event" portion) require runtime state and are deferred to B2 (substrate impl).
