@@ -37,7 +37,7 @@ Phases beyond layer-2 closure, named at high level — order indicative not rigi
 | Phase | Work | Status |
 |---|---|---|
 | **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | **Closed at D35.** Refined by D34 (refinement pass) + D37-D40 (side-quest sharpening). |
-| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36 + D41: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (stub) ✅, B6 specialist (next), B2b MS Agent Framework substrate stub (per D41; required before closure; parallel-eligible with B6/B7/B8), B7 RAG-via-MCP, B8 end-to-end. |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36 + D41: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (stub) ✅, B6 specialist ✅ (+ subscriber-dispatch infrastructure giving D17 event-streaming push semantics per D37), B2b MS Agent Framework substrate stub (per D41; required before closure; parallel-eligible with B7/B8), B7 RAG-via-MCP, B8 end-to-end. |
 | **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Not started. Phase B prerequisite. |
 | **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | Not started. Phase B + C prerequisite. |
 | **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Not started. |
@@ -59,6 +59,7 @@ Per D26, deferred items have implicit phase homes:
   - Resolve D39 out-of-band-state tensions (manifest-actor seeding + work-unit record carry).
   - D17 capability-vocabulary sharpening if B2b two-substrate parity (D41) surfaces Claude-flavored bias.
   - Sana-style knowledge-query worked-example validating D38 (no knowledge-kind needed; decomposes across adapters + state + shape policy).
+  - **Activation-scope DSL** for specialists per D19 — currently the slot is opaque metadata (runtime treats any non-null value as always-active-when-bound). Phase D pioneer concrete activation expressions give the DSL design real input; locked here as a candidate refinement deliverable.
   - **Split `decisions.md` into per-entry files at `decisions/D<NN>-<slug>.md`**, with `decisions.md` becoming a thin chronological index. Precedent: pbs-bureau's GLOSSARY split (36 per-entry files) + DISCIPLINES split (10 per-discipline files) for context-load efficiency. Trigger: file size + Phase-C-onward growth makes the monolith painful. Done as part of refinement so it composes with the closure-entry write rather than colliding with mainline workstream commits.
 - **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
 - **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
@@ -139,4 +140,5 @@ fresh-plan/
       generic-shape-ext/        <- B3 shape (GenericShape(Shape))
       mcp-server-ext/           <- B4 stub MCP-server-protocol adapter (MCPToolAdapter(Adapter))
       direct-api-ext/           <- B5 stub direct-api adapter (DirectAPIAdapter(Adapter))
+      generic-specialist-ext/   <- B6 specialist (GenericSpecialist(Specialist); registers generic-task into work-unit.kind)
 ```

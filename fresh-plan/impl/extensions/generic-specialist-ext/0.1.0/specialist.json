@@ -1,0 +1,14 @@
+{
+  "id": "generic-specialist",
+  "version": "0.1.0",
+  "roles": ["author"],
+  "skills": [
+    { "id": "do-task",
+      "description": "Generic task execution skill; emits an action event and may invoke a bound adapter." }
+  ],
+  "supported-work-unit-kinds": ["generic-specialist-ext:generic-task"],
+  "required-adapter-bindings": ["mcp-server-ext:mcp-tool-adapter"],
+  "required-substrate-capabilities": ["skills", "event-streaming"],
+  "declared-event-emissions": [{ "payload-subtype": "action" }],
+  "declared-event-subscriptions": [{ "payload-subtype": "claim" }]
+}

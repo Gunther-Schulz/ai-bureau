@@ -19,6 +19,9 @@ GENERIC_SHAPE_FIXTURE = (
     Path(__file__).parent / "fixtures" / "workspace-generic-shape"
 )
 MCP_ADAPTER_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-mcp-adapter"
+GENERIC_SPECIALIST_FIXTURE = (
+    Path(__file__).parent / "fixtures" / "workspace-generic-specialist"
+)
 
 
 @pytest.fixture
@@ -231,5 +234,38 @@ def test_e2e_mcp_adapter_call_emits_action_into_chain():
         assert emitted["payload"]["action-name"] == "echo"
         assert emitted["payload"]["parameters"] == {"x": 1}
         assert emitted["payload"]["outcome-reference"] == response["outcome-reference"]
+    finally:
+        ws.shutdown()
+
+
+# ---------------------------------------------------------------
+# B6 — generic specialist end-to-end (D19 + D37)
+# ---------------------------------------------------------------
+
+
+def test_e2e_generic_specialist_skill_invocation_emits_action():
+    """Per D19 + B6: boot a workspace binding generic-specialist + the
+    required mcp-tool-adapter; the specialist resolves its adapter binding,
+    registers `do-task` into substrate.skills, and invoking the skill emits
+    one action event into the chain."""
+    manifest = json.loads((GENERIC_SPECIALIST_FIXTURE / "workspace.json").read_text())
+    ws = Workspace.boot(manifest, GENERIC_SPECIALIST_FIXTURE / "extensions")
+    try:
+        specialist = ws.specialist("primary-specialist")
+        assert specialist is not None
+        # Required adapter is resolved + present in the specialist's _adapters.
+        assert ws.adapter("primary-mcp") is specialist._adapters[
+            "mcp-server-ext:mcp-tool-adapter"
+        ]
+        # Skill invocation emits an action event.
+        before = len(ws.event_chain.by_payload_subtype("action"))
+        response = ws.substrate.skills.invoke("do-task", {"target": "doc-1"})
+        actions = ws.event_chain.by_payload_subtype("action")
+        assert len(actions) == before + 1
+        emitted = actions[-1]
+        assert emitted["payload"]["action-name"] == "do-task"
+        assert emitted["payload"]["parameters"] == {"target": "doc-1"}
+        assert response["ok"] is True
+        assert response["stub"] is True
     finally:
         ws.shutdown()

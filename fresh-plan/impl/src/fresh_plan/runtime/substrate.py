@@ -37,6 +37,7 @@ from fresh_plan.validator.schemas import SchemaStore
 if TYPE_CHECKING:
     from fresh_plan.runtime.adapter import Adapter
     from fresh_plan.runtime.shape import Shape
+    from fresh_plan.runtime.specialist import Specialist
 
 
 @dataclass
@@ -83,6 +84,13 @@ class InProcessSubstrate:
     # post-Workspace construction (pre boot-lifecycle event) per B4 boot-
     # ordering.
     adapter_instances: dict[str, "Adapter"] = field(default_factory=dict)
+
+    # Instantiated specialist runtimes per binding-id (B6 + D19). Workspace
+    # attached + skills registered post-adapter-attach so required-adapter
+    # bindings resolve. `specialist_subscribers` duplicates the values list
+    # for the append_event hot path (D37 event-driven coordination).
+    specialist_instances: dict[str, "Specialist"] = field(default_factory=dict)
+    specialist_subscribers: list["Specialist"] = field(default_factory=list)
 
     # ---------------------------------------------------------------
     # Event append (the integrity gate)
@@ -138,7 +146,31 @@ class InProcessSubstrate:
         # Apply runtime side effects of certain payload subtypes.
         self._apply_runtime_side_effects(event)
 
+        # Dispatch event to specialist subscribers per D37 + D19 declared-event-
+        # subscriptions. One match per specialist (multiple subscription rows
+        # do not multiply on_event firings). Exceptions are swallowed so a
+        # buggy subscriber cannot corrupt the appended chain.
+        if self.specialist_subscribers:
+            self._dispatch_event_to_subscribers(event)
+
         return seq
+
+    def _dispatch_event_to_subscribers(self, event: dict) -> None:
+        """Fire on_event on each subscribing specialist with a matching subscription."""
+        subtype = event.get("payload-subtype")
+        payload = event.get("payload") or {}
+        for sub in self.specialist_subscribers:
+            for subscription in sub.declared_event_subscriptions:
+                if subscription.get("payload-subtype") != subtype:
+                    continue
+                qualifier = subscription.get("qualifier")
+                if qualifier is not None and payload.get("qualifier") != qualifier:
+                    continue
+                try:
+                    sub.on_event(event)
+                except Exception:
+                    pass
+                break
 
     def _apply_runtime_side_effects(self, event: dict) -> None:
         """Apply state mutations driven by the event per D7 §3 + D10.

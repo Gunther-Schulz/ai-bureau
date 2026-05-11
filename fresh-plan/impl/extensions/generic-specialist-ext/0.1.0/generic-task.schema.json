@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "generic-task work-unit-kind stub",
+  "description": "Stub spec for the generic-task identifier registered into work-unit.kind per D29. Real work-unit-kind payload schema is Phase C+ territory; this stub exists to demonstrate the vocabulary-registration spec-ref resolution path per D2 strict protocol-neutrality.",
+  "type": "object"
+}

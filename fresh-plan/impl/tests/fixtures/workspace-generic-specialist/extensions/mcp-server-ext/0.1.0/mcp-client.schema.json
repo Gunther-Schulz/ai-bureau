@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mcp-client protocol stub",
+  "description": "Stub spec for the mcp-client protocol identifier registered into adapter.protocol-or-transport per D29. Real wire-format (MCP JSON-RPC over stdio/HTTP) is Phase C territory; this stub exists to demonstrate the vocabulary-registration spec-ref resolution path per D2 strict protocol-neutrality.",
+  "type": "object"
+}

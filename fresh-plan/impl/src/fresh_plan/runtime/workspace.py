@@ -282,6 +282,14 @@ class Workspace:
         """Return the adapter instance bound at `binding_id` (KeyError on miss)."""
         return self._substrate.adapter_instances[binding_id]
 
+    @property
+    def specialists(self) -> dict:
+        return self._substrate.specialist_instances
+
+    def specialist(self, binding_id: str):
+        """Return the specialist instance bound at `binding_id` (KeyError on miss)."""
+        return self._substrate.specialist_instances[binding_id]
+
     # ------------------------ work-unit + sub-agent ------------------------
 
     def create_work_unit(

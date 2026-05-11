@@ -182,34 +182,37 @@ def boot_workspace(
             continue
         substrate.adapter_instances[bid] = adapter
 
-    # 8. Specialist bindings: store metadata + register skill stubs.
+    # 8. Specialist bindings: store metadata + instantiate specialist runtimes
+    # (B6 + D19). When no runtime class is registered for spec.id (B1-era
+    # fixtures binding e.g. `core-ext:minimal-specialist`), fall back to the
+    # B2 stub-skill registration via load_provision_spec.
+    from fresh_plan.runtime.provision import load_provision_spec
+    from fresh_plan.runtime.specialist import load_specialist_from_provision
+
     for binding in composition.get("specialist-bindings", []):
         bid = binding.get("binding-id")
         if bid:
             substrate.specialist_bindings[bid] = dict(binding)
-        # Look up the specialist provision spec to enumerate its declared skills.
         prov_ref = binding.get("provision")
-        if not prov_ref:
+        if not bid or not prov_ref:
             continue
-        ext_id, prov_id = prov_ref.split(":", 1)
-        from fresh_plan.validator.extensions import (
-            discover_extensions,
-            load_extension,
-        )
-
-        discovered = discover_extensions(extensions_dir)
-        if ext_id not in discovered:
+        try:
+            specialist = load_specialist_from_provision(prov_ref, extensions_dir)
+        except ValueError:
+            specialist = None
+        if specialist is not None:
+            substrate.specialist_instances[bid] = specialist
             continue
-        for version, manifest_path in discovered[ext_id].items():
-            loaded_ext, _errs = load_extension(ext_id, version, manifest_path)
-            spec = loaded_ext.provisions_loaded.get(prov_id)
-            if spec is None:
-                continue
-            for skill in spec.get("skills", []) or []:
-                skill_id = skill if isinstance(skill, str) else skill.get("id")
-                if skill_id and not substrate.skills.has(skill_id):
-                    substrate.skills.register_stub(skill_id)
-            break
+        # Fallback path: no runtime class registered; register declared skills
+        # as B2 stubs so they remain invokable (NotImplementedError).
+        try:
+            spec = load_provision_spec(prov_ref, extensions_dir)
+        except ValueError:
+            continue
+        for skill in spec.get("skills", []) or []:
+            skill_id = skill if isinstance(skill, str) else skill.get("id")
+            if skill_id and not substrate.skills.has(skill_id):
+                substrate.skills.register_stub(skill_id)
 
     # Construct the Workspace handle and emit the boot lifecycle event.
     # Import here to avoid circular imports at module load time.
@@ -220,6 +223,15 @@ def boot_workspace(
     # Attach the workspace to each instantiated adapter (B4 boot-ordering).
     for adapter in substrate.adapter_instances.values():
         adapter.attach_workspace(workspace)
+
+    # Attach workspace + register skills for each instantiated specialist (B6
+    # boot-ordering). Runs AFTER adapter attach so required-adapter-bindings
+    # resolve via workspace.adapter(...). Subscribers list is populated for
+    # the append_event hot path (D37 event-driven coordination).
+    for specialist in substrate.specialist_instances.values():
+        specialist.attach_workspace(workspace)
+        specialist.register_skills(substrate.skills)
+        substrate.specialist_subscribers.append(specialist)
 
     # 9. Emit lifecycle-transition:boot. Use the first manifest-declared
     # actor as the attributing actor (every event needs ≥1 actor per D10;
