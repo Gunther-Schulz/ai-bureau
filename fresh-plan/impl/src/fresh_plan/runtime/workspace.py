@@ -274,6 +274,14 @@ class Workspace:
                 self._work_unit_handles[wid] = WorkUnitHandle(self, wid)
         return self._work_unit_handles
 
+    @property
+    def adapters(self) -> dict:
+        return self._substrate.adapter_instances
+
+    def adapter(self, binding_id: str):
+        """Return the adapter instance bound at `binding_id` (KeyError on miss)."""
+        return self._substrate.adapter_instances[binding_id]
+
     # ------------------------ work-unit + sub-agent ------------------------
 
     def create_work_unit(

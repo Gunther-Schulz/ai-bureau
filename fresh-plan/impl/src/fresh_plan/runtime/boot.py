@@ -165,11 +165,22 @@ def boot_workspace(
             substrate.shape = shape
             shape.register_stub_handlers(substrate.hooks)
 
-    # 7. Adapter bindings: store metadata; runtime is B4/B5.
+    # 7. Adapter bindings: store metadata + instantiate adapter runtimes.
+    # Workspace attachment happens after Workspace is constructed (below).
     for binding in composition.get("adapter-bindings", []):
         bid = binding.get("binding-id")
         if bid:
             substrate.adapter_bindings[bid] = dict(binding)
+        prov_ref = binding.get("provision")
+        if not bid or not prov_ref:
+            continue
+        from fresh_plan.runtime.adapter import load_adapter_from_provision
+
+        try:
+            adapter = load_adapter_from_provision(prov_ref, extensions_dir)
+        except ValueError:
+            continue
+        substrate.adapter_instances[bid] = adapter
 
     # 8. Specialist bindings: store metadata + register skill stubs.
     for binding in composition.get("specialist-bindings", []):
@@ -205,6 +216,10 @@ def boot_workspace(
     from fresh_plan.runtime.workspace import Workspace
 
     workspace = Workspace(substrate=substrate, manifest=manifest)
+
+    # Attach the workspace to each instantiated adapter (B4 boot-ordering).
+    for adapter in substrate.adapter_instances.values():
+        adapter.attach_workspace(workspace)
 
     # 9. Emit lifecycle-transition:boot. Use the first manifest-declared
     # actor as the attributing actor (every event needs ≥1 actor per D10;

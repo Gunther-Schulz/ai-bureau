@@ -18,6 +18,7 @@ SUBSTRATE_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-substrate-te
 GENERIC_SHAPE_FIXTURE = (
     Path(__file__).parent / "fixtures" / "workspace-generic-shape"
 )
+MCP_ADAPTER_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-mcp-adapter"
 
 
 @pytest.fixture
@@ -206,5 +207,29 @@ def test_e2e_generic_shape_attached_and_enforces_authority_bindings():
         with pytest.raises(EventRejected) as excinfo:
             primary.emit_claim("unauthorized claim")
         assert any(f.category == "authority" for f in excinfo.value.failures)
+    finally:
+        ws.shutdown()
+
+
+# ---------------------------------------------------------------
+# B4 — MCP tool-adapter end-to-end (D16 stub adapter)
+# ---------------------------------------------------------------
+
+
+def test_e2e_mcp_adapter_call_emits_action_into_chain():
+    """Per D16 + B4: boot a workspace binding the mcp-tool-adapter; call()
+    emits an action event with the right outcome-reference; B1 validation
+    passed (boot did not raise)."""
+    manifest = json.loads((MCP_ADAPTER_FIXTURE / "workspace.json").read_text())
+    ws = Workspace.boot(manifest, MCP_ADAPTER_FIXTURE / "extensions")
+    try:
+        adapter = ws.adapter("primary-mcp")
+        response = adapter.call("echo", {"x": 1})
+        actions = ws.event_chain.by_payload_subtype("action")
+        assert len(actions) == 1
+        emitted = actions[0]
+        assert emitted["payload"]["action-name"] == "echo"
+        assert emitted["payload"]["parameters"] == {"x": 1}
+        assert emitted["payload"]["outcome-reference"] == response["outcome-reference"]
     finally:
         ws.shutdown()

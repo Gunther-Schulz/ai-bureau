@@ -35,6 +35,7 @@ from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
 
 if TYPE_CHECKING:
+    from fresh_plan.runtime.adapter import MCPToolAdapter
     from fresh_plan.runtime.shape import GenericShape
 
 
@@ -76,6 +77,11 @@ class InProcessSubstrate:
     # boot path resolved everything correctly.
     adapter_bindings: dict[str, dict] = field(default_factory=dict)
     specialist_bindings: dict[str, dict] = field(default_factory=dict)
+
+    # Instantiated adapter runtimes per binding-id (B4: MCPToolAdapter).
+    # Populated at boot step 7; workspace attached post-Workspace
+    # construction (pre boot-lifecycle event) per B4 boot-ordering.
+    adapter_instances: dict[str, "MCPToolAdapter"] = field(default_factory=dict)
 
     # ---------------------------------------------------------------
     # Event append (the integrity gate)

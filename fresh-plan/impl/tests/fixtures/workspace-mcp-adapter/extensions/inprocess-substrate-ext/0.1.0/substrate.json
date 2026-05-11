@@ -1,0 +1,6 @@
+{
+  "id": "inprocess-substrate",
+  "version": "0.1.0",
+  "capabilities": ["hooks", "skills", "event-streaming"],
+  "runtime-shapes": ["interactive", "programmatic"]
+}
