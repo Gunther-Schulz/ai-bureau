@@ -8,6 +8,29 @@ A clean restart of framework architectural decisions. The existing `pbs-bureau` 
 
 The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the framework and made PBS-Schulz primary). Per D1: **reusable framework is primary; PBS-Schulz is the first deployment / proving ground; generality wins on conflict.**
 
+### In concrete terms (vision)
+
+Concrete picture of what fresh-plan enables: an office worker has a project they're working on. Through the day they receive emails, look up regulations and prior decisions, draft documents based on accumulated context, coordinate with colleagues (human + agent), get sign-off, and file work. The AI workspace knows their project (scope), holds relevant context (corpus + history), routes work intelligently (some agent-handled, some human-surfaced), captures every action attributably (audit), preserves continuity across sessions (state-from-events), and composes with existing tools (email / calendar / files / CAD / accounting).
+
+| Concrete | Framework primitive |
+|---|---|
+| The project's coordination context | **workspace** (D7) |
+| The office worker + their agents | **actors** (D9) — `human-actor` + `agent-actor` |
+| What this workspace substantively *is* | **shape** (D13) — e.g., `practitioner-shape` at Phase D |
+| Email / files / CAD / accounting integration | **adapters** (D16) |
+| Domain skill bundles (draft-section, review-citation, etc.) | **specialists** (D19) |
+| What's being worked on (a section, a Vorprüfung, etc.) | **work-units** (D20) |
+| The audit trail of everything that happened | **event chain** (D10) |
+
+**Automation level is a deployment configuration, not a framework constraint.** A workspace can run with high human involvement (every claim requires human attestation; specialists deferred to human review), low human involvement (most events agent-attributable; humans only for sign-off), or fully autonomous (no human-actors; agent-actors fulfill all roles). The framework expresses this fluidity via:
+
+- **Shape choice** — `practitioner-shape` mandates ≥1 human-actor; `autonomous-business-shape` requires none. Different shape = different default posture.
+- **Per-event authority-bindings (D13 with `qualifier` slot)** — same payload-subtype can have different requirements depending on event qualifier. Defensibility-grade claims may require human-actor attestation; routine-draft claims may admit agent-actor attribution. Same workspace, mixed posture per event class.
+- **Composition mix** — which specialists / adapters are bound determines where work is routed. Same shape, different bindings = different automation posture.
+- **Evolution over time** — composition-change events (D10) + shape versioning (D33) let a workspace's posture *change over its lifetime*. Start human-attested; swap in agent-attribution as trust + capability grow. The event chain records the transition; the new shape version represents the new snapshot.
+
+Same framework, 1% automation, 50%, 99%. The spec doesn't prescribe a ratio; the deployment configures it; the workspace evolves it. PBS-Schulz pioneer-instance (Phase D) instantiates the high-human-involvement end; future deployments calibrate differently. The framework's job is to make all of them attributable, composable, audit-replayable — regardless of posture.
+
 ### What is durable vs scaffolding
 
 Working framing (stake-in-the-ground; candidate D42 at end-of-Phase-B refinement after source-grounded reads of Bucket A platform positioning):
@@ -27,6 +50,25 @@ Working framing (stake-in-the-ground; candidate D42 at end-of-Phase-B refinement
 **What this is NOT a bet on**: the radical "agents fully self-organize structural work; humans become signees" extrapolation. No Bucket A platform with shipping power (Gemini Enterprise, Microsoft Copilot Studio, Salesforce Agentforce, IBM watsonx, Kore.ai) publicly targets that scenario. Their actual stated direction — agents + orchestration + protocols + governance + persistent human-in-the-loop — is *more* friendly to fresh-plan's positioning, not less. The conservative direction has stronger demand-signal for accountability infrastructure than the radical scenario. Use the radical framing as a stress-test to avoid painting corners (composition rules should permit runtime discovery; event chain should be capability-card-compatible); do not position for it as roadmap.
 
 **Why discovery + smart agents don't replace this**: A2A / MCP / agent cards / discoverability handle *how agents wire up + how work gets done*. They do not handle *attribution* (who said what, attributable to whom), *audit replay* (reconstructing state at sequence N), *authorization* (which roles can delegate which events), or *composition validation* (is this workspace's composition valid against its shape policy?). Smart agents producing more autonomous work create *more* records that need shared structure — the OpenTelemetry / OpenAPI / Prometheus pattern. EU AI Act Article 12 (Aug 2026) makes audit-grade records legally mandatory for certain AI systems. Fresh-plan sits in the demand side of that regulatory + governance arc; the wire-level protocols sit underneath.
+
+### Relationship to governance frameworks / tooling
+
+"Governance" is a broad term spanning several distinct concerns. Fresh-plan covers the **specification-side**; hooks into existing tools for the **runtime-side**:
+
+| # | Concern | Fresh-plan covers? |
+|---|---|---|
+| 1 | Audit / accountability records (who did what when, attributable, replayable) | **YES — spec side**: I3 + D10 event chain + D39 state-from-events + D40 §A `state_at(n)` projection. |
+| 2 | Authority / authorization semantics (role-bindings, signing, who can do what) | **YES — spec side**: D13 authority-bindings + shape role vocabulary. |
+| 3 | Integrity / tamper-evidence (cryptographic guarantees over records) | **YES — extension point**: D40 §B integrity-mechanism slot; AEGIS / Axon / post-quantum schemes register here. |
+| 4 | Compliance reporting (EU AI Act / NIST AI RMF / SR 11-7 / SOX) | **PARTIAL — spec aligns**: D24 standards-alignment list. Reporting *tools* are external. |
+| 5 | Policy enforcement engines (runtime evaluators) | **NO — tooling**: Open Policy Agent / Cedar / etc. Fresh-plan declares policies; engine choice is external. |
+| 6 | Risk dashboards / model risk / content risk | **NO — tooling**: Microsoft AGT / IBM OpenPages / AuditBoard / Drata. They consume event records. |
+| 7 | Lifecycle approvals (deployment gates, change management) | **NO — tooling**: ServiceNow / ITIL / workflow products. Approval-as-event lives in fresh-plan; workflow engine doesn't. |
+| 8 | Identity binding (workspace-actor ↔ real-world identity via SSO / JWT / DID) | **Mostly external** — mechanism is adapter-territory + external IdPs. **Binding-contract slot is currently a gap** (see open questions). |
+
+The relationship is the durability-framing pattern: fresh-plan provides the *contract* that governance tooling reads against. A workspace's event chain is structured per fresh-plan's spec; compliance tooling (existing products, future Bucket A platform features, in-house) consumes it to produce reports / dashboards / approval flows. Fresh-plan does not re-implement what governance products already ship.
+
+This matches what Bucket A platforms are publicly doing: adding governance features as agents become more autonomous (Microsoft AGT, Salesforce Agentforce governance, IBM watsonx Orchestrate governance). They need shared specs to consume. Fresh-plan competes by providing better specs, not by competing with their tooling. Follow established specs (PROV-O, JSON Schema, AEGIS-shape, EU AI Act audit-record requirements) as much as possible; introduce new vocabulary only where existing standards leave a gap fresh-plan's positioning fills (accountability-bearing workspace composition is the genuine gap).
 
 ## Layered structure (per D3)
 
@@ -88,7 +130,8 @@ Per D26, deferred items have implicit phase homes:
 - **Workflow as containment hierarchy on work-unit** → Phase D (pioneer) or E (multi-deployment) if forced.
 - ~~Branch / commit strategy~~ → **resolved in D36** (`fresh-plan` is canonical).
 - **D21 verification targets** (A2A peer + MCP server) → Phase C.
-- **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific).
+- **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific). **Status: list is named in D24 as alignment targets but the actual mapping work is mostly unstarted.** Concrete sub-items for Phase B/C: (i) PROV-O event-chain mapping — workspace event chain ↔ PROV-O Activity / Agent / Entity; (ii) CloudEvents envelope alignment — do our event shapes round-trip through CloudEvents binding?; (iii) EU AI Act Article 12 audit-record bundle format — what's a regulator-consumable export?; (iv) OpenTelemetry trace alignment for cross-workspace operations; (v) VC + DID for actor-identity binding (composes with the identity-binding gap below). Some (i, ii) are Phase B-affordable; most are Phase C natural home.
+- **Identity-binding spec slot for actor records (gap)** → D9 + D22 specify actor.id / subtype / declared-name / substrate-binding; no slot for *external-identity reference* (e.g., DID, SSO subject, JWT). The mechanism is external (adapter-territory + external IdPs); the *binding contract* is fresh-plan-shaped. Becomes load-bearing in Phase C (A2A peering = cross-workspace identity) and Phase D (PBS-Schulz humans need real-identity mapping). Candidate refinement entry; specifically a small actor-schema amendment adding an optional `external-identity: { scheme, identifier, verification? }` slot.
 - ~~B2 follow-on tasks~~ → **completed**: B2-followon-1 (composition-change `record` per D39) + B2-followon-2 (`state_at(sequence_n)` per D40 §A) landed.
 - **D39 out-of-band-state tensions surfaced for end-of-Phase-B refinement** (per D39 "(ii) surfaced as a tension to address"): (a) manifest-declared actors loaded into state at boot bypass the event chain — `state_at(n)` pure-replay does not reflect them; (b) work-units' full records are not carried in state-change events (only `id` and status) — replay reconstructs status but not the full record. Both need either synthetic-event emission at boot (closing the loop) or explicit ledger entries before Phase B closure.
 - **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35). Codified deliverables for the refinement pass:
