@@ -29,6 +29,19 @@ Throughout the session, follow the **procedural conventions** + **working prefer
 - **Tight responses.** Concise communication; tables / bullets where they help; no padding.
 - **Cite decisions by number** (D1, D7, D16, etc.) rather than summarizing them inline. The ledger is the canonical reference.
 
+## Working patterns (accumulated across sessions)
+
+Working-process disciplines that emerged through development, parallel to the operating-disciplines + working-preferences above. NOT architectural decisions (those live in `decisions.md`) — these are *how the work proceeds*.
+
+- **Sketch-then-lock for substantive decisions.** For tier-3 substantive items (real architectural choices with branching): sketch the shape first → user signs off on framing → deliver a committed draft → one-round review → lock. Don't jump straight to a draft when the framing isn't agreed. Avoid menu-style "here are 5 options"; commit to a recommendation with tradeoffs surfaced. Pattern observed across D29 / D30 / D32 / D33 / D40 lock cycles.
+- **Sub-agent dispatch when / how.** Dispatch a sub-agent for *substantive design + large-artifact production* (multi-module impls per workstream B1 / B2; big sweeps like the D34 refinement pass; fresh-eyes review where Writer-Reviewer separation per process-kit invariant 4 is genuinely valuable). Main-session for *mechanical encoding + small commits + routine wording*. Brief shape: focused scope + required-reading list + concrete deliverables + tensions-to-surface + what-NOT-to-do + return-report format.
+- **Honest naming.** Name artifacts for what they ARE today, not what they aspire to become. Example: `inprocess-substrate-ext` (mocked LLM) rather than `claude-agent-sdk-ext` (which would imply real Claude SDK integration). Real names land when real things land. Avoids forward-looking misrepresentation in the codebase.
+- **Follow-on tracking** (`<workstream>-followon-N`). When scope is deliberately cut, track as e.g., `B2-followon-1`, `B2-followon-2`. Surfaced in commit messages + relevant ledger entries; addressed before phase closure. Distinguishes "deferred-with-evidence" from "forgotten."
+- **Side-quest persistence rule.** Research, positioning, landscape analysis, competitive notes, vision-framing analysis → `market-context.md` (or similar research file). New ledger entries (D-N) *only* for architectural decisions. Positioning is deliberately deferred per discipline; keeping research separate from the ledger separates "thinking we do" from "decisions we lock."
+- **Generic vs pioneer-instance discipline.** When building "generic" exemplars per D26 (e.g., B3's generic-shape impl), keep them deliberately neutral. Don't accidentally bake in pioneer-specific opinions. D26 explicitly says B3 is NOT practitioner-shape; the bias-avoidance is load-bearing for Phase E shape-neutrality validation.
+- **Fixture vs canonical artifact placement.** Test fixtures (`impl/tests/fixtures/`) are *disposable test inputs*, not canonical artifacts. Canonical artifacts (substrate impls, shape impls, adapter impls) live at `impl/extensions/`. Don't promote a fixture to canonical without intent; don't duplicate work between the two. Example: `min-shape-ext` under B2 fixtures is a test-only minimal shape; the B3 generic-shape impl is a separate canonical artifact under `impl/extensions/`.
+- **Steelman-then-resolve.** When a competing alternative surfaces (Kore.ai's orchestrator-vs-worker per D37; Sana's knowledge-as-core per D38; AEGIS-at-core per D40; the `extends` slot per D31; etc.), steelman it honestly + name it explicitly in the rejection rationale. The defense is part of the lock; future readers don't re-open the question. Pattern shape: D8 / D17 / D31 / D37 / D38 / D40.
+
 ---
 
 ## What this is (background)
