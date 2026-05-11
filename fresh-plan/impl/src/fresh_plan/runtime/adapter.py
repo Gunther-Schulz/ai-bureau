@@ -150,10 +150,42 @@ class MCPToolAdapter(Adapter):
         }
 
 
+@dataclass
+class DirectAPIAdapter(Adapter):
+    """Stub direct-api adapter per D16 + B5.
+
+    The non-MCP request/response path: an in-process direct call, no
+    protocol wrapper. `call()` emits one `action` event and returns a
+    canned response. Phase C / Phase D replace the body with real
+    direct-call dispatch into target Python APIs.
+    """
+
+    _outcome_prefix: ClassVar[str] = "direct-stub"
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
+        params = parameters or {}
+        outcome_reference = self._emit_action(tool_name, params, attributing_actor_id)
+        return {
+            "outcome-reference": outcome_reference,
+            "ok": True,
+            "stub": True,
+            "kind": "direct-api",
+            "tool": tool_name,
+            "parameters": params,
+        }
+
+
 # Module-level registry of (protocol-or-transport → runtime class). Populated
 # as new adapter impls land. Phase C real-wire impls replace stub classes here.
 _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
     "mcp-server-ext:mcp-client": MCPToolAdapter,
+    "direct-api-ext:direct-api": DirectAPIAdapter,
 }
 
 

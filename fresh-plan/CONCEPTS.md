@@ -37,7 +37,7 @@ Phases beyond layer-2 closure, named at high level — order indicative not rigi
 | Phase | Work | Status |
 |---|---|---|
 | **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | **Closed at D35.** Refined by D34 (refinement pass) + D37-D40 (side-quest sharpening). |
-| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (next), B6 specialist, B7 RAG-via-MCP, B8 end-to-end. |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (stub) ✅, B6 specialist (next), B7 RAG-via-MCP, B8 end-to-end. |
 | **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Not started. Phase B prerequisite. |
 | **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | Not started. Phase B + C prerequisite. |
 | **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Not started. |
@@ -105,6 +105,7 @@ fresh-plan/
     tests/           <- pytest; 128 tests passing as of B4
     extensions/      <- shipped canonical extensions
       inprocess-substrate-ext/  <- B2 substrate
-      generic-shape-ext/        <- B3 shape
-      mcp-server-ext/           <- B4 stub MCP-server-protocol adapter
+      generic-shape-ext/        <- B3 shape (GenericShape(Shape))
+      mcp-server-ext/           <- B4 stub MCP-server-protocol adapter (MCPToolAdapter(Adapter))
+      direct-api-ext/           <- B5 stub direct-api adapter (DirectAPIAdapter(Adapter))
 ```
