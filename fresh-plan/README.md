@@ -7,8 +7,8 @@ Append-only decision ledger for a fresh framework dev plan, started 2026-05-08 o
 **When the user has directed you to this README** (e.g., "read fresh-plan/README.md"), follow these steps in order before responding to substantive prompts:
 
 1. **Read this README in full** — context + conventions + status + working preferences.
-2. **Read `fresh-plan/decisions.md` in full** — the append-only ledger D1 through current. Each entry is locked; supersedes-relationships are explicit; the closure entry (D25) names the layer-2 final kind set; D26 names the post-layer-2 roadmap.
-3. **Confirm context tightly** — in 2–3 sentences, tell the user where the work stands (last decision number; current layer / phase per D26; any explicit open threads). Do not summarize the entire ledger; cite by entry number.
+2. **Read `fresh-plan/decisions.md` in full** — the append-only ledger. Each entry is locked; supersedes-relationships are explicit. Key closure entries: **D5** (layer 1 identity), **D25** (layer 2; 8 kinds), **D35** (Phase A — layer 3 formal schemas + composition rules + versioning). **D26** + **D36** name the post-Phase-A roadmap. The latest entries reflect current state; check the bottom of the file.
+3. **Confirm context tightly** — in 2–3 sentences, tell the user where work stands (last decision number; current phase per D26; any explicit open threads — including Phase B impl status at `fresh-plan/impl/` if relevant). Do not summarize the entire ledger; cite by entry number.
 4. **Wait for user direction** — do not jump into work. The user may have specific next steps that don't follow the obvious path.
 
 Throughout the session, follow the **procedural conventions** + **working preferences** below.
@@ -20,7 +20,7 @@ Throughout the session, follow the **procedural conventions** + **working prefer
 - **Concrete examples before locking.** Substantive decisions are grounded with worked examples that exercise the contract before the entry is written. Don't write a decision entry from pure abstract reasoning when a concrete scenario is available.
 - **Multiple passes for substantive findings.** When a finding has cascading effects (e.g., the strict protocol-neutrality finding in D16), do honest passes — solidify or refute — before locking. Single-pass on big findings is unsafe.
 - **Rolling refinement (option C).** Clear-now findings get supersedes / clarification entries when surfaced (rather than accumulating until a closure pass). The named refinement pass per D14 catches cross-cutting and late-emerging findings at end-of-layer.
-- **Commit and push regularly.** Each substantive lock ≈ one commit, pushed to `origin/fresh-plan`. The session-stop hook complains about uncommitted/untracked files and will block stop until clean.
+- **Commit and push regularly.** Each substantive lock ≈ one commit, pushed to `origin/fresh-plan` (canonical branch per D36). Some hosted-session environments push to a session-specific branch (e.g., `claude/identify-repo-S5zfO`) — those are session-quirks; reconcile to `fresh-plan` at the session boundary (see "Branch state" below). The session-stop hook complains about uncommitted / untracked files and will block stop until clean.
 
 ## Working preferences (observed during prior session)
 
@@ -63,14 +63,14 @@ The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the fr
 
 Phases beyond layer-2 closure, named at high level — order indicative not rigid; phase boundaries trigger-based not scheduled. See **D26** in `decisions.md` for full content.
 
-| Phase | Work | Closes when |
+| Phase | Work | Status |
 |---|---|---|
-| **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | Layer-3 closure analogous to D25 |
-| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | Reference impl boots end-to-end |
-| **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Peer + MCP-server demonstrably work |
-| **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | PBS-Schulz running on framework end-to-end |
-| **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Two distinct deployments coexist |
-| **F+** | Refinement / optimization / ecosystem | Indefinite |
+| **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | **Closed at D35.** Refined by D34 (refinement pass) + D37-D40 (side-quest sharpening). |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅, B3 generic shape (next), B4 MCP-server adapter, B5 direct-api adapter, B6 specialist, B7 RAG-via-MCP, B8 end-to-end. Two B2-followon tasks pending per D39 + D40. |
+| **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Not started. Phase B prerequisite. |
+| **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | Not started. Phase B + C prerequisite. |
+| **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Not started. |
+| **F+** | Refinement / optimization / ecosystem | Indefinite. |
 
 ## Open questions / deferred items (with phase placement)
 
@@ -79,9 +79,13 @@ Per D26, deferred items have implicit phase homes:
 - **D1 open tension** (PBS-Schulz daily during rebuild) → resolved in Phase D.
 - **Optional `parent-actor` slot on actor** → revisit in Phase A or B if sub-agent patterns surface concrete need.
 - **Workflow as containment hierarchy on work-unit** → Phase D (pioneer) or E (multi-deployment) if forced.
-- **Branch / commit strategy** → after fresh-plan stabilizes (likely during Phase A).
+- ~~Branch / commit strategy~~ → **resolved in D36** (`fresh-plan` is canonical).
 - **D21 verification targets** (A2A peer + MCP server) → Phase C.
 - **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific).
+- **B2 follow-on tasks** → before Phase B closure: (i) `Workspace.register_agent_actor` emits composition-change events with the new `record` slot populated per D39; (ii) `AppendOnlyEventChain.state_at(sequence_n)` per D40 §A. Tracked as B2-followon-1 + B2-followon-2; low-effort; not blocking B3.
+- **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35).
+- **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
+- **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
 
 ## Status of the existing pbs-bureau corpus
 
@@ -95,17 +99,33 @@ Treated as **preservation / input only**. Specific findings so far:
 
 ## Branch state
 
-- **Current development branch**: `fresh-plan`
-- **Branched from**: `step-back-evaluation` at commit `4ed5bee`
-- **Other branches**: `step-back-evaluation`, `lock-and-park`, `claude/identify-repo-S5zfO`, `main` (all at varying earlier points; not active)
+- **Canonical development branch**: `fresh-plan` (locked at D36).
+- **Branched from**: `step-back-evaluation` at commit `4ed5bee`.
+- **Session-quirk branches**: `claude/identify-repo-S5zfO` — used by hosted-session environments that cannot push directly to `fresh-plan`. Commits land here; reconcile to `fresh-plan` at the session boundary.
+- **Other branches**: `step-back-evaluation`, `lock-and-park`, `main` — earlier points; not active.
+
+### Reconciling after a hosted session
+
+If a prior session pushed to `claude/identify-repo-S5zfO` rather than `fresh-plan`, fast-forward `fresh-plan` locally before continuing:
+
+```bash
+git fetch origin
+git checkout fresh-plan
+git merge --ff-only origin/claude/identify-repo-S5zfO
+git push origin fresh-plan
+```
+
+Then resume work on `fresh-plan` as canonical. If `--ff-only` fails (branches diverged), investigate before forcing — there should be no divergence under the current session policy.
 
 ## Repository layout in this branch
 
 ```
 fresh-plan/
   README.md          <- this file
-  decisions.md       <- the append-only ledger (D1-D35; layer 1 + 2 + Phase A all closed)
-  schemas/           <- layer-3 formal schemas (workstream 3 + refinement)
+  decisions.md       <- the append-only ledger (D1 through current)
+  market-context.md  <- adjacent products + positioning research notes (not committed positioning)
+  schemas/           <- Phase A layer-3 formal schemas (D28 + workstream 3 + D34 + D39 + D40)
+    README.md        <- multi-schema loading convention + identifier conventions
     _common.schema.json
     extension-manifest.schema.json
     workspace.schema.json
@@ -122,7 +142,24 @@ fresh-plan/
     payload-composition-change.schema.json
     payload-lifecycle-transition.schema.json
     examples/        <- worked-example instances (validate against schemas)
+  impl/              <- Phase B reference impl (per D36)
+    README.md        <- install + CLI + library usage
+    pyproject.toml   <- Python 3.11+; deps: jsonschema, referencing, pyyaml, click, node-semver
+    src/fresh_plan/
+      validator/     <- B1: conformance validator (D29 + D30 + D32 + D33)
+      runtime/       <- B2: in-process substrate runtime (D7 + D10 + D13 + D19 + D20)
+      cli.py         <- fresh-plan-validate + fresh-plan-run
+    tests/           <- pytest; 101 tests pass (44 B1 + 57 B2)
+    extensions/      <- B2 substrate extension (inprocess-substrate-ext/0.1.0)
 ```
+
+## Current state (snapshot for handoff / session pickup)
+
+- **Last ledger entry**: **D40** (extends D10 with projection / query contract + integrity-mechanism extension point; cites AEGIS as canonical first example).
+- **Phase A**: closed at D35; refined by D34 + sharpened by side-quest batch D37-D40.
+- **Phase B**: **in progress.** B1 (conformance validator) + B2 (substrate runtime) committed; ~3,800 LOC total; 101 tests pass. B2 follow-on tasks pending: composition-change `record` emission per D39, `state-at(n)` query per D40 §A. B3 (generic minimal shape impl) is next per D36 workstream order.
+- **Side-quest research**: `market-context.md` captures adjacent products + landscape map (Kore.ai, Sana AI, AEGIS, Axon, big-consultancy / vertical-startup / thought-leader / muddle-through buckets). Not committed positioning; revisit Phase D or later.
+- **Open threads at handoff**: B2-followon-1 + B2-followon-2 (small); B3 (next substantive); end-of-Phase-B refinement (per D14 / D34); Phase B closure entry (analog of D25 / D35).
 
 ## Cleanup notes
 
