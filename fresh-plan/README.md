@@ -14,6 +14,19 @@ Session-procedure anchor for `fresh-plan` work. Working disciplines, patterns, l
 
 Throughout the session, follow the **procedural conventions** + **working preferences** below.
 
+## Session-end procedure (Claude: follow before stopping)
+
+**When the user signals end of session, or when reaching a natural stopping boundary, run this checklist before the final message:**
+
+1. **Working tree clean + branch reconciled + pushed.** `git status` shows no uncommitted modifications and is up to date with `origin/fresh-plan`. Any hosted-session-quirk push to `claude/identify-repo-...` reconciled per the "Reconciling after a hosted session" subsection. The 0-byte UUID-named file at repo root is an intentional session-JSONL smoke-reminder (per memory); leave it alone — don't commit, don't delete.
+2. **Tests pass** (if impl work happened this session). `.venv/bin/python -m pytest -q` from `fresh-plan/impl/` is green; current count noted in the session-end message if it changed.
+3. **Handoff snapshot current.** This README's "Current state (snapshot for handoff / session pickup)" section reflects: last ledger entry, current phase, current workstream, open threads. Update inline if session moves changed any of these.
+4. **Forward-looking pointers tracked** per Surface-then-track + Track-with-minimum-viable-overhead. Every "deferred to X" / "future entry" / "would need a..." raised in this session has a tracked home (CONCEPTS open-questions / `<workstream>-followon-N` / commit-message reference). No orphan pointers.
+5. **Stale doc audit.** Any doc *implicitly* invalidated by session work — typically `impl/README.md` after a B-workstream lands, or `CONCEPTS.md` roadmap row after a phase advances, or `decisions.md` references after a clarification entry — updated inline before the session-end message.
+6. **Honest self-assessment.** Did pacing drift (e.g., many meta-commits vs feature commits)? Anything left half-finished? Surface in the final message rather than leaving for the next session to discover.
+
+Then write the final session-end message naming: what landed in the session, where we left off, what's the natural next move. Keep it short — the handoff snapshot in this README is the canonical state; the final message is just an orientation pointer.
+
 ## Operating disciplines (load-bearing during session)
 
 - **Append-only ledger.** Entries in `decisions.md` are locked once added. Override = new entry that explicitly supersedes the prior. Never edit a locked entry's substance; clarifications go in follow-up entries.
