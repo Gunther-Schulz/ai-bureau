@@ -1,8 +1,9 @@
 """Substrate runtime — D12 + D17 + D41 two-substrate parity for Phase B.
 
 Per D12, a substrate hosts the agent loop and exposes interfaces
-(capabilities) for other extensions to hook into. Per D17, the three
-core abstract capabilities are `hooks`, `skills`, `event-chain`.
+(capabilities) for other extensions to hook into. Per D17 (renamed by
+D43), the three core abstract capabilities are `hooks`, `skills`,
+`event-chain`.
 
 Per D41 Phase B closure: two substrate impls ship in Phase B —
 InProcessSubstrate (B2) + MSAgentFrameworkSubstrate (B2b). Both are
@@ -14,9 +15,18 @@ Per D12 binding resolution: substrates declare `runtime-shapes[]`; each
 binding selects exactly one. The substrate instance tracks its bound
 runtime-shape for state visibility; runtime-shape semantics beyond that
 are implementation per D11.
+
+Per D44 (extends D37): subscriber dispatch is queued. Append + projection
++ chain integrity remain synchronous (preserves D10 + D39 + D40 §A);
+subscribers' on_event fires from a FIFO drain at the outermost
+append_event call. Nested append_event calls (emitted from inside
+on_event) just enqueue the new event for dispatch. A loop backstop
+(`max_events_per_drain`, default 1000) raises with a diagnostic if a
+single drain exceeds the limit, so genuine infinite loops surface fast.
 """
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
@@ -88,12 +98,29 @@ class Substrate:
     specialist_instances: dict[str, "Specialist"] = field(default_factory=dict)
     specialist_subscribers: list["Specialist"] = field(default_factory=list)
 
+    # Per D44: subscriber dispatch is queued. The outermost append_event
+    # drains; nested append_event calls (emitted from on_event) enqueue
+    # without re-entering the drain. The loop backstop raises with a
+    # diagnostic if a single drain exceeds `max_events_per_drain`.
+    max_events_per_drain: int = 1000
+    _dispatch_queue: deque = field(default_factory=deque, repr=False)
+    _dispatching: bool = field(default=False, repr=False)
+
     # ---------------------------------------------------------------
     # Event append (the integrity gate)
     # ---------------------------------------------------------------
 
     def append_event(self, event: dict) -> int:
         """Validate per D30 §4 runtime + chain integrity, then append.
+
+        Per D44 (extends D37): per-event check + shape authority + schema
+        + chain integrity + state projection all run synchronously
+        (preserves D10 chain order + D39 state-from-events + D40 §A
+        replay equivalence). Subscriber dispatch is queued — the
+        outermost append_event call drains the queue FIFO; nested
+        append_event calls (from inside on_event) enqueue without
+        re-entering the drain. A loop backstop raises with a diagnostic
+        if a single drain exceeds `max_events_per_drain`.
 
         On per-event identity failure: raise EventRejected; event is not
         appended (per D30 timing-modes table).
@@ -123,9 +150,33 @@ class Substrate:
 
         self._apply_runtime_side_effects(event)
 
-        if self.specialist_subscribers:
-            self._dispatch_event_to_subscribers(event)
+        if not self.specialist_subscribers:
+            return seq
 
+        # Queued dispatch (D44). Nested calls just enqueue; the outermost
+        # call owns the drain.
+        self._dispatch_queue.append(event)
+        if self._dispatching:
+            return seq
+        self._dispatching = True
+        try:
+            n_dispatched = 0
+            while self._dispatch_queue:
+                n_dispatched += 1
+                if n_dispatched > self.max_events_per_drain:
+                    offender = self._dispatch_queue[0]
+                    self._dispatch_queue.clear()
+                    raise RuntimeError(
+                        f"subscriber-dispatch drain exceeded "
+                        f"{self.max_events_per_drain} events; likely "
+                        f"infinite loop. Last event in flight: "
+                        f"id={offender.get('id')!r} "
+                        f"payload-subtype={offender.get('payload-subtype')!r}"
+                    )
+                e = self._dispatch_queue.popleft()
+                self._dispatch_event_to_subscribers(e)
+        finally:
+            self._dispatching = False
         return seq
 
     def _dispatch_event_to_subscribers(self, event: dict) -> None:
