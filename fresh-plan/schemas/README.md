@@ -122,6 +122,10 @@ Per **D33**:
 - Kind contract versions are *advisory* per D34 §A.9 — not operationally consumed by the boot validator.
 - Extension-manifest semver per D29 IS operationally consumed (drives cross-extension version-conflict resolution per D33).
 
+## Authoring conventions
+
+- **Use `unevaluatedProperties: false`, NOT `additionalProperties: false`, on object schemas that use `allOf` + `if/then` for conditional fields.** JSON Schema Draft 2020-12 evaluates `additionalProperties` against the immediate schema only — it rejects properties added by `if/then` branches and produces false-positive failures. `unevaluatedProperties` evaluates against the merged set of all applied branches. Acknowledged in D34 §A.6; applied across `event.schema.json`, `actor.schema.json`, etc. Easy to forget when writing a new schema; cross-check before locking.
+
 ## Identifier conventions (per D29 + D34 §A.1)
 
 - **`vocabulary-identifier`** (kebab-strict, `^[a-z][a-z0-9-]*$`) — extension-id, kind-impl ids, role-tags, hook names, capability values, runtime-shape values, payload-subtype values, work-unit-kind bare forms.

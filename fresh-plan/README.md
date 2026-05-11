@@ -42,6 +42,13 @@ Working-process disciplines that emerged through development, parallel to the op
 - **Fixture vs canonical artifact placement.** Test fixtures (`impl/tests/fixtures/`) are *disposable test inputs*, not canonical artifacts. Canonical artifacts (substrate impls, shape impls, adapter impls) live at `impl/extensions/`. Don't promote a fixture to canonical without intent; don't duplicate work between the two. Example: `min-shape-ext` under B2 fixtures is a test-only minimal shape; the B3 generic-shape impl is a separate canonical artifact under `impl/extensions/`.
 - **Steelman-then-resolve.** When a competing alternative surfaces (Kore.ai's orchestrator-vs-worker per D37; Sana's knowledge-as-core per D38; AEGIS-at-core per D40; the `extends` slot per D31; etc.), steelman it honestly + name it explicitly in the rejection rationale. The defense is part of the lock; future readers don't re-open the question. Pattern shape: D8 / D17 / D31 / D37 / D38 / D40.
 
+## Ledger conventions
+
+Structural conventions for `decisions.md` entries, distilled from D7 / D10 / D13 / D16 / D19 / D20 / D29 / D30 / D32 / D33 / D40. **Revisable when a substantive entry's content makes the structure awkward** — structural reason, not aesthetic preference. Revision = update this section + any supersedes entries (NOT rewrites; append-only ledger discipline stands per the operating discipline above).
+
+- **Section shape.** Open with `## D<N> — <YYYY-MM-DD> — <one-line title>`. Then a bold `**Decision**:` paragraph stating the lock crisply. Then numbered sections (`### A.` / `### B.` / etc. — or named subsections when the entry isn't multi-axis). For substantive entries: a `### What is NOT in this decision` section enumerating explicit deferrals + out-of-scope items. Close with `**Rationale**:` paragraph + `**Cross-references**:` line listing related D-N's.
+- **Worked-example inclusion.** Substantive entries (esp. those defining new contracts) include a worked example exercising the contract — either inline (`### Worked example`) or in a cited fixture / schema file. Distinct from the operating discipline "Concrete examples before locking" (which is about *grounding the thinking*) — this is about *including the example in the entry's own text* so future readers see what conformance looks like. Pattern across D29 / D30 / D32 / D33 / D40.
+
 ---
 
 ## What this is (background)
