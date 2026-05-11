@@ -37,7 +37,7 @@ Phases beyond layer-2 closure, named at high level — order indicative not rigi
 | Phase | Work | Status |
 |---|---|---|
 | **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | **Closed at D35.** Refined by D34 (refinement pass) + D37-D40 (side-quest sharpening). |
-| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (stub) ✅, B6 specialist (next), B7 RAG-via-MCP, B8 end-to-end. |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36 + D41: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (stub) ✅, B5 direct-api adapter (stub) ✅, B6 specialist (next), B2b MS Agent Framework substrate stub (per D41; required before closure; parallel-eligible with B6/B7/B8), B7 RAG-via-MCP, B8 end-to-end. |
 | **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Not started. Phase B prerequisite. |
 | **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | Not started. Phase B + C prerequisite. |
 | **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Not started. |
@@ -58,6 +58,27 @@ Per D26, deferred items have implicit phase homes:
 - **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35).
 - **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
 - **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
+- **Two-substrate parity (D41)** → B2b (MS Agent Framework substrate stub or equivalently diverse second substrate) shipped before Phase B closure; D17 capability vocabulary sharpened at end-of-Phase-B refinement if cross-tension surfaces.
+
+## Cross-phase work-streams
+
+Some threads of work span multiple phases rather than living in one. Sequential phasing can obscure this; surface explicitly:
+
+- **Substrate-neutrality evidence** — proven by stub-pair in Phase B (per D41) + reinforced by real-wire substrate impls in Phase C. Single-substrate evidence is not sufficient.
+- **Shape-neutrality evidence** — proven by second shape impl in Phase E (practitioner-shape in Phase D first, then a contrasting shape in E per D26). Single-shape evidence is not sufficient.
+- **Methodology articulation** — see "Methodology placement" below; lives in shape-policy + specialist behavior at Phase D, not as a separate phase.
+- **Positioning** — research lives in `market-context.md`; commit-decision waits for Phase D pioneer evidence; no dedicated phase.
+
+## External-trigger checkpoints
+
+Trigger-based phasing (per D26) is correct discipline for internal work but blind to calendar-bound externals. Known external events that should re-evaluate roadmap priorities when they hit:
+
+- **EU AI Act Article 12 effective date — 2026-08-02.** Audit-record reconstruction requirements become enforceable. AEGIS-shaped integrity protocol (per D40 §B) is the canonical extension target; Phase C is the natural impl home. Re-evaluate Phase C scope when the date approaches.
+- **Microsoft Agent Framework GA / version evolution.** D41 names MS Agent Framework as the candidate second substrate; if its API shifts substantially between B2b authoring and Phase C real-wire work, B2b stub may need re-mapping.
+- **MCP spec evolution under Linux Foundation.** Phase C's MCP-server-protocol adapter (per D26) tracks the spec; major version changes require Phase C scope adjustment.
+- **Anthropic API changes affecting Claude Agent SDK.** Substrate-binding contracts may shift; relevant for Phase C real-wire impl.
+
+These are monitoring discipline, not architecture. Update list as new external dependencies surface.
 
 ## Status of the existing pbs-bureau corpus
 
@@ -68,6 +89,12 @@ Treated as **preservation / input only**. Specific findings so far:
 - `arch/*` discipline mechanisms (audit / sparring / gate / authority-binding): **decomposed** per D8 — audit is state property; sparring/authority-binding are shape policy; gate is specialist+shape concern. No `discipline` kind at framework-core.
 - `1-NEXT.md` F1-F4 plan: **paused** per 5-PIVOT-DECISION; further reversed by D1 (reusable framework now primary, PBS-Schulz secondary).
 - Existing `arch/practitioner.md`, `arch/workflow-work-unit.md`, etc. — not yet processed against fresh-plan; treat as input when relevant.
+
+### Methodology placement
+
+Methodology content from the inherited corpus — `DISCIPLINES.md`, `process-kit/`, `profiles/` — has no dedicated phase in the roadmap. The structural answer is locked in **D4** + **D8**: methodology mechanisms (disciplines, sparring, audit, authority-binding, etc.) **decompose** into shape policy + specialist behavior + adapter mechanics. There is no separate "methodology" kind at framework-core.
+
+So methodology *content* (what does "be a practitioner" mean? what's the workflow of writing a Begründung? what's the discipline of sparring?) lives in **shape impls + specialist impls** at Phase D pioneer-instance. The older `DISCIPLINES.md` / `process-kit/` / `profiles/` artifacts are *input* to that re-derivation — preservation per the "Status of the existing pbs-bureau corpus" section above; not directly inherited. Practitioner-shape (Phase D) is where the methodology resurfaces with framework-aware policy structure.
 
 ## Repository layout
 
