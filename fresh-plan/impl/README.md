@@ -1,6 +1,6 @@
 # fresh-plan/impl — Phase B reference implementation
 
-Per **D36 + D41 + D42** (Phase B planning + amendments), this directory hosts the Phase B reference impl. **Impl side is complete**: all of B1, B2 (+ followons), B2b, B3, B4, B5, B6, B7, B8 shipped. **164 tests pass.** Remaining for Phase B closure: Bref (refinement workstream per D42; seven tracked deliverables; canonical list in `../CONCEPTS.md` open-questions) → Phase B closure entry (analog of D25 / D35).
+Per **D36 + D41 + D42 + D43 + D44** (Phase B planning + amendments + first three Bref outputs), this directory hosts the Phase B reference impl. **Impl side is complete**: all of B1, B2 (+ followons), B2b, B3, B4, B5, B6, B7, B8 shipped. **168 tests pass.** Bref in progress (3 of 7 deliverables landed: D39 closed impl-side, D43 rename `event-streaming` → `event-chain`, D44 queued subscriber-dispatch + loop backstop). Remaining for Phase B closure: 4 Bref deliverables → Phase B closure entry (analog of D25 / D35).
 
 What each workstream contributes:
 - **B1** — Conformance validator. Applies D29 validation flow + D30 cross-kind referential integrity + D32 boot-time resolution (multi-binding, cycle detection, load order) + D33 version-conflict resolution. Library + CLI (`fresh-plan-validate`).
@@ -9,7 +9,7 @@ What each workstream contributes:
 - **B3** — Generic minimal shape (D13). `Shape` base + `GenericShape(Shape)` impl with per-event authority-binding enforcement.
 - **B4** — Stub MCP-server-protocol adapter (D16 + D29 protocol-identifier registration). `Adapter` base + `MCPToolAdapter(Adapter)` impl. No real MCP wire (Phase C+).
 - **B5** — Stub direct-api adapter. `DirectAPIAdapter(Adapter)`. Demonstrates non-MCP adapter path; loader dispatches by `protocol-or-transport`.
-- **B6** — Generic minimal specialist (D19). `Specialist` base + `GenericSpecialist(Specialist)` impl. Substrate gains subscriber-dispatch giving D17 `event-chain` real push semantics per D37.
+- **B6** — Generic minimal specialist (D19). `Specialist` base + `GenericSpecialist(Specialist)` impl. Substrate gains subscriber-dispatch giving D17 `event-chain` real push semantics per D37 (queued FIFO drain + loop backstop per D44).
 - **B7** — RAG-via-MCP (per D38: retrieval composes via existing primitives). `RAGSpecialist(Specialist)` + new extension. Demonstrates one-protocol-many-provisions architectural property.
 - **B8** — End-to-end scenario. Fixture composing all 5 shipped extensions; 7 tests satisfying D36 §C closure criterion 1-6.
 
@@ -20,7 +20,7 @@ cd fresh-plan/impl
 .venv/bin/python -m pytest -q     # (or use system Python + uv pip install -e .[dev])
 ```
 
-164 tests; deterministic.
+168 tests; deterministic.
 
 ## Install
 
