@@ -34,6 +34,26 @@ Surfaced from session conversation; pending deliberate positioning work. Sharpen
 - **Hash-chain + signing is an emerging standard** for accountability-bearing event streams. Fresh-plan's openness on integrity mechanism (D10 leaves it open; D40 names an extension point) is the right pattern — adopt AEGIS or equivalent without baking it into core.
 - **Fork-from-state + replay** are derived operations under D39 + D40. Pre-deployment simulation, time-travel debugging, and analytics views are composable from framework primitives rather than reinvented per substrate. This is positioning-relevant.
 
+## Research notes — landscape map for future positioning
+
+Snapshot of who's actually doing workplace-AI-aware-transformation work today (as of 2026-05; not committed positioning, research input for when positioning is settled). The pattern: no open methodology, no shared playbook at practitioner / SMB scale. Each entry has different IP / scope / openness shape.
+
+- **Big-consultancy bespoke engagements** (KPMG / PwC / Accenture / IBM Consulting / Deloitte). Fortune-1000 clients at €5-50M engagement size. Custom per engagement; playbooks proprietary; no shared methodology output between engagements.
+- **In-house AI ops teams at large enterprises.** Embedded inside closed organizations. Network-of-agents patterns operating across thousands of documents; methodology stays internal, not published.
+- **Vertical AI startups owning one workflow deeply** (Harvey for legal; Hebbia for finance; EvenUp for personal injury). Transform one specific high-value workflow per company; don't generalize across the workplace; closed-source product; single-vertical scope.
+- **Solo AI strategy consultants / boutique implementers.** Many in 2026, especially LinkedIn-visible. Per-client bespoke; rarely have framework / IP; mostly billable-hours wrapping ChatGPT / Copilot / Claude / Cursor. No shared methodology.
+- **Thought leaders writing about it** (Ethan Mollick *Co-Intelligence*; "The Intelligence Age" essays). Books / essays / frameworks-as-prose. Not implementable methodology.
+- **The practitioners themselves, doing it manually.** Planners, lawyers, architects, accountants individually working out how to integrate AI into their authoring of accountability-bearing artifacts. Re-invented per practitioner; no shared structure.
+
+### What this map suggests (research direction, not committed)
+
+- **No open framework + methodology for workplace-AI-aware-transformation at practitioner / SMB scale.** The named buckets each have IP / scope / openness reasons not to publish.
+- **Closest analogs from prior paradigms**: GoF design patterns book (1994) for OO transformation; Agile Manifesto + Scrum (2001+) for waterfall→agile; Domain-Driven Design (Evans, 2003) for complex business domains. Each took 5-15 years to become widely adopted; each created a generation of practitioners + small consultancies who could deliver the transformation; none vendor-tied.
+- **pbs-bureau corpus** already gestures at methodology (DISCIPLINES.md, profiles/L*.md, arch/, process-kit/) alongside framework architecture. The fresh-plan ledger has been sharpening framework architecture; methodology layer is currently dormant input per the fresh-plan README's "preservation / input only" framing.
+- **Aspiration vs current state**: methodology positioning is reasonable aspiration once practitioner evidence accumulates (Phase D PBS-Schulz as first case; Phase E multi-deployment validation as scale evidence). Not current state. Premature claiming would be unsupported.
+
+Action: track this as research input. Revisit when positioning is deliberately settled (likely Phase D or later per D26).
+
 ## Notes
 
 - This file is **reference / input only**, parallel to how `pbs-bureau/VISION.md` etc. are treated as input per the fresh-plan README.
