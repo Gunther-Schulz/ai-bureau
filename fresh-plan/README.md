@@ -79,7 +79,7 @@ Phases beyond layer-2 closure, named at high level — order indicative not rigi
 | Phase | Work | Status |
 |---|---|---|
 | **A — Layer 3** | Formal schemas per kind; extension declaration mechanism; composition / promotion rules; JSON Schema toolchain | **Closed at D35.** Refined by D34 (refinement pass) + D37-D40 (side-quest sharpening). |
-| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅, B3 generic shape (next), B4 MCP-server adapter, B5 direct-api adapter, B6 specialist, B7 RAG-via-MCP, B8 end-to-end. Two B2-followon tasks pending per D39 + D40. |
+| **B — Reference impl of core** | Generic substrate / shape / adapters / specialist; minimal RAG-via-MCP | **In progress.** Workstreams per D36: B1 conformance validator ✅, B2 substrate runtime ✅ (+ B2-followon-1 D39 record emission ✅ + B2-followon-2 D40 §A `state_at(n)` ✅), B3 generic shape ✅, B4 MCP-server adapter (next), B5 direct-api adapter, B6 specialist, B7 RAG-via-MCP, B8 end-to-end. |
 | **C — Standards-compat impl** | A2A peer adapter; MCP server adapter (validates D21) | Not started. Phase B prerequisite. |
 | **D — Pioneer-instance (PBS-Schulz)** | Practitioner-shape; domain specialists; bauleitplanung corpus; PBS-Schulz workspace manifest; cutover from 0.1.0 plugin | Not started. Phase B + C prerequisite. |
 | **E — Multi-deployment validation** | Second shape impl; second workspace; federation begins | Not started. |
@@ -171,9 +171,9 @@ fresh-plan/
 
 - **Last ledger entry**: **D40** (extends D10 with projection / query contract + integrity-mechanism extension point; cites AEGIS as canonical first example).
 - **Phase A**: closed at D35; refined by D34 + sharpened by side-quest batch D37-D40.
-- **Phase B**: **in progress.** B1 (conformance validator) + B2 (substrate runtime) + B2-followon-1 (composition-change `record` per D39) + B2-followon-2 (`state_at(n)` per D40 §A) committed; 111 tests pass. D39 out-of-band-state tensions documented for end-of-Phase-B refinement (manifest-declared actors at boot; work-unit records carried only by id). B3 (generic minimal shape impl) is next per D36 workstream order.
+- **Phase B**: **in progress.** B1 + B2 + B2-followon-1 (D39 `record`) + B2-followon-2 (D40 §A `state_at(n)`) + B3 (generic minimal shape impl per D13) committed; 121 tests pass. D39 out-of-band-state tensions documented for end-of-Phase-B refinement (manifest-declared actors at boot; work-unit records carried only by id). B4 (MCP-server adapter) is next per D36 workstream order; B3/B4/B5 can also run in parallel.
 - **Side-quest research**: `market-context.md` captures adjacent products + landscape map (Kore.ai, Sana AI, AEGIS, Axon, big-consultancy / vertical-startup / thought-leader / muddle-through buckets). Not committed positioning; revisit Phase D or later.
-- **Open threads at handoff**: B3 (next substantive); D39 out-of-band-state tensions (manifest-declared actors at boot; work-unit record carry); end-of-Phase-B refinement (per D14 / D34); Phase B closure entry (analog of D25 / D35).
+- **Open threads at handoff**: B4 (MCP-server adapter; next per D36); B5 / B6 / B7 / B8; D39 out-of-band-state tensions (manifest-declared actors at boot; work-unit record carry); end-of-Phase-B refinement (per D14 / D34); Phase B closure entry (analog of D25 / D35).
 
 ## Cleanup notes
 

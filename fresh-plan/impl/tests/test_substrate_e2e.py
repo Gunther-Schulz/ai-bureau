@@ -11,10 +11,13 @@ from pathlib import Path
 
 import pytest
 
-from fresh_plan.runtime import Workspace
+from fresh_plan.runtime import EventRejected, Workspace
 
 
 SUBSTRATE_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-substrate-test"
+GENERIC_SHAPE_FIXTURE = (
+    Path(__file__).parent / "fixtures" / "workspace-generic-shape"
+)
 
 
 @pytest.fixture
@@ -174,3 +177,34 @@ def test_e2e_chain_remains_continuous(workspace):
     events = list(ws.events())
     for prior, current in zip(events, events[1:]):
         assert current["prev-event"] == prior["id"]
+
+
+# ---------------------------------------------------------------
+# B3 — generic-shape end-to-end (D13 authority-binding enforcement)
+# ---------------------------------------------------------------
+
+
+def test_e2e_generic_shape_attached_and_enforces_authority_bindings():
+    """Per D13 + B3: shape is attached at boot, hook stubs registered, and
+    authority-bindings reject `claim` events lacking the author role.
+    """
+    manifest = json.loads((GENERIC_SHAPE_FIXTURE / "workspace.json").read_text())
+    ws = Workspace.boot(manifest, GENERIC_SHAPE_FIXTURE / "extensions")
+    try:
+        # Shape attached + hook stubs registered.
+        assert ws.substrate.shape is not None
+        assert ws.substrate.shape.id == "generic-shape"
+        registered = set(ws.hooks.registered_names())
+        assert {"pre-event-emit", "post-event-emit"} <= registered
+
+        primary = ws.actors["agent-primary"]
+
+        # Valid claim with role=author on an agent-actor passes.
+        primary.emit_claim("section drafted", role="author")
+
+        # Claim without the author role is rejected by the authority binding.
+        with pytest.raises(EventRejected) as excinfo:
+            primary.emit_claim("unauthorized claim")
+        assert any(f.category == "authority" for f in excinfo.value.failures)
+    finally:
+        ws.shutdown()

@@ -18,7 +18,7 @@ are implementation per D11.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from fresh_plan.runtime.event_chain import (
     AppendOnlyEventChain,
@@ -33,6 +33,9 @@ from fresh_plan.runtime.per_event_checks import (
 from fresh_plan.runtime.skills import SkillRegistry
 from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
+
+if TYPE_CHECKING:
+    from fresh_plan.runtime.shape import GenericShape
 
 
 @dataclass
@@ -62,6 +65,10 @@ class InProcessSubstrate:
 
     # Capabilities advertised; populated from the resolved substrate provision.
     capabilities: list[str] = field(default_factory=list)
+
+    # Shape policy bundle (D13) attached at boot when composition.shape resolves.
+    # None for fixtures that don't bind a real shape impl.
+    shape: Optional["GenericShape"] = None
 
     # Adapter / specialist binding metadata stored for inspection by callers.
     # The B2 substrate does NOT execute adapters or specialists — those are
@@ -108,6 +115,13 @@ class InProcessSubstrate:
         )
         if ident_failures:
             raise EventRejected(ident_failures)
+
+        # Shape authority-binding check (D13). Skipped when no shape attached
+        # (legacy fixtures binding `min-shape` etc.).
+        if self.shape is not None:
+            auth_failures = self.shape.check_authority(event, self.state)
+            if auth_failures:
+                raise EventRejected(auth_failures)
 
         # Schema + chain-integrity validation lives in the event chain.
         # MalformedEventError propagates to the caller; event is not

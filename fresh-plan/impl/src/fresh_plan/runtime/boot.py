@@ -150,13 +150,20 @@ def boot_workspace(
     for slot_qids in (result.vocabulary_tables or {}).get("event.payload-subtype", []):
         substrate.registered_payload_subtypes.add(slot_qids)
 
-    # 6. Shape policies: B2 records the bound shape provision reference for
-    # inspection. Full shape impl is B3; hooks remain empty unless test code
-    # registers them.
-    # (Recording the shape ref on the substrate gives consumers a way to
-    # observe what was resolved; no behavioral binding happens.)
+    # 6. Shape policies (D13 + B3): load + attach the shape impl when a
+    # provision is bound; register stub handlers for declared hook names.
     shape_ref = composition.get("shape", {}).get("provision")
     substrate.bound_shape_provision = shape_ref  # type: ignore[attr-defined]
+    if shape_ref:
+        from fresh_plan.runtime.shape import load_shape_from_provision
+
+        try:
+            shape = load_shape_from_provision(shape_ref, extensions_dir)
+        except ValueError:
+            shape = None
+        if shape is not None:
+            substrate.shape = shape
+            shape.register_stub_handlers(substrate.hooks)
 
     # 7. Adapter bindings: store metadata; runtime is B4/B5.
     for binding in composition.get("adapter-bindings", []):

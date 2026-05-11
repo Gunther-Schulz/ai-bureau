@@ -24,6 +24,7 @@ FAILURE_CATEGORIES = frozenset(
         "binding",  # D30 §5 — specialist requires adapter binding not present
         "circular-dependency",  # D32 §2 — cycle in extension dependency graph
         "version-conflict",  # D33 §B — range intersection empty / no version available
+        "authority",  # D13 — shape authority-binding requirement unsatisfied
     }
 )
 
