@@ -1739,3 +1739,164 @@ Single D36 covering workstream order + setup + closure (rather than three entrie
 **Cross-references**: D14 (refinement-pass discipline); D26 (Phase B scope + closure trigger + deferred branch-strategy item); D27 (analog of this entry for Phase A); D29 + D30 + D32 (validator B1 implements these); D35 (Phase A closure; B1 builds on the artifact inventory there).
 
 ---
+
+## D37 — 2026-05-11 — Clarifies D19 — multi-agent orchestration is shape-policy, not framework-core
+
+**Decision (clarifies D19 + D8)**: Multi-agent orchestration semantics — orchestrator-vs-worker distinctions, delegation patterns, coordination flow — are **shape policy**, not framework-core. Per D19's existing wording: "Event-driven (preferred at framework level): specialists subscribe to other specialists' / adapters' / shape's emissions and react via their skills. RPC-style direct invocation between specialists is implementation-shape." This entry formalizes that wording as the canonical framework-level answer.
+
+### Rejected alternative (named)
+
+**Kore.ai's orchestrator-vs-worker pattern**: explicit orchestrator-role designation on specialists; framework-level routing-by-role; 300+ pre-built industry templates assuming this distinction. The pattern has commercial traction and scale evidence.
+
+Why fresh-plan rejects at framework-core: per D4 inclusion test, legitimate shapes opt out of an orchestrator-vs-worker distinction (e.g., autonomous-business-shape with parallel specialists; financial-trading-shape with broadcast-then-aggregate semantics). Forcing the distinction into core fails the inclusion test the same way the VISION axes did.
+
+### How shapes express orchestration
+
+Shapes that need orchestrator-worker patterns declare them via existing D13 slots:
+
+- **`roles[]`** — shape declares `orchestrator` + `worker` as shape-level role-tags.
+- **`hooks[]`** — shape declares `pre-delegate`, `post-aggregate`, etc.
+- **`authority-bindings[]`** — shape requires delegation events to be attested by the orchestrator role.
+
+No framework-core changes needed; D19's existing mechanisms accommodate the full Kore.ai pattern at shape level.
+
+**Cross-references**: D4 (inclusion test); D8 (routing is not a framework-core kind); D13 (shape policy slots); D19 (specialist cross-specialist coordination); D26 Phase E (multi-deployment validation as evidence-gathering for shape-neutrality).
+
+---
+
+## D38 — 2026-05-11 — Clarifies D25 — knowledge / corpus is not a framework-core kind
+
+**Decision (clarifies D25)**: "Knowledge" or "corpus" is **not** a framework-core kind. The 8 layer-2 kinds (D25) remain final. Knowledge as a deployment concern is supported via existing primitives:
+
+- **Retrieval-shaped adapters** (per D16; canonical example: RAG-via-MCP per D26 Phase B B7).
+- **Workspace state event projections** (claim payloads per D10 carry assertional content; per D40 events are queryable; per D39 state is fully derived from chain).
+- **Shape policy** declaring knowledge-related hooks / roles / authority-bindings (e.g., a knowledge-centric shape declares roles like `curator` / `consumer` and hooks like `pre-citation`).
+
+### Rejected alternative (named)
+
+**Sana AI's "knowledge platform + agents" thesis**: knowledge is the central artifact; agents are tools over knowledge. Sana was acquired by Workday in 2025; the thesis has commercial traction.
+
+Why fresh-plan rejects at framework-core: per D4 inclusion test, legitimate shapes have no knowledge corpus (e.g., financial-trading using real-time data feeds; process-automation orchestrating workflows; autonomous-business with proprietary internal state). Forcing knowledge as a core primitive fails the inclusion test the same way the VISION axes did.
+
+Per fresh-plan's I3 (accountability-bearing AI-human work, per D5): *work* is the central organizing primitive; knowledge is supporting infrastructure. Different deployments have different relationships to knowledge — some are knowledge-centric (Sana-shape candidate); some treat knowledge as ambient context; some don't engage with knowledge at all.
+
+### Precedent
+
+Same shape as D8 ("no `discipline` kind at framework-core layer 2"): mechanisms-formerly-called-disciplines decompose across existing kinds. Same principle: knowledge-related mechanisms decompose across adapters, events, and shape policy. No new kind.
+
+**Cross-references**: D4 (inclusion test); D5 I3 (accountability-bearing work as central primitive); D8 (precedent — "no discipline kind"); D10 (claim payload carries assertional content); D16 (retrieval-shaped adapters); D25 (layer 2 closure; this entry defends the kind set against the knowledge-thesis alternative); D26 Phase B B7 (RAG-via-MCP); D40 (projection / query contract enabling knowledge-related projections).
+
+---
+
+## D39 — 2026-05-11 — Clarifies D7 §3 + extends payload-composition-change schema — state is fully derived from the event chain
+
+**Decision (clarifies D7 §3 + D10; extends payload-composition-change schema)**: Workspace state — actors registry, work-unit tracker, scope — is **fully derived from the event chain**. Any workspace state at any sequence point is reconstructible by replaying the event chain up to that point. This property is now named explicitly + load-bearing.
+
+### Why this is load-bearing
+
+- **Pre-deployment simulation** — fork from a known state, exercise an experiment, throw away the fork. Requires state-from-chain.
+- **Replay debugging + time-travel** — reconstruct state at sequence N to investigate. Requires state-from-chain.
+- **Analytics views** — projection of state at arbitrary points. Requires state-from-chain.
+- **Audit reconstruction** — regulators (EU AI Act Article 12) or auditors (SR 11-7, OCC/CFPB) reconstruct the workspace's state evolution. Requires state-from-chain.
+- **Standards-compatibility** — PROV-O genealogy, AEGIS protocol, Axon-style event sourcing all assume this property.
+
+### Implications
+
+Every state mutation MUST be representable as one or more events. Current core payload-subtypes (D10) cover:
+
+- Actor changes: composition-change events with binding-kind=actor.
+- Work-unit lifecycle: state-change events on work-unit status.
+- Scope changes: state-change events with what=scope.
+- Composition mutations: composition-change events with binding-kind ∈ {substrate-binding, adapter-binding, specialist-binding, extension}.
+
+**Out-of-band state mutations** (changes that bypass the event chain) violate this property. Per refinement-pass discipline, any out-of-band path is either (i) covered by a synthetic event the substrate generates, or (ii) surfaced as a tension to address.
+
+### Schema update applied in same commit
+
+Per D34's discipline of landing schema updates with the supersedes entry, the `payload-composition-change.schema.json` is extended in the same commit:
+
+- New optional **`record`** slot — binding-kind-specific record content carrying the full state of the added / removed / updated binding. For `change-type: add`, this slot SHOULD carry the full record so workspace state can be reconstructed from the chain alone.
+- Shape of `record` is binding-kind-specific (validated against the relevant kind schema by the framework conformance validator, not by the envelope schema). For binding-kind=actor, record conforms to actor.schema.json; for binding-kind=adapter-binding, record conforms to the workspace-manifest's adapter-binding shape; etc.
+
+### Connection to B2
+
+B2 sub-agent flagged that the current `Workspace.register_agent_actor` registers sub-agent actor records out-of-band (per the previous composition-change schema's `additionalProperties: false`). D39 resolves this by extending the schema to admit the actor record. B2's runtime needs a minor follow-on refactor to emit composition-change events with the new `record` slot populated. Tracked as **B2-followon-1** (low-effort; not blocking B3).
+
+### What is NOT in this decision
+
+- **Fork-as-framework-API** — derived operation per D40 §C; substrate-impl concern.
+- **Specific replay tooling** — implementation per D11.
+- **Snapshot caching** for replay performance — implementation per D11; the property is "state IS derivable," not "state must be re-derived every time."
+
+**Cross-references**: D7 §3 (state contents); D10 + D23 (event chain + work-unit-id); D29 (validation flow); D34 (refinement discipline); D40 (projection / query contract building on this property); B2 surfaced tensions.
+
+---
+
+## D40 — 2026-05-11 — Extends D10 — projection / query contract + integrity-mechanism extension point
+
+**Decision (extends D10's contract)**: The event chain (D10) gains two additions: a **minimum projection / query interface** every substrate must provide, and an explicit **integrity-mechanism extension point** for protocols like AEGIS / Axon to plug in.
+
+### A. Minimum projection / query interface
+
+Every substrate (D12) advertising the `event-streaming` capability (per D17) must provide the following operations over the event chain it hosts:
+
+| Operation | Description |
+|---|---|
+| `filter-by-actor(actor-id)` | Returns ordered subsequence of events where `actor-id` appears in `event.actors[].id`. |
+| `filter-by-work-unit(work-unit-id)` | Returns ordered subsequence of events where `event.work-unit-id` matches. |
+| `filter-by-payload-subtype(subtype)` | Returns ordered subsequence of events with matching `payload-subtype`. |
+| `state-at(sequence-n)` | Returns workspace state derived from events 0..n (per D39 state-is-derivable property). |
+| `full-chain()` | Returns the full ordered event sequence. |
+
+These are **minimum**; substrates may provide additional operations (indexed lookups, time-range filters, payload-shape predicates, etc.). The minimum guarantees cross-substrate portability for analytics, replay, simulation, and audit-reconstruction workflows (per D12's cross-substrate-portability goal).
+
+**Refinement of D17**: the `event-streaming` capability is defined to include the minimum projection / query interface above. No new core abstract capability is added; D17's three-capability core (`hooks`, `skills`, `event-streaming`) is unchanged. Substrates advertising `event-streaming` implicitly commit to the minimum query interface.
+
+### B. Integrity-mechanism extension point
+
+D10's wording "integrity-checkable; the implementation provides a mechanism" is **retained as the framework-core position** (per D2: no specific protocols at core), but **D40 names "event-chain integrity protocols" as a registered protocol-or-transport category**: extensions may register integrity protocols that substrates can adopt.
+
+**Canonical first example (not provided in Phase A or B; named as future work)**:
+
+**AEGIS protocol** as an extension (`aegis-protocol-ext`) registering:
+- `protocol-or-transport: aegis-event-chain-integrity`
+- Specifies: SHA-256 hash chain + Ed25519 signing + JCS canonicalization.
+- Positioned for EU AI Act Article 12 (effective 2026-08-02), GDPR Article 22, SR 11-7, OCC/CFPB alignment.
+
+Other integrity protocols can coexist per D29 namespacing:
+- `axon-protocol-ext` for Axoniq-style event-sourcing semantics.
+- `prov-o-protocol-ext` for W3C PROV-O alignment.
+- Future post-quantum-signature protocols.
+
+A workspace's substrate-binding may declare the integrity protocol it uses via binding configuration (per D7 substrate-binding.configuration). Substrates that don't support a required integrity protocol fail capability satisfaction (D30 §2) for any deployment requiring it.
+
+**Why AEGIS is not at core**: per D2 strict reading + D17 principle ("core declares a capability iff a core kind contract references it") + D4 inclusion test (legitimate deployments may use Axon, PROV-O, internal hash chains, or post-quantum schemes instead of AEGIS specifically). Same shape as D17's demotion of `mcp-client` / `a2a` — specific protocols are extension-registered, not core. If AEGIS proves universal, D33 promotion to core is a small supersedes entry — but reversibility (demoting later if alternatives emerge) is painful, so the discipline is "stays minimal until proven universal."
+
+### C. Connection to fork-from-state
+
+Per D39 (state-is-fully-derived) + D40 §A (`state-at(sequence-n)` is in the minimum query interface), **fork-from-state is a derived operation**: any workspace can be reconstituted from any prefix of its event chain. Fork is not a separate framework primitive; it's a derived capability that substrates may or may not expose as an API.
+
+Pre-deployment simulation, replay debugging, time-travel workflows, and multi-tenant isolation are all derived from these properties + the minimum query interface. No new kind needed.
+
+### What is NOT in this decision
+
+- **AEGIS protocol implementation** — out of scope here; named as future extension. Phase C (standards-compat impl per D26) is the natural home.
+- **Specific algorithm bindings** for integrity protocols (hash function choice, signature scheme, canonicalization) — extension territory.
+- **Fork-as-framework-API** — derived operation; substrate-impl concern.
+- **Time-range filtering or advanced query operations beyond the minimum** — substrate may provide; not in minimum.
+- **Query performance characteristics** — implementation per D11.
+- **Snapshot caching for state-at(n)** — implementation per D11; the property is "state IS derivable," not "state must be re-derived from scratch on every query."
+
+### Connection to B1 / B2
+
+- **B1 (conformance validator)**: substrates advertising `event-streaming` are now implicitly committed to the minimum query interface. Validator does not need a new check (no schema change to substrate.schema.json); the interface contract is at runtime / impl level.
+- **B2 (substrate runtime)**: `AppendOnlyEventChain` already provides four of the five minimum operations (by-id, by-actor, by-work-unit, by-payload-subtype, full-chain). Needs to add **`state-at(sequence-n)`** (replay events 0..n and reconstruct state). Tracked as **B2-followon-2** (low-to-medium effort; not blocking B3).
+- Combined with D39's composition-change schema extension: B2 follow-on tasks are (i) emit `record` in composition-change events; (ii) implement `state-at(n)` replay. Both small; landed as a "Phase B internal refinement" before Phase B closure.
+
+**Rationale**: per D2 (kinds are abstractions; instances are extensions), the integrity mechanism is an instance-level concern that extensions own. Per D12 (substrate hosts the agent loop; cross-substrate portability), the query interface needs to be uniform across substrates — so the minimum interface is core-locked. Per D5 I3 (accountability-bearing AI-human work) + D24 (EU AI Act compliance in-scope), the integrity-mechanism extension point is what lets fresh-plan plug into the regulatory landscape without forcing a specific protocol on every deployment.
+
+The split is clean: framework specifies *what* (queries, integrity-checkability), extensions specify *how* (specific algorithms, specific canonicalization).
+
+**Cross-references**: D2 (no specific protocols at core); D4 (inclusion test); D10 (event chain; this entry extends with minimum query + integrity extension point); D12 + D17 (substrate capabilities; `event-streaming` refined to include query interface); D24 (EU AI Act compliance in-scope; AEGIS / Axon target the same); D26 Phase C (standards-compat impl — natural home for `aegis-protocol-ext`); D29 (namespacing — integrity protocols are extension-registered); D33 (promotion / demotion — AEGIS can graduate later if proven universal); D39 (state-is-derivable; foundation of `state-at(n)`); B2 surfaced tensions (integrity mechanism + projection contract).
+
+---

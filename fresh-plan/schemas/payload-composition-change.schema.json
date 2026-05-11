@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pbs-bureau.dev/fresh-plan/schemas/payload-composition-change.schema.json",
   "title": "Event payload — composition-change",
-  "description": "Payload schema for event.payload-subtype = 'composition-change' per D10 — workspace composition binding/unbinding (per D7 §4 composition mutability). Closes D34 finding 5.2. Notation: JSON Schema Draft 2020-12 per D28.",
+  "description": "Payload schema for event.payload-subtype = 'composition-change' per D10 — workspace composition binding/unbinding (per D7 §4 composition mutability). Refined per D39 (state-is-fully-derived-from-event-chain): for change-type='add', the `record` slot SHOULD carry the full added binding's record so workspace state is reconstructible from the chain alone. Notation: JSON Schema Draft 2020-12 per D28.",
 
   "type": "object",
   "required": ["change-type", "binding-reference"],
@@ -22,6 +22,10 @@
       "type": "string",
       "enum": ["substrate-binding", "adapter-binding", "specialist-binding", "actor", "extension"],
       "description": "Which kind of binding was changed. Useful for filtered-view queries."
+    },
+    "record": {
+      "type": "object",
+      "description": "Optional binding-kind-specific record content carrying the full state of the added / removed / updated binding. Per D39 (state-is-fully-derived-from-event-chain): for change-type='add', this slot should carry the full record so workspace state can be reconstructed from the chain alone. Shape is binding-kind-specific (validated against the relevant kind schema by the framework conformance validator, not by this envelope schema — e.g., for binding-kind=actor, record conforms to actor.schema.json)."
     }
   }
 }
