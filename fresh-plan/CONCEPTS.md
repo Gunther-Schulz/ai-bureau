@@ -8,6 +8,26 @@ A clean restart of framework architectural decisions. The existing `pbs-bureau` 
 
 The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the framework and made PBS-Schulz primary). Per D1: **reusable framework is primary; PBS-Schulz is the first deployment / proving ground; generality wins on conflict.**
 
+### What is durable vs scaffolding
+
+Working framing (stake-in-the-ground; candidate D42 at end-of-Phase-B refinement after source-grounded reads of Bucket A platform positioning):
+
+**The durable contribution** is the **specification + methodology + protocol extensions** for accountability-bearing AI-human work:
+- *Vocabulary* — workspace, actor, event, substrate, shape, adapter, specialist, work-unit (the 8 kinds; D7 / D9 / D10 / D12 / D13 / D16 / D19 / D20).
+- *Structural commitments* — I1 composition / I2 machine-checkable contracts / I3 accountability-bearing AI-human work (D5).
+- *Composition rules* — extension manifest contract, boot-time resolution, versioning policy (D29 / D30 / D31 / D32 / D33).
+- *Protocol extensions* — workspace-as-A2A-peer (D21); adapter-as-MCP-server (D16); integrity-mechanism extension point with AEGIS / Axon as canonical examples (D40 §B); standards-alignment toward PROV-O / VC / DID / CloudEvents / OpenTelemetry / AsyncAPI / JSON Schema / Activity Streams / EU AI Act tooling (D24).
+- *Methodology* — see "Methodology placement" section below.
+
+**The scaffolding** is the **reference implementation** at `fresh-plan/impl/`:
+- B1 conformance validator + B2-B6 runtime classes + shipped extensions. Necessary for two things: (a) proving the specification is implementable (the durability bet survives "spec without ref-impl never gets adopted"); (b) supporting PBS-Schulz daily use during Phase D pioneer-instance. Not the canonical runtime; one exemplar of the spec.
+
+**Why this framing matters**: the historical survivor pattern (CORBA → REST, SOAP → JSON-over-HTTP, EJB → POJOs + microservices, etc.) suggests thick runtime middleware perishes when models + protocols mature; thin specs survive. Fresh-plan's ledger is mostly already specification-shaped; the framing makes the durability bet explicit and shapes how future entries frame themselves. JSON Schema for accountability-bearing AI-human workspaces; not CORBA for accountability-bearing AI-human workspaces.
+
+**What this is NOT a bet on**: the radical "agents fully self-organize structural work; humans become signees" extrapolation. No Bucket A platform with shipping power (Gemini Enterprise, Microsoft Copilot Studio, Salesforce Agentforce, IBM watsonx, Kore.ai) publicly targets that scenario. Their actual stated direction — agents + orchestration + protocols + governance + persistent human-in-the-loop — is *more* friendly to fresh-plan's positioning, not less. The conservative direction has stronger demand-signal for accountability infrastructure than the radical scenario. Use the radical framing as a stress-test to avoid painting corners (composition rules should permit runtime discovery; event chain should be capability-card-compatible); do not position for it as roadmap.
+
+**Why discovery + smart agents don't replace this**: A2A / MCP / agent cards / discoverability handle *how agents wire up + how work gets done*. They do not handle *attribution* (who said what, attributable to whom), *audit replay* (reconstructing state at sequence N), *authorization* (which roles can delegate which events), or *composition validation* (is this workspace's composition valid against its shape policy?). Smart agents producing more autonomous work create *more* records that need shared structure — the OpenTelemetry / OpenAPI / Prometheus pattern. EU AI Act Article 12 (Aug 2026) makes audit-grade records legally mandatory for certain AI systems. Fresh-plan sits in the demand side of that regulatory + governance arc; the wire-level protocols sit underneath.
+
 ## Layered structure (per D3)
 
 | Layer | Content | Status |
@@ -29,6 +49,22 @@ The fresh-plan reverses the prior `5-PIVOT-DECISION.md` (which had paused the fr
 | adapter | D16 | Interface to external surfaces; `protocol-or-transport` open vocabulary (no specific protocols at core per strict D2). |
 | specialist | D19 | Internal capability bundle; declares skills + supported work-unit-kinds + adapter dependencies + event subscriptions. |
 | work-unit | D20 | Instance of organized work; kind-discriminated (extension-registered); fixed core lifecycle enum (created / in-progress / paused / completed / abandoned). |
+
+## Protocol extensions
+
+First-class deliverable cluster per the durability framing: fresh-plan defines how accountability-bearing workspaces integrate with the maturing protocol ecosystem. These are *not* extensions to fresh-plan's core; they are fresh-plan's contributions *to* external specifications, expressed via the extension mechanism (D29).
+
+| Target | Fresh-plan contribution | Source decisions |
+|---|---|---|
+| **A2A** (agent-to-agent peering) | Workspace-as-A2A-peer deployability — every workspace can expose its specialists + accept work as an A2A peer | D21 |
+| **MCP** (Model Context Protocol, under Linux Foundation) | Adapter-as-MCP-server pattern — any MCP server is a candidate adapter via the protocol-or-transport extension-registered vocabulary | D16 + D29 |
+| **PROV-O** (W3C provenance) | Event-chain alignment — workspace event chain is structurally compatible with PROV-O genealogy + Activity Streams | D10 + D24 |
+| **Event-chain integrity** (AEGIS, Axon, post-quantum signatures, etc.) | Integrity-mechanism extension point — substrates declare which integrity protocol they implement; framework specifies what (queries, integrity-checkability); extensions specify how | D40 §B |
+| **EU AI Act Article 12** (audit-record reconstruction, effective 2026-08-02) | Standards-compat workstream + D17 query-interface (`state_at(n)`) make audit replay an architectural property, not a bolted-on feature | D24 + D40 §A |
+| **JSON Schema 2020-12** | Formal-schema notation; all kind contracts are machine-validatable | D28 + D34 §A.6 |
+| **Standards under D24 watch** | PROV-O / VC / DID / CloudEvents / OpenTelemetry / AsyncAPI / Activity Streams — per-kind mapping work split across Phases A (layer-3-affecting), B/C (impl-level), D (deployment-specific) | D24 |
+
+The pattern: framework-core stays protocol-neutral (per D2 strict reading); protocol identifiers are extension-registered (per D17 + D29); per-protocol behavior is extension-defined. This composes with the durability framing — fresh-plan adds *contracts* to the protocol ecosystem; it does not *re-implement* what protocols already standardize.
 
 ## Roadmap (indicative; per D26)
 
@@ -66,6 +102,7 @@ Per D26, deferred items have implicit phase homes:
 - **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
 - **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
 - **Two-substrate parity (D41)** → B2b (MS Agent Framework substrate stub or equivalently diverse second substrate) shipped before Phase B closure; D17 capability vocabulary sharpened at end-of-Phase-B refinement if cross-tension surfaces.
+- **Positioning lock (candidate D42)** → end-of-Phase-B refinement deliverable: a clarification of D1 making explicit that the durable contribution is the specification + methodology + protocol extensions; the reference impl is exemplar, not canonical runtime. Stake-in-the-ground framing currently in CONCEPTS "What is durable vs scaffolding" + "Protocol extensions" sections. Pre-lock: source-grounded reads of Gemini Enterprise / Microsoft Copilot Studio + AGT / Salesforce Agentforce / IBM watsonx Orchestrate / Kore.ai current product positioning pages, so the entry is grounded in *what they publicly target*, not synthesis.
 
 ## Cross-phase work-streams
 
