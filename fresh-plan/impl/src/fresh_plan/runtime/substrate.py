@@ -135,18 +135,13 @@ class InProcessSubstrate:
             binding_kind = payload.get("binding-kind")
             ref = payload.get("binding-reference")
             if change_type == "add" and binding_kind == "actor" and ref is not None:
-                # Sub-agent registration: the new actor record is stored in
-                # event.payload under a runtime convention. We accept either
-                # a full actor dict in payload['actor-record'] (B2 convention)
-                # or just a reference (in which case the caller has already
-                # registered the actor via Workspace.register_agent_actor and
-                # the event is the audit trail).
-                if (
-                    "actor-record" in payload
-                    and isinstance(payload["actor-record"], dict)
-                    and not self.state.has_actor(ref)
-                ):
-                    self.state.add_actor(payload["actor-record"])
+                # Per D39: composition-change:add carries the full added
+                # binding's state in `payload.record` so workspace state is
+                # fully derivable from the event chain. Idempotent: skip if
+                # the actor is already registered (replay-safe).
+                record = payload.get("record")
+                if isinstance(record, dict) and not self.state.has_actor(ref):
+                    self.state.add_actor(record)
 
         elif subtype == "state-change":
             if payload.get("what") == "scope":

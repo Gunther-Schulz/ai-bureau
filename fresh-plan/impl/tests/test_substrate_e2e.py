@@ -99,6 +99,54 @@ def test_e2e_sub_agent_is_valid_event_target_after_composition_change(workspace)
     assert any(e["payload-subtype"] == "action" for e in by_actor)
 
 
+def test_e2e_composition_change_carries_record_per_d39(workspace):
+    """Per D39: composition-change:add events MUST carry the full added
+    binding's record in `payload.record` so workspace state is fully
+    derivable from the event chain alone."""
+    ws = workspace
+    ws.register_agent_actor(id="subagent-rec", substrate_binding="primary")
+    comp_events = ws.event_chain.by_payload_subtype("composition-change")
+    add_events = [
+        e for e in comp_events
+        if e["payload"]["change-type"] == "add"
+        and e["payload"].get("binding-reference") == "subagent-rec"
+    ]
+    assert len(add_events) == 1
+    record = add_events[0]["payload"].get("record")
+    assert isinstance(record, dict)
+    assert record["id"] == "subagent-rec"
+    assert record["subtype"] == "agent-actor"
+    assert record["substrate-binding"] == "primary"
+
+
+def test_e2e_actor_registry_derivable_from_event_chain(workspace):
+    """Per D39: replaying composition-change:add events against a fresh
+    WorkspaceState reconstructs the runtime-added actors."""
+    from fresh_plan.runtime.workspace_state import WorkspaceState
+
+    ws = workspace
+    ws.register_agent_actor(id="subagent-replay-a", substrate_binding="primary")
+    ws.register_agent_actor(id="subagent-replay-b", substrate_binding="primary")
+
+    replayed = WorkspaceState()
+    # Seed with manifest-declared actors (boot snapshot — out of band of
+    # the runtime composition-change path; B2-followon-2 will provide
+    # state_at(n) that includes this).
+    for aid, rec in ws.substrate.state.actors.items():
+        if aid in {"subagent-replay-a", "subagent-replay-b"}:
+            continue
+        replayed.add_actor(rec)
+    # Apply composition-change:add events.
+    for e in ws.event_chain.by_payload_subtype("composition-change"):
+        p = e["payload"]
+        if p["change-type"] == "add" and p.get("binding-kind") == "actor":
+            replayed.add_actor(p["record"])
+
+    assert replayed.has_actor("subagent-replay-a")
+    assert replayed.has_actor("subagent-replay-b")
+    assert replayed.get_actor("subagent-replay-a")["substrate-binding"] == "primary"
+
+
 def test_e2e_chain_remains_continuous(workspace):
     ws = workspace
     primary = ws.actors["agent-primary"]

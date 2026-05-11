@@ -345,9 +345,12 @@ class Workspace:
             "substrate-binding": substrate_binding,
         }
 
-        # Emit composition-change BEFORE adding the actor to state, so the
-        # event's actors[] references existing actors (per D34 §A.5 — the
-        # new actor is valid for events AFTER its composition-change).
+        # Per D39: composition-change:add carries the full actor record in
+        # `payload.record` so workspace state is fully derivable from the
+        # event chain. Per D34 §A.5: the attributing actor (already in state)
+        # appears in event.actors[]; the new actor is registered by the
+        # substrate side-effect AFTER append, so it becomes a valid event
+        # target for subsequent events.
         attributing = attributing_actor_id or next(
             iter(self._substrate.state.actors), None
         )
@@ -358,16 +361,9 @@ class Workspace:
                 "change-type": "add",
                 "binding-reference": id,
                 "binding-kind": "actor",
-                # `actor-record` is a B2 runtime convention so the substrate's
-                # _apply_runtime_side_effects can register the actor. It's
-                # carried in the payload because the schema's `additionalProperties`
-                # constraint on payload-composition-change.schema.json would
-                # reject it — so we register the actor OUTSIDE the event and
-                # let the event be the audit trail.
+                "record": actor_record,
             },
         )
-        # Register the actor in state (post-event, per D34 §A.5 ordering)
-        self._substrate.state.add_actor(actor_record)
         handle = ActorHandle(self, id)
         self._actor_handles[id] = handle
         return handle
