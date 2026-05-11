@@ -55,7 +55,11 @@ Per D26, deferred items have implicit phase homes:
 - **Standards-compat per-kind mapping** (PROV-O, VC, DID, CloudEvents, OpenTelemetry, AsyncAPI, JSON Schema, Activity Streams, EU AI Act) → split across Phase A (layer-3-affecting), B/C (impl-level), D (deployment-specific).
 - ~~B2 follow-on tasks~~ → **completed**: B2-followon-1 (composition-change `record` per D39) + B2-followon-2 (`state_at(sequence_n)` per D40 §A) landed.
 - **D39 out-of-band-state tensions surfaced for end-of-Phase-B refinement** (per D39 "(ii) surfaced as a tension to address"): (a) manifest-declared actors loaded into state at boot bypass the event chain — `state_at(n)` pure-replay does not reflect them; (b) work-units' full records are not carried in state-change events (only `id` and status) — replay reconstructs status but not the full record. Both need either synthetic-event emission at boot (closing the loop) or explicit ledger entries before Phase B closure.
-- **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35).
+- **Phase B end-of-phase refinement** (per D14 / D34 pattern) before Phase B closure entry (analog of D25 / D35). Codified deliverables for the refinement pass:
+  - Resolve D39 out-of-band-state tensions (manifest-actor seeding + work-unit record carry).
+  - D17 capability-vocabulary sharpening if B2b two-substrate parity (D41) surfaces Claude-flavored bias.
+  - Sana-style knowledge-query worked-example validating D38 (no knowledge-kind needed; decomposes across adapters + state + shape policy).
+  - **Split `decisions.md` into per-entry files at `decisions/D<NN>-<slug>.md`**, with `decisions.md` becoming a thin chronological index. Precedent: pbs-bureau's GLOSSARY split (36 per-entry files) + DISCIPLINES split (10 per-discipline files) for context-load efficiency. Trigger: file size + Phase-C-onward growth makes the monolith painful. Done as part of refinement so it composes with the closure-entry write rather than colliding with mainline workstream commits.
 - **AEGIS / Axon integrity-protocol extensions** → Phase C (per D40 §B as canonical first examples).
 - **Positioning** (open-source / craft-practice / accountability-bearing / methodology-layer) → deliberately deferred per `market-context.md`; revisit Phase D or later.
 - **Two-substrate parity (D41)** → B2b (MS Agent Framework substrate stub or equivalently diverse second substrate) shipped before Phase B closure; D17 capability vocabulary sharpened at end-of-Phase-B refinement if cross-tension surfaces.
