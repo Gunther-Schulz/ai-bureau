@@ -1,44 +1,45 @@
-"""Adapter runtime — minimal MCP-server-protocol adapter (D16 + D2 + D29).
+"""Adapter runtime — D16 + adapter.schema.json + D29 protocol-identifier registration.
 
-Per D16, an adapter integrates a workspace with an external surface via a
-single protocol-or-transport (extension-registered per D2 strict reading +
-D29 namespacing). Per D36 / B4 scope: this module ships a *stub* adapter
-that validates the MCP adapter pattern + the registered `mcp-client`
-protocol identifier. The stub emits a workspace `action` event per call
-and returns a canned response. Real-wire MCP integration (JSON-RPC over
-stdio / HTTP) is Phase C territory.
+Per D16, adapters integrate a workspace with external surfaces via a single
+protocol-or-transport (extension-registered per D2 strict reading + D29
+namespacing). `Adapter` is the base class reading off D16; concrete adapter
+impls subclass it.
 
-Runtime concerns owned here:
-  - Hold the loaded adapter spec dict and expose D16 slot accessors.
-  - Attach to a Workspace post-construction (boot-ordering subtlety:
-    Workspace is constructed after the substrate; the adapter is
-    instantiated at step 7 and attached after Workspace exists, before
-    the boot lifecycle event).
-  - `call(tool_name, parameters)` emits one `action` event and returns
-    a stub response carrying an outcome-reference.
+The base supports the **request/response invocation shape** (per D16's
+"request/response tool" pattern) via `call(tool_name, parameters)`.
+Delegation peer + passive event source patterns may require alternative
+invocation interfaces — re-evaluate when first non-request/response impl
+lands (Phase C+).
+
+For Phase B, both shipped adapters (MCPToolAdapter, future DirectAPIAdapter)
+are stubs: they emit one `action` event per call() and return a canned
+response. Real-wire protocol implementations are Phase C territory.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any, Callable, ClassVar, Optional
+
+from fresh_plan.runtime.provision import load_provision_spec
 
 
 @dataclass
-class MCPToolAdapter:
-    """Stub MCP-server-protocol adapter per D16 + B4.
+class Adapter:
+    """Base class for adapter runtime impls per D16 + adapter.schema.json.
 
-    Holds the loaded adapter spec dict and exposes the D16 slot accessors
-    plus a `call()` method that emits one `action` event into the
-    workspace event chain and returns a canned response. No real MCP wire
-    is opened in B4; Phase C replaces the stub `call()` body with a real
-    JSON-RPC client.
+    Holds the loaded spec, exposes D16 slot accessors, manages workspace
+    attachment + event-emit infrastructure. Subclasses override `call()` to
+    implement protocol-specific invocation.
     """
 
     spec: dict
     _emit_event: Optional[Callable[..., dict]] = field(default=None, repr=False)
-    _outcome_counter: int = field(default=0, repr=False)
     _workspace: Any = field(default=None, repr=False)
+    _outcome_counter: int = field(default=0, repr=False)
+
+    # Subclasses override to give their outcome-references a distinct prefix.
+    _outcome_prefix: ClassVar[str] = "stub"
 
     @property
     def id(self) -> str:
@@ -74,7 +75,38 @@ class MCPToolAdapter:
         self._emit_event = workspace._emit_event
 
     # ---------------------------------------------------------------
-    # Stub MCP tool-call
+    # Convenience for request/response stub + real impls
+    # ---------------------------------------------------------------
+
+    def _emit_action(
+        self,
+        tool_name: str,
+        parameters: dict,
+        attributing_actor_id: Optional[str] = None,
+    ) -> str:
+        """Emit one `action` event for a tool-call invocation; return its outcome-reference."""
+        if self._emit_event is None or self._workspace is None:
+            raise RuntimeError(
+                "adapter not attached to a workspace; call attach_workspace first"
+            )
+        self._outcome_counter += 1
+        outcome_reference = f"{self._outcome_prefix}-{self._outcome_counter}"
+        actor_id = attributing_actor_id or next(
+            iter(self._workspace._substrate.state.actors), None
+        )
+        self._emit_event(
+            actor_id=actor_id,
+            payload_subtype="action",
+            payload={
+                "action-name": tool_name,
+                "parameters": parameters,
+                "outcome-reference": outcome_reference,
+            },
+        )
+        return outcome_reference
+
+    # ---------------------------------------------------------------
+    # Invocation interface (abstract; subclass-owned)
     # ---------------------------------------------------------------
 
     def call(
@@ -84,26 +116,31 @@ class MCPToolAdapter:
         *,
         attributing_actor_id: Optional[str] = None,
     ) -> dict:
-        """Stub MCP tool-call: emit one `action` event, return canned response."""
-        if self._emit_event is None or self._workspace is None:
-            raise RuntimeError(
-                "adapter not attached to a workspace; call attach_workspace first"
-            )
-        self._outcome_counter += 1
-        outcome_reference = f"mcp-stub-{self._outcome_counter}"
+        """Invoke this adapter for a tool-call. Subclasses MUST override."""
+        raise NotImplementedError("Adapter subclasses must implement call()")
+
+
+@dataclass
+class MCPToolAdapter(Adapter):
+    """Stub MCP-server-protocol adapter per D16 + B4.
+
+    No real MCP wire is opened; `call()` emits one `action` event into the
+    workspace event chain and returns a canned response carrying the
+    outcome-reference. Phase C replaces the body with a real JSON-RPC
+    client.
+    """
+
+    _outcome_prefix: ClassVar[str] = "mcp-stub"
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
         params = parameters or {}
-        actor_id = attributing_actor_id or next(
-            iter(self._workspace._substrate.state.actors), None
-        )
-        self._emit_event(
-            actor_id=actor_id,
-            payload_subtype="action",
-            payload={
-                "action-name": tool_name,
-                "parameters": params,
-                "outcome-reference": outcome_reference,
-            },
-        )
+        outcome_reference = self._emit_action(tool_name, params, attributing_actor_id)
         return {
             "outcome-reference": outcome_reference,
             "ok": True,
@@ -113,34 +150,28 @@ class MCPToolAdapter:
         }
 
 
+# Module-level registry of (protocol-or-transport → runtime class). Populated
+# as new adapter impls land. Phase C real-wire impls replace stub classes here.
+_ADAPTER_CLASSES: dict[str, type[Adapter]] = {
+    "mcp-server-ext:mcp-client": MCPToolAdapter,
+}
+
+
 def load_adapter_from_provision(
     provision_ref: str, extensions_dir: Path
-) -> MCPToolAdapter:
-    """Load an adapter spec from a `<ext-id>:<provision-id>` ref.
+) -> Adapter:
+    """Load an adapter spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
-    Mirrors `load_shape_from_provision` in shape.py.
+    Dispatches by `spec.protocol-or-transport` to the registered runtime
+    class. Raises ValueError if the spec uses a protocol-or-transport with
+    no registered runtime class.
     """
-    from fresh_plan.validator.extensions import (
-        discover_extensions,
-        load_extension,
-    )
-
-    ext_id, prov_id = provision_ref.split(":", 1)
-    discovered = discover_extensions(extensions_dir)
-    if ext_id not in discovered:
+    spec = load_provision_spec(provision_ref, extensions_dir)
+    protocol = spec.get("protocol-or-transport")
+    cls = _ADAPTER_CLASSES.get(protocol)
+    if cls is None:
         raise ValueError(
-            f"adapter provision {provision_ref!r}: extension {ext_id!r} not discovered "
-            f"under {extensions_dir!s}"
+            f"adapter provision {provision_ref!r}: protocol-or-transport "
+            f"{protocol!r} has no registered Adapter runtime class"
         )
-    spec: Optional[dict] = None
-    for version, manifest_path in discovered[ext_id].items():
-        loaded_ext, _errs = load_extension(ext_id, version, manifest_path)
-        spec = loaded_ext.provisions_loaded.get(prov_id)
-        if spec is not None:
-            break
-    if spec is None:
-        raise ValueError(
-            f"adapter provision {provision_ref!r}: provision id {prov_id!r} not found "
-            f"in any version of extension {ext_id!r}"
-        )
-    return MCPToolAdapter(spec=spec)
+    return cls(spec=spec)

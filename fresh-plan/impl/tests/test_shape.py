@@ -118,9 +118,9 @@ def test_check_authority_skips_when_actors_empty(shape, state):
     assert shape.check_authority(event, state) == []
 
 
-def test_register_stub_handlers_makes_hooks_firable(shape):
+def test_register_handlers_makes_hooks_firable(shape):
     registry = HookRegistry()
-    shape.register_stub_handlers(registry)
+    shape.register_handlers(registry)
     assert set(registry.registered_names()) == {"pre-event-emit", "post-event-emit"}
     assert registry.handler_count("pre-event-emit") == 1
     assert registry.fire("pre-event-emit", {}) == [None]

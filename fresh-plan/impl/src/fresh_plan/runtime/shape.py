@@ -2,25 +2,29 @@
 
 Per D13, the shape kind carries substantive identity as a policy bundle of
 authority-bindings, roles, hooks, actor-requirements, and capability
-requirements. Per D26, this module is intentionally a *generic* minimal
-shape impl — not practitioner-shape (pioneer-instance bias avoidance).
+requirements. `Shape` is the base class reading off D13 + shape.schema.json;
+concrete shape impls subclass it. `GenericShape` is the deliberately
+neutral first impl (B3), explicitly NOT practitioner-shape per D26.
 
-Runtime concerns owned here:
-  - Per-event authority-binding enforcement (D13 authority-bindings).
-  - Hook-name stub registration so declared hooks are observable / firable.
+Runtime concerns owned by Shape:
+  - Hold the loaded shape spec dict; expose D13 slot accessors.
+  - Per-event authority-binding enforcement (D13 authority-bindings) —
+    universal across shape impls.
+  - Hook-handler registration interface (`register_handlers`) — each
+    shape impl supplies its own registration logic.
 
 Out of scope (handled elsewhere):
-  - actor-requirements cardinality — workspace-level concern, boot-time
-    (B1 / future).
+  - actor-requirements cardinality — workspace-level concern, boot-time.
   - required-capabilities — resolved at boot via the B1 capability check.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from fresh_plan.runtime.hooks import HookRegistry
+from fresh_plan.runtime.provision import load_provision_spec
 from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.types import ValidationFailure
 
@@ -31,11 +35,12 @@ def _stub_handler(ctx: dict) -> None:
 
 
 @dataclass
-class GenericShape:
-    """Generic minimal shape impl per D13 + D26.
+class Shape:
+    """Base class for shape runtime impls per D13 + shape.schema.json.
 
-    Holds the loaded shape spec dict and exposes the slot accessors plus
-    runtime enforcement (authority-binding check + hook stub registration).
+    Holds the loaded spec, exposes D13 slot accessors, enforces
+    authority-bindings on emitted events. Subclasses override
+    `register_handlers` to install policy-specific hook handlers.
     """
 
     spec: dict
@@ -138,45 +143,56 @@ class GenericShape:
         return failures
 
     # ---------------------------------------------------------------
-    # Hook stub registration
+    # Hook handler registration (abstract; subclass-owned)
     # ---------------------------------------------------------------
 
-    def register_stub_handlers(self, hook_registry: HookRegistry) -> None:
-        """Register a no-op handler for each declared hook name."""
+    def register_handlers(self, hook_registry: HookRegistry) -> None:
+        """Install policy handlers for the declared hook names.
+
+        Subclasses MUST override. Real-shape impls install policy-specific
+        handlers; stub-style shapes (like GenericShape) install no-op stubs.
+        """
+        raise NotImplementedError("Shape subclasses must implement register_handlers")
+
+
+@dataclass
+class GenericShape(Shape):
+    """Neutral first shape impl per D26 (B3) — deliberately NOT practitioner-shape.
+
+    Registers a no-op stub handler for every declared hook name so hooks
+    are observable and firable; pioneer-instance practitioner-shape (Phase D)
+    replaces stubs with real policy behavior in its own subclass of Shape.
+    """
+
+    def register_handlers(self, hook_registry: HookRegistry) -> None:
         for hook in self.hooks:
             name = hook.get("name")
             if name:
                 hook_registry.register(name, _stub_handler)
 
 
+# Module-level registry of (shape.id → runtime class). Populated as new shape
+# impls land. For Phase B there's only GenericShape; Phase D's practitioner-
+# shape will register here.
+_SHAPE_CLASSES: dict[str, type[Shape]] = {
+    "generic-shape": GenericShape,
+}
+
+
 def load_shape_from_provision(
     provision_ref: str, extensions_dir: Path
-) -> GenericShape:
-    """Load a shape spec from a `<ext-id>:<provision-id>` ref.
+) -> Shape:
+    """Load a shape spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
-    Mirrors the substrate-provision loading path in boot.py step 3.
+    Dispatches by `spec.id` to the registered runtime class. Raises
+    ValueError if the spec's id has no registered runtime class.
     """
-    from fresh_plan.validator.extensions import (
-        discover_extensions,
-        load_extension,
-    )
-
-    ext_id, prov_id = provision_ref.split(":", 1)
-    discovered = discover_extensions(extensions_dir)
-    if ext_id not in discovered:
+    spec = load_provision_spec(provision_ref, extensions_dir)
+    shape_id = spec.get("id")
+    cls = _SHAPE_CLASSES.get(shape_id)
+    if cls is None:
         raise ValueError(
-            f"shape provision {provision_ref!r}: extension {ext_id!r} not discovered "
-            f"under {extensions_dir!s}"
+            f"shape provision {provision_ref!r}: spec id {shape_id!r} has no "
+            f"registered Shape runtime class"
         )
-    spec: Optional[dict] = None
-    for version, manifest_path in discovered[ext_id].items():
-        loaded_ext, _errs = load_extension(ext_id, version, manifest_path)
-        spec = loaded_ext.provisions_loaded.get(prov_id)
-        if spec is not None:
-            break
-    if spec is None:
-        raise ValueError(
-            f"shape provision {provision_ref!r}: provision id {prov_id!r} not found "
-            f"in any version of extension {ext_id!r}"
-        )
-    return GenericShape(spec=spec)
+    return cls(spec=spec)

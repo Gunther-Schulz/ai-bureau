@@ -163,7 +163,7 @@ def boot_workspace(
             shape = None
         if shape is not None:
             substrate.shape = shape
-            shape.register_stub_handlers(substrate.hooks)
+            shape.register_handlers(substrate.hooks)
 
     # 7. Adapter bindings: store metadata + instantiate adapter runtimes.
     # Workspace attachment happens after Workspace is constructed (below).

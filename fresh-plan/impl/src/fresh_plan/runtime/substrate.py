@@ -35,8 +35,8 @@ from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
 
 if TYPE_CHECKING:
-    from fresh_plan.runtime.adapter import MCPToolAdapter
-    from fresh_plan.runtime.shape import GenericShape
+    from fresh_plan.runtime.adapter import Adapter
+    from fresh_plan.runtime.shape import Shape
 
 
 @dataclass
@@ -69,7 +69,7 @@ class InProcessSubstrate:
 
     # Shape policy bundle (D13) attached at boot when composition.shape resolves.
     # None for fixtures that don't bind a real shape impl.
-    shape: Optional["GenericShape"] = None
+    shape: Optional["Shape"] = None
 
     # Adapter / specialist binding metadata stored for inspection by callers.
     # The B2 substrate does NOT execute adapters or specialists — those are
@@ -78,10 +78,11 @@ class InProcessSubstrate:
     adapter_bindings: dict[str, dict] = field(default_factory=dict)
     specialist_bindings: dict[str, dict] = field(default_factory=dict)
 
-    # Instantiated adapter runtimes per binding-id (B4: MCPToolAdapter).
-    # Populated at boot step 7; workspace attached post-Workspace
-    # construction (pre boot-lifecycle event) per B4 boot-ordering.
-    adapter_instances: dict[str, "MCPToolAdapter"] = field(default_factory=dict)
+    # Instantiated adapter runtimes per binding-id, keyed by binding-id and
+    # typed as the Adapter base. Populated at boot step 7; workspace attached
+    # post-Workspace construction (pre boot-lifecycle event) per B4 boot-
+    # ordering.
+    adapter_instances: dict[str, "Adapter"] = field(default_factory=dict)
 
     # ---------------------------------------------------------------
     # Event append (the integrity gate)
