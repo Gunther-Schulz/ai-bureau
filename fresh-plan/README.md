@@ -53,6 +53,21 @@ Entries fall into two shape-classes — apply the shape that fits, don't inflate
 - **Clarification / supersedes / refinement entries** (narrow scope: clarify one slot, supersede one slot of a prior entry, codify a refinement-pass finding). Open with the same `## D<N> — <YYYY-MM-DD> — <one-line title>` header (often with "Clarifies D<M>" or "Supersedes D<M>" in the title). Then a bold `**Decision (clarifies/supersedes D<M>)**:` paragraph stating the change. Optional short paragraph or named subsection if real internal structure warrants it; otherwise omit. Close with `**Cross-references**:` line. Numbered sections + "What is NOT" + multi-paragraph rationale generally NOT used — forcing them onto a narrow clarification inflates unhelpfully. Pattern: D8 / D11 / D14 / D17 / D22 / D23.
 - **Worked-example inclusion.** Substantive entries (esp. those defining new contracts) include a worked example exercising the contract — either inline (`### Worked example`) or in a cited fixture / schema file. Distinct from the operating discipline "Concrete examples before locking" (which is about *grounding the thinking*) — this is about *including the example in the entry's own text* so future readers see what conformance looks like. Pattern across D29 / D30 / D32 / D33 / D40. Clarification entries typically don't need a fresh example — they cite back to the example in the entry they clarify.
 
+## Implementation discipline (framework code)
+
+How impl code under `fresh-plan/impl/` gets structured. Distinct from *Working patterns* (process-level) and *Ledger conventions* (entry shape) — this is about *how the code expresses the framework's contracts*.
+
+- **Contract-driven abstraction, not DRY-driven.** When a kind contract is locked in `decisions.md` (D-entry) or `schemas/` (formal schema), the runtime impl extracts a base class / interface that *reads off the contract*. Concrete classes satisfy the base. The base exists from the *first* concrete impl, not the third — the abstraction shape is given by the contract, not by accumulated example-code.
+  - Right: `class Adapter:` base reads off D16 + `adapter.schema.json`; `MCPToolAdapter(Adapter)` + `DirectAPIAdapter(Adapter)` satisfy it.
+  - Right: `class Shape:` base reads off D13 + `shape.schema.json`; `GenericShape(Shape)` is one impl; `PractitionerShape(Shape)` joins in Phase D without retrofit.
+  - When NOT to extract: if the "abstraction" would just name shared code without a contract-level reason (classic DRY-driven), don't. If only one concrete impl exists AND no second is imminent in the next 1-2 workstreams, the base can wait — but the extraction is a *known follow-up*, not forgotten.
+  - The rule-of-three (wait for three examples) is application-code wisdom. It does NOT apply to framework code where the contract is already a priori — there the contract IS the abstraction.
+- **No sunk cost on impl code.** Existing impl code (`impl/src/`, `impl/extensions/`, `impl/tests/`) is not protected from refactoring when a discipline agreement warrants restructuring. Prior commits do not grant code "lock-in" status; if convention changes mid-Phase, reorganize.
+  - *Carve-out — append-only ledger.* This rule does NOT apply to `decisions.md`. Past D-entries stand as written; supersedes entries are how decisions evolve.
+  - *Carve-out — convention text itself.* "Naming conventions" / "Ledger conventions" / "Implementation discipline" — convention changes apply to *future* work; whether existing in-tree references get retrofit'd in the same commit is a judgment call (typically yes for impl code; the same-commit retrofit is what makes the principle visible).
+
+**Revisability of this section**: structural reason required — e.g., a pattern emerges that doesn't fit contract-driven-vs-DRY-driven cleanly. Not aesthetic preference. Revision = update this section + adjust in-tree code in the same commit when the principle change implies it.
+
 ---
 
 ## Branch state
