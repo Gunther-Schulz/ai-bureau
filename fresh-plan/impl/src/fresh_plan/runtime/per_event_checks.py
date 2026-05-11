@@ -18,7 +18,7 @@ not appended to the chain). Per the B2 brief: this raises
 """
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Iterable, Optional
 
 from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.types import ValidationFailure
@@ -41,7 +41,16 @@ def check_event_references(
     """Run D30 §4 per-event runtime checks; return any failures.
 
     Per D34 §A.5: resolution is against current state (the live actor +
-    work-unit registries on `state`), not the manifest snapshot.
+    work-unit registries on `state`), not the manifest snapshot. The
+    "current state" reading extends to state-after-applying-this-event:
+    when the event itself adds an actor or creates a work-unit, that
+    actor / work-unit is admitted as a reference target on the same
+    event ("self-attestation" — see Bref closure of D39 tensions).
+    This is what enables boot-time manifest-actor seeding (which would
+    otherwise hit a chicken-and-egg: composition-change:add for the
+    first manifest actor needs ≥1 actor in event.actors[] but no actor
+    is in state yet) and work-unit creation events that carry the
+    work-unit-id slot for query-by-work-unit support.
 
     `registered_payload_subtypes` is the runtime registry of extension-
     registered subtypes (managed by the substrate; populated from the
@@ -58,13 +67,37 @@ def check_event_references(
     """
     failures: list[ValidationFailure] = []
 
+    payload = event.get("payload") or {}
+    subtype = event.get("payload-subtype")
+
+    # Self-attestation: when this event itself adds an actor (composition-
+    # change:add + binding-kind=actor), the actor referenced in
+    # event.actors[].id may be the very one being added.
+    self_attested_actor: Optional[str] = None
+    if (
+        subtype == "composition-change"
+        and payload.get("change-type") == "add"
+        and payload.get("binding-kind") == "actor"
+    ):
+        self_attested_actor = payload.get("binding-reference")
+
+    # Self-attestation: when this event itself creates a work-unit
+    # (state-change + what=work-unit-created), event.work-unit-id may
+    # match the work-unit being created (carried as `payload.after.id`
+    # per Bref closure of D39 tension 2).
+    self_attested_work_unit: Optional[str] = None
+    if subtype == "state-change" and payload.get("what") == "work-unit-created":
+        after = payload.get("after")
+        if isinstance(after, dict):
+            self_attested_work_unit = after.get("id")
+
     # event.actors[].id → existing actor in current state
     for i, actor_ref in enumerate(event.get("actors", []) or []):
         aid = actor_ref.get("id")
         if aid is None:
             # Schema layer catches missing id; nothing to resolve.
             continue
-        if not state.has_actor(aid):
+        if not state.has_actor(aid) and aid != self_attested_actor:
             failures.append(
                 ValidationFailure(
                     category="identity",
@@ -79,7 +112,11 @@ def check_event_references(
 
     # event.work-unit-id (when non-null) → existing work-unit in current state
     wu_id = event.get("work-unit-id")
-    if wu_id is not None and not state.has_work_unit(wu_id):
+    if (
+        wu_id is not None
+        and not state.has_work_unit(wu_id)
+        and wu_id != self_attested_work_unit
+    ):
         failures.append(
             ValidationFailure(
                 category="identity",

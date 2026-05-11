@@ -66,13 +66,27 @@ def test_boot_registers_manifest_actors(substrate_manifest, substrate_extensions
 def test_boot_emits_lifecycle_transition_boot_event(
     substrate_manifest, substrate_extensions_dir
 ):
+    """Per Bref closure of D39: boot now emits N composition-change:add events
+    (one per manifest actor) followed by one lifecycle-transition:boot event.
+    The boot event is the last event in the post-boot chain; the chain begins
+    with manifest-actor seed events.
+    """
     ws = boot_workspace(substrate_manifest, substrate_extensions_dir)
     try:
         events = list(ws.events())
-        assert len(events) == 1
-        assert events[0]["payload-subtype"] == "lifecycle-transition"
-        assert events[0]["payload"]["transition-type"] == "boot"
-        assert events[0]["prev-event"] is None
+        n_actors = len(substrate_manifest["composition"]["actors"])
+        assert len(events) == n_actors + 1
+        # Boot event sits at the end (after manifest-actor seeds).
+        boot_event = events[-1]
+        assert boot_event["payload-subtype"] == "lifecycle-transition"
+        assert boot_event["payload"]["transition-type"] == "boot"
+        # The first event in the chain is now a composition-change:add for
+        # the first manifest actor (with prev-event=None).
+        first = events[0]
+        assert first["payload-subtype"] == "composition-change"
+        assert first["payload"]["change-type"] == "add"
+        assert first["payload"]["binding-kind"] == "actor"
+        assert first["prev-event"] is None
     finally:
         ws.shutdown()
 

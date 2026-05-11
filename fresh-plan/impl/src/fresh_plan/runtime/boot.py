@@ -1,18 +1,21 @@
 """Boot procedure: orchestrates B1 validation + substrate instantiation.
 
-Per the B2 brief boot procedure spec:
+Per the B2 brief boot procedure spec (refined by Bref closure of D39):
 
   1. Call B1 to validate the manifest (D29 + D30 + D32 + D33).
   2. Resolve the substrate provision from composition.substrate-bindings[].
   3. Load the resolved substrate provision's spec.
   4. Instantiate the substrate runtime — dispatched by provision id
      (InProcessSubstrate / MSAgentFrameworkSubstrate per D41).
-  5. Register manifest-declared actors into the registry.
-  6. Load shape policies (B2: record names; full impl is B3).
-  7. Bind adapters (B2: store metadata; runtime is B4/B5).
-  8. Bind specialists (B2: store metadata; register skills as stubs; runtime is B6).
-  9. Emit lifecycle-transition:boot event into the chain.
- 10. Return the Workspace handle.
+  5. Bind shape, adapters, specialists; construct Workspace handle;
+     attach workspace to adapters/specialists.
+  6. Per Bref closure of D39: emit synthetic composition-change:add
+     events for each manifest-declared actor (full record in
+     payload.record). First actor self-attests (per D34 §A.5 extension);
+     subsequent ones attribute to the first. Projection adds them to
+     state — no direct state mutation.
+  7. Emit lifecycle-transition:boot event into the chain.
+  8. Return the Workspace handle.
 
 For the in-process substrate, "instantiation" is just constructing a
 Python object — no separate process to spawn.
@@ -136,12 +139,11 @@ def boot_workspace(
         capabilities=capabilities,
     )
 
-    # 5. Register manifest-declared actors.
-    for actor in composition.get("actors", []):
-        substrate.state.add_actor(dict(actor))
-
     # Cache known binding-ids (for D30 §4 per-event check support and
-    # for the workspace's introspection API).
+    # for the workspace's introspection API). Manifest-declared actor
+    # seeding now happens via synthetic composition-change events emitted
+    # below, after shape/adapter/specialist binding is in place — per
+    # Bref closure of D39 (no out-of-band state mutation at boot).
     substrate.known_binding_ids = {
         b.get("binding-id") for b in substrate_bindings if b.get("binding-id")
     }
@@ -233,14 +235,51 @@ def boot_workspace(
         specialist.register_skills(substrate.skills)
         substrate.specialist_subscribers.append(specialist)
 
-    # 9. Emit lifecycle-transition:boot. Use the first manifest-declared
-    # actor as the attributing actor (every event needs ≥1 actor per D10;
-    # boot is workspace-level, so any registered actor is a reasonable
-    # attribution — schema validates the actor exists in state).
-    first_actor_id = composition.get("actors", [{}])[0].get("id")
+    # Per Bref closure of D39: seed manifest-declared actors via synthetic
+    # composition-change:add events (one per actor). The full actor record
+    # rides on payload.record so state_at(n) replay reproduces them. The
+    # first actor self-attests in event.actors[]; subsequent ones attribute
+    # to the first. Per D34 §A.5 extension (Bref): per-event identity
+    # resolution admits state-after-applying-this-event for the actor
+    # being added on a composition-change:add event.
+    manifest_actors = composition.get("actors", []) or []
+    first_actor_id: Optional[str] = None
+    for idx, actor in enumerate(manifest_actors):
+        actor_record = dict(actor)
+        aid = actor_record.get("id")
+        if aid is None:
+            continue
+        attributing_id = aid if first_actor_id is None else first_actor_id
+        prev_id = (
+            substrate.event_chain.tail["id"] if substrate.event_chain.tail else None
+        )
+        seed_event = {
+            "id": f"evt-actor-add-{idx:03d}-{substrate.workspace_id}",
+            "prev-event": prev_id,
+            "timestamp": _utcnow_iso(),
+            "actors": [{"id": attributing_id}],
+            "payload-subtype": "composition-change",
+            "payload": {
+                "change-type": "add",
+                "binding-kind": "actor",
+                "binding-reference": aid,
+                "record": actor_record,
+            },
+        }
+        substrate.append_event(seed_event)
+        if first_actor_id is None:
+            first_actor_id = aid
+
+    # Emit lifecycle-transition:boot. Use the first manifest-declared actor
+    # as the attributing actor (every event needs ≥1 actor per D10; boot
+    # is workspace-level, so any registered actor is a reasonable
+    # attribution). prev-event chains off the most recent seed event (or
+    # is None if the workspace has no manifest actors — schema rejects
+    # that case anyway via composition.actors minItems=1).
+    prev_id = substrate.event_chain.tail["id"] if substrate.event_chain.tail else None
     boot_event = {
         "id": f"evt-boot-{substrate.workspace_id}",
-        "prev-event": None,
+        "prev-event": prev_id,
         "timestamp": _utcnow_iso(),
         "actors": [{"id": first_actor_id}] if first_actor_id else [],
         "payload-subtype": "lifecycle-transition",

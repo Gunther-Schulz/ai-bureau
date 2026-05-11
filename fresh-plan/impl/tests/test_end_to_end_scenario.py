@@ -64,7 +64,9 @@ def test_b8_boot_succeeds_with_all_eight_kinds_present(workspace):
     # D19 — specialist.
     assert "primary-specialist" in ws.specialists
 
-    # D10 — event chain (boot event sits at sequence 0).
+    # D10 — event chain (per Bref closure of D39: boot emits N
+    # composition-change:add events for manifest actors, then the
+    # lifecycle-transition:boot event).
     assert len(ws.event_chain) >= 1
 
     # D7 — workspace identity.
@@ -111,21 +113,40 @@ def test_b8_work_unit_lifecycle_through_extension_registered_kind(workspace):
 def test_b8_state_at_replay_reproduces_event_driven_state(workspace):
     """D40 §A state-at(n) replay reflects event-driven state per D39.
 
-    Pure-replay against a fresh WorkspaceState reconstructs runtime-added
-    sub-agents (composition-change with `record` per D39). Documented
-    out-of-band paths from D39 NOT exercised here (Bref deliverables):
-      (a) manifest-declared actors loaded at boot — not event-derived.
-      (b) work-unit records carried only by id in state-change events.
+    Per Bref closure of D39, replay reproduces ALL state, including
+    paths previously surfaced as tensions:
+      (a) manifest-declared actors (now seeded at boot via synthetic
+          composition-change:add events; full record in payload.record).
+      (b) work-units (full record now carried in state-change:work-unit-
+          created's payload.after; status changes projected from
+          state-change:work-unit-status).
     """
     ws = workspace
     ws.register_agent_actor(id="sub-e2e", substrate_binding="primary")
     ws.actors["agent-primary"].emit_state_change(
         "scope", after={"focus": "replay-check"}
     )
+    wu = ws.create_work_unit(
+        id="wu-replay-1",
+        kind="generic-specialist-ext:generic-task",
+        payload={"note": "replay"},
+    )
+    wu.transition("in-progress")
 
     state = ws.state_at(len(ws.event_chain) - 1)
+    # Manifest-declared actors reproduced (Bref closure of D39 tension 1).
+    assert state.has_actor("agent-primary")
+    assert state.has_actor("human-supervisor")
+    # Runtime-added sub-agent reproduced.
     assert state.has_actor("sub-e2e")
+    # Scope reproduced.
     assert state.current_scope == {"focus": "replay-check"}
+    # Work-unit full record reproduced (Bref closure of D39 tension 2).
+    assert state.has_work_unit("wu-replay-1")
+    replayed_wu = state.get_work_unit("wu-replay-1")
+    assert replayed_wu["kind"] == "generic-specialist-ext:generic-task"
+    assert replayed_wu["payload"] == {"note": "replay"}
+    assert replayed_wu["status"] == "in-progress"
 
 
 def test_b8_validator_accepts_workspace_manifest():

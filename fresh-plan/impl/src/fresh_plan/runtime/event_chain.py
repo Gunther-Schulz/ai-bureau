@@ -33,13 +33,18 @@ def apply_event_to_state(event: dict, state: WorkspaceState) -> None:
       - `AppendOnlyEventChain.state_at(n)` (replays events 0..n onto a
         fresh state per D40 §A minimum query interface).
 
-    Per D39, state must be fully derivable from the chain. Currently
-    derivable through events: actor add/remove (via the D39 `record`
-    slot) and current_scope (via state-change:scope). Out-of-band paths
-    still present in B2 (manifest-declared actor seeding at boot;
-    work-unit records carried only by id in state-change:work-unit-*)
-    are documented tensions per D39 ("(ii) surfaced as a tension to
-    address"); they're tracked for the end-of-Phase-B refinement pass.
+    Per D39, state is fully derivable from the chain. Bref closure of
+    the D39 out-of-band tensions: manifest-declared actors are now
+    seeded via synthetic composition-change:add events at boot (no more
+    direct state.add_actor in the boot procedure); work-unit creation
+    + status transitions now carry the full record in `payload.after`
+    so replay reconstructs them. Projections:
+      - composition-change:add binding-kind=actor → add_actor(record)
+      - composition-change:remove binding-kind=actor → drop actor
+      - state-change what=scope → set current_scope
+      - state-change what=work-unit-created → add_work_unit(after)
+      - state-change what=work-unit-status → transition_work_unit
+        (uses event.work-unit-id + payload.after for the new status)
     """
     subtype = event.get("payload-subtype")
     payload = event.get("payload") or {}
@@ -58,8 +63,24 @@ def apply_event_to_state(event: dict, state: WorkspaceState) -> None:
                     del state.actors[ref]
 
     elif subtype == "state-change":
-        if payload.get("what") == "scope":
+        what = payload.get("what")
+        if what == "scope":
             state.current_scope = payload.get("after")
+        elif what == "work-unit-created":
+            record = payload.get("after")
+            if isinstance(record, dict):
+                wid = record.get("id")
+                if wid is not None and not state.has_work_unit(wid):
+                    state.add_work_unit(record)
+        elif what == "work-unit-status":
+            wu_id = event.get("work-unit-id")
+            new_status = payload.get("after")
+            if (
+                wu_id is not None
+                and isinstance(new_status, str)
+                and state.has_work_unit(wu_id)
+            ):
+                state.transition_work_unit(wu_id, new_status)
 
 
 class MalformedEventError(Exception):
@@ -244,11 +265,12 @@ class AppendOnlyEventChain:
     def state_at(self, sequence_n: int) -> WorkspaceState:
         """Per D40 §A: workspace state derived from events 0..n (inclusive).
 
-        Pure-replay against a fresh WorkspaceState — only event-driven
-        state is reflected. Out-of-band state paths (manifest-declared
-        actors loaded at boot; work-unit records carried only by id in
-        state-change events) are not reflected; those are tensions per
-        D39 to address in the end-of-Phase-B refinement pass.
+        Pure-replay against a fresh WorkspaceState. Per D39 (closed by
+        Bref): all state mutations are event-driven, so the replayed
+        state matches the live state at the same sequence. This includes
+        manifest-declared actors (seeded via synthetic composition-change
+        events at boot) and work-units (full record carried in the
+        creation event's payload.after).
 
         Args:
             sequence_n: inclusive upper bound. Negative returns empty

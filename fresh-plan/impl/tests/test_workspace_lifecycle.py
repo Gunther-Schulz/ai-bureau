@@ -21,12 +21,16 @@ def boot_kwargs():
 
 
 def test_context_manager_exit_emits_shutdown(boot_kwargs):
+    """Per Bref closure of D39: boot emits N composition-change:add events
+    (one per manifest actor) plus a lifecycle-transition:boot. The boot
+    and shutdown events still form a valid pair around the session."""
     with Workspace.boot(**boot_kwargs) as ws:
+        n_actors = len(boot_kwargs["manifest"]["composition"]["actors"])
         boot_count = len(ws.event_chain)
-        assert boot_count == 1
+        assert boot_count == n_actors + 1
     # After exit, the shutdown event was appended.
     chain = ws.event_chain
-    assert len(chain) == 2
+    assert len(chain) == n_actors + 2
     transitions = [
         e for e in chain if e["payload-subtype"] == "lifecycle-transition"
     ]
@@ -44,12 +48,23 @@ def test_explicit_shutdown_idempotent(boot_kwargs):
     assert len(ws.event_chain) == n_after_first
 
 
-def test_boot_event_first_in_chain(boot_kwargs):
+def test_boot_event_present_in_chain(boot_kwargs):
+    """Per Bref closure of D39: the lifecycle-transition:boot is the LAST
+    event emitted at boot — preceded by N composition-change:add events
+    (one per manifest actor). The first event in the chain has prev-event=None.
+    """
     with Workspace.boot(**boot_kwargs) as ws:
         events = list(ws.events())
-        assert events[0]["payload-subtype"] == "lifecycle-transition"
-        assert events[0]["payload"]["transition-type"] == "boot"
         assert events[0]["prev-event"] is None
+        # Exactly one boot transition; it's the tail at this point.
+        boot_events = [
+            e
+            for e in events
+            if e["payload-subtype"] == "lifecycle-transition"
+            and e["payload"]["transition-type"] == "boot"
+        ]
+        assert len(boot_events) == 1
+        assert boot_events[0] is events[-1]
 
 
 def test_event_chain_integrity_across_lifecycle(boot_kwargs):

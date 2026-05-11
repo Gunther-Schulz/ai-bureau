@@ -79,10 +79,18 @@ def test_e2e_event_chain_subtypes_in_order(workspace):
     ws.shutdown()
 
     subtypes = [e["payload-subtype"] for e in ws.events()]
-    assert subtypes[0] == "lifecycle-transition"  # boot
+    # Per Bref closure of D39: boot emits N composition-change:add events
+    # (manifest-actor seeding) BEFORE the lifecycle-transition:boot, so
+    # subtypes[0] is composition-change, not lifecycle-transition. The
+    # boot + shutdown transitions are both present; shutdown is last.
     assert subtypes[-1] == "lifecycle-transition"  # shutdown
-    # Every core subtype except composition-change appears via actor emits;
-    # composition-change appears via register_agent_actor.
+    transitions = [
+        e for e in ws.events() if e["payload-subtype"] == "lifecycle-transition"
+    ]
+    assert [t["payload"]["transition-type"] for t in transitions] == [
+        "boot",
+        "shutdown",
+    ]
     assert "composition-change" in subtypes
     assert "claim" in subtypes
     assert "action" in subtypes
@@ -133,8 +141,11 @@ def test_e2e_composition_change_carries_record_per_d39(workspace):
 
 
 def test_e2e_actor_registry_derivable_from_event_chain(workspace):
-    """Per D39: replaying composition-change:add events against a fresh
-    WorkspaceState reconstructs the runtime-added actors."""
+    """Per D39 (Bref-closed): replaying composition-change:add events against
+    a fresh WorkspaceState reconstructs every actor — including
+    manifest-declared ones, which now seed via synthetic composition-change
+    events at boot.
+    """
     from fresh_plan.runtime.workspace_state import WorkspaceState
 
     ws = workspace
@@ -142,19 +153,14 @@ def test_e2e_actor_registry_derivable_from_event_chain(workspace):
     ws.register_agent_actor(id="subagent-replay-b", substrate_binding="primary")
 
     replayed = WorkspaceState()
-    # Seed with manifest-declared actors (boot snapshot — out of band of
-    # the runtime composition-change path; B2-followon-2 will provide
-    # state_at(n) that includes this).
-    for aid, rec in ws.substrate.state.actors.items():
-        if aid in {"subagent-replay-a", "subagent-replay-b"}:
-            continue
-        replayed.add_actor(rec)
-    # Apply composition-change:add events.
     for e in ws.event_chain.by_payload_subtype("composition-change"):
         p = e["payload"]
         if p["change-type"] == "add" and p.get("binding-kind") == "actor":
             replayed.add_actor(p["record"])
 
+    # Manifest actors + runtime sub-agents all reconstructed.
+    assert replayed.has_actor("human-1")
+    assert replayed.has_actor("agent-primary")
     assert replayed.has_actor("subagent-replay-a")
     assert replayed.has_actor("subagent-replay-b")
     assert replayed.get_actor("subagent-replay-a")["substrate-binding"] == "primary"
@@ -165,7 +171,8 @@ def test_e2e_state_at_reflects_runtime_added_actors(workspace):
     sub-agents (D19 + D39) appear in the replayed state at and after their
     composition-change event."""
     ws = workspace
-    # Capture initial chain length (boot event already at sequence 0).
+    # Capture initial chain length (post-boot: N manifest-actor seeds +
+    # the boot lifecycle event already in the chain).
     initial_len = len(ws.event_chain)
     ws.register_agent_actor(id="sub-state-at", substrate_binding="primary")
     # The composition-change event is at sequence initial_len.

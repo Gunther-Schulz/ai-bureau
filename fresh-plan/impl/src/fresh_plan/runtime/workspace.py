@@ -142,14 +142,19 @@ class WorkUnitHandle:
         attributing_actor_id: Optional[str] = None,
         role: Optional[str] = None,
     ) -> dict:
-        """Transition this work-unit; emits a state-change event per D20."""
+        """Transition this work-unit; emits a state-change event per D20.
+
+        Per Bref closure of D39: the state mutation is performed by the
+        projection on append (apply_event_to_state). We read the current
+        status here only to carry it as `payload.before` on the event.
+        """
         if to_status not in WORK_UNIT_STATUSES:
             raise ValueError(
                 f"target status {to_status!r} not in core enum {sorted(WORK_UNIT_STATUSES)}"
             )
-        from_status, _ = self._workspace._substrate.state.transition_work_unit(
-            self._work_unit_id, to_status
-        )
+        from_status = self._workspace._substrate.state.get_work_unit(
+            self._work_unit_id
+        ).get("status")
 
         # Per D20: lifecycle transitions are events.
         actor_id = (
@@ -306,7 +311,14 @@ class Workspace:
         """Create a work-unit in status=`created` and emit a state-change event.
 
         Per D20: status `created` is the entry state; richer lifecycle
-        history derives from events filtered by work-unit-id.
+        history derives from events filtered by work-unit-id. Per Bref
+        closure of D39: the full work-unit record rides on
+        `payload.after` so state_at(n) replay reconstructs the work-unit
+        (not only by id, as before). State mutation happens via the
+        projection on append; no direct state.add_work_unit here.
+        Self-attestation in event.work-unit-id is admitted by the
+        per-event check (the work-unit being created may reference
+        itself before it exists in state).
         """
         wu = {
             "id": id,
@@ -317,7 +329,6 @@ class Workspace:
             "contributing-specialists": contributing_specialists or [],
             "lifecycle": {"created-at": _utcnow_iso()},
         }
-        self._substrate.state.add_work_unit(wu)
         handle = WorkUnitHandle(self, id)
         self._work_unit_handles[id] = handle
 
@@ -328,7 +339,7 @@ class Workspace:
         self._emit_event(
             actor_id=actor_id,
             payload_subtype="state-change",
-            payload={"what": "work-unit-created", "after": id},
+            payload={"what": "work-unit-created", "after": wu},
             work_unit_id=id,
         )
         return handle
@@ -440,9 +451,9 @@ class Workspace:
     def state_at(self, sequence_n: int):
         """Per D40 §A: workspace state derived from events 0..n.
 
-        Pure-replay against a fresh state. Note that manifest-declared
-        actors loaded at boot are not currently event-driven — see
-        AppendOnlyEventChain.state_at docstring for the documented
-        D39 tension.
+        Pure-replay against a fresh state. Per Bref closure of D39,
+        all state mutations are event-driven (manifest-actor seeding +
+        work-unit creation/transition flow through the chain), so the
+        replayed state matches the live state at the same sequence.
         """
         return self._substrate.event_chain.state_at(sequence_n)
