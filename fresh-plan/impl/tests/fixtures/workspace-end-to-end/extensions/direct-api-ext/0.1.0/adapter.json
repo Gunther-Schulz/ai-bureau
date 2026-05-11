@@ -1,0 +1,10 @@
+{
+  "id": "direct-api-adapter",
+  "version": "0.1.0",
+  "protocol-or-transport": "direct-api-ext:direct-api",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}
