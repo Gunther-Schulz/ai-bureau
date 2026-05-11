@@ -54,6 +54,69 @@ Snapshot of who's actually doing workplace-AI-aware-transformation work today (a
 
 Action: track this as research input. Revisit when positioning is deliberately settled (likely Phase D or later per D26).
 
+## Research notes — vision framing: "AI as workspace, not app"
+
+Snapshot of a sharper positioning framing surfaced in research (cross-session input as of 2026-05; not committed positioning). Captured here so it's available for future ledger / positioning work.
+
+### The framing
+
+Dominant model today: AI is an app you switch into — open ChatGPT for a question, open Claude for a draft, open Copilot in Word, open Cursor for code. AI is one more tile on the dock alongside Email, Calendar, Files, Slack, CAD viewer, accounting.
+
+Sharper framing for fresh-plan: **AI is not on the dock — AI is the dock.** The workspace itself is AI-native. All artifacts (Begründungen, Festsetzungen, Stellungnahmen, evaluations, the project's events, cross-document relationships) live inside it. External tools (email, CAD, file storage, accounting) are adapters into the workspace, not destinations the practitioner leaves to. The practitioner doesn't "use AI" — they work inside an AI-aware substrate where AI is woven into how artifacts evolve, how decisions get recorded, how cross-document coherence is checked.
+
+### Architectural lineage (real, citable)
+
+- **Engelbart's NLS / "Augmenting Human Intellect"** (1962-68) — the system is the workspace; everything composes inside it. "Mother of All Demos."
+- **Smalltalk image** (1980s) — persistent world where everything lives; not apps you launch.
+- **Plan 9 from Bell Labs** (1990s) — workspace as primary surface; everything is a file in a unified namespace.
+- **Emacs as a way of life** — single environment people live in for decades.
+- **Magic Cap / General Magic** (1990s) — early personal-agent workspace attempt.
+- **AI-era gestures**: "AI OS" thinking (Altman); Copilot+PCs (Microsoft); Rabbit R1 / Humane AI Pin (hardware attempts). Each is a half-step — Microsoft's framing is "AI everywhere in your existing OS"; the workspace-as-substrate framing is "the workspace IS the AI substrate."
+
+The lineage has perfect architectural coherence and a near-perfect record of non-adoption at scale. NLS, Smalltalk, Plan 9, Emacs — all coherent, none won the general desktop. Fresh-plan's bet uses different levers (open framework + shape ecosystems + standards alignment per D4/D24/D40 + accountability-bearing per I3) that *may* survive where prior attempts didn't. Honest: not guaranteed.
+
+### How fresh-plan's primitives already serve this (no architecture change needed)
+
+- **D5 I1** (composition system) — the workspace IS the composition; not an app you visit.
+- **D7** workspace kind — first-class identity / composition / state / lifecycle; persists across machines / sessions / years. Same shape as Smalltalk-image + Engelbart-NLS persistence.
+- **D10** event chain — everything that happens in the workspace gets captured; the workspace owns the timeline.
+- **D13** shape — substantive identity / disciplines the workspace carries. Practitioner-shape, autonomous-business-shape, personal-OS-shape — each configures the workspace's character.
+- **D16** adapter — external surfaces (email, file system, CAD, calendar) are adapters into the workspace, not destinations the practitioner leaves to.
+- **D19** specialist — capabilities native to the workspace; always-on, not invoked-per-session.
+- **D20** work-unit — units of work live in the workspace with lifecycle and accountability.
+
+The spec doesn't have to change for this vision. Sharpens it.
+
+### What it clarifies about positioning
+
+**Necessary but not sufficient.** "AI as workspace" is rhetorical territory others claim — Microsoft (Copilot+PCs), Google (Workspace AI), even OpenAI (Operator). The phrase alone doesn't distinguish fresh-plan. What actually distinguishes is the **combination**:
+
+1. Workspace as the medium (this framing)
+2. Shape-neutrality (D4) — substantive identity is shape policy, not vendor-baked
+3. Accountability-bearing (I3) — work, not just chat; attribution + audit are first-class
+4. Standards-interop + extension protocols (D24 + D40) — adapters into vendor services, not lock-in *to* vendor substrate
+5. Open framework + craft-practice scale — not enterprise-bespoke; not vendor-owned
+
+**"Sovereign workspace" framing requires honest caveats.** The practitioner still depends on vendor APIs (email server, file storage, CAD, accounting). What fresh-plan offers is **composition-ownership** — the practitioner owns the *manifest* + *event chain* + *shape policy*, not the underlying services. Adapters wrap vendor APIs; vendors keep their lock-in within their own service. Honest framing: "framework-aware composition layer where the practitioner is sovereign over how things compose, not where the underlying services run."
+
+### Tensions this surfaces
+
+- **UX-boundary design**: workspace-as-primary-surface (high-commitment for practitioner; they must move into it) vs workspace-as-coherent-substrate-behind-existing-UIs (low-commitment; weaker delivery of the "AI is the medium" promise). Real design tension at Phase D when PBS-Schulz pioneer impl gets concrete.
+- **Bucket-A philosophical conflict**: vendor-substrate platforms want practitioners living *in their substrate*. Fresh-plan's framing says the workspace is sovereign with adapters *out* to those systems. This is not neutral coexistence — it's a quiet alternative thesis to vendor-lock-in.
+- **5-10 year build, not v0.1.** Integrating N existing tools (email + calendar + CAD + files + accounting + communications) with maintenance + vendor-API churn is the slow grinding work after the architecture is right. The historical lesson from Emacs / Plan 9: integrating-everything is what takes a decade. Worth being explicit that workspace-as-substrate is decade-scale infrastructure-shaping work, not a quick product.
+- **Engelbart-scale ambition with one author** (currently). PBS-Schulz daily use is what makes the work intrinsically valuable to the author regardless of external adoption; the spec + methodology survive even if scale-adoption takes 5-10 years or never arrives.
+
+### Future-ledger candidates (deferred per "positioning is deferred")
+
+When positioning is committed (likely Phase D PBS-Schulz pioneer impl, or later):
+
+1. **Positioning clarification under D5** — adds "AI as workspace, not app" as an explicit framing of I1 composition system. Not a new identity claim; a framing sharpening.
+2. **Practitioner-shape axis-3 sharpening** — the VISION three-axes (intertwining / sparring / authorship-preservation) carried as practitioner-shape policy per D4: axis-3 "intertwining" may sharpen to "workspace-as-medium-not-tool" with this framing. Becomes architecturally specific in shape policy without affecting framework-core.
+
+Both candidates explicitly deferred per the existing discipline — positioning is committed only when practitioner evidence accumulates.
+
+Action: persist as research input; integrate into future positioning work when it's deliberately settled.
+
 ## Notes
 
 - This file is **reference / input only**, parallel to how `pbs-bureau/VISION.md` etc. are treated as input per the fresh-plan README.
