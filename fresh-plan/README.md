@@ -25,7 +25,19 @@ Throughout the session, follow the **procedural conventions** + **working prefer
 5. **Stale doc audit.** Any doc *implicitly* invalidated by session work — typically `impl/README.md` after a B-workstream lands, or `CONCEPTS.md` roadmap row after a phase advances, or `decisions.md` references after a clarification entry — updated inline before the session-end message.
 6. **Honest self-assessment.** Did pacing drift (e.g., many meta-commits vs feature commits)? Anything left half-finished? Surface in the final message rather than leaving for the next session to discover.
 
-Then write the final session-end message naming: what landed in the session, where we left off, what's the natural next move. Keep it short — the handoff snapshot in this README is the canonical state; the final message is just an orientation pointer.
+Then write the final session-end message in two distinct parts:
+
+**Part 1 — Session summary (for the user)**. What landed, where we left off, what's the natural next move. Keep it short — the handoff snapshot in this README is the canonical state; this part is just an orientation pointer for the user.
+
+**Part 2 — Pickup message (copy-pasteable for the next session)**. The user pastes this verbatim into a new chat to deterministically trigger the Session-start procedure. Format:
+
+```
+Read fresh-plan/README.md.
+
+[Optional 1-sentence focus pointer. Omit entirely if no specific next-session orientation beyond "continue per handoff" — the README's Current-state section already names the next move. Include only when there's a specific question to hold, e.g., "Picking up at Bref refinement workstream" or "Decide D17 capability-vocabulary sharpening direction".]
+```
+
+The pickup message MUST start with `Read fresh-plan/README.md.` (verbatim — this is the deterministic trigger for the Session-start procedure). Surface it as a clearly-marked code block in the session-end message so the user can copy-paste cleanly. Per `feedback_pickup_message_minimal.md` memory: 1–3 sentences max total; don't re-derive what the README/CONCEPTS/decisions.md already carry (signals doubt that they're in good state when they are).
 
 ## Operating disciplines (load-bearing during session)
 
