@@ -20,7 +20,7 @@ GENERIC_SHAPE_SPEC = {
     "version": "0.1.0",
     "actor-requirements": "none",
     "required-capabilities": ["hooks", "skills"],
-    "optional-capabilities": ["event-streaming"],
+    "optional-capabilities": ["event-chain"],
     "authority-bindings": [
         {
             "payload-subtype": "claim",
@@ -56,7 +56,7 @@ def test_generic_shape_accessors(shape):
     assert shape.id == "generic-shape"
     assert shape.version == "0.1.0"
     assert shape.required_capabilities == ["hooks", "skills"]
-    assert shape.optional_capabilities == ["event-streaming"]
+    assert shape.optional_capabilities == ["event-chain"]
     assert shape.actor_requirements == "none"
     assert len(shape.authority_bindings) == 1
     assert shape.authority_bindings[0]["payload-subtype"] == "claim"

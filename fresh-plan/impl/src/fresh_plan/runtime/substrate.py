@@ -2,7 +2,7 @@
 
 Per D12, a substrate hosts the agent loop and exposes interfaces
 (capabilities) for other extensions to hook into. Per D17, the three
-core abstract capabilities are `hooks`, `skills`, `event-streaming`.
+core abstract capabilities are `hooks`, `skills`, `event-chain`.
 
 Per D41 Phase B closure: two substrate impls ship in Phase B —
 InProcessSubstrate (B2) + MSAgentFrameworkSubstrate (B2b). Both are

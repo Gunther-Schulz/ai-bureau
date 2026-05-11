@@ -41,10 +41,10 @@
 
     "capability-identifier": {
       "oneOf": [
-        { "type": "string", "enum": ["hooks", "skills", "event-streaming"] },
+        { "type": "string", "enum": ["hooks", "skills", "event-chain"] },
         { "$ref": "#/$defs/qualified-identifier" }
       ],
-      "description": "Either a core abstract capability (D17: hooks, skills, event-streaming) or a fully-qualified extension-registered capability identifier per D29."
+      "description": "Either a core abstract capability (D17: hooks, skills, event-chain) or a fully-qualified extension-registered capability identifier per D29."
     },
 
     "payload-subtype-identifier": {

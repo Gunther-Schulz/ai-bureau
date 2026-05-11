@@ -40,10 +40,10 @@
       "properties": {
         "required-core-capabilities": {
           "type": "array",
-          "description": "Abstract core capabilities the provisions need (D17: hooks, skills, event-streaming).",
+          "description": "Abstract core capabilities the provisions need (D17: hooks, skills, event-chain).",
           "items": {
             "type": "string",
-            "enum": ["hooks", "skills", "event-streaming"]
+            "enum": ["hooks", "skills", "event-chain"]
           },
           "uniqueItems": true
         },

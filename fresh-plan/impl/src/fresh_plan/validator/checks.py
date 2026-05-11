@@ -8,7 +8,7 @@ portion (event-id resolution against current workspace state; runtime
 work-unit reference resolution) requires substrate-runtime context that
 B1 doesn't have — those are deferred to B2 per D36's workstream order.
 This module implements the boot-time portion of §4 only; the per-event
-hooks land in B2 alongside the event-streaming substrate capability.
+hooks land in B2 alongside the event-chain substrate capability.
 """
 from __future__ import annotations
 
@@ -67,7 +67,7 @@ CORE_ACTOR_SUBTYPES = frozenset({"human-actor", "agent-actor"})
 CORE_RUNTIME_SHAPES = frozenset(
     {"interactive", "programmatic", "hosted-interactive", "hosted-programmatic"}
 )
-CORE_CAPABILITIES = frozenset({"hooks", "skills", "event-streaming"})
+CORE_CAPABILITIES = frozenset({"hooks", "skills", "event-chain"})
 
 
 def _is_registered_payload_subtype(value: str, vocab: dict[str, set[str]]) -> bool:

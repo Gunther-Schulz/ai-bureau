@@ -42,12 +42,12 @@ def test_load_substrate_from_provision_returns_ms_subclass():
         workspace_id="probe-ws",
         runtime_shape="ms-agent-framework-substrate-ext:workflow",
         schema_store=schema_store,
-        capabilities=["hooks", "skills", "event-streaming"],
+        capabilities=["hooks", "skills", "event-chain"],
     )
     assert isinstance(substrate, MSAgentFrameworkSubstrate)
     assert isinstance(substrate, Substrate)
     assert not isinstance(substrate, InProcessSubstrate)
-    assert substrate.capabilities == ["hooks", "skills", "event-streaming"]
+    assert substrate.capabilities == ["hooks", "skills", "event-chain"]
     assert substrate.runtime_shape == "ms-agent-framework-substrate-ext:workflow"
 
 
@@ -72,7 +72,7 @@ def test_ms_substrate_satisfies_shape_and_specialist_required_capabilities(
     and generic-specialist (required-substrate-capabilities) are satisfied."""
     ws = booted_ms_workspace
     declared = set(ws.substrate.declared_capabilities())
-    assert {"hooks", "skills", "event-streaming"} <= declared
+    assert {"hooks", "skills", "event-chain"} <= declared
 
     shape = ws.substrate.shape
     for cap in shape.required_capabilities:
@@ -155,7 +155,7 @@ def test_inprocess_loader_dispatch_still_resolves_inprocess_class():
         workspace_id="probe-ws",
         runtime_shape="interactive",
         schema_store=schema_store,
-        capabilities=["hooks", "skills", "event-streaming"],
+        capabilities=["hooks", "skills", "event-chain"],
     )
     assert isinstance(substrate, InProcessSubstrate)
     assert isinstance(substrate, Substrate)

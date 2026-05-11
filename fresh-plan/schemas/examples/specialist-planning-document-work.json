@@ -16,7 +16,7 @@
     "pbs-schulz-ext:bauleitplanung-corpus",
     "pbs-schulz-ext:latex-compile"
   ],
-  "required-substrate-capabilities": ["skills", "event-streaming"],
+  "required-substrate-capabilities": ["skills", "event-chain"],
   "declared-event-emissions": [
     { "payload-subtype": "claim", "qualifier": "regulation-citation" },
     { "payload-subtype": "action", "qualifier": "section-drafted" }

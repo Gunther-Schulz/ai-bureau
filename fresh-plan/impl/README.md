@@ -4,12 +4,12 @@ Per **D36 + D41 + D42** (Phase B planning + amendments), this directory hosts th
 
 What each workstream contributes:
 - **B1** — Conformance validator. Applies D29 validation flow + D30 cross-kind referential integrity + D32 boot-time resolution (multi-binding, cycle detection, load order) + D33 version-conflict resolution. Library + CLI (`fresh-plan-validate`).
-- **B2** — In-process substrate runtime (D12 + D17 capabilities `hooks` / `skills` / `event-streaming`). Now refactored into `Substrate` base + `InProcessSubstrate(Substrate)` subclass per B2b. Per-event D30 §4 runtime checks + D13 shape authority-binding check + chain integrity + subscriber dispatch (D37) all gated in `Substrate.append_event`. B2-followon-1 (D39 record emission on composition-change) + B2-followon-2 (D40 §A `state_at(n)` pure-replay) both landed.
+- **B2** — In-process substrate runtime (D12 + D17 capabilities `hooks` / `skills` / `event-chain`). Now refactored into `Substrate` base + `InProcessSubstrate(Substrate)` subclass per B2b. Per-event D30 §4 runtime checks + D13 shape authority-binding check + chain integrity + subscriber dispatch (D37) all gated in `Substrate.append_event`. B2-followon-1 (D39 record emission on composition-change) + B2-followon-2 (D40 §A `state_at(n)` pure-replay) both landed.
 - **B2b** — `MSAgentFrameworkSubstrate(Substrate)` stub per D41 two-substrate parity. Triggers `Substrate` base extraction (Implementation discipline + second-concrete-impl rule). Surfaces D17 capability-vocabulary cross-tension for Bref refinement.
 - **B3** — Generic minimal shape (D13). `Shape` base + `GenericShape(Shape)` impl with per-event authority-binding enforcement.
 - **B4** — Stub MCP-server-protocol adapter (D16 + D29 protocol-identifier registration). `Adapter` base + `MCPToolAdapter(Adapter)` impl. No real MCP wire (Phase C+).
 - **B5** — Stub direct-api adapter. `DirectAPIAdapter(Adapter)`. Demonstrates non-MCP adapter path; loader dispatches by `protocol-or-transport`.
-- **B6** — Generic minimal specialist (D19). `Specialist` base + `GenericSpecialist(Specialist)` impl. Substrate gains subscriber-dispatch giving D17 `event-streaming` real push semantics per D37.
+- **B6** — Generic minimal specialist (D19). `Specialist` base + `GenericSpecialist(Specialist)` impl. Substrate gains subscriber-dispatch giving D17 `event-chain` real push semantics per D37.
 - **B7** — RAG-via-MCP (per D38: retrieval composes via existing primitives). `RAGSpecialist(Specialist)` + new extension. Demonstrates one-protocol-many-provisions architectural property.
 - **B8** — End-to-end scenario. Fixture composing all 5 shipped extensions; 7 tests satisfying D36 §C closure criterion 1-6.
 

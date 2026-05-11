@@ -4,7 +4,7 @@
   "actor-requirements": {
     "human-actor": { "min": 1, "max": 1 }
   },
-  "required-capabilities": ["hooks", "event-streaming"],
+  "required-capabilities": ["hooks", "event-chain"],
   "optional-capabilities": ["skills"],
   "authority-bindings": [
     {

@@ -4,7 +4,7 @@
   "capabilities": [
     "hooks",
     "skills",
-    "event-streaming",
+    "event-chain",
     "mcp-protocol-ext:mcp-client",
     "a2a-protocol-ext:a2a"
   ],

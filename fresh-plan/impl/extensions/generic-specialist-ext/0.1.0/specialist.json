@@ -8,7 +8,7 @@
   ],
   "supported-work-unit-kinds": ["generic-specialist-ext:generic-task"],
   "required-adapter-bindings": ["mcp-server-ext:mcp-tool-adapter"],
-  "required-substrate-capabilities": ["skills", "event-streaming"],
+  "required-substrate-capabilities": ["skills", "event-chain"],
   "declared-event-emissions": [{ "payload-subtype": "action" }],
   "declared-event-subscriptions": [{ "payload-subtype": "claim" }]
 }

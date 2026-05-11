@@ -40,7 +40,7 @@ RAG_SPECIALIST_SPEC = {
     ],
     "supported-work-unit-kinds": ["rag-via-mcp-ext:retrieval-task"],
     "required-adapter-bindings": ["rag-via-mcp-ext:rag-retriever-adapter"],
-    "required-substrate-capabilities": ["skills", "event-streaming"],
+    "required-substrate-capabilities": ["skills", "event-chain"],
     "declared-event-emissions": [{"payload-subtype": "action"}],
     "declared-event-subscriptions": [],
 }
@@ -74,7 +74,7 @@ def test_rag_specialist_accessors(rag_specialist):
     ]
     assert rag_specialist.required_substrate_capabilities == [
         "skills",
-        "event-streaming",
+        "event-chain",
     ]
     assert rag_specialist.declared_event_emissions == [{"payload-subtype": "action"}]
     assert rag_specialist.declared_event_subscriptions == []

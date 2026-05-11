@@ -50,7 +50,7 @@ def test_boot_advertises_substrate_capabilities(
     ws = boot_workspace(substrate_manifest, substrate_extensions_dir)
     try:
         # Per D17 core capabilities.
-        assert set(ws.substrate.capabilities) >= {"hooks", "skills", "event-streaming"}
+        assert set(ws.substrate.capabilities) >= {"hooks", "skills", "event-chain"}
     finally:
         ws.shutdown()
 

@@ -1,6 +1,6 @@
 {
   "id": "i-sub",
   "version": "1.0.0",
-  "capabilities": ["hooks", "skills", "event-streaming"],
+  "capabilities": ["hooks", "skills", "event-chain"],
   "runtime-shapes": ["interactive"]
 }

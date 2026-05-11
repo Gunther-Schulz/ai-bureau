@@ -30,7 +30,7 @@ SPECIALIST_SPEC = {
     ],
     "supported-work-unit-kinds": ["generic-specialist-ext:generic-task"],
     "required-adapter-bindings": ["mcp-server-ext:mcp-tool-adapter"],
-    "required-substrate-capabilities": ["skills", "event-streaming"],
+    "required-substrate-capabilities": ["skills", "event-chain"],
     "declared-event-emissions": [{"payload-subtype": "action"}],
     "declared-event-subscriptions": [{"payload-subtype": "claim"}],
 }
@@ -62,7 +62,7 @@ def test_generic_specialist_accessors(specialist):
     assert specialist.required_adapter_bindings == [
         "mcp-server-ext:mcp-tool-adapter"
     ]
-    assert specialist.required_substrate_capabilities == ["skills", "event-streaming"]
+    assert specialist.required_substrate_capabilities == ["skills", "event-chain"]
     assert specialist.declared_event_emissions == [{"payload-subtype": "action"}]
     assert specialist.declared_event_subscriptions == [{"payload-subtype": "claim"}]
     assert specialist.activation_scope is None
