@@ -155,11 +155,65 @@ class GenericSpecialist(Specialist):
         return {"ok": True, "skill": skill_id, "stub": True, "parameters": params}
 
 
+@dataclass
+class RAGSpecialist(Specialist):
+    """Retrieval specialist per D38 (knowledge composes via existing primitives).
+
+    First concrete impl of a retrieval-shaped specialist. handle_skill('retrieve',
+    {query, k?}) invokes the bound MCP retriever adapter and returns a stub
+    retrieval-shaped response with `chunks`. Real-wire retrieval (real corpus +
+    embedding model + vector DB) is Phase C / D.
+    """
+
+    def handle_skill(self, skill_id: str, params: dict) -> Any:
+        if self._emit_event is None or self._workspace is None:
+            raise RuntimeError(
+                "specialist not attached to a workspace; call attach_workspace first"
+            )
+        if skill_id != "retrieve":
+            raise NotImplementedError(
+                f"rag-specialist does not implement skill {skill_id!r}"
+            )
+        params = params or {}
+        query = params.get("query", "")
+        k = int(params.get("k", 3))
+        adapter = self._adapters.get("rag-via-mcp-ext:rag-retriever-adapter")
+        if adapter is None:
+            raise RuntimeError(
+                "rag-specialist: required adapter "
+                "'rag-via-mcp-ext:rag-retriever-adapter' not bound"
+            )
+        actor_id = next(iter(self._workspace._substrate.state.actors), None)
+        self._emit_event(
+            actor_id=actor_id,
+            payload_subtype="action",
+            payload={
+                "action-name": skill_id,
+                "parameters": params,
+            },
+        )
+        adapter_response = adapter.call("retrieve", {"query": query, "k": k})
+        chunks = [
+            {"id": f"chunk-{i + 1}", "content": f"stub chunk {i + 1} for query={query!r}"}
+            for i in range(k)
+        ]
+        return {
+            "ok": True,
+            "skill": "retrieve",
+            "query": query,
+            "k": k,
+            "chunks": chunks,
+            "adapter-outcome-ref": adapter_response["outcome-reference"],
+            "stub": True,
+        }
+
+
 # Module-level registry of (specialist.id → runtime class). Populated as new
 # specialist impls land. For Phase B there's only GenericSpecialist; future
 # practitioner-specialist (Phase D) registers here.
 _SPECIALIST_CLASSES: dict[str, type[Specialist]] = {
     "generic-specialist": GenericSpecialist,
+    "rag-specialist": RAGSpecialist,
 }
 
 

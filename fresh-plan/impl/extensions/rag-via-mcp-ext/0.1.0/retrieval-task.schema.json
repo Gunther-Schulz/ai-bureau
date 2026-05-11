@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "retrieval-task work-unit-kind stub",
+  "description": "Stub spec for the retrieval-task identifier registered into work-unit.kind per D29. Real retrieval-task payload schema (query/k/corpus-binding/etc.) is Phase C+ territory; this stub exists to demonstrate the vocabulary-registration spec-ref resolution path per D2 strict protocol-neutrality and D38 (knowledge composes via existing primitives).",
+  "type": "object"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "rag-via-mcp-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "work-unit.kind",
+      "identifier": "retrieval-task",
+      "spec-ref": "./retrieval-task.schema.json"
+    }
+  ],
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "rag-retriever-adapter",
+      "spec-ref": "./adapter.json"
+    },
+    {
+      "kind": "specialist",
+      "id": "rag-specialist",
+      "spec-ref": "./specialist.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" }
+    ]
+  }
+}

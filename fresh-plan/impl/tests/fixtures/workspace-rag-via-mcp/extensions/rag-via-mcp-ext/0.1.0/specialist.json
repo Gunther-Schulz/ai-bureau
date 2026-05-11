@@ -1,0 +1,14 @@
+{
+  "id": "rag-specialist",
+  "version": "0.1.0",
+  "roles": ["retriever"],
+  "skills": [
+    { "id": "retrieve",
+      "description": "Retrieve relevant context chunks from the bound MCP retriever for a query." }
+  ],
+  "supported-work-unit-kinds": ["rag-via-mcp-ext:retrieval-task"],
+  "required-adapter-bindings": ["rag-via-mcp-ext:rag-retriever-adapter"],
+  "required-substrate-capabilities": ["skills", "event-streaming"],
+  "declared-event-emissions": [{ "payload-subtype": "action" }],
+  "declared-event-subscriptions": []
+}

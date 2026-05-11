@@ -22,6 +22,9 @@ MCP_ADAPTER_FIXTURE = Path(__file__).parent / "fixtures" / "workspace-mcp-adapte
 GENERIC_SPECIALIST_FIXTURE = (
     Path(__file__).parent / "fixtures" / "workspace-generic-specialist"
 )
+RAG_VIA_MCP_FIXTURE = (
+    Path(__file__).parent / "fixtures" / "workspace-rag-via-mcp"
+)
 MS_AGENT_FRAMEWORK_FIXTURE = (
     Path(__file__).parent / "fixtures" / "workspace-ms-agent-framework"
 )
@@ -270,6 +273,47 @@ def test_e2e_generic_specialist_skill_invocation_emits_action():
         assert emitted["payload"]["parameters"] == {"target": "doc-1"}
         assert response["ok"] is True
         assert response["stub"] is True
+    finally:
+        ws.shutdown()
+
+
+# ---------------------------------------------------------------
+# B7 — minimal RAG-via-MCP end-to-end (D19 + D38; protocol-vs-provision)
+# ---------------------------------------------------------------
+
+
+def test_e2e_rag_specialist_retrieve_emits_chained_action_events():
+    """Per D38 + B7: boot a workspace binding rag-specialist + rag-retriever-adapter
+    (both reusing mcp-server-ext:mcp-client); invoking `retrieve` produces two
+    action events in the chain — specialist's own emission, then the adapter's
+    action from adapter.call — and the specialist response references the
+    adapter's outcome-reference.
+    """
+    manifest = json.loads((RAG_VIA_MCP_FIXTURE / "workspace.json").read_text())
+    ws = Workspace.boot(manifest, RAG_VIA_MCP_FIXTURE / "extensions")
+    try:
+        specialist = ws.specialist("primary-rag-specialist")
+        assert specialist is not None
+        # Required retriever adapter is resolved + present in the specialist's _adapters.
+        assert ws.adapter("primary-rag-retriever") is specialist._adapters[
+            "rag-via-mcp-ext:rag-retriever-adapter"
+        ]
+        before = len(ws.event_chain.by_payload_subtype("action"))
+        response = ws.substrate.skills.invoke(
+            "retrieve", {"query": "doc-1", "k": 2}
+        )
+        actions = ws.event_chain.by_payload_subtype("action")
+        assert len(actions) == before + 2
+        # Order: specialist emission first, then adapter emission via adapter.call.
+        assert actions[-2]["payload"]["action-name"] == "retrieve"
+        assert "outcome-reference" not in actions[-2]["payload"]
+        assert actions[-1]["payload"]["action-name"] == "retrieve"
+        assert actions[-1]["payload"]["outcome-reference"] == response["adapter-outcome-ref"]
+        # Chain continuity across the two action events.
+        assert actions[-1]["prev-event"] == actions[-2]["id"]
+        assert response["ok"] is True
+        assert response["stub"] is True
+        assert len(response["chunks"]) == 2
     finally:
         ws.shutdown()
 

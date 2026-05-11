@@ -1,0 +1,42 @@
+{
+  "id": "rag-via-mcp-ws",
+  "description": "Workspace fixture binding rag-via-mcp-ext (B7); exercises the RAG specialist + retriever adapter composition, demonstrating that one protocol (mcp-server-ext:mcp-client) supports multiple semantically-distinct provisions per D38.",
+  "composition": {
+    "extensions": [
+      { "id": "inprocess-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" },
+      { "id": "rag-via-mcp-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "inprocess-substrate-ext:inprocess-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "agent-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-rag-retriever",
+        "provision": "rag-via-mcp-ext:rag-retriever-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "primary-rag-specialist",
+        "provision": "rag-via-mcp-ext:rag-specialist",
+        "version-range": ">=0.1.0"
+      }
+    ]
+  }
+}
