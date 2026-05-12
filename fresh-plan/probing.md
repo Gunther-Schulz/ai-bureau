@@ -44,6 +44,31 @@ Canonical motivating instance: D47 §B.3 originally claimed `HookRegistry.fire(n
 
 ---
 
+## Design-side vs impl-side labeling discipline
+
+Every piece of work in fresh-plan lives on one of two sides:
+
+- **[design]** — D-entry / specification / framework architecture / ledger work (the `decisions/D<NN>-*.md` files + cross-cutting docs like `CONCEPTS.md` / `roadmap.md` / schema files at `schemas/`). Append-only; locked entries; supersedes-relationships explicit; pre-lock probes when warranted; per-entry review discipline. A wrong design lock requires a supersedes entry.
+- **[impl]** — runtime code in `impl/src/` + tests in `impl/tests/` + extension specs in `impl/extensions/`; reference implementation conforming to the spec. Refactorable; tests-pass discipline; no sunk cost on impl code per README §"Implementation discipline". A wrong impl is just a refactor.
+
+**Rule**: every fix, finding, completed-work report, and commit MUST be labeled `[design]` or `[impl]` (or `[design+impl]` when a single piece genuinely spans both — e.g., a cluster supersedes entry locked together with its impl follow-through in the same commit). Applies to:
+
+- **Chat communication** — prefix completed-work reports + findings with `[design]` or `[impl]`. Examples: "[design] D48 entry locked with 5 Phase C deferrals", "[impl] specialist.py:103-106 refactored to structured WorkspaceBootError", "[design+impl] D46 cluster (entry + follow-through) landed together".
+- **Commit subjects** — include `[design]` or `[impl]` tag. Examples: `fresh-plan: D48 [design] — adapter cluster supersedes per D45 §C` vs `fresh-plan: D48 [impl] — AdapterCallError + boot.py wrap + tests`. Combined commits = `[design+impl]`.
+- **Work proposals** — name the side upfront so cadence + review discipline are clear before starting.
+- **Findings that span both sides** — split into two findings labeled separately, OR explicitly note "design side: X; impl side: Y".
+
+**Why this matters**: mixing design + impl in communication obscures which discipline applies. Discipline drift mid-work — e.g., spec'ing impl details into a D-entry (drift toward [design]-bloat), or refactoring impl in a way that conflicts with the locked spec (drift toward [impl]-divergence) — surfaces faster when the side is named in every communication. `roadmap.md`'s Bref deliverable tracking already separates entry + impl-follow-through; this rule makes that visible in chat and commits too.
+
+**Composes with**:
+- Procedure 3 (pre-lock probe) applies to [design] not [impl].
+- Procedure 2 audit menu — each probe shape may target one side or both: slot-interpretation audit hits [design]; failure-mode coverage audit hits both sides at different layers (failure semantics declared in [design]; honored in [impl]).
+- README §"Implementation discipline" — no sunk cost on [impl] code; the corresponding [design] carve-out (append-only ledger; past D-entries stand) makes the cadence asymmetry explicit.
+
+**Targets**: design/impl conflation (a working-process failure mode parallel to the AI failure modes targeted by the procedures above; surfaced empirically 2026-05-12 during D48 cluster work).
+
+---
+
 ## Procedure 1 — Decision-shape template (mandatory for substantive D-entries)
 
 Every substantive D-entry must carry answers to a fixed set of framing questions. Clarification / supersedes entries that touch only one slot may answer proportionally (the WHO + FAILS questions for that slot only). Absence of an answer means the entry can't lock; "TBD" or "deferred" is a valid answer if the deferral target is named.
