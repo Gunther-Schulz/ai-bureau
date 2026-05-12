@@ -82,6 +82,13 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 | 10 | Slot interpretation-layer pass (process 24 SUSPECT slots) | NOT STARTED | Mix of cheap labels + ~4-6 substantive D-entries (see breakdown below) |
 | 11 | One additional adversarial audit (combined failure-mode coverage + abandonment-path) | DONE (2026-05-12) | **33 SUSPECT findings** on ~38 audited surface (more findings per surface than slot-interpretation's 24-of-78). Cross-category overlap → systemic pattern, not isolated gaps. Forced **bounded-fill plan revision** (pending next session) + **probing.md amendments** (5 edits landed; audit findings count tracking added to discipline evolution). See "Bounded lock-and-fill plan — REVISION PENDING" below. |
 | 12 | probing.md amendments (5 edits) based on audit (c) findings | DONE | FAILS field strengthened with D44 triad pattern; new detection-surface-recovery audit shape; standing checkpoint cadence (failure-mode + abandonment-path now standing, not rotating); empirical calibration data point added; audit findings count tracking in evolution rules |
+| 13 | D45 meta-foundation entry — detection-surface-recovery triad as standing requirement for runtime decisions | DONE | D45 (substantive; meta-foundation). Locks the pattern; pre-lock probe SKIPPED with documented reason (audit-driven entries are circular to re-probe; precedent for future audit-driven entries). Casts net over ~25-28 of 33 SUSPECTs via the cluster supersedes entries below. |
+| 14 | Boot-procedure cluster supersedes entry | NOT STARTED | Apply D45 triad to boot path: silent ValueError swallowing (steps 6/7/8) + manifest-actor seeding rollback (introduced in D39 closure) + capability-only substrate-binding error path. ~D46 candidate. |
+| 15 | Subscriber-dispatch cluster supersedes entry | NOT STARTED | Apply D45 triad to dispatch path: on_event exception silently swallowed + HookRegistry.fire integration site (hooks never invoked; D13 hook contract is decorative until firing-sites land). ~D47 candidate. |
+| 16 | Adapter cluster supersedes entry | NOT STARTED | Apply D45 triad to adapter path: adapter call() failure shape unspecified + adapter binding mid-boot failure (root cause lost). ~D48 candidate. |
+| 17 | Specialist cluster supersedes entry | NOT STARTED | Apply D45 triad to specialist path: handle_skill failure shape + on_event exception (composes with deliverable 15). ~D49 candidate. |
+| 18 | Validation cluster supersedes entry | NOT STARTED | Apply D45 triad to validation path: D30 §4 per-work-unit identity checks (named in spec, never implemented) + B1 collect-all skipping when extensions empty. ~D50 candidate. |
+| 19 | Composition-change cluster supersedes entry | NOT STARTED | Apply D45 triad to composition-change path: post-projection state validity (e.g., adding actor whose subtype contradicts shape's authority-binding) + composition-change shape authority interaction. ~D51 candidate. |
 
 **Slot pass (#10) breakdown** (24 SUSPECT slots from the 2026-05-12 audit):
 
@@ -99,26 +106,31 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 - Live in-place shape migration deliberate scope-cut (clarifies `payload-composition-change.binding-kind` enum doesn't include shape)
 - Positioning lock (needs source-grounded Bucket A platform reads first — likely deferred)
 
-### Bounded lock-and-fill plan — REVISION PENDING (per audit-c findings 2026-05-12)
+### Bounded lock-and-fill plan — REVISED 2026-05-12 (process-by-pattern)
 
-**Original plan**: process 24 slot-interpretation suspects, run one additional audit (deliverable #11), re-evaluate. **Status**: deliverable #11 ran and produced 33 more SUSPECT findings. Original plan is now too narrow.
+**Original plan**: process 24 slot-interpretation suspects, run one additional audit (deliverable #11), re-evaluate. **Status of original plan**: superseded by the process-by-pattern revision below.
 
-**Revision pending** at next session decision-point. Two framings on the table:
+**Revised plan (process-by-pattern; locked 2026-05-12 per D45)**:
 
-- **(a) Process-by-suspect**: expand bounded scope to ~57 suspects (24 slot + 33 failure-mode/abandonment-path); process each in batches. Risk: repeats the local-over-global failure mode at scale; ~57 items processed individually.
-- **(b) Process-by-pattern (audit's recommendation)**: write a small number of meta-D-entries that establish standing patterns (e.g., "every runtime decision honors D44's detection + surface + recovery triad"; "boot procedure failures are surfaced — silent degradation paths removed"; "subscriber dispatch exceptions surface, not silently swallowed"). Each meta-D-entry casts a net over many suspects at once.
+1. ✅ DONE: D45 meta-foundation entry locks detection-surface-recovery triad as standing requirement for runtime decisions
+2. NOT STARTED: 6 cluster supersedes entries (deliverables 14-19) apply D45 triad to specific runtime paths — each casts net over multiple SUSPECT findings
+3. NOT STARTED: each cluster supersedes entry pairs with impl follow-throughs (typed exceptions + diagnostic surfaces + recovery paths in the impl)
+4. NOT STARTED: slot-pass for the 24 slot-interpretation suspects (deliverable #10) — process in batches; cheap labels for impl gaps + spec drifts; substantive D-entries for design gaps that don't fold into the cluster supersedes
+5. NOT STARTED: remaining original Bref deliverables (#5 D33 migration-safety; #6 D38 Sana worked-example; #7 decisions.md split — mechanical, last)
+6. NOT STARTED: Bref output entry (analog of D34) consolidating all of the above
+7. NOT STARTED: Phase B closure entry (analog of D35)
 
-Lean (b). The probing.md amendments (deliverable #12, DONE) codified the D44 triad as standing pattern in the FAILS field — pattern-level processing is now backed by the discipline.
+**Why process-by-pattern (rejected: process-by-suspect)**: the local-over-global failure mode that produced the gaps in the first place would repeat at scale if 57 suspects were processed individually. Pattern-level entries (D45 + cluster supersedes) cast nets and codify the discipline structurally. Per D45's rationale + the discipline-cited-as-label-not-applied-as-check observation from the 2026-05-12 audit.
 
 **Phase B closure pre-condition expanded**: audit (c) revealed structural items that can't responsibly defer to Phase C+:
-- HookRegistry.fire() never called (D13 hooks are decorative until firing-sites land)
-- Specialist on_event exceptions silently swallowed (substrate.py:193-197)
-- Boot procedure swallows ValueError in steps 6/7/8 (silent degradation)
-- D30 §4 per-work-unit identity checks named in spec, never implemented
-- Multi-event boot-time actor seeding has no rollback (we just introduced this in D39 closure)
-- Composition-change post-projection state validity unchecked
+- HookRegistry.fire() never called (D13 hooks are decorative until firing-sites land) → addressed by deliverable #15 (subscriber-dispatch cluster)
+- Specialist on_event exceptions silently swallowed (substrate.py:193-197) → addressed by deliverable #15
+- Boot procedure swallows ValueError in steps 6/7/8 (silent degradation) → addressed by deliverable #14 (boot-procedure cluster)
+- D30 §4 per-work-unit identity checks named in spec, never implemented → addressed by deliverable #18 (validation cluster)
+- Multi-event boot-time actor seeding has no rollback (we just introduced this in D39 closure) → addressed by deliverable #14
+- Composition-change post-projection state validity unchecked → addressed by deliverable #19 (composition-change cluster)
 
-These are substantive D-entries + impl follow-throughs. Estimated revised scope: **3-5 more sessions** of substantive work, not the "1-2 sessions" the original bounded-fill plan implied.
+Estimated revised scope: **3-5 more sessions** of substantive work (cluster supersedes + impl + remaining Bref deliverables + closure entries).
 
 ### Phase B closure entry
 
