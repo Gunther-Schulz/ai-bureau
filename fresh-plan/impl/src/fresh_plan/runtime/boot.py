@@ -257,8 +257,28 @@ def boot_workspace(
     workspace = Workspace(substrate=substrate, manifest=manifest)
 
     # Attach the workspace to each instantiated adapter (B4 boot-ordering).
-    for adapter in substrate.adapter_instances.values():
-        adapter.attach_workspace(workspace)
+    # Per D48 §B.2: wrap each call in try/except → WorkspaceBootError(category=
+    # "adapter-attach"). Phase B stubs have a trivial attach (cannot fail);
+    # the wrapping is defensive for Phase C+ real-wire where attach may run
+    # connection-pool setup / auth handshake / pre-flight. Per D48 §D D-2,
+    # attach-failure cause-vocabulary inside each adapter-impl's raised
+    # exception is extension-defined per protocol.
+    for bid, adapter in substrate.adapter_instances.items():
+        try:
+            adapter.attach_workspace(workspace)
+        except Exception as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="adapter-attach",
+                        path=f"composition.adapter-bindings[binding-id={bid!r}]",
+                        value=adapter.id,
+                        reason=(
+                            f"adapter {adapter.id!r} attach_workspace failed: {e}"
+                        ),
+                    )
+                ]
+            ) from e
 
     # Attach workspace + register skills for each instantiated specialist (B6
     # boot-ordering). Runs AFTER adapter attach so required-adapter-bindings

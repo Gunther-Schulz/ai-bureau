@@ -86,10 +86,19 @@ def test_attach_workspace_resolves_required_adapter(booted_workspace):
 
 
 def test_attach_workspace_raises_on_missing_required_adapter(specialist):
-    """Hand-built workspace stand-in with no matching adapter-binding."""
+    """Hand-built workspace stand-in with no matching adapter-binding.
+
+    Per D48 §B.3 (adapter cluster supersedes per D45 §C): raises structured
+    WorkspaceBootError(category="adapter-binding-resolution") instead of the
+    pre-D48 bare RuntimeError. Path names the offending specialist binding-id
+    (None here because _MockSubstrate.specialist_instances is empty) and
+    references the unresolved provision via `failures[i].value`.
+    """
+    from fresh_plan.runtime.boot import WorkspaceBootError
 
     class _MockSubstrate:
         adapter_bindings: dict = {}
+        specialist_instances: dict = {}
         state = None
 
     class _MockWorkspace:
@@ -101,11 +110,15 @@ def test_attach_workspace_raises_on_missing_required_adapter(specialist):
         def adapter(self, bid):
             raise KeyError(bid)
 
-    with pytest.raises(RuntimeError) as excinfo:
+    with pytest.raises(WorkspaceBootError) as excinfo:
         specialist.attach_workspace(_MockWorkspace())
-    msg = str(excinfo.value)
-    assert "mcp-server-ext:mcp-tool-adapter" in msg
-    assert "generic-specialist" in msg
+    failures = excinfo.value.failures
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "adapter-binding-resolution"
+    assert f.value == "mcp-server-ext:mcp-tool-adapter"
+    assert "mcp-server-ext:mcp-tool-adapter" in f.reason
+    assert "generic-specialist" in f.reason
 
 
 def test_register_skills_adds_invokable_handler(booted_workspace):

@@ -185,3 +185,146 @@ def test_load_adapter_dispatches_by_protocol_or_transport():
     # Both share the Adapter base contract.
     assert isinstance(mcp, Adapter)
     assert isinstance(direct, Adapter)
+
+
+# ---------------------------------------------------------------
+# D48 — adapter cluster supersedes per D45 §C
+# ---------------------------------------------------------------
+
+
+def test_adapter_call_error_propagates_with_structured_fields(booted_workspace):
+    """D48 §B.1: AdapterCallError carries structured fields (adapter_id,
+    call_target, category, detail) + chains the original exception via `from`.
+
+    Phase B stubs cannot fail meaningfully; this test uses a monkeypatched
+    subclass to exercise the forward-bar contract Phase C real-wire impls
+    must honor.
+    """
+    from fresh_plan.runtime.adapter import AdapterCallError
+
+    class _FailingAdapter(MCPToolAdapter):
+        def call(self, tool_name, parameters=None, *, attributing_actor_id=None):
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="timeout",
+                detail={"elapsed_ms": 30000, "limit_ms": 30000},
+            )
+
+    failing = _FailingAdapter(spec=dict(ADAPTER_SPEC))
+    failing.attach_workspace(booted_workspace)
+
+    with pytest.raises(AdapterCallError) as excinfo:
+        failing.call("plan", {"target": "doc-1"})
+
+    e = excinfo.value
+    assert e.adapter_id == "mcp-tool-adapter"
+    assert e.call_target == "plan"
+    assert e.category == "timeout"
+    assert e.detail == {"elapsed_ms": 30000, "limit_ms": 30000}
+    # Structured diagnostic visible without reading server logs.
+    assert "[timeout]" in str(e)
+    assert "mcp-tool-adapter" in str(e)
+
+
+def test_adapter_call_error_aggregated_via_subscriber_dispatch(booted_workspace):
+    """D48 §B.1 composition with D47 §B.1: AdapterCallError raised inside a
+    specialist's on_event (subscriber-dispatch path) is captured into
+    substrate._subscriber_failures and aggregated as SubscriberDispatchError
+    after the outer drain completes.
+    """
+    from fresh_plan.runtime.adapter import AdapterCallError
+    from fresh_plan.runtime.specialist import Specialist
+    from fresh_plan.runtime.substrate import SubscriberDispatchError
+
+    class _FailingAdapter(MCPToolAdapter):
+        def call(self, tool_name, parameters=None, *, attributing_actor_id=None):
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="upstream-error",
+                detail={"status": 503},
+            )
+
+    class _ReactingSpecialist(Specialist):
+        """Reacts to claim events by invoking the bound adapter — exercises
+        the D44 + D47 + D48 composition path."""
+
+        def __init__(self, spec, adapter):
+            super().__init__(spec=spec)
+            self._test_adapter = adapter
+            self.spec.setdefault(
+                "declared-event-subscriptions", [{"payload-subtype": "state-change"}]
+            )
+
+        def handle_skill(self, skill_id, params):
+            return None
+
+        def on_event(self, event):
+            # Will raise AdapterCallError — captured per D47 §B.1.
+            self._test_adapter.call("react-to-claim", {"event_id": event["id"]})
+
+    failing = _FailingAdapter(spec=dict(ADAPTER_SPEC))
+    failing.attach_workspace(booted_workspace)
+
+    reacting = _ReactingSpecialist(
+        spec={
+            "id": "reacting-test-specialist",
+            "version": "0.1.0",
+            "roles": [],
+            "skills": [],
+            "supported-work-unit-kinds": [],
+            "required-adapter-bindings": [],
+            "declared-event-subscriptions": [{"payload-subtype": "state-change"}],
+        },
+        adapter=failing,
+    )
+    substrate = booted_workspace._substrate
+    substrate.specialist_subscribers.append(reacting)
+
+    actor_id = next(iter(substrate.state.actors))
+    with pytest.raises(SubscriberDispatchError) as excinfo:
+        booted_workspace._emit_event(
+            actor_id=actor_id,
+            payload_subtype="state-change",
+            payload={"what": "test-state-change"},
+        )
+
+    failures = excinfo.value.failures
+    assert len(failures) == 1
+    spec_id, evt_id, captured_exc = failures[0]
+    assert spec_id == "reacting-test-specialist"
+    assert isinstance(captured_exc, AdapterCallError)
+    assert captured_exc.category == "upstream-error"
+    assert captured_exc.adapter_id == "mcp-tool-adapter"
+
+
+def test_adapter_attach_failure_surfaces_as_workspace_boot_error(tmp_path):
+    """D48 §B.2: when an adapter's attach_workspace raises, boot.py wraps
+    as WorkspaceBootError(category="adapter-attach") naming the failing
+    adapter-binding + the underlying cause.
+    """
+    from fresh_plan.runtime.adapter import _ADAPTER_CLASSES
+    from fresh_plan.runtime.boot import WorkspaceBootError
+
+    class _AttachFailingAdapter(MCPToolAdapter):
+        def attach_workspace(self, workspace):
+            raise RuntimeError("simulated Phase-C-style attach failure (e.g., auth handshake)")
+
+    # Register the failing class against the MCP protocol so the existing
+    # MCP fixture instantiates it; restore at test end.
+    original = _ADAPTER_CLASSES["mcp-server-ext:mcp-client"]
+    _ADAPTER_CLASSES["mcp-server-ext:mcp-client"] = _AttachFailingAdapter
+    try:
+        manifest = json.loads((MCP_FIXTURE / "workspace.json").read_text())
+        with pytest.raises(WorkspaceBootError) as excinfo:
+            Workspace.boot(manifest, MCP_FIXTURE / "extensions")
+        failures = excinfo.value.failures
+        assert any(f.category == "adapter-attach" for f in failures)
+        attach_failure = next(f for f in failures if f.category == "adapter-attach")
+        assert "primary-mcp" in attach_failure.path
+        assert attach_failure.value == "mcp-tool-adapter"
+        assert "attach_workspace failed" in attach_failure.reason
+        assert "auth handshake" in attach_failure.reason
+    finally:
+        _ADAPTER_CLASSES["mcp-server-ext:mcp-client"] = original

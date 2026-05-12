@@ -17,7 +17,8 @@ from typing import Any, Optional
 # Extended per D45 / D46 / D47 (Phase B Bref cluster supersedes) for
 # runtime-failure categories that share the validator's failure shape:
 # actor-seeding (D46 §B.2 boot manifest-actor seeding rollback),
-# hook-handler (D47 §B.2 pre-event-emit hook handler raise).
+# hook-handler (D47 §B.2 pre-event-emit hook handler raise),
+# adapter-attach + adapter-binding-resolution (D48 §B.2 + §B.3 adapter cluster).
 FAILURE_CATEGORIES = frozenset(
     {
         "schema",  # JSON Schema validation failure (Phase A formal schemas)
@@ -31,6 +32,8 @@ FAILURE_CATEGORIES = frozenset(
         "authority",  # D13 — shape authority-binding requirement unsatisfied
         "actor-seeding",  # D46 §B.2 — boot-time manifest-actor seeding rejection
         "hook-handler",  # D47 §B.2 — pre-event-emit hook handler raise
+        "adapter-attach",  # D48 §B.2 — adapter.attach_workspace failure (Phase C real-wire)
+        "adapter-binding-resolution",  # D48 §B.3 — specialist required-adapter-binding miss
     }
 )
 

@@ -24,6 +24,46 @@ from typing import Any, Callable, ClassVar, Optional
 from fresh_plan.runtime.provision import load_provision_spec
 
 
+class AdapterCallError(Exception):
+    """Adapter ``call()`` runtime failure per D48 §B.1 (adapter cluster supersedes per D45 §C).
+
+    Phase C real-wire forward-bar: real-wire adapter impls (subclasses of
+    ``Adapter`` overriding ``call()``) SHALL raise this on protocol /
+    transport / auth / timeout / upstream failures. Phase B stubs do not
+    trigger this exception — the contract is defined now so Phase C impls
+    have a clear bar to meet rather than a happy-path-only example to
+    reverse-engineer from.
+
+    Composes with D47 §B.1 SubscriberDispatchError aggregation: when
+    AdapterCallError fires from inside a specialist's ``on_event``
+    (subscriber-dispatch path per D37 + D44), it is captured per D47 §B.1
+    into substrate's ``_subscriber_failures`` (substrate.py:310-320) and
+    aggregated as SubscriberDispatchError after the outer drain.
+
+    Per D48 §D D-1: call-lifecycle raise-point (before-wire / mid-wire /
+    after-wire) is per-real-wire-impl choice. Per D48 §D D-3: starter
+    category vocabulary (transport / auth / timeout / protocol-error /
+    upstream-error / unknown) is HTTP/JSON-RPC-shaped; non-HTTP transports
+    register additional categories per D29 namespacing.
+    """
+
+    def __init__(
+        self,
+        *,
+        adapter_id: str,
+        call_target: str,
+        category: str,
+        detail: Optional[dict] = None,
+    ) -> None:
+        self.adapter_id = adapter_id
+        self.call_target = call_target
+        self.category = category
+        self.detail = dict(detail) if detail else {}
+        super().__init__(
+            f"[{category}] adapter={adapter_id!r} target={call_target!r}: {self.detail}"
+        )
+
+
 @dataclass
 class Adapter:
     """Base class for adapter runtime impls per D16 + adapter.schema.json.

@@ -87,12 +87,27 @@ class Specialist:
 
         Per D30 cross-kind referential integrity: every entry in
         `required-adapter-bindings` must resolve to an adapter bound in
-        the workspace. Raises RuntimeError on miss (B1 catches the static
-        case; this guard covers runtime composition drift).
+        the workspace. Per D48 §B.3 (adapter cluster supersedes per D45 §C):
+        misses surface as structured `WorkspaceBootError(category=
+        "adapter-binding-resolution", ...)` (replaces the prior bare
+        RuntimeError; symmetric with D46's raise-at-failure-site pattern).
         """
+        # Import locally to avoid a module-level circular dep: boot.py
+        # imports specialist.py lazily (inside boot_workspace); this
+        # reverse import is the symmetric lazy path.
+        from fresh_plan.runtime.boot import WorkspaceBootError
+        from fresh_plan.validator.types import ValidationFailure
+
         self._workspace = workspace
         self._emit_event = workspace._emit_event
         substrate = workspace._substrate
+        # Look up the binding-id this specialist instance was bound under
+        # (substrate.specialist_instances is keyed by binding-id; instance
+        # identity gives us the key without changing attach signatures).
+        my_binding_id: Optional[str] = next(
+            (bid for bid, sp in substrate.specialist_instances.items() if sp is self),
+            None,
+        )
         for required in self.required_adapter_bindings:
             matched_bid: Optional[str] = None
             for bid, binding_dict in substrate.adapter_bindings.items():
@@ -100,9 +115,22 @@ class Specialist:
                     matched_bid = bid
                     break
             if matched_bid is None:
-                raise RuntimeError(
-                    f"specialist {self.id!r}: required-adapter-binding "
-                    f"{required!r} has no matching adapter-binding in workspace"
+                raise WorkspaceBootError(
+                    [
+                        ValidationFailure(
+                            category="adapter-binding-resolution",
+                            path=(
+                                f"composition.specialist-bindings"
+                                f"[binding-id={my_binding_id!r}]"
+                                f".required-adapter-bindings"
+                            ),
+                            value=required,
+                            reason=(
+                                f"specialist {self.id!r}: required-adapter-binding "
+                                f"{required!r} has no matching adapter-binding in workspace"
+                            ),
+                        )
+                    ]
                 )
             self._adapters[required] = workspace.adapter(matched_bid)
 
