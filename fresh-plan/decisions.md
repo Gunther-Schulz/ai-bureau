@@ -56,3 +56,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D43](decisions/D43-supersedes-d17-rename-core-capability-event-streaming-event.md) — Supersedes D17 — rename core capability `event-streaming` → `event-chain` (2026-05-11)
 - [D44](decisions/D44-extends-d37-subscriber-dispatch-is-queued-fifo-drain-with.md) — Extends D37 — subscriber-dispatch is queued (FIFO drain) with loop backstop (2026-05-11)
 - [D45](decisions/D45-establishes-detection-surface-recovery-triad-as-standing.md) — Establishes detection-surface-recovery triad as standing requirement for runtime decisions (2026-05-12)
+- [D46](decisions/D46-extends-d7-d32-boot-procedure-honors-detection-surface.md) — Extends D7 + D32 — boot procedure honors detection-surface-recovery triad (boot-procedure cluster per D45) (2026-05-12)
