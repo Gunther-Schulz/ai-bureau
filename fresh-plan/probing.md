@@ -19,8 +19,28 @@ The discipline is small on purpose. It is itself subject to the failure modes it
 - **No-failure-mode imagination** — AI builds for the happy path; doesn't naturally enumerate unhappy paths.
 - **Authority-deference** — AI honors what's locked rather than probing whether the lock was right.
 - **Recency-bias** — AI weights recent conversation context heavily; older corpus content fades from active probing range even when load-bearing.
+- **Investigation-bias / claim-without-evidence** — AI states facts about existing code, state, or documents without Reading or Citing source. Pattern-completion produces plausible-looking claims (e.g., "the function probably accepts `*args/**kwargs`" because that's the most common variadic pattern) that masquerade as verified. Distinct from pattern-completion (which is structural prediction); this is direct factual confabulation about specific entities. Targeted by the investigation-before-claim discipline immediately below.
 
 The discipline doesn't claim to address every failure mode (some require routine outside-reader cadence beyond AI dispatch). It addresses the load-bearing ones with bounded mechanisms.
+
+---
+
+## Investigation-before-claim discipline (load-bearing for D-entry drafting)
+
+Per global CLAUDE.md Cite-or-Read-or-Flag — **every claim a D-entry makes about existing impl** (function signatures, code-path behavior, line-level details, runtime sequencing, schema content, state at specific moments) MUST be backed by one of:
+
+- **Cite**: the cited code was Read in current session; entry cites specific file:line or symbol name
+- **Read**: read the cited code NOW (before drafting that section), then assert
+- **Flag**: explicitly tag the claim as "inferred from adjacent signal X — not verified by reading source" — and prefer Read over Flag for load-bearing claims (those driving impl follow-through OR locking new contract)
+
+**Pattern-completion masquerading as fact is the failure mode this discipline targets specifically.** AI's tendency to confabulate plausible-looking claims about code (because variadic `*args/**kwargs` is the "most common" pattern, etc.) produces D-entries that look authoritative but contain factual errors. **Drafting from pattern-recall is not Read or Cite; it's an unflagged inference.**
+
+Canonical motivating instance: D47 §B.3 originally claimed `HookRegistry.fire(name, *args, **kwargs)` without reading `hooks.py` first; the actual API is `fire(name, context: dict)`. Caught at impl-planning time before commit; would have shipped a wrong contract into the ledger if not caught. This was the SAME pattern as the activation-scope finding (load-bearing claim made without verification) but at the D-entry-drafting layer rather than the slot-interpretation layer.
+
+**Procedural enforcement** (composes with Procedures 1, 3 below):
+- Procedure 1 (decision-shape template) FAILS / WHO / CROSS fields: any claim about impl behavior MUST be Read-or-Cite-backed at draft time.
+- Procedure 3 (pre-lock probe) brief menu includes "what code claims are unverified?" — fires before lock to catch any inferred-but-not-flagged claims.
+- Procedure 3 (refined audit-driven-skip): when an entry establishes NEW contract content (not pure audit cleanup), the pre-lock probe MUST fire even when audit-driven. The audit motivates the gap; the entry's resolution may include new claims that need verification.
 
 ---
 
@@ -40,7 +60,7 @@ The framing fields (named in the entry text, not necessarily as separate section
   - `opaque (documentary)` — not consumed at runtime; serves as documentation / metadata for downstream tools / auditors
   - `deferred (named target phase)` — interpretation explicitly deferred to a future phase; the target phase MUST be named
   - Multi-layer answers acceptable when the decision genuinely spans (e.g., "shape declares; substrate enforces at append").
-- **FAILS** — what happens when the decision's subject is malformed, missing, or contradictory. Where the failure surfaces. What error the user sees. What recovery path exists. ("Should never happen" without alerting / logging is not a failure mode answer.) **Pattern (per D44 precedent)**: every runtime decision should have a **detection + surface + recovery** triad explicitly named — named exception type, user-visible diagnostic, recovery path. The 2026-05-12 failure-mode audit found D44 was the *only* runtime decision that honored this; every other decision (D7, D9, D10, D12, D13, D16, D19, D20, D29, D30, D32, D34, D37, D39, D40 §A) lacked it. **Citing "Failure-modes-are-first-class" as rationale ≠ applying it as a check.** Pre-lock probe (Procedure 3) should test whether the answer is real, not just present.
+- **FAILS** — what happens when the decision's subject is malformed, missing, or contradictory. Where the failure surfaces. What error the user sees. What recovery path exists. ("Should never happen" without alerting / logging is not a failure mode answer.) **Pattern (per D44 precedent)**: every runtime decision should have a **detection + surface + recovery** triad explicitly named — named exception type, user-visible diagnostic, recovery path. The 2026-05-12 failure-mode audit found D44 was the *only* runtime decision that honored this; every other decision (D7, D9, D10, D12, D13, D16, D19, D20, D29, D30, D32, D34, D37, D39, D40 §A) lacked it. **Citing "Failure-modes-are-first-class" as rationale ≠ applying it as a check.** Pre-lock probe (Procedure 3) should test whether the answer is real, not just present. **Code-claim verification (per investigation-before-claim discipline above)**: any FAILS claim about how impl behaves under failure (which exception type raises, what state survives, what diagnostic surfaces) MUST be Read-or-Cite-backed at draft time. Pattern-completed claims (e.g., "the function probably raises XError") are unflagged inferences and violate the discipline.
 - **CROSS** — what other decisions this cross-cuts. The existing `**Cross-references**:` line names related entries; the CROSS field forces the author to name *which slots in those decisions* this entry interacts with.
 - **DEFERS** — what this entry deliberately doesn't decide, and where it gets decided (which phase, which future entry). Composes with the existing `### What is NOT in this decision` section in substantive entries.
 
@@ -86,6 +106,9 @@ Brief menu (rotates across instances; pick the brief that fires hardest for the 
 - **What would a hostile reader misinterpret?** — frame-acceptance flavor; catches assumptions the entry treats as obvious.
 - **What assumption is this entry quietly making?** — frame-acceptance flavor; surfaces unspoken premises.
 - **What precedent is this entry mirroring? Does the precedent's reasoning actually apply here, or is the pattern being imposed?** — pattern-completion flavor; specifically catches cases where the author defaulted to a precedent's resolution shape without stress-testing fit.
+- **What code claims does this entry make? List each. For each: was the cited code Read in this session, OR is the claim inferred? Verify any inferred claim against actual code now.** — investigation-bias flavor; specifically catches the pattern-completion-masquerading-as-fact case (D47 §B.3 unverified `HookRegistry.fire` signature is the canonical motivating instance).
+
+**Audit-driven-skip refinement**: D45 §E established the precedent that pre-lock probe can be SKIPPED for entries grounded in fresh-context audit findings (re-probing is circular — the audit motivated the entry; the entry codifies the audit's recommendation). D46 followed it cleanly (pure typed-exception application). D47 followed it but introduced new contract content (hook firing integration sites — the audit said "fire is never called", not "here's how fire should work") and slipped two unverified claims past lock-time. **Refined skip rule**: skip applies to entries that are PURE pattern application (typed-exception application of an existing pattern). Entries that establish NEW contract content not in the audit's findings MUST run pre-lock probe even when audit-driven, with the brief specifically targeting the new content (especially the code-claim-verification brief above).
 
 Fires when the entry is genuinely substantive. NOT for clarification entries or mechanical refactors — those are bounded enough that the decision-shape template alone suffices.
 
