@@ -119,7 +119,7 @@ The pattern: framework-core stays protocol-neutral (per D2 strict reading); prot
 
 ## Roadmap (indicative; per D26)
 
-Phases beyond layer-2 closure, named at high level — order indicative not rigid; phase boundaries trigger-based not scheduled. See **D26** in `decisions.md` for full content.
+Phases beyond layer-2 closure, named at high level — order indicative not rigid; phase boundaries trigger-based not scheduled. See **D26** in `decisions.md` for full content. **For per-phase workstream tracker (current status of every workstream + Bref scope + cross-phase work-streams + external-trigger checkpoints), see `roadmap.md` — the canonical execution tracker.** This table is the at-a-glance summary; `roadmap.md` is the structured map.
 
 | Phase | Work | Status |
 |---|---|---|
