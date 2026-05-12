@@ -50,11 +50,13 @@ The framing fields (named in the entry text, not necessarily as separate section
 
 ---
 
-## Procedure 2 — Phase-boundary structured audit (mandatory at end of each phase)
+## Procedure 2 — Structured audit (mandatory at multiple checkpoints — see Checkpoint cadence)
 
-At the end of each phase (Phase A closure was D35; Phase B closure is upcoming), run a structured audit menu — multiple probes, each a different question shape. Each probe runs in fresh context (sub-agent dispatch with adversarial brief). Outputs feed the phase's refinement entry (Bref-shape) as findings to fix or defer-with-named-home.
+A menu of audit shapes — multiple probes, each a different question shape. Each probe runs in fresh context (sub-agent dispatch with adversarial brief). Outputs feed the relevant refinement entry (Bref-shape at phase-boundary; per-workstream commit notes at workstream-completion; etc.) as findings to fix or defer-with-named-home.
 
-Per phase, run at minimum the slot-interpretation audit + one other (rotated). The menu accumulates over time as new probe shapes prove valuable.
+This procedure defines WHAT probes exist (the menu below). The "Checkpoint cadence" section after Procedure 5 defines WHEN they fire (workstream-completion / pre-refinement-pass / phase-boundary / pre-phase-transition).
+
+The menu accumulates over time as new probe shapes prove valuable.
 
 The current audit menu:
 
@@ -117,17 +119,46 @@ Mechanism: dispatch a sub-agent with the artifact + the relevant decisions, brie
 
 ---
 
-## Cadence + ownership
+## Checkpoint cadence — when probes fire
 
-| Procedure | When | Who runs |
-|---|---|---|
-| 1 — Decision-shape template | Every substantive D-entry | Author (verified by reading entry; absent field = entry not lockable) |
-| 2 — Phase-boundary audit | End of each phase | Phase-closure session(s); minimum slot-interpretation + one other audit shape |
-| 3 — Pre-lock probe | Before locking Tier-3 substantive D-entry | Dispatched before lock; output is part of lock decision |
-| 4 — Mid-cycle exploratory | ~Every 10 sessions or 10 substantive D-entries | Discretionary; tracked by counting since last run |
-| 5 — Artifact probe | When introducing / modifying cross-cutting artifact | Invoked by the change author |
+Procedures 1-5 above define WHAT probes exist. This section defines WHEN they fire. The same probe shape can fire at multiple checkpoints with different scope (e.g., the slot-interpretation audit fires at workstream-completion scoped to the workstream, AND at phase-boundary scoped to the full phase).
 
-Sub-agent dispatch is the default executor. Outside human readers (eventual) augment but don't replace.
+Checkpoints accumulate as new ones prove valuable. Per the discipline's evolution rule below, retire checkpoints that produce no findings across 3+ instances.
+
+### Checkpoint catalog
+
+| Checkpoint | When | Probes invoked | Scope |
+|---|---|---|---|
+| **Substantive D-entry lock** | Every substantive D-entry author moment | Procedure 1 (decision-shape template, mandatory) + Procedure 3 (pre-lock probe, when warranted for Tier-3) | Per-entry |
+| **Workstream completion** | After each named workstream lands (B1, B2, B2b, ..., B8 in Phase B; equivalents in other phases). Tracked in `roadmap.md`. | Procedure 2 audit menu — minimum slot-interpretation + failure-mode coverage | Scoped to workstream's added content (lighter than phase-boundary) |
+| **Pre-refinement-pass start** | At the START of a named refinement workstream (Bref, future Cref, etc.) — before processing the tracked deliverables list begins | Procedure 2 audit menu, adapted brief: "What's NOT on the tracked deliverables list that should be?" | Scoped to refinement-pass scope-setting |
+| **Phase boundary (closure)** | End of each phase (Phase A closed at D35; Phase B closure pending) | Procedure 2 audit menu — full menu, multiple shapes rotated | Full phase corpus |
+| **Pre-phase-transition** | Before starting the next phase (especially pre-Phase-D where deferred items concentrate) | Procedure 2 audit menu, adapted brief: "What deferred items come due now? What cross-phase coherence isn't verified?" | Cross-phase deferral inventory + dependency check |
+| **Mid-cycle exploratory** | ~Every 10 sessions or 10 substantive D-entries | Procedure 4 (mid-cycle exploratory dispatch) | Pure exploration; no specific question |
+| **Cross-cutting artifact change** | When introducing / modifying a cross-cutting artifact (workspace manifest, event sequence, worked example) | Procedure 5 (cross-decision artifact probe) | Per-artifact |
+
+### Why these specific checkpoints
+
+- **Substantive D-entry lock + Workstream completion** catch issues at write-time when the author's context is fresh and the scope is bounded. Cheaper than discovering the same issues at phase-boundary when the audit scope has ballooned across multiple workstreams.
+- **Pre-refinement-pass start** is the checkpoint that would have caught the slot-interpretation discipline gap BEFORE Bref deliverables 1-3 had landed. Refinement passes process tracked deliverables; a probe BEFORE the pass starts asks "what should be ON the tracked list that isn't?" Different question shape from the audit menu's per-decision probes.
+- **Phase boundary** is the catch-all: full audit menu with multiple shapes rotated. Catches what slipped through earlier checkpoints + what's only visible across multiple workstreams.
+- **Pre-phase-transition** matters because phases name "deferred to Phase X" items as they go. At the transition moment, those deferrals come due simultaneously. A probe surfaces the deferral inventory + checks coherence across them. Especially load-bearing pre-Phase-D where pioneer-instance touches every layer.
+- **Mid-cycle exploratory** is the time-based safety net for what the structured probes don't ask about.
+- **Cross-cutting artifact change** catches local-over-global gaps that per-decision review misses.
+
+### Scope notes
+
+- **Workstream-completion probes are deliberately lighter** than phase-boundary (~5-10 min sub-agent dispatch vs ~30 min full-phase audit). The point is to catch workstream-local issues before they compound, not to re-audit the whole corpus on every workstream landing.
+- **Pre-refinement-pass scope is the deliverables-list itself**, not the corpus. The probe asks whether the list captures the right scope, not whether each item is well-formed.
+- **Pre-phase-transition scope is deferred items + cross-phase dependencies**, not a re-audit of the just-closed phase (that already ran at the phase boundary).
+
+## Ownership
+
+- **Sub-agent dispatch is the default executor** for all probe shapes. Brief includes the scope (workstream / phase / artifact) and the brief variant (pure exploration / specific question).
+- **The change-author triggers** workstream-completion + cross-cutting artifact change checkpoints (these are bounded enough that the author owns initiating).
+- **The session managing a refinement-pass / phase-closure entry triggers** pre-refinement-pass / phase-boundary / pre-phase-transition checkpoints.
+- **Mid-cycle exploratory** is discretionary; tracked by counting sessions / substantive entries since last run.
+- **Outside human readers (eventual)** augment but don't replace sub-agent dispatch. Sub-agents share some AI failure modes; outside readers don't, but cost more and aren't always available.
 
 ---
 
