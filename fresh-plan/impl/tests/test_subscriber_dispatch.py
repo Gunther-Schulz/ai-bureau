@@ -307,3 +307,253 @@ def test_d44_cross_specialist_fifo_ordering(workspace):
     # B's observation happened after BOTH A-emissions were appended,
     # i.e. chain length at observation == final length.
     assert b.observed_at_chain_length[0] == chain_before + 3
+
+
+# ---------------------------------------------------------------------------
+# D47 — subscriber dispatch + hook firing honor detection-surface-recovery triad
+# ---------------------------------------------------------------------------
+
+
+class _RaisingSpecialist(Specialist):
+    """on_event always raises a marker exception; tests aggregation per D47 §B.1."""
+
+    def __init__(self, spec: dict, marker: str = "raise-marker") -> None:
+        super().__init__(spec=spec)
+        self._marker = marker
+
+    def on_event(self, event: dict) -> None:
+        raise RuntimeError(f"{self._marker}:{event.get('id')}")
+
+
+def test_d47_subscriber_exception_captured_and_aggregated(workspace):
+    """Per D47 §B.1: subscriber on_event exceptions are NOT silently swallowed —
+    they're collected during drain and raised as SubscriberDispatchError
+    aggregate after the outer drain completes.
+    """
+    from fresh_plan.runtime.substrate import SubscriberDispatchError
+
+    ws = workspace
+    spec = {
+        "id": "test-raising-specialist",
+        "version": "0.1.0",
+        "skills": [],
+        "supported-work-unit-kinds": [],
+        "required-adapter-bindings": [],
+        "required-substrate-capabilities": ["skills", "event-chain"],
+        "declared-event-emissions": [],
+        "declared-event-subscriptions": [{"payload-subtype": "claim"}],
+    }
+    raising = _RaisingSpecialist(spec=spec, marker="boom")
+    _attach_test_specialist(ws, raising)
+
+    actor = next(iter(ws.actors.values()))
+    with pytest.raises(SubscriberDispatchError) as exc_info:
+        actor.emit_claim("trigger")
+
+    failures = exc_info.value.failures
+    assert len(failures) == 1
+    spec_id, event_id, exc = failures[0]
+    assert spec_id == "test-raising-specialist"
+    assert isinstance(exc, RuntimeError)
+    assert "boom:" in str(exc)
+
+
+def test_d47_subscriber_exceptions_aggregate_across_multiple_specialists(workspace):
+    """Per D47 §B.1: when multiple subscribers raise, ALL failures captured
+    in the aggregate (not just the first); cascade is not terminated by
+    individual failures."""
+    from fresh_plan.runtime.substrate import SubscriberDispatchError
+
+    ws = workspace
+    spec_template = {
+        "version": "0.1.0",
+        "skills": [],
+        "supported-work-unit-kinds": [],
+        "required-adapter-bindings": [],
+        "required-substrate-capabilities": ["skills", "event-chain"],
+        "declared-event-emissions": [],
+        "declared-event-subscriptions": [{"payload-subtype": "claim"}],
+    }
+    a_spec = {**spec_template, "id": "raiser-a"}
+    b_spec = {**spec_template, "id": "raiser-b"}
+    a = _RaisingSpecialist(spec=a_spec, marker="A")
+    b = _RaisingSpecialist(spec=b_spec, marker="B")
+    _attach_test_specialist(ws, a)
+    _attach_test_specialist(ws, b)
+
+    actor = next(iter(ws.actors.values()))
+    with pytest.raises(SubscriberDispatchError) as exc_info:
+        actor.emit_claim("trigger")
+
+    failures = exc_info.value.failures
+    assert len(failures) == 2
+    spec_ids = {f[0] for f in failures}
+    assert spec_ids == {"raiser-a", "raiser-b"}
+
+
+def test_d47_chain_consistent_after_subscriber_failures(workspace):
+    """Per D47 §B.1: even when subscribers raise, the event IS in the chain
+    + state. Chain integrity preserved per D10; replay still works per D39."""
+    from fresh_plan.runtime.substrate import SubscriberDispatchError
+
+    ws = workspace
+    spec = {
+        "id": "test-raiser-c",
+        "version": "0.1.0",
+        "skills": [],
+        "supported-work-unit-kinds": [],
+        "required-adapter-bindings": [],
+        "required-substrate-capabilities": ["skills", "event-chain"],
+        "declared-event-emissions": [],
+        "declared-event-subscriptions": [{"payload-subtype": "claim"}],
+    }
+    _attach_test_specialist(ws, _RaisingSpecialist(spec=spec, marker="C"))
+
+    chain_before = len(ws.event_chain)
+    actor = next(iter(ws.actors.values()))
+    with pytest.raises(SubscriberDispatchError):
+        actor.emit_claim("survives")
+
+    # Event IS in chain even though subscribers failed.
+    assert len(ws.event_chain) == chain_before + 1
+    # Replay reproduces (state-from-events still works).
+    state = ws.state_at(len(ws.event_chain) - 1)
+    assert state.has_actor(next(iter(ws.actors.keys())))
+
+
+def test_d47_pre_event_emit_handler_raise_rejects_event(workspace):
+    """Per D47 §B.2: pre-event-emit hook handler raise → EventRejected
+    (category="hook-handler"); event NOT appended; chain unchanged."""
+    from fresh_plan.runtime.per_event_checks import EventRejected
+
+    ws = workspace
+
+    def raising_pre_handler(context: dict) -> None:
+        raise RuntimeError("pre-emit veto")
+
+    ws.substrate.hooks.register("pre-event-emit", raising_pre_handler)
+
+    try:
+        chain_before = len(ws.event_chain)
+        actor = next(iter(ws.actors.values()))
+        with pytest.raises(EventRejected) as exc_info:
+            actor.emit_claim("rejected-by-hook")
+
+        failures = exc_info.value.failures
+        assert any(
+            f.category == "hook-handler"
+            and "pre-event-emit" in f.path
+            and "pre-emit veto" in f.reason
+            for f in failures
+        ), f"expected hook-handler EventRejected, got: {failures}"
+        # Event NOT in chain (pre-emit raise prevented append).
+        assert len(ws.event_chain) == chain_before
+    finally:
+        # Clear the always-raising handler so fixture's ws.shutdown()
+        # (which emits a lifecycle-transition:shutdown event) can succeed.
+        ws.substrate.hooks.clear("pre-event-emit")
+
+
+def test_d47_post_event_emit_handler_raise_captured_event_in_chain(workspace):
+    """Per D47 §B.2: post-event-emit handler raise → HookExecutionError
+    aggregated AFTER drain; event IS in chain + state per append-only."""
+    from fresh_plan.runtime.substrate import HookExecutionError
+
+    ws = workspace
+
+    def raising_post_handler(context: dict) -> None:
+        raise RuntimeError(f"post-emit boom for {context['event']['id']}")
+
+    ws.substrate.hooks.register("post-event-emit", raising_post_handler)
+
+    try:
+        chain_before = len(ws.event_chain)
+        actor = next(iter(ws.actors.values()))
+        with pytest.raises(HookExecutionError) as exc_info:
+            actor.emit_claim("event-survives-post-failure")
+
+        failures = exc_info.value.failures
+        assert len(failures) == 1
+        name, idx, event_id, exc = failures[0]
+        assert name == "post-event-emit"
+        assert isinstance(exc, RuntimeError)
+        assert "post-emit boom" in str(exc)
+        # Event IS in chain even though post-emit raised.
+        assert len(ws.event_chain) == chain_before + 1
+    finally:
+        ws.substrate.hooks.clear("post-event-emit")
+
+
+def test_d47_subscriber_and_post_emit_failures_chain_via_exception(workspace):
+    """Per D47 §C: when both subscriber and post-emit failures occur during
+    one drain, both surface — SubscriberDispatchError raised with
+    HookExecutionError as __cause__."""
+    from fresh_plan.runtime.substrate import (
+        HookExecutionError,
+        SubscriberDispatchError,
+    )
+
+    ws = workspace
+    spec = {
+        "id": "test-raiser-both",
+        "version": "0.1.0",
+        "skills": [],
+        "supported-work-unit-kinds": [],
+        "required-adapter-bindings": [],
+        "required-substrate-capabilities": ["skills", "event-chain"],
+        "declared-event-emissions": [],
+        "declared-event-subscriptions": [{"payload-subtype": "claim"}],
+    }
+    _attach_test_specialist(ws, _RaisingSpecialist(spec=spec, marker="D"))
+
+    def raising_post_handler(context: dict) -> None:
+        raise RuntimeError("post boom")
+
+    ws.substrate.hooks.register("post-event-emit", raising_post_handler)
+
+    try:
+        actor = next(iter(ws.actors.values()))
+        with pytest.raises(SubscriberDispatchError) as exc_info:
+            actor.emit_claim("both-fail")
+
+        # SubscriberDispatchError raised primary; HookExecutionError chained.
+        assert isinstance(exc_info.value.__cause__, HookExecutionError)
+        assert len(exc_info.value.failures) == 1  # one subscriber raised
+        assert len(exc_info.value.__cause__.failures) == 1  # one post-emit raised
+    finally:
+        ws.substrate.hooks.clear("post-event-emit")
+
+
+def test_d47_pre_emit_handler_succeeds_with_event_in_context(workspace):
+    """Per D47 §B.3: handler signature receives context dict with `event` key."""
+    ws = workspace
+    received = []
+
+    def observing_pre_handler(context: dict) -> None:
+        received.append(context["event"]["id"])
+
+    ws.substrate.hooks.register("pre-event-emit", observing_pre_handler)
+
+    actor = next(iter(ws.actors.values()))
+    actor.emit_claim("observe-me")
+
+    assert len(received) >= 1
+
+
+def test_d47_post_emit_handler_succeeds_with_event_and_sequence_in_context(workspace):
+    """Per D47 §B.3: post-emit handler context carries `event` + `sequence` keys."""
+    ws = workspace
+    received = []
+
+    def observing_post_handler(context: dict) -> None:
+        received.append((context["event"]["id"], context["sequence"]))
+
+    ws.substrate.hooks.register("post-event-emit", observing_post_handler)
+
+    actor = next(iter(ws.actors.values()))
+    actor.emit_claim("observe-with-seq")
+
+    assert len(received) >= 1
+    event_id, seq = received[-1]
+    assert isinstance(seq, int)
+    assert seq >= 0

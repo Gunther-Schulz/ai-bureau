@@ -14,6 +14,10 @@ from typing import Any, Optional
 # Per D30 (resolution / capability / vocabulary / identity / binding),
 # D32 (circular-dependency), D33 (version-conflict), and schema-level
 # failures from the per-kind schemas (Phase A artifacts).
+# Extended per D45 / D46 / D47 (Phase B Bref cluster supersedes) for
+# runtime-failure categories that share the validator's failure shape:
+# actor-seeding (D46 §B.2 boot manifest-actor seeding rollback),
+# hook-handler (D47 §B.2 pre-event-emit hook handler raise).
 FAILURE_CATEGORIES = frozenset(
     {
         "schema",  # JSON Schema validation failure (Phase A formal schemas)
@@ -25,6 +29,8 @@ FAILURE_CATEGORIES = frozenset(
         "circular-dependency",  # D32 §2 — cycle in extension dependency graph
         "version-conflict",  # D33 §B — range intersection empty / no version available
         "authority",  # D13 — shape authority-binding requirement unsatisfied
+        "actor-seeding",  # D46 §B.2 — boot-time manifest-actor seeding rejection
+        "hook-handler",  # D47 §B.2 — pre-event-emit hook handler raise
     }
 )
 

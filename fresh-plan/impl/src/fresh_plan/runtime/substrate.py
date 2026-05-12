@@ -44,6 +44,48 @@ from fresh_plan.runtime.provision import load_provision_spec
 from fresh_plan.runtime.skills import SkillRegistry
 from fresh_plan.runtime.workspace_state import WorkspaceState
 from fresh_plan.validator.schemas import SchemaStore
+from fresh_plan.validator.types import ValidationFailure
+
+
+class SubscriberDispatchError(Exception):
+    """Aggregated subscriber on_event exceptions per D47 §B.1.
+
+    Raised after the outer subscriber-dispatch drain completes if any
+    subscribing specialist's on_event raised during dispatch. Each failure
+    is (specialist_id, event_id, exception). Cascade is NOT terminated by
+    individual failures — subsequent subscribers continue to fire; the
+    aggregate surfaces all failures at drain end.
+    """
+
+    def __init__(self, failures: list[tuple]) -> None:
+        self.failures = failures
+        msg = "; ".join(
+            f"specialist={spec_id!r} event={evt_id!r}: {exc}"
+            for spec_id, evt_id, exc in failures
+        )
+        super().__init__(msg or "subscriber dispatch failures")
+
+
+class HookExecutionError(Exception):
+    """Aggregated post-event-emit hook handler exceptions per D47 §B.2.
+
+    Raised after the outer subscriber-dispatch drain completes if any
+    post-event-emit handler raised during the drain. Each failure is
+    (hook_name, handler_index, event_id, exception). Event(s) IS in chain
+    + state per D10 + D39; only post-emit observation failed.
+
+    Note: pre-event-emit handler raises do NOT collect here — they raise
+    immediately as EventRejected(category="hook-handler") per D47 §B.2,
+    rejecting the event before it lands in the chain.
+    """
+
+    def __init__(self, failures: list[tuple]) -> None:
+        self.failures = failures
+        msg = "; ".join(
+            f"hook={name!r}[handler={idx}] event={evt_id!r}: {exc}"
+            for name, idx, evt_id, exc in failures
+        )
+        super().__init__(msg or "hook execution failures")
 
 if TYPE_CHECKING:
     from fresh_plan.runtime.adapter import Adapter
@@ -106,32 +148,42 @@ class Substrate:
     _dispatch_queue: deque = field(default_factory=deque, repr=False)
     _dispatching: bool = field(default=False, repr=False)
 
+    # Per D47 §B.1 + B.2: subscriber on_event exceptions + post-event-emit
+    # hook handler exceptions are collected into these lists during the
+    # outer drain; aggregated errors raised after the drain completes.
+    _subscriber_failures: list = field(default_factory=list, repr=False)
+    _post_emit_failures: list = field(default_factory=list, repr=False)
+
     # ---------------------------------------------------------------
     # Event append (the integrity gate)
     # ---------------------------------------------------------------
 
     def append_event(self, event: dict) -> int:
-        """Validate per D30 §4 runtime + chain integrity, then append.
+        """Validate per D30 §4 runtime + chain integrity + D47 hook firing,
+        then append.
 
-        Per D44 (extends D37): per-event check + shape authority + schema
-        + chain integrity + state projection all run synchronously
-        (preserves D10 chain order + D39 state-from-events + D40 §A
-        replay equivalence). Subscriber dispatch is queued — the
-        outermost append_event call drains the queue FIFO; nested
-        append_event calls (from inside on_event) enqueue without
-        re-entering the drain. A loop backstop raises with a diagnostic
-        if a single drain exceeds `max_events_per_drain`.
+        Per D44 + D47 ordered steps (synchronous through enqueue; queued
+        dispatch via outer drain):
 
-        On per-event identity failure: raise EventRejected; event is not
-        appended (per D30 timing-modes table).
+          1. per-event identity check (D30 §4 + D34 §A.5)
+          2. shape authority check (D13)
+          3. pre-event-emit hook fire (D47 §B.2 NEW); handler raise →
+             EventRejected(category="hook-handler"); event NOT appended
+          4. event_chain.append (schema + chain integrity per D10)
+          5. _apply_runtime_side_effects (projection per D39)
+          6. enqueue for dispatch (D44 queued FIFO)
+          7. post-event-emit hook fire (D47 §B.2 NEW); handler raise
+             collected (NOT raised) — aggregated after outer drain
+          8. (outer call only) drain queue (D44 backstop applies)
+          9. (outer call only) raise aggregated SubscriberDispatchError +
+             HookExecutionError if collection lists non-empty
 
-        On schema / chain-integrity failure: raise MalformedEventError
-        (also a rejection — event is not appended).
-
-        Per D34 §A.5: identity is against current state; sub-agents added
-        via composition-change events are valid event targets *after*
-        their composition-change is appended.
+        Per-event check / shape authority / pre-emit hook failures REJECT
+        the event (event NOT in chain). Post-emit hook + subscriber
+        on_event failures are POST-APPEND observation failures: event IS
+        in chain + state; aggregated diagnostic surfaces after drain.
         """
+        # Step 1: per-event identity check (D30 §4 + D34 §A.5)
         ident_failures = check_event_references(
             event,
             self.state,
@@ -141,23 +193,63 @@ class Substrate:
         if ident_failures:
             raise EventRejected(ident_failures)
 
+        # Step 2: shape authority check (D13)
         if self.shape is not None:
             auth_failures = self.shape.check_authority(event, self.state)
             if auth_failures:
                 raise EventRejected(auth_failures)
 
+        # Step 3: pre-event-emit hook fire (D47 §B.2 NEW CONTRACT)
+        try:
+            self.hooks.fire("pre-event-emit", {"event": event})
+        except Exception as exc:
+            raise EventRejected(
+                [
+                    ValidationFailure(
+                        category="hook-handler",
+                        path="hook[pre-event-emit]",
+                        value=event.get("id"),
+                        reason=(
+                            f"pre-event-emit handler raised: {exc} — "
+                            f"event NOT appended (chain integrity preserved)"
+                        ),
+                    )
+                ]
+            ) from exc
+
+        # Step 4: chain append (assigns seq; D10 + D44)
         seq = self.event_chain.append(event, self.schema_store)
 
+        # Step 5: projection (D39 state-from-events)
         self._apply_runtime_side_effects(event)
 
-        if not self.specialist_subscribers:
-            return seq
+        # Step 6: enqueue for subscriber dispatch (D44 queued FIFO)
+        if self.specialist_subscribers:
+            self._dispatch_queue.append(event)
 
-        # Queued dispatch (D44). Nested calls just enqueue; the outermost
-        # call owns the drain.
-        self._dispatch_queue.append(event)
+        # Step 7: post-event-emit hook fire (D47 §B.2 NEW CONTRACT)
+        # Collect, don't raise — aggregated after outer drain completes.
+        if self.hooks.handler_count("post-event-emit") > 0:
+            try:
+                self.hooks.fire(
+                    "post-event-emit", {"event": event, "sequence": seq}
+                )
+            except Exception as exc:
+                # HookRegistry.fire iterates handlers serially; on raise,
+                # only the failing handler's exception surfaces. Index is
+                # not knowable from the catch site without re-iterating;
+                # captured as -1 (= "first-raising handler in registration
+                # order"). Future probing audit may surface this as a gap;
+                # acceptable for Phase B impl per D47 §D.
+                self._post_emit_failures.append(
+                    ("post-event-emit", -1, event.get("id"), exc)
+                )
+
+        # Nested call: outer drain handles aggregation; just return seq.
         if self._dispatching:
             return seq
+
+        # Step 8: outer call drains the queue.
         self._dispatching = True
         try:
             n_dispatched = 0
@@ -177,10 +269,35 @@ class Substrate:
                 self._dispatch_event_to_subscribers(e)
         finally:
             self._dispatching = False
+
+        # Step 9: aggregated error raise per D47 §C.
+        sub_fail = self._subscriber_failures
+        post_fail = self._post_emit_failures
+        self._subscriber_failures = []
+        self._post_emit_failures = []
+
+        if sub_fail and post_fail:
+            # Both visible via Python's exception chaining (__context__).
+            try:
+                raise HookExecutionError(post_fail)
+            except HookExecutionError as he:
+                raise SubscriberDispatchError(sub_fail) from he
+        elif sub_fail:
+            raise SubscriberDispatchError(sub_fail)
+        elif post_fail:
+            raise HookExecutionError(post_fail)
+
         return seq
 
     def _dispatch_event_to_subscribers(self, event: dict) -> None:
-        """Fire on_event on each subscribing specialist with a matching subscription."""
+        """Fire on_event on each subscribing specialist with a matching subscription.
+
+        Per D47 §B.1: subscriber exceptions captured into
+        `self._subscriber_failures` rather than silently swallowed.
+        Aggregated + raised as `SubscriberDispatchError` after the outer
+        drain in `append_event` completes. Cascade is NOT terminated by
+        individual failures — subsequent subscribers continue firing.
+        """
         subtype = event.get("payload-subtype")
         payload = event.get("payload") or {}
         for sub in self.specialist_subscribers:
@@ -192,8 +309,15 @@ class Substrate:
                     continue
                 try:
                     sub.on_event(event)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    spec_id = (
+                        sub.spec.get("id")
+                        if hasattr(sub, "spec")
+                        else type(sub).__name__
+                    )
+                    self._subscriber_failures.append(
+                        (spec_id, event.get("id"), exc)
+                    )
                 break
 
     def _apply_runtime_side_effects(self, event: dict) -> None:

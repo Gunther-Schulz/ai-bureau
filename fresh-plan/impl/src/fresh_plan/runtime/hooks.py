@@ -12,7 +12,7 @@ deferred.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 
 # Type alias for a hook handler. The context dict is whatever the
@@ -56,3 +56,14 @@ class HookRegistry:
 
     def handler_count(self, name: str) -> int:
         return len(self._handlers.get(name, []))
+
+    def clear(self, name: Optional[str] = None) -> None:
+        """Clear handlers — for one named hook (if `name` given) or all hooks.
+
+        Useful in tests to reset hook state between scenarios. Production
+        code should not need this; shapes register handlers once at boot.
+        """
+        if name is None:
+            self._handlers.clear()
+        else:
+            self._handlers.pop(name, None)
