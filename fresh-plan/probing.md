@@ -15,7 +15,7 @@ The discipline is small on purpose. It is itself subject to the failure modes it
 - **Frame-acceptance** — AI executes the task as given; doesn't ask "what does this task not ask?"
 - **Local-over-global** — each decision well-formed in its own scope; cross-cutting integration questions live nowhere.
 - **Forward-motion bias** — AI prefers landing the next thing over stress-testing the previous thing.
-- **Pattern-completion over pattern-questioning** — AI sees a precedent (D17 → D43 supersedes-by-rename) and mirrors the pattern in the next case without asking "does the precedent's reasoning genuinely apply here?"
+- **Pattern-completion over pattern-questioning** — AI sees a precedent (D17 → D43 supersedes-by-rename) and mirrors the pattern in the next case without asking "does the precedent's reasoning genuinely apply here?" **Manifests at multiple stages**: (a) factual claims (e.g., D47 §B.3 confabulated `HookRegistry.fire` signature from common API pattern); (b) structural scope (e.g., D49 first-pass mirrored D48's 3-path scope when D49 had 1 SUSPECT); (c) section frame (mirroring §A/§B/§C count without checking content fit). Procedure 3 brief #7 catches this — applies at sketch-stage AND pre-lock, not just pre-lock.
 - **No-failure-mode imagination** — AI builds for the happy path; doesn't naturally enumerate unhappy paths.
 - **Authority-deference** — AI honors what's locked rather than probing whether the lock was right.
 - **Recency-bias** — AI weights recent conversation context heavily; older corpus content fades from active probing range even when load-bearing.
