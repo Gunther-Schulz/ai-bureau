@@ -171,11 +171,35 @@ class GenericShape(Shape):
                 hook_registry.register(name, _stub_handler)
 
 
+@dataclass
+class MinShape(Shape):
+    """Truly minimal shape — no roles, no hooks, no authority-bindings.
+
+    Used by B2-era substrate-only test fixtures (e.g., `workspace-substrate-
+    test`) that exercise substrate runtime mechanics in isolation, without
+    shape-policy interference. Distinct from GenericShape: GenericShape has
+    illustrative authority-bindings + hooks for B3 shape-impl tests; MinShape
+    has none — purely "shape slot satisfied; no policy."
+
+    Registered runtime class for `min-shape` provision-id per D46 §B.1
+    (every shape provision must have a registered runtime class).
+    """
+
+    def register_handlers(self, hook_registry: HookRegistry) -> None:
+        # No hooks declared in MinShape spec; nothing to register.
+        for hook in self.hooks:
+            name = hook.get("name")
+            if name:
+                hook_registry.register(name, _stub_handler)
+
+
 # Module-level registry of (shape.id → runtime class). Populated as new shape
-# impls land. For Phase B there's only GenericShape; Phase D's practitioner-
-# shape will register here.
+# impls land. For Phase B there's GenericShape (B3 reference impl) + MinShape
+# (test-fixture-only minimal shape per D46); Phase D's practitioner-shape
+# will register here.
 _SHAPE_CLASSES: dict[str, type[Shape]] = {
     "generic-shape": GenericShape,
+    "min-shape": MinShape,
 }
 
 

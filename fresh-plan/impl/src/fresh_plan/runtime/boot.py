@@ -155,6 +155,8 @@ def boot_workspace(
 
     # 6. Shape policies (D13 + B3): load + attach the shape impl when a
     # provision is bound; register stub handlers for declared hook names.
+    # Per D46 §B.1: unknown shape provision-id surfaces as WorkspaceBootError
+    # rather than silently degrading to shape=None.
     shape_ref = composition.get("shape", {}).get("provision")
     substrate.bound_shape_provision = shape_ref  # type: ignore[attr-defined]
     if shape_ref:
@@ -162,14 +164,28 @@ def boot_workspace(
 
         try:
             shape = load_shape_from_provision(shape_ref, extensions_dir)
-        except ValueError:
-            shape = None
-        if shape is not None:
-            substrate.shape = shape
-            shape.register_handlers(substrate.hooks)
+        except ValueError as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="resolution",
+                        path="composition.shape.provision",
+                        value=shape_ref,
+                        reason=(
+                            f"shape provision {shape_ref!r} has no registered "
+                            f"runtime class — manifest declares this binding but "
+                            f"the framework cannot instantiate it. Underlying: {e}"
+                        ),
+                    )
+                ]
+            ) from e
+        substrate.shape = shape
+        shape.register_handlers(substrate.hooks)
 
     # 7. Adapter bindings: store metadata + instantiate adapter runtimes.
     # Workspace attachment happens after Workspace is constructed (below).
+    # Per D46 §B.1: unknown adapter provision-id surfaces as WorkspaceBootError
+    # rather than silently skipping.
     for binding in composition.get("adapter-bindings", []):
         bid = binding.get("binding-id")
         if bid:
@@ -181,14 +197,31 @@ def boot_workspace(
 
         try:
             adapter = load_adapter_from_provision(prov_ref, extensions_dir)
-        except ValueError:
-            continue
+        except ValueError as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="resolution",
+                        path=f"composition.adapter-bindings[binding-id={bid!r}].provision",
+                        value=prov_ref,
+                        reason=(
+                            f"adapter provision {prov_ref!r} has no registered "
+                            f"runtime class — manifest declares this binding but "
+                            f"the framework cannot instantiate it. Underlying: {e}"
+                        ),
+                    )
+                ]
+            ) from e
         substrate.adapter_instances[bid] = adapter
 
     # 8. Specialist bindings: store metadata + instantiate specialist runtimes
-    # (B6 + D19). When no runtime class is registered for spec.id (B1-era
-    # fixtures binding e.g. `core-ext:minimal-specialist`), fall back to the
-    # B2 stub-skill registration via load_provision_spec.
+    # (B6 + D19). Per D46 §B.1: unknown specialist provision-id surfaces as
+    # WorkspaceBootError rather than silently falling back to stub-skill
+    # registration. The prior fallback path was vestigial — only B1 validator
+    # fixtures (workspace-valid using core-ext:minimal-specialist) had no
+    # runtime class registered, and those fixtures are never runtime-booted
+    # (they exercise validate_workspace_boot only). Production specialists
+    # MUST have a registered runtime class.
     from fresh_plan.runtime.specialist import load_specialist_from_provision
 
     for binding in composition.get("specialist-bindings", []):
@@ -200,21 +233,22 @@ def boot_workspace(
             continue
         try:
             specialist = load_specialist_from_provision(prov_ref, extensions_dir)
-        except ValueError:
-            specialist = None
-        if specialist is not None:
-            substrate.specialist_instances[bid] = specialist
-            continue
-        # Fallback path: no runtime class registered; register declared skills
-        # as B2 stubs so they remain invokable (NotImplementedError).
-        try:
-            spec = load_provision_spec(prov_ref, extensions_dir)
-        except ValueError:
-            continue
-        for skill in spec.get("skills", []) or []:
-            skill_id = skill if isinstance(skill, str) else skill.get("id")
-            if skill_id and not substrate.skills.has(skill_id):
-                substrate.skills.register_stub(skill_id)
+        except ValueError as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="resolution",
+                        path=f"composition.specialist-bindings[binding-id={bid!r}].provision",
+                        value=prov_ref,
+                        reason=(
+                            f"specialist provision {prov_ref!r} has no registered "
+                            f"runtime class — manifest declares this binding but "
+                            f"the framework cannot instantiate it. Underlying: {e}"
+                        ),
+                    )
+                ]
+            ) from e
+        substrate.specialist_instances[bid] = specialist
 
     # Construct the Workspace handle and emit the boot lifecycle event.
     # Import here to avoid circular imports at module load time.
@@ -242,13 +276,34 @@ def boot_workspace(
     # to the first. Per D34 §A.5 extension (Bref): per-event identity
     # resolution admits state-after-applying-this-event for the actor
     # being added on a composition-change:add event.
+    #
+    # Per D46 §B.2: mid-cascade rejection during the seeding loop is wrapped
+    # as WorkspaceBootError naming the failing actor index; partial-state
+    # workspace is partial-and-discardable (no handle returned to caller).
+    # Per D46 §C cleanup: actors with missing id surface as WorkspaceBootError
+    # instead of silently dropping.
+    from fresh_plan.runtime.event_chain import MalformedEventError
+    from fresh_plan.runtime.per_event_checks import EventRejected
+
     manifest_actors = composition.get("actors", []) or []
     first_actor_id: Optional[str] = None
     for idx, actor in enumerate(manifest_actors):
         actor_record = dict(actor)
         aid = actor_record.get("id")
         if aid is None:
-            continue
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="actor-seeding",
+                        path=f"composition.actors[{idx}].id",
+                        value=None,
+                        reason=(
+                            f"manifest actor at index {idx} lacks an id; cannot "
+                            f"emit synthetic composition-change:add seed event"
+                        ),
+                    )
+                ]
+            )
         attributing_id = aid if first_actor_id is None else first_actor_id
         prev_id = (
             substrate.event_chain.tail["id"] if substrate.event_chain.tail else None
@@ -266,7 +321,24 @@ def boot_workspace(
                 "record": actor_record,
             },
         }
-        substrate.append_event(seed_event)
+        try:
+            substrate.append_event(seed_event)
+        except (EventRejected, MalformedEventError) as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="actor-seeding",
+                        path=f"composition.actors[{idx}]",
+                        value=aid,
+                        reason=(
+                            f"actor seeding rejected at index {idx} (id={aid!r}): "
+                            f"{e}. Workspace handle NOT returned; substrate is "
+                            f"partial-and-discardable (actors 0..{idx - 1} were "
+                            f"seeded; lifecycle:boot was not emitted)."
+                        ),
+                    )
+                ]
+            ) from e
         if first_actor_id is None:
             first_actor_id = aid
 
