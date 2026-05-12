@@ -80,7 +80,8 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 | 8 | `probing.md` adversarial stress-testing discipline (foundation) | DONE | `probing.md` (5 procedures) |
 | 9 | `roadmap.md` canonical execution tracker | DONE | `roadmap.md` (this file) |
 | 10 | Slot interpretation-layer pass (process 24 SUSPECT slots) | NOT STARTED | Mix of cheap labels + ~4-6 substantive D-entries (see breakdown below) |
-| 11 | One additional adversarial audit (different probe shape — likely failure-mode coverage or abandonment-path) | NOT STARTED | Audit findings → either Bref scope expansion or framework-is-bounded confirmation |
+| 11 | One additional adversarial audit (combined failure-mode coverage + abandonment-path) | DONE (2026-05-12) | **33 SUSPECT findings** on ~38 audited surface (more findings per surface than slot-interpretation's 24-of-78). Cross-category overlap → systemic pattern, not isolated gaps. Forced **bounded-fill plan revision** (pending next session) + **probing.md amendments** (5 edits landed; audit findings count tracking added to discipline evolution). See "Bounded lock-and-fill plan — REVISION PENDING" below. |
+| 12 | probing.md amendments (5 edits) based on audit (c) findings | DONE | FAILS field strengthened with D44 triad pattern; new detection-surface-recovery audit shape; standing checkpoint cadence (failure-mode + abandonment-path now standing, not rotating); empirical calibration data point added; audit findings count tracking in evolution rules |
 
 **Slot pass (#10) breakdown** (24 SUSPECT slots from the 2026-05-12 audit):
 
@@ -98,11 +99,26 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 - Live in-place shape migration deliberate scope-cut (clarifies `payload-composition-change.binding-kind` enum doesn't include shape)
 - Positioning lock (needs source-grounded Bucket A platform reads first — likely deferred)
 
-### Bounded lock-and-fill plan (per session 2026-05-12 disorientation conversation)
+### Bounded lock-and-fill plan — REVISION PENDING (per audit-c findings 2026-05-12)
 
-**No new substantive D-entries** until the 24 audited suspects are processed (cheap labels + ~4-6 substantive D-entries). Then run one additional adversarial audit (deliverable #11) to test whether the discipline addition (`probing.md`) catches new categories of gap. Then re-evaluate scope.
+**Original plan**: process 24 slot-interpretation suspects, run one additional audit (deliverable #11), re-evaluate. **Status**: deliverable #11 ran and produced 33 more SUSPECT findings. Original plan is now too narrow.
 
-This is bounded scope — NOT "lock forever and audit infinitely." Estimated 3-5 sessions to clear deliverables 4-11 + write Bref output entry + Phase B closure entry.
+**Revision pending** at next session decision-point. Two framings on the table:
+
+- **(a) Process-by-suspect**: expand bounded scope to ~57 suspects (24 slot + 33 failure-mode/abandonment-path); process each in batches. Risk: repeats the local-over-global failure mode at scale; ~57 items processed individually.
+- **(b) Process-by-pattern (audit's recommendation)**: write a small number of meta-D-entries that establish standing patterns (e.g., "every runtime decision honors D44's detection + surface + recovery triad"; "boot procedure failures are surfaced — silent degradation paths removed"; "subscriber dispatch exceptions surface, not silently swallowed"). Each meta-D-entry casts a net over many suspects at once.
+
+Lean (b). The probing.md amendments (deliverable #12, DONE) codified the D44 triad as standing pattern in the FAILS field — pattern-level processing is now backed by the discipline.
+
+**Phase B closure pre-condition expanded**: audit (c) revealed structural items that can't responsibly defer to Phase C+:
+- HookRegistry.fire() never called (D13 hooks are decorative until firing-sites land)
+- Specialist on_event exceptions silently swallowed (substrate.py:193-197)
+- Boot procedure swallows ValueError in steps 6/7/8 (silent degradation)
+- D30 §4 per-work-unit identity checks named in spec, never implemented
+- Multi-event boot-time actor seeding has no rollback (we just introduced this in D39 closure)
+- Composition-change post-projection state validity unchecked
+
+These are substantive D-entries + impl follow-throughs. Estimated revised scope: **3-5 more sessions** of substantive work, not the "1-2 sessions" the original bounded-fill plan implied.
 
 ### Phase B closure entry
 
