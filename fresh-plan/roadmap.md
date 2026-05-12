@@ -71,7 +71,7 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 | 4 | D19 activation-scope DSL design | NOW PART OF SLOT PASS | Deferral entry candidate (~D45 if standalone, OR folded into slot-pass output) |
 | 5 | D33 migration-safety discipline for shape versioning | NOT STARTED | TBD |
 | 6 | D38 Sana-style worked-example validation | NOT STARTED | TBD |
-| 7 | `decisions.md` split into per-entry files | NOT STARTED (mechanical, last) | TBD |
+| 7 | `decisions.md` split into per-entry files | DONE (2026-05-12) | 45 entries → 45 files at `decisions/D<NN>-<slug>.md`; `decisions.md` is now the chronological index. Done BEFORE D46+ cluster supersedes entries so they land as new files (no monolith collision). Session-start procedure updated to read index + iterate per-entry files. |
 
 **Added to Bref scope mid-pass via slot-interpretation audit (2026-05-12):**
 
@@ -116,7 +116,7 @@ Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** 
 2. NOT STARTED: 6 cluster supersedes entries (deliverables 14-19) apply D45 triad to specific runtime paths — each casts net over multiple SUSPECT findings
 3. NOT STARTED: each cluster supersedes entry pairs with impl follow-throughs (typed exceptions + diagnostic surfaces + recovery paths in the impl)
 4. NOT STARTED: slot-pass for the 24 slot-interpretation suspects (deliverable #10) — process in batches; cheap labels for impl gaps + spec drifts; substantive D-entries for design gaps that don't fold into the cluster supersedes
-5. NOT STARTED: remaining original Bref deliverables (#5 D33 migration-safety; #6 D38 Sana worked-example; #7 decisions.md split — mechanical, last)
+5. NOT STARTED: remaining original Bref deliverables (#5 D33 migration-safety; #6 D38 Sana worked-example) — note: #7 decisions.md split landed early on 2026-05-12 (deliverable status table)
 6. NOT STARTED: Bref output entry (analog of D34) consolidating all of the above
 7. NOT STARTED: Phase B closure entry (analog of D35)
 
