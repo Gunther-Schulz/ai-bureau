@@ -59,3 +59,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D46](decisions/D46-extends-d7-d32-boot-procedure-honors-detection-surface.md) — Extends D7 + D32 — boot procedure honors detection-surface-recovery triad (boot-procedure cluster per D45) (2026-05-12)
 - [D47](decisions/D47-extends-d13-d17-d37-d44-subscriber-dispatch-hook-firing.md) — Extends D13 + D17 + D37 + D44 — subscriber dispatch + hook firing honor detection-surface-recovery triad (subscriber-dispatch cluster per D45) (2026-05-12)
 - [D48](decisions/D48-extends-d16-adapter-cluster-honors-detection-surface-recovery.md) — Extends D16 — adapter cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-12)
+- [D49](decisions/D49-clarifies-d47-c-d-d48-b2-sharpen-surfaced-corrections.md) — Clarifies D47 §C + §D + D48 §B.2 — sharpen-surfaced corrections (step-count + missing handler-index defer + Recovery-row wording) (2026-05-12)
