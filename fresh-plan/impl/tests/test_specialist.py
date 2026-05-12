@@ -180,3 +180,103 @@ def test_load_specialist_from_provision_finds_impl_shipped_generic_specialist():
     assert isinstance(specialist, Specialist)
     assert specialist.id == "generic-specialist"
     assert specialist.version == "0.1.0"
+
+
+# ---------------------------------------------------------------
+# D50 — specialist cluster supersedes per D45 §C
+# ---------------------------------------------------------------
+
+
+def test_skill_execution_error_propagates_with_structured_fields(booted_workspace):
+    """D50 §B.1: SkillExecutionError carries structured fields (specialist_id,
+    skill_id, category, detail) + chains the original exception via `from`.
+
+    Phase B stubs cannot fail meaningfully; this test uses a monkeypatched
+    subclass to exercise the forward-bar contract Phase C+ real-wire impls
+    must honor. Direct invocation path: caller catches SkillExecutionError raw.
+    """
+    from fresh_plan.runtime.specialist import SkillExecutionError
+
+    class _FailingSpecialist(GenericSpecialist):
+        def handle_skill(self, skill_id, params):
+            raise SkillExecutionError(
+                specialist_id=self.id,
+                skill_id=skill_id,
+                category="domain-error",
+                detail={"reason": "required-citation missing", "section": "§3.2"},
+            )
+
+    failing = _FailingSpecialist(spec=dict(SPECIALIST_SPEC))
+    failing.attach_workspace(booted_workspace)
+
+    with pytest.raises(SkillExecutionError) as excinfo:
+        failing.handle_skill("do-task", {"section": "§3.2"})
+
+    e = excinfo.value
+    assert e.specialist_id == "generic-specialist"
+    assert e.skill_id == "do-task"
+    assert e.category == "domain-error"
+    assert e.detail == {"reason": "required-citation missing", "section": "§3.2"}
+    # Structured diagnostic visible without reading server logs.
+    assert "[domain-error]" in str(e)
+    assert "generic-specialist" in str(e)
+    assert "do-task" in str(e)
+
+
+def test_skill_execution_error_aggregated_via_subscriber_dispatch(booted_workspace):
+    """D50 §B.2 composition with D47 §B.1: SkillExecutionError raised inside
+    a specialist's on_event (subscriber-dispatch path; via delegation to
+    handle_skill) is captured into substrate._subscriber_failures and
+    aggregated as SubscriberDispatchError after the outer drain completes.
+    """
+    from fresh_plan.runtime.specialist import SkillExecutionError
+    from fresh_plan.runtime.substrate import SubscriberDispatchError
+
+    class _DelegatingFailingSpecialist(GenericSpecialist):
+        """on_event delegates to handle_skill which raises — exercises the
+        D44 + D47 + D50 composition path."""
+
+        def handle_skill(self, skill_id, params):
+            raise SkillExecutionError(
+                specialist_id=self.id,
+                skill_id=skill_id,
+                category="skill-execution",
+                detail={"trigger_event_id": params.get("event_id")},
+            )
+
+        def on_event(self, event):
+            # Delegate to own handle_skill — will raise SkillExecutionError;
+            # captured per D47 §B.1.
+            self.handle_skill("react-to-event", {"event_id": event["id"]})
+
+    delegating = _DelegatingFailingSpecialist(
+        spec={
+            "id": "delegating-test-specialist",
+            "version": "0.1.0",
+            "roles": [],
+            "skills": [],
+            "supported-work-unit-kinds": [],
+            "required-adapter-bindings": [],
+            "declared-event-subscriptions": [{"payload-subtype": "state-change"}],
+        }
+    )
+    substrate = booted_workspace._substrate
+    delegating.attach_workspace(booted_workspace)
+    substrate.specialist_subscribers.append(delegating)
+
+    actor_id = next(iter(substrate.state.actors))
+    with pytest.raises(SubscriberDispatchError) as excinfo:
+        booted_workspace._emit_event(
+            actor_id=actor_id,
+            payload_subtype="state-change",
+            payload={"what": "test-state-change"},
+        )
+
+    failures = excinfo.value.failures
+    assert len(failures) == 1
+    spec_id, evt_id, captured_exc = failures[0]
+    assert spec_id == "delegating-test-specialist"
+    assert isinstance(captured_exc, SkillExecutionError)
+    assert captured_exc.category == "skill-execution"
+    assert captured_exc.specialist_id == "delegating-test-specialist"
+    assert captured_exc.skill_id == "react-to-event"

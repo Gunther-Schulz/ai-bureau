@@ -22,6 +22,53 @@ from typing import Any, Callable, Optional
 from fresh_plan.runtime.provision import load_provision_spec
 
 
+class SkillExecutionError(Exception):
+    """Specialist ``handle_skill`` runtime failure per D50 §B.1 (specialist cluster supersedes per D45 §C).
+
+    Phase C+ real-wire forward-bar: real-wire specialist impls (subclasses
+    of ``Specialist`` overriding ``handle_skill``) SHALL raise this on
+    skill-body failures (domain-validation rejection, external-dependency
+    unavailable, runtime invariant violation, etc.). Phase B stubs do not
+    trigger this exception — Phase B pre-condition guards stay as Python
+    idioms (bare ``RuntimeError`` / ``NotImplementedError``) per D50 §D D-1.
+
+    Composes with D47 §B.1 SubscriberDispatchError aggregation: when a
+    specialist's ``on_event`` delegates to ``handle_skill`` which raises
+    SkillExecutionError, the exception is captured per D47 §B.1 into
+    substrate's ``_subscriber_failures`` (substrate.py:310-320) and
+    aggregated as SubscriberDispatchError after the outer drain. Direct
+    ``handle_skill`` callers see the raw exception.
+
+    Composes with D48 §B.1 AdapterCallError: when ``handle_skill`` body
+    invokes ``adapter.call(...)`` which raises AdapterCallError,
+    specialist-impl choice (per D50 §D D-5) — wrap as
+    SkillExecutionError(category="external-dependency-error",
+    original=AdapterCallError) for uniform skill-failure surface, OR
+    propagate raw AdapterCallError. Caller MUST be prepared for either.
+
+    Per D50 §D D-2: starter category vocabulary (domain-error /
+    external-dependency-error / skill-execution / unknown) is
+    practitioner-shape-flavored; non-practitioner shapes register
+    additional categories per D29 namespacing.
+    """
+
+    def __init__(
+        self,
+        *,
+        specialist_id: str,
+        skill_id: str,
+        category: str,
+        detail: Optional[dict] = None,
+    ) -> None:
+        self.specialist_id = specialist_id
+        self.skill_id = skill_id
+        self.category = category
+        self.detail = dict(detail) if detail else {}
+        super().__init__(
+            f"[{category}] specialist={specialist_id!r} skill={skill_id!r}: {self.detail}"
+        )
+
+
 @dataclass
 class Specialist:
     """Base class for specialist runtime impls per D19 + specialist.schema.json.
