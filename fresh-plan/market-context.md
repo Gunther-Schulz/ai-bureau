@@ -117,6 +117,21 @@ Both candidates explicitly deferred per the existing discipline — positioning 
 
 Action: persist as research input; integrate into future positioning work when it's deliberately settled.
 
+## Tagline (stake-in-the-ground; 2026-05-12)
+
+**Locked tagline**: *An open specification for accountable agent-human work.*
+
+What this commits to (and why this phrasing):
+- **"open specification"** — primary deliverable framing per the durability bet (CONCEPTS "What is durable vs scaffolding"). Spec, not platform; the runtime is exemplar, not canonical. Open per the candidate-positioning "open source" angle above.
+- **"accountable"** — load-bearing word; mirrors I3 (D5) directly. Distinguishes from agent platforms that treat accountability as compliance bolt-on (Bucket A platforms) vs frameworks that center it (AEGIS / Axon, but those are protocols-only, not the full agent / work / shape stack).
+- **"agent-human work"** — captures composition (humans + agents in one workspace); deliberate ordering puts agent first (signals AI-augmented work as the assumed shape, not human-with-AI-tools); "work" not "workflow" / "tasks" / "operations" because work-unit (D20) is the framework's organizing primitive and the term carries the right weight (work in the craft / professional sense).
+
+What's NOT in this lock:
+- **No name yet.** Tagline reads cleanly without one; name decision deferred. Candidates explored in 2026-05-12 side-quest (Praxis / Accord / Werk / Atrium / Concord) all rejected. The tagline lives without a name until the name lock arrives.
+- **Tagline lock ≠ positioning lock.** Tagline is a stake-in-the-ground — useful for sharpening design intent + giving the framework consistent self-description in conversations. Full positioning (against the named commercial platforms + AEGIS / Axon + the standards landscape) still deferred per the existing discipline; lands as a decision entry when Phase D pioneer evidence accumulates.
+
+Use the tagline now in: README hero text (when ship-time arrives), conversational self-reference, design-intent sharpening. **Do NOT use** in committed ledger entries until positioning lock arrives — D-entries should describe substance, not branding.
+
 ## Notes
 
 - This file is **reference / input only**, parallel to how `pbs-bureau/VISION.md` etc. are treated as input per the fresh-plan README.
