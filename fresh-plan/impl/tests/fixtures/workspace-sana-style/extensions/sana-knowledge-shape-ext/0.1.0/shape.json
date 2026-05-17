@@ -1,0 +1,21 @@
+{
+  "id": "sana-knowledge-shape",
+  "version": "0.1.0",
+  "actor-requirements": {
+    "human-actor": { "min": 1 }
+  },
+  "required-capabilities": ["hooks", "skills", "event-chain"],
+  "optional-capabilities": [],
+  "authority-bindings": [],
+  "roles": [
+    { "id": "curator",  "description": "Human-actor authority to curate / annotate / ingest corpus documents (D53 §B Sana-style instantiation; see also generic-shape author role)." },
+    { "id": "consumer", "description": "Human-actor authority to query the corpus + cite retrieved chunks." },
+    { "id": "author",   "description": "Agent-actor authority for synthesis-claim emission (the kb-agent's role when proposing write-back content; subject to pre-citation hook)." }
+  ],
+  "hooks": [
+    { "name": "pre-event-emit",     "purpose": "Substrate-fired before event append (substrate.py:219 per D47 §B.2); SanaKnowledgeShape installs pre-citation-impl logic here — for claim events emitted with role=author by an agent-actor, requires non-empty payload.evidence-references with every reference resolving to a known prior action outcome-reference; raise → EventRejected(category=hook-handler) per D47 §B.2." },
+    { "name": "post-event-emit",    "purpose": "Substrate-fired after event append (substrate.py:249 per D47 §B.2); SanaKnowledgeShape installs post-corpus-write-impl logic here — captures outcome-references from emitted action events into shape state so subsequent pre-citation checks can validate evidence-references." },
+    { "name": "pre-citation",       "purpose": "Semantic declaration (D13 hooks list); concrete enforcement runs inside pre-event-emit handler per D47 §B.2 substrate-fired lifecycle. Validates an emitted synthesis-claim event's evidence-references resolve to prior retrieve-action outcome-references in the chain. D38 §3 hook-based knowledge discipline." },
+    { "name": "post-corpus-write",  "purpose": "Semantic declaration (D13 hooks list); concrete enforcement runs inside post-event-emit handler — records outcome-references for downstream pre-citation resolution. Projects synthesis claim into corpus state (Phase B: in-memory; Phase C: knowledge-writer adapter call). D38 §2 framing of workspace state event projections carrying assertional content." }
+  ]
+}

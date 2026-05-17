@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "synthesis-task work-unit-kind stub",
+  "description": "Stub spec for the synthesis-task identifier registered into work-unit.kind per D29 + D53 §B. Real synthesis-task payload schema (query/sources/draft fields) is Phase C+ territory; this stub demonstrates the vocabulary-registration spec-ref resolution path per D2 strict protocol-neutrality and D38 (knowledge composes via existing primitives — work-unit-kind is one of those primitives).",
+  "type": "object"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "sana-style-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "work-unit.kind",
+      "identifier": "synthesis-task",
+      "spec-ref": "./synthesis-task.schema.json"
+    }
+  ],
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "knowledge-retriever-adapter",
+      "spec-ref": "./knowledge-retriever-adapter.json"
+    },
+    {
+      "kind": "adapter",
+      "id": "knowledge-writer-adapter",
+      "spec-ref": "./knowledge-writer-adapter.json"
+    },
+    {
+      "kind": "specialist",
+      "id": "knowledge-agent-specialist",
+      "spec-ref": "./knowledge-agent-specialist.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": [
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" }
+    ]
+  }
+}

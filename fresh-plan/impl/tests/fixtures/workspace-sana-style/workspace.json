@@ -1,0 +1,50 @@
+{
+  "id": "sana-style-ws",
+  "description": "Workspace fixture validating D38's rejection of knowledge-as-core-kind via a Sana-style worked example per D53. Two human-actors (curator + consumer roles) + one agent-actor (kb-agent) compose around a corpus accessed through two adapters (knowledge-retriever + knowledge-writer) and one specialist (knowledge-agent). The sana-knowledge-shape declares actor-requirements {human-actor:{min:1}} (exercising D52 step 2.5 post-projection state validity for the first time in a fixture per D52 §D D-7 forward-bar) + pre-citation / post-corpus-write hooks (impl wired through pre-event-emit / post-event-emit per D47 §B.2 + substrate.py:219 + :249). Manifest actors are ordered curator-1 FIRST so the post-projection state check passes during seeding (after first add: human-actor count = 1, satisfying min=1).",
+  "composition": {
+    "extensions": [
+      { "id": "inprocess-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "sana-knowledge-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" },
+      { "id": "sana-style-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "sana-knowledge-shape-ext:sana-knowledge-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "inprocess-substrate-ext:inprocess-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "curator-1", "subtype": "human-actor", "declared-name": "Curator One" },
+      { "id": "consumer-1", "subtype": "human-actor", "declared-name": "Consumer One" },
+      { "id": "kb-agent", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "knowledge-retriever",
+        "provision": "sana-style-ext:knowledge-retriever-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client"
+      },
+      {
+        "binding-id": "knowledge-writer",
+        "provision": "sana-style-ext:knowledge-writer-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "knowledge-agent",
+        "provision": "sana-style-ext:knowledge-agent-specialist",
+        "version-range": ">=0.1.0"
+      }
+    ]
+  }
+}

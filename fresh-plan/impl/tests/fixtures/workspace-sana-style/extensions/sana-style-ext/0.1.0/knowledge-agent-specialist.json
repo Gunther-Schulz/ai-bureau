@@ -1,0 +1,22 @@
+{
+  "id": "knowledge-agent-specialist",
+  "version": "0.1.0",
+  "roles": ["author"],
+  "skills": [
+    { "id": "retrieve",
+      "description": "Retrieve corpus chunks via the bound knowledge-retriever adapter for a query." },
+    { "id": "synthesize",
+      "description": "Synthesize an evidence-grounded claim from retrieved chunks; emits a claim event whose evidence-references list the outcome-references of prior retrieve action events. Subject to sana-knowledge-shape pre-citation gate." }
+  ],
+  "supported-work-unit-kinds": ["sana-style-ext:synthesis-task"],
+  "required-adapter-bindings": [
+    "sana-style-ext:knowledge-retriever-adapter",
+    "sana-style-ext:knowledge-writer-adapter"
+  ],
+  "required-substrate-capabilities": ["skills", "event-chain"],
+  "declared-event-emissions": [
+    { "payload-subtype": "claim" },
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-subscriptions": []
+}

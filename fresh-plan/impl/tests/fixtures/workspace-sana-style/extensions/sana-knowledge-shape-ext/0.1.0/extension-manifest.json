@@ -1,0 +1,16 @@
+{
+  "id": "sana-knowledge-shape-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    {
+      "kind": "shape",
+      "id": "sana-knowledge-shape",
+      "spec-ref": "./shape.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}
