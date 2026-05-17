@@ -190,6 +190,16 @@ def boot_workspace(
     for wu_kind in (result.vocabulary_tables or {}).get("work-unit.kind", []):
         substrate.registered_work_unit_kinds.add(wu_kind)
 
+    # §B-4 (D62 §B cheap impl): populate work_unit_kind_payload_schemas from
+    # validator's resolved spec-refs (vocabulary-registrations for
+    # work-unit.kind whose spec-ref resolves to a JSON Schema). Per D20 +
+    # work-unit.schema.json the framework validates payload shape via this
+    # schema. Schemas absent for kinds without spec-refs (no-op).
+    if result.work_unit_kind_payload_schemas:
+        substrate.work_unit_kind_payload_schemas.update(
+            result.work_unit_kind_payload_schemas
+        )
+
     # Per D59 §B.1: populate registered_payload_vocabulary from validator's
     # payload_vocabulary_tables. Per-slot merge into substrate's preset
     # four-slot dict.
@@ -306,6 +316,42 @@ def boot_workspace(
                 ]
             ) from e
         substrate.adapter_instances[bid] = adapter
+
+    # §B-5 (D62 §B cheap impl): adapter.declared-event-emissions[] cross-checked
+    # against shape's authority-bindings vocabulary. Per D16 line 11 ("Lets
+    # shapes' authority-bindings reason about adapter outputs at composition
+    # validation time"): record adapter emissions whose payload-subtype has
+    # no corresponding shape.authority-bindings[].payload-subtype. Non-fatal
+    # — adapter emissions without shape authority-binding may be intentional
+    # (out-of-scope events, observability-only emissions). Stored on
+    # substrate as parallel to `unmet_optional_capabilities` (item 1 §B
+    # cheap impl pattern). Empty list = full coverage OR no shape bound OR
+    # no shape authority-bindings declared.
+    unmet_adapter_emissions: list[dict] = []
+    if substrate.shape is not None:
+        bound_payload_subtypes: set[str] = {
+            ab.get("payload-subtype")
+            for ab in substrate.shape.authority_bindings
+            if ab.get("payload-subtype")
+        }
+        # Skip the check when shape declares no authority-bindings at all
+        # (e.g., MinShape / test fixtures). The shape has not opted into
+        # constraining emission shape-side, so all emissions are accepted
+        # silently.
+        if bound_payload_subtypes:
+            for bid, adapter in substrate.adapter_instances.items():
+                for emission in adapter.declared_event_emissions:
+                    pst = emission.get("payload-subtype")
+                    if pst and pst not in bound_payload_subtypes:
+                        unmet_adapter_emissions.append(
+                            {
+                                "binding-id": bid,
+                                "adapter-id": adapter.id,
+                                "payload-subtype": pst,
+                            }
+                        )
+    # type: ignore comment — attribute set dynamically per item-1 pattern.
+    substrate.unmet_adapter_emissions = unmet_adapter_emissions  # type: ignore[attr-defined]
 
     # 8. Specialist bindings: store metadata + instantiate specialist runtimes
     # (B6 + D19). Per D46 §B.1: unknown specialist provision-id surfaces as

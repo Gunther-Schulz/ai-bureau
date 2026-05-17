@@ -94,6 +94,24 @@ def test_call_emitted_event_passes_generic_shape_authority_check(booted_workspac
     assert response["ok"] is True
 
 
+def test_unmet_adapter_emissions_recorded_when_shape_lacks_binding(booted_workspace):
+    """§B-5 (D62 §B cheap impl): adapter.declared-event-emissions[] without a
+    matching shape.authority-bindings[].payload-subtype is recorded on substrate
+    as `unmet_adapter_emissions` (non-fatal — parallel to optional-capabilities
+    log pattern). generic-shape binds `claim` only; mcp-tool-adapter emits
+    `action` → should surface as unmet."""
+    ws = booted_workspace
+    unmet = getattr(ws.substrate, "unmet_adapter_emissions", None)
+    assert unmet is not None
+    # mcp-tool-adapter declares emission of `action`; shape has no binding
+    # for `action` (only `claim`). Surface this one record.
+    assert any(
+        rec.get("payload-subtype") == "action"
+        and rec.get("adapter-id") == "mcp-tool-adapter"
+        for rec in unmet
+    )
+
+
 def test_load_adapter_from_provision_finds_impl_shipped_mcp_tool_adapter():
     adapter = load_adapter_from_provision(
         "mcp-server-ext:mcp-tool-adapter", IMPL_EXTENSIONS_DIR

@@ -120,6 +120,12 @@ class Substrate:
     # slices here for per-event checks).
     registered_payload_subtypes: set[str] = field(default_factory=set)
     registered_work_unit_kinds: set[str] = field(default_factory=set)
+    # §B-4 (D62 §B cheap impl) — work-unit-kind payload schemas. Maps
+    # qualified work-unit-kind id (`<ext-id>:<kind>`) → JSON Schema dict.
+    # Populated at boot from validator's work_unit_kind_payload_schemas.
+    # When a kind has no registered payload schema (spec-ref omitted /
+    # unresolvable), per-event payload check no-ops for that kind.
+    work_unit_kind_payload_schemas: dict[str, dict] = field(default_factory=dict)
     known_binding_ids: set[str] = field(default_factory=set)
     # Per D59 §B.1 — open-vocab payload-body registry per slot. Keys are
     # the four payload-slot identifiers; values are sets of qualified
@@ -205,7 +211,18 @@ class Substrate:
         in chain + state; aggregated diagnostic surfaces after drain.
         """
         # Step 1: per-event identity check (D30 §4 + D34 §A.5; D51 §B.1 for
-        # work-unit-creation-event per-work-unit identity)
+        # work-unit-creation-event per-work-unit identity; §B-3 + §B-7 for
+        # event.actors[].role + work-unit contributing-actors[].role vocabulary
+        # against shape's roles[] vocabulary when shape is bound).
+        _shape_role_ids: Optional[set[str]] = None
+        if self.shape is not None:
+            _shape_role_ids = {
+                r["id"]
+                for r in self.shape.roles
+                if isinstance(r, dict) and r.get("id")
+            }
+            if not _shape_role_ids:
+                _shape_role_ids = None
         ident_failures = check_event_references(
             event,
             self.state,
@@ -214,6 +231,9 @@ class Substrate:
             known_specialist_binding_ids=self.specialist_bindings.keys(),
             registered_work_unit_kinds=self.registered_work_unit_kinds,
             registered_payload_vocabulary=self.registered_payload_vocabulary,
+            shape_role_ids=_shape_role_ids,
+            work_unit_kind_payload_schemas=self.work_unit_kind_payload_schemas
+            or None,
         )
         if ident_failures:
             raise EventRejected(ident_failures)

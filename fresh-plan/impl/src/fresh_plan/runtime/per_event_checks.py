@@ -40,6 +40,8 @@ def check_event_references(
     known_specialist_binding_ids: Optional[Iterable[str]] = None,
     registered_work_unit_kinds: Optional[Iterable[str]] = None,
     registered_payload_vocabulary: Optional[dict[str, Iterable[str]]] = None,
+    shape_role_ids: Optional[Iterable[str]] = None,
+    work_unit_kind_payload_schemas: Optional[dict[str, dict]] = None,
 ) -> list[ValidationFailure]:
     """Run D30 §4 per-event runtime checks; return any failures.
 
@@ -94,6 +96,14 @@ def check_event_references(
         if isinstance(after, dict):
             self_attested_work_unit = after.get("id")
 
+    # Materialize shape role vocabulary (if provided) for §B-3 + §B-7 checks.
+    # When None: shape-role check skipped (no shape bound OR shape declares no
+    # roles vocabulary). When provided: roles on event.actors[] + work-unit
+    # contributing-actors[] are validated against the vocabulary.
+    _shape_role_ids: Optional[set[str]] = (
+        set(shape_role_ids) if shape_role_ids is not None else None
+    )
+
     # event.actors[].id → existing actor in current state
     for i, actor_ref in enumerate(event.get("actors", []) or []):
         aid = actor_ref.get("id")
@@ -112,6 +122,26 @@ def check_event_references(
                     ),
                 )
             )
+        # §B-3 (D62 §B cheap impl): event.actors[].role vocabulary check.
+        # Per D13: roles are declared by the bound shape's `roles[]` slot.
+        # When the actor-ref omits role (legal — only authority-bindings
+        # require role), skip. When the shape has no roles vocabulary
+        # (_shape_role_ids is None or empty), skip. Otherwise the role
+        # value must appear in the shape's roles vocabulary.
+        if _shape_role_ids:
+            role = actor_ref.get("role")
+            if role is not None and role not in _shape_role_ids:
+                failures.append(
+                    ValidationFailure(
+                        category="vocabulary",
+                        path=f"event.actors[{i}].role",
+                        value=role,
+                        reason=(
+                            f"event.actors[{i}].role {role!r} is not declared "
+                            "in the bound shape's roles[] vocabulary"
+                        ),
+                    )
+                )
 
     # event.work-unit-id (when non-null) → existing work-unit in current state
     wu_id = event.get("work-unit-id")
@@ -233,6 +263,25 @@ def check_event_references(
                             ),
                         )
                     )
+                # §B-7 (D62 §B cheap impl; composes with §B-3): contributing-actors
+                # role vocabulary check against shape's roles vocabulary.
+                if _shape_role_ids:
+                    ca_role = ca.get("role")
+                    if ca_role is not None and ca_role not in _shape_role_ids:
+                        failures.append(
+                            ValidationFailure(
+                                category="vocabulary",
+                                path=(
+                                    f"{wu_path_base}.contributing-actors[{j}].role"
+                                ),
+                                value=ca_role,
+                                reason=(
+                                    f"work-unit contributing-actors[{j}].role "
+                                    f"{ca_role!r} is not declared in the bound "
+                                    "shape's roles[] vocabulary"
+                                ),
+                            )
+                        )
             # (ii) contributing-specialists[] → bound specialist binding-id
             if known_specialist_binding_ids is not None:
                 known_sp_set = set(known_specialist_binding_ids)
@@ -268,6 +317,51 @@ def check_event_references(
                             ),
                         )
                     )
+            # §B-4 (D62 §B cheap impl) — work-unit.payload schema validation
+            # against the work-unit-kind's registered payload schema. Per D20
+            # + work-unit.schema.json: framework conformance validator (D30)
+            # validates payload against the kind's spec-ref schema. No-op
+            # when (a) no schemas registered, (b) this kind has no registered
+            # schema (spec-ref omitted / unresolvable). Reuses `vocabulary`
+            # category since payload-shape conformance is a per-kind
+            # vocabulary check (D30 §3 spirit).
+            if (
+                work_unit_kind_payload_schemas
+                and isinstance(after.get("kind"), str)
+                and isinstance(after.get("payload"), dict)
+            ):
+                wu_kind = after["kind"]
+                schema = work_unit_kind_payload_schemas.get(wu_kind)
+                if schema is not None:
+                    # Lazy import: jsonschema is already a dependency via
+                    # validator/schemas.py; lazy here to keep the per-event
+                    # checks module's import footprint light when no
+                    # work-unit-creation events are flowing.
+                    from jsonschema import Draft202012Validator
+
+                    validator = Draft202012Validator(schema)
+                    for err in validator.iter_errors(after["payload"]):
+                        path_parts = list(err.absolute_path)
+                        sub_path = "".join(
+                            f"[{p}]" if isinstance(p, int) else f".{p}"
+                            for p in path_parts
+                        )
+                        failures.append(
+                            ValidationFailure(
+                                category="vocabulary",
+                                path=f"{wu_path_base}.payload{sub_path}",
+                                value=(
+                                    err.instance
+                                    if not isinstance(err.instance, (dict, list))
+                                    else None
+                                ),
+                                reason=(
+                                    f"work-unit payload (kind={wu_kind!r}) "
+                                    f"violates registered payload schema: "
+                                    f"{err.message}"
+                                ),
+                            )
+                        )
 
     return failures
 

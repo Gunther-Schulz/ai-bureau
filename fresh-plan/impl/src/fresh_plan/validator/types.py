@@ -88,6 +88,15 @@ class ValidationResult:
     # "lifecycle-transition.trigger". Values: list of qualified
     # `<ext-id>:<value>` strings.
     payload_vocabulary_tables: Optional[dict[str, list[str]]] = None
+    # §B-4 (D62 §B cheap impl) — work-unit-kind payload schemas keyed by
+    # qualified work-unit-kind id (`<ext-id>:<kind>`). Populated when a
+    # vocabulary-registration for `work-unit.kind` declares a `spec-ref`
+    # path that resolves to a JSON Schema. Per D20 + work-unit.schema.json:
+    # "Framework doesn't validate payload shape at core; the work-unit-kind
+    # extension declaration provides a payload schema (per D29 vocabulary
+    # registration spec-ref) validated separately by the framework
+    # conformance validator (D30)." None until populated.
+    work_unit_kind_payload_schemas: Optional[dict[str, dict]] = None
 
     def __bool__(self) -> bool:
         return self.success

@@ -269,3 +269,165 @@ def test_work_unit_created_with_unregistered_kind_fails():
     assert f.category == "identity"
     assert "kind" in f.path
     assert f.value == "ext:unknown-kind"
+
+
+# ---------------------------------------------------------------
+# §B-3 (D62 §B cheap impl) — event.actors[].role vocabulary check
+# ---------------------------------------------------------------
+
+
+def test_event_actor_role_not_in_shape_vocabulary_fails():
+    """§B-3: role on event.actors[] must be declared in the bound shape's roles[]."""
+    state = _state_with_actors("alice")
+    event = _event(
+        actors=[{"id": "alice", "role": "fabricated-role"}],
+        payload_subtype="action",
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        shape_role_ids={"author", "reviewer"},
+    )
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "vocabulary"
+    assert f.path == "event.actors[0].role"
+    assert f.value == "fabricated-role"
+
+
+def test_event_actor_role_present_in_shape_vocabulary_passes():
+    """§B-3: role declared in shape vocabulary passes; absent role also passes (optional)."""
+    state = _state_with_actors("alice", "bob")
+    event_with_role = _event(
+        actors=[{"id": "alice", "role": "author"}],
+        payload_subtype="action",
+    )
+    failures = check_event_references(
+        event_with_role,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        shape_role_ids={"author", "reviewer"},
+    )
+    assert failures == []
+    # Role absence is legal (only authority-bindings require role; check is
+    # a vocabulary-when-present check, not a presence requirement).
+    event_no_role = _event(
+        actors=[{"id": "bob"}],
+        payload_subtype="action",
+    )
+    failures = check_event_references(
+        event_no_role,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        shape_role_ids={"author", "reviewer"},
+    )
+    assert failures == []
+
+
+# ---------------------------------------------------------------
+# §B-7 (D62 §B cheap impl) — work-unit contributing-actors[].role vocabulary
+# ---------------------------------------------------------------
+
+
+# ---------------------------------------------------------------
+# §B-4 (D62 §B cheap impl) — work-unit.payload schema validation
+# ---------------------------------------------------------------
+
+
+def test_work_unit_payload_validates_against_registered_schema_pass():
+    """§B-4: payload conforms to registered schema → no failures."""
+    state = _state_with_actors("alice")
+    schema = {
+        "type": "object",
+        "required": ["task-id"],
+        "properties": {"task-id": {"type": "string"}},
+    }
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "payload": {"task-id": "T-001"},
+            "contributing-actors": [{"id": "alice"}],
+            "contributing-specialists": [],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=[],
+        registered_work_unit_kinds=["ext:task"],
+        work_unit_kind_payload_schemas={"ext:task": schema},
+    )
+    assert failures == []
+
+
+def test_work_unit_payload_missing_required_field_fails():
+    """§B-4: payload missing required field per registered schema → vocabulary failure."""
+    state = _state_with_actors("alice")
+    schema = {
+        "type": "object",
+        "required": ["task-id"],
+        "properties": {"task-id": {"type": "string"}},
+    }
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "payload": {"unrelated": "value"},  # missing 'task-id'
+            "contributing-actors": [{"id": "alice"}],
+            "contributing-specialists": [],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=[],
+        registered_work_unit_kinds=["ext:task"],
+        work_unit_kind_payload_schemas={"ext:task": schema},
+    )
+    assert len(failures) >= 1
+    f = failures[0]
+    assert f.category == "vocabulary"
+    assert "payload" in f.path
+    assert "ext:task" in f.reason
+
+
+def test_work_unit_contributing_actor_role_unknown_fails():
+    """§B-7: contributing-actors[].role must appear in shape's roles[] vocabulary."""
+    state = _state_with_actors("alice")
+    event = _work_unit_created_event(
+        actors=[{"id": "alice", "role": "author"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "contributing-actors": [
+                {"id": "alice", "role": "author"},
+                {"id": "alice", "role": "ghost-role"},
+            ],
+            "contributing-specialists": [],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=[],
+        registered_work_unit_kinds=["ext:task"],
+        shape_role_ids={"author", "reviewer"},
+    )
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "vocabulary"
+    assert "contributing-actors[1].role" in f.path
+    assert f.value == "ghost-role"

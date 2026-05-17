@@ -261,15 +261,41 @@ def validate_workspace_boot(
     # Keys: "claim.confidence" / "action.action-name" / "state-change.what" /
     # "lifecycle-transition.trigger". Values are qualified `<ext-id>:<value>`.
     payload_vocabulary_tables: dict[str, set[str]] = {}
+    # §B-4 (D62 §B cheap impl) — work-unit-kind payload schemas keyed by
+    # qualified work-unit-kind id. Loaded from each vocabulary-registration
+    # for slot=work-unit.kind whose `spec-ref` is a locally-resolvable path
+    # to a JSON Schema (per D29 spec-ref opaque-string semantics). Schemas
+    # that fail to resolve (missing file, URL ref, parse error) are silently
+    # skipped — the registration's identifier still goes into the closed
+    # vocabulary table; only the payload schema is absent (per-event check
+    # then no-ops for that kind).
+    work_unit_kind_payload_schemas: dict[str, dict] = {}
+    from fresh_plan.validator.extensions import resolve_provision_spec
+
     for ext_id in sorted_nodes:
         ext = loaded.get(ext_id)
         if ext is None:
             continue
+        manifest_dir = ext.manifest_path.parent
         for reg in ext.manifest.get("vocabulary-registrations", []):
             slot = reg.get("slot")
             ident = reg.get("identifier")
             if slot and ident:
                 vocabulary_tables.setdefault(slot, set()).add(f"{ext_id}:{ident}")
+                # §B-4: resolve spec-ref for work-unit.kind registrations
+                # (only this slot carries a payload schema). spec-ref is
+                # OPTIONAL per D29; absent → kind registers without payload
+                # schema (per-event payload check no-ops for that kind).
+                if slot == "work-unit.kind":
+                    spec_ref = reg.get("spec-ref")
+                    if isinstance(spec_ref, str) and spec_ref:
+                        content, _err = resolve_provision_spec(
+                            manifest_dir, spec_ref
+                        )
+                        if isinstance(content, dict):
+                            work_unit_kind_payload_schemas[
+                                f"{ext_id}:{ident}"
+                            ] = content
         for reg in ext.manifest.get("payload-vocabulary-registrations", []):
             slot = reg.get("payload-slot")
             value = reg.get("value")
@@ -313,6 +339,12 @@ def validate_workspace_boot(
             {k: sorted(v) for k, v in payload_vocabulary_tables.items()}
             if success
             else None
+        ),
+        # §B-4: payload-schemas always provided when computed (independent of
+        # success flag — boot.py only copies on success path anyway via the
+        # surrounding ValidationResult success check).
+        work_unit_kind_payload_schemas=(
+            dict(work_unit_kind_payload_schemas) if success else None
         ),
     )
 
