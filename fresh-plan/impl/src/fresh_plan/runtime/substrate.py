@@ -163,11 +163,16 @@ class Substrate:
         """Validate per D30 §4 runtime + chain integrity + D47 hook firing,
         then append.
 
-        Per D44 + D47 ordered steps (synchronous through enqueue; queued
+        Per D44 + D47 + D52 ordered steps (synchronous through enqueue; queued
         dispatch via outer drain):
 
           1. per-event identity check (D30 §4 + D34 §A.5)
           2. shape authority check (D13)
+          2.5. post-projection state validity check (D52 §B.1 NEW); for
+             composition-change events affecting actors, simulates projection
+             on copy of state + validates against shape.actor_requirements;
+             EventRejected(category="composition-validity") on failure;
+             event NOT appended; state NOT mutated
           3. pre-event-emit hook fire (D47 §B.2 NEW); handler raise →
              EventRejected(category="hook-handler"); event NOT appended
           4. event_chain.append (schema + chain integrity per D10)
@@ -202,6 +207,14 @@ class Substrate:
             auth_failures = self.shape.check_authority(event, self.state)
             if auth_failures:
                 raise EventRejected(auth_failures)
+
+        # Step 2.5: post-projection state validity check (D52 §B.1)
+        if self.shape is not None:
+            comp_failures = self.shape.check_post_event_state_validity(
+                event, self.state
+            )
+            if comp_failures:
+                raise EventRejected(comp_failures)
 
         # Step 3: pre-event-emit hook fire (D47 §B.2 NEW CONTRACT)
         try:

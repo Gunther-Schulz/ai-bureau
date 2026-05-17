@@ -34,6 +34,7 @@ FAILURE_CATEGORIES = frozenset(
         "hook-handler",  # D47 §B.2 — pre-event-emit hook handler raise
         "adapter-attach",  # D48 §B.2 — adapter.attach_workspace failure (Phase C real-wire)
         "adapter-binding-resolution",  # D48 §B.3 — specialist required-adapter-binding miss
+        "composition-validity",  # D52 §B.1 — composition-change post-projection state violates shape policy
     }
 )
 

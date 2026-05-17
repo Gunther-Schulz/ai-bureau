@@ -23,6 +23,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import copy
+
 from fresh_plan.runtime.hooks import HookRegistry
 from fresh_plan.runtime.provision import load_provision_spec
 from fresh_plan.runtime.workspace_state import WorkspaceState
@@ -140,6 +142,87 @@ class Shape:
                     )
                 )
 
+        return failures
+
+    # ---------------------------------------------------------------
+    # Post-projection state validity (D52 §B.1)
+    # ---------------------------------------------------------------
+
+    def check_post_event_state_validity(
+        self, event: dict, state_before: WorkspaceState
+    ) -> list[ValidationFailure]:
+        """Enforce shape policy against post-projection state per D52 §B.1.
+
+        For composition-change events affecting actors, simulates projection
+        on a copy of state_before; counts actors by subtype in the simulated
+        post-state; validates against actor_requirements cardinality
+        {subtype: {min, max?}} declared on the shape spec.
+
+        Returns ValidationFailure(category="composition-validity") per
+        unsatisfied constraint. Empty list = no violations OR check
+        not applicable to this event.
+
+        Early-returns empty list:
+          - event.payload-subtype != "composition-change"
+          - event.payload.binding-kind != "actor"
+          - shape.actor_requirements == "none" or absent
+        """
+        if event.get("payload-subtype") != "composition-change":
+            return []
+        payload = event.get("payload") or {}
+        if payload.get("binding-kind") != "actor":
+            return []
+        reqs = self.actor_requirements
+        if reqs is None or reqs == "none" or not isinstance(reqs, dict):
+            return []
+
+        # Lazy import to avoid circular-import surface at module load.
+        from fresh_plan.runtime.event_chain import apply_event_to_state
+
+        state_copy = copy.deepcopy(state_before)
+        apply_event_to_state(event, state_copy)
+
+        # Count actors by subtype in post-state
+        counts: dict[str, int] = {}
+        for actor in state_copy.actors.values():
+            subtype = actor.get("subtype")
+            if subtype:
+                counts[subtype] = counts.get(subtype, 0) + 1
+
+        failures: list[ValidationFailure] = []
+        binding_ref = payload.get("binding-reference")
+        for subtype, constraint in reqs.items():
+            if not isinstance(constraint, dict):
+                continue
+            count = counts.get(subtype, 0)
+            min_req = constraint.get("min")
+            max_req = constraint.get("max")
+            if min_req is not None and count < min_req:
+                failures.append(
+                    ValidationFailure(
+                        category="composition-validity",
+                        path="event.payload.binding-reference",
+                        value=binding_ref,
+                        reason=(
+                            f"shape {self.id!r} actor-requirements for "
+                            f"subtype={subtype!r} requires min={min_req}; "
+                            f"resulting state would have count={count}"
+                        ),
+                    )
+                )
+            if max_req is not None and count > max_req:
+                failures.append(
+                    ValidationFailure(
+                        category="composition-validity",
+                        path="event.payload.binding-reference",
+                        value=binding_ref,
+                        reason=(
+                            f"shape {self.id!r} actor-requirements for "
+                            f"subtype={subtype!r} caps at max={max_req}; "
+                            f"resulting state would have count={count}"
+                        ),
+                    )
+                )
         return failures
 
     # ---------------------------------------------------------------
