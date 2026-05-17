@@ -119,6 +119,7 @@ class Substrate:
     # vocabulary_tables at boot success — substrate copies the relevant
     # slices here for per-event checks).
     registered_payload_subtypes: set[str] = field(default_factory=set)
+    registered_work_unit_kinds: set[str] = field(default_factory=set)
     known_binding_ids: set[str] = field(default_factory=set)
 
     # Capabilities advertised; populated from the resolved substrate provision.
@@ -183,12 +184,15 @@ class Substrate:
         on_event failures are POST-APPEND observation failures: event IS
         in chain + state; aggregated diagnostic surfaces after drain.
         """
-        # Step 1: per-event identity check (D30 §4 + D34 §A.5)
+        # Step 1: per-event identity check (D30 §4 + D34 §A.5; D51 §B.1 for
+        # work-unit-creation-event per-work-unit identity)
         ident_failures = check_event_references(
             event,
             self.state,
             self.registered_payload_subtypes,
             self.known_binding_ids,
+            known_specialist_binding_ids=self.specialist_bindings.keys(),
+            registered_work_unit_kinds=self.registered_work_unit_kinds,
         )
         if ident_failures:
             raise EventRejected(ident_failures)

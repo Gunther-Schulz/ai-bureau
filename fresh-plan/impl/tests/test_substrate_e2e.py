@@ -58,7 +58,7 @@ def test_scripted_scenario_produces_expected_chain(workspace):
     # Create + transition a work-unit.
     wu = ws.create_work_unit(
         id="wu-test-1",
-        kind="ext:dummy-kind",
+        kind="min-shape-ext:dummy-kind",
         payload={"note": "ok"},
     )
     wu.transition("in-progress")
@@ -73,7 +73,7 @@ def test_e2e_event_chain_subtypes_in_order(workspace):
     sub.emit_action("plan", parameters={})
     primary.emit_claim("assertion", confidence="high")
     primary.emit_state_change("scope", after={"domain": "x"})
-    wu = ws.create_work_unit(id="wu-1", kind="ext:k", payload={})
+    wu = ws.create_work_unit(id="wu-1", kind="min-shape-ext:k", payload={})
     wu.transition("in-progress")
     wu.transition("completed")
     ws.shutdown()
@@ -100,7 +100,7 @@ def test_e2e_event_chain_subtypes_in_order(workspace):
 def test_e2e_work_unit_id_propagates_to_events(workspace):
     """Per D23 + D20 — events referencing a work-unit carry work-unit-id."""
     ws = workspace
-    wu = ws.create_work_unit(id="wu-track", kind="ext:k", payload={})
+    wu = ws.create_work_unit(id="wu-track", kind="min-shape-ext:k", payload={})
     wu.transition("in-progress")
     related = ws.event_chain.by_work_unit("wu-track")
     assert len(related) >= 2  # creation event + transition event

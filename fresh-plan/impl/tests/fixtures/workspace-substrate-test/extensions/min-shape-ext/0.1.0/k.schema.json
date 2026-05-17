@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "k work-unit-kind stub (substrate-test fixture)",
+  "description": "Stub spec for work-unit.kind identifier 'k' registered by min-shape-ext per D29. Used by substrate-e2e tests; fully-qualified form is 'min-shape-ext:k'.",
+  "type": "object"
+}

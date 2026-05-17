@@ -37,6 +37,8 @@ def check_event_references(
     state: WorkspaceState,
     registered_payload_subtypes: Iterable[str],
     known_binding_ids: Iterable[str],
+    known_specialist_binding_ids: Optional[Iterable[str]] = None,
+    registered_work_unit_kinds: Optional[Iterable[str]] = None,
 ) -> list[ValidationFailure]:
     """Run D30 §4 per-event runtime checks; return any failures.
 
@@ -151,6 +153,80 @@ def check_event_references(
     # known_binding_ids is unused for event-level checks; included for the
     # substrate's parallel composition-change handling per D34 §A.5.
     _ = list(known_binding_ids)
+
+    # Per D51 §B.1 — per-work-unit identity checks at work-unit-creation
+    # event time (D30 §4 per-work-unit portion). Work-units are created via
+    # state-change events with what="work-unit-created"; payload.after carries
+    # the full work-unit record. Validate (i) contributing-actors[].id; (ii)
+    # contributing-specialists[]; (iii) kind. Reuses category="identity"
+    # (same semantic class as event-level identity per D30 §4).
+    if (
+        subtype == "state-change"
+        and payload.get("what") == "work-unit-created"
+    ):
+        after = payload.get("after")
+        if isinstance(after, dict):
+            wu_path_base = "event.payload.after"
+            # (i) contributing-actors[].id → existing actor (with self-attestation)
+            for j, ca in enumerate(after.get("contributing-actors", []) or []):
+                if not isinstance(ca, dict):
+                    continue
+                ca_id = ca.get("id")
+                if ca_id is None:
+                    continue  # Schema layer catches missing id
+                # Self-attestation: actors added on this very event (composition-
+                # change:add) are admitted; for work-unit-created the actor
+                # references must already exist OR be the self-attested-actor
+                # from a co-emitted composition-change (single-event-only case
+                # not currently supported; rare).
+                if not state.has_actor(ca_id):
+                    failures.append(
+                        ValidationFailure(
+                            category="identity",
+                            path=f"{wu_path_base}.contributing-actors[{j}].id",
+                            value=ca_id,
+                            reason=(
+                                f"work-unit creation references contributing-actor "
+                                f"{ca_id!r} which does not resolve to a registered "
+                                "actor in current workspace state"
+                            ),
+                        )
+                    )
+            # (ii) contributing-specialists[] → bound specialist binding-id
+            if known_specialist_binding_ids is not None:
+                known_sp_set = set(known_specialist_binding_ids)
+                for j, sp_bid in enumerate(after.get("contributing-specialists", []) or []):
+                    if not isinstance(sp_bid, str):
+                        continue
+                    if sp_bid not in known_sp_set:
+                        failures.append(
+                            ValidationFailure(
+                                category="identity",
+                                path=f"{wu_path_base}.contributing-specialists[{j}]",
+                                value=sp_bid,
+                                reason=(
+                                    f"work-unit creation references specialist "
+                                    f"binding-id {sp_bid!r} which is not bound "
+                                    "in the workspace"
+                                ),
+                            )
+                        )
+            # (iii) kind → registered work-unit-kind
+            if registered_work_unit_kinds is not None:
+                known_kinds = set(registered_work_unit_kinds)
+                wu_kind = after.get("kind")
+                if wu_kind is not None and wu_kind not in known_kinds:
+                    failures.append(
+                        ValidationFailure(
+                            category="identity",
+                            path=f"{wu_path_base}.kind",
+                            value=wu_kind,
+                            reason=(
+                                f"work-unit kind {wu_kind!r} is not registered "
+                                "by any loaded extension's vocabulary-registrations"
+                            ),
+                        )
+                    )
 
     return failures
 

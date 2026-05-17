@@ -144,3 +144,128 @@ def test_rejected_events_do_not_enter_chain():
         except EventRejected:
             pass
         assert len(ws.event_chain) == before
+
+
+# ---------------------------------------------------------------
+# D51 §B.1 — per-work-unit identity checks at work-unit-creation event time
+# ---------------------------------------------------------------
+
+
+def _work_unit_created_event(
+    *,
+    actors: list[dict],
+    after: dict,
+) -> dict:
+    """Construct a state-change/work-unit-created event with given record."""
+    return {
+        "id": "evt-wu-create",
+        "prev-event": None,
+        "timestamp": "2026-05-12T00:00:00Z",
+        "actors": actors,
+        "payload-subtype": "state-change",
+        "payload": {"what": "work-unit-created", "after": after},
+    }
+
+
+def test_work_unit_created_with_valid_references_passes():
+    """D51 §B.1: valid contributing-actors + contributing-specialists + kind → no failures."""
+    state = _state_with_actors("alice", "bob")
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "contributing-actors": [{"id": "alice"}, {"id": "bob"}],
+            "contributing-specialists": ["sp-primary"],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=["sp-primary"],
+        registered_work_unit_kinds=["ext:task"],
+    )
+    assert failures == []
+
+
+def test_work_unit_created_with_unknown_contributing_actor_fails():
+    """D51 §B.1 (i): contributing-actors[].id referencing non-existent actor → identity failure."""
+    state = _state_with_actors("alice")
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "contributing-actors": [{"id": "alice"}, {"id": "ghost"}],
+            "contributing-specialists": [],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=[],
+        registered_work_unit_kinds=["ext:task"],
+    )
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "identity"
+    assert "contributing-actors[1].id" in f.path
+    assert f.value == "ghost"
+
+
+def test_work_unit_created_with_unbound_specialist_fails():
+    """D51 §B.1 (ii): contributing-specialists[] referencing unbound binding-id → failure."""
+    state = _state_with_actors("alice")
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:task",
+            "contributing-actors": [{"id": "alice"}],
+            "contributing-specialists": ["sp-bound", "sp-unbound"],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=["sp-bound"],
+        registered_work_unit_kinds=["ext:task"],
+    )
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "identity"
+    assert "contributing-specialists[1]" in f.path
+    assert f.value == "sp-unbound"
+
+
+def test_work_unit_created_with_unregistered_kind_fails():
+    """D51 §B.1 (iii): kind not registered → failure."""
+    state = _state_with_actors("alice")
+    event = _work_unit_created_event(
+        actors=[{"id": "alice"}],
+        after={
+            "id": "wu-1",
+            "kind": "ext:unknown-kind",
+            "contributing-actors": [{"id": "alice"}],
+            "contributing-specialists": [],
+        },
+    )
+    failures = check_event_references(
+        event,
+        state,
+        CORE_PAYLOAD_SUBTYPES,
+        known_binding_ids=[],
+        known_specialist_binding_ids=[],
+        registered_work_unit_kinds=["ext:task"],
+    )
+    assert len(failures) == 1
+    f = failures[0]
+    assert f.category == "identity"
+    assert "kind" in f.path
+    assert f.value == "ext:unknown-kind"

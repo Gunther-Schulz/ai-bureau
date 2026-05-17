@@ -268,14 +268,17 @@ def validate_workspace_boot(
                 vocabulary_tables.setdefault(slot, set()).add(f"{ext_id}:{ident}")
 
     # --- 8. D30 checks ---
-    # Skip vocabulary-resolution if no extensions loaded (no vocabularies to
-    # resolve against — orchestration would emit noise).
+    # Per D51 §B.2: all five check categories run unconditionally. The previous
+    # `if loaded:` guard silently skipped capability / vocabulary / binding
+    # checks when no extensions loaded — hiding real failures when a manifest
+    # declared requirements with no satisfying extensions. The three checks
+    # no-op when there's genuinely nothing to check; surface failures when
+    # there are declared requirements.
     failures += checks.check_resolution(manifest, loaded)
     failures += checks.check_workspace_internal_identity(manifest)
-    if loaded:
-        failures += checks.check_capability_satisfaction(manifest, loaded)
-        failures += checks.check_vocabulary_resolution(manifest, loaded, vocabulary_tables)
-        failures += checks.check_binding_availability(manifest, loaded)
+    failures += checks.check_capability_satisfaction(manifest, loaded)
+    failures += checks.check_vocabulary_resolution(manifest, loaded, vocabulary_tables)
+    failures += checks.check_binding_availability(manifest, loaded)
 
     success = len(failures) == 0
     return ValidationResult(

@@ -1,7 +1,18 @@
 {
   "id": "min-shape-ext",
   "version": "0.1.0",
-  "vocabulary-registrations": [],
+  "vocabulary-registrations": [
+    {
+      "slot": "work-unit.kind",
+      "identifier": "k",
+      "spec-ref": "./k.schema.json"
+    },
+    {
+      "slot": "work-unit.kind",
+      "identifier": "dummy-kind",
+      "spec-ref": "./dummy-kind.schema.json"
+    }
+  ],
   "provisions": [
     {
       "kind": "shape",

@@ -153,6 +153,11 @@ def boot_workspace(
     for slot_qids in (result.vocabulary_tables or {}).get("event.payload-subtype", []):
         substrate.registered_payload_subtypes.add(slot_qids)
 
+    # Per D51 §B.1: populate registered_work_unit_kinds for per-work-unit
+    # identity check at work-unit-creation event time (D30 §4 per-work-unit).
+    for wu_kind in (result.vocabulary_tables or {}).get("work-unit.kind", []):
+        substrate.registered_work_unit_kinds.add(wu_kind)
+
     # 6. Shape policies (D13 + B3): load + attach the shape impl when a
     # provision is bound; register stub handlers for declared hook names.
     # Per D46 §B.1: unknown shape provision-id surfaces as WorkspaceBootError

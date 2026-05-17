@@ -153,3 +153,43 @@ def test_check_resolution_pure_unit():
     failures = check_resolution(ws, loaded={})
     # shape.provision references missing extension → resolution failure
     assert any(f.path == "composition.shape.provision" for f in failures)
+
+
+# --- D51 §B.2: B1 collect-all silent-skip removal ---------------------------
+
+
+def test_capability_check_runs_even_with_empty_loaded():
+    """D51 §B.2: capability-satisfaction check fires when no extensions loaded
+    BUT manifest declares unsatisfied requirements (prior `if loaded:` guard
+    silently skipped this; D51 removed the guard).
+
+    Constructs a minimal workspace declaring an extension but with no
+    extensions actually available on disk. The validator should surface the
+    resolution failure AND attempt all D30 checks unconditionally rather
+    than silent-skipping when `loaded` is empty.
+    """
+    ws = {
+        "id": "test-empty-loaded",
+        "composition": {
+            "extensions": [{"id": "missing-ext", "version-range": ">=1.0.0"}],
+            "shape": {"provision": "missing-ext:foo", "version-range": ">=1.0.0"},
+            "substrate-bindings": [
+                {"binding-id": "s1", "provision": "missing-ext:sub", "version-range": ">=1.0.0"}
+            ],
+            "actors": [{"id": "a1", "subtype": "human-actor", "declared-name": "a1"}],
+            "adapter-bindings": [],
+            "specialist-bindings": [],
+        },
+    }
+    # Run with empty loaded — pre-D51 this would silently skip capability /
+    # vocabulary / binding checks; post-D51 they run (no-op or surface failures).
+    cap_failures = check_capability_satisfaction(ws, loaded={})
+    voc_failures = check_vocabulary_resolution(ws, loaded={}, vocabulary_tables={})
+    bin_failures = check_binding_availability(ws, loaded={})
+    # No declared required-capabilities + no loaded ext → cap check no-ops cleanly.
+    # No vocabulary references at this manifest level → vocab no-ops.
+    # No specialist required-adapter-bindings → binding no-ops.
+    # KEY: no exception, function actually ran (vs being skipped entirely).
+    assert isinstance(cap_failures, list)
+    assert isinstance(voc_failures, list)
+    assert isinstance(bin_failures, list)

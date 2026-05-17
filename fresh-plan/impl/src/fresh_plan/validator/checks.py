@@ -164,9 +164,13 @@ def check_resolution(
         for i, binding in enumerate(comp.get(slot, [])):
             prov = binding.get("provision")
             if not prov:
+                # Per D51 §C: defensive skip on missing provision.
                 # substrate-bindings may omit provision if required-capabilities
-                # is present (per workspace.schema.json anyOf). Capability-based
-                # bindings are validated separately (capability satisfaction).
+                # is present (per workspace.schema.json anyOf — capability-based
+                # bindings are validated separately by check_capability_satisfaction).
+                # For adapter-bindings + specialist-bindings, schema layer catches
+                # missing provision; this skip avoids redundant per-resolution
+                # failure when schema would have already failed.
                 continue
             ext_id, _ = _split_qualified(prov)
             if ext_id and ext_id not in declared_ext_ids:
@@ -269,13 +273,19 @@ def check_capability_satisfaction(
     for i, binding in enumerate(comp.get("adapter-bindings", [])):
         prov = binding.get("provision")
         if not prov:
+            # Schema layer catches missing provision on adapter-bindings.
             continue
         ext_id, prov_id = _split_qualified(prov)
         ext = loaded.get(ext_id)
         if ext is None:
+            # Defensive skip: upstream check_resolution records the resolution
+            # failure (ext not declared OR provision not in any loaded ext).
+            # Per D51 §C: silent-continue is defensive not silent-degradation.
             continue
         spec = ext.provisions_loaded.get(prov_id)
         if spec is None:
+            # Defensive skip: provision spec load failure already recorded by
+            # workspace.py:200-217 as resolution failure. Skip avoids double-count.
             continue
         for cap in spec.get("required-substrate-capabilities", []):
             if cap not in available:
@@ -295,13 +305,17 @@ def check_capability_satisfaction(
     for i, binding in enumerate(comp.get("specialist-bindings", [])):
         prov = binding.get("provision")
         if not prov:
+            # Schema layer catches missing provision on specialist-bindings.
             continue
         ext_id, prov_id = _split_qualified(prov)
         ext = loaded.get(ext_id)
         if ext is None:
+            # Defensive skip: upstream check_resolution records the resolution
+            # failure. Per D51 §C: silent-continue is defensive not silent-degradation.
             continue
         spec = ext.provisions_loaded.get(prov_id)
         if spec is None:
+            # Defensive skip: provision spec load failure already recorded upstream.
             continue
         for cap in spec.get("required-substrate-capabilities", []):
             if cap not in available:
@@ -605,10 +619,13 @@ def check_binding_availability(
     for i, sp_binding in enumerate(comp.get("specialist-bindings", [])):
         prov = sp_binding.get("provision")
         if not prov:
+            # Schema layer catches missing provision on specialist-bindings.
             continue
         ext_id, prov_id = _split_qualified(prov)
         ext = loaded.get(ext_id)
         if ext is None:
+            # Defensive skip: upstream check_resolution records the resolution
+            # failure. Per D51 §C: silent-continue is defensive not silent-degradation.
             continue
         spec = ext.provisions_loaded.get(prov_id)
         if spec is None:
