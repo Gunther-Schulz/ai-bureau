@@ -1,0 +1,10 @@
+{
+  "id": "direct-api-realwire-adapter",
+  "version": "0.2.0",
+  "protocol-or-transport": "direct-api-ext:direct-api-realwire",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}

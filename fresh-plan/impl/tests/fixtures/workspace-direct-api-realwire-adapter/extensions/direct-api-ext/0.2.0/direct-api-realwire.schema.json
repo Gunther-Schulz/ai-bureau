@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "direct-api-realwire protocol",
+  "description": "Real-wire direct-API client protocol identifier registered into adapter.protocol-or-transport per D29. Activates D48 §B.1 AdapterCallError forward-bar under real HTTP network / auth (native 401/403/407) / timeout / protocol-error / upstream-error conditions per D68 §C closure item (e) + D72 §B.1. Wire format is HTTP via httpx (per D68 §B.3 verify-at-workstream-start discipline). Unlike D71's MCP starter vocabulary (where the auth subcase folded into upstream-error per D71 §D D-2 deferral), HTTP transport implements the auth category natively via response.status_code discrimination on 401/403/407. 0.1.0 stub protocol identifier `direct-api-ext:direct-api` stands unchanged for back-compat per D41 two-substrate parity precedent.",
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "direct-api-ext",
+  "version": "0.2.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "direct-api-realwire",
+      "spec-ref": "./direct-api-realwire.schema.json"
+    }
+  ],
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "direct-api-realwire-adapter",
+      "spec-ref": "./adapter.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

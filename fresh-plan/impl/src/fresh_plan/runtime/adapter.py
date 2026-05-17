@@ -512,6 +512,317 @@ class RealWireMCPClientAdapter(Adapter):
             ) from exc
 
 
+@dataclass
+class RealWireDirectAPIAdapter(Adapter):
+    """Phase C real-wire direct-API HTTP adapter per D72 §B.1 (closes C4).
+
+    Per D68 §A C4 + §B.3 (verify-at-workstream-start; httpx 0.28.1 confirmed
+    at C4 workstream start) + D68 §C closure item (e). Pure pattern
+    application of D71 §B.1 (RealWireMCPClientAdapter) for HTTP transport:
+    SAME class shape, SAME asyncio.run sync-wrap pattern, SAME
+    _session_factory test-injection hook, SAME D48 §B.1 starter category
+    vocabulary (transport / auth / timeout / protocol-error / upstream-error
+    / unknown). The httpx-specific exception branches differ; the framework
+    contract is unchanged.
+
+    The httpx library ships ``httpx.AsyncClient`` (async-only here for
+    Phase C pattern consistency with D69 + D71); this adapter wraps it
+    synchronously per D44 ("no async substrate model" at Phase C) using
+    ``asyncio.run`` to drive the underlying coroutines — mirroring the
+    D69 + D71 sync-wrap precedent.
+
+    Per D48 §D D-5 (action-event timing; resolved by D71 §B.1 for adapter
+    cluster): this adapter emits the ``action`` event BEFORE the wire
+    round-trip so partial-success / failure paths leave the intent-recorded
+    action event in the chain (per D5 §I3 accountability anchor + D10 chain
+    integrity). Caller of a failed ``call()`` may emit a subsequent
+    ``state-change`` event to record outcome; the action event itself
+    stands regardless.
+
+    Per D48 §B.1 + §D D-1 (call-lifecycle raise-point): real-wire exceptions
+    from any of (a) AsyncClient construction, (b) HTTP request send,
+    (c) response status validation, (d) JSON decoding are caught and
+    mapped to ``AdapterCallError`` per starter category vocabulary.
+    Mid-wire raise-point chosen: action event emitted at method entry;
+    AdapterCallError can raise from anywhere downstream.
+
+    Per scope-cut C12 (autopilot constraint) + the in-process test
+    harness pattern: tests inject a ``_session_factory`` (per-instance
+    field) that returns an async context-manager yielding a configured
+    ``httpx.AsyncClient`` (typically with a ``MockTransport`` handler
+    function). Production callers pass a configuration dict via
+    ``composition.adapter-bindings[i].configuration`` (per D57 §B.1
+    opaque pass-through) carrying ``base-url`` + ``headers`` + (optional)
+    ``read-timeout-seconds``; default factory builds a real
+    ``AsyncClient`` from configuration. Phase C scope = test-harness
+    exercise of the AdapterCallError starter category vocabulary;
+    production per-API auth-flow specifics (OAuth / JWT refresh / etc.)
+    are Phase D refinement per D72 §D D-2 (extension-author concern per
+    D29 namespacing).
+
+    Per D48 §D D-3 starter category vocabulary mapping (HTTP-native;
+    extends D71's MCP mapping with native auth-category discrimination —
+    unlike MCP per D71 §D D-2 deferral, HTTP cleanly discriminates 401
+    / 403 / 407 from upstream-error 4xx/5xx via response.status_code):
+
+      - ``transport`` ← httpx.ConnectError / httpx.NetworkError + plain
+        OSError (subclasses cover TLS-handshake / DNS / socket).
+      - ``auth`` ← httpx.HTTPStatusError with response.status_code in
+        {401, 403, 407}. NATIVE HTTP semantics — first Phase C adapter
+        to populate the auth starter category natively.
+      - ``timeout`` ← httpx.TimeoutException (covers ConnectTimeout +
+        ReadTimeout + WriteTimeout + PoolTimeout subclasses).
+      - ``protocol-error`` ← httpx.RemoteProtocolError + httpx.DecodingError
+        + json.JSONDecodeError / ValueError raised by response.json().
+      - ``upstream-error`` ← httpx.HTTPStatusError with status_code >=
+        500 OR non-auth 4xx (400 / 404 / 405 / 409 / 422 / 429 / etc.).
+      - ``unknown`` ← catch-all ``except Exception`` last branch.
+    """
+
+    _outcome_prefix: ClassVar[str] = "direct-realwire"
+
+    # Per-instance test-injection hook. Async callable returning an async
+    # context manager that yields a configured httpx.AsyncClient. Tests
+    # set this to a function building a client with a MockTransport
+    # handler for fault injection. None → resolve default factory
+    # (real httpx.AsyncClient from configuration) at call() time.
+    _session_factory: Optional[Callable[..., Any]] = field(
+        default=None, repr=False
+    )
+
+    # Read-timeout for the HTTP request round-trip, in seconds. Configurable
+    # per D57 §B.1 opaque pass-through (`configuration.read-timeout-seconds`).
+    _read_timeout_seconds: float = field(default=30.0, repr=False)
+
+    # Configuration-lifted fields used to build the default factory's
+    # AsyncClient + the per-call request. Lifted in __post_init__ from
+    # `configuration` per D57 §B.1 opaque pass-through.
+    _base_url: str = field(default="", repr=False)
+    _headers: dict = field(default_factory=dict, repr=False)
+
+    def __post_init__(self) -> None:
+        # Lift configuration per D57 §B.1 opaque pass-through. Defaults
+        # preserve the unconfigured shape (empty base_url + headers; 30s
+        # timeout).
+        config = self.configuration or {}
+        timeout = config.get("read-timeout-seconds")
+        if timeout is not None:
+            self._read_timeout_seconds = float(timeout)
+        base_url = config.get("base-url")
+        if base_url is not None:
+            self._base_url = str(base_url)
+        headers = config.get("headers")
+        if headers is not None:
+            self._headers = dict(headers)
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
+        """Invoke a remote HTTP endpoint as ``POST {base_url}/{tool_name}``;
+        return parsed JSON body.
+
+        Per D48 §B.1 surface contract: on protocol / transport / auth /
+        timeout / upstream failures, raises ``AdapterCallError`` with the
+        starter category vocabulary + original exception chained via
+        Python's ``from`` clause.
+
+        Per D48 §D D-5 (resolved by D71 §B.1 + carried by D72 §B.1): the
+        ``action`` event is emitted BEFORE the wire round-trip. Partial-
+        success / failure paths leave the intent-recorded action event
+        in the chain.
+
+        Args:
+            tool_name: path component appended to ``base_url`` for the
+                outgoing request (e.g., ``"chat/completions"``).
+            parameters: optional dict of request body parameters (JSON-
+                serializable). Sent as the JSON body of a POST.
+            attributing_actor_id: override the default first-actor
+                attribution for the emitted action event.
+
+        Returns:
+            Dict carrying ``outcome-reference`` (the action event's
+            unique ref), ``ok`` (True on success), ``status-code`` (HTTP
+            status code), and ``body`` (parsed JSON response body when
+            content-type is JSON; raw text otherwise).
+
+        Raises:
+            AdapterCallError: on any wire / protocol / auth / timeout /
+                upstream failure — see §B.1 category vocabulary.
+        """
+        import asyncio
+
+        params = parameters or {}
+
+        # Emit the action event FIRST so the intent is recorded in the
+        # chain even if the wire round-trip fails partway through. Per
+        # D48 §D D-5 resolution at D71 §B.1; D72 §B.1 carries this for
+        # HTTP transport.
+        outcome_reference = self._emit_action(
+            tool_name, params, attributing_actor_id
+        )
+
+        # Lazy import — keeps adapter module load-cost low when httpx is
+        # not used (e.g., MCP-only workspaces).
+        try:
+            import httpx
+        except ImportError as exc:
+            # httpx missing despite pyproject declaration (e.g.,
+            # uninstalled local dev env). Surface as transport per
+            # starter vocabulary — the call cannot proceed because the
+            # wire library is absent.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": f"httpx import failed: {exc}"},
+            ) from exc
+
+        async def _drive() -> dict:
+            # Resolve factory: per-instance override (test injection) OR
+            # default real AsyncClient (production). Default builds a
+            # client from lifted configuration; tests inject a factory
+            # that wires MockTransport for in-process exception / status
+            # injection.
+            factory = self._session_factory
+            if factory is None:
+                # Build the default AsyncClient from configuration.
+                from contextlib import asynccontextmanager
+
+                @asynccontextmanager
+                async def _default_factory():
+                    async with httpx.AsyncClient(
+                        base_url=self._base_url,
+                        headers=self._headers,
+                        timeout=self._read_timeout_seconds,
+                    ) as client:
+                        yield client
+
+                factory = _default_factory
+
+            async with factory() as client:
+                response = await client.post(tool_name, json=params)
+                # raise_for_status() surfaces non-2xx as
+                # httpx.HTTPStatusError. We catch it in the outer
+                # mapping branch to discriminate auth (401/403/407) vs
+                # upstream-error (5xx + other 4xx).
+                response.raise_for_status()
+                status_code = response.status_code
+                # Attempt JSON decode; fall back to text on non-JSON
+                # responses. response.json() raises json.JSONDecodeError
+                # (a ValueError subclass) on malformed JSON — mapped to
+                # protocol-error in the outer branch.
+                content_type = response.headers.get("content-type", "")
+                if "application/json" in content_type.lower():
+                    body: Any = response.json()
+                else:
+                    body = response.text
+            return {
+                "outcome-reference": outcome_reference,
+                "ok": True,
+                "status-code": status_code,
+                "body": body,
+            }
+
+        try:
+            return asyncio.run(_drive())
+        except AdapterCallError:
+            # Already mapped (none currently raised inside _drive on the
+            # happy path, but keep for symmetry with D71 + future
+            # in-_drive mappings).
+            raise
+        except httpx.TimeoutException as exc:
+            # Covers ConnectTimeout + ReadTimeout + WriteTimeout +
+            # PoolTimeout subclasses per httpx exception hierarchy.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="timeout",
+                detail={
+                    "reason": str(exc) or type(exc).__name__,
+                    "read-timeout-seconds": self._read_timeout_seconds,
+                },
+            ) from exc
+        except httpx.HTTPStatusError as exc:
+            # raise_for_status() surfaced a non-2xx response. Discriminate
+            # auth (401/403/407 per RFC 7235 + 7239) vs upstream-error
+            # (5xx + other 4xx). NATIVE HTTP auth-category mapping —
+            # unlike MCP per D71 §D D-2 deferral.
+            status_code = exc.response.status_code
+            if status_code in (401, 403, 407):
+                category = "auth"
+            else:
+                category = "upstream-error"
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category=category,
+                detail={
+                    "reason": str(exc) or f"HTTP {status_code}",
+                    "status-code": status_code,
+                },
+            ) from exc
+        except (httpx.RemoteProtocolError, httpx.DecodingError) as exc:
+            # Protocol-level failures: malformed HTTP framing / chunked
+            # encoding / encoding declared but not decodable.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="protocol-error",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+        except ValueError as exc:
+            # json.JSONDecodeError (subclass of ValueError) raised by
+            # response.json() on malformed JSON body. Map to
+            # protocol-error per starter vocabulary — server returned
+            # 2xx but body didn't conform to declared JSON content-type.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="protocol-error",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+        except (httpx.ConnectError, httpx.NetworkError) as exc:
+            # Transport-layer failure: DNS / connection-refused / TLS
+            # handshake / socket-level errors. Note: ConnectError is a
+            # subclass of NetworkError; listing both for clarity.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": str(exc) or type(exc).__name__},
+            ) from exc
+        except OSError as exc:
+            # Lower-level OS failure not wrapped by httpx (rare but
+            # possible — e.g., raised by MockTransport handler directly).
+            # Maps to transport semantically.
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": str(exc) or type(exc).__name__},
+            ) from exc
+        except Exception as exc:
+            # Catch-all per D48 §B.1 starter vocabulary `unknown` category.
+            # Per-protocol extension may register a richer subcategory per
+            # D29 namespacing (deferred per D72 §D D-2).
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="unknown",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+
+
 # Module-level registry of (protocol-or-transport → runtime class). Populated
 # as new adapter impls land. Phase C real-wire impls add alongside Phase B
 # stubs (per D41 two-substrate parity precedent + D69 substrate-alongside
@@ -521,6 +832,7 @@ _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
     "mcp-server-ext:mcp-client": MCPToolAdapter,
     "mcp-server-ext:mcp-client-realwire": RealWireMCPClientAdapter,
     "direct-api-ext:direct-api": DirectAPIAdapter,
+    "direct-api-ext:direct-api-realwire": RealWireDirectAPIAdapter,
 }
 
 

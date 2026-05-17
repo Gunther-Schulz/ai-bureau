@@ -82,3 +82,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D69](decisions/D69-phase-c-real-wire-substrate-claude-agent-sdk.md) — Phase C real-wire substrate (Claude Agent SDK Python; closes C1) (2026-05-17)
 - [D70](decisions/D70-phase-c-jsonl-persistence-layer.md) — Phase C JSONL persistence layer (closes C2; activates D54 §B.2 + D58 §B.1) (2026-05-17)
 - [D71](decisions/D71-phase-c-real-wire-mcp-client-adapter.md) — Phase C real-wire MCP client adapter (closes C3; activates D48 §B.1; resolves D48 §D D-1/D-3/D-5 for MCP transport) (2026-05-17)
+- [D72](decisions/D72-phase-c-real-wire-direct-api-adapter.md) — Phase C real-wire direct-API HTTP adapter (closes C4; pure pattern application of D71; native HTTP auth-category mapping) (2026-05-17)
