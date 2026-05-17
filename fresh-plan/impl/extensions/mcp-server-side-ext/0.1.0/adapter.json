@@ -1,0 +1,10 @@
+{
+  "id": "mcp-server-side-adapter",
+  "version": "0.1.0",
+  "protocol-or-transport": "mcp-server-side-ext:mcp-server",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}

@@ -1374,6 +1374,369 @@ def _make_a2a_request_handler(adapter: "A2APeerAdapter"):
     return _A2ARequestHandler
 
 
+@dataclass
+class MCPServerAdapter(Adapter):
+    """Phase C real-wire MCP SERVER adapter per D74 §B (closes C6; closes
+    Phase C closure item (b) — workspace-as-MCP-server).
+
+    Per D68 §A C6 + §B.3 (verify-at-workstream-start; mcp Python SDK
+    confirmed via prior C3 introspection per D71; same package, server-side
+    surface) + D68 §C closure item (b) (in-process self-test harness per
+    scope-cut C12 — workspace's own MCP client invokes workspace's own MCP
+    server). Validates D21 §generalization (workspace-as-MCP-server) by
+    providing the concrete extension impl exposing loaded specialists'
+    skills as MCP tools to an MCP client.
+
+    HYBRID pattern application of D71 (MCP SDK; ClientSession side) + D73
+    (server-side aggregator; specialist_instances filter publicly-exposed
+    + tool-routing-to-handle_skill). Unlike D73 (HTTP server via stdlib
+    ThreadingHTTPServer on a daemon thread), this adapter is **async-native**
+    — the mcp SDK's ``Server.run`` API is an asyncio coroutine, and the
+    self-test fixture uses ``mcp.shared.memory.create_connected_server_and_client_session(server)``
+    which bridges client+server inside the SAME asyncio event loop. No
+    background thread; no ThreadingHTTPServer.
+
+    Per scope-cut C12 (Phase C autopilot constraint): tests use the SDK's
+    in-process memory bridge directly — the test fixture constructs the
+    workspace, reads the adapter's prepared ``server`` attribute (populated
+    by ``attach_workspace``), and drives ``create_connected_server_and_client_session(server)``
+    inside ``asyncio.run`` to assert list_tools + call_tool round-trips.
+    There is NO long-running server task at framework attach time —
+    production transports (stdio / sse / streamable_http) are Phase D
+    pioneer-instance territory (deferred per D74 §D).
+
+    Per D45 triad applied per path:
+
+      §B.1 Server-bind failure at attach_workspace lifecycle: SDK Server
+      construction failures (rare; mostly init-arg-shape) propagate as
+      Exception which boot.py:599 wraps as ``WorkspaceBootError(category=
+      'adapter-attach')`` per D48 §B.2 REUSE — no new FAILURE_CATEGORIES
+      needed.
+
+      §B.2 Inbound tool-call failure (NEW shape parallel to D73 §B.3): the
+      registered ``@server.call_tool()`` handler catches specialist.handle_skill
+      exceptions and surfaces them via ``mcp.shared.exceptions.McpError`` with
+      JSON-RPC error code (server-side error surface; the ClientSession's
+      ``call_tool`` call propagates the McpError to the caller). Server task
+      stays alive — per-call exceptions do not abort the server. NOT
+      AdapterCallError — this adapter IS the server; no caller exists in the
+      framework process for the inbound side.
+
+      §B.3 Tool-not-found at @call_tool: ``McpError`` raised with JSON-RPC
+      code -32601 (Method not found) per the spec. The SDK turns the unknown
+      tool name into a McpError when ``call_tool`` is invoked with an
+      unregistered name.
+
+      §B.4 Skill-not-publicly-exposed at @call_tool: same surface as §B.3
+      — the handler returns ``McpError(-32601)`` because the skill is not
+      part of the exposed tool surface (filter is authoritative at both
+      list_tools aggregator AND call_tool dispatch).
+
+    Per D21 §generalization (workspace-as-MCP-server) + D60 publicly-exposed
+    slot semantics: the skill aggregator walks
+    ``workspace._substrate.specialist_instances`` (per D19 + substrate.py:
+    specialist_instances registry); for each specialist's ``spec.skills[]``
+    entry filtered by ``publicly-exposed=True``, builds a ``mcp.types.Tool``
+    entry. Tool name convention: ``"<binding_id>.<skill_id>"`` to prevent
+    name collision across specialists in the same workspace; reverse-mapping
+    splits on the first ``.`` to route at call_tool time. Dot separator
+    chosen per MCP SEP-986 tool-name character set (A-Z / a-z / 0-9 / _ /
+    - / .); colon would warn at server registration.
+
+    NO outbound ``adapter.call()`` impl — c6 IS server; outbound peer-as-server
+    (cross-impl) is explicitly deferred per D74 §D. Calling ``call()`` raises
+    ``NotImplementedError`` with a diagnostic message naming the deferral.
+    """
+
+    _outcome_prefix: ClassVar[str] = "mcp-server"
+
+    # Per-instance test-injection hook. When set, ``attach_workspace`` calls
+    # ``factory(self)`` instead of constructing the default
+    # ``mcp.server.lowlevel.Server``. Default behavior: construct a real SDK
+    # Server keyed off ``workspace.workspace_id``. Tests can override the
+    # factory to inject a stubbed Server for unit-shape coverage; the
+    # canonical in-process round-trip uses the default factory.
+    _server_factory: Optional[Callable[..., Any]] = field(
+        default=None, repr=False
+    )
+
+    # Per-instance pre-built server. Populated by attach_workspace. Read by
+    # the test harness (which drives create_connected_server_and_client_session
+    # against it) and by future production transport hooks.
+    _server: Any = field(default=None, repr=False)
+
+    # ---------------------------------------------------------------
+    # Server lifecycle (attach builds the SDK Server + registers handlers)
+    # ---------------------------------------------------------------
+
+    def attach_workspace(self, workspace: Any) -> None:
+        """Wire workspace + construct the SDK Server with registered handlers.
+
+        Per D48 §B.2: any Exception from SDK Server construction or handler
+        registration propagates out and is wrapped at boot.py:599 as
+        ``WorkspaceBootError(category='adapter-attach')`` per the existing
+        REUSE path (no new category needed).
+
+        Decorators ``@server.list_tools()`` and ``@server.call_tool()``
+        register the closures that reference ``self`` to access
+        ``workspace._substrate.specialist_instances`` at request time. Per
+        D74 §B.1: there is NO long-running server task started here;
+        production transport binding (stdio / sse / http) is deferred per
+        D74 §D.
+        """
+        super().attach_workspace(workspace)
+
+        # Resolve factory: per-instance override (test injection) OR the
+        # default that builds an mcp.server.lowlevel.Server. The default
+        # is the production path (an SDK Server ready for stdio / sse /
+        # http transport binding) but Phase C scope = in-process self-test
+        # only per scope-cut C12.
+        factory = self._server_factory
+        if factory is None:
+            factory = _default_mcp_server_factory
+
+        self._server = factory(self)
+
+    @property
+    def server(self) -> Any:
+        """The MCP SDK Server instance built at attach_workspace.
+
+        Test harnesses pass this to
+        ``mcp.shared.memory.create_connected_server_and_client_session(server)``
+        to drive the in-process self-test round-trip per D74 §B + closure
+        item (b). None until ``attach_workspace`` has been called.
+        """
+        return self._server
+
+    # ---------------------------------------------------------------
+    # Tool aggregation (per D21 §generalization + D60)
+    # ---------------------------------------------------------------
+
+    def build_tools(self) -> list:
+        """Walk specialist_instances + return publicly-exposed skills as Tools.
+
+        Per D21 §generalization (workspace-as-MCP-server) + D60: filters
+        ``specialist.skills[]`` by ``publicly-exposed=True``; maps each to
+        ``mcp.types.Tool`` with name ``"<binding_id>:<skill_id>"`` (binding-
+        id prefix prevents skill_id collision across specialists in the
+        same workspace).
+
+        Returns:
+            list[mcp.types.Tool] in canonical SDK shape; empty list when
+            no workspace attached OR no publicly-exposed skills declared.
+        """
+        from mcp import types as t
+
+        tools: list = []
+        if self._workspace is None:
+            return tools
+        substrate = self._workspace._substrate
+        for binding_id, specialist in substrate.specialist_instances.items():
+            for skill in specialist.skills:
+                if skill.get("publicly-exposed") is not True:
+                    continue
+                skill_id = skill.get("id")
+                if not skill_id:
+                    continue
+                tool_name = f"{binding_id}.{skill_id}"
+                tools.append(
+                    t.Tool(
+                        name=tool_name,
+                        description=skill.get(
+                            "description", f"specialist skill {skill_id}"
+                        ),
+                        inputSchema={
+                            "type": "object",
+                            "additionalProperties": True,
+                        },
+                    )
+                )
+        return tools
+
+    # ---------------------------------------------------------------
+    # Tool routing (per D74 §B.2: inbound call → specialist.handle_skill)
+    # ---------------------------------------------------------------
+
+    def route_tool_call(self, tool_name: str, arguments: Optional[dict]) -> Any:
+        """Route an inbound MCP tool-call to a specialist's handle_skill.
+
+        Per D74 §B.2 + §B.3 + §B.4: looks up the specialist + skill_id by
+        reverse-mapping the tool name (``"<binding_id>.<skill_id>"``); if
+        the name format is wrong, the binding_id has no specialist, the
+        skill_id is unknown, or the skill is NOT publicly-exposed, raises
+        ``McpError`` with code -32601 (Method not found). Otherwise invokes
+        ``specialist.handle_skill(skill_id, params)`` and returns the
+        result.
+
+        If ``handle_skill`` itself raises (D50 SkillExecutionError, an
+        AdapterCallError from chained adapter.call, or arbitrary Exception),
+        the exception is wrapped as ``McpError`` per D74 §B.2 (server-side
+        error surface; ClientSession's call_tool propagates to the caller).
+        """
+        from mcp.shared.exceptions import McpError
+        from mcp.types import ErrorData
+
+        if self._workspace is None:
+            raise McpError(
+                ErrorData(
+                    code=-32603,
+                    message=(
+                        "adapter not attached to a workspace; "
+                        "call attach_workspace first"
+                    ),
+                )
+            )
+
+        # Reverse-map tool name to (binding_id, skill_id). The convention is
+        # ``"<binding_id>.<skill_id>"`` (built in build_tools above; dot
+        # separator per MCP SEP-986 tool-name character set).
+        if "." not in tool_name:
+            raise McpError(
+                ErrorData(
+                    code=-32601,
+                    message=(
+                        f"unknown MCP tool name {tool_name!r}: expected "
+                        "format '<binding_id>.<skill_id>'"
+                    ),
+                )
+            )
+        binding_id, _, skill_id = tool_name.partition(".")
+
+        substrate = self._workspace._substrate
+        specialist = substrate.specialist_instances.get(binding_id)
+        if specialist is None:
+            raise McpError(
+                ErrorData(
+                    code=-32601,
+                    message=(
+                        f"unknown MCP tool name {tool_name!r}: no specialist "
+                        f"binding {binding_id!r}"
+                    ),
+                )
+            )
+
+        # Verify the skill is BOTH declared AND publicly-exposed. Filter is
+        # authoritative at call_tool entry — internal-only skills are not
+        # invokable via the MCP server surface (parallel to D73 §B.3 +
+        # §"Per-skill exposure control" — by-obscurity bypass would be
+        # incorrect).
+        matching_skill = None
+        for skill in specialist.skills:
+            if skill.get("id") == skill_id:
+                matching_skill = skill
+                break
+        if matching_skill is None or (
+            matching_skill.get("publicly-exposed") is not True
+        ):
+            raise McpError(
+                ErrorData(
+                    code=-32601,
+                    message=(
+                        f"unknown MCP tool name {tool_name!r}: skill "
+                        f"{skill_id!r} not exposed by specialist "
+                        f"{binding_id!r}"
+                    ),
+                )
+            )
+
+        params = arguments or {}
+        try:
+            return specialist.handle_skill(skill_id, params)
+        except McpError:
+            # Specialist raised an MCP-shaped error directly — propagate
+            # without rewrapping.
+            raise
+        except Exception as exc:
+            # Per D74 §B.2: server-side error surface. The framework process
+            # is the receiver (no AdapterCallError consumer); wrap as
+            # McpError(-32603) Internal-error per JSON-RPC 2.0 spec with the
+            # underlying exception's type + message preserved for caller
+            # diagnostic visibility. Exception chained via ``from``.
+            raise McpError(
+                ErrorData(
+                    code=-32603,
+                    message=(
+                        f"skill {skill_id!r} on specialist {binding_id!r} "
+                        f"failed: {type(exc).__name__}: {exc}"
+                    ),
+                )
+            ) from exc
+
+    # ---------------------------------------------------------------
+    # Outbound call() — NOT IMPLEMENTED for c6 per D74 §D
+    # ---------------------------------------------------------------
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
+        """NOT IMPLEMENTED for the server-side adapter per D74 §D.
+
+        c6 (MCPServerAdapter) IS the server; outbound peer-as-server
+        (workspace acting as a client of another workspace's MCP server)
+        is a cross-impl deferral — the existing
+        ``RealWireMCPClientAdapter`` (D71) covers the client side. Calling
+        this method raises ``NotImplementedError`` with a diagnostic
+        message naming the deferral.
+        """
+        raise NotImplementedError(
+            f"MCPServerAdapter {self.id!r} is the SERVER side; outbound "
+            "peer-as-server is deferred per D74 §D — bind a "
+            "RealWireMCPClientAdapter (mcp-server-ext:mcp-client-realwire) "
+            "for outbound MCP calls."
+        )
+
+
+def _default_mcp_server_factory(adapter: "MCPServerAdapter") -> Any:
+    """Build the default MCP SDK Server with handlers registered.
+
+    Per D74 §B: constructs ``mcp.server.lowlevel.Server`` named off the
+    workspace id; registers ``@server.list_tools()`` + ``@server.call_tool()``
+    closures that reference ``adapter`` for substrate access at request
+    time.
+
+    @list_tools returns the aggregator output (per D21 §generalization +
+    D60 publicly-exposed filter).
+
+    @call_tool dispatches to ``adapter.route_tool_call`` (per D74 §B.2 +
+    §B.3 + §B.4 error surface). On success returns a list of
+    ``mcp.types.TextContent`` blocks carrying the JSON-serialized
+    ``handle_skill`` return.
+    """
+    from mcp.server.lowlevel import Server
+    from mcp import types as t
+
+    workspace_id = (
+        adapter._workspace.workspace_id
+        if adapter._workspace is not None
+        else adapter.id
+    )
+    server = Server(workspace_id)
+
+    @server.list_tools()
+    async def _list_tools() -> list:
+        return adapter.build_tools()
+
+    @server.call_tool()
+    async def _call_tool(name: str, arguments: Optional[dict]) -> list:
+        result = adapter.route_tool_call(name, arguments)
+        # Serialize the handle_skill return as JSON text content. The
+        # specialist may return any JSON-serializable shape (dict / list /
+        # primitive); fall back to ``str()`` if json.dumps cannot encode.
+        import json as _json
+
+        try:
+            text = _json.dumps(result, default=str)
+        except Exception:
+            text = str(result)
+        return [t.TextContent(type="text", text=text)]
+
+    return server
+
+
 # Module-level registry of (protocol-or-transport → runtime class). Populated
 # as new adapter impls land. Phase C real-wire impls add alongside Phase B
 # stubs (per D41 two-substrate parity precedent + D69 substrate-alongside
@@ -1385,6 +1748,7 @@ _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
     "direct-api-ext:direct-api": DirectAPIAdapter,
     "direct-api-ext:direct-api-realwire": RealWireDirectAPIAdapter,
     "a2a-peer-ext:a2a-peer": A2APeerAdapter,
+    "mcp-server-side-ext:mcp-server": MCPServerAdapter,
 }
 
 
