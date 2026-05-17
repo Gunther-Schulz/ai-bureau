@@ -194,7 +194,11 @@ class Workspace:
         }
         self._work_unit_handles: dict[str, WorkUnitHandle] = {}
         self._shutdown_emitted = False
-        self._event_id_counter = 0
+        # Per D70 §B: seed the auto-event-id counter from the current chain
+        # length so post-replay emits never collide with replayed event ids
+        # (which used the same f"evt-{ws}-{NNN}" deterministic shape).
+        # Cold start = 0; post-replay = chain length at boot moment.
+        self._event_id_counter = len(substrate.event_chain)
 
     # ------------------------ classmethod entry ------------------------
 

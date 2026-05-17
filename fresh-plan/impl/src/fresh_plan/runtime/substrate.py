@@ -89,6 +89,7 @@ class HookExecutionError(Exception):
 
 if TYPE_CHECKING:
     from fresh_plan.runtime.adapter import Adapter
+    from fresh_plan.runtime.persistence import PersistenceLayer
     from fresh_plan.runtime.shape import Shape
     from fresh_plan.runtime.specialist import Specialist
 
@@ -161,6 +162,13 @@ class Substrate:
     # Per D57 §B.1: opaque pass-through configuration dict from
     # composition.substrate-bindings[i].configuration. None when omitted.
     configuration: Optional[dict] = None
+
+    # Per D70 §B (Phase C C2): optional JSONL persistence layer. None for
+    # tests that don't need on-disk persistence (in-memory only); set by
+    # boot.py step 4.5 when persistence is configured for the workspace.
+    # When non-None, append_event mirrors each successful append to the
+    # persistence file (POSIX-atomic append).
+    persistence: Optional["PersistenceLayer"] = None
 
     # Per D44: subscriber dispatch is queued. The outermost append_event
     # drains; nested append_event calls (emitted from on_event) enqueue
@@ -285,6 +293,17 @@ class Substrate:
 
         # Step 4: chain append (assigns seq; D10 + D44)
         seq = self.event_chain.append(event, self.schema_store)
+
+        # Step 4a (D70 §B Phase C C2): mirror successful append to JSONL
+        # persistence layer when configured. IO error propagates — the
+        # in-memory chain already contains the event (integrity preserved
+        # per D10); the persistence write failure surfaces to caller via
+        # PersistenceCorruptionError. Future Phase C+ refinement may
+        # rollback the in-memory chain on persistence failure (per D70
+        # §D D-2 deferral); current behavior keeps in-memory as
+        # source-of-truth.
+        if self.persistence is not None:
+            self.persistence.save_event(event)
 
         # Step 5: projection (D39 state-from-events)
         self._apply_runtime_side_effects(event)

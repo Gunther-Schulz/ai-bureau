@@ -27,6 +27,10 @@ from fresh_plan.runtime.per_event_checks import (
     EventRejected,
     check_event_references,
 )
+from fresh_plan.runtime.persistence import (
+    PersistenceCorruptionError,
+    PersistenceLayer,
+)
 from fresh_plan.runtime.skills import SkillRegistry, UnknownSkillError
 from fresh_plan.runtime.substrate import (
     ClaudeAgentSDKSubstrate,
@@ -57,6 +61,8 @@ __all__ = [
     "InvalidWorkUnitTransitionError",
     "MSAgentFrameworkSubstrate",
     "MalformedEventError",
+    "PersistenceCorruptionError",
+    "PersistenceLayer",
     "SkillRegistry",
     "Substrate",
     "UnknownActorError",

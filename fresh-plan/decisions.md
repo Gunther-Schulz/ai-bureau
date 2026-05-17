@@ -80,3 +80,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D67](decisions/D67-clarifies-d62-d63-count-corrections.md) — Clarifies D62 + D63 — count corrections per retro-validation Group 4 finding (2026-05-17)
 - [D68](decisions/D68-phase-c-planning-workstream-order-setup-decisions-closure.md) — Phase C planning: workstream order + setup decisions + closure criterion (2026-05-17)
 - [D69](decisions/D69-phase-c-real-wire-substrate-claude-agent-sdk.md) — Phase C real-wire substrate (Claude Agent SDK Python; closes C1) (2026-05-17)
+- [D70](decisions/D70-phase-c-jsonl-persistence-layer.md) — Phase C JSONL persistence layer (closes C2; activates D54 §B.2 + D58 §B.1) (2026-05-17)

@@ -1,21 +1,32 @@
 """Boot procedure: orchestrates B1 validation + substrate instantiation.
 
-Per the B2 brief boot procedure spec (refined by Bref closure of D39):
+Per the B2 brief boot procedure spec (refined by Bref closure of D39;
+Phase C C2 insertion per D70 §B):
 
   1. Call B1 to validate the manifest (D29 + D30 + D32 + D33).
   2. Resolve the substrate provision from composition.substrate-bindings[].
   3. Load the resolved substrate provision's spec.
   4. Instantiate the substrate runtime — dispatched by provision id
-     (InProcessSubstrate / MSAgentFrameworkSubstrate per D41).
+     (InProcessSubstrate / MSAgentFrameworkSubstrate / ClaudeAgentSDKSubstrate
+     per D41 + D69).
+  4.5 (D70 §B per D54 + D58): attach JSONL persistence layer when
+     configured; load any prior chain + replay through substrate
+     append-event integrity gate; load prior manifest snapshot + call
+     classify_shape_change to detect breaking shape-version bump;
+     activate D58 §B.1 lifecycle-derivation-mismatch reconciliation
+     against the loaded chain.
   5. Bind shape, adapters, specialists; construct Workspace handle;
      attach workspace to adapters/specialists.
   6. Per Bref closure of D39: emit synthetic composition-change:add
      events for each manifest-declared actor (full record in
      payload.record). First actor self-attests (per D34 §A.5 extension);
      subsequent ones attribute to the first. Projection adds them to
-     state — no direct state mutation.
+     state — no direct state mutation. Actor seeding is GUARDED by
+     state.has_actor (existing behavior) so a replayed chain that
+     already seeded actors does not re-add them.
   7. Emit lifecycle-transition:boot event into the chain.
-  8. Return the Workspace handle.
+  8. Save manifest snapshot atomically (D70 §B + D54 §B.2 forward-input).
+  9. Return the Workspace handle.
 
 For the in-process substrate, "instantiation" is just constructing a
 Python object — no separate process to spawn.
@@ -50,6 +61,26 @@ class WorkspaceBootError(Exception):
 def _utcnow_iso() -> str:
     """ISO-8601 UTC with Z suffix, matching the schema's date-time format."""
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def _persistence_enabled(config: dict) -> bool:
+    """Return True when persistence is opted-in via substrate configuration.
+
+    Per D70 §B + D57 §B.1 opaque pass-through: persistence is OPT-IN to
+    avoid forcing every test workspace (in-memory only) to create dot-
+    directories on disk. Opt-in signal: ``persistence-root`` key present
+    (any value, including the default-marker) OR explicit
+    ``persistence: true`` flag in the substrate-binding configuration.
+
+    Tests that want persistence either (a) pass an explicit
+    ``persistence-root`` path in fixture configuration, OR (b) construct
+    a ``PersistenceLayer`` directly + attach to ``substrate.persistence``
+    after boot. Phase B-shaped tests remain unaffected (no persistence
+    attached → no file I/O).
+    """
+    if not isinstance(config, dict):
+        return False
+    return bool(config.get("persistence") or config.get("persistence-root"))
 
 
 def boot_workspace(
@@ -170,6 +201,140 @@ def boot_workspace(
                 )
             ]
         ) from e
+
+    # Step 4.5 (D70 §B per D54 + D58): attach persistence layer + replay
+    # any persisted chain + reconcile shape spec against prior boot's
+    # manifest snapshot. Lives between substrate instantiation (step 4)
+    # and shape binding (step 5) because:
+    #   (a) it needs the substrate's event_chain + schema_store to replay
+    #       events through the chain's schema validator;
+    #   (b) it precedes shape binding so D54's classify_shape_change can
+    #       run against the prior manifest's shape spec before the
+    #       (potentially-changed) new shape is loaded.
+    # Persistence-root resolves from substrate-binding configuration per
+    # D57 §B.1 opaque pass-through; default './.fresh-plan-state/'
+    # (cwd-relative) per D68 §B.2 setup decision.
+    persistence_config = (
+        primary_binding.get("configuration") or {}
+    )
+    persistence_root = persistence_config.get(
+        "persistence-root"
+    )
+    if persistence_root is not None or _persistence_enabled(persistence_config):
+        from fresh_plan.runtime.persistence import (
+            DEFAULT_PERSISTENCE_ROOT,
+            PersistenceCorruptionError,
+            PersistenceLayer,
+        )
+
+        if persistence_root is None:
+            persistence_root = DEFAULT_PERSISTENCE_ROOT
+        persistence = PersistenceLayer(
+            persistence_root=persistence_root,
+            workspace_id=manifest["id"],
+        )
+        substrate.persistence = persistence
+
+        # Replay any prior chain BEFORE attaching persistence to the
+        # substrate's append_event side-effect — replay path appends to
+        # the in-memory chain directly via event_chain.append +
+        # apply_event_to_state, NOT via substrate.append_event (which
+        # would re-run integrity checks + re-write the same events to
+        # disk, doubling the persisted record).
+        if persistence.has_events():
+            try:
+                replay_count = 0
+                for evt in persistence.load_chain():
+                    substrate.event_chain.append(evt, schema_store)
+                    from fresh_plan.runtime.event_chain import (
+                        apply_event_to_state,
+                    )
+
+                    apply_event_to_state(evt, substrate.state)
+                    replay_count += 1
+            except PersistenceCorruptionError as exc:
+                raise WorkspaceBootError(
+                    [
+                        ValidationFailure(
+                            category="persistence-corruption",
+                            path=exc.path,
+                            value=exc.line_number,
+                            reason=exc.reason,
+                        )
+                    ]
+                ) from exc
+
+        # D54 §B.2 boot-integration ACTIVATED: compare prior shape spec
+        # (from manifest snapshot) against new manifest's shape spec.
+        # Non-safe entries → WorkspaceBootError(category=
+        # 'shape-migration-unsafe'). Resolves D54 §D D-1.
+        try:
+            prior_manifest = persistence.load_manifest_snapshot()
+        except PersistenceCorruptionError as exc:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="persistence-corruption",
+                        path=exc.path,
+                        value=exc.line_number,
+                        reason=exc.reason,
+                    )
+                ]
+            ) from exc
+
+        if prior_manifest is not None:
+            from fresh_plan.validator.shape_migration import (
+                classify_shape_change,
+            )
+
+            prior_shape_spec = (
+                (prior_manifest.get("composition") or {}).get("shape") or {}
+            )
+            new_shape_spec = composition.get("shape") or {}
+            shape_changes = classify_shape_change(
+                prior_shape_spec, new_shape_spec
+            )
+            non_safe = [
+                change
+                for change in shape_changes
+                if change[3] != "safe-in-place"
+            ]
+            if non_safe:
+                failures: list[ValidationFailure] = []
+                for slot_path, prior_val, new_val, category in non_safe:
+                    failures.append(
+                        ValidationFailure(
+                            category="shape-migration-unsafe",
+                            path=f"composition.shape.{slot_path}",
+                            value=new_val,
+                            reason=(
+                                f"shape spec change at slot {slot_path!r} "
+                                f"classified as {category!r}: "
+                                f"prior={prior_val!r} new={new_val!r}. "
+                                f"Per D54 §B.2 recovery: operator either "
+                                f"reverts shape version, ships a transition "
+                                f"event recording the era boundary, OR starts "
+                                f"a new workspace at major-bump boundary."
+                            ),
+                        )
+                    )
+                raise WorkspaceBootError(failures)
+
+        # D58 §B.1 reconciliation ACTIVATED: pass the loaded chain to
+        # the lifecycle-derivation check so manifest-declared work-unit
+        # timestamps reconcile against chain-derived state. Replaces the
+        # event_chain=None call at validator/workspace.py:328 for the
+        # persisted-chain code path. No-op when manifest has no
+        # work-units (current schema). Resolves D58 §C wiring.
+        from fresh_plan.validator.workspace import (
+            check_work_unit_lifecycle_derivation,
+        )
+
+        lifecycle_failures = check_work_unit_lifecycle_derivation(
+            manifest, event_chain=substrate.event_chain
+        )
+        if lifecycle_failures:
+            raise WorkspaceBootError(lifecycle_failures)
 
     # Cache known binding-ids (for D30 §4 per-event check support and
     # for the workspace's introspection API). Manifest-declared actor
@@ -490,6 +655,18 @@ def boot_workspace(
                     )
                 ]
             )
+        # Per D70 §B + D58 composition-delta-deferral: if the persisted
+        # chain replayed the actor onto state already, skip re-emitting
+        # the synthetic composition-change:add seed event. Re-emitting
+        # would collide on event id ("evt-actor-add-NNN-<ws-id>" is
+        # deterministic per index) AND would emit a duplicate add for an
+        # actor already-present in state. Composition-delta semantics
+        # (manifest actors vs chain actors) deferred per D70 §D — current
+        # behavior: trust the chain.
+        if substrate.state.has_actor(aid):
+            if first_actor_id is None:
+                first_actor_id = aid
+            continue
         attributing_id = aid if first_actor_id is None else first_actor_id
         prev_id = (
             substrate.event_chain.tail["id"] if substrate.event_chain.tail else None
@@ -534,9 +711,14 @@ def boot_workspace(
     # attribution). prev-event chains off the most recent seed event (or
     # is None if the workspace has no manifest actors — schema rejects
     # that case anyway via composition.actors minItems=1).
+    # Per D70 §B: event id includes the chain length so subsequent boots
+    # (which re-emit lifecycle-transition:boot) don't collide with the
+    # prior boot's deterministic id. First boot emits id `evt-boot-<n>-<ws>`
+    # where <n> is the chain-length at emit time; replay produces unique
+    # ids per boot session.
     prev_id = substrate.event_chain.tail["id"] if substrate.event_chain.tail else None
     boot_event = {
-        "id": f"evt-boot-{substrate.workspace_id}",
+        "id": f"evt-boot-{len(substrate.event_chain)}-{substrate.workspace_id}",
         "prev-event": prev_id,
         "timestamp": _utcnow_iso(),
         "actors": [{"id": first_actor_id}] if first_actor_id else [],
@@ -547,5 +729,30 @@ def boot_workspace(
         },
     }
     substrate.append_event(boot_event)
+
+    # Step 8 (D70 §B per D54 §B.2 forward-input): snapshot the manifest
+    # atomically so the next boot's classify_shape_change has the prior
+    # shape spec available. Snapshot happens AFTER lifecycle-transition:boot
+    # so a mid-boot failure leaves the prior snapshot in place (and the
+    # caller is free to retry; the in-memory chain failure already wiped
+    # via WorkspaceBootError). Per D61 the composition-change binding-kind
+    # enum excludes 'shape' — prior shape can't be recovered from chain
+    # alone, hence this separate snapshot.
+    if substrate.persistence is not None:
+        from fresh_plan.runtime.persistence import PersistenceCorruptionError
+
+        try:
+            substrate.persistence.save_manifest_snapshot(manifest)
+        except PersistenceCorruptionError as exc:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="persistence-corruption",
+                        path=exc.path,
+                        value=exc.line_number,
+                        reason=exc.reason,
+                    )
+                ]
+            ) from exc
 
     return workspace
