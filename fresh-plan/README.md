@@ -48,7 +48,13 @@ When invoking Clippy (`/clippy:composer` / `/clippy:autopilot` / `/clippy:auto`)
 
 Clippy upstream principles (v0.4.6+) apply unchanged on top: V1 verification + secondary-source synthesis + temporal discipline + class-completeness; D1 pre-lock plausibility trace + scope-cardinality honesty sub-check; Honest basis caveats cross-phase output convention; 8-item lifecycle + C/P/U checklists + READY self-check. Several of these (secondary-source / temporal / class-completeness / scope-cardinality / honest-basis-caveats) were upstreamed to Clippy as a side product of fresh-plan's discipline-hardening — they live in Clippy now, not here.
 
-Example invocation:
+Example invocation (current — Phase C planning):
+
+```
+/clippy:autopilot Begin Phase C planning entry — D68 analog of D27 (Phase A enumeration) + D36 (Phase B planning). Phase B closed at D63; Bref-followon batch via clippy:autopilot complete (D64-D67 landed 2026-05-17 on fresh-plan-clippy branch). Per D26 + D63 §E indicative-scope: real-wire substrate + adapters + specialists + persistence layer + integrity-protocol extensions + standards-compat engagement. At session-start: Read fresh-plan/README.md + CLIPPY-COMPANION.md + probing.md + decisions.md index.
+```
+
+Historical examples (for shape reference; Bref/D52 era 2026-05-12 through 2026-05-17):
 
 ```
 /clippy:autopilot Continue Bref work per fresh-plan/roadmap.md deliverable #19 (D52 composition-change cluster). At session-start: Read fresh-plan/README.md + fresh-plan/CLIPPY-COMPANION.md + fresh-plan/probing.md.
