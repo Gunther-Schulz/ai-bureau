@@ -72,3 +72,5 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D59](decisions/D59-extends-d29-d10-payload-vocabulary-registration.md) — Extends D29 + D10 — payload-vocabulary registration mechanism + per-event validation (2026-05-17)
 - [D60](decisions/D60-clarifies-d19-d21-specialist-skills-modality-slots.md) — Clarifies D19 + D21 — specialist.skills[] modality + publicly-exposed slots are A2A-peer agent-card vocabulary anticipation (2026-05-17)
 - [D61](decisions/D61-clarifies-d7-d31-live-shape-migration-scope-cut.md) — Clarifies D7 + D31 — live in-place shape migration is a deliberate scope-cut; shape changes require workspace reboot (2026-05-17)
+- [D62](decisions/D62-bref-refinement-workstream-output-phase-b-refinement-complete.md) — Bref refinement workstream output (analog of D34) — Phase B refinement workstream complete (2026-05-17)
+- [D63](decisions/D63-phase-b-closure-final-artifacts-phase-b-complete.md) — Phase B closure (analog of D35) — Phase B complete (2026-05-17)

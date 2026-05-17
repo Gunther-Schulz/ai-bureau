@@ -37,7 +37,7 @@ Closed at D35. Refined by D34. Sharpened by D37-D40 side-quest batch.
 
 ---
 
-## Phase B — IN PROGRESS
+## Phase B — COMPLETE (closed 2026-05-17 at D63)
 
 Per D36 (Phase B planning) + D41 (B2b two-substrate parity) + D42 (Bref formalization).
 
@@ -57,9 +57,9 @@ Per D36 (Phase B planning) + D41 (B2b two-substrate parity) + D42 (Bref formaliz
 
 168 tests pass. Implementation discipline locked.
 
-### Bref — IN PROGRESS (Phase B refinement workstream per D42)
+### Bref — COMPLETE (Phase B refinement workstream per D42; closed 2026-05-17 at D62)
 
-Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** by the slot-interpretation audit (run as part of Bref deliverable processing; surfaced 24 SUSPECT slots and the underlying discipline gap that motivated `probing.md`).
+Originally tracked 7 deliverables at D42 lock-time. **Scope expanded mid-Bref** by the slot-interpretation audit (surfaced 24 SUSPECT slots) + the failure-mode/abandonment-path audit (surfaced 33 SUSPECT runtime decisions). Both absorbed via D45 meta-foundation + 6 cluster supersedes (D46-D48 + D50-D52) + 5 substantive post-cluster Extends entries (D54-D58 + D59) + 2 clarifications (D60-D61). **Workstream closed at D62 (Bref output) + D63 (Phase B closure). 218 tests pass; 63 D-entries locked.**
 
 **Original 7 tracked deliverables:**
 
