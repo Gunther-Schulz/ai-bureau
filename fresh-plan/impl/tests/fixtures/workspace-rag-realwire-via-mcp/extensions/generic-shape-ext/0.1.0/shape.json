@@ -1,0 +1,21 @@
+{
+  "id": "generic-shape",
+  "version": "0.1.0",
+  "actor-requirements": "none",
+  "required-capabilities": ["hooks", "skills"],
+  "optional-capabilities": ["event-chain"],
+  "authority-bindings": [
+    { "payload-subtype": "claim",
+      "required-role": "author",
+      "required-actor-subtype": "agent-actor" }
+  ],
+  "roles": [
+    { "id": "author",    "description": "Generic emitter role." },
+    { "id": "reviewer",  "description": "Generic witness role." },
+    { "id": "retriever", "description": "Retrieves context chunks from a bound retriever adapter (C7 D75 real-wire RAG fixture)." }
+  ],
+  "hooks": [
+    { "name": "pre-event-emit",  "purpose": "Fired before an event is appended." },
+    { "name": "post-event-emit", "purpose": "Fired after an event is appended." }
+  ]
+}

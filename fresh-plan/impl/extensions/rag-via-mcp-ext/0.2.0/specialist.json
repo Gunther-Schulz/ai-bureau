@@ -1,0 +1,14 @@
+{
+  "id": "rag-realwire-specialist",
+  "version": "0.2.0",
+  "roles": ["retriever"],
+  "skills": [
+    { "id": "retrieve",
+      "description": "Retrieve relevant context chunks from the bound real-wire MCP retriever for a query. Real-wire impl per D75 §B.1; activates D50 §B.1 SkillExecutionError forward-bar; resolves D50 §D D-5 composition contract by WRAPping AdapterCallError as SkillExecutionError(category='external-dependency-error') with __cause__ chain." }
+  ],
+  "supported-work-unit-kinds": ["rag-via-mcp-ext:retrieval-task"],
+  "required-adapter-bindings": ["mcp-server-ext:mcp-real-wire-adapter"],
+  "required-substrate-capabilities": ["skills", "event-chain"],
+  "declared-event-emissions": [{ "payload-subtype": "action" }],
+  "declared-event-subscriptions": []
+}
