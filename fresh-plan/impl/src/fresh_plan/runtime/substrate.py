@@ -708,8 +708,9 @@ class ClaudeAgentSDKSubstrate(Substrate):
           - UserMessage / AssistantMessage / SystemMessage / ResultMessage /
             StreamEvent / RateLimitEvent.
 
-        Phase C C1 scope: translate AssistantMessage + ResultMessage as
-        ``action`` events with structured payload. Other shapes return None.
+        Phase C C1 scope: translate AssistantMessage + UserMessage +
+        ResultMessage as ``action`` events with structured payload (per the
+        ``msg_class_name in {...}`` set below). Other shapes return None.
         Per D-1 (future Phase C+ refinement): finer-grained mapping
         (tool-use → adapter.call action events; tool-result → state-change
         events; thinking-blocks → claim events) lands as the contract surface

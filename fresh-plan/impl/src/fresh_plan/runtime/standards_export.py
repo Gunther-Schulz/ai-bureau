@@ -70,6 +70,16 @@ PROV_NAMESPACE = "http://www.w3.org/ns/prov#"
 
 
 # Fresh-plan event required envelope fields (D10 + D23 — schema.event.json).
+#
+# NOTE: this list is intentionally NARROWER than the canonical event schema
+# (which also requires `prev-event`) BY DESIGN — this validator runs at
+# EXPORT time, where chain-integrity (prev-event linkage) has already been
+# enforced upstream (B1 validator + per-event checks + AEGIS integrity
+# protocol per D40 §B + D76). The exporter does not consume prev-event in
+# either the CloudEvents or PROV-JSON shape, so requiring it here would
+# only surface a redundant gate. A cold reader spotting the omission
+# should NOT treat it as a hole; the chain-integrity contract is enforced
+# elsewhere per D45 detection-surface-recovery layering.
 _REQUIRED_EVENT_FIELDS = (
     "id",
     "timestamp",
@@ -84,6 +94,9 @@ def _validate_event_envelope(event: dict, *, context: str) -> None:
 
     No silent substitution — a malformed event is surfaced at conversion
     time rather than producing a downstream record with missing fields.
+
+    Narrower than the canonical event.schema.json (omits `prev-event`) BY
+    DESIGN — see _REQUIRED_EVENT_FIELDS module-level comment.
     """
     if not isinstance(event, dict):
         raise ValueError(

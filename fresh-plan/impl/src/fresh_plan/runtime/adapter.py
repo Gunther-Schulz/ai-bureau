@@ -1517,9 +1517,10 @@ class MCPServerAdapter(Adapter):
 
         Per D21 §generalization (workspace-as-MCP-server) + D60: filters
         ``specialist.skills[]`` by ``publicly-exposed=True``; maps each to
-        ``mcp.types.Tool`` with name ``"<binding_id>:<skill_id>"`` (binding-
+        ``mcp.types.Tool`` with name ``"<binding_id>.<skill_id>"`` (binding-
         id prefix prevents skill_id collision across specialists in the
-        same workspace).
+        same workspace; dot separator per MCP SEP-986 tool-name character
+        set).
 
         Returns:
             list[mcp.types.Tool] in canonical SDK shape; empty list when
@@ -1600,7 +1601,11 @@ class MCPServerAdapter(Adapter):
                     ),
                 )
             )
-        binding_id, _, skill_id = tool_name.partition(".")
+        # Use rpartition so binding-ids containing dots (admitted by
+        # _common.schema.json instance-identifier; skill-ids forbid dots per
+        # the vocabulary-identifier rule) reverse-map correctly. E.g.,
+        # ``"b-plan-3.2.echo"`` → binding=``"b-plan-3.2"`` + skill=``"echo"``.
+        binding_id, _, skill_id = tool_name.rpartition(".")
 
         substrate = self._workspace._substrate
         specialist = substrate.specialist_instances.get(binding_id)
@@ -1864,7 +1869,9 @@ class ProvJsonExportAdapter(Adapter):
         # chain (transparency) but not in the exported PROV document
         # (otherwise every export would carry a meta-event referring to
         # itself, polluting the workspace's substantive provenance).
-        chain = list(self._workspace._substrate.event_chain.all_events())
+        # all_events() already returns a fresh list per event_chain.py:250-252;
+        # no need to re-wrap with list(...).
+        chain = self._workspace._substrate.event_chain.all_events()
         # The last event is the action we just emitted; exclude it.
         if chain and chain[-1].get("payload", {}).get(
             "outcome-reference"

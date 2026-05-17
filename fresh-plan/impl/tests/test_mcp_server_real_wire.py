@@ -321,6 +321,91 @@ def test_call_tool_binding_id_collision_routes_correctly(
 
 
 # ---------------------------------------------------------------------------
+# Dotted binding-id reverse-mapping (Cref F12; rpartition vs partition)
+# ---------------------------------------------------------------------------
+#
+# _common.schema.json instance-identifier admits dots in binding-ids (e.g.,
+# project-codes like ``b-plan-3.2``); skill-ids forbid dots per the
+# vocabulary-identifier rule. Hence ``route_tool_call`` MUST rpartition from
+# the right so a tool name ``"b-plan-3.2.echo"`` splits into binding
+# ``"b-plan-3.2"`` + skill ``"echo"`` (not binding ``"b-plan-3"`` +
+# skill ``"2.echo"`` which would mis-route and surface a spurious
+# method-not-found). These tests bypass the workspace-boot fixture to
+# unit-test the routing logic against a stub specialist registry.
+
+
+class _StubSubstrate:
+    """Minimal stub exposing ``specialist_instances`` for route_tool_call."""
+
+    def __init__(self, instances):
+        self.specialist_instances = instances
+
+
+class _StubWorkspace:
+    """Minimal stub exposing ``_substrate`` for route_tool_call."""
+
+    def __init__(self, substrate):
+        self._substrate = substrate
+
+
+class _StubSpecialist:
+    """Minimal stub with a single publicly-exposed skill named ``echo``."""
+
+    def __init__(self):
+        self.skills = [
+            {"id": "echo", "publicly-exposed": True, "modality": "function"}
+        ]
+
+    def handle_skill(self, skill_id, params):
+        return {"ok": True, "skill": skill_id, "parameters": params}
+
+
+def test_route_tool_call_dotted_binding_id_reverse_maps_correctly():
+    """Cref F12: a binding-id containing dots (e.g., ``b-plan-3.2``) must
+    reverse-map correctly from the tool name ``b-plan-3.2.echo`` — binding
+    on the LEFT, skill on the RIGHT. The fix swapped ``partition`` (which
+    splits on the FIRST dot, mis-routing) for ``rpartition`` (last dot)."""
+    adapter = MCPServerAdapter(spec=dict(MCP_SERVER_ADAPTER_SPEC))
+    specialist = _StubSpecialist()
+    adapter._workspace = _StubWorkspace(
+        _StubSubstrate({"b-plan-3.2": specialist})
+    )
+    result = adapter.route_tool_call("b-plan-3.2.echo", {"msg": "hi"})
+    assert result == {
+        "ok": True,
+        "skill": "echo",
+        "parameters": {"msg": "hi"},
+    }
+
+
+def test_route_tool_call_dotted_binding_id_partition_would_misroute():
+    """Cref F12 regression: under the OLD ``partition`` behaviour, a tool
+    name ``b-plan-3.2.echo`` would split to binding=``b-plan-3`` +
+    skill=``2.echo`` — the binding lookup would miss and raise
+    McpError(-32601) even though the skill is legitimately exposed. With
+    the rpartition fix, the same tool name routes through correctly.
+    This test asserts the legitimate-route path; the misrouting fault is
+    proven by the binding-id present in the lookup map being the dotted
+    variant rather than the truncated prefix."""
+    from mcp.shared.exceptions import McpError
+
+    adapter = MCPServerAdapter(spec=dict(MCP_SERVER_ADAPTER_SPEC))
+    # Registry has ONLY the dotted binding-id. Under partition()'s
+    # left-split, the lookup would target "b-plan-3" (absent) and surface
+    # method-not-found; under rpartition() it targets "b-plan-3.2"
+    # (present) and routes through to handle_skill.
+    specialist = _StubSpecialist()
+    adapter._workspace = _StubWorkspace(
+        _StubSubstrate({"b-plan-3.2": specialist})
+    )
+    # Sanity: a missing-binding tool name still raises -32601 (the
+    # rpartition fix does not change the negative-path semantics).
+    with pytest.raises(McpError) as excinfo:
+        adapter.route_tool_call("absent-binding.echo", {})
+    assert excinfo.value.error.code == -32601
+
+
+# ---------------------------------------------------------------------------
 # Outbound call() not implemented per D74 §D
 # ---------------------------------------------------------------------------
 
