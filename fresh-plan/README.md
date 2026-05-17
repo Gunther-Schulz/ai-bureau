@@ -42,6 +42,18 @@ Read fresh-plan/README.md.
 
 The pickup message MUST start with `Read fresh-plan/README.md.` (verbatim — this is the deterministic trigger for the Session-start procedure). Surface it as a clearly-marked code block in the session-end message so the user can copy-paste cleanly. Per `feedback_pickup_message_minimal.md` memory: 1–3 sentences max total; don't re-derive what the README/CONCEPTS/decisions.md already carry (signals doubt that they're in good state when they are).
 
+## Working with Clippy on fresh-plan
+
+When invoking Clippy (`/clippy:composer` / `/clippy:autopilot` / `/clippy:auto`) on fresh-plan work, **include `fresh-plan/CLIPPY-COMPANION.md` in the session-start brief** alongside this README. The companion carries fresh-plan-specific shape — D-entry template (§A scope / §B triad / §C impl follow-through / §D What is NOT / §E pre-lock probe disposition); cluster supersedes pattern per D45 §C; pre-lock probe FIRE vs SKIP refined rule per D48 §E precedent; Sketch-then-lock user-sign-off override of Clippy autopilot's no-interrupt default; [design]/[impl]/[design+impl] commit-tag convention; state-mapping (Clippy `.ai/` vs fresh-plan native `decisions/` + `roadmap.md`); after-locking checklist (decisions.md index + roadmap status + README snapshot updates).
+
+Clippy upstream principles (v0.4.6+) apply unchanged on top: V1 verification + secondary-source synthesis + temporal discipline + class-completeness; D1 pre-lock plausibility trace + scope-cardinality honesty sub-check; Honest basis caveats cross-phase output convention; 8-item lifecycle + C/P/U checklists + READY self-check. Several of these (secondary-source / temporal / class-completeness / scope-cardinality / honest-basis-caveats) were upstreamed to Clippy as a side product of fresh-plan's discipline-hardening — they live in Clippy now, not here.
+
+Example invocation:
+
+```
+/clippy:autopilot Continue Bref work per fresh-plan/roadmap.md deliverable #19 (D52 composition-change cluster). At session-start: Read fresh-plan/README.md + fresh-plan/CLIPPY-COMPANION.md + fresh-plan/probing.md.
+```
+
 ## Operating disciplines (load-bearing during session)
 
 - **Append-only ledger.** Entries in `decisions.md` are locked once added. Override = new entry that explicitly supersedes the prior. Never edit a locked entry's substance; clarifications go in follow-up entries.
