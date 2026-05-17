@@ -206,6 +206,13 @@ def boot_workspace(
     for slot, values in (result.payload_vocabulary_tables or {}).items():
         substrate.registered_payload_vocabulary.setdefault(slot, set()).update(values)
 
+    # Per D65 §B.1: populate substrate.state.shape_config from manifest's
+    # composition.shape.configuration. Closes D56 §D D-7 deferral.
+    # Immutable post-boot per shape-as-substantive-identity (D4 + D13).
+    substrate.state.shape_config = (
+        composition.get("shape", {}).get("configuration") or {}
+    )
+
     # 6. Shape policies (D13 + B3): load + attach the shape impl when a
     # provision is bound; register stub handlers for declared hook names.
     # Per D46 §B.1: unknown shape provision-id surfaces as WorkspaceBootError
