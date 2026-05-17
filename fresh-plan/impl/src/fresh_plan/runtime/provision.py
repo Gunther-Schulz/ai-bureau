@@ -10,6 +10,16 @@ from pathlib import Path
 from typing import Optional
 
 
+class ProvisionResolutionError(ValueError):
+    """Raised when a provision-ref cannot be resolved to a registered runtime class.
+
+    Per D57 §C: boot.py distinguishes this from constructor-rejection
+    raises. Registry-miss → ``WorkspaceBootError(category="resolution")``;
+    constructor-raise (anything OTHER than this exception type) →
+    ``WorkspaceBootError(category="configuration-rejected")``.
+    """
+
+
 def load_provision_spec(provision_ref: str, extensions_dir: Path) -> dict:
     """Load a provision spec dict from a `<ext-id>:<provision-id>` ref.
 

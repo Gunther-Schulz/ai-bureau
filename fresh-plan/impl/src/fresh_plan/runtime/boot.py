@@ -130,14 +130,46 @@ def boot_workspace(
             capabilities.append(cap)
 
     # 4. Instantiate the substrate runtime — dispatched by provision id.
-    substrate = load_substrate_from_provision(
-        prov_ref,
-        extensions_dir,
-        workspace_id=manifest["id"],
-        runtime_shape=runtime_shape,
-        schema_store=schema_store,
-        capabilities=capabilities,
-    )
+    # Per D57 §B.1: registry-miss → ProvisionResolutionError →
+    # category="resolution"; constructor-raise → category="configuration-rejected".
+    from fresh_plan.runtime.provision import ProvisionResolutionError
+
+    try:
+        substrate = load_substrate_from_provision(
+            prov_ref,
+            extensions_dir,
+            workspace_id=manifest["id"],
+            runtime_shape=runtime_shape,
+            schema_store=schema_store,
+            capabilities=capabilities,
+            configuration=primary_binding.get("configuration"),
+        )
+    except ProvisionResolutionError as e:
+        raise WorkspaceBootError(
+            [
+                ValidationFailure(
+                    category="resolution",
+                    path="composition.substrate-bindings[0].provision",
+                    value=prov_ref,
+                    reason=(
+                        f"substrate provision {prov_ref!r} resolution failed: {e}"
+                    ),
+                )
+            ]
+        ) from e
+    except Exception as e:
+        raise WorkspaceBootError(
+            [
+                ValidationFailure(
+                    category="configuration-rejected",
+                    path="composition.substrate-bindings[0].configuration",
+                    value=prov_ref,
+                    reason=(
+                        f"substrate {prov_ref!r} runtime rejected configuration: {e}"
+                    ),
+                )
+            ]
+        ) from e
 
     # Cache known binding-ids (for D30 §4 per-event check support and
     # for the workspace's introspection API). Manifest-declared actor
@@ -158,6 +190,12 @@ def boot_workspace(
     for wu_kind in (result.vocabulary_tables or {}).get("work-unit.kind", []):
         substrate.registered_work_unit_kinds.add(wu_kind)
 
+    # Per D59 §B.1: populate registered_payload_vocabulary from validator's
+    # payload_vocabulary_tables. Per-slot merge into substrate's preset
+    # four-slot dict.
+    for slot, values in (result.payload_vocabulary_tables or {}).items():
+        substrate.registered_payload_vocabulary.setdefault(slot, set()).update(values)
+
     # 6. Shape policies (D13 + B3): load + attach the shape impl when a
     # provision is bound; register stub handlers for declared hook names.
     # Per D46 §B.1: unknown shape provision-id surfaces as WorkspaceBootError
@@ -168,8 +206,12 @@ def boot_workspace(
         from fresh_plan.runtime.shape import load_shape_from_provision
 
         try:
-            shape = load_shape_from_provision(shape_ref, extensions_dir)
-        except ValueError as e:
+            shape = load_shape_from_provision(
+                shape_ref,
+                extensions_dir,
+                configuration=composition.get("shape", {}).get("configuration"),
+            )
+        except ProvisionResolutionError as e:
             raise WorkspaceBootError(
                 [
                     ValidationFailure(
@@ -184,8 +226,34 @@ def boot_workspace(
                     )
                 ]
             ) from e
+        except WorkspaceBootError:
+            # Shape.__post_init__ may raise WorkspaceBootError directly
+            # (e.g., D56 authority-constraint-grammar). Surface unchanged.
+            raise
+        except Exception as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="configuration-rejected",
+                        path="composition.shape.configuration",
+                        value=shape_ref,
+                        reason=(
+                            f"shape {shape_ref!r} runtime rejected configuration: {e}"
+                        ),
+                    )
+                ]
+            ) from e
         substrate.shape = shape
         shape.register_handlers(substrate.hooks)
+
+        # §B cheap impl: log shape.optional-capabilities that are NOT advertised
+        # by the substrate. Optional capabilities (D13) are nice-to-have; absence
+        # is non-fatal but should be observable. Recorded on the substrate for
+        # introspection; not raised. Phase C+ may surface via diagnostic API.
+        unmet_optional = [
+            cap for cap in shape.optional_capabilities if cap not in capabilities
+        ]
+        substrate.unmet_optional_capabilities = unmet_optional  # type: ignore[attr-defined]
 
     # 7. Adapter bindings: store metadata + instantiate adapter runtimes.
     # Workspace attachment happens after Workspace is constructed (below).
@@ -201,8 +269,12 @@ def boot_workspace(
         from fresh_plan.runtime.adapter import load_adapter_from_provision
 
         try:
-            adapter = load_adapter_from_provision(prov_ref, extensions_dir)
-        except ValueError as e:
+            adapter = load_adapter_from_provision(
+                prov_ref,
+                extensions_dir,
+                configuration=binding.get("configuration"),
+            )
+        except ProvisionResolutionError as e:
             raise WorkspaceBootError(
                 [
                     ValidationFailure(
@@ -213,6 +285,22 @@ def boot_workspace(
                             f"adapter provision {prov_ref!r} has no registered "
                             f"runtime class — manifest declares this binding but "
                             f"the framework cannot instantiate it. Underlying: {e}"
+                        ),
+                    )
+                ]
+            ) from e
+        except Exception as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="configuration-rejected",
+                        path=(
+                            f"composition.adapter-bindings[binding-id={bid!r}]"
+                            f".configuration"
+                        ),
+                        value=prov_ref,
+                        reason=(
+                            f"adapter {prov_ref!r} runtime rejected configuration: {e}"
                         ),
                     )
                 ]
@@ -237,8 +325,12 @@ def boot_workspace(
         if not bid or not prov_ref:
             continue
         try:
-            specialist = load_specialist_from_provision(prov_ref, extensions_dir)
-        except ValueError as e:
+            specialist = load_specialist_from_provision(
+                prov_ref,
+                extensions_dir,
+                configuration=binding.get("configuration"),
+            )
+        except ProvisionResolutionError as e:
             raise WorkspaceBootError(
                 [
                     ValidationFailure(
@@ -249,6 +341,22 @@ def boot_workspace(
                             f"specialist provision {prov_ref!r} has no registered "
                             f"runtime class — manifest declares this binding but "
                             f"the framework cannot instantiate it. Underlying: {e}"
+                        ),
+                    )
+                ]
+            ) from e
+        except Exception as e:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="configuration-rejected",
+                        path=(
+                            f"composition.specialist-bindings[binding-id={bid!r}]"
+                            f".configuration"
+                        ),
+                        value=prov_ref,
+                        reason=(
+                            f"specialist {prov_ref!r} runtime rejected configuration: {e}"
                         ),
                     )
                 ]

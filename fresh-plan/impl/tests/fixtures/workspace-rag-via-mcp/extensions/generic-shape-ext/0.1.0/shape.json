@@ -10,8 +10,9 @@
       "required-actor-subtype": "agent-actor" }
   ],
   "roles": [
-    { "id": "author",   "description": "Generic emitter role." },
-    { "id": "reviewer", "description": "Generic witness role." }
+    { "id": "author",    "description": "Generic emitter role." },
+    { "id": "reviewer",  "description": "Generic witness role." },
+    { "id": "retriever", "description": "Retrieves context chunks from a bound retriever adapter (RAG-via-MCP B7 fixture)." }
   ],
   "hooks": [
     { "name": "pre-event-emit",  "purpose": "Fired before an event is appended." },

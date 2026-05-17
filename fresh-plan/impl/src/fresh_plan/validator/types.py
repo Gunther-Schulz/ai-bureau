@@ -35,6 +35,11 @@ FAILURE_CATEGORIES = frozenset(
         "adapter-attach",  # D48 §B.2 — adapter.attach_workspace failure (Phase C real-wire)
         "adapter-binding-resolution",  # D48 §B.3 — specialist required-adapter-binding miss
         "composition-validity",  # D52 §B.1 — composition-change post-projection state violates shape policy
+        "shape-migration-unsafe",  # D54 §B.2 — shape-version bump classified as breaking/new-era by classifier
+        "activation-scope-grammar",  # D55 §B.1 — specialist activation-scope grammar parse failure at attach time
+        "authority-constraint-grammar",  # D56 §B.1 — shape authority-binding additional-constraints grammar parse failure
+        "configuration-rejected",  # D57 §B.1 — kind-runtime constructor rejected its `composition.*.configuration` dict
+        "lifecycle-derivation-mismatch",  # D58 §B.1 — manifest-declared work-unit lifecycle timestamps disagree with chain-derived
     }
 )
 
@@ -78,6 +83,11 @@ class ValidationResult:
     failures: list[ValidationFailure] = field(default_factory=list)
     loaded_extensions: Optional[dict[str, dict]] = None
     vocabulary_tables: Optional[dict[str, dict]] = None
+    # Per D59 §B.1 — registered payload-body open-vocab values per slot.
+    # Keys: "claim.confidence", "action.action-name", "state-change.what",
+    # "lifecycle-transition.trigger". Values: list of qualified
+    # `<ext-id>:<value>` strings.
+    payload_vocabulary_tables: Optional[dict[str, list[str]]] = None
 
     def __bool__(self) -> bool:
         return self.success

@@ -83,9 +83,25 @@
       "items": { "$ref": "#/$defs/event-emission-or-subscription" }
     },
     "activation-scope": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional scope conditions under which the specialist is active (D19). Absent = always-active when bound."
+      "description": "Optional scope conditions under which the specialist is active (D19; minimal grammar locked by D55 §B.1). Absent = always-active when bound. Either literal string \"always\" OR a single-field structured predicate {\"when\": {\"payload-subtype\": <value>}}.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["when"],
+          "additionalProperties": false,
+          "properties": {
+            "when": {
+              "type": "object",
+              "required": ["payload-subtype"],
+              "additionalProperties": false,
+              "properties": {
+                "payload-subtype": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      ]
     }
   },
 

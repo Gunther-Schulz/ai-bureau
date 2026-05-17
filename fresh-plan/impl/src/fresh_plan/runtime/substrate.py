@@ -121,6 +121,17 @@ class Substrate:
     registered_payload_subtypes: set[str] = field(default_factory=set)
     registered_work_unit_kinds: set[str] = field(default_factory=set)
     known_binding_ids: set[str] = field(default_factory=set)
+    # Per D59 §B.1 — open-vocab payload-body registry per slot. Keys are
+    # the four payload-slot identifiers; values are sets of qualified
+    # `<ext-id>:<value>` strings registered by loaded extensions.
+    registered_payload_vocabulary: dict[str, set[str]] = field(
+        default_factory=lambda: {
+            "claim.confidence": set(),
+            "action.action-name": set(),
+            "state-change.what": set(),
+            "lifecycle-transition.trigger": set(),
+        }
+    )
 
     # Capabilities advertised; populated from the resolved substrate provision.
     capabilities: list[str] = field(default_factory=list)
@@ -140,6 +151,10 @@ class Substrate:
     # append_event hot path (D37 event-driven coordination).
     specialist_instances: dict[str, "Specialist"] = field(default_factory=dict)
     specialist_subscribers: list["Specialist"] = field(default_factory=list)
+
+    # Per D57 §B.1: opaque pass-through configuration dict from
+    # composition.substrate-bindings[i].configuration. None when omitted.
+    configuration: Optional[dict] = None
 
     # Per D44: subscriber dispatch is queued. The outermost append_event
     # drains; nested append_event calls (emitted from on_event) enqueue
@@ -198,6 +213,7 @@ class Substrate:
             self.known_binding_ids,
             known_specialist_binding_ids=self.specialist_bindings.keys(),
             registered_work_unit_kinds=self.registered_work_unit_kinds,
+            registered_payload_vocabulary=self.registered_payload_vocabulary,
         )
         if ident_failures:
             raise EventRejected(ident_failures)
@@ -318,6 +334,25 @@ class Substrate:
         subtype = event.get("payload-subtype")
         payload = event.get("payload") or {}
         for sub in self.specialist_subscribers:
+            # Per D55 §B.1: specialist-level gate evaluated BEFORE per-subscription
+            # filter. If the predicate evaluates false, skip the specialist entirely.
+            # Predicate-raise routes through D47 §B.1 SubscriberDispatchError
+            # aggregation (existing 3-tuple shape) — cascade NOT terminated.
+            predicate = getattr(sub, "_activation_predicate", None)
+            if predicate is not None:
+                try:
+                    if not predicate(event):
+                        continue
+                except Exception as exc:
+                    spec_id = (
+                        sub.spec.get("id")
+                        if hasattr(sub, "spec")
+                        else type(sub).__name__
+                    )
+                    self._subscriber_failures.append(
+                        (spec_id, event.get("id"), exc)
+                    )
+                    continue
             for subscription in sub.declared_event_subscriptions:
                 if subscription.get("payload-subtype") != subtype:
                     continue
@@ -395,17 +430,23 @@ def load_substrate_from_provision(
     runtime_shape: str,
     schema_store: SchemaStore,
     capabilities: list[str],
+    configuration: Optional[dict] = None,
 ) -> Substrate:
     """Load a substrate spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
     Dispatches by `spec.id` to the registered runtime class. Raises
-    ValueError if the spec's id has no registered runtime class.
+    ValueError if the spec's id has no registered runtime class (boot.py
+    wraps as ``category="resolution"``). Constructor-raises are caught
+    at boot.py and wrapped as ``category="configuration-rejected"`` per
+    D57 §B.1.
     """
+    from fresh_plan.runtime.provision import ProvisionResolutionError
+
     spec = load_provision_spec(provision_ref, extensions_dir)
     substrate_id = spec.get("id")
     cls = _SUBSTRATE_CLASSES.get(substrate_id)
     if cls is None:
-        raise ValueError(
+        raise ProvisionResolutionError(
             f"substrate provision {provision_ref!r}: spec id {substrate_id!r} "
             f"has no registered Substrate runtime class"
         )
@@ -414,4 +455,5 @@ def load_substrate_from_provision(
         runtime_shape=runtime_shape,
         schema_store=schema_store,
         capabilities=list(capabilities),
+        configuration=configuration,
     )

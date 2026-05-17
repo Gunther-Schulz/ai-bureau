@@ -257,6 +257,10 @@ def validate_workspace_boot(
     # --- 7. Merge vocabulary tables in load order ---
     # vocabulary_tables: slot -> set of qualified-ids
     vocabulary_tables: dict[str, set[str]] = {}
+    # Per D59 §B.1 — parallel registry for payload-body open-vocab values.
+    # Keys: "claim.confidence" / "action.action-name" / "state-change.what" /
+    # "lifecycle-transition.trigger". Values are qualified `<ext-id>:<value>`.
+    payload_vocabulary_tables: dict[str, set[str]] = {}
     for ext_id in sorted_nodes:
         ext = loaded.get(ext_id)
         if ext is None:
@@ -266,6 +270,13 @@ def validate_workspace_boot(
             ident = reg.get("identifier")
             if slot and ident:
                 vocabulary_tables.setdefault(slot, set()).add(f"{ext_id}:{ident}")
+        for reg in ext.manifest.get("payload-vocabulary-registrations", []):
+            slot = reg.get("payload-slot")
+            value = reg.get("value")
+            if slot and value:
+                payload_vocabulary_tables.setdefault(slot, set()).add(
+                    f"{ext_id}:{value}"
+                )
 
     # --- 8. D30 checks ---
     # Per D51 §B.2: all five check categories run unconditionally. The previous
@@ -279,6 +290,16 @@ def validate_workspace_boot(
     failures += checks.check_capability_satisfaction(manifest, loaded)
     failures += checks.check_vocabulary_resolution(manifest, loaded, vocabulary_tables)
     failures += checks.check_binding_availability(manifest, loaded)
+    # §B cheap impl — specialist.roles[] must reference shape role-ids.
+    failures += checks.check_specialist_roles_against_shape(manifest, loaded)
+
+    # Per D58 §B.1: reconcile any manifest-declared work-unit lifecycle
+    # timestamps against the (currently in-memory; persistence deferred per
+    # D58 §D D-5) event chain. No-op when manifest has no `work-units` slot
+    # (current workspace.schema.json does not declare one — the slot exists
+    # for forward-bar parity with D54 migration-safety pattern and for
+    # future persistence-layer integration).
+    failures += check_work_unit_lifecycle_derivation(manifest, event_chain=None)
 
     success = len(failures) == 0
     return ValidationResult(
@@ -287,6 +308,11 @@ def validate_workspace_boot(
         loaded_extensions={k: v.manifest for k, v in loaded.items()} if success else None,
         vocabulary_tables=(
             {k: sorted(v) for k, v in vocabulary_tables.items()} if success else None
+        ),
+        payload_vocabulary_tables=(
+            {k: sorted(v) for k, v in payload_vocabulary_tables.items()}
+            if success
+            else None
         ),
     )
 
@@ -314,6 +340,75 @@ def _schema_validate(
             )
         )
     return out
+
+
+def check_work_unit_lifecycle_derivation(
+    manifest: dict,
+    event_chain: Optional[object] = None,
+) -> list[ValidationFailure]:
+    """Per D58 §B.1 — reconcile manifest-declared work-unit lifecycle timestamps
+    against chain-derived state.
+
+    For each manifest-declared work-unit with non-null ``lifecycle.started-at``
+    or ``lifecycle.completed-at``: derive the chain-projection state via
+    ``event_chain.state_at(len(event_chain) - 1)`` and compare. Mismatch
+    (declared but no corresponding transition event in chain, OR declared
+    value ≠ derived value) yields ``ValidationFailure(category=
+    "lifecycle-derivation-mismatch", ...)``.
+
+    No-op when ``manifest`` has no ``work-units`` slot (current schema does
+    not declare one — forward-bar pattern parallel to D54). No-op when
+    ``event_chain`` is None (current in-memory impl: chain at boot is empty;
+    persistence-layer integration deferred per D58 §D D-5).
+    """
+    failures: list[ValidationFailure] = []
+    manifest_work_units = manifest.get("work-units", []) or []
+    if not manifest_work_units:
+        return failures
+
+    # Compute chain-derived state if a chain is provided.
+    derived_state = None
+    if event_chain is not None and len(event_chain) > 0:
+        derived_state = event_chain.state_at(len(event_chain) - 1)
+
+    for wu in manifest_work_units:
+        if not isinstance(wu, dict):
+            continue
+        wu_id = wu.get("id")
+        if wu_id is None:
+            continue
+        lifecycle = wu.get("lifecycle") or {}
+        declared_started = lifecycle.get("started-at")
+        declared_completed = lifecycle.get("completed-at")
+        if declared_started is None and declared_completed is None:
+            continue
+
+        derived_lifecycle: dict = {}
+        if derived_state is not None and derived_state.has_work_unit(wu_id):
+            derived_record = derived_state.get_work_unit(wu_id)
+            derived_lifecycle = derived_record.get("lifecycle", {}) or {}
+
+        for field_name, declared in (
+            ("started-at", declared_started),
+            ("completed-at", declared_completed),
+        ):
+            if declared is None:
+                continue
+            derived = derived_lifecycle.get(field_name)
+            if derived != declared:
+                failures.append(
+                    ValidationFailure(
+                        category="lifecycle-derivation-mismatch",
+                        path=f"workspace.work-units[{wu_id}].lifecycle.{field_name}",
+                        value=declared,
+                        reason=(
+                            f"manifest declares lifecycle.{field_name}={declared!r} "
+                            f"but chain-derived value is {derived!r} "
+                            f"(no corresponding transition event in chain, or value differs)"
+                        ),
+                    )
+                )
+    return failures
 
 
 def _build_dependency_graph(loaded: dict[str, LoadedExtension]) -> DependencyGraph:

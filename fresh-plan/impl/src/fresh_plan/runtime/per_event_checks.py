@@ -39,6 +39,7 @@ def check_event_references(
     known_binding_ids: Iterable[str],
     known_specialist_binding_ids: Optional[Iterable[str]] = None,
     registered_work_unit_kinds: Optional[Iterable[str]] = None,
+    registered_payload_vocabulary: Optional[dict[str, Iterable[str]]] = None,
 ) -> list[ValidationFailure]:
     """Run D30 §4 per-event runtime checks; return any failures.
 
@@ -149,6 +150,46 @@ def check_event_references(
                     ),
                 )
             )
+
+    # Per D59 §B.1 — open-vocab payload-body validation. For each of the
+    # four core payload-subtypes carrying an open-vocab string slot, check
+    # that the value (when present + non-empty) is registered by some
+    # loaded extension. Empty / absent values pass (slots optional).
+    if registered_payload_vocabulary is not None:
+        _payload_slot_map = [
+            ("claim", "confidence", "claim.confidence"),
+            ("action", "action-name", "action.action-name"),
+            ("state-change", "what", "state-change.what"),
+            ("lifecycle-transition", "trigger", "lifecycle-transition.trigger"),
+        ]
+        for owning_subtype, slot_key, slot_qualified in _payload_slot_map:
+            if subtype != owning_subtype:
+                continue
+            value = payload.get(slot_key)
+            if not isinstance(value, str) or not value:
+                continue
+            registered = set(registered_payload_vocabulary.get(slot_qualified, []) or [])
+            # Opt-in enforcement: check fires only when the per-slot table has
+            # at least one registration. Pre-registration state leaves the
+            # slot unconstrained (back-compat with existing event sites that
+            # pre-date D59 vocabulary registration). Once an extension
+            # registers ANY value for a slot, all values for that slot become
+            # subject to closed-vocabulary enforcement.
+            if not registered:
+                continue
+            if value not in registered:
+                failures.append(
+                    ValidationFailure(
+                        category="vocabulary",
+                        path=f"event.payload.{slot_key}",
+                        value=value,
+                        reason=(
+                            f"payload-{owning_subtype} {slot_key} {value!r} is "
+                            "not registered by any loaded extension's "
+                            "payload-vocabulary-registrations"
+                        ),
+                    )
+                )
 
     # known_binding_ids is unused for event-level checks; included for the
     # substrate's parallel composition-change handling per D34 §A.5.

@@ -57,6 +57,10 @@ class WorkspaceState:
     actors: dict[str, dict] = field(default_factory=dict)
     work_units: dict[str, dict] = field(default_factory=dict)
     current_scope: Optional[dict] = None
+    # Per D56 §C + §D D-7: shape-config state slot consulted by
+    # authority-constraint grammar (path lookup `state.shape-config.<key>`).
+    # Default empty dict; population pathway from manifest deferred.
+    shape_config: dict = field(default_factory=dict)
 
     # -----------------------------------------------------------------
     # Actor registry (per D9; manifest-declared + runtime-added per D19)
@@ -113,6 +117,11 @@ class WorkspaceState:
         Per D20: framework enforces the fixed status enum; it does NOT
         enforce transition conditions (those are shape / specialist
         concerns). Any enum-valid transition is accepted at this layer.
+
+        Per D58 §C: lifecycle timestamp writes (``lifecycle.started-at``
+        / ``lifecycle.completed-at``) happen at the projection layer
+        (``event_chain.apply_event_to_state``), NOT here — preserving the
+        projection-is-the-only-mutator invariant per D39.
         """
         if to_status not in WORK_UNIT_STATUSES:
             raise InvalidWorkUnitTransitionError(

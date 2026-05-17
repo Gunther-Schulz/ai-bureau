@@ -69,6 +69,63 @@ class SkillExecutionError(Exception):
         )
 
 
+def _parse_activation_scope(
+    raw: Any,
+) -> Optional[Callable[[dict], bool]]:
+    """Parse D55 §B.1 minimal grammar; return predicate callable or None.
+
+    Grammar:
+
+      activation-scope ::= "always"                                       ; string literal
+                         | { "when": { "payload-subtype": <string> } }    ; single-field predicate
+
+    Returns ``None`` when ``raw`` is ``None`` or the literal ``"always"``
+    (semantic equivalent of always-active). Returns a callable
+    ``(event) -> bool`` otherwise. Raises ``ValueError`` on grammar
+    violation. Caller (``attach_workspace``) wraps into
+    ``WorkspaceBootError(category="activation-scope-grammar")``.
+    """
+    if raw is None:
+        return None
+    if isinstance(raw, str):
+        if raw == "always":
+            return None
+        raise ValueError(
+            f"activation-scope string literal must be 'always'; got {raw!r}"
+        )
+    if isinstance(raw, dict):
+        if set(raw.keys()) != {"when"}:
+            raise ValueError(
+                f"activation-scope object must have exactly one top-level key 'when'; "
+                f"got keys={sorted(raw.keys())!r}"
+            )
+        when = raw["when"]
+        if not isinstance(when, dict):
+            raise ValueError(
+                f"activation-scope 'when' value must be an object; got {type(when).__name__}"
+            )
+        if set(when.keys()) != {"payload-subtype"}:
+            raise ValueError(
+                f"activation-scope 'when' object admits exactly one key 'payload-subtype'; "
+                f"got keys={sorted(when.keys())!r}"
+            )
+        target_subtype = when["payload-subtype"]
+        if not isinstance(target_subtype, str) or not target_subtype:
+            raise ValueError(
+                "activation-scope 'when.payload-subtype' must be a non-empty string; "
+                f"got {target_subtype!r}"
+            )
+
+        def predicate(event: dict, _target: str = target_subtype) -> bool:
+            return event.get("payload-subtype") == _target
+
+        return predicate
+    raise ValueError(
+        f"activation-scope must be either a string or an object; got "
+        f"{type(raw).__name__}"
+    )
+
+
 @dataclass
 class Specialist:
     """Base class for specialist runtime impls per D19 + specialist.schema.json.
@@ -81,9 +138,17 @@ class Specialist:
     """
 
     spec: dict
+    # Per D57 §B.1: opaque pass-through configuration dict from
+    # composition.specialist-bindings[i].configuration. None when omitted.
+    configuration: Optional[dict] = None
     _emit_event: Optional[Callable[..., dict]] = field(default=None, repr=False)
     _workspace: Any = field(default=None, repr=False)
     _adapters: dict[str, "Adapter"] = field(default_factory=dict, repr=False)
+    # Per D55 §B.1: parsed activation-scope predicate; None means always-active.
+    # Populated by ``_parse_activation_scope`` at ``attach_workspace`` time.
+    _activation_predicate: Optional[Callable[[dict], bool]] = field(
+        default=None, repr=False
+    )
 
     @property
     def id(self) -> str:
@@ -138,6 +203,11 @@ class Specialist:
         misses surface as structured `WorkspaceBootError(category=
         "adapter-binding-resolution", ...)` (replaces the prior bare
         RuntimeError; symmetric with D46's raise-at-failure-site pattern).
+
+        Per D55 §B.1: parse the ``activation-scope`` slot at attach time
+        and cache the predicate on ``self._activation_predicate``. Grammar
+        parse-failures raise ``WorkspaceBootError(category=
+        "activation-scope-grammar")``.
         """
         # Import locally to avoid a module-level circular dep: boot.py
         # imports specialist.py lazily (inside boot_workspace); this
@@ -148,13 +218,36 @@ class Specialist:
         self._workspace = workspace
         self._emit_event = workspace._emit_event
         substrate = workspace._substrate
-        # Look up the binding-id this specialist instance was bound under
-        # (substrate.specialist_instances is keyed by binding-id; instance
-        # identity gives us the key without changing attach signatures).
-        my_binding_id: Optional[str] = next(
+        # Per D55 §B.1: parse activation-scope before adapter-binding-resolution.
+        # Look up binding-id early so error path can name it.
+        my_binding_id_for_scope: Optional[str] = next(
             (bid for bid, sp in substrate.specialist_instances.items() if sp is self),
             None,
         )
+        try:
+            self._activation_predicate = _parse_activation_scope(
+                self.spec.get("activation-scope")
+            )
+        except ValueError as exc:
+            raise WorkspaceBootError(
+                [
+                    ValidationFailure(
+                        category="activation-scope-grammar",
+                        path=(
+                            f"composition.specialist-bindings"
+                            f"[binding-id={my_binding_id_for_scope!r}]"
+                            f".activation-scope"
+                        ),
+                        value=self.spec.get("activation-scope"),
+                        reason=(
+                            f"specialist {self.id!r}: activation-scope grammar "
+                            f"violation: {exc}"
+                        ),
+                    )
+                ]
+            ) from exc
+        # Reuse the binding-id already looked up for activation-scope error path.
+        my_binding_id: Optional[str] = my_binding_id_for_scope
         for required in self.required_adapter_bindings:
             matched_bid: Optional[str] = None
             for bid, binding_dict in substrate.adapter_bindings.items():
@@ -293,19 +386,27 @@ _SPECIALIST_CLASSES: dict[str, type[Specialist]] = {
 
 
 def load_specialist_from_provision(
-    provision_ref: str, extensions_dir: Path
+    provision_ref: str,
+    extensions_dir: Path,
+    *,
+    configuration: Optional[dict] = None,
 ) -> Specialist:
     """Load a specialist spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
     Dispatches by `spec.id` to the registered runtime class. Raises
-    ValueError if the spec's id has no registered runtime class.
+    ValueError if the spec's id has no registered runtime class (boot.py
+    wraps as ``category="resolution"``). Constructor-raises are caught
+    at boot.py and wrapped as ``category="configuration-rejected"`` per
+    D57 §B.1.
     """
+    from fresh_plan.runtime.provision import ProvisionResolutionError
+
     spec = load_provision_spec(provision_ref, extensions_dir)
     specialist_id = spec.get("id")
     cls = _SPECIALIST_CLASSES.get(specialist_id)
     if cls is None:
-        raise ValueError(
+        raise ProvisionResolutionError(
             f"specialist provision {provision_ref!r}: spec id {specialist_id!r} "
             f"has no registered Specialist runtime class"
         )
-    return cls(spec=spec)
+    return cls(spec=spec, configuration=configuration)

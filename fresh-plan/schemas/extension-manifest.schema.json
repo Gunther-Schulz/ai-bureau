@@ -27,6 +27,11 @@
       "description": "List of (slot, identifier, spec-ref) tuples that add values to a core open-vocabulary slot (D29 §2). Required slot; may be [] (per D13 required-with-explicit-empty pattern).",
       "items": { "$ref": "#/$defs/vocabulary-registration" }
     },
+    "payload-vocabulary-registrations": {
+      "type": "array",
+      "description": "Optional. Per D59 §B.1 — registers open-vocab values for the four core payload-body slots (claim.confidence, action.action-name, state-change.what, lifecycle-transition.trigger). Parallel to vocabulary-registrations (which covers top-level slots); D59 extends D29's mechanism to payload-body values. Identifier namespacing per D29 (qualified form `<ext-id>:<value>`).",
+      "items": { "$ref": "#/$defs/payload-vocabulary-registration" }
+    },
     "provisions": {
       "type": "array",
       "description": "List of (kind, id, spec-ref) tuples — actual instances of kinds that this extension provides (D29 §3). Kinds that admit provisions: substrate, shape, adapter, specialist. (workspace, event, actor, work-unit are not extension-provided per D29.) Required slot; may be [].",
@@ -100,6 +105,26 @@
       "properties": {
         "slot": { "$ref": "#/$defs/vocabulary-slot" },
         "identifier": { "$ref": "_common.schema.json#/$defs/vocabulary-identifier" },
+        "spec-ref": { "$ref": "#/$defs/spec-ref" }
+      }
+    },
+
+    "payload-vocabulary-registration": {
+      "type": "object",
+      "description": "Per D59 §B.1 — a single (payload-slot, value, spec-ref?) tuple registering one open-vocab value into one core payload-body slot. spec-ref optional per D29 §2 pattern.",
+      "required": ["payload-slot", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "payload-slot": {
+          "type": "string",
+          "enum": [
+            "claim.confidence",
+            "action.action-name",
+            "state-change.what",
+            "lifecycle-transition.trigger"
+          ]
+        },
+        "value": { "type": "string", "minLength": 1 },
         "spec-ref": { "$ref": "#/$defs/spec-ref" }
       }
     },

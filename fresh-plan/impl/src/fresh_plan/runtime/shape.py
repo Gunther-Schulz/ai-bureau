@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import copy
 
@@ -46,6 +46,48 @@ class Shape:
     """
 
     spec: dict
+    # Per D57 §B.1: opaque pass-through configuration dict from
+    # composition.shape.configuration; framework conveys, kind-runtime
+    # interprets. None when slot omitted in manifest.
+    configuration: Optional[dict] = None
+
+    def __post_init__(self) -> None:
+        """Parse per-binding ``additional-constraints`` per D56 §B.1.1.
+
+        Caches parsed constraint per binding-index on
+        ``self._parsed_constraints`` (parallel to ``self.authority_bindings``).
+        Index ``None`` means the binding carries no constraint (or empty).
+        Grammar parse-failures raise ``WorkspaceBootError(category=
+        "authority-constraint-grammar")``.
+        """
+        # Lazy imports to avoid module-level circular dep with boot.py.
+        from fresh_plan.runtime.authority_constraint import (
+            AuthorityConstraintGrammarError,
+            parse_authority_constraint,
+        )
+        from fresh_plan.runtime.boot import WorkspaceBootError
+        from fresh_plan.validator.types import ValidationFailure
+
+        self._parsed_constraints: list = []
+        for i, binding in enumerate(self.authority_bindings):
+            raw = binding.get("additional-constraints")
+            try:
+                parsed = parse_authority_constraint(raw)
+            except AuthorityConstraintGrammarError as exc:
+                raise WorkspaceBootError(
+                    [
+                        ValidationFailure(
+                            category="authority-constraint-grammar",
+                            path=f"shape.authority-bindings[{i}].additional-constraints",
+                            value=raw,
+                            reason=(
+                                f"shape {self.spec.get('id')!r}: "
+                                f"additional-constraints grammar violation: {exc}"
+                            ),
+                        )
+                    ]
+                ) from exc
+            self._parsed_constraints.append(parsed)
 
     @property
     def id(self) -> str:
@@ -105,7 +147,7 @@ class Shape:
         payload = event.get("payload") or {}
         failures: list[ValidationFailure] = []
 
-        for binding in self.authority_bindings:
+        for binding_index, binding in enumerate(self.authority_bindings):
             if binding.get("payload-subtype") != subtype:
                 continue
             qualifier = binding.get("qualifier")
@@ -116,14 +158,17 @@ class Shape:
             required_subtype = binding.get("required-actor-subtype")
 
             matched = False
+            matched_actor_record: Any = None
             for actor_ref in actors:
                 if actor_ref.get("role") != required_role:
                     continue
                 aid = actor_ref.get("id")
                 if aid is None or not state.has_actor(aid):
                     continue
-                if state.get_actor(aid).get("subtype") == required_subtype:
+                actor_rec = state.get_actor(aid)
+                if actor_rec.get("subtype") == required_subtype:
                     matched = True
+                    matched_actor_record = actor_rec
                     break
 
             if not matched:
@@ -141,6 +186,43 @@ class Shape:
                         ),
                     )
                 )
+                continue
+
+            # Per D56 §B.1: evaluate additional-constraints (if any) against
+            # the matched actor record + event + state. False evaluation →
+            # append authority failure citing the constraint.
+            parsed = (
+                self._parsed_constraints[binding_index]
+                if binding_index < len(self._parsed_constraints)
+                else None
+            )
+            if parsed is not None:
+                from fresh_plan.runtime.authority_constraint import (
+                    evaluate_constraint,
+                )
+
+                if not evaluate_constraint(
+                    parsed, event, matched_actor_record, state
+                ):
+                    qual_clause = (
+                        f", qualifier={qualifier!r}" if qualifier is not None else ""
+                    )
+                    failures.append(
+                        ValidationFailure(
+                            category="authority",
+                            path=(
+                                f"shape.authority-bindings[{binding_index}]"
+                                f".additional-constraints"
+                            ),
+                            value=binding.get("additional-constraints"),
+                            reason=(
+                                f"shape {self.id!r} authority-binding for "
+                                f"payload-subtype={subtype!r}{qual_clause} "
+                                f"matched actor {matched_actor_record.get('id')!r} "
+                                f"but additional-constraints evaluated false"
+                            ),
+                        )
+                    )
 
         return failures
 
@@ -287,19 +369,27 @@ _SHAPE_CLASSES: dict[str, type[Shape]] = {
 
 
 def load_shape_from_provision(
-    provision_ref: str, extensions_dir: Path
+    provision_ref: str,
+    extensions_dir: Path,
+    *,
+    configuration: Optional[dict] = None,
 ) -> Shape:
     """Load a shape spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
     Dispatches by `spec.id` to the registered runtime class. Raises
-    ValueError if the spec's id has no registered runtime class.
+    ValueError if the spec's id has no registered runtime class
+    (boot.py wraps as ``category="resolution"``). Constructor-raises
+    are caught at boot.py and wrapped as ``category="configuration-rejected"``
+    per D57 §B.1.
     """
+    from fresh_plan.runtime.provision import ProvisionResolutionError
+
     spec = load_provision_spec(provision_ref, extensions_dir)
     shape_id = spec.get("id")
     cls = _SHAPE_CLASSES.get(shape_id)
     if cls is None:
-        raise ValueError(
+        raise ProvisionResolutionError(
             f"shape provision {provision_ref!r}: spec id {shape_id!r} has no "
             f"registered Shape runtime class"
         )
-    return cls(spec=spec)
+    return cls(spec=spec, configuration=configuration)

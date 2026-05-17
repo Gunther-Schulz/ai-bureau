@@ -81,6 +81,26 @@ def apply_event_to_state(event: dict, state: WorkspaceState) -> None:
                 and state.has_work_unit(wu_id)
             ):
                 state.transition_work_unit(wu_id, new_status)
+                # Per D58 §B.1: project transition event's `at` into the
+                # work-unit's lifecycle.started-at / completed-at on first
+                # transition into in-progress / completed. Idempotent
+                # ("only write if unset"): replay produces identical state.
+                record = state.work_units.get(wu_id)
+                if record is not None:
+                    lifecycle = record.setdefault("lifecycle", {})
+                    event_at = event.get("at")
+                    if (
+                        new_status == "in-progress"
+                        and lifecycle.get("started-at") is None
+                        and event_at is not None
+                    ):
+                        lifecycle["started-at"] = event_at
+                    elif (
+                        new_status == "completed"
+                        and lifecycle.get("completed-at") is None
+                        and event_at is not None
+                    ):
+                        lifecycle["completed-at"] = event_at
 
 
 class MalformedEventError(Exception):

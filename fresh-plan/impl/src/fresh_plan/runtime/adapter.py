@@ -74,6 +74,9 @@ class Adapter:
     """
 
     spec: dict
+    # Per D57 §B.1: opaque pass-through configuration dict from
+    # composition.adapter-bindings[i].configuration. None when slot omitted.
+    configuration: Optional[dict] = None
     _emit_event: Optional[Callable[..., dict]] = field(default=None, repr=False)
     _workspace: Any = field(default=None, repr=False)
     _outcome_counter: int = field(default=0, repr=False)
@@ -230,20 +233,27 @@ _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
 
 
 def load_adapter_from_provision(
-    provision_ref: str, extensions_dir: Path
+    provision_ref: str,
+    extensions_dir: Path,
+    *,
+    configuration: Optional[dict] = None,
 ) -> Adapter:
     """Load an adapter spec from a `<ext-id>:<provision-id>` ref + instantiate.
 
     Dispatches by `spec.protocol-or-transport` to the registered runtime
     class. Raises ValueError if the spec uses a protocol-or-transport with
-    no registered runtime class.
+    no registered runtime class (boot.py wraps as ``category="resolution"``).
+    Constructor-raises are caught at boot.py and wrapped as
+    ``category="configuration-rejected"`` per D57 §B.1.
     """
+    from fresh_plan.runtime.provision import ProvisionResolutionError
+
     spec = load_provision_spec(provision_ref, extensions_dir)
     protocol = spec.get("protocol-or-transport")
     cls = _ADAPTER_CLASSES.get(protocol)
     if cls is None:
-        raise ValueError(
+        raise ProvisionResolutionError(
             f"adapter provision {provision_ref!r}: protocol-or-transport "
             f"{protocol!r} has no registered Adapter runtime class"
         )
-    return cls(spec=spec)
+    return cls(spec=spec, configuration=configuration)

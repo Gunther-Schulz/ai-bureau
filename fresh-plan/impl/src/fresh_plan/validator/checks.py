@@ -522,6 +522,75 @@ def check_vocabulary_resolution(
 # agent-actor.substrate-binding → existing binding-id within manifest.
 
 
+def check_specialist_roles_against_shape(
+    workspace: dict,
+    loaded: dict[str, LoadedExtension],
+) -> list[ValidationFailure]:
+    """§B cheap impl — specialist.roles[] entries must reference shape role-ids.
+
+    Per D19 + D13: ``specialist.roles[]`` references role-ids declared in the
+    bound shape's ``roles[]`` vocabulary. Catches typos / orphan references
+    at boot. Cross-kind check (specialist ↔ shape).
+
+    No-op when no shape is bound to the workspace, or when no shape provision
+    is loaded. Specialists without ``roles`` (empty array) trivially pass.
+    """
+    failures: list[ValidationFailure] = []
+    comp = workspace.get("composition", {})
+    shape_ref = comp.get("shape", {}).get("provision")
+    if not shape_ref:
+        return failures
+    # Find the loaded shape spec.
+    shape_spec = None
+    for ext_id, ext in loaded.items():
+        for prov in ext.manifest.get("provisions", []):
+            if prov.get("kind") == "shape":
+                pid = prov.get("id")
+                qualified_id = f"{ext_id}:{pid}"
+                if qualified_id == shape_ref:
+                    shape_spec = ext.provisions_loaded.get(pid)
+                    break
+        if shape_spec is not None:
+            break
+    if shape_spec is None:
+        return failures
+    shape_role_ids: set[str] = set()
+    for r in shape_spec.get("roles", []) or []:
+        if isinstance(r, dict):
+            rid = r.get("id")
+            if rid:
+                shape_role_ids.add(rid)
+        elif isinstance(r, str):
+            shape_role_ids.add(r)
+    if not shape_role_ids:
+        return failures
+    # For each specialist provision, check roles against shape_role_ids.
+    for ext_id, ext in loaded.items():
+        for prov in ext.manifest.get("provisions", []):
+            if prov.get("kind") != "specialist":
+                continue
+            pid = prov.get("id")
+            spec = ext.provisions_loaded.get(pid)
+            if spec is None:
+                continue
+            base = f"loaded-extensions[{ext_id}].provisions[{pid}]"
+            for j, role in enumerate(spec.get("roles", []) or []):
+                if role not in shape_role_ids:
+                    failures.append(
+                        ValidationFailure(
+                            category="identity",
+                            path=f"{base}.roles[{j}]",
+                            value=role,
+                            reason=(
+                                f"specialist roles[{j}]={role!r} does not "
+                                f"resolve to any role-id declared by bound "
+                                f"shape {shape_ref!r}"
+                            ),
+                        )
+                    )
+    return failures
+
+
 def check_workspace_internal_identity(
     workspace: dict,
 ) -> list[ValidationFailure]:
