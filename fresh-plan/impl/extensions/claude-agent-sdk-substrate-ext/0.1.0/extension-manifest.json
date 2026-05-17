@@ -1,0 +1,16 @@
+{
+  "id": "claude-agent-sdk-substrate-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [],
+  "provisions": [
+    {
+      "kind": "substrate",
+      "id": "claude-agent-sdk-substrate",
+      "spec-ref": "./substrate.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

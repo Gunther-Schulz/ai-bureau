@@ -1,0 +1,6 @@
+{
+  "id": "claude-agent-sdk-substrate",
+  "version": "0.1.0",
+  "capabilities": ["hooks", "skills", "event-chain"],
+  "runtime-shapes": ["interactive", "programmatic"]
+}

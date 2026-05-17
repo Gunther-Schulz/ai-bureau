@@ -40,6 +40,7 @@ FAILURE_CATEGORIES = frozenset(
         "authority-constraint-grammar",  # D56 §B.1 — shape authority-binding additional-constraints grammar parse failure
         "configuration-rejected",  # D57 §B.1 — kind-runtime constructor rejected its `composition.*.configuration` dict
         "lifecycle-derivation-mismatch",  # D58 §B.1 — manifest-declared work-unit lifecycle timestamps disagree with chain-derived
+        "sdk-init",  # D69 §B.1 — Phase C real-wire SDK init / auth / connection failure during substrate.start_session
     }
 )
 

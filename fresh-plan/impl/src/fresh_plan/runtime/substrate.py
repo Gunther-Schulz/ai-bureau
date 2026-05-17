@@ -447,9 +447,343 @@ class MSAgentFrameworkSubstrate(Substrate):
     """
 
 
+@dataclass
+class ClaudeAgentSDKSubstrate(Substrate):
+    """Phase C real-wire substrate using the Claude Agent SDK Python package.
+
+    Per D68 §B.1 (substrate library lock) + D69 §B.1 (real-wire forward-bar +
+    NEW `sdk-init` failure category). The Claude Agent SDK ships an
+    async-only ``ClaudeSDKClient`` interface; this substrate wraps it in
+    a synchronous boot/session lifecycle per D44 ("no async substrate model"
+    at Phase C) using ``asyncio.run`` to drive the underlying coroutines.
+
+    The SDK lives **inside** the substrate as ``_sdk_client``. Caller controls
+    session lifecycle:
+
+      - ``boot_workspace(...)`` returns the ``Workspace`` handle (per D7 boot
+        procedure); no SDK session is started during boot.
+      - Caller invokes ``substrate.start_session(prompt=...)`` to spin up an
+        SDK session, drive one round-trip with the SDK, and translate SDK
+        responses into framework events via ``append_event`` (existing
+        integrity gate per D44 + D47 + D52).
+      - Caller invokes ``substrate.stop_session()`` to release SDK resources
+        (idempotent; safe to call when no session is active).
+
+    Per D45 detection-surface-recovery triad applied to the ``sdk-init`` path:
+
+      - **Detection** — any exception raised by the SDK during ``connect`` /
+        ``query`` / response-streaming is caught by ``start_session``.
+      - **Surface** — wrapped as ``WorkspaceBootError`` carrying
+        ``ValidationFailure(category="sdk-init", path="substrate.session.start",
+        value=<sdk-class-name>, reason=<diagnostic>)`` with the original SDK
+        exception chained via ``from`` for full diagnostic visibility.
+        ``WorkspaceBootError`` is reused (not a new exception type) because
+        ``sdk-init`` failures share the abort-and-discard semantics of boot
+        failures — the session never fully started, no observable state
+        survives.
+      - **Recovery** — caller catches ``WorkspaceBootError``, inspects the
+        ``sdk-init`` category, decides retry vs abort. Substrate is left in a
+        clean state: ``_sdk_client`` is None and ``stop_session`` is a no-op.
+
+    Per scope-cut C12 (autopilot constraint): tests use a monkeypatched SDK
+    client (no real Anthropic API calls). The ``_sdk_client_factory`` class
+    attribute defaults to ``claude_agent_sdk.ClaudeSDKClient``; tests
+    subclass and override the factory to inject a fake client whose
+    ``connect`` / ``receive_response`` / ``disconnect`` behaviors are
+    controlled by the test.
+
+    Per D69 §D D-1: SDK callback signatures (specifically the
+    ``receive_response`` async iterator yielding ``Message`` subclasses) are
+    verified against ``claude_agent_sdk.client.ClaudeSDKClient`` 0.2.82.
+    Future SDK version bumps may require adapter changes; the
+    verify-at-workstream-start discipline (D68 §B.3) re-grounds the SDK API
+    claim at each Phase C workstream consuming it.
+    """
+
+    # Per-instance SDK state. Set during start_session; cleared by stop_session.
+    _sdk_client: Optional[object] = field(default=None, repr=False)
+    _session_active: bool = field(default=False, repr=False)
+
+    # Class-level factory hook for test injection. Default: real SDK class.
+    # Tests override at subclass level to inject a fake client with controlled
+    # connect/receive_response/disconnect semantics (per scope-cut C12 — no
+    # real Anthropic API calls in autopilot loop).
+    _sdk_client_factory: Optional[object] = field(default=None, repr=False)
+
+    # ---------------------------------------------------------------
+    # Session lifecycle (Phase C real-wire — D69 §B.1)
+    # ---------------------------------------------------------------
+
+    def _resolve_sdk_client_factory(self) -> object:
+        """Return the SDK client factory — instance override, else SDK default.
+
+        Resolution order:
+          1. ``self._sdk_client_factory`` if set (test injection / subclass).
+          2. ``claude_agent_sdk.ClaudeSDKClient`` resolved lazily on first use.
+
+        Import is lazy so the framework doesn't hard-require the SDK at
+        import time. SDK missing at start_session → ImportError surfaces as
+        sdk-init failure.
+        """
+        if self._sdk_client_factory is not None:
+            return self._sdk_client_factory
+        try:
+            from claude_agent_sdk import ClaudeSDKClient
+        except ImportError as exc:
+            raise WorkspaceBootError_sdk_init(
+                self,
+                detail=f"claude-agent-sdk import failed: {exc}",
+                cause=exc,
+            )
+        return ClaudeSDKClient
+
+    def start_session(
+        self,
+        prompt: Optional[str] = None,
+        options: Optional[object] = None,
+    ) -> list[int]:
+        """Start an SDK session, drive one round-trip, emit events.
+
+        Per D69 §B.1 + D44 no-async-substrate-model: synchronously wraps the
+        SDK's async lifecycle (``connect`` → optional ``query`` → drain
+        ``receive_response`` → translate to events) using ``asyncio.run``.
+
+        SDK responses are translated to framework events via ``append_event``
+        — preserving D10 chain integrity + D44 queued subscriber dispatch +
+        D47 hook firing + D52 composition-validity checks. The first
+        manifest actor (any registered ``agent-actor`` subtype) is the
+        attribution; if no agent actor is present, the first registered
+        actor is used as a fallback.
+
+        Args:
+            prompt: optional initial prompt to send via ``client.query``.
+                When None, the session opens with no initial message
+                (caller may interact via subsequent calls — though Phase C
+                scope is one round-trip per start_session).
+            options: optional ``ClaudeAgentOptions`` instance forwarded to
+                the SDK client constructor. None lets the SDK use defaults.
+
+        Returns:
+            List of event sequence numbers appended during this session
+            (length matches the number of SDK messages translated to events;
+            empty list when no messages flowed before disconnect).
+
+        Raises:
+            WorkspaceBootError: category ``sdk-init`` on SDK init / auth /
+                connection failure (caught from ``connect`` / ``query`` /
+                ``receive_response``). The substrate is left in a clean
+                state (``_sdk_client`` is None; ``_session_active`` False).
+        """
+        import asyncio
+
+        if self._session_active:
+            raise WorkspaceBootError_sdk_init(
+                self,
+                detail="start_session called while session already active",
+                cause=None,
+            )
+
+        factory = self._resolve_sdk_client_factory()
+        try:
+            client = factory(options=options) if options is not None else factory()
+        except Exception as exc:
+            raise WorkspaceBootError_sdk_init(
+                self,
+                detail=f"SDK client construction failed: {exc}",
+                cause=exc,
+            )
+        self._sdk_client = client
+        self._session_active = True
+
+        emitted_seqs: list[int] = []
+
+        async def _drive() -> None:
+            await client.connect(prompt if isinstance(prompt, str) else None)
+            if prompt is not None and not isinstance(prompt, str):
+                # Streaming-mode prompt (per ClaudeSDKClient.connect contract).
+                pass
+            elif prompt is None:
+                # No initial prompt; session connected but idle. Caller may
+                # invoke subsequent operations OR immediately stop_session.
+                return
+            async for message in client.receive_response():
+                event = self._translate_sdk_message_to_event(message)
+                if event is not None:
+                    seq = self.append_event(event)
+                    emitted_seqs.append(seq)
+
+        # Lazy import — avoids module-load circular dep (boot imports substrate).
+        from fresh_plan.runtime.boot import WorkspaceBootError as _WBE
+        from fresh_plan.runtime.event_chain import MalformedEventError as _MEE
+        try:
+            asyncio.run(_drive())
+        except (_WBE, _MEE, EventRejected, SubscriberDispatchError,
+                HookExecutionError):
+            # Framework-level rejections from append_event during translation
+            # (per-event check / authority / composition-validity / hook /
+            # subscriber dispatch). Surface unchanged — distinct from
+            # sdk-init failures. The SDK round-trip succeeded; the framework
+            # rejected the resulting event.
+            self._cleanup_session_state()
+            raise
+        except Exception as exc:
+            # SDK-side failure (connect / query / receive_response) OR
+            # unexpected exception during translation. Wrap as sdk-init per
+            # D69 §B.1 triad.
+            self._cleanup_session_state()
+            raise WorkspaceBootError_sdk_init(
+                self,
+                detail=f"SDK session failed: {exc}",
+                cause=exc,
+            )
+        return emitted_seqs
+
+    def stop_session(self) -> None:
+        """Release SDK resources. Idempotent — safe to call without a session.
+
+        Per D69 §B.1 recovery contract: leaves the substrate in a clean
+        state. If the SDK ``disconnect`` raises, the exception surfaces to
+        the caller (sdk-init failures during teardown are still sdk-init
+        per the triad — caller decides whether to retry or abort the
+        workspace). After stop_session returns (success or raise), the
+        substrate's ``_sdk_client`` is None and a subsequent ``start_session``
+        is valid.
+        """
+        import asyncio
+
+        client = self._sdk_client
+        if client is None:
+            return
+
+        async def _drive_disconnect() -> None:
+            await client.disconnect()
+
+        try:
+            asyncio.run(_drive_disconnect())
+        except Exception as exc:
+            self._cleanup_session_state()
+            raise WorkspaceBootError_sdk_init(
+                self,
+                detail=f"SDK disconnect failed: {exc}",
+                cause=exc,
+            )
+        self._cleanup_session_state()
+
+    def _cleanup_session_state(self) -> None:
+        """Reset SDK fields. Internal — called by start_session/stop_session.
+        """
+        self._sdk_client = None
+        self._session_active = False
+
+    def _translate_sdk_message_to_event(
+        self, message: object
+    ) -> Optional[dict]:
+        """Translate one SDK message to a framework event dict, or None.
+
+        Per D69 §B.1 + D10 chain integrity: each translatable SDK message
+        becomes one ``action`` event attributed to the first registered
+        actor in workspace state. Non-translatable messages (system /
+        rate-limit / stream-control) return None and are not appended.
+
+        SDK message taxonomy (per claude_agent_sdk.types 0.2.82):
+          - UserMessage / AssistantMessage / SystemMessage / ResultMessage /
+            StreamEvent / RateLimitEvent.
+
+        Phase C C1 scope: translate AssistantMessage + ResultMessage as
+        ``action`` events with structured payload. Other shapes return None.
+        Per D-1 (future Phase C+ refinement): finer-grained mapping
+        (tool-use → adapter.call action events; tool-result → state-change
+        events; thinking-blocks → claim events) lands as the contract surface
+        sharpens. C1 keeps translation minimal — proves the round-trip
+        without over-committing to a message-taxonomy contract that the
+        SDK may evolve.
+        """
+        # Use duck-typing rather than isinstance to keep tests SDK-import-free.
+        msg_class_name = type(message).__name__
+
+        # Identify attribution actor (first agent-actor, else first actor).
+        attribution_id: Optional[str] = None
+        for actor_id, actor_rec in self.state.actors.items():
+            if actor_rec.get("subtype") == "agent-actor":
+                attribution_id = actor_id
+                break
+        if attribution_id is None and self.state.actors:
+            attribution_id = next(iter(self.state.actors.keys()))
+        if attribution_id is None:
+            # No actor to attribute the event to — translate-and-skip rather
+            # than crash. Phase C+ may surface this as a structured warning;
+            # C1 keeps it silent to preserve the round-trip happy path.
+            return None
+
+        prev_id = self.event_chain.tail["id"] if self.event_chain.tail else None
+        from datetime import datetime, timezone
+
+        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        event_id = (
+            f"evt-sdk-{msg_class_name.lower()}-{len(self.event_chain)}-"
+            f"{self.workspace_id}"
+        )
+
+        if msg_class_name in {"AssistantMessage", "UserMessage", "ResultMessage"}:
+            return {
+                "id": event_id,
+                "prev-event": prev_id,
+                "timestamp": timestamp,
+                "actors": [{"id": attribution_id}],
+                "payload-subtype": "action",
+                "payload": {
+                    "action-name": "claude-agent-sdk-substrate-ext:sdk-message",
+                    # Per action-payload-schema additionalProperties=false:
+                    # the SDK message class is stashed inside `parameters`
+                    # (free-form object slot per action.schema.json).
+                    "parameters": {"sdk-message-class": msg_class_name},
+                },
+            }
+        return None
+
+
+def WorkspaceBootError_sdk_init(
+    substrate: "ClaudeAgentSDKSubstrate",
+    *,
+    detail: str,
+    cause: Optional[BaseException],
+) -> "WorkspaceBootError":
+    """Construct a WorkspaceBootError carrying the sdk-init ValidationFailure.
+
+    Per D69 §B.1 surface contract — wraps SDK failures with structured
+    ValidationFailure(category='sdk-init'); chains the original exception
+    via Python's ``from`` clause so callers see the SDK-side root cause.
+    Helper function (not a method) so it can be called by both instance
+    paths and (in principle) external callers wanting to construct the
+    error shape from outside the substrate.
+    """
+    from fresh_plan.runtime.boot import WorkspaceBootError as _WBE
+
+    factory = substrate._sdk_client_factory
+    factory_name = (
+        getattr(factory, "__name__", repr(factory))
+        if factory is not None
+        else "claude_agent_sdk.ClaudeSDKClient"
+    )
+    err = _WBE(
+        [
+            ValidationFailure(
+                category="sdk-init",
+                path="substrate.session.start",
+                value=factory_name,
+                reason=detail,
+            )
+        ]
+    )
+    if cause is not None:
+        err.__cause__ = cause
+    return err
+
+
 # Module-level registry of (substrate.id → runtime class). Populated as new
 # substrate impls land. Phase C real-wire impls replace stub classes here.
 _SUBSTRATE_CLASSES: dict[str, type[Substrate]] = {
+    "claude-agent-sdk-substrate": ClaudeAgentSDKSubstrate,
     "inprocess-substrate": InProcessSubstrate,
     "ms-agent-framework-substrate": MSAgentFrameworkSubstrate,
 }

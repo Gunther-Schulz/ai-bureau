@@ -1,0 +1,9 @@
+{
+  "id": "ms-agent-framework-substrate",
+  "version": "0.1.0",
+  "capabilities": ["hooks", "skills", "event-chain"],
+  "runtime-shapes": [
+    "ms-agent-framework-substrate-ext:workflow",
+    "ms-agent-framework-substrate-ext:agent-composition"
+  ]
+}

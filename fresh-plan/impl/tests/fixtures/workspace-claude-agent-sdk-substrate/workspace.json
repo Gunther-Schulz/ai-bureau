@@ -1,0 +1,42 @@
+{
+  "id": "claude-agent-sdk-ws",
+  "description": "Workspace fixture binding the Claude Agent SDK real-wire substrate (Phase C C1 per D69 §B.1). Exercises substrate dispatch + start_session/stop_session lifecycle + sdk-init failure surface. Tests use a monkeypatched _sdk_client_factory to inject a fake SDK client (per scope-cut C12; no real Anthropic API calls in autopilot loop).",
+  "composition": {
+    "extensions": [
+      { "id": "claude-agent-sdk-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "mcp-server-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-specialist-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "claude-agent-sdk-substrate-ext:claude-agent-sdk-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "claude-agent-sdk-substrate-ext:interactive"
+      }
+    ],
+    "actors": [
+      { "id": "agent-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-mcp",
+        "provision": "mcp-server-ext:mcp-tool-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client"
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "primary-specialist",
+        "provision": "generic-specialist-ext:generic-specialist",
+        "version-range": ">=0.1.0"
+      }
+    ]
+  }
+}

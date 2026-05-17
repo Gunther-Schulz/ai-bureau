@@ -1,0 +1,22 @@
+{
+  "id": "mcp-server-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "mcp-client",
+      "spec-ref": "./mcp-client.schema.json"
+    }
+  ],
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "mcp-tool-adapter",
+      "spec-ref": "./adapter.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

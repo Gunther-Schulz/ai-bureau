@@ -29,6 +29,7 @@ from fresh_plan.runtime.per_event_checks import (
 )
 from fresh_plan.runtime.skills import SkillRegistry, UnknownSkillError
 from fresh_plan.runtime.substrate import (
+    ClaudeAgentSDKSubstrate,
     InProcessSubstrate,
     MSAgentFrameworkSubstrate,
     Substrate,
@@ -48,6 +49,7 @@ from fresh_plan.runtime.workspace_state import (
 __all__ = [
     "ActorHandle",
     "AppendOnlyEventChain",
+    "ClaudeAgentSDKSubstrate",
     "DuplicateActorError",
     "EventRejected",
     "HookRegistry",

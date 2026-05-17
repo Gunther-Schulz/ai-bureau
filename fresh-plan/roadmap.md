@@ -154,7 +154,7 @@ Source-of-truth: D68 §A. Order indicative not rigid per D26 caveat. C3-C6 can r
 
 | # | Workstream | Depends on | Status | Source |
 |---|---|---|---|---|
-| C1 | Real-wire substrate (Claude Agent SDK; single-substrate per D68 §B.1 + A3) | — | NOT STARTED | D68 §A + §B.1 |
+| C1 | Real-wire substrate (Claude Agent SDK; single-substrate per D68 §B.1 + A3) | — | **[design+impl] DONE (D69 entry + impl + 11 tests landed 2026-05-17)** | D68 §A + §B.1 + D69 §B.1 NEW `sdk-init` FAILURE_CATEGORIES entry + ClaudeAgentSDKSubstrate runtime class + claude-agent-sdk-substrate-ext extension; 240 tests pass (229 baseline + 11 new); pre-lock probe FIRED per refined-skip rule (NEW contract: sdk-init category + agent-loop framing + sync-wrapper-over-async-SDK pattern); 7 §D defers cover Phase C+ refinements (translation granularity / multi-turn / tool registration / connection-pool / SDK version-incompat / real-wire Anthropic / ClaudeAgentOptions configuration). |
 | C2 | Persistence layer (JSONL append-only per D68 §B.2) | C1 | NOT STARTED | D68 §A + §B.2 |
 | C3 | Real-wire MCP client adapter | C1, C2 | NOT STARTED | D68 §A; exercises D48 §B.1 |
 | C4 | Real-wire direct-API adapter | C1, C2 | NOT STARTED | D68 §A; exercises D48 §B.1 |

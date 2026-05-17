@@ -79,3 +79,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D66](decisions/D66-roadmap-20-pretoolus-hook-structural-enforcement.md) — Roadmap #20 — PreToolUse hook for grounded-reads discipline structural enforcement (2026-05-17)
 - [D67](decisions/D67-clarifies-d62-d63-count-corrections.md) — Clarifies D62 + D63 — count corrections per retro-validation Group 4 finding (2026-05-17)
 - [D68](decisions/D68-phase-c-planning-workstream-order-setup-decisions-closure.md) — Phase C planning: workstream order + setup decisions + closure criterion (2026-05-17)
+- [D69](decisions/D69-phase-c-real-wire-substrate-claude-agent-sdk.md) — Phase C real-wire substrate (Claude Agent SDK Python; closes C1) (2026-05-17)
