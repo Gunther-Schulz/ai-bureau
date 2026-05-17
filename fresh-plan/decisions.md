@@ -77,3 +77,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D64](decisions/D64-extends-d19-d47-specialist-emit-attribution.md) — Extends D19 + D47 — specialist emit-attribution mechanism; runtime enforcement of declared-event-emissions[] (2026-05-17)
 - [D65](decisions/D65-extends-d56-d7-shape-config-population-pathway.md) — Extends D56 + D7 — state.shape_config population pathway; immutable post-boot (2026-05-17)
 - [D66](decisions/D66-roadmap-20-pretoolus-hook-structural-enforcement.md) — Roadmap #20 — PreToolUse hook for grounded-reads discipline structural enforcement (2026-05-17)
+- [D67](decisions/D67-clarifies-d62-d63-count-corrections.md) — Clarifies D62 + D63 — count corrections per retro-validation Group 4 finding (2026-05-17)
