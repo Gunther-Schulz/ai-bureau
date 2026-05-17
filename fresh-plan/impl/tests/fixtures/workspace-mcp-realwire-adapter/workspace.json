@@ -1,0 +1,35 @@
+{
+  "id": "mcp-realwire-adapter-ws",
+  "description": "Workspace fixture binding the mcp-real-wire-adapter (0.2.0); exercises C3 D71 §B.1 AdapterCallError forward-bar under in-process MCP server harness per scope-cut C12.",
+  "composition": {
+    "extensions": [
+      { "id": "inprocess-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "mcp-server-ext", "version-range": ">=0.2.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "inprocess-substrate-ext:inprocess-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "agent-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-mcp-realwire",
+        "provision": "mcp-server-ext:mcp-real-wire-adapter",
+        "version-range": ">=0.2.0",
+        "protocol-or-transport": "mcp-server-ext:mcp-client-realwire"
+      }
+    ],
+    "specialist-bindings": []
+  }
+}

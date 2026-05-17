@@ -1,0 +1,10 @@
+{
+  "id": "mcp-real-wire-adapter",
+  "version": "0.2.0",
+  "protocol-or-transport": "mcp-server-ext:mcp-client-realwire",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}
