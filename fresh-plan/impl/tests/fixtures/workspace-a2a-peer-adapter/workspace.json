@@ -1,0 +1,46 @@
+{
+  "id": "a2a-peer-adapter-ws",
+  "description": "Workspace fixture binding the A2A peer adapter (0.1.0) + a specialist with one publicly-exposed + one internal-only skill; exercises C5 D73 §B (closes Phase C closure item (a) — A2A peer simulator harness) under in-process ThreadingHTTPServer + httpx.Client harness per scope-cut C12.",
+  "composition": {
+    "extensions": [
+      { "id": "inprocess-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-specialist-ext", "version-range": ">=0.1.0" },
+      { "id": "a2a-peer-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "inprocess-substrate-ext:inprocess-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "agent-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-a2a-peer",
+        "provision": "a2a-peer-ext:a2a-peer-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "a2a-peer-ext:a2a-peer",
+        "configuration": {
+          "bind-host": "localhost",
+          "port": 0
+        }
+      }
+    ],
+    "specialist-bindings": [
+      {
+        "binding-id": "publisher",
+        "provision": "generic-specialist-ext:generic-specialist",
+        "version-range": ">=0.1.0"
+      }
+    ]
+  }
+}

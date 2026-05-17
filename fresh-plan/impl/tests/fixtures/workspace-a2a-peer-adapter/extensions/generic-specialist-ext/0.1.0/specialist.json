@@ -1,0 +1,22 @@
+{
+  "id": "generic-specialist",
+  "version": "0.1.0",
+  "roles": ["author"],
+  "skills": [
+    {
+      "id": "echo",
+      "description": "Echo a payload back to the caller; publicly-exposed for A2A peer surface.",
+      "publicly-exposed": true
+    },
+    {
+      "id": "internal-only",
+      "description": "Internal-only skill not exposed via A2A peer agent-card.",
+      "publicly-exposed": false
+    }
+  ],
+  "supported-work-unit-kinds": ["generic-specialist-ext:generic-task"],
+  "required-adapter-bindings": [],
+  "required-substrate-capabilities": ["skills", "event-chain"],
+  "declared-event-emissions": [{ "payload-subtype": "action" }],
+  "declared-event-subscriptions": []
+}

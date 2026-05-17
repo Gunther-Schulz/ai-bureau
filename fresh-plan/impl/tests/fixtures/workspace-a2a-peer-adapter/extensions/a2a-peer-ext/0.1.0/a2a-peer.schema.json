@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "a2a-peer protocol",
+  "description": "A2A peer protocol identifier registered into adapter.protocol-or-transport per D29 + D21 (workspace-as-A2A-peer deployability) + D60 (specialist.skills publicly-exposed) + D73 §B (closes Phase C C5 per D68 §A + closure item (a)). Activates a combined publisher + task-receiver + outbound peer-client adapter: (a) inbound server publishes the workspace's aggregated agent-card at /.well-known/agent.json + routes incoming A2A task requests to specialist.handle_skill via stdlib http.server.ThreadingHTTPServer on a background daemon thread; (b) outbound D48 §B.1 AdapterCallError forward-bar under HTTP transport via httpx (parallel to D72 §B.1 RealWireDirectAPIAdapter). Agent-card schema follows the canonical A2A public spec via a2a-sdk's protobuf-generated AgentCard / AgentSkill types serialized to JSON by google.protobuf.json_format. Per scope-cut C12 + D68 §C closure item (a): in-process httpx.Client harness against the same-process ThreadingHTTPServer is the test bar; real external A2A peer reach is Phase D pioneer-instance.",
+  "type": "object"
+}

@@ -823,6 +823,557 @@ class RealWireDirectAPIAdapter(Adapter):
             ) from exc
 
 
+@dataclass
+class A2APeerAdapter(Adapter):
+    """Phase C real-wire A2A peer adapter per D73 §B (closes C5).
+
+    Per D68 §A C5 + §B.3 (verify-at-workstream-start; a2a-sdk 1.0.3 confirmed
+    at C5 workstream start) + D68 §C closure item (a) (A2A peer simulator
+    harness; in-process). Combines THREE concerns in one adapter class:
+
+      (a) **Inbound agent-card publisher** — serves the workspace's
+          aggregated agent-card at ``GET /.well-known/agent.json`` per D21
+          (workspace-as-A2A-peer deployability) + D60 (specialist.skills
+          publicly-exposed slot is the documentary anticipation D21
+          consumes here).
+      (b) **Inbound A2A task receiver** — routes ``POST /tasks`` requests
+          to the matching specialist's ``handle_skill(skill_id, params)``
+          per D19 + the substrate.specialist_instances registry.
+      (c) **Outbound A2A peer client** — ``call(tool_name, parameters)``
+          POSTs to a configured ``peer_url`` per D72 §B.1 pattern
+          (httpx.AsyncClient + asyncio.run sync-wrap + AdapterCallError
+          per starter category vocabulary). Mirrors c4 for outbound.
+
+    Server lifecycle (stdlib ``http.server.ThreadingHTTPServer`` on a
+    background daemon thread per coherence-advisory #3 + D44 "no async
+    substrate model"):
+
+      - ``attach_workspace(workspace)``: super().attach_workspace; then
+        ``ThreadingHTTPServer((bind_host, bind_port), HandlerCls)`` + start
+        a daemon ``threading.Thread`` running ``server.serve_forever()``.
+        Bind failures (port in use) raise ``OSError`` which boot.py wraps
+        as ``WorkspaceBootError(category='adapter-attach')`` per D48 §B.2
+        (REUSE — no new FAILURE_CATEGORIES entry).
+      - ``shutdown()``: ``server.shutdown()`` + ``thread.join(timeout=5)``.
+        Idempotent; safe to call from any thread. Test fixtures call this
+        in their finally-block.
+      - Port resolution: if ``configuration['port']`` is 0 or omitted,
+        stdlib ``ThreadingHTTPServer`` auto-allocates; the assigned port
+        is readable via ``self._server.server_address[1]`` post-start.
+
+    Per D48 §B.1 + §D D-1 (call-lifecycle raise-point): outbound `call()`
+    exceptions from httpx are caught and mapped to ``AdapterCallError``
+    per starter category vocabulary (transport / auth / timeout /
+    protocol-error / upstream-error / unknown — same as D72 §B.1).
+    Mid-wire raise-point: action event emitted at method entry; AdapterCallError
+    can raise from anywhere downstream.
+
+    Per D48 §D D-3 outbound starter category vocabulary mapping (HTTP-native;
+    parallel to D72 §B.1 since A2A wire format is HTTP-shaped):
+
+      - ``transport`` ← httpx.ConnectError / httpx.NetworkError + OSError.
+      - ``auth`` ← httpx.HTTPStatusError with status_code in {401, 403, 407}.
+      - ``timeout`` ← httpx.TimeoutException (subclasses included).
+      - ``protocol-error`` ← httpx.RemoteProtocolError / DecodingError /
+        ValueError from response.json() on malformed body.
+      - ``upstream-error`` ← httpx.HTTPStatusError with other 4xx / 5xx.
+      - ``unknown`` ← catch-all ``except Exception`` last branch.
+
+    Inbound handler exceptions (specialist.handle_skill raises during
+    POST /tasks routing) are caught inside the HTTP request handler and
+    surface as HTTP 500 + an A2A error response body. These are NOT
+    AdapterCallError because they're server-side; the framework process
+    is the receiver, not the caller — no AdapterCallError consumer exists.
+    The HTTP 500 IS the surface (caller-side, an external A2A peer would
+    see it; in tests, the httpx.Client used by the harness observes it).
+    """
+
+    _outcome_prefix: ClassVar[str] = "a2a-peer"
+
+    # Per-instance test-injection hook for outbound call(); parallels D72.
+    # None → default factory builds a real httpx.AsyncClient using
+    # `_peer_url` + `_read_timeout_seconds` at call() time.
+    _session_factory: Optional[Callable[..., Any]] = field(
+        default=None, repr=False
+    )
+
+    # Configuration-lifted fields. Lifted in __post_init__ from
+    # `configuration` per D57 §B.1 opaque pass-through.
+    _bind_host: str = field(default="localhost", repr=False)
+    _bind_port: int = field(default=0, repr=False)  # 0 → auto-allocate
+    _peer_url: str = field(default="", repr=False)
+    _read_timeout_seconds: float = field(default=30.0, repr=False)
+
+    # Server-state — populated by attach_workspace; cleared by shutdown.
+    _server: Any = field(default=None, repr=False)
+    _thread: Any = field(default=None, repr=False)
+
+    def __post_init__(self) -> None:
+        # Lift configuration per D57 §B.1 opaque pass-through. Defaults
+        # preserve unconfigured shape.
+        config = self.configuration or {}
+        bind_host = config.get("bind-host")
+        if bind_host is not None:
+            self._bind_host = str(bind_host)
+        bind_port = config.get("port")
+        if bind_port is not None:
+            self._bind_port = int(bind_port)
+        peer_url = config.get("peer-url")
+        if peer_url is not None:
+            self._peer_url = str(peer_url)
+        timeout = config.get("read-timeout-seconds")
+        if timeout is not None:
+            self._read_timeout_seconds = float(timeout)
+
+    # ---------------------------------------------------------------
+    # Server lifecycle (inbound publisher + task receiver)
+    # ---------------------------------------------------------------
+
+    def attach_workspace(self, workspace: Any) -> None:
+        """Wire workspace + start the inbound HTTP server thread.
+
+        Per D48 §B.2: any OSError from socket-bind (e.g., port in use)
+        propagates out and is wrapped at boot.py:599 as
+        ``WorkspaceBootError(category='adapter-attach')`` per the
+        existing REUSE path (no new category needed).
+        """
+        super().attach_workspace(workspace)
+
+        import threading
+        from http.server import ThreadingHTTPServer
+
+        adapter_self = self
+        handler_cls = _make_a2a_request_handler(adapter_self)
+        # bind_port=0 → stdlib auto-allocates a free port; read back via
+        # server.server_address[1] post-construction.
+        self._server = ThreadingHTTPServer(
+            (self._bind_host, self._bind_port), handler_cls
+        )
+        # Update the lifted port to the actual bound value (important when
+        # configuration requested auto-allocate via port=0).
+        self._bind_port = self._server.server_address[1]
+        self._thread = threading.Thread(
+            target=self._server.serve_forever,
+            name=f"A2APeerAdapter[{self.id}]",
+            daemon=True,
+        )
+        self._thread.start()
+
+    def shutdown(self) -> None:
+        """Stop the inbound HTTP server thread. Idempotent."""
+        if self._server is not None:
+            try:
+                self._server.shutdown()
+            finally:
+                self._server.server_close()
+            self._server = None
+        if self._thread is not None:
+            self._thread.join(timeout=5.0)
+            self._thread = None
+
+    @property
+    def bound_port(self) -> int:
+        """The actual port the inbound HTTP server is bound to.
+
+        Equal to ``configuration['port']`` when explicit; auto-allocated
+        value when ``configuration['port']`` was 0 or omitted. Test
+        harnesses read this to build the ``http://localhost:<port>`` URL
+        for in-process httpx.Client requests.
+        """
+        return self._bind_port
+
+    # ---------------------------------------------------------------
+    # Agent-card aggregation (per D21 + D60)
+    # ---------------------------------------------------------------
+
+    def build_agent_card_json(self) -> str:
+        """Build the workspace's aggregated A2A AgentCard as JSON bytes.
+
+        Walks ``workspace._substrate.specialist_instances`` (per D19 +
+        substrate.py:158-159). For each specialist's ``spec.skills[]``
+        entry, filter by ``publicly-exposed=True`` (per D60 + specialist
+        schema lines 46-51); map to ``a2a.types.AgentSkill`` (the
+        protobuf-generated canonical type from a2a-sdk 1.0.3); embed in
+        ``a2a.types.AgentCard``. Serialize via
+        ``google.protobuf.json_format.MessageToJson`` for canonical JSON
+        output preserving snake_case proto field names per the A2A
+        public spec.
+
+        Per D21 §"What this requires from extensions": exposure control
+        ensures internal-only skills don't leak into the agent-card.
+
+        Returns:
+            JSON string in canonical A2A AgentCard shape.
+        """
+        from a2a.types import AgentCard, AgentSkill
+        from google.protobuf import json_format
+
+        skills_pb = []
+        if self._workspace is not None:
+            substrate = self._workspace._substrate
+            for binding_id, specialist in substrate.specialist_instances.items():
+                for skill in specialist.skills:
+                    if skill.get("publicly-exposed") is not True:
+                        continue
+                    skills_pb.append(
+                        AgentSkill(
+                            id=skill["id"],
+                            name=skill["id"],
+                            description=skill.get("description", ""),
+                            tags=[binding_id],
+                            input_modes=list(
+                                skill.get("input-modalities", []) or []
+                            ),
+                            output_modes=list(
+                                skill.get("output-modalities", []) or []
+                            ),
+                        )
+                    )
+
+        workspace_id = (
+            self._workspace.workspace_id
+            if self._workspace is not None
+            else self.id
+        )
+        card = AgentCard(
+            name=workspace_id,
+            description=(
+                f"A2A peer agent-card for workspace {workspace_id!r}"
+            ),
+            version="1.0.0",
+            skills=skills_pb,
+        )
+        return json_format.MessageToJson(
+            card, preserving_proto_field_name=True
+        )
+
+    # ---------------------------------------------------------------
+    # Inbound task routing (POST /tasks → specialist.handle_skill)
+    # ---------------------------------------------------------------
+
+    def handle_inbound_task(self, task_payload: dict) -> dict:
+        """Route an inbound A2A task to a specialist's handle_skill.
+
+        The task payload is expected to carry ``{"skill_id": "...",
+        "params": {...}}``. Looks up the first specialist whose spec
+        declares a publicly-exposed skill matching ``skill_id``; invokes
+        ``specialist.handle_skill(skill_id, params)`` and returns the
+        result wrapped as ``{"ok": True, "result": <handle_skill_return>}``.
+
+        If no specialist owns a publicly-exposed skill matching
+        ``skill_id``, raises ``KeyError`` (handler converts to HTTP 404 +
+        A2A error response shape).
+
+        If specialist.handle_skill raises, the exception propagates out
+        (handler converts to HTTP 500 + A2A error response shape).
+
+        Returns:
+            Dict with ``ok: True`` + ``result`` carrying the
+            ``handle_skill`` return value.
+        """
+        skill_id = task_payload.get("skill_id") or task_payload.get(
+            "skill-id"
+        )
+        if not skill_id:
+            raise KeyError("task payload missing 'skill_id'")
+        params = task_payload.get("params") or {}
+
+        if self._workspace is None:
+            raise RuntimeError(
+                "adapter not attached to a workspace; "
+                "call attach_workspace first"
+            )
+        substrate = self._workspace._substrate
+        for binding_id, specialist in substrate.specialist_instances.items():
+            for skill in specialist.skills:
+                if skill.get("publicly-exposed") is not True:
+                    continue
+                if skill["id"] == skill_id:
+                    result = specialist.handle_skill(skill_id, params)
+                    return {"ok": True, "result": result}
+        raise KeyError(
+            f"no specialist binding declares a publicly-exposed skill "
+            f"named {skill_id!r}"
+        )
+
+    # ---------------------------------------------------------------
+    # Outbound call() — D48 §B.1 forward-bar under HTTP transport
+    # ---------------------------------------------------------------
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
+        """Invoke a peer A2A endpoint as ``POST {peer_url}/tasks``.
+
+        Per D48 §B.1 surface contract: on protocol / transport / auth /
+        timeout / upstream failures, raises ``AdapterCallError`` with
+        the starter category vocabulary + original exception chained
+        via Python's ``from`` clause.
+
+        Per D48 §D D-5 (resolved by D71 §B.1; carried by D72 §B.1; D73
+        §B.2 carries forward for A2A peer transport): the ``action``
+        event is emitted BEFORE the wire round-trip. Partial-success /
+        failure paths leave the intent-recorded action event in the
+        chain.
+
+        Args:
+            tool_name: skill_id at the peer to invoke (mapped into the
+                task payload's ``skill_id`` field; the URL path is
+                ``/tasks`` constant per A2A peer task convention).
+            parameters: optional dict of task parameters sent as the
+                ``params`` field of the JSON task payload.
+            attributing_actor_id: override the default first-actor
+                attribution for the emitted action event.
+
+        Returns:
+            Dict carrying ``outcome-reference`` (action event ref),
+            ``ok`` (True on success), ``status-code`` (HTTP status code),
+            and ``body`` (parsed JSON response from the peer).
+
+        Raises:
+            AdapterCallError: on any wire / protocol / auth / timeout /
+                upstream failure — see D72 §B.1 category vocabulary
+                (parallel mapping for HTTP transport).
+        """
+        import asyncio
+
+        params = parameters or {}
+        outcome_reference = self._emit_action(
+            tool_name, params, attributing_actor_id
+        )
+
+        try:
+            import httpx
+        except ImportError as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": f"httpx import failed: {exc}"},
+            ) from exc
+
+        async def _drive() -> dict:
+            factory = self._session_factory
+            if factory is None:
+                from contextlib import asynccontextmanager
+
+                @asynccontextmanager
+                async def _default_factory():
+                    async with httpx.AsyncClient(
+                        base_url=self._peer_url,
+                        timeout=self._read_timeout_seconds,
+                    ) as client:
+                        yield client
+
+                factory = _default_factory
+
+            task_payload = {"skill_id": tool_name, "params": params}
+            async with factory() as client:
+                response = await client.post("/tasks", json=task_payload)
+                response.raise_for_status()
+                status_code = response.status_code
+                content_type = response.headers.get("content-type", "")
+                if "application/json" in content_type.lower():
+                    body: Any = response.json()
+                else:
+                    body = response.text
+            return {
+                "outcome-reference": outcome_reference,
+                "ok": True,
+                "status-code": status_code,
+                "body": body,
+            }
+
+        try:
+            return asyncio.run(_drive())
+        except AdapterCallError:
+            raise
+        except httpx.TimeoutException as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="timeout",
+                detail={
+                    "reason": str(exc) or type(exc).__name__,
+                    "read-timeout-seconds": self._read_timeout_seconds,
+                },
+            ) from exc
+        except httpx.HTTPStatusError as exc:
+            status_code = exc.response.status_code
+            if status_code in (401, 403, 407):
+                category = "auth"
+            else:
+                category = "upstream-error"
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category=category,
+                detail={
+                    "reason": str(exc) or f"HTTP {status_code}",
+                    "status-code": status_code,
+                },
+            ) from exc
+        except (httpx.RemoteProtocolError, httpx.DecodingError) as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="protocol-error",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+        except ValueError as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="protocol-error",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+        except (httpx.ConnectError, httpx.NetworkError) as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": str(exc) or type(exc).__name__},
+            ) from exc
+        except OSError as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={"reason": str(exc) or type(exc).__name__},
+            ) from exc
+        except Exception as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="unknown",
+                detail={
+                    "reason": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+
+
+def _make_a2a_request_handler(adapter: "A2APeerAdapter"):
+    """Build a BaseHTTPRequestHandler subclass closing over the adapter.
+
+    The handler routes:
+      - ``GET /.well-known/agent.json`` → adapter.build_agent_card_json()
+      - ``POST /tasks`` → adapter.handle_inbound_task(json_body)
+      - everything else → HTTP 404
+
+    Handler exceptions from ``handle_inbound_task`` surface as HTTP 500 +
+    A2A-shaped error response body. KeyError (unknown skill_id) surfaces
+    as HTTP 404. JSON decode errors on inbound body surface as HTTP 400.
+    These error surfaces ARE the recovery path per D73 §B.3 inbound-
+    handler triad (NOT AdapterCallError — server-side; no caller in
+    framework process).
+    """
+    import json as _json
+    from http.server import BaseHTTPRequestHandler
+
+    class _A2ARequestHandler(BaseHTTPRequestHandler):
+        # Silence stdlib's default stderr access-log; tests don't need it
+        # and noisy logs obscure the actual pytest output.
+        def log_message(self, format, *args):  # type: ignore[override]
+            return
+
+        def _write_json(self, status: int, body: dict) -> None:
+            payload = _json.dumps(body).encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+
+        def do_GET(self) -> None:  # noqa: N802 (stdlib API name)
+            if self.path == "/.well-known/agent.json":
+                try:
+                    card_json = adapter.build_agent_card_json()
+                except Exception as exc:  # pragma: no cover defensive
+                    self._write_json(
+                        500,
+                        {
+                            "error": {
+                                "code": "agent-card-build-failed",
+                                "message": str(exc),
+                            }
+                        },
+                    )
+                    return
+                payload = card_json.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
+            self._write_json(
+                404, {"error": {"code": "not-found", "path": self.path}}
+            )
+
+        def do_POST(self) -> None:  # noqa: N802 (stdlib API name)
+            if self.path != "/tasks":
+                self._write_json(
+                    404,
+                    {"error": {"code": "not-found", "path": self.path}},
+                )
+                return
+            length = int(self.headers.get("Content-Length", "0") or "0")
+            raw = self.rfile.read(length) if length else b""
+            try:
+                payload = _json.loads(raw) if raw else {}
+            except ValueError as exc:
+                self._write_json(
+                    400,
+                    {
+                        "error": {
+                            "code": "malformed-json",
+                            "message": str(exc),
+                        }
+                    },
+                )
+                return
+            try:
+                result = adapter.handle_inbound_task(payload)
+            except KeyError as exc:
+                self._write_json(
+                    404,
+                    {
+                        "error": {
+                            "code": "skill-not-found",
+                            "message": str(exc),
+                        }
+                    },
+                )
+                return
+            except Exception as exc:
+                # Per D73 §B.3 inbound-handler triad: specialist
+                # handle_skill exception surfaces as HTTP 500 + A2A
+                # error response body. Recovery path = caller sees error
+                # response; logged on the wire side.
+                self._write_json(
+                    500,
+                    {
+                        "error": {
+                            "code": "skill-execution-error",
+                            "type": type(exc).__name__,
+                            "message": str(exc),
+                        }
+                    },
+                )
+                return
+            self._write_json(200, result)
+
+    return _A2ARequestHandler
+
+
 # Module-level registry of (protocol-or-transport → runtime class). Populated
 # as new adapter impls land. Phase C real-wire impls add alongside Phase B
 # stubs (per D41 two-substrate parity precedent + D69 substrate-alongside
@@ -833,6 +1384,7 @@ _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
     "mcp-server-ext:mcp-client-realwire": RealWireMCPClientAdapter,
     "direct-api-ext:direct-api": DirectAPIAdapter,
     "direct-api-ext:direct-api-realwire": RealWireDirectAPIAdapter,
+    "a2a-peer-ext:a2a-peer": A2APeerAdapter,
 }
 
 

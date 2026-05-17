@@ -1,0 +1,10 @@
+{
+  "id": "a2a-peer-adapter",
+  "version": "0.1.0",
+  "protocol-or-transport": "a2a-peer-ext:a2a-peer",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}

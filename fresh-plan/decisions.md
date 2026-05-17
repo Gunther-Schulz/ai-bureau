@@ -83,3 +83,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D70](decisions/D70-phase-c-jsonl-persistence-layer.md) — Phase C JSONL persistence layer (closes C2; activates D54 §B.2 + D58 §B.1) (2026-05-17)
 - [D71](decisions/D71-phase-c-real-wire-mcp-client-adapter.md) — Phase C real-wire MCP client adapter (closes C3; activates D48 §B.1; resolves D48 §D D-1/D-3/D-5 for MCP transport) (2026-05-17)
 - [D72](decisions/D72-phase-c-real-wire-direct-api-adapter.md) — Phase C real-wire direct-API HTTP adapter (closes C4; pure pattern application of D71; native HTTP auth-category mapping) (2026-05-17)
+- [D73](decisions/D73-phase-c-real-wire-a2a-peer-adapter.md) — Phase C real-wire A2A peer adapter (closes C5; closes Phase C closure item (a); validates D21 — combined publisher + task-receiver + outbound peer-client; activates D60 publicly-exposed filter) (2026-05-17)
