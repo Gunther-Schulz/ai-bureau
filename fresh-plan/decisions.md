@@ -62,3 +62,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D49](decisions/D49-clarifies-d47-c-d-d48-b2-sharpen-surfaced-corrections.md) — Clarifies D47 §C + §D + D48 §B.2 — sharpen-surfaced corrections (step-count + missing handler-index defer + Recovery-row wording) (2026-05-12)
 - [D50](decisions/D50-extends-d19-specialist-cluster-honors-detection-surface-recovery.md) — Extends D19 — specialist cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-12)
 - [D51](decisions/D51-extends-d29-d30-validation-cluster-honors-detection-surface-recovery.md) — Extends D29 + D30 §4 — validation cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-12)
+- [D52](decisions/D52-extends-d10-d13-d39-composition-change-cluster-honors-detection-surface-recovery.md) — Extends D10 + D13 + D39 — composition-change cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-17)
