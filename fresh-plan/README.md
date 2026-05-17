@@ -48,16 +48,34 @@ When invoking Clippy (`/clippy:composer` / `/clippy:autopilot` / `/clippy:auto`)
 
 Clippy upstream principles (v0.4.6+) apply unchanged on top: V1 verification + secondary-source synthesis + temporal discipline + class-completeness; D1 pre-lock plausibility trace + scope-cardinality honesty sub-check; Honest basis caveats cross-phase output convention; 8-item lifecycle + C/P/U checklists + READY self-check. Several of these (secondary-source / temporal / class-completeness / scope-cardinality / honest-basis-caveats) were upstreamed to Clippy as a side product of fresh-plan's discipline-hardening — they live in Clippy now, not here.
 
-Example invocation (current — Phase C planning):
+Example invocation (current — Phase C autopilot experiment per "Phase C autopilot experiment (active)" section below):
 
 ```
-/clippy:autopilot Begin Phase C planning entry — D68 analog of D27 (Phase A enumeration) + D36 (Phase B planning). Phase B closed at D63; Bref-followon batch via clippy:autopilot complete (D64-D67 landed 2026-05-17 on fresh-plan-clippy branch). Per D26 + D63 §E indicative-scope: real-wire substrate + adapters + specialists + persistence layer + integrity-protocol extensions + standards-compat engagement. At session-start: Read fresh-plan/README.md + CLIPPY-COMPANION.md + probing.md + decisions.md index.
+/clippy:autopilot BATCH AUTHORIZATION: execute all of Phase C (C1-C9 + Cref + closure per D68) hands-off, no per-entry SKETCH sign-off. Branch fresh-plan-clippy (experimental; not reconciled).
+
+Decompose against D68 §A workstream table + dependencies (C1 → C2 → {C3, C4, C5, C6} → C7; C8 + C9 parallel after C2).
+
+Closure criterion per D68 §C with scope-cuts (per README §"Phase C autopilot experiment"):
+- C3/C4 adapters: mockable-only (no real-API credentials)
+- Closure items (a) A2A peer, (b) MCP server, (e) AdapterCallError per category, (g) AEGIS round-trip: in-process test harnesses acceptable
+- Closure entry surfaces scope-cuts explicitly
+
+Cref MUST include retro-Group-4-style retro-validation sub-agent dispatch as final step before closure entry locks (per D67 lesson).
+
+Circuit-breaker: stop on 3 consecutive workstream failures.
+No /clear discipline: push through; accept compaction; cross-session continuity via clippy-loop.sh + .ai/state.yaml + .ai/checkpoints/.
+
+At session-start (and after each compaction): Read fresh-plan/README.md + fresh-plan/CLIPPY-COMPANION.md + fresh-plan/probing.md + fresh-plan/decisions.md index + D68 + D66.
 ```
 
-Historical examples (for shape reference; Bref/D52 era 2026-05-12 through 2026-05-17):
+Historical examples (for shape reference; Bref/D52 era 2026-05-12 through 2026-05-17, D68 Phase C planning 2026-05-17):
 
 ```
 /clippy:autopilot Continue Bref work per fresh-plan/roadmap.md deliverable #19 (D52 composition-change cluster). At session-start: Read fresh-plan/README.md + fresh-plan/CLIPPY-COMPANION.md + fresh-plan/probing.md.
+```
+
+```
+/clippy:autopilot Begin Phase C planning entry — D68 analog of D27 (Phase A enumeration) + D36 (Phase B planning). Phase B closed at D63; Bref-followon batch via clippy:autopilot complete (D64-D67 landed 2026-05-17 on fresh-plan-clippy branch). Per D26 + D63 §E indicative-scope: real-wire substrate + adapters + specialists + persistence layer + integrity-protocol extensions + standards-compat engagement. At session-start: Read fresh-plan/README.md + CLIPPY-COMPANION.md + probing.md + decisions.md index.
 ```
 
 ## Operating disciplines (load-bearing during session)
@@ -144,10 +162,10 @@ Then resume work on `fresh-plan` as canonical. If `--ff-only` fails (branches di
 
 For full workstream status (phases × workstreams × done/in-progress/next), see `roadmap.md`. This section is the at-a-glance pointer.
 
-- **Current phase**: **Phase C ACTIVE per D68** (locked 2026-05-17). Phase B closed at D63 (2026-05-17); Bref-followon batch landed via clippy:autopilot (D64-D67 on 2026-05-17). D68 instantiates Phase C scope per D26 indicative roadmap + D63 §E handoff — C1-C9 workstreams + Cref + closure entry; 3 setup decisions (Claude Agent SDK substrate; JSONL persistence; verify-at-workstream-start adapter SDKs); 7-item closure criterion exercising all eight Phase B forward-bars + D21 deployability + D40 §B integrity-protocol extension point. NEW disciplines: verify-at-workstream-start (§B.3) + EU AI Act Article 12 external-trigger checkpoint (§D; 2026-08-02 effective date drives C8 AEGIS scope timing). MSAF real-wire deferred to Phase E per A3 user resolution; standards-compat split impl-level (Phase C / C9) vs deployment-specific (Phase D) per A5 user resolution. See `roadmap.md` Phase C section for workstream-by-workstream status.
+- **Current phase**: **Phase C ACTIVE per D68** (locked 2026-05-17). Phase B closed at D63 (2026-05-17); Bref-followon batch landed via clippy:autopilot (D64-D67 on 2026-05-17). D68 instantiates Phase C scope per D26 indicative roadmap + D63 §E handoff — C1-C9 workstreams + Cref + closure entry; 3 setup decisions (Claude Agent SDK substrate; JSONL persistence; verify-at-workstream-start adapter SDKs); 7-item closure criterion exercising all eight Phase B forward-bars + D21 deployability + D40 §B integrity-protocol extension point. NEW disciplines: verify-at-workstream-start (§B.3) + EU AI Act Article 12 external-trigger checkpoint (§D; 2026-08-02 effective date drives C8 AEGIS scope timing). MSAF real-wire deferred to Phase E per A3 user resolution; standards-compat split impl-level (Phase C / C9) vs deployment-specific (Phase D) per A5 user resolution. See `roadmap.md` Phase C section for workstream-by-workstream status. **Phase C will be executed as the autopilot batch-mode experiment per the "Phase C autopilot experiment (active)" section below** — kickoff pending user "go" signal after D66 hook activation.
 - **Last ledger entry**: **D68** (Phase C planning: workstream order + setup decisions + closure criterion; analog of D27 / D36 for Phase C; FIRED pre-lock probe per refined-skip rule for new contract content — 3 setup decisions + 7-item closure criterion + 2 new disciplines).
 - **Forward-bars locked at Phase B (activate in Phase C)**: D48 AdapterCallError; D50 SkillExecutionError; D54 classify_shape_change + shape-migration-unsafe; D55-D59 §D D-7 Phase D end-to-end exercises; D56 §D D-5 practitioner-shape canonical constraints (D-7 closed by D65); D57 §D D-3 hot-reload; D58 §D D-5 snapshot caching; D64 §D adapter emit-attribution + replay-validation per D40 + cross-specialist delegation + adapter.call outcomes + subclass override; D66 §D content-pattern checks + per-write-type required-Reads granularity + Phase C+ portability.
-- **Branch state**: working on `fresh-plan-clippy` (per branch-isolation discipline for the Clippy autopilot experiment). All session work committed to this branch only. `fresh-plan` canonical not updated; reconciliation pending user decision.
+- **Branch state**: working on `fresh-plan-clippy` — **the Phase C autopilot experiment branch**. All session work committed here only. `fresh-plan` canonical not updated; reconciliation deferred until experiment outcome assessed per "Phase C autopilot experiment (active)" section below.
 - **D66 hook activation status**: code committed; NOT yet activated via `/reload-plugins`. To activate + empirically verify, run `/reload-plugins` then attempt a deliberate violation (e.g., Edit on a `fresh-plan/decisions/D*.md` file without prior Reads of `CLIPPY-COMPANION.md` + `probing.md` in the session). Hook should exit 2 with stderr naming missing Reads. Operational note tracked in D66 §C + §D D-6.
 - **Bref-followon tracking** (deferred items per D62 §E):
   - D54 architectural concern (classifier optional-vs-required-subtype gap; tracked as Bref-followon-D54-classifier-new-subtype-gap; surfaces only when D-1 persistence-layer activates)
@@ -156,6 +174,91 @@ For full workstream status (phases × workstreams × done/in-progress/next), see
 - **Active discipline state**: `probing.md` carries (a) the original adversarial probing discipline (5 procedures + checkpoint cadence; foundation locked during Bref); (b) the investigation-before-claim discipline added 2026-05-12 per the D47 §B.3 confabulation incident; (c) the 2026-05-12 sketch-without-grounding incident sharpened the framing — the load-bearing discipline is **applying** Cite-or-Read-or-Flag at claim-time (Session-start procedure step 5; behavioral gate), not loading `probing.md` itself. Bounded lock-and-fill plan revised to **process-by-pattern** (per D45). See `roadmap.md` "Bounded lock-and-fill plan — REVISED 2026-05-12" section for current state.
 - **Cross-session pending decision**: standards-compat engagement (CloudEvents alignment + W3C PROV-DM citation). Deferred to next session decision-point. See `roadmap.md` Phase C "Cross-session input pending" section.
 - **Side-quest research**: `market-context.md` captures adjacent products + landscape map (Kore.ai, Sana AI, AEGIS, Axon, big-consultancy / vertical-startup / thought-leader / muddle-through buckets). Not committed positioning; revisit Phase D or later.
+
+## Phase C autopilot experiment (active, 2026-05-17 onward)
+
+Phase C will be executed as an experiment: does `clippy:autopilot` in batch mode handle a full phase autonomously? Per CLIPPY-COMPANION §"Autopilot batch mode" + D67 lesson on real-vs-performative Clippy. Branch `fresh-plan-clippy` (NOT reconciled to canonical `fresh-plan` until outcome assessed).
+
+### Authorization
+
+**Batch mode authorized for entire Phase C scope** (C1-C9 + Cref + closure per D68). Sketch-then-lock per-entry user-interrupt is **suspended** for the duration. Autopilot proceeds SKETCH → pre-lock probe → draft → commit without returning to checkpoint per D-entry.
+
+### Discipline floor (preserved under batch mode)
+
+Per CLIPPY-COMPANION:156-162:
+
+- Pre-lock probe FIRES on new-contract entries / SKIPs on pure pattern application (refined skip rule per D48 §E)
+- Investigation-before-claim discipline per probing.md (V1 evidence + secondary-source synthesis + temporal discipline + class-completeness — now upstream in Clippy v0.4.6)
+- Clippy D1 plausibility trace + scope-cardinality-honesty sub-check
+- Post-build verify phase (clippy:reviewer fresh-context dispatch)
+- Circuit breakers (3 failures per unit; 3 consecutive unit failures stop the build)
+- `/clippy:cancel` at any time
+
+### Scope-cuts locked at experiment kickoff
+
+The experiment proves the framework + autopilot, NOT external-ecosystem reach.
+
+- **C3/C4 adapters**: mockable-only — no real-API credentials in the autopilot loop. Real Anthropic / external-API integration deferred to Phase D pioneer-instance or a separate non-batch autopilot run.
+- **Closure items requiring external systems**: in-process test harnesses acceptable:
+  - **(a) A2A peer external interaction** → in-process A2A peer simulator
+  - **(b) MCP server external invocation** → workspace's own MCP client invokes workspace's own MCP server in test fixture
+  - **(e) AdapterCallError per starter category** → MonkeyPatched subclass + test-server round-trip
+  - **(g) AEGIS integrity round-trip** → in-process AEGIS reference impl
+
+Phase C closure entry (analog of D63) MUST surface these scope-cuts explicitly so deviation from D68 §C nominal external-round-trip wording is recorded.
+
+### Operational policy
+
+- **Circuit breaker**: autopilot stops on 3 consecutive workstream failures. User decides resume after reviewing `.ai/checkpoints/`.
+- **No `/clear` discipline**: push through Phase C scope without periodic context resets. If compaction fires, accept it; cross-session continuity via `clippy-loop.sh` + `.ai/state.yaml` + `.ai/checkpoints/` per Clippy autopilot persistence layer.
+- **Branch isolation**: failure stays on `fresh-plan-clippy`; canonical `fresh-plan` not touched.
+
+### Cref retro-validation (mandatory final step)
+
+Cref MUST include a Group-4-style retro-validation sub-agent dispatch as the LAST step before the Phase C closure entry locks. The retro-reviewer reads the Phase C corpus cold + surfaces false-Cite drift class (per D67 retroactive Group 4 finding precedent). Catches synthesis-class entries (per-workstream summaries; Cref output; closure entry) that codified disciplines miss at lock-time.
+
+### Pre-experiment activation
+
+Before invoking autopilot:
+
+1. **Activate D66 hook**: run `/reload-plugins`; verify the hook fires on a deliberate-violation test per D66 §C activation note. The hook is the structural backstop for grounded-reads discipline; without it, drift risk goes up substantially.
+
+### Recovery path (per CLIPPY-COMPANION:166-170)
+
+For any batch-mode-produced drift:
+
+1. Subsequent sharpen sweep or Cref retro-validation surfaces findings
+2. Clarification entry (D49 pattern) corrects load-bearing errors via append-only ledger
+3. Wording-polish findings log-and-accept
+
+Expect 2-5 D49-style clarification entries across Phase C as the honest trade for autonomy.
+
+### Outcome assessment (post-experiment)
+
+After Phase C closure entry locks:
+
+- **If clean**: reconcile `fresh-plan-clippy` → canonical `fresh-plan`; promote batch-mode autopilot as recognized pattern for substantive phase execution.
+- **If unacceptable drift**: keep `fresh-plan-clippy` isolated; document failure modes via post-mortem entry; revert / restart on canonical `fresh-plan` with per-entry Sketch-then-lock discipline.
+
+Either outcome is a useful experiment result; the failure mode catalogue informs future discipline-framework evolution.
+
+## Autopilot applicability for future phases (forward-looking)
+
+Indicative; revisable based on Phase C experiment outcome. General heuristic: **spec-driven impl from already-locked contracts** → autopilot batch suits; **new substantive contract content** → Sketch-then-lock per-entry with pre-lock probe firing; **domain knowledge / pioneer-instance / human authorship** → user-authored with autopilot dispatched only for bounded sub-tasks.
+
+### Phase D — Pioneer-instance (PBS-Schulz) — hybrid
+
+Pure-impl pieces fit autopilot batch: practitioner-shape contract impl (from D13 + D55-D58); specialist runtime skeletons (from D19); manifest composition from declared pieces. Domain-knowledge pieces require human authorship: bauleitplanung corpus curation (real BauGB / BNatSchG / regional / leitfäden / urteile content); pioneer activation expressions (per D55-D56 PractitionerShape population); cutover semantics from 0.1.0 plugin; D1 daily-during-rebuild resolution. Likely shape: bounded autopilot sub-dispatches per impl-piece, interleaved with user-authored domain content. NOT a single-shot batch like the Phase C experiment.
+
+### Phase E — Multi-deployment validation — hybrid
+
+Real-wire MS Agent Framework substrate (per A3 deferral from Phase C) is autopilot-suitable, parallel to C1. Second-shape impl: autopilot-suitable IF the shape is well-grounded against locked precedent (e.g., Kore.ai orchestrator-worker per D37; Sana curator-consumer per D38 / D53); requires human design if novel. Federation contract (workspace-to-workspace coordination; cross-workspace event-chain integrity; VC + DID identity binding per D24 standards-compat tracker) is substantive architectural work — Sketch-then-lock per-entry, NOT batch-mode.
+
+### Phase F+ — Refinement / optimization / ecosystem — mostly autopilot
+
+D49-style clarifications + impl follow-throughs + optimization work (perf, snapshot caching per D58 §D D-5, scaling) fits autopilot batch. Pattern-applying extensions to evolving standards (A2A spec updates, MCP spec evolution under Linux Foundation, EU AI Act guidance ingestion) fits autopilot batch. Novel ecosystem-extension contracts (new integrity protocols beyond AEGIS; new substrate kinds; novel federation primitives) are substantive work — Sketch-then-lock per-entry; pre-lock probe fires on new contract.
+
+Phase C experiment outcome will empirically refine these heuristics.
 
 ## Cleanup notes
 
