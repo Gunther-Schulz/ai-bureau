@@ -63,3 +63,4 @@ Append-only ledger of architectural decisions. Each entry is locked once added; 
 - [D50](decisions/D50-extends-d19-specialist-cluster-honors-detection-surface-recovery.md) — Extends D19 — specialist cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-12)
 - [D51](decisions/D51-extends-d29-d30-validation-cluster-honors-detection-surface-recovery.md) — Extends D29 + D30 §4 — validation cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-12)
 - [D52](decisions/D52-extends-d10-d13-d39-composition-change-cluster-honors-detection-surface-recovery.md) — Extends D10 + D13 + D39 — composition-change cluster honors detection-surface-recovery triad (per D45 §C) (2026-05-17)
+- [D53](decisions/D53-extends-d38-sana-style-worked-example-validates-fresh-plan-core-kinds.md) — Extends D38 — Sana-style worked-example validates fresh-plan core kinds against knowledge-work use case (2026-05-17)
