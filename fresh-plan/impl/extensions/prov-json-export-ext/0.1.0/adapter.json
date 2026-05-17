@@ -1,0 +1,10 @@
+{
+  "id": "prov-json-export-adapter",
+  "version": "0.1.0",
+  "protocol-or-transport": "prov-json-export-ext:prov-json-export",
+  "required-substrate-capabilities": [],
+  "declared-event-emissions": [
+    { "payload-subtype": "action" }
+  ],
+  "declared-event-consumptions": []
+}

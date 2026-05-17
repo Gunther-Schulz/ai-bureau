@@ -1737,6 +1737,196 @@ def _default_mcp_server_factory(adapter: "MCPServerAdapter") -> Any:
     return server
 
 
+@dataclass
+class ProvJsonExportAdapter(Adapter):
+    """Phase C real-wire PROV-JSON export adapter per D77 §B (closes C9;
+    closes Phase C closure item — standards-compatibility engagement at
+    impl-level per D68 §A5 split).
+
+    Per D77 §B.1 + D24 standards-compat tracker + W3C PROV-DM 2013-04-30
+    spec + W3C PROV-JSON 2014-04-30 spec: workspace-side EXPORT-ONLY
+    adapter that converts the workspace event chain into a W3C PROV-JSON
+    document. NEW adapter sub-shape: **export-only** — no inbound surface
+    (unlike a2a-peer-ext / mcp-server-side-ext server-side adapters which
+    accept inbound requests); no outbound real-wire reach (unlike the
+    real-wire client adapters which POST/dispatch over HTTP/JSON-RPC).
+    The call surface is a synchronous conversion that either returns the
+    PROV-JSON dict OR writes a file at the caller-supplied output-path.
+
+    Per D77 §A (NON-BREAKING contract): fresh-plan event envelope is
+    UNCHANGED. PROV-JSON is a one-way export-time serialization of the
+    canonical fresh-plan chain. Future export adapters (OpenTelemetry /
+    AsyncAPI / Activity Streams per D24 carry-overs) register at the same
+    EXPORT-ONLY sub-shape per D29 namespacing.
+
+    Per D45 + D77 §B.2 triad applied per path:
+
+      §B.2 Conversion + IO failure path: pre-export ``action`` event
+      emitted via ``_emit_action`` per D71 pre-wire convention; if
+      ``standards_export.event_chain_to_prov_json`` raises ``ValueError``
+      (malformed event envelope), the adapter wraps as
+      ``AdapterCallError(category='protocol-error')`` per D48 §D D-3
+      starter category vocabulary REUSE. If file IO fails (read-only
+      target / permission denied / disk full), the adapter wraps as
+      ``AdapterCallError(category='transport')`` per D48 §D D-3 REUSE.
+      Catch-all on unexpected exception types → ``category='unknown'``.
+
+    Per scope-cut C12 (Phase C autopilot constraint): in-process tests
+    only via pytest ``tmp_path`` fixtures; no real export-target reach.
+    Production deployment-specific PROV-O practitioner-shape mappings +
+    per-payload-subtype prov:Entity assertion + EU AI Act Article 12
+    audit-record-bundle format are deferred per D77 §D / D24 / D68 §D
+    external-trigger 2026-08-02.
+
+    Configuration (per D57 §B.1 opaque pass-through):
+      - ``output-path`` (str, optional) — filesystem path. When set,
+        ``call('export', ...)`` writes the PROV-JSON document to this
+        path AND returns the dict in the result. When absent, call()
+        returns the dict without filesystem side-effects (useful for
+        in-memory inspection / piping into another export step).
+      - ``output-path`` may also be supplied at call() time via the
+        ``parameters`` argument — the call-time value overrides the
+        configuration-time value when both are present.
+    """
+
+    _outcome_prefix: ClassVar[str] = "prov-json-export"
+
+    def call(
+        self,
+        tool_name: str,
+        parameters: Optional[dict] = None,
+        *,
+        attributing_actor_id: Optional[str] = None,
+    ) -> dict:
+        """Export the workspace event chain to PROV-JSON.
+
+        Per D77 §B.2 + D71 pre-wire convention: emit action event BEFORE
+        the conversion call so the export is itself attribution-recorded
+        in the chain. Then invoke ``standards_export.event_chain_to_prov_json``
+        on the workspace's event chain (excluding the just-emitted action
+        event to keep export-side-effect separate from exported content).
+
+        Args:
+            tool_name: call dispatch identifier. ``"export"`` is the
+                canonical operation. Unknown names fall through to the
+                same conversion path (the adapter has one operation).
+            parameters: optional call-time parameters:
+                - ``output-path``: filesystem path to write the JSON
+                  document to (overrides ``configuration.output-path``).
+            attributing_actor_id: optional actor id for the action event
+                attribution.
+
+        Returns:
+            dict with shape::
+
+                {
+                    "outcome-reference": "prov-json-export-<n>",
+                    "ok": True,
+                    "activity-count": <int>,
+                    "agent-count": <int>,
+                    "attribution-count": <int>,
+                    "output-path": <str or None>,
+                    "prov-json": <PROV-JSON document dict>,
+                }
+
+        Raises:
+            AdapterCallError: per §B.2 triad — category='protocol-error'
+                for malformed event envelope (ValueError from converter);
+                category='transport' for file IO failure; category=
+                'unknown' for unexpected exceptions.
+        """
+        from fresh_plan.runtime import standards_export
+
+        params = parameters or {}
+        # Pre-export action event per D71 pre-wire convention.
+        outcome_reference = self._emit_action(
+            tool_name, params, attributing_actor_id
+        )
+
+        if self._workspace is None:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="unknown",
+                detail={
+                    "reason": "adapter not attached to a workspace",
+                },
+            )
+
+        # Resolve effective output-path: call-time overrides configuration.
+        config = self.configuration or {}
+        output_path_str = params.get("output-path") or config.get(
+            "output-path"
+        )
+
+        # Walk events; drop the just-emitted pre-export action event from
+        # the export payload so the export-side-effect is recorded in the
+        # chain (transparency) but not in the exported PROV document
+        # (otherwise every export would carry a meta-event referring to
+        # itself, polluting the workspace's substantive provenance).
+        chain = list(self._workspace._substrate.event_chain.all_events())
+        # The last event is the action we just emitted; exclude it.
+        if chain and chain[-1].get("payload", {}).get(
+            "outcome-reference"
+        ) == outcome_reference:
+            chain = chain[:-1]
+
+        workspace_id = self._workspace.workspace_id
+
+        try:
+            if output_path_str is not None:
+                output_path = Path(output_path_str)
+                prov_doc = standards_export.write_prov_json(
+                    chain, workspace_id, output_path
+                )
+            else:
+                prov_doc = standards_export.event_chain_to_prov_json(
+                    chain, workspace_id
+                )
+        except ValueError as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="protocol-error",
+                detail={
+                    "reason": "PROV-JSON conversion: malformed event envelope",
+                    "error": str(exc),
+                },
+            ) from exc
+        except OSError as exc:
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="transport",
+                detail={
+                    "reason": "PROV-JSON file write failed",
+                    "output-path": output_path_str,
+                    "error": str(exc),
+                },
+            ) from exc
+        except Exception as exc:  # pragma: no cover - catch-all
+            raise AdapterCallError(
+                adapter_id=self.id,
+                call_target=tool_name,
+                category="unknown",
+                detail={
+                    "reason": "PROV-JSON export: unexpected error",
+                    "error": str(exc),
+                    "error-type": type(exc).__name__,
+                },
+            ) from exc
+
+        return {
+            "outcome-reference": outcome_reference,
+            "ok": True,
+            "activity-count": len(prov_doc.get("activity", {})),
+            "agent-count": len(prov_doc.get("agent", {})),
+            "attribution-count": len(prov_doc.get("wasAttributedTo", {})),
+            "output-path": output_path_str,
+            "prov-json": prov_doc,
+        }
+
+
 # Module-level registry of (protocol-or-transport → runtime class). Populated
 # as new adapter impls land. Phase C real-wire impls add alongside Phase B
 # stubs (per D41 two-substrate parity precedent + D69 substrate-alongside
@@ -1749,6 +1939,7 @@ _ADAPTER_CLASSES: dict[str, type[Adapter]] = {
     "direct-api-ext:direct-api-realwire": RealWireDirectAPIAdapter,
     "a2a-peer-ext:a2a-peer": A2APeerAdapter,
     "mcp-server-side-ext:mcp-server": MCPServerAdapter,
+    "prov-json-export-ext:prov-json-export": ProvJsonExportAdapter,
 }
 
 

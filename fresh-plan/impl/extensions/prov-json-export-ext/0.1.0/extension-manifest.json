@@ -1,0 +1,22 @@
+{
+  "id": "prov-json-export-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "prov-json-export",
+      "spec-ref": "./prov-json-export.schema.json"
+    }
+  ],
+  "provisions": [
+    {
+      "kind": "adapter",
+      "id": "prov-json-export-adapter",
+      "spec-ref": "./adapter.json"
+    }
+  ],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

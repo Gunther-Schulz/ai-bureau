@@ -1,0 +1,35 @@
+{
+  "id": "prov-json-export-ws",
+  "description": "Workspace fixture binding the prov-json-export adapter (D77 §B; closes Phase C C9); exercises EXPORT-ONLY adapter sub-shape + W3C PROV-JSON conversion of the workspace event chain.",
+  "composition": {
+    "extensions": [
+      { "id": "inprocess-substrate-ext", "version-range": ">=0.1.0" },
+      { "id": "generic-shape-ext", "version-range": ">=0.1.0" },
+      { "id": "prov-json-export-ext", "version-range": ">=0.1.0" }
+    ],
+    "shape": {
+      "provision": "generic-shape-ext:generic-shape",
+      "version-range": ">=0.1.0"
+    },
+    "substrate-bindings": [
+      {
+        "binding-id": "primary",
+        "provision": "inprocess-substrate-ext:inprocess-substrate",
+        "version-range": ">=0.1.0",
+        "runtime-shape": "interactive"
+      }
+    ],
+    "actors": [
+      { "id": "actor-primary", "subtype": "agent-actor", "substrate-binding": "primary" }
+    ],
+    "adapter-bindings": [
+      {
+        "binding-id": "primary-prov-export",
+        "provision": "prov-json-export-ext:prov-json-export-adapter",
+        "version-range": ">=0.1.0",
+        "protocol-or-transport": "prov-json-export-ext:prov-json-export"
+      }
+    ],
+    "specialist-bindings": []
+  }
+}
