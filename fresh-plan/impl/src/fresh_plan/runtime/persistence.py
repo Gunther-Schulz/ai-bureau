@@ -63,6 +63,11 @@ DEFAULT_PERSISTENCE_ROOT = "./.fresh-plan-state"
 # File name conventions; load-bearing at module boundary.
 EVENTS_FILE = "events.jsonl"
 MANIFEST_SNAPSHOT_FILE = "last-boot-manifest.json"
+# Per D76 §C: AEGIS integrity-records persist parallel to events.jsonl,
+# one record per event line. File name re-exported from runtime.integrity
+# for boot.py + tests; defined here as the canonical persistence-layer
+# constant to keep file-layout knowledge in one module.
+INTEGRITY_RECORDS_FILE = "events.integrity.jsonl"
 
 
 class PersistenceCorruptionError(Exception):
@@ -122,6 +127,19 @@ class PersistenceLayer:
     workspace_dir: Path = field(init=False)
     events_path: Path = field(init=False)
     manifest_snapshot_path: Path = field(init=False)
+    integrity_records_path: Path = field(init=False)
+
+    # Per D76 §B Phase C C8: optional AEGIS-style integrity protocol. When
+    # set, save_event also stamps + persists an IntegrityRecord to
+    # events.integrity.jsonl (parallel-line discipline). None for tests
+    # that don't exercise integrity-stamping.
+    # Field is dataclass-Optional[object] not Optional[IntegrityProtocol]
+    # to avoid an import cycle between persistence.py + integrity.py.
+    integrity_protocol: Optional[object] = None
+    # Tracks the most recent stamped hash bytes for chain continuity at
+    # save_event time. Loaded from prior integrity records on first call
+    # when chain is non-empty.
+    _last_integrity_hash: Optional[bytes] = field(default=None, repr=False)
 
     def __post_init__(self) -> None:
         # Resolve workspace_dir but do NOT create it yet — directory
@@ -129,6 +147,7 @@ class PersistenceLayer:
         self.workspace_dir = Path(self.persistence_root) / self.workspace_id
         self.events_path = self.workspace_dir / EVENTS_FILE
         self.manifest_snapshot_path = self.workspace_dir / MANIFEST_SNAPSHOT_FILE
+        self.integrity_records_path = self.workspace_dir / INTEGRITY_RECORDS_FILE
 
     # -----------------------------------------------------------------
     # Cold-start detection
@@ -184,6 +203,192 @@ class PersistenceLayer:
                 path=str(self.events_path),
                 reason=f"failed to append event to JSONL: {exc}",
             ) from exc
+
+        # Per D76 §B Phase C C8: when an integrity protocol is attached,
+        # stamp the event + persist the IntegrityRecord to
+        # events.integrity.jsonl. Failure to stamp surfaces as
+        # PersistenceCorruptionError (the events.jsonl write already
+        # committed; the integrity-records file is now inconsistent
+        # with the chain — caller must surface to operator).
+        if self.integrity_protocol is not None:
+            try:
+                record = self.integrity_protocol.stamp(  # type: ignore[attr-defined]
+                    event, self._last_integrity_hash
+                )
+            except Exception as exc:
+                raise PersistenceCorruptionError(
+                    path=str(self.integrity_records_path),
+                    reason=(
+                        f"integrity protocol failed to stamp event: {exc}"
+                    ),
+                ) from exc
+
+            # Sequence position = current line count of the integrity file.
+            # On first stamp the file does not yet exist → sequence 0.
+            try:
+                if self.integrity_records_path.exists():
+                    with open(
+                        self.integrity_records_path, "r", encoding="utf-8"
+                    ) as fh:
+                        existing_count = sum(1 for line in fh if line.strip())
+                else:
+                    existing_count = 0
+            except OSError as exc:
+                raise PersistenceCorruptionError(
+                    path=str(self.integrity_records_path),
+                    reason=(
+                        f"failed to read integrity records for sequence "
+                        f"derivation: {exc}"
+                    ),
+                ) from exc
+
+            # Re-assemble with the correct sequence (stamp returns -1).
+            from dataclasses import replace
+
+            record = replace(record, sequence=existing_count)
+
+            # Update cached prior hash for the next event in the chain.
+            self._last_integrity_hash = bytes.fromhex(record.hash)
+
+            try:
+                payload = json.dumps(
+                    record.to_jsonl(),
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                )
+            except TypeError as exc:
+                raise PersistenceCorruptionError(
+                    path=str(self.integrity_records_path),
+                    reason=(
+                        f"integrity record not JSON-serializable: {exc}"
+                    ),
+                ) from exc
+
+            try:
+                with open(
+                    self.integrity_records_path, "a", encoding="utf-8"
+                ) as fh:
+                    fh.write(payload + "\n")
+                    fh.flush()
+            except OSError as exc:
+                raise PersistenceCorruptionError(
+                    path=str(self.integrity_records_path),
+                    reason=(
+                        f"failed to append integrity record to JSONL: {exc}"
+                    ),
+                ) from exc
+
+    def has_integrity_records(self) -> bool:
+        """True when events.integrity.jsonl exists (per D76 §B Phase C C8)."""
+        return self.integrity_records_path.exists()
+
+    def prime_integrity_state(self) -> None:
+        """Initialize _last_integrity_hash from the latest persisted record.
+
+        Per D76 §B Phase C C8: when boot replays a prior chain that was
+        integrity-stamped, subsequent events appended on this boot must
+        chain off the last persisted record's hash (not the bootstrap
+        hash). Caller (boot.py) invokes once after attaching the integrity
+        protocol + before any new events are appended.
+
+        No-op when events.integrity.jsonl is absent (cold start).
+        """
+        if not self.integrity_records_path.exists():
+            return
+        last_hash: Optional[str] = None
+        try:
+            with open(
+                self.integrity_records_path, "r", encoding="utf-8"
+            ) as fh:
+                for line in fh:
+                    stripped = line.strip()
+                    if not stripped:
+                        continue
+                    try:
+                        obj = json.loads(stripped)
+                    except json.JSONDecodeError as exc:
+                        raise PersistenceCorruptionError(
+                            path=str(self.integrity_records_path),
+                            reason=(
+                                f"malformed JSON priming integrity state: {exc}"
+                            ),
+                        ) from exc
+                    if isinstance(obj, dict) and "hash" in obj:
+                        last_hash = obj["hash"]
+        except OSError as exc:
+            raise PersistenceCorruptionError(
+                path=str(self.integrity_records_path),
+                reason=(
+                    f"failed to prime integrity state from records file: {exc}"
+                ),
+            ) from exc
+        if last_hash is not None:
+            try:
+                self._last_integrity_hash = bytes.fromhex(last_hash)
+            except ValueError as exc:
+                raise PersistenceCorruptionError(
+                    path=str(self.integrity_records_path),
+                    reason=(
+                        f"latest integrity record has non-hex hash field: {exc}"
+                    ),
+                ) from exc
+
+    def load_integrity_records(self) -> Iterator[dict]:
+        """Yield integrity records from events.integrity.jsonl in append order.
+
+        Each record is a raw dict (caller wraps via
+        ``IntegrityRecord.from_jsonl`` if a typed object is needed). Empty
+        iterator when the file is absent (cold start or no integrity
+        protocol was ever attached).
+
+        Parse failures (malformed JSON / non-object line) raise
+        ``PersistenceCorruptionError`` symmetrically with load_chain.
+        """
+        if not self.integrity_records_path.exists():
+            return iter([])
+
+        try:
+            handle = open(
+                self.integrity_records_path, "r", encoding="utf-8"
+            )
+        except OSError as exc:
+            raise PersistenceCorruptionError(
+                path=str(self.integrity_records_path),
+                reason=(
+                    f"failed to open integrity records for read: {exc}"
+                ),
+            ) from exc
+
+        def _iter_records() -> Iterator[dict]:
+            try:
+                for line_number, raw in enumerate(handle, start=1):
+                    stripped = raw.rstrip("\n").rstrip("\r")
+                    if not stripped:
+                        continue
+                    try:
+                        record = json.loads(stripped)
+                    except json.JSONDecodeError as exc:
+                        raise PersistenceCorruptionError(
+                            path=str(self.integrity_records_path),
+                            reason=(
+                                f"malformed JSON in integrity records: {exc}"
+                            ),
+                            line_number=line_number,
+                        ) from exc
+                    if not isinstance(record, dict):
+                        raise PersistenceCorruptionError(
+                            path=str(self.integrity_records_path),
+                            reason=(
+                                f"integrity record line is JSON but not an "
+                                f"object (got {type(record).__name__})"
+                            ),
+                            line_number=line_number,
+                        )
+                    yield record
+            finally:
+                handle.close()
+
+        return _iter_records()
 
     def load_chain(self) -> Iterator[dict]:
         """Yield events from events.jsonl in append order (D70 §B replay).

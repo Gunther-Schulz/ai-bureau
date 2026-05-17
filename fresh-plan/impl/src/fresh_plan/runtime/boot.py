@@ -264,6 +264,114 @@ def boot_workspace(
                     ]
                 ) from exc
 
+        # D76 §B Phase C C8: integrity-protocol verify + attach when the
+        # workspace's substrate-binding configuration declares one. Lives
+        # AFTER chain replay (verify against the loaded chain) but BEFORE
+        # the manifest-snapshot read + downstream lifecycle reconciliation
+        # so any integrity violation surfaces before further state is
+        # constructed.
+        integrity_protocol_id = persistence_config.get("integrity-protocol")
+        if integrity_protocol_id:
+            from fresh_plan.runtime.integrity import (
+                AEGISIntegrityProtocol,
+                IntegrityRecord,
+                load_or_create_aegis_keypair,
+            )
+
+            # Dispatch by protocol identifier per D29 namespacing. AEGIS
+            # is the canonical first; future protocols register here.
+            if (
+                integrity_protocol_id
+                == "aegis-protocol-ext:aegis-event-chain-integrity"
+            ):
+                priv_key, pub_key = load_or_create_aegis_keypair(
+                    persistence.workspace_dir
+                )
+                aegis = AEGISIntegrityProtocol(
+                    private_key=priv_key,
+                    workspace_id=manifest["id"],
+                )
+
+                # Verify the loaded chain against the persisted records.
+                if persistence.has_integrity_records():
+                    try:
+                        record_dicts = list(persistence.load_integrity_records())
+                    except PersistenceCorruptionError as exc:
+                        raise WorkspaceBootError(
+                            [
+                                ValidationFailure(
+                                    category="persistence-corruption",
+                                    path=exc.path,
+                                    value=exc.line_number,
+                                    reason=exc.reason,
+                                )
+                            ]
+                        ) from exc
+
+                    try:
+                        records = [
+                            IntegrityRecord.from_jsonl(r) for r in record_dicts
+                        ]
+                    except (KeyError, ValueError, TypeError) as exc:
+                        raise WorkspaceBootError(
+                            [
+                                ValidationFailure(
+                                    category="integrity-violation",
+                                    path=str(
+                                        persistence.integrity_records_path
+                                    ),
+                                    value=None,
+                                    reason=(
+                                        f"integrity records file malformed: {exc}. "
+                                        f"Detail: subcase=record-schema-malformed."
+                                    ),
+                                )
+                            ]
+                        ) from exc
+
+                    chain_events = list(substrate.event_chain)
+                    integrity_failures = aegis.verify(
+                        chain_events, records, pub_key
+                    )
+                    if integrity_failures:
+                        raise WorkspaceBootError(integrity_failures)
+
+                # Attach AEGIS to the persistence layer so subsequent
+                # save_event calls stamp + append integrity records.
+                persistence.integrity_protocol = aegis
+                try:
+                    persistence.prime_integrity_state()
+                except PersistenceCorruptionError as exc:
+                    raise WorkspaceBootError(
+                        [
+                            ValidationFailure(
+                                category="persistence-corruption",
+                                path=exc.path,
+                                value=exc.line_number,
+                                reason=exc.reason,
+                            )
+                        ]
+                    ) from exc
+            else:
+                raise WorkspaceBootError(
+                    [
+                        ValidationFailure(
+                            category="resolution",
+                            path="composition.substrate-bindings[0].configuration.integrity-protocol",
+                            value=integrity_protocol_id,
+                            reason=(
+                                f"integrity-protocol {integrity_protocol_id!r} "
+                                f"is not registered. Per D40 §B + D29 "
+                                f"namespacing, only "
+                                f"'aegis-protocol-ext:aegis-event-chain-integrity' "
+                                f"is bundled at Phase C scope; other protocols "
+                                f"register via their own *-protocol-ext at "
+                                f"Phase D+."
+                            ),
+                        )
+                    ]
+                )
+
         # D54 §B.2 boot-integration ACTIVATED: compare prior shape spec
         # (from manifest snapshot) against new manifest's shape spec.
         # Non-safe entries → WorkspaceBootError(category=

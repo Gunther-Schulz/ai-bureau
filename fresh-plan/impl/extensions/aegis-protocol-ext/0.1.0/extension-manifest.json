@@ -1,0 +1,16 @@
+{
+  "id": "aegis-protocol-ext",
+  "version": "0.1.0",
+  "vocabulary-registrations": [
+    {
+      "slot": "adapter.protocol-or-transport",
+      "identifier": "aegis-event-chain-integrity",
+      "spec-ref": "./aegis.schema.json"
+    }
+  ],
+  "provisions": [],
+  "dependencies": {
+    "required-core-capabilities": [],
+    "required-extensions": []
+  }
+}

@@ -23,6 +23,14 @@ from fresh_plan.runtime.event_chain import (
     MalformedEventError,
 )
 from fresh_plan.runtime.hooks import HookRegistry
+from fresh_plan.runtime.integrity import (
+    AEGISIntegrityProtocol,
+    IntegrityProtocol,
+    IntegrityRecord,
+    IntegrityViolationError,
+    generate_aegis_keypair,
+    load_or_create_aegis_keypair,
+)
 from fresh_plan.runtime.per_event_checks import (
     EventRejected,
     check_event_references,
@@ -52,12 +60,16 @@ from fresh_plan.runtime.workspace_state import (
 
 __all__ = [
     "ActorHandle",
+    "AEGISIntegrityProtocol",
     "AppendOnlyEventChain",
     "ClaudeAgentSDKSubstrate",
     "DuplicateActorError",
     "EventRejected",
     "HookRegistry",
     "InProcessSubstrate",
+    "IntegrityProtocol",
+    "IntegrityRecord",
+    "IntegrityViolationError",
     "InvalidWorkUnitTransitionError",
     "MSAgentFrameworkSubstrate",
     "MalformedEventError",
@@ -75,5 +87,7 @@ __all__ = [
     "WorkUnitHandle",
     "boot_workspace",
     "check_event_references",
+    "generate_aegis_keypair",
+    "load_or_create_aegis_keypair",
     "load_substrate_from_provision",
 ]

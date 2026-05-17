@@ -42,6 +42,7 @@ FAILURE_CATEGORIES = frozenset(
         "lifecycle-derivation-mismatch",  # D58 §B.1 — manifest-declared work-unit lifecycle timestamps disagree with chain-derived
         "sdk-init",  # D69 §B.1 — Phase C real-wire SDK init / auth / connection failure during substrate.start_session
         "persistence-corruption",  # D70 §B.1 — Phase C JSONL persistence layer IO / parse / partial-line failure during boot replay or manifest snapshot read
+        "integrity-violation",  # D76 §B — Phase C C8 AEGIS integrity-protocol detection: hash-chain-break / signature-invalid / missing-record / canonicalization-error at boot-time chain verification
     }
 )
 
