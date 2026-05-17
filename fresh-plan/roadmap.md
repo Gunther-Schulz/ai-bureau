@@ -12,7 +12,7 @@ Source-of-truth for each workstream's *definition* is the cited D-entry. This fi
 |---|---|---|
 | A | Layer 3 (formal schemas + extension protocol + composition rules + versioning) | DONE (closed at D35) |
 | B | Reference impl of core | IN PROGRESS (impl side complete; Bref refinement workstream active) |
-| C | Standards-compat impl (real-wire A2A peer adapter + MCP server adapter + integrity-protocol extensions) | NOT STARTED |
+| C | Real-wire integration (substrate + adapters + specialists + persistence + integrity-protocol extensions + impl-level standards-compat) | ACTIVE per D68 |
 | D | Pioneer-instance (PBS-Schulz practitioner-shape) | NOT STARTED |
 | E | Multi-deployment validation (second shape impl + federation begins) | NOT STARTED |
 | F+ | Refinement / optimization / ecosystem | INDEFINITE |
@@ -144,23 +144,45 @@ Pending Bref completion. Analog of D35 (Phase A closure). Per D42 §"Closure-cri
 
 ---
 
-## Phase C — NOT STARTED
+## Phase C — ACTIVE (planned at D68; trigger-based per D26)
 
-Per D26 description. Per-phase planning entry (analog of D27/D36) when entered.
+Per D26 indicative scope + D63 §E Phase C scope handoff + D68 Phase C planning entry (workstream order + setup decisions + closure criterion).
 
-**Indicative workstreams** (not yet locked; to be enumerated in Phase C planning entry):
+### Workstreams
 
-- Real-wire A2A peer adapter (validates D21)
-- Real-wire MCP server adapter
-- Real-wire substrate impl (Claude Agent SDK or alternative replacing the in-process stub)
-- AEGIS / Axon integrity-protocol extensions (per D40 §B; canonical first examples)
-- Standards-compat per-kind mappings (PROV-O, CloudEvents, OpenTelemetry, EU AI Act Article 12 audit-record format) — D24 tracker
+Source-of-truth: D68 §A. Order indicative not rigid per D26 caveat. C3-C6 can run in parallel after C1 + C2 land.
+
+| # | Workstream | Depends on | Status | Source |
+|---|---|---|---|---|
+| C1 | Real-wire substrate (Claude Agent SDK; single-substrate per D68 §B.1 + A3) | — | NOT STARTED | D68 §A + §B.1 |
+| C2 | Persistence layer (JSONL append-only per D68 §B.2) | C1 | NOT STARTED | D68 §A + §B.2 |
+| C3 | Real-wire MCP client adapter | C1, C2 | NOT STARTED | D68 §A; exercises D48 §B.1 |
+| C4 | Real-wire direct-API adapter | C1, C2 | NOT STARTED | D68 §A; exercises D48 §B.1 |
+| C5 | Real-wire A2A peer adapter | C1, C2 | NOT STARTED | D68 §A; validates D21 |
+| C6 | Real-wire MCP server adapter | C1, C2 | NOT STARTED | D68 §A; validates D21 generalization |
+| C7 | Real-wire specialists | C3, C4 | NOT STARTED | D68 §A; exercises D48 + D50 + D64 |
+| C8 | Integrity-protocol extensions (AEGIS canonical first per D40 §B) | C1, C2 | NOT STARTED | D68 §A; operationalizes D40 §B |
+| C9 | Standards-compatibility engagement (impl-level per A5 split) | C1, C3-C7 | NOT STARTED | D68 §A; CloudEvents + W3C PROV-DM / PROV-JSON export |
+| Cref | Phase C refinement workstream (analog of Bref) | C1-C9 | NOT STARTED | D68 §A; analog of D62 |
+| closure | Phase C closure entry (analog of D63) | Cref | NOT STARTED | D68 §A; closure-criterion per D68 §C |
+
+### Closure criterion
+
+Source-of-truth: D68 §C. Phase C closes when all seven items demonstrable:
+
+- (a) A2A peer external interaction succeeds (C5 + D21)
+- (b) MCP server external invocation succeeds (C6 + D21 generalization)
+- (c) Real-wire RAG-via-MCP end-to-end (C7 replaces B7 stub)
+- (d) Persistence survives restart with D54 + D58 active (C2 activates D54 §D D-1 + D58 §D D-5)
+- (e) D48 §B.1 AdapterCallError raised under real-wire conditions (each starter category exercised)
+- (f) D50 §B.1 SkillExecutionError raised under real-wire conditions (each starter category exercised)
+- (g) AEGIS integrity-chain verification round-trip (C8 operationalizes D40 §B)
 
 ### Cross-session input pending — standards-compat engagement
 
-Surfaced during Bref session 2026-05-12 (cross-session input from another session): CloudEvents envelope alignment + W3C PROV-DM citation/export. Both already on D24's standards-compat tracker (CONCEPTS line ~142). **Decision deferred** to next session: small standalone clarification entry citing PROV-DM + naming CloudEvents alignment as priority, OR formalize a parallel "standards-compat per-kind mapping" workstream, OR leave on tracker. Lean: small clarification entry + leave heavy work for Phase C planning.
+**A5 split locked in D68 §E** (2026-05-17): Phase C handles impl-level (CloudEvents envelope + W3C PROV-DM citation / PROV-JSON export per C9); Phase D handles deployment-specific (practitioner-shape PROV-O attribution; bauleitplanung domain-extension PROV-DM mappings). Aligned with D26 indicative phase-mapping ("Phase B/C for impl-level; Phase D for deployment-specific") + D24 standards-compat tracker carry-over.
 
-CloudEvents envelope alignment is a D43-class-but-larger rename refactor. NOT a Bref item. Phase C natural home for the actual mapping work. PROV-JSON export adapter is unambiguously Phase C deliverable per D24.
+CloudEvents envelope alignment is a D43-class-but-larger rename refactor — landed as part of C9 per D68 §A. PROV-JSON export adapter is C9 deliverable per D24. D24 tracker carry-overs (OpenTelemetry, AsyncAPI, Activity Streams, EU AI Act mappings) — per D68 §D EU AI Act Article 12 external-trigger checkpoint (2026-08-02) drives C8 timing.
 
 ---
 
