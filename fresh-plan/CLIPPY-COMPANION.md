@@ -129,7 +129,7 @@ Pre-lock probe is a sub-agent dispatch:
 
 ---
 
-## Sketch-then-lock checkpoint (MANDATORY user interrupt)
+## Sketch-then-lock checkpoint (MANDATORY user interrupt, unless batch-authorized)
 
 Before drafting any substantive D-entry, present a SKETCH to the user. Wait for explicit sign-off before drafting the committed entry.
 
@@ -148,6 +148,29 @@ Skip user-sign-off ONLY for:
 - Impl follow-through commits for already-locked D-entries (§C is the brief)
 - Routine roadmap status updates after [design]/[impl] cycles
 - Mechanical clarifications (e.g., D49 sharpen-surfaced corrections to factual errors)
+
+### Autopilot batch mode (Sketch-then-lock relaxed)
+
+When the user has given **explicit batch authorization** at session start (e.g., "finish all remaining Bref work hands-off"; "autopilot through D53/D54 + slot-pass without per-entry approval"), Sketch-then-lock interrupt is **suspended** for the duration of the authorized scope. Autopilot proceeds through SKETCH → pre-lock probe (FIRE/SKIP per refined rule) → draft → commit without returning to user-checkpoint for the SKETCH-stage approval.
+
+Mitigations that remain in effect under batch mode:
+- Pre-lock probe FIRES for entries with new contract content (per D48 §E + D50 §E + D52 §E refined skip rule); SKIP for pure pattern application (per D45 §E precedent — D46/D47/D51 pattern)
+- probing.md investigation-before-claim discipline (V1 evidence + secondary-source synthesis discrimination + temporal discipline + class-completeness — now upstream in Clippy v0.4.6)
+- Clippy D1 plausibility trace + scope-cardinality-honesty sub-check (now upstream in Clippy v0.4.6)
+- Post-build verify phase (Clippy autopilot post-build per references/post-build.md)
+- Circuit breakers (3 failures per unit; 3 consecutive unit failures stop build)
+- `/clippy:cancel` at any time
+
+**Empirical risk** (honest tradeoff): Sketch-then-lock catches first-pass scope-inflation patterns that codified disciplines empirically miss (D49 first-pass mirroring D48's 3-path structure when D49 had 1 SUSPECT — caught by "do a second pass" user prompt, not by probing.md or pre-lock probe). Without the user-interrupt catch, similar inflations may commit; correction is via supersedes entries (D49-style clarifications) post-hoc. Append-only ledger means corrections accumulate, not overwrite.
+
+Recovery path when batch mode produces a flawed entry:
+1. Subsequent sharpen sweep (next sessions or end-of-batch retrospective) surfaces findings
+2. Clarification entry (D49 pattern) corrects load-bearing errors via append-only
+3. Wording-polish findings log-and-accept (cumulative ledger-load not justified)
+
+Batch mode is a **deliberate trade**: more autonomy, more post-hoc cleanup. Surface this tradeoff explicitly when accepting batch authorization. Do not silently relax Sketch-then-lock — the relaxation is itself an explicit recorded decision per the user's batch-authorization phrasing.
+
+Returning to normal Sketch-then-lock (non-batch mode): when authorized scope completes OR user signals "back to per-entry" / "next D-entry needs sign-off" / explicit cancellation, resume Sketch-then-lock interrupt for subsequent substantive D-entries.
 
 ---
 
