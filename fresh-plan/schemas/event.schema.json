@@ -55,6 +55,13 @@
         { "$ref": "_common.schema.json#/$defs/instance-identifier" }
       ],
       "description": "Optional reference to the work-unit (D20) the event is associated with (D23). null when the event is not work-unit-associated (e.g., workspace-level lifecycle events)."
+    },
+    "emitting-specialist": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "_common.schema.json#/$defs/instance-identifier" }
+      ],
+      "description": "Optional reference to the specialist binding-id that emitted this event (D64; runtime enforcement of declared-event-emissions per D19). null/absent for system events + actor-emitted events (e.g., curator's emit_claim via ActorHandle)."
     }
   },
 

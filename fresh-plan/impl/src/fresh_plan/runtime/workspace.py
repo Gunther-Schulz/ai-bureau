@@ -414,6 +414,7 @@ class Workspace:
         role: Optional[str] = None,
         work_unit_id: Optional[str] = None,
         event_id: Optional[str] = None,
+        emitting_specialist: Optional[str] = None,
     ) -> dict:
         """Build a chained event dict and append it via the substrate.
 
@@ -422,6 +423,13 @@ class Workspace:
         registered (impossible per workspace schema minItems=1, but
         defensive) we accept the event with an empty actors list — the
         substrate's schema check will reject it.
+
+        Per D64 §B.1: when ``emitting_specialist`` is provided (specialist-
+        wrapped path via ``specialist.attach_workspace``), the event dict
+        carries an ``emitting-specialist`` slot referencing the bound
+        specialist's binding-id. Non-specialist emit paths (e.g.,
+        ``ActorHandle.emit_claim``) omit the slot; the per-event
+        emit-attribution check skips when the slot is absent.
         """
         tail = self._substrate.event_chain.tail
         prev_id = tail["id"] if tail else None
@@ -440,6 +448,8 @@ class Workspace:
         }
         if work_unit_id is not None:
             event["work-unit-id"] = work_unit_id
+        if emitting_specialist is not None:
+            event["emitting-specialist"] = emitting_specialist
         self._substrate.append_event(event)
         return event
 

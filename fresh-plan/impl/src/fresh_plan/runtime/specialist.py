@@ -216,7 +216,6 @@ class Specialist:
         from fresh_plan.validator.types import ValidationFailure
 
         self._workspace = workspace
-        self._emit_event = workspace._emit_event
         substrate = workspace._substrate
         # Per D55 §B.1: parse activation-scope before adapter-binding-resolution.
         # Look up binding-id early so error path can name it.
@@ -224,6 +223,18 @@ class Specialist:
             (bid for bid, sp in substrate.specialist_instances.items() if sp is self),
             None,
         )
+        # Per D64 §B.1: wrap workspace._emit_event as a closure pre-filling
+        # emitting-specialist=<self-binding-id>. `setdefault` lets a
+        # subclass override attribution (e.g., when delegating); default
+        # is the bound specialist's own binding-id.
+        _binding_id_for_emit = my_binding_id_for_scope
+        _ws_emit = workspace._emit_event
+
+        def _wrapped_emit(**kwargs: Any) -> dict:
+            kwargs.setdefault("emitting_specialist", _binding_id_for_emit)
+            return _ws_emit(**kwargs)
+
+        self._emit_event = _wrapped_emit
         try:
             self._activation_predicate = _parse_activation_scope(
                 self.spec.get("activation-scope")

@@ -42,6 +42,7 @@ def check_event_references(
     registered_payload_vocabulary: Optional[dict[str, Iterable[str]]] = None,
     shape_role_ids: Optional[Iterable[str]] = None,
     work_unit_kind_payload_schemas: Optional[dict[str, dict]] = None,
+    specialist_emissions_map: Optional[dict[str, set[str]]] = None,
 ) -> list[ValidationFailure]:
     """Run D30 §4 per-event runtime checks; return any failures.
 
@@ -180,6 +181,47 @@ def check_event_references(
                     ),
                 )
             )
+
+    # Per D64 §B.1 — specialist emit-attribution check. When the event
+    # carries an `emitting-specialist` slot (specialist-wrapped emit path
+    # via specialist.attach_workspace closure; D64 §B.1), validate that
+    # the event's payload-subtype is in that specialist's declared-event-
+    # emissions[] vocabulary (D19). Reuses category="vocabulary" per D30
+    # §3 + D59 pattern (no new FAILURE_CATEGORIES entry). Skipped when
+    # the slot is absent (system events + ActorHandle.emit_claim path)
+    # or when no specialist_emissions_map provided. Per A2 STRICT lock:
+    # empty declared-event-emissions[] = zero allowed (per D19 required-
+    # with-explicit-empty + no-silent-substitution discipline).
+    if specialist_emissions_map is not None:
+        emitter = event.get("emitting-specialist")
+        if emitter is not None:
+            allowed = specialist_emissions_map.get(emitter)
+            if allowed is None:
+                # Specialist binding-id unresolved against bound specialists.
+                failures.append(
+                    ValidationFailure(
+                        category="identity",
+                        path="event.emitting-specialist",
+                        value=emitter,
+                        reason=(
+                            f"event.emitting-specialist {emitter!r} does not "
+                            "resolve to a bound specialist in workspace"
+                        ),
+                    )
+                )
+            elif subtype is not None and subtype not in allowed:
+                failures.append(
+                    ValidationFailure(
+                        category="vocabulary",
+                        path="event.emitting-specialist",
+                        value=emitter,
+                        reason=(
+                            f"specialist {emitter!r} emitted payload-subtype "
+                            f"{subtype!r} which is not declared in its "
+                            "declared-event-emissions[] vocabulary"
+                        ),
+                    )
+                )
 
     # Per D59 §B.1 — open-vocab payload-body validation. For each of the
     # four core payload-subtypes carrying an open-vocab string slot, check

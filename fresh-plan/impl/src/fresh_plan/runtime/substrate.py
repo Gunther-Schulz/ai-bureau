@@ -223,6 +223,18 @@ class Substrate:
             }
             if not _shape_role_ids:
                 _shape_role_ids = None
+        # Per D64 §B.1: build per-bound-specialist emissions vocabulary
+        # map for emit-attribution check. Pure derivation from
+        # specialist_instances; one dict-comp per emit (cheap; could
+        # cache as a field if profiling shows hot path).
+        specialist_emissions_map: dict[str, set[str]] = {
+            bid: {
+                e.get("payload-subtype")
+                for e in sp.declared_event_emissions
+                if e.get("payload-subtype")
+            }
+            for bid, sp in self.specialist_instances.items()
+        }
         ident_failures = check_event_references(
             event,
             self.state,
@@ -234,6 +246,7 @@ class Substrate:
             shape_role_ids=_shape_role_ids,
             work_unit_kind_payload_schemas=self.work_unit_kind_payload_schemas
             or None,
+            specialist_emissions_map=specialist_emissions_map,
         )
         if ident_failures:
             raise EventRejected(ident_failures)
