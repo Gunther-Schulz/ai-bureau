@@ -1,0 +1,29 @@
+{
+  "name": "fresh-plan",
+  "version": "0.1.0",
+  "description": "fresh-plan framework development plugin — grounded-reads structural enforcement hook (D66; Roadmap deliverable #20). Lives on fresh-plan-clippy branch only.",
+  "author": {
+    "name": "Gunther Schulz"
+  },
+  "repository": "https://github.com/Gunther-Schulz/pbs-bureau",
+  "license": "MIT",
+  "keywords": [
+    "fresh-plan",
+    "framework",
+    "structural-enforcement"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/fresh_plan_grounding_gate.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
