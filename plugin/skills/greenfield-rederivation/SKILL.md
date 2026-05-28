@@ -177,7 +177,7 @@ Compare a greenfield-derivation (from Writer sub-agent) against the currently-lo
 2. `VISION.md` (full)
 3. `MAINTENANCE.md` TOP-LEVEL DESIGN PRINCIPLES + TOP-LEVEL ARCHITECTURE
 4. `disciplines/10-greenfield-evaluation.md`
-5. `plugin/skills/coherence-audit/SKILL.md` Lens 5 (provenance hygiene) + Lens 8 (pattern-vs-instance) + Lens 9 (VISION-grounding)
+5. `coherence-audit` skill (external standalone plugin — `github.com/Gunther-Schulz/coherence-audit`) — Lens 5 (provenance hygiene) + Lens 8 (pattern-vs-instance) + Lens 9 (foundation-grounding, called "VISION-grounding" in some pbs contexts)
 
 # Surface divergences per element
 For each element where greenfield-derivation diverges from locked content, classify:
