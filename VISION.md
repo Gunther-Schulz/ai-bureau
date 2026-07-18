@@ -1,5 +1,15 @@
 # pbs-bureau vision
 
+> **Status (2026-07-18):** Active development is paused. This repo now serves
+> as source material for two efforts tracked in the pbs-office startbrief
+> (`pbs-office/pending-actions.md`): (1) a near-term **idea-harvest pass** —
+> concepts worth folding into the running pbs-office system (e.g. sparring,
+> authorship preservation, disciplines) — and (2) the long-term
+> **office-framework extraction** (anneal pattern: extract a framework from a
+> mature instance, regenerate the instance from it, deprecate the source).
+> Nothing here is deprecated yet; the material's value is deliberately
+> unassessed until the harvest pass.
+
 This document anchors the deepest "why" behind the architecture. Every design decision and every commitment traces back to one thesis. When in doubt about whether a proposed feature belongs, check it against this thesis first.
 
 ## What this is
